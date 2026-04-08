@@ -56,6 +56,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../src/app/(main)/fortune/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/fortune">> = Specific
+  const handler = {} as typeof import("../../src/app/(main)/fortune/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/app/(main)/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/">> = Specific
@@ -150,6 +159,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/bazi">> = Specific
   const handler = {} as typeof import("../../src/app/api/bazi/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/api/fortune/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/fortune">> = Specific
+  const handler = {} as typeof import("../../src/app/api/fortune/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
