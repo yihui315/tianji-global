@@ -4,10 +4,12 @@
   "description": "TianJi Global — AI Fortune Platform | 天机全球AI算命平台",
   "main": "src/index.js",
   "scripts": {
-    "dev": "node src/index.js",
-    "start": "NODE_ENV=production node src/index.js",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "serve": "NODE_ENV=production node src/index.js",
     "test": "jest --coverage",
-    "lint": "eslint src/**/*.js"
+    "lint": "next lint"
   },
   "keywords": [
     "fortune",
@@ -30,11 +32,27 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.102.1",
+    "@types/node": "^25.5.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.27",
+    "chart.js": "^4.5.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
+    "framer-motion": "^12.38.0",
     "helmet": "^7.1.0",
-    "openai": "^4.28.0"
+    "next": "^14.2.35",
+    "next-intl": "^4.9.0",
+    "openai": "^4.28.0",
+    "postcss": "^8.5.9",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^6.0.2",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
