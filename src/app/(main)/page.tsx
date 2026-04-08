@@ -92,6 +92,12 @@ export default function HomePage() {
               <p className="text-purple-300/80 text-lg">TianJi Global</p>
             </div>
             <div className="flex items-center gap-4">
+              <Link
+                href="/pricing"
+                className="px-4 py-2 bg-gradient-to-r from-purple-600 to-amber-500 text-white rounded-lg text-sm font-medium hover:opacity-90 transition"
+              >
+                {language === 'zh' ? '订阅方案' : 'Pricing'}
+              </Link>
               <button
                 onClick={() => setLanguage('zh')}
                 className={`px-3 py-1 rounded-full text-sm transition-all ${

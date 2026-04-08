@@ -74,6 +74,24 @@
       "namedRegex": "^/login(?:/)?$"
     },
     {
+      "page": "/pricing",
+      "regex": "^/pricing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/pricing(?:/)?$"
+    },
+    {
+      "page": "/pricing/cancel",
+      "regex": "^/pricing/cancel(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/pricing/cancel(?:/)?$"
+    },
+    {
+      "page": "/pricing/success",
+      "regex": "^/pricing/success(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/pricing/success(?:/)?$"
+    },
+    {
       "page": "/tarot",
       "regex": "^/tarot(?:/)?$",
       "routeKeys": {},
