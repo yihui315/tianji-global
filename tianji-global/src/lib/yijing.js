@@ -83,6 +83,11 @@ const HEXAGRAMS = [
  *   - 2 tails (sum 7)  → young yang → yang line, drawn as ———
  *   - 3 tails (sum 6)  → old yin   → changing line, drawn as —o—
  *
+ * The hexagram number is derived from the six lines:
+ * - Lines 1-3 (bottom) form the lower trigram; lines 4-6 (top) the upper.
+ * - Yang lines (7 or 9) = 1, Yin lines (6 or 8) = 0.
+ * - The 64 hexagrams are indexed by (upperTrigram * 8 + lowerTrigram).
+ *
  * @returns {{ hexagram: object, lines: number[], hasChangingLines: boolean }}
  */
 function castHexagram() {
@@ -91,7 +96,25 @@ function castHexagram() {
     return coins.reduce((sum, c) => sum + c, 0); // 6, 7, 8, or 9
   });
 
-  const hexagram = HEXAGRAMS[Math.floor(Math.random() * HEXAGRAMS.length)];
+  // Convert lines to binary (yang=1, yin=0) and derive trigrams
+  const binary = lines.map(l => (l === 7 || l === 9) ? 1 : 0);
+  const lowerTrigram = binary[0] + binary[1] * 2 + binary[2] * 4;
+  const upperTrigram = binary[3] + binary[4] * 2 + binary[5] * 4;
+
+  // King Wen sequence mapping: trigram pair → hexagram number
+  const kingWenMap = [
+    [2, 24, 7, 19, 15, 36, 46, 11],
+    [23, 2, 8, 20, 16, 35, 45, 12],
+    [8, 23, 29, 4, 39, 64, 47, 6],
+    [20, 42, 59, 4, 56, 50, 28, 32],
+    [16, 51, 40, 62, 54, 55, 32, 34],
+    [36, 21, 64, 50, 55, 30, 28, 14],
+    [45, 17, 47, 28, 31, 49, 58, 43],
+    [11, 25, 6, 33, 10, 13, 44, 1],
+  ];
+
+  const hexagramNumber = kingWenMap[upperTrigram][lowerTrigram];
+  const hexagram = getHexagramByNumber(hexagramNumber);
   const hasChangingLines = lines.some(l => l === 6 || l === 9);
 
   return { hexagram, lines, hasChangingLines };

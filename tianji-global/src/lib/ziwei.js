@@ -153,8 +153,11 @@ function placeMajorStars(lunarDay, lifePalace) {
   const palaceStars = Array.from({ length: 12 }, () => []);
 
   // ── Zi Wei star position ──────────────────────────────────────────────────
-  // Classic lookup: Zi Wei's palace depends on lunar day.
-  // Simplified mapping table (based on traditional 五行局 Fire/Water/Wood/Metal/Earth timing):
+  // Simplified placement: Zi Wei's palace is offset from the Life Palace by
+  // (lunarDay - 1) % 12. Traditional ZiWei Dou Shu uses the Five Elements
+  // Bureau (五行局: 水二局/木三局/金四局/土五局/火六局) to determine the exact
+  // offset — a full implementation requires the bureau number derived from the
+  // year stem and branch. This approximation is suitable for demonstration.
   const ziWeiPalaceOffset = (lunarDay - 1) % 12;
   const ziWeiPalace = (lifePalace + ziWeiPalaceOffset) % 12;
 
@@ -169,9 +172,8 @@ function placeMajorStars(lunarDay, lifePalace) {
   palaceStars[(ziWeiPalace +  8) % 12].push('天同');          // four back
   palaceStars[(ziWeiPalace +  5) % 12].push('廉贞');          // seven back (skip two)
 
-  // ── Tian Fu star: always opposite Zi Wei ─────────────────────────────────
-  // 天府 is always at the mirror position across the chart:
-  const tianFuPalace = (12 - ziWeiPalace + lifePalace * 2) % 12;
+  // ── Tian Fu star: always opposite Zi Wei (6 palaces away) ───────────────
+  const tianFuPalace = (ziWeiPalace + 6) % 12;
   palaceStars[tianFuPalace].push('天府');
 
   // Tian Fu group offsets relative to 天府 palace:

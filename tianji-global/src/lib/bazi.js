@@ -70,7 +70,7 @@ function calculateBaZi({ year, month, day, hour }) {
   const yearBranch = yearBranchIndex(year);
 
   // Month stem is derived from year stem and month number (1-based)
-  const monthStem = (yearStem % 5) * 2 + (month - 1);
+  const monthStem = ((yearStem % 5) * 2 + (month - 1)) % 10;
   const monthBranch = (month + 1) % 12; // 寅 (index 2) = month 1
 
   // Day calculation (simplified Julian Day Number approach)
@@ -79,7 +79,7 @@ function calculateBaZi({ year, month, day, hour }) {
   const dayBranch = ((jdn - 11) % 12 + 12) % 12;
 
   const hourBranch = hourBranchIndex(hour);
-  const hourStem = (dayStem % 5) * 2 + hourBranch;
+  const hourStem = ((dayStem % 5) * 2 + hourBranch) % 10;
 
   return {
     year: buildPillar(yearStem, yearBranch),
