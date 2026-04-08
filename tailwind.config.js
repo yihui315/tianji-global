@@ -6,7 +6,17 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        tianji: {
+          purple: '#7C3AED',
+          'purple-light': '#A78BFA',
+          'purple-dark': '#5B21B6',
+          gold: '#F59E0B',
+          'gold-light': '#FCD34D',
+        },
+      },
+    },
   },
   plugins: [],
 };

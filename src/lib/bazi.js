@@ -63,7 +63,7 @@ function buildPillar(stemIdx, branchIdx) {
  * Calculates the full BaZi (Four Pillars) chart.
  *
  * @param {{ year: number, month: number, day: number, hour: number }} birthDate
- * @returns {{ year: object, month: object, day: object, hour: object, dayMasterElement: string }}
+ * @returns {{ year: {heavenlyStem: string, earthlyBranch: string, element: string}, month: {heavenlyStem: string, earthlyBranch: string, element: string}, day: {heavenlyStem: string, earthlyBranch: string, element: string}, hour: {heavenlyStem: string, earthlyBranch: string, element: string}, dayMasterElement: string }}
  */
 function calculateBaZi({ year, month, day, hour }) {
   const yearStem = yearStemIndex(year);
