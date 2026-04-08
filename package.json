@@ -32,10 +32,13 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@auth/core": "^0.41.0",
+    "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.102.1",
     "@types/node": "^25.5.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@vercel/og": "^0.11.1",
     "autoprefixer": "^10.4.27",
     "chart.js": "^4.5.1",
     "cors": "^2.8.5",
@@ -45,6 +48,7 @@
     "helmet": "^7.1.0",
     "iztro": "^2.5.8",
     "next": "^15.5.14",
+    "next-auth": "^5.0.0-beta.22",
     "next-intl": "^4.9.0",
     "openai": "^4.28.0",
     "postcss": "^8.5.9",

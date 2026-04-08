@@ -1,15 +1,19 @@
 {
+  "/_not-found/page": "/_not-found",
   "/api/ask/route": "/api/ask",
   "/api/bazi/route": "/api/bazi",
   "/api/tarot/route": "/api/tarot",
   "/api/yijing/route": "/api/yijing",
   "/api/ziwei/route": "/api/ziwei",
-  "/_not-found/page": "/_not-found",
+  "/api/auth/[...nextauth]/route": "/api/auth/[...nextauth]",
   "/(main)/bazi/page": "/bazi",
-  "/(main)/report/[id]/page": "/report/[id]",
   "/(main)/page": "/",
   "/(main)/tarot/page": "/tarot",
   "/(main)/western/page": "/western",
+  "/(main)/report/[id]/page": "/report/[id]",
   "/(main)/yijing/page": "/yijing",
-  "/(main)/ziwei/page": "/ziwei"
+  "/(main)/ziwei/page": "/ziwei",
+  "/dashboard/page": "/dashboard",
+  "/login/page": "/login",
+  "/api/share/og/route": "/api/share/og"
 }

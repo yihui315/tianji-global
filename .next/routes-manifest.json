@@ -20,6 +20,14 @@
   },
   "dynamicRoutes": [
     {
+      "page": "/api/auth/[...nextauth]",
+      "regex": "^/api/auth/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPnextauth": "nxtPnextauth"
+      },
+      "namedRegex": "^/api/auth/(?<nxtPnextauth>.+?)(?:/)?$"
+    },
+    {
       "page": "/report/[id]",
       "regex": "^/report/([^/]+?)(?:/)?$",
       "routeKeys": {
@@ -46,6 +54,18 @@
       "regex": "^/bazi(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/bazi(?:/)?$"
+    },
+    {
+      "page": "/dashboard",
+      "regex": "^/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
     },
     {
       "page": "/tarot",
