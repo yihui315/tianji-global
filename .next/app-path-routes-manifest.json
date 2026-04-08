@@ -1,15 +1,15 @@
 {
-  "/_not-found/page": "/_not-found",
   "/api/ask/route": "/api/ask",
-  "/api/tarot/route": "/api/tarot",
   "/api/bazi/route": "/api/bazi",
+  "/api/tarot/route": "/api/tarot",
   "/api/yijing/route": "/api/yijing",
   "/api/ziwei/route": "/api/ziwei",
+  "/_not-found/page": "/_not-found",
   "/(main)/bazi/page": "/bazi",
   "/(main)/report/[id]/page": "/report/[id]",
+  "/(main)/page": "/",
   "/(main)/tarot/page": "/tarot",
-  "/(main)/yijing/page": "/yijing",
-  "/(main)/ziwei/page": "/ziwei",
   "/(main)/western/page": "/western",
-  "/(main)/page": "/"
+  "/(main)/yijing/page": "/yijing",
+  "/(main)/ziwei/page": "/ziwei"
 }

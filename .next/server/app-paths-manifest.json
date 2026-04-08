@@ -1,15 +1,15 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/api/ask/route": "app/api/ask/route.js",
-  "/api/tarot/route": "app/api/tarot/route.js",
   "/api/bazi/route": "app/api/bazi/route.js",
+  "/api/tarot/route": "app/api/tarot/route.js",
   "/api/yijing/route": "app/api/yijing/route.js",
   "/api/ziwei/route": "app/api/ziwei/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/(main)/bazi/page": "app/(main)/bazi/page.js",
   "/(main)/report/[id]/page": "app/(main)/report/[id]/page.js",
+  "/(main)/page": "app/(main)/page.js",
   "/(main)/tarot/page": "app/(main)/tarot/page.js",
-  "/(main)/yijing/page": "app/(main)/yijing/page.js",
-  "/(main)/ziwei/page": "app/(main)/ziwei/page.js",
   "/(main)/western/page": "app/(main)/western/page.js",
-  "/(main)/page": "app/(main)/page.js"
+  "/(main)/yijing/page": "app/(main)/yijing/page.js",
+  "/(main)/ziwei/page": "app/(main)/ziwei/page.js"
 }

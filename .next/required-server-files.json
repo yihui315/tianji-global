@@ -99,7 +99,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/Users/yihui",
+    "outputFileTracingRoot": "/Users/yihui/tianji-global",
     "experimental": {
       "useSkewCookie": false,
       "cacheLife": {
@@ -290,11 +290,11 @@
     "configFileName": "next.config.js",
     "serverExternalPackages": [],
     "turbopack": {
-      "root": "/Users/yihui"
+      "root": "/Users/yihui/tianji-global"
     }
   },
   "appDir": "/Users/yihui/tianji-global",
-  "relativeAppDir": "tianji-global",
+  "relativeAppDir": "",
   "files": [
     ".next/routes-manifest.json",
     ".next/server/pages-manifest.json",
