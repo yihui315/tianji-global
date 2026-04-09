@@ -271,3 +271,50 @@ COMMENT ON COLUMN readings.birth_data        IS 'Birth info: birth_date, birth_t
 COMMENT ON COLUMN readings.result_data       IS 'Computed fortune result: chart data, deity combinations, etc.';
 COMMENT ON COLUMN readings.ai_interpretation IS 'AI-generated interpretation text (user opt-in)';
 COMMENT ON COLUMN readings.share_token       IS 'Unique token for pre-generated OG share image';
+
+-- ============================================================
+-- pgvector Extension (for RAG / similarity search)
+-- Install: CREATE EXTENSION vector;
+-- ============================================================
+CREATE EXTENSION IF NOT EXISTS vector;
+
+-- ============================================================
+-- User Feedback (for RAG quality loop)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS user_feedback (
+    id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id       UUID REFERENCES users(id) ON DELETE SET NULL,
+    reading_id    UUID REFERENCES readings(id) ON DELETE SET NULL,
+    rating        SMALLINT CHECK (rating BETWEEN 1 AND 5) NOT NULL,
+    feedback_text TEXT,
+    service_type  VARCHAR(20) CHECK (service_type IN ('yijing','tarot','bazi','ziwei','western','fortune')),
+    created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_user_feedback_user_id     ON user_feedback(user_id);
+CREATE INDEX idx_user_feedback_reading_id  ON user_feedback(reading_id);
+CREATE INDEX idx_user_feedback_service_type ON user_feedback(service_type);
+CREATE INDEX idx_user_feedback_rating      ON user_feedback(rating DESC);
+
+COMMENT ON TABLE user_feedback IS 'User ratings and feedback on AI interpretations (RAG quality loop)';
+
+-- ============================================================
+-- Reading Embeddings (for RAG similarity search)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS reading_embeddings (
+    id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    reading_id    UUID REFERENCES readings(id) ON DELETE CASCADE UNIQUE,
+    service_type  VARCHAR(20) CHECK (service_type IN ('yijing','tarot','bazi','ziwei','western','fortune')) NOT NULL,
+    content_text  TEXT,
+    embedding     VECTOR(1536),
+    created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Cosine similarity search index (requires pgvector >= 0.5)
+CREATE INDEX idx_reading_embeddings_vector ON reading_embeddings
+    USING ivfflat (embedding vector_cosine_ops)
+    WITH (lists = 100);
+
+CREATE INDEX idx_reading_embeddings_service_type ON reading_embeddings(service_type);
+
+COMMENT ON TABLE reading_embeddings IS 'Pre-computed text embeddings for similarity search (RAG)';
