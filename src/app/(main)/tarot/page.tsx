@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import SharePanel from '@/components/SharePanel';
 import { spreadLayouts, type TarotCard, type SpreadLayout, type DrawnCard } from '@/lib/tarot';
 
 type SpreadType = 'single' | 'three-card' | 'celtic-cross';
@@ -237,6 +238,13 @@ export default function TarotPage() {
                 {language === 'zh' ? 'AI 解读失败' : 'AI Interpretation Failed'}: {reading.aiError}
               </div>
             )}
+
+            {/* Share Panel */}
+            <SharePanel
+              serviceType="tarot"
+              resultId={`${reading.spread.name}-${Date.now()}`}
+              shareUrl={`https://tianji.global/tarot?spread=${reading.spread.name}`}
+            />
           </div>
         )}
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import SharePanel from '@/components/SharePanel';
 
 type Language = 'zh' | 'en';
 
@@ -381,6 +382,13 @@ export default function YiJingPage() {
                 </p>
               </div>
             )}
+
+            {/* Share Panel */}
+            <SharePanel
+              serviceType="yijing"
+              resultId={displayedHexagram.number.toString()}
+              shareUrl={`https://tianji.global/yijing?hex=${displayedHexagram.number}`}
+            />
           </div>
         )}
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import SharePanel from '@/components/SharePanel';
 
 type Language = 'zh' | 'en';
 type Gender = 'male' | 'female';
@@ -445,6 +446,13 @@ export default function BaZiPage() {
                 {language === 'zh' ? 'AI 解读失败' : 'AI Interpretation Failed'}: {result.aiError}
               </div>
             )}
+
+            {/* Share Panel */}
+            <SharePanel
+              serviceType="bazi"
+              resultId={birthday.replace(/-/g, '')}
+              shareUrl={`https://tianji.global/bazi?birthday=${birthday}`}
+            />
           </div>
         )}
 
