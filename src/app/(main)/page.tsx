@@ -49,6 +49,15 @@ const FORTUNE_ITEMS = [
     icon: '🎴',
     gradient: 'from-violet-600 to-purple-600',
   },
+  {
+    href: '/love-match',
+    title: '姻缘合盘',
+    titleEn: 'Love Match',
+    description: '八字合婚 · 命理姻缘配对',
+    descriptionEn: 'BaZi Marriage Compatibility',
+    icon: '💘',
+    gradient: 'from-pink-600 to-rose-600',
+  },
 ];
 
 export default function HomePage() {
