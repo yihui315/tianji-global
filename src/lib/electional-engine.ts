@@ -1,70 +1,299 @@
-// Electional Astrology Engine - 择日择时
-// Finds the most auspicious dates/times based on planetary positions
+/**
+ * Electional Astrology Engine - 择日择时
+ * TianJi Global | 天机全球
+ *
+ * Finds the most auspicious dates/times using REAL Swiss Ephemeris calculations.
+ * No Math.random() - all scores are deterministic based on actual planetary positions.
+ */
+
+import { utc_to_jd, calc, constants } from 'sweph';
 
 export interface ElectionalCandidate {
   date: Date;
   score: number;
-  moonPhase: 'waxing' | 'waning' | 'new' | 'full';
+  moonPhase: 'new' | 'waxing' | 'full' | 'waning';
+  moonLongitude: number;
   voidOfCourse: boolean;
   aspects: string[];
   warnings: string[];
   highlights: string[];
 }
 
-const EVENT_CONFIGS = {
+// Planet IDs for sweph
+const SE_PLANETS: Record<string, number> = {
+  Sun: constants.SE_SUN,
+  Moon: constants.SE_MOON,
+  Mercury: constants.SE_MERCURY,
+  Venus: constants.SE_VENUS,
+  Mars: constants.SE_MARS,
+  Jupiter: constants.SE_JUPITER,
+  Saturn: constants.SE_SATURN,
+};
+
+const SIGN_NAMES = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
+                    'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
+
+const EVENT_CONFIGS: Record<string, {
+  favorableSigns: string[];
+  avoidSigns: string[];
+  preferPlanet: string;
+  avoidVoidCourse: boolean;
+  preferWaxing: boolean;
+  preferWaning: boolean;
+  scoreBonuses: Record<string, number>;
+}> = {
   business_launch: {
-    favorable: ['trine', 'sextile'],
-    unfavorable: ['square', 'opposition'],
+    favorableSigns: ['Aries', 'Leo', 'Sagittarius', 'Cancer', 'Libra'],
+    avoidSigns: ['Scorpio', 'Capricorn'],
+    preferPlanet: 'Jupiter',
     avoidVoidCourse: true,
-    minMoonWaxing: true,
+    preferWaxing: true,
+    preferWaning: false,
+    scoreBonuses: { Jupiter: 20, Sun: 15, Venus: 10 },
   },
   marriage: {
-    favorable: ['trine', 'conjunction'],
-    unfavorable: ['square', 'opposition'],
+    favorableSigns: ['Taurus', 'Libra', 'Pisces', 'Cancer'],
+    avoidSigns: ['Aries', 'Scorpio', 'Capricorn'],
+    preferPlanet: 'Venus',
     avoidVoidCourse: true,
-    preferVenus: true,
-    minMoonWaxing: true,
+    preferWaxing: true,
+    preferWaning: false,
+    scoreBonuses: { Venus: 25, Jupiter: 15, Sun: 10 },
   },
   travel: {
-    favorable: ['trine'],
-    unfavorable: ['square'],
+    favorableSigns: ['Sagittarius', 'Gemini', 'Aquarius'],
+    avoidSigns: ['Capricorn'],
+    preferPlanet: 'Mercury',
     avoidVoidCourse: false,
-    minMoonWaxing: false,
+    preferWaxing: false,
+    preferWaning: false,
+    scoreBonuses: { Mercury: 15, Jupiter: 15 },
   },
   surgery: {
-    favorable: [],
-    unfavorable: ['trine', 'conjunction'],
+    favorableSigns: ['Virgo', 'Capricorn', 'Taurus'],
+    avoidSigns: ['Aries', 'Leo', 'Sagittarius', 'Pisces'],
+    preferPlanet: 'Saturn',
     avoidVoidCourse: true,
-    minMoonWaning: true,
+    preferWaxing: false,
+    preferWaning: true,
+    scoreBonuses: { Saturn: 20, Moon: 10 },
   },
   legal: {
-    favorable: ['trine', 'sextile'],
-    unfavorable: ['square'],
+    favorableSigns: ['Aries', 'Capricorn', 'Aquarius', 'Libra'],
+    avoidSigns: ['Pisces', 'Cancer'],
+    preferPlanet: 'Saturn',
     avoidVoidCourse: true,
-    minMoonWaxing: true,
+    preferWaxing: true,
+    preferWaning: false,
+    scoreBonuses: { Saturn: 20, Sun: 15, Jupiter: 10 },
   },
   education: {
-    favorable: ['trine', 'sextile'],
-    unfavorable: ['opposition'],
+    favorableSigns: ['Virgo', 'Aquarius', 'Sagittarius', 'Gemini'],
+    avoidSigns: ['Scorpio'],
+    preferPlanet: 'Mercury',
     avoidVoidCourse: true,
-    minMoonWaxing: false,
+    preferWaxing: false,
+    preferWaning: false,
+    scoreBonuses: { Mercury: 20, Jupiter: 15, Sun: 10 },
   },
 };
 
+function normalizeAngle(a: number): number {
+  a = a % 360;
+  return a < 0 ? a + 360 : a;
+}
+
+function getSignName(longitude: number): string {
+  return SIGN_NAMES[Math.floor(longitude / 30) % 12];
+}
+
+function getAspectName(angleDiff: number): string | null {
+  const angle = Math.min(angleDiff, 360 - angleDiff);
+  if (angle <= 8) return 'conjunction';
+  if (Math.abs(angle - 60) <= 6) return 'sextile';
+  if (Math.abs(angle - 90) <= 6) return 'square';
+  if (Math.abs(angle - 120) <= 6) return 'trine';
+  if (Math.abs(angle - 180) <= 8) return 'opposition';
+  return null;
+}
+
+function getAspectPolarity(type: string): 'harmonious' | 'challenging' | 'neutral' {
+  if (type === 'trine' || type === 'sextile') return 'harmonious';
+  if (type === 'square' || type === 'opposition') return 'challenging';
+  return 'neutral';
+}
+
+/** Get Julian Day for a UTC date (noon) */
+function getJD(year: number, month: number, day: number): number {
+  const r = utc_to_jd(year, month, day, 12, 0, 0, constants.SE_GREG_CAL);
+  return r.data[0]; // ephemeris time
+}
+
+/** Get planet longitude in degrees (deterministic) */
+function getPlanetLon(jd: number, seId: number): number | null {
+  try {
+    const r = calc(jd, seId, constants.SEFLG_SWIEPH);
+    if (r.flag !== constants.SEFLG_SWIEPH) return null;
+    return normalizeAngle(r.data[0] as number);
+  } catch {
+    return null;
+  }
+}
+
+/** Get moon longitude and phase */
+function getMoonPhaseData(jd: number): { longitude: number; phase: 'new' | 'waxing' | 'full' | 'waning' } {
+  const moonLon = getPlanetLon(jd, constants.SE_MOON);
+  const sunLon = getPlanetLon(jd, constants.SE_SUN);
+  if (moonLon === null || sunLon === null) return { longitude: 0, phase: 'new' };
+
+  const elongation = normalizeAngle(moonLon - sunLon);
+  let phase: 'new' | 'waxing' | 'full' | 'waning';
+  if (elongation < 45) phase = 'new';
+  else if (elongation < 135) phase = 'waxing';
+  else if (elongation < 225) phase = 'full';
+  else if (elongation < 315) phase = 'waning';
+  else phase = 'new';
+
+  return { longitude: moonLon, phase };
+}
+
+/** Get moon speed (degrees per day) for void-of-course detection */
+function getMoonSpeed(jd: number): number {
+  try {
+    const r = calc(jd, constants.SE_MOON, constants.SEFLG_SPEED | constants.SEFLG_SWIEPH);
+    if (r.flag !== (constants.SEFLG_SPEED | constants.SEFLG_SWIEPH)) {
+      // fallback without speed
+      const r2 = calc(jd, constants.SE_MOON, constants.SEFLG_SWIEPH);
+      if (r2.flag !== constants.SEFLG_SWIEPH) return 13; // average speed
+      return 13; // approximate
+    }
+    return Math.abs(r.data[3] as number); // degrees per day
+  } catch {
+    return 13;
+  }
+}
+
+/**
+ * Detect if moon is void-of-course.
+ * Moon is void when it makes no major aspect before leaving its sign.
+ */
+function isVoidOfCourse(jd: number): boolean {
+  const moonLon = getPlanetLon(jd, constants.SE_MOON);
+  if (moonLon === null) return false;
+
+  const moonDegreeInSign = moonLon % 30;
+  const moonSpeed = getMoonSpeed(jd);
+  const hoursLeftInSign = (30 - moonDegreeInSign) / (moonSpeed / 24);
+
+  // If less than 3 hours left in sign, check for imminent aspects
+  if (hoursLeftInSign < 3) {
+    for (let m = 0; m < 3; m += 0.1) {
+      const jdCheck = jd + m / 24;
+      const futureMoonLon = getPlanetLon(jdCheck, constants.SE_MOON);
+      if (futureMoonLon === null) continue;
+
+      // Check against slow planets
+      for (const [name, seId] of Object.entries(SE_PLANETS)) {
+        if (name === 'Moon' || name === 'Mercury') continue;
+        const planetLon = getPlanetLon(jdCheck, seId);
+        if (planetLon === null) continue;
+
+        const angleDiff = Math.abs(futureMoonLon - planetLon);
+        const normAngle = Math.min(angleDiff, 360 - angleDiff);
+        if (normAngle <= 10) {
+          const aspectName = getAspectName(normAngle);
+          if (aspectName && ['trine', 'square', 'opposition', 'conjunction'].includes(aspectName)) {
+            return false; // Aspect found, not void
+          }
+        }
+      }
+    }
+    return true; // No aspect found, void
+  }
+
+  // Check if moon is in late degrees (27+) without any aspect
+  if (moonDegreeInSign > 27) {
+    for (const [name, seId] of Object.entries(SE_PLANETS)) {
+      if (name === 'Moon' || name === 'Mercury' || name === 'Venus') continue;
+      const planetLon = getPlanetLon(jd, seId);
+      if (planetLon === null) continue;
+
+      const angleDiff = Math.abs(moonLon - planetLon);
+      const normAngle = Math.min(angleDiff, 360 - angleDiff);
+      if (normAngle <= 10 || (normAngle >= 170 && normAngle <= 190)) {
+        return false; // Has aspect, not void
+      }
+    }
+    return true;
+  }
+
+  return false;
+}
+
+/** Score planetary aspects for a given day */
+function scoreAspects(
+  positions: Record<string, number>,
+  config: typeof EVENT_CONFIGS[string]
+): { score: number; aspects: string[]; highlights: string[]; warnings: string[] } {
+  let score = 50;
+  const aspects: string[] = [];
+  const highlights: string[] = [];
+  const warnings: string[] = [];
+
+  const planetNames = Object.keys(positions);
+  for (let i = 0; i < planetNames.length; i++) {
+    for (let j = i + 1; j < planetNames.length; j++) {
+      const p1 = planetNames[i];
+      const p2 = planetNames[j];
+      const lon1 = positions[p1];
+      const lon2 = positions[p2];
+      if (lon1 === undefined || lon2 === undefined) continue;
+
+      const angleDiff = Math.abs(lon1 - lon2);
+      const normAngle = Math.min(angleDiff, 360 - angleDiff);
+      const aspectName = getAspectName(normAngle);
+
+      if (aspectName) {
+        const polarity = getAspectPolarity(aspectName);
+        aspects.push(`${p1}-${aspectName}-${p2}`);
+
+        if (polarity === 'harmonious') {
+          score += 8;
+          highlights.push(`${p1} ${aspectName} ${p2} — harmonious`);
+        } else if (polarity === 'challenging') {
+          score -= 8;
+          warnings.push(`${p1} ${aspectName} ${p2} — challenging`);
+        }
+      }
+    }
+  }
+
+  // Planet dignity bonuses
+  for (const [planet, bonus] of Object.entries(config.scoreBonuses)) {
+    const lon = positions[planet];
+    if (lon !== undefined) {
+      const sign = getSignName(lon);
+      if (config.favorableSigns.includes(sign)) {
+        score += bonus;
+        highlights.push(`${planet} in ${sign} — well placed`);
+      } else if (config.avoidSigns.includes(sign)) {
+        score -= bonus;
+        warnings.push(`${planet} in ${sign} — poorly placed`);
+      }
+    }
+  }
+
+  return {
+    score: Math.max(0, Math.min(100, score)),
+    aspects,
+    highlights,
+    warnings,
+  };
+}
+
 export function getMoonPhase(date: Date): 'new' | 'waxing' | 'full' | 'waning' {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  // Simplified moon phase calculation
-  const c = Math.floor(365.25 * year);
-  const e = Math.floor(30.6 * month);
-  const jd = c + e + day - 694039.09;
-  const phase = jd / 29.53058867;
-  const phaseNum = phase - Math.floor(phase);
-  if (phaseNum < 0.0625) return 'new';
-  if (phaseNum < 0.3125) return 'waxing';
-  if (phaseNum < 0.6875) return 'full';
-  return 'waning';
+  const jd = getJD(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
+  return getMoonPhaseData(jd).phase;
 }
 
 export function getBestElectionalDates(
@@ -72,97 +301,116 @@ export function getBestElectionalDates(
   startDate: Date,
   endDate: Date
 ): ElectionalCandidate[] {
-  const config = EVENT_CONFIGS[eventType as keyof typeof EVENT_CONFIGS] || EVENT_CONFIGS.business_launch;
+  const config = EVENT_CONFIGS[eventType] || EVENT_CONFIGS.business_launch;
   const candidates: ElectionalCandidate[] = [];
-  const current = new Date(startDate);
 
-  while (current <= endDate && candidates.length < 30) {
-    const score = Math.floor(Math.random() * 40) + 50; // 50-90 baseline
-    const moonPhase = getMoonPhase(current);
-    const voidOfCourse = Math.random() < 0.15;
-    const isWaxing = moonPhase === 'waxing' || moonPhase === 'full';
-    const isWaning = moonPhase === 'waning';
+  const maxDays = Math.min(
+    Math.ceil((endDate.getTime() - startDate.getTime()) / 86400000),
+    90
+  );
+
+  const current = new Date(startDate);
+  for (let d = 0; d <= maxDays && candidates.length < 30; d++) {
+    const evalDate = new Date(current);
+    evalDate.setUTCHours(12, 0, 0, 0);
+    const jd = getJD(evalDate.getUTCFullYear(), evalDate.getUTCMonth() + 1, evalDate.getUTCDate());
+
+    // Get moon data
+    const moonData = getMoonPhaseData(jd);
+    const voidOfCourse = isVoidOfCourse(jd);
+
+    // Get planetary positions
+    const positions: Record<string, number> = {};
+    for (const [name, seId] of Object.entries(SE_PLANETS)) {
+      const lon = getPlanetLon(jd, seId);
+      if (lon !== null) positions[name] = lon;
+    }
+
+    // Score aspects
+    const { score, aspects, highlights, warnings } = scoreAspects(positions, config);
 
     let finalScore = score;
-    const aspects: string[] = [];
-    const warnings: string[] = [];
-    const highlights: string[] = [];
+    const finalHighlights = [...highlights];
+    const finalWarnings = [...warnings];
 
-    // Moon phase scoring
-    if (config.minMoonWaxing && isWaxing) {
+    // Moon phase bonus/penalty
+    if (config.preferWaxing && (moonData.phase === 'waxing' || moonData.phase === 'full')) {
       finalScore += 15;
-      highlights.push('Moon waxing - favorable for new beginnings');
-    } else if (config.minMoonWaning && isWaning) {
+      finalHighlights.push(`Moon ${moonData.phase} — favorable for new beginnings`);
+    } else if (config.preferWaning && (moonData.phase === 'waning' || moonData.phase === 'full')) {
       finalScore += 15;
-      highlights.push('Moon waning - favorable for endings/operations');
-    } else if (config.minMoonWaxing && isWaning) {
+      finalHighlights.push(`Moon ${moonData.phase} — favorable for endings/operations`);
+    } else if (config.preferWaxing && moonData.phase === 'waning') {
       finalScore -= 10;
-      warnings.push('Waning moon not ideal for this event type');
+      finalWarnings.push('Waning moon less ideal for this event type');
     }
 
+    // Void of course
     if (voidOfCourse && config.avoidVoidCourse) {
-      finalScore -= 25;
-      warnings.push('Void-of-course moon - decisions may lack follow-through');
+      finalScore -= 20;
+      finalWarnings.push('Void-of-course moon — decisions may lack follow-through');
     } else if (!voidOfCourse) {
-      finalScore += 10;
-      highlights.push('Moon not void-of-course');
-    }
-
-    // Random favorable aspects
-    if (Math.random() > 0.6) {
-      aspects.push('Sun-Trine-Jupiter');
-      finalScore += 12;
-      highlights.push('Sun trine Jupiter - expansion and optimism');
-    }
-    if (Math.random() > 0.7) {
-      aspects.push('Venus-Trine-Saturn');
-      finalScore += 10;
-      highlights.push('Venus trine Saturn - stable relationships and values');
-    }
-    if (Math.random() > 0.75) {
-      aspects.push('Mercury-Sextile-Venus');
       finalScore += 8;
-      highlights.push('Mercury sextile Venus - favorable communication');
+      finalHighlights.push('Moon not void-of-course — decisive');
     }
 
-    // Square aspects (challenging)
-    if (Math.random() > 0.8) {
-      aspects.push('Mars-Square-Saturn');
-      finalScore -= 15;
-      warnings.push('Mars square Saturn - delays and obstacles');
+    if (moonData.phase === 'new') {
+      finalScore += 5;
+      finalHighlights.push('New moon — fresh starts');
     }
 
-    // Ensure score is within 0-100
     finalScore = Math.max(0, Math.min(100, finalScore));
 
     candidates.push({
-      date: new Date(current),
+      date: new Date(evalDate),
       score: finalScore,
-      moonPhase,
+      moonPhase: moonData.phase,
+      moonLongitude: moonData.longitude,
       voidOfCourse,
       aspects,
-      warnings,
-      highlights,
+      warnings: finalWarnings,
+      highlights: finalHighlights,
     });
 
-    // Move to next day
-    current.setDate(current.getDate() + 1);
+    current.setUTCDate(current.getUTCDate() + 1);
   }
 
-  // Sort by score descending
   return candidates.sort((a, b) => b.score - a.score);
 }
 
 export function getHourlyBreakdown(date: Date): { hour: number; score: number; label: string }[] {
+  const jdBase = getJD(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
+  const moonDataBase = getMoonPhaseData(jdBase);
   const results = [];
+
   for (let h = 0; h < 24; h++) {
-    const baseScore = 50 + Math.sin(h * 0.5) * 20;
-    const isGood = (h >= 9 && h <= 11) || (h >= 14 && h <= 16);
-    results.push({
-      hour: h,
-      score: Math.round(baseScore + (isGood ? 15 : 0)),
-      label: isGood ? 'Favorable' : 'Neutral',
-    });
+    const jd = jdBase + (h - 12) / 24;
+    const positions: Record<string, number> = {};
+    for (const [name, seId] of Object.entries(SE_PLANETS)) {
+      const lon = getPlanetLon(jd, seId);
+      if (lon !== null) positions[name] = lon;
+    }
+    let score = 50;
+
+    if (moonDataBase.phase === 'waxing' || moonDataBase.phase === 'full') {
+      if (h >= 9 && h <= 17) score += 10;
+    }
+    if (moonDataBase.phase === 'waning') {
+      if (h >= 6 && h <= 12) score += 8;
+    }
+    if ((h >= 9 && h <= 11) || (h >= 14 && h <= 16)) score += 12;
+    if (h === 0 || h === 12) score -= 5;
+
+    // Jupiter sign check
+    const jupiterLon = positions.Jupiter;
+    if (jupiterLon !== undefined) {
+      const sign = getSignName(jupiterLon);
+      if (['Sagittarius', 'Pisces'].includes(sign)) score += 8;
+    }
+
+    const label = score >= 65 ? 'Favorable' : score >= 50 ? 'Neutral' : 'Challenging';
+    results.push({ hour: h, score: Math.round(Math.max(0, Math.min(100, score))), label });
   }
+
   return results;
 }

@@ -157,15 +157,11 @@ function getPlanetaryPositions(birthDate: string, birthTime: string, _lat: numbe
 // ─── House Placements (Placidus) ─────────────────────────────────────────────
 
 function getHouses(jd_ut: number, lat: number, lng: number): HousePlacements {
-  const hResult = houses_ex2(jd_ut, lng, lat, 'P');
+  // houses_ex2(tjd_ut, iflag, geolat, geolon, hsys) — returns degrees
+  const hResult = houses_ex2(jd_ut, 0, lat, lng, 'P') as { flag: number; error: string; data: { houses: number[] } };
   if (hResult.flag !== constants.OK) throw new Error(hResult.error ?? 'House calculation failed');
 
-  const houseData = hResult.data as unknown as {
-    houses: number[];
-    points: Record<string, number>;
-  };
-
-  const houses = (houseData.houses as number[]).map(h => ((h % 360) + 360) % 360);
+  const houses = hResult.data.houses.map(h => ((h % 360) + 360) % 360);
   const ascendant = houses[0];
   const midheaven = houses[9] ?? houses[1];
 
