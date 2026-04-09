@@ -15,13 +15,18 @@ export default function FortunePage() {
     summary: string;
     bestPeriods: string[];
     challengingPeriods: string[];
+    aiInterpretation?: string;
+    disclaimer?: string;
+    aiMeta?: { provider: string; model: string; latencyMs: number; costUSD: number };
+    aiError?: string;
   } | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingAI, setLoadingAI] = useState(false);
   const [error, setError] = useState('');
 
   const isZH = language === 'zh';
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (withAI: boolean) => {
     if (!birthDate) {
       setError(isZH ? '请选择出生日期' : 'Please select your birth date');
       return;
@@ -36,6 +41,7 @@ export default function FortunePage() {
         gender,
         language,
         ...(birthTime ? { birthTime } : {}),
+        enhanceWithAI: String(withAI),
       });
 
       const res = await fetch(`/api/fortune?${params}`);
@@ -47,6 +53,7 @@ export default function FortunePage() {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
+      setLoadingAI(false);
     }
   };
 
@@ -137,13 +144,22 @@ export default function FortunePage() {
             </p>
           )}
 
-          <button
-            onClick={handleGenerate}
-            disabled={loading}
-            className="mt-4 px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 disabled:from-gray-600 text-white font-semibold rounded-xl transition"
-          >
-            {loading ? (isZH ? '生成中...' : 'Generating...') : (isZH ? '🔮 生成运势图' : '🔮 Generate Fortune Chart')}
-          </button>
+          <div className="flex gap-4 mt-4">
+            <button
+              onClick={() => handleGenerate(false)}
+              disabled={loading}
+              className="flex-1 px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 disabled:from-gray-600 text-white font-semibold rounded-xl transition"
+            >
+              {loading && !loadingAI ? (isZH ? '生成中...' : 'Generating...') : (isZH ? '🔮 生成运势图' : '🔮 Generate Fortune Chart')}
+            </button>
+            <button
+              onClick={() => { setLoadingAI(true); handleGenerate(true); }}
+              disabled={loading}
+              className="flex-1 px-8 py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-600 disabled:from-gray-600 text-white font-semibold rounded-xl transition"
+            >
+              {loadingAI ? (isZH ? 'AI解读中...' : 'AI Interpreting...') : (isZH ? '✨ AI 深度解读' : '✨ AI Deep Interpretation')}
+            </button>
+          </div>
         </div>
 
         {/* Results */}
@@ -185,6 +201,30 @@ export default function FortunePage() {
               </h3>
               <p className="text-gray-300 leading-relaxed">{data.summary}</p>
             </div>
+
+            {/* AI Interpretation */}
+            {data.aiInterpretation && (
+              <div className="bg-gradient-to-r from-purple-900/40 to-amber-900/40 backdrop-blur rounded-xl p-5 border border-purple-500/30">
+                <h3 className="text-lg font-semibold mb-3 text-purple-300">
+                  {isZH ? '✨ AI 深度解读' : '✨ AI Deep Interpretation'}
+                </h3>
+                <p className="text-gray-200 leading-relaxed whitespace-pre-wrap">{data.aiInterpretation}</p>
+                {data.disclaimer && (
+                  <p className="text-slate-500 text-xs mt-4 italic">{data.disclaimer}</p>
+                )}
+                {data.aiMeta && (
+                  <p className="text-slate-600 text-xs mt-2">
+                    {data.aiMeta.provider} · {data.aiMeta.model} · {data.aiMeta.latencyMs}ms
+                  </p>
+                )}
+              </div>
+            )}
+
+            {data.aiError && (
+              <div className="bg-red-900/30 border border-red-500/50 rounded-lg p-4 text-red-200 text-sm">
+                {isZH ? 'AI 解读失败' : 'AI Interpretation Failed'}: {data.aiError}
+              </div>
+            )}
 
             {/* Chart */}
             <div>

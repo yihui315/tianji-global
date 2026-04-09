@@ -59,10 +59,11 @@ CREATE TABLE users (
   email           TEXT            NOT NULL UNIQUE,
   name            TEXT,
   avatar_url      TEXT,
+  image           TEXT,
+  email_verified  TIMESTAMPTZ     DEFAULT NULL,
   stripe_customer_id TEXT        UNIQUE,
   subscription_status subscription_status DEFAULT 'active',
   subscription_tier   subscription_tier DEFAULT 'free',
-  email_verified  TIMESTAMPTZ     DEFAULT NULL,
   created_at      TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
   updated_at      TIMESTAMPTZ     NOT NULL DEFAULT NOW()
 );
@@ -71,6 +72,48 @@ CREATE TABLE users (
 CREATE INDEX idx_users_email           ON users(email);
 CREATE INDEX idx_users_stripe_customer ON users(stripe_customer_id);
 CREATE INDEX idx_users_subscription    ON users(subscription_status, subscription_tier);
+
+-- ============================================================
+-- NEXTAUTH TABLES (Auth.js / NextAuth v5)
+-- ============================================================
+-- These support database sessions with @auth/pg-adapter.
+
+CREATE TABLE accounts (
+  id               TEXT         PRIMARY KEY DEFAULT uuid_generate_v4(),
+  "userId"         UUID         NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  type             TEXT         NOT NULL,
+  provider         TEXT         NOT NULL,
+  "providerAccountId" TEXT      NOT NULL,
+  access_token     TEXT,
+  expires_at       INTEGER,
+  refresh_token    TEXT,
+  id_token         TEXT,
+  scope            TEXT,
+  session_state    TEXT,
+  token_type       TEXT,
+  CONSTRAINT accounts_provider_provideraccountid_unique
+    UNIQUE (provider, "providerAccountId")
+);
+
+CREATE INDEX idx_accounts_user_id          ON accounts("userId");
+CREATE INDEX idx_accounts_provider_account ON accounts(provider, "providerAccountId");
+
+CREATE TABLE sessions (
+  id             TEXT     PRIMARY KEY DEFAULT uuid_generate_v4(),
+  "sessionToken" TEXT     NOT NULL UNIQUE,
+  "userId"       UUID     NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  expires        TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX idx_sessions_user_id        ON sessions("userId");
+CREATE INDEX idx_sessions_session_token  ON sessions("sessionToken");
+
+CREATE TABLE verification_tokens (
+  identifier TEXT NOT NULL,
+  token      TEXT NOT NULL,
+  expires    TIMESTAMPTZ NOT NULL,
+  PRIMARY KEY (identifier, token)
+);
 
 -- ============================================================
 -- SUBSCRIPTIONS

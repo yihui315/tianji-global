@@ -13,6 +13,22 @@ interface BaZiChart {
   dayMasterElement: string;
 }
 
+interface AiMeta {
+  provider: string;
+  model: string;
+  latencyMs: number;
+  costUSD: number;
+}
+
+interface BaZiResponse {
+  chart: BaZiChart;
+  interpretation: string;
+  aiInterpretation?: string;
+  disclaimer?: string;
+  aiMeta?: AiMeta;
+  aiError?: string;
+}
+
 const HEAVENLY_STEMS = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
 const EARTHLY_BRANCHES = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 const ELEMENTS = ['木', '木', '火', '火', '土', '土', '金', '金', '水', '水'];
@@ -109,17 +125,45 @@ export default function BaZiPage() {
   const [birthTime, setBirthTime] = useState<number>(2);
   const [gender, setGender] = useState<Gender>('male');
   const [language, setLanguage] = useState<Language>('zh');
-  const [chart, setChart] = useState<BaZiChart | null>(null);
+  const [result, setResult] = useState<BaZiResponse | null>(null);
   const [elementCounts, setElementCounts] = useState<Record<string, number> | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingAI, setLoadingAI] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleCalculate = useCallback(() => {
-    const [year, month, day] = birthday.split('-').map(Number);
-    // Convert birth time index to hour (each period is 2 hours, starting from 23:00)
-    const hour = birthTime * 2 + 23;
-    const calculatedChart = calculateBaZi(year, month, day, hour % 24);
-    setChart(calculatedChart);
-    setElementCounts(countElements(calculatedChart));
-  }, [birthday, birthTime]);
+  const handleCalculate = useCallback(async (withAI: boolean) => {
+    setLoading(true);
+    setError('');
+    setResult(null);
+
+    try {
+      const [year, month, day] = birthday.split('-').map(Number);
+      const hour = birthTime * 2 + 23;
+
+      const res = await fetch('/api/bazi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          birthday,
+          birthTime: `${String(hour % 24).padStart(2, '0')}:00`,
+          gender,
+          language,
+          enhanceWithAI: withAI,
+        }),
+      });
+
+      const json: BaZiResponse = await res.json();
+      if (!res.ok) throw new Error(json.aiError || json.interpretation || 'Calculation failed');
+
+      setResult(json);
+      setElementCounts(countElements(json.chart));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+      setLoadingAI(false);
+    }
+  }, [birthday, birthTime, gender, language]);
 
   const pillarLabels = {
     year: language === 'zh' ? '年柱' : 'Year',
@@ -235,16 +279,33 @@ export default function BaZiPage() {
           </div>
 
           {/* Calculate Button */}
-          <button
-            onClick={handleCalculate}
-            className="w-full py-4 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 font-bold text-lg transition-all"
-          >
-            {language === 'zh' ? '分析八字' : 'Calculate Ba Zi'}
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={() => handleCalculate(false)}
+              disabled={loading}
+              className="flex-1 py-4 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 font-bold text-lg transition-all disabled:opacity-50"
+            >
+              {loading && !loadingAI ? (language === 'zh' ? '计算中...' : 'Calculating...') : (language === 'zh' ? '分析八字' : 'Calculate Ba Zi')}
+            </button>
+            <button
+              onClick={() => { setLoadingAI(true); handleCalculate(true); }}
+              disabled={loading}
+              className="flex-1 py-4 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 font-bold text-lg transition-all disabled:opacity-50"
+            >
+              {loadingAI ? (language === 'zh' ? 'AI解读中...' : 'AI Interpreting...') : (language === 'zh' ? '✨ AI 深度解读' : '✨ AI Deep Interpretation')}
+            </button>
+          </div>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-900/30 border border-red-500/50 rounded-lg p-4 mb-6 text-red-200">
+            {error}
+          </div>
+        )}
+
         {/* Results */}
-        {chart && (
+        {result && (
           <div className="space-y-6">
             {/* Four Pillars Chart */}
             <div className="bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm border border-slate-700/50">
@@ -263,7 +324,7 @@ export default function BaZiPage() {
 
               {/* Heavenly Stems */}
               <div className="grid grid-cols-4 gap-2 mb-2">
-                {[chart.year, chart.month, chart.day, chart.hour].map((pillar, i) => (
+                {[result.chart.year, result.chart.month, result.chart.day, result.chart.hour].map((pillar, i) => (
                   <div key={i} className="text-center bg-slate-700/30 rounded-lg py-3">
                     <span className="text-3xl font-bold text-amber-400">{pillar.heavenlyStem}</span>
                   </div>
@@ -272,7 +333,7 @@ export default function BaZiPage() {
 
               {/* Earthly Branches */}
               <div className="grid grid-cols-4 gap-2 mb-4">
-                {[chart.year, chart.month, chart.day, chart.hour].map((pillar, i) => (
+                {[result.chart.year, result.chart.month, result.chart.day, result.chart.hour].map((pillar, i) => (
                   <div key={i} className="text-center bg-slate-700/30 rounded-lg py-3">
                     <span className="text-3xl font-bold text-orange-400">{pillar.earthlyBranch}</span>
                   </div>
@@ -281,7 +342,7 @@ export default function BaZiPage() {
 
               {/* Elements Row */}
               <div className="grid grid-cols-4 gap-2">
-                {[chart.year, chart.month, chart.day, chart.hour].map((pillar, i) => (
+                {[result.chart.year, result.chart.month, result.chart.day, result.chart.hour].map((pillar, i) => (
                   <div key={i} className="text-center bg-slate-700/30 rounded-lg py-2">
                     <span className={`text-lg font-semibold ${ELEMENT_COLORS[pillar.element]}`}>
                       {ELEMENT_LABELS[language][pillar.element]}
@@ -297,15 +358,15 @@ export default function BaZiPage() {
                 {language === 'zh' ? '日主 (Day Master)' : '日主 (Day Master)'}
               </h3>
               <div className="text-center">
-                <span className="text-5xl font-bold text-amber-400 mr-4">{chart.day.heavenlyStem}</span>
-                <span className={`text-3xl font-bold ${ELEMENT_COLORS[chart.dayMasterElement]}`}>
-                  {ELEMENT_LABELS[language][chart.dayMasterElement]}
+                <span className="text-5xl font-bold text-amber-400 mr-4">{result.chart.day.heavenlyStem}</span>
+                <span className={`text-3xl font-bold ${ELEMENT_COLORS[result.chart.dayMasterElement]}`}>
+                  {ELEMENT_LABELS[language][result.chart.dayMasterElement]}
                 </span>
               </div>
               <p className="text-slate-300 text-center mt-4">
                 {language === 'zh'
-                  ? `${chart.day.heavenlyStem}日主，属于${ELEMENT_LABELS['zh'][chart.dayMasterElement]}行`
-                  : `Day Master ${chart.day.heavenlyStem}, ${ELEMENT_LABELS['en'][chart.dayMasterElement]} element`}
+                  ? `${result.chart.day.heavenlyStem}日主，属于${ELEMENT_LABELS['zh'][result.chart.dayMasterElement]}行`
+                  : `Day Master ${result.chart.day.heavenlyStem}, ${ELEMENT_LABELS['en'][result.chart.dayMasterElement]} element`}
               </p>
             </div>
 
@@ -352,10 +413,38 @@ export default function BaZiPage() {
               </h3>
               <p className="text-slate-300 text-center leading-relaxed">
                 {language === 'zh'
-                  ? `您的日主为${chart.day.heavenlyStem}，属${ELEMENT_LABELS['zh'][chart.dayMasterElement]}行。${chart.year.heavenlyStem}年、${chart.month.heavenlyStem}月、${chart.day.heavenlyStem}日、${chart.hour.heavenlyStem}时，构成了独特的八字命盘。`
-                  : `Your Day Master is ${chart.day.heavenlyStem}, belonging to the ${ELEMENT_LABELS['en'][chart.dayMasterElement]} element. The combination of ${chart.year.heavenlyStem} (Year), ${chart.month.heavenlyStem} (Month), ${chart.day.heavenlyStem} (Day), and ${chart.hour.heavenlyStem} (Hour) creates your unique Ba Zi chart.`}
+                  ? `您的日主为${result.chart.day.heavenlyStem}，属${ELEMENT_LABELS['zh'][result.chart.dayMasterElement]}行。${result.chart.year.heavenlyStem}年、${result.chart.month.heavenlyStem}月、${result.chart.day.heavenlyStem}日、${result.chart.hour.heavenlyStem}时，构成了独特的八字命盘。`
+                  : `Your Day Master is ${result.chart.day.heavenlyStem}, belonging to the ${ELEMENT_LABELS['en'][result.chart.dayMasterElement]} element. The combination of ${result.chart.year.heavenlyStem} (Year), ${result.chart.month.heavenlyStem} (Month), ${result.chart.day.heavenlyStem} (Day), and ${result.chart.hour.heavenlyStem} (Hour) creates your unique Ba Zi chart.`}
               </p>
             </div>
+
+            {/* AI Interpretation */}
+            {result.aiInterpretation && (
+              <div className="bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-xl p-6 border border-purple-600/30">
+                <h3 className="text-xl font-bold text-purple-300 mb-4 text-center">
+                  {language === 'zh' ? '✨ AI 深度解读' : '✨ AI Deep Interpretation'}
+                </h3>
+                <p className="text-slate-200 text-center leading-relaxed whitespace-pre-wrap">
+                  {result.aiInterpretation}
+                </p>
+                {result.disclaimer && (
+                  <p className="text-slate-500 text-xs mt-4 italic">
+                    {result.disclaimer}
+                  </p>
+                )}
+                {result.aiMeta && (
+                  <p className="text-slate-600 text-xs mt-2">
+                    {result.aiMeta.provider} · {result.aiMeta.model} · {result.aiMeta.latencyMs}ms
+                  </p>
+                )}
+              </div>
+            )}
+
+            {result.aiError && (
+              <div className="bg-red-900/30 border border-red-500/50 rounded-lg p-4 text-red-200 text-sm">
+                {language === 'zh' ? 'AI 解读失败' : 'AI Interpretation Failed'}: {result.aiError}
+              </div>
+            )}
           </div>
         )}
 
