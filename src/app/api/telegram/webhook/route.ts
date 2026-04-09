@@ -106,7 +106,8 @@ async function cmdBazi(chatId: string, date: string, time: string): Promise<void
 async function cmdDaily(chatId: string): Promise<void> {
   await sendMessage(chatId, '🔮 正在生成今日运势，请稍候...', 'HTML');
   try {
-    await sendDailyFortune(chatId);
+    const user = await getTelegramUser(chatId);
+    await sendDailyFortune(chatId, user);
   } catch (err) {
     console.error('[telegram] daily fortune error:', err);
     await sendMessage(
@@ -184,7 +185,7 @@ async function cmdHelp(chatId: string): Promise<void> {
     '',
     '<code>/start</code> — 欢迎 & 语言选择',
     '<code>/bazi YYYY-MM-DD HH:MM</code> — 登记出生信息',
-    '<code>/daily</code> — 今日运势',
+    '<code>/daily</code> / <code>/dailyfortune</code> — 今日运势',
     '<code>/tarot</code> — 抽取塔罗牌',
     '<code>/love YYYY-MM-DD</code> — 姻缘速测',
     '<code>/subscribe</code> — 开启每日推送',
@@ -228,7 +229,7 @@ async function handleMessage(msg: {
         'HTML'
       );
     }
-  } else if (text === '/daily') {
+  } else if (text === '/daily' || text === '/dailyfortune') {
     await cmdDaily(chatId);
   } else if (text === '/tarot') {
     await cmdTarot(chatId);
