@@ -19,7 +19,7 @@
 
 type Language = 'en' | 'zh';
 
-interface BaziData {
+export interface BaziData {
   year: { heavenlyStem: string; earthlyBranch: string; element: string };
   month: { heavenlyStem: string; earthlyBranch: string; element: string };
   day: { heavenlyStem: string; earthlyBranch: string; element: string };
@@ -28,7 +28,7 @@ interface BaziData {
   gender?: string;
 }
 
-interface ZiweiData {
+export interface ZiweiData {
   yearStem: string;
   lifePalace: { branch: string; name: string };
   bodyPalace: { branch: string; name: string };
@@ -42,15 +42,42 @@ interface ZiweiData {
   gender: string;
 }
 
-interface PsychologyData {
+export interface PsychologyData {
   baziData?: BaziData;
   ziweiData?: ZiweiData;
   userNotes?: string;
 }
 
+// ─── Fortune (人生运势) Types ─────────────────────────────────────────────────
+
+export interface FortuneCycle {
+  ageStart: number;
+  ageEnd: number;
+  phase: string;
+  phaseEn: string;
+  overall: number;
+  career: number;
+  wealth: number;
+  love: number;
+  health: number;
+}
+
+export interface FortuneData {
+  birthYear: number;
+  birthMonth: number;
+  birthDay: number;
+  gender?: string;
+  currentAge: number;
+  currentPhase: string;
+  currentPhaseEn: string;
+  fortuneCycles: FortuneCycle[];
+  bestPeriods: string[];
+  challengingPeriods: string[];
+}
+
 // ─── Tarot Types ───────────────────────────────────────────────────────────────
 
-interface TarotCard {
+export interface TarotCard {
   name: string;
   nameEn: string;
   suit?: string;
@@ -59,7 +86,7 @@ interface TarotCard {
   reversedMeaning: string;
 }
 
-interface TarotSpread {
+export interface TarotSpread {
   positions: Array<{
     name: string;
     nameEn: string;
@@ -68,7 +95,7 @@ interface TarotSpread {
   cards: TarotCard[];
 }
 
-interface TarotData {
+export interface TarotData {
   spread: TarotSpread;
   question?: string;
   gender?: string;
@@ -76,7 +103,7 @@ interface TarotData {
 
 // ─── YiJing (I Ching) Types ───────────────────────────────────────────────────
 
-interface YiJingHexagram {
+export interface YiJingHexagram {
   number: number;
   name: string;
   nameEn: string;
@@ -94,7 +121,7 @@ interface YiJingHexagram {
   }>;
 }
 
-interface YiJingData {
+export interface YiJingData {
   hexagram: YiJingHexagram;
   question?: string;
   gender?: string;
@@ -102,7 +129,7 @@ interface YiJingData {
 
 // ─── Western Astrology Types ───────────────────────────────────────────────────
 
-interface WesternChart {
+export interface WesternChart {
   sun: { sign: string; degree: number };
   moon: { sign: string; degree: number };
   rising: { sign: string; degree: number };
@@ -121,7 +148,7 @@ interface WesternChart {
   }>;
 }
 
-interface WesternData {
+export interface WesternData {
   chart: WesternChart;
   aspects: Array<{
     planet1: string;
@@ -375,6 +402,82 @@ Your task:
 3. Provide at least 3 personalised CBT behavioural experiment suggestions
 4. Offer growth suggestions from a mindfulness and self-compassion perspective
 5. Highlight potential strengths and resources
+
+Set the disclaimer to: ${DISCLAIMER_EN}
+
+${OUTPUT_SCHEMA_EN}`;
+}
+
+// ─── Fortune Report Prompt ──────────────────────────────────────────────────────
+
+/**
+ * Returns a bilingual prompt for generating a Fortune (人生运势) AI report.
+ */
+export function getFortuneReportPrompt(data: FortuneData, language: Language = 'en'): string {
+  const currentCycle = data.fortuneCycles.find(
+    c => data.currentAge >= c.ageStart && data.currentAge <= c.ageEnd
+  );
+
+  const cycleSummary = data.fortuneCycles
+    .map(c => {
+      const bar = '★'.repeat(Math.round(c.overall / 10)) + '☆'.repeat(10 - Math.round(c.overall / 10));
+      return `  ${c.phaseEn} (${c.ageStart}-${c.ageEnd}): ${bar} ${c.overall}/100 | Career:${c.career} Wealth:${c.wealth} Love:${c.love} Health:${c.health}`;
+    })
+    .join('\n');
+
+  if (language === 'zh') {
+    return `你是精通东方传统命理学的专业命理师，结合现代心理学提供人生运势指引。
+
+用户信息：
+出生：${data.birthYear}年${data.birthMonth}月${data.birthDay}日
+性别：${data.gender || '未指定'}
+当前年龄：${data.currentAge}岁
+当前人生阶段：${data.currentPhase}
+
+人生运势周期分析：
+${cycleSummary}
+
+当前运势评估：
+${currentCycle ? `  总体：${currentCycle.overall}/100 | 事业：${currentCycle.career} | 财富：${currentCycle.wealth} | 感情：${currentCycle.love} | 健康：${currentCycle.health}` : '暂无'}
+
+最佳时期：${data.bestPeriods.join('；')}
+挑战时期：${data.challengingPeriods.join('；')}
+
+请根据以上运势数据：
+1. 解读当前人生阶段的挑战与机遇
+2. 分析事业、感情、财富、健康的五行生克关系
+3. 提供实用的行动建议（结合Big Five人格）
+4. 给予心理建设性指引
+5. 指出下一个转运期的关键行动
+
+免责声明请设置为：${DISCLAIMER_ZH}
+
+${OUTPUT_SCHEMA_ZH}`;
+  }
+
+  return `You are a professional Eastern metaphysics consultant specialising in life fortune cycles.
+
+User information:
+Birth: ${data.birthYear}-${data.birthMonth}-${data.birthDay}
+Gender: ${data.gender || 'Not specified'}
+Current age: ${data.currentAge}
+Current life phase: ${data.currentPhaseEn}
+
+Life fortune cycle analysis:
+${cycleSummary}
+
+Current cycle assessment:
+${currentCycle ? `  Overall: ${currentCycle.overall}/100 | Career: ${currentCycle.career} | Wealth: ${currentCycle.wealth} | Love: ${currentCycle.love} | Health: ${currentCycle.health}` : 'N/A'}
+
+Best periods: ${data.bestPeriods.join('; ')}
+Challenging periods: ${data.challengingPeriods.join('; ')}
+
+Please based on the fortune data above:
+1. Analyse the challenges and opportunities in the current life phase
+2. Assess career, love, wealth, and health trajectories
+3. Provide actionable guidance aligned with Big Five personality traits
+4. Offer psychological resilience strategies
+5. Identify key actions to capitalise on the next favourable period
 
 Set the disclaimer to: ${DISCLAIMER_EN}
 

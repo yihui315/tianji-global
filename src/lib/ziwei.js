@@ -329,7 +329,108 @@ function calculateZiWei(birthDate, birthTime, gender) {
   };
 }
 
+/**
+ * Generate a full Zi Wei chart using the iztro library (solar birthday).
+ *
+ * @param {Object} params
+ * @param {string} params.birthday  — YYYY-MM-DD
+ * @param {number} params.birthTime — hour index (0–12, 0=子时 midnight)
+ * @param {'male'|'female'} params.gender
+ * @param {boolean} [params.leapMonth] — treat month as lunar leap month
+ * @param {string} [params.language]  — locale: 'zh-CN', 'en-US', etc.
+ * @returns {Object} unified chart data
+ */
+function generateBySolar({ birthday, birthTime, gender, leapMonth = false, language = 'zh-CN' }) {
+  // eslint-disable-next-line global-require
+  const { astro } = require('iztro');
+  const chart = astro.bySolar(birthday, birthTime, gender, leapMonth, language);
+  return _normalizeIzstroChart(chart, language);
+}
+
+/**
+ * Generate a full Zi Wei chart using the iztro library (lunar birthday).
+ *
+ * @param {Object} params
+ * @param {string} params.birthday  — YYYY-MM-DD (lunar calendar date)
+ * @param {number} params.birthTime — hour index (0–12)
+ * @param {'male'|'female'} params.gender
+ * @param {boolean} [params.leapMonth]
+ * @param {string} [params.language]
+ * @returns {Object} unified chart data
+ */
+function generateByLunar({ birthday, birthTime, gender, leapMonth = false, language = 'zh-CN' }) {
+  // eslint-disable-next-line global-require
+  const { astro } = require('iztro');
+  const chart = astro.byLunar(birthday, birthTime, gender, leapMonth, language);
+  return _normalizeIzstroChart(chart, language);
+}
+
+/**
+ * Normalise an iztro FunctionalAstrolabe instance into the same data shape
+ * that the AI interpreter expects (ZiweiData).
+ *
+ * @param {Object} chart — raw iztro chart
+ * @param {string} language
+ * @returns {Object}
+ */
+function _normalizeIzstroChart(chart, language) {
+  // Find life palace (命宫 = index 4 in iztro palace array)
+  const LIFE_PALACE_IDX = 4;
+  const lifePalace = chart.palaces[LIFE_PALACE_IDX];
+  const bodyPalaceIdx = chart.palaces.findIndex(p => p.isBodyPalace);
+  const bodyPalace = chart.palaces[bodyPalaceIdx];
+
+  // Year stem — iztro does not expose it directly; use the life palace stem as proxy
+  const yearStem = lifePalace?.heavenlyStem || '未知';
+
+  const palaces = chart.palaces.map((p, idx) => ({
+    name: p.name,
+    nameEn: p.name, // iztro doesn't separate English names; keep as-is for v1
+    stars: [
+      ...(p.majorStars || []).map(s => s.name),
+      ...(p.minorStars || []).map(s => s.name),
+      ...(p.adjectiveStars || []).map(s => s.name),
+    ],
+    isLifePalace: idx === LIFE_PALACE_IDX,
+    heavenlyStem: p.heavenlyStem || '',
+    earthlyBranch: p.earthlyBranch || '',
+  }));
+
+  // siHua — iztro doesn't expose it in v2; return empty placeholders
+  const siHua = { lu: '', quan: '', ke: '', ji: '' };
+
+  return {
+    raw: {
+      palaces,
+      fiveElementsClass: chart.fiveElementsClass,
+      soul: chart.soul,
+      body: chart.body,
+      zodiac: chart.zodiac,
+      sign: chart.sign,
+    },
+    lifePalace: {
+      branch: String(LIFE_PALACE_IDX),
+      name: lifePalace?.name || '命宫',
+    },
+    bodyPalace: {
+      branch: String(bodyPalaceIdx),
+      name: bodyPalace?.name || '身宫',
+    },
+    yearStem,
+    fiveElementsClass: chart.fiveElementsClass || '',
+    soul: chart.soul || '',
+    body: chart.body || '',
+    zodiac: chart.zodiac || '',
+    sign: chart.sign || '',
+    siHua,
+    gender: chart.gender,
+    language,
+  };
+}
+
 module.exports = {
+  generateBySolar,
+  generateByLunar,
   calculateZiWei,
   calculateLifePalaceBranch,
   calculateBodyPalaceBranch,

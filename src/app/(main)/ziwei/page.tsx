@@ -1,11 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Iztrolabe } from 'react-iztro';
+
+interface ZiweiAIResponse {
+  aiInterpretation?: string;
+  disclaimer?: string;
+  aiMeta?: {
+    provider: string;
+    model: string;
+    latencyMs: number;
+    costUSD: number;
+  };
+  aiError?: string;
+}
 
 /**
  * ZiweiPage —紫微斗数星盘页面
- * Uses react-iztro for visualization and iztro for data generation.
+ * Calls /api/ziwei with enhanceWithAI=true for AI interpretation.
+ * Uses react-iztro Iztrolabe for visualization.
  */
 export default function ZiweiPage() {
   const [birthday, setBirthday] = useState<string>('2000-08-16');
@@ -13,10 +26,44 @@ export default function ZiweiPage() {
   const [birthdayType, setBirthdayType] = useState<'solar' | 'lunar'>('solar');
   const [gender, setGender] = useState<'male' | 'female'>('male');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // The Iztrolabe component will recalculate automatically via props
-  };
+  const [aiResult, setAiResult] = useState<ZiweiAIResponse | null>(null);
+  const [isLoadingAI, setIsLoadingAI] = useState<boolean>(false);
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setIsLoadingAI(true);
+      setAiResult(null);
+
+      try {
+        const params = new URLSearchParams({
+          birthday,
+          birthTime: String(birthTime),
+          birthdayType,
+          gender,
+          enhanceWithAI: 'true',
+          language: 'zh-CN',
+        });
+
+        const res = await fetch(`/api/ziwei?${params.toString()}`);
+
+        if (!res.ok) {
+          throw new Error(`API error: ${res.status}`);
+        }
+
+        const data: ZiweiAIResponse = await res.json();
+        setAiResult(data);
+      } catch (err) {
+        console.error('Ziwei AI fetch failed:', err);
+        setAiResult({
+          aiError: err instanceof Error ? err.message : 'Failed to get AI interpretation',
+        });
+      } finally {
+        setIsLoadingAI(false);
+      }
+    },
+    [birthday, birthTime, birthdayType, gender]
+  );
 
   return (
     <main className="min-h-screen flex flex-col items-center p-8">
@@ -100,7 +147,93 @@ export default function ZiweiPage() {
             </select>
           </div>
         </div>
+
+        {/* Submit Button */}
+        <div className="mt-6 flex justify-center">
+          <button
+            type="submit"
+            disabled={isLoadingAI}
+            className="px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoadingAI ? (
+              <span className="flex items-center gap-2">
+                <svg
+                  className="animate-spin h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  />
+                </svg>
+                AI 解读中...
+              </span>
+            ) : (
+              '✨ AI 解读'
+            )}
+          </button>
+        </div>
       </form>
+
+      {/* AI Interpretation Display */}
+      {isLoadingAI && (
+        <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 mb-8 text-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="animate-pulse">
+              <div className="h-4 w-64 bg-gray-200 rounded mb-2"></div>
+              <div className="h-4 w-48 bg-gray-200 rounded mx-auto"></div>
+            </div>
+            <p className="text-gray-500">正在调用 AI 分析您的紫微命盘...</p>
+          </div>
+        </div>
+      )}
+
+      {aiResult && !isLoadingAI && (
+        <>
+          {aiResult.aiError ? (
+            <div className="w-full max-w-2xl bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
+              <p className="text-red-600 text-center">
+                AI 解读失败: {aiResult.aiError}
+              </p>
+            </div>
+          ) : (
+            <div className="w-full max-w-2xl bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-xl p-6 mb-8 border border-purple-600/30">
+              <h2 className="text-xl font-bold text-purple-300 mb-4 text-center">
+                ✨ AI 命盘解读
+              </h2>
+              <div className="text-slate-200 whitespace-pre-wrap leading-relaxed">
+                {aiResult.aiInterpretation}
+              </div>
+              {aiResult.disclaimer && (
+                <p className="mt-4 text-xs text-slate-400 italic">
+                  {aiResult.disclaimer}
+                </p>
+              )}
+              {aiResult.aiMeta && (
+                <div className="mt-4 pt-4 border-t border-purple-600/30 text-xs text-slate-400 flex justify-between">
+                  <span>
+                    Model: {aiResult.aiMeta.model}
+                  </span>
+                  <span>
+                    Latency: {aiResult.aiMeta.latencyMs}ms | Cost: ${aiResult.aiMeta.costUSD?.toFixed(4) ?? 'N/A'}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
 
       {/* Astrolabe Visualization */}
       <div

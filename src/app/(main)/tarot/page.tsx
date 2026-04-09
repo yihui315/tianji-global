@@ -6,12 +6,23 @@ import { spreadLayouts, type TarotCard, type SpreadLayout, type DrawnCard } from
 type SpreadType = 'single' | 'three-card' | 'celtic-cross';
 type Language = 'en' | 'zh';
 
+interface AiMeta {
+  provider: string;
+  model: string;
+  latencyMs: number;
+  costUSD: number;
+}
+
 interface TarotReadingResponse {
   spread: SpreadLayout;
   question?: string;
   drawnCards: DrawnCard[];
   totalCards: number;
   language: Language;
+  aiInterpretation?: string;
+  disclaimer?: string;
+  aiMeta?: AiMeta;
+  aiError?: string;
 }
 
 export default function TarotPage() {
@@ -39,7 +50,7 @@ export default function TarotPage() {
       const response = await fetch('/api/tarot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ spreadType, question, language }),
+        body: JSON.stringify({ spreadType, question, language, enhanceWithAI: true }),
       });
 
       if (!response.ok) {
@@ -189,6 +200,41 @@ export default function TarotPage() {
                     onClick={() => handleCardClick(index)}
                   />
                 ))}
+              </div>
+            )}
+
+            {/* AI Interpretation */}
+            {reading.aiInterpretation && (
+              <div className="bg-gradient-to-br from-purple-900/50 to-slate-800/50 rounded-xl p-6 border border-purple-500/30 backdrop-blur-sm">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
+                    AI
+                  </div>
+                  <h3 className="text-xl font-bold text-purple-300">
+                    {language === 'zh' ? 'AI 智能解读' : 'AI Interpretation'}
+                  </h3>
+                </div>
+                <div className="prose prose-invert prose-purple max-w-none">
+                  <p className="text-slate-200 leading-relaxed whitespace-pre-wrap">
+                    {reading.aiInterpretation}
+                  </p>
+                </div>
+                {reading.disclaimer && (
+                  <p className="text-slate-500 text-xs mt-4 italic">
+                    {reading.disclaimer}
+                  </p>
+                )}
+                {reading.aiMeta && (
+                  <p className="text-slate-600 text-xs mt-2">
+                    {reading.aiMeta.provider} · {reading.aiMeta.model} · {reading.aiMeta.latencyMs}ms
+                  </p>
+                )}
+              </div>
+            )}
+
+            {reading.aiError && (
+              <div className="bg-red-900/30 border border-red-500/50 rounded-lg p-4 text-red-300 text-sm">
+                {language === 'zh' ? 'AI 解读失败' : 'AI Interpretation Failed'}: {reading.aiError}
               </div>
             )}
           </div>

@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { interpretFortune } from '@/lib/ai-interpreter';
+import type { FortuneData } from '@/lib/ai-prompts';
 
 export interface FortunePoint {
   ageStart: number;
@@ -25,7 +27,6 @@ const PHASES_ZH = [
   { ageStart: 90, ageEnd: 99, phase: '耄耋', phaseEn: 'Elder' },
 ];
 
-// Seeded pseudo-random for consistent results per birth year
 function seededRandom(seed: number): () => number {
   let s = seed;
   return () => {
@@ -66,11 +67,12 @@ export async function GET(req: NextRequest) {
   const birthTime = searchParams.get('birthTime');
   const gender = searchParams.get('gender') || 'unspecified';
   const language = searchParams.get('language') || 'zh';
+  const enhanceWithAI = searchParams.get('enhanceWithAI') === 'true';
 
   if (!birthDate) {
     return NextResponse.json(
       { error: language === 'zh' ? '缺少出生日期' : 'Birth date is required' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -78,41 +80,79 @@ export async function GET(req: NextRequest) {
     const [year, month, day] = birthDate.split('-').map(Number);
     const fortuneCycles = calculateFortuneFromBirth(year, month, day);
 
-    // Find best and worst periods
     const sorted = [...fortuneCycles].sort((a, b) => b.overall - a.overall);
     const bestPeriods = sorted.slice(0, 3).map(
-      p => language === 'zh'
-        ? `${p.phase} (${p.ageStart}-${p.ageEnd}岁): ${p.overall}分`
-        : `${p.phaseEn} (${p.ageStart}-${p.ageEnd}): Score ${p.overall}`
+      p =>
+        language === 'zh'
+          ? `${p.phase} (${p.ageStart}-${p.ageEnd}岁): ${p.overall}分`
+          : `${p.phaseEn} (${p.ageStart}-${p.ageEnd}): Score ${p.overall}`,
     );
     const challengingPeriods = sorted.slice(-2).map(
-      p => language === 'zh'
-        ? `${p.phase} (${p.ageStart}-${p.ageEnd}岁): ${p.overall}分`
-        : `${p.phaseEn} (${p.ageStart}-${p.ageEnd}): Score ${p.overall}`
+      p =>
+        language === 'zh'
+          ? `${p.phase} (${p.ageStart}-${p.ageEnd}岁): ${p.overall}分`
+          : `${p.phaseEn} (${p.ageStart}-${p.ageEnd}): Score ${p.overall}`,
     );
 
-    // Determine current life phase
     const currentYear = new Date().getFullYear();
     const age = currentYear - year;
-    const currentPhase = PHASES_ZH.find(p => age >= p.ageStart && age <= p.ageEnd) || PHASES_ZH[0];
+    const currentPhaseObj = PHASES_ZH.find(p => age >= p.ageStart && age <= p.ageEnd) || PHASES_ZH[0];
+    const currentPhaseZh = currentPhaseObj.phase;
+    const currentPhaseEn = currentPhaseObj.phaseEn;
 
-    return NextResponse.json({
+    const response: Record<string, unknown> = {
       birthDate,
       birthTime: birthTime || null,
       gender,
       currentAge: age,
-      currentPhase: language === 'zh' ? currentPhase.phase : currentPhase.phaseEn,
+      currentPhase: language === 'zh' ? currentPhaseZh : currentPhaseEn,
       fortuneCycles,
-      summary: language === 'zh'
-        ? `根据您的八字推算，您目前处于${currentPhase.phase}时期（${currentPhase.ageStart}-${currentPhase.ageEnd}岁），这是一个重要的人生阶段。`
-        : `Based on your birth chart, you are currently in the ${currentPhase.phaseEn} phase (${currentPhase.ageStart}-${currentPhase.ageEnd}).`,
+      summary:
+        language === 'zh'
+          ? `根据您的出生日期推算，您目前处于${currentPhaseZh}时期（${currentPhaseObj.ageStart}-${currentPhaseObj.ageEnd}岁），这是一个重要的人生阶段。`
+          : `Based on your birth chart, you are currently in the ${currentPhaseEn} phase (${currentPhaseObj.ageStart}-${currentPhaseObj.ageEnd}).`,
       bestPeriods,
       challengingPeriods,
-    });
+      meta: { platform: 'TianJi Global | 天机全球', version: '1.0.0' },
+    };
+
+    // AI interpretation
+    if (enhanceWithAI) {
+      try {
+        const fortuneData: FortuneData = {
+          birthYear: year,
+          birthMonth: month,
+          birthDay: day,
+          gender,
+          currentAge: age,
+          currentPhase: currentPhaseZh,
+          currentPhaseEn,
+          fortuneCycles,
+          bestPeriods,
+          challengingPeriods,
+        };
+
+        const lang = language.startsWith('zh') ? 'zh' : 'en';
+        const { aiInterpretation, disclaimer, report } = await interpretFortune(fortuneData, lang);
+        response.aiInterpretation = aiInterpretation;
+        response.disclaimer = disclaimer;
+        response.aiMeta = {
+          provider: report.provider,
+          model: report.model,
+          latencyMs: report.latencyMs,
+          costUSD: report.costUSD,
+        };
+      } catch (aiErr) {
+        response.aiError =
+          aiErr instanceof Error ? aiErr.message : 'AI interpretation failed';
+      }
+    }
+
+    return NextResponse.json(response);
   } catch {
     return NextResponse.json(
       { error: language === 'zh' ? '日期格式错误' : 'Invalid date format' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }
