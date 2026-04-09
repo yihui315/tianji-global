@@ -2,6 +2,9 @@
 
 import { useState, useCallback } from 'react';
 import SharePanel from '@/components/SharePanel';
+import PDFDownloadButton from '@/components/PDFDownloadButton';
+import BaziWheelAnimation from '@/components/animations/BaziWheelAnimation';
+import AnimatedShareButton from '@/components/AnimatedShareButton';
 
 type Language = 'zh' | 'en';
 type Gender = 'male' | 'female';
@@ -452,6 +455,41 @@ export default function BaZiPage() {
               serviceType="bazi"
               resultId={birthday.replace(/-/g, '')}
               shareUrl={`https://tianji.global/bazi?birthday=${birthday}`}
+            />
+
+            {/* Animated BaZi Wheel */}
+            <div className="bg-slate-800/30 rounded-xl p-6 border border-slate-700/50">
+              <h3 className="text-xl font-bold text-amber-300 mb-4 text-center">
+                ✨ Animated BaZi Wheel
+              </h3>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
+                <BaziWheelAnimation
+                  birthDate={birthday}
+                  birthTime={TIME_PERIODS[birthTime]?.labelEn?.split(' ')[0]
+                    ? `${String(birthTime * 2 + 23).padStart(2, '0')}:00`
+                    : '02:00'}
+                  width={420}
+                  height={420}
+                  playing={true}
+                />
+              </div>
+              <div className="flex justify-center">
+                <AnimatedShareButton
+                  type="bazi"
+                  resultData={{ chart: result?.chart, birthday, birthTime: TIME_PERIODS[birthTime]?.label || '' }}
+                  format="webp"
+                  language={language}
+                  variant="secondary"
+                />
+              </div>
+            </div>
+
+            {/* PDF Download */}
+            <PDFDownloadButton
+              serviceType="bazi"
+              resultData={result as unknown as Record<string, unknown>}
+              birthData={{ birthday, birthTime: TIME_PERIODS[birthTime]?.label || '', gender }}
+              language={language}
             />
           </div>
         )}

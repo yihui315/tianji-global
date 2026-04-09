@@ -348,3 +348,20 @@ CREATE TABLE IF NOT EXISTS user_subscriptions (
 
 CREATE INDEX idx_user_subscriptions_user_id ON user_subscriptions(user_id);
 CREATE INDEX idx_user_subscriptions_enabled ON user_subscriptions(enabled) WHERE enabled = true;
+
+-- ============================================================
+-- Telegram Bot Users
+-- ============================================================
+CREATE TABLE IF NOT EXISTS telegram_users (
+    id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    telegram_chat_id VARCHAR(50) UNIQUE NOT NULL,
+    user_id         UUID REFERENCES users(id),
+    birth_date      DATE,
+    birth_time      TIME,
+    language        VARCHAR(5) DEFAULT 'zh',
+    subscribed      BOOLEAN DEFAULT true,
+    created_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_telegram_users_chat_id ON telegram_users(telegram_chat_id);
+CREATE INDEX idx_telegram_users_subscribed ON telegram_users(subscribed) WHERE subscribed = true;

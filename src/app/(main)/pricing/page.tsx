@@ -277,6 +277,15 @@ export default function PricingPage() {
 
         {/* Footer */}
         <footer className="text-center py-8 text-slate-500 text-sm border-t border-white/10">
+          <div className="flex justify-center gap-4 mb-2">
+            <Link href="/about" className="hover:text-purple-400 transition-colors">
+              {language === 'zh' ? '关于我们' : 'About'}
+            </Link>
+            <span>·</span>
+            <Link href="/legal" className="hover:text-purple-400 transition-colors">
+              {language === 'zh' ? '法律声明' : 'Legal'}
+            </Link>
+          </div>
           <p>© 2024 TianJi Global · 天机全球</p>
           <p className="mt-1">
             {language === 'zh'

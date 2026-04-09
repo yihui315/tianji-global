@@ -2,6 +2,9 @@
 
 import { useState, useCallback } from 'react';
 import SharePanel from '@/components/SharePanel';
+import PDFDownloadButton from '@/components/PDFDownloadButton';
+import AnimatedShareButton from '@/components/AnimatedShareButton';
+import TarotCardAnimation from '@/components/animations/TarotCardAnimation';
 import { spreadLayouts, type TarotCard, type SpreadLayout, type DrawnCard } from '@/lib/tarot';
 
 type SpreadType = 'single' | 'three-card' | 'celtic-cross';
@@ -244,6 +247,40 @@ export default function TarotPage() {
               serviceType="tarot"
               resultId={`${reading.spread.name}-${Date.now()}`}
               shareUrl={`https://tianji.global/tarot?spread=${reading.spread.name}`}
+            />
+
+            {/* Animated Tarot Card Display */}
+            <div className="bg-slate-800/30 rounded-xl p-6 border border-slate-700/50">
+              <h3 className="text-lg font-bold text-purple-300 mb-4 text-center">
+                ✨ Animated Tarot Cards
+              </h3>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
+                <TarotCardAnimation
+                  drawnCards={reading.drawnCards}
+                  spread={reading.spread}
+                  language={language}
+                  spreadType={spreadType}
+                  playing={true}
+                  width={spreadType === 'celtic-cross' ? 700 : 600}
+                  height={400}
+                />
+              </div>
+              <div className="flex justify-center">
+                <AnimatedShareButton
+                  type="tarot"
+                  resultData={reading as unknown as Record<string, unknown>}
+                  format="webp"
+                  language={language}
+                  variant="secondary"
+                />
+              </div>
+            </div>
+
+            {/* PDF Download */}
+            <PDFDownloadButton
+              serviceType="tarot"
+              resultData={reading as unknown as Record<string, unknown>}
+              language={language}
             />
           </div>
         )}

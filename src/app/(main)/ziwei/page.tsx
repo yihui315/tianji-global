@@ -2,6 +2,8 @@
 
 import { useState, useCallback } from 'react';
 import { Iztrolabe } from 'react-iztro';
+import ZiWeiPalaceAnimation from '@/components/animations/ZiWeiPalaceAnimation';
+import AnimatedShareButton from '@/components/AnimatedShareButton';
 
 interface ZiweiAIResponse {
   aiInterpretation?: string;
@@ -233,6 +235,35 @@ export default function ZiweiPage() {
             </div>
           )}
         </>
+      )}
+
+      {/* Animated ZiWei Palace Chart */}
+      {aiResult && !isLoadingAI && !aiResult.aiError && (
+        <div className="mt-8">
+          <h3 className="text-xl font-bold text-purple-300 mb-4 text-center">
+            ✨ Animated ZiWei Palace
+          </h3>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
+            <ZiWeiPalaceAnimation
+              birthDate={birthday}
+              birthTime={birthTime}
+              gender={gender}
+              birthdayType={birthdayType}
+              width={420}
+              height={420}
+              playing={true}
+            />
+          </div>
+          <div className="flex justify-center">
+            <AnimatedShareButton
+              type="ziwei"
+              resultData={{ birthday, birthTime, birthdayType, gender }}
+              format="webp"
+              language="zh"
+              variant="primary"
+            />
+          </div>
+        </div>
       )}
 
       {/* Astrolabe Visualization */}

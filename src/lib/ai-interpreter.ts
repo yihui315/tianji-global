@@ -5,6 +5,9 @@
  * (ai-prompts.ts) to produce enriched AI interpretations for each
  * fortune system. All AI outputs include a disclaimer.
  *
+ * RAG++ Integration: Each interpret function retrieves KB context via
+ * ragPlusEngine and validates AI output with detectHallucinations().
+ *
  * Usage:
  *   const result = await interpretBazi(baziChart, 'zh');
  *   const result = await interpretTarot(tarotData, 'en');
@@ -27,6 +30,8 @@ import {
   type FortuneData,
   type PsychologyData,
 } from '@/lib/ai-prompts';
+import { ragPlusEngine, detectHallucinations } from './rag-plus';
+import type { Hallucination, RetrievedChunk } from './rag-plus';
 
 // ─── Shared disclaimer text ───────────────────────────────────────────────────
 
@@ -39,17 +44,28 @@ const DISCLAIMER_ZH =
   '本报告仅供娱乐与自我探索，不构成医疗、法律或财务建议。' +
   '重要人生决策请咨询具备资质的专业人士。';
 
+// ─── RAG++ KB constraint text ───────────────────────────────────────────────
+
+const KB_CONSTRAINT_EN = `IMPORTANT: Only interpret based on the knowledge base entries provided above. Cite sources as [KB:entry_id]. Do NOT invent stars, palaces, stems, branches, elements, or hexagrams not present in the knowledge base.`;
+
+const KB_CONSTRAINT_ZH = `重要：仅根据上述知识库条目进行解读，引用来源时请使用 [KB:条目ID] 格式。请勿编造知识库中不存在的星曜、宫位、天干、地支、五行或卦象。`;
+
 // ─── Generic interpreter ─────────────────────────────────────────────────────
 
 async function callAI(
   prompt: string,
   language: 'en' | 'zh',
-  taskType: 'analysis' = 'analysis'
+  taskType: 'analysis' = 'analysis',
+  extraSystemContext?: string
 ): Promise<{ content: string; report: ReportResponse }> {
-  const systemPrompt =
+  const baseSystemPrompt =
     language === 'zh'
       ? '你是一位融合传统命理学与现代心理学的专业命理师。请用JSON格式回复。'
       : 'You are a professional astrologer specializing in Chinese metaphysics and modern psychology. Please respond in JSON format.';
+
+  const systemPrompt = extraSystemContext
+    ? `${baseSystemPrompt}\n\n${extraSystemContext}`
+    : baseSystemPrompt;
 
   const report = await generateReport({
     prompt,
@@ -62,6 +78,29 @@ async function callAI(
   return { content: report.content, report };
 }
 
+/**
+ * Build RAG++-augmented system prompt by retrieving relevant KB chunks
+ * for the given query and service type.
+ */
+function buildRAGPrompt(
+  userPrompt: string,
+  serviceType: 'bazi' | 'ziwei' | 'yijing',
+  language: 'en' | 'zh'
+): { kbContext: string; kbChunks: RetrievedChunk[] } {
+  const { groundedPrompt, chunks } = ragPlusEngine.ragpp(
+    userPrompt,
+    serviceType,
+    {}
+  );
+
+  // Extract just the KB section (everything after "KNOWLEDGE BASE:")
+  const kbContext = chunks
+    .map((c) => `[KB:${c.id}]\n${c.content}`)
+    .join('\n\n');
+
+  return { kbContext, kbChunks: chunks };
+}
+
 // ─── Per-system interpreters ──────────────────────────────────────────────────
 
 /**
@@ -70,11 +109,34 @@ async function callAI(
 export async function interpretBazi(
   data: BaziData,
   language: 'en' | 'zh' = 'en'
-): Promise<{ aiInterpretation: string; report: ReportResponse; disclaimer: string }> {
-  const prompt = getBaziReportPrompt(data, language);
-  const { content, report } = await callAI(prompt, language);
+): Promise<{
+  aiInterpretation: string;
+  report: ReportResponse;
+  disclaimer: string;
+  hallucinations?: Hallucination[];
+  kbChunks?: RetrievedChunk[];
+}> {
+  const userPrompt = getBaziReportPrompt(data, language);
+  const { kbContext, kbChunks } = buildRAGPrompt(userPrompt, 'bazi', language);
+  const kbConstraint = language === 'zh' ? KB_CONSTRAINT_ZH : KB_CONSTRAINT_EN;
+
+  const extraSystemContext =
+    `You are a Chinese metaphysics BaZi (八字) expert.\n\n` +
+    `KNOWLEDGE BASE:\n${kbContext}\n\n` +
+    `SYSTEM CONSTRAINT: ${kbConstraint}`;
+
+  const { content, report } = await callAI(userPrompt, language, 'analysis', extraSystemContext);
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
-  return { aiInterpretation: content, report, disclaimer };
+
+  const hallucinations = detectHallucinations(content, 'bazi');
+
+  return {
+    aiInterpretation: content,
+    report,
+    disclaimer,
+    hallucinations: hallucinations.length > 0 ? hallucinations : undefined,
+    kbChunks,
+  };
 }
 
 /**
@@ -83,11 +145,34 @@ export async function interpretBazi(
 export async function interpretZiwei(
   data: ZiweiData,
   language: 'en' | 'zh' = 'en'
-): Promise<{ aiInterpretation: string; report: ReportResponse; disclaimer: string }> {
-  const prompt = getZiweiReportPrompt(data, language);
-  const { content, report } = await callAI(prompt, language);
+): Promise<{
+  aiInterpretation: string;
+  report: ReportResponse;
+  disclaimer: string;
+  hallucinations?: Hallucination[];
+  kbChunks?: RetrievedChunk[];
+}> {
+  const userPrompt = getZiweiReportPrompt(data, language);
+  const { kbContext, kbChunks } = buildRAGPrompt(userPrompt, 'ziwei', language);
+  const kbConstraint = language === 'zh' ? KB_CONSTRAINT_ZH : KB_CONSTRAINT_EN;
+
+  const extraSystemContext =
+    `You are a Chinese metaphysics Zi Wei Dou Shu (紫微斗数) expert.\n\n` +
+    `KNOWLEDGE BASE:\n${kbContext}\n\n` +
+    `SYSTEM CONSTRAINT: ${kbConstraint}`;
+
+  const { content, report } = await callAI(userPrompt, language, 'analysis', extraSystemContext);
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
-  return { aiInterpretation: content, report, disclaimer };
+
+  const hallucinations = detectHallucinations(content, 'ziwei');
+
+  return {
+    aiInterpretation: content,
+    report,
+    disclaimer,
+    hallucinations: hallucinations.length > 0 ? hallucinations : undefined,
+    kbChunks,
+  };
 }
 
 /**
@@ -96,11 +181,31 @@ export async function interpretZiwei(
 export async function interpretTarot(
   data: TarotData,
   language: 'en' | 'zh' = 'en'
-): Promise<{ aiInterpretation: string; report: ReportResponse; disclaimer: string }> {
+): Promise<{
+  aiInterpretation: string;
+  report: ReportResponse;
+  disclaimer: string;
+  hallucinations?: Hallucination[];
+}> {
   const prompt = getTarotReportPrompt(data, language);
-  const { content, report } = await callAI(prompt, language);
+  const kbConstraint = language === 'zh' ? KB_CONSTRAINT_ZH : KB_CONSTRAINT_EN;
+
+  const extraSystemContext =
+    `You are a Tarot reading expert.\n\n` +
+    `SYSTEM CONSTRAINT: ${kbConstraint}`;
+
+  const { content, report } = await callAI(prompt, language, 'analysis', extraSystemContext);
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
-  return { aiInterpretation: content, report, disclaimer };
+
+  // Tarot uses general pattern detection (no dedicated KB)
+  const hallucinations = detectHallucinations(content, 'tarot');
+
+  return {
+    aiInterpretation: content,
+    report,
+    disclaimer,
+    hallucinations: hallucinations.length > 0 ? hallucinations : undefined,
+  };
 }
 
 /**
@@ -109,11 +214,34 @@ export async function interpretTarot(
 export async function interpretYiJing(
   data: YiJingData,
   language: 'en' | 'zh' = 'en'
-): Promise<{ aiInterpretation: string; report: ReportResponse; disclaimer: string }> {
-  const prompt = getYiJingReportPrompt(data, language);
-  const { content, report } = await callAI(prompt, language);
+): Promise<{
+  aiInterpretation: string;
+  report: ReportResponse;
+  disclaimer: string;
+  hallucinations?: Hallucination[];
+  kbChunks?: RetrievedChunk[];
+}> {
+  const userPrompt = getYiJingReportPrompt(data, language);
+  const { kbContext, kbChunks } = buildRAGPrompt(userPrompt, 'yijing', language);
+  const kbConstraint = language === 'zh' ? KB_CONSTRAINT_ZH : KB_CONSTRAINT_EN;
+
+  const extraSystemContext =
+    `You are a Chinese metaphysics Yi Jing (易经) expert.\n\n` +
+    `KNOWLEDGE BASE:\n${kbContext}\n\n` +
+    `SYSTEM CONSTRAINT: ${kbConstraint}`;
+
+  const { content, report } = await callAI(userPrompt, language, 'analysis', extraSystemContext);
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
-  return { aiInterpretation: content, report, disclaimer };
+
+  const hallucinations = detectHallucinations(content, 'yijing');
+
+  return {
+    aiInterpretation: content,
+    report,
+    disclaimer,
+    hallucinations: hallucinations.length > 0 ? hallucinations : undefined,
+    kbChunks,
+  };
 }
 
 /**
@@ -122,11 +250,30 @@ export async function interpretYiJing(
 export async function interpretFortune(
   data: FortuneData,
   language: 'en' | 'zh' = 'en'
-): Promise<{ aiInterpretation: string; report: ReportResponse; disclaimer: string }> {
+): Promise<{
+  aiInterpretation: string;
+  report: ReportResponse;
+  disclaimer: string;
+  hallucinations?: Hallucination[];
+}> {
   const prompt = getFortuneReportPrompt(data, language);
-  const { content, report } = await callAI(prompt, language);
+  const kbConstraint = language === 'zh' ? KB_CONSTRAINT_ZH : KB_CONSTRAINT_EN;
+
+  const extraSystemContext =
+    `You are a Chinese metaphysics fortune-telling expert.\n\n` +
+    `SYSTEM CONSTRAINT: ${kbConstraint}`;
+
+  const { content, report } = await callAI(prompt, language, 'analysis', extraSystemContext);
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
-  return { aiInterpretation: content, report, disclaimer };
+
+  const hallucinations = detectHallucinations(content, 'fortune');
+
+  return {
+    aiInterpretation: content,
+    report,
+    disclaimer,
+    hallucinations: hallucinations.length > 0 ? hallucinations : undefined,
+  };
 }
 
 /**
@@ -135,9 +282,24 @@ export async function interpretFortune(
 export async function interpretPsychology(
   data: PsychologyData,
   language: 'en' | 'zh' = 'en'
-): Promise<{ aiInterpretation: string; report: ReportResponse; disclaimer: string }> {
+): Promise<{
+  aiInterpretation: string;
+  report: ReportResponse;
+  disclaimer: string;
+  hallucinations?: Hallucination[];
+}> {
   const prompt = getPsychologyPrompt(data, language);
   const { content, report } = await callAI(prompt, language);
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
-  return { aiInterpretation: content, report, disclaimer };
+
+  // Psychology doesn't have metaphysics hallucination risks, but we still
+  // scan for overconfident/medical claims
+  const hallucinations = detectHallucinations(content, 'fortune');
+
+  return {
+    aiInterpretation: content,
+    report,
+    disclaimer,
+    hallucinations: hallucinations.length > 0 ? hallucinations : undefined,
+  };
 }

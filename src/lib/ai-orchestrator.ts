@@ -33,6 +33,8 @@ function getApiKey(provider: ModelProvider): string | undefined {
       return process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
     case 'ollama':
       return undefined; // No API key needed for local Ollama
+    case 'minimax':
+      return process.env.MINIMAX_API_KEY;
   }
 }
 
@@ -48,6 +50,8 @@ function getBaseUrl(provider: ModelProvider): string {
       return process.env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta';
     case 'ollama':
       return process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+    case 'minimax':
+      return process.env.MINIMAX_BASE_URL || 'https://api.minimax.chat/v1';
   }
 }
 

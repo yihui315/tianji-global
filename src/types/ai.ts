@@ -5,7 +5,7 @@
 
 // ─── Provider & Model Types ──────────────────────────────────────────────────
 
-export type ModelProvider = 'openai' | 'anthropic' | 'grok' | 'gemini' | 'ollama';
+export type ModelProvider = 'openai' | 'anthropic' | 'grok' | 'gemini' | 'ollama' | 'minimax';
 
 export type TaskType = 'analysis' | 'creative' | 'fast' | 'privacy';
 
@@ -142,6 +142,15 @@ export const MODEL_REGISTRY: ModelEntry[] = [
     provider: 'ollama',
     contextLength: 128000,
     recommendedFor: ['privacy'],
+  },
+  // MiniMax
+  {
+    id: 'minimax/minimax-01',
+    provider: 'minimax',
+    contextLength: 1000000,
+    costPer1kInput: 0.001,
+    costPer1kOutput: 0.005,
+    recommendedFor: ['fast', 'analysis'],
   },
 ];
 

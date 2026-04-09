@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import SharePanel from '@/components/SharePanel';
+import PDFDownloadButton from '@/components/PDFDownloadButton';
 
 type Language = 'zh' | 'en';
 
@@ -388,6 +389,13 @@ export default function YiJingPage() {
               serviceType="yijing"
               resultId={displayedHexagram.number.toString()}
               shareUrl={`https://tianji.global/yijing?hex=${displayedHexagram.number}`}
+            />
+
+            {/* PDF Download */}
+            <PDFDownloadButton
+              serviceType="yijing"
+              resultData={{ hexagram: displayedHexagram, aiInterpretation: castResult?.aiInterpretation } as unknown as Record<string, unknown>}
+              language={language}
             />
           </div>
         )}
