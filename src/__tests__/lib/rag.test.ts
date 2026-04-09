@@ -1,17 +1,23 @@
 /**
  * RAG Module Tests — TianJi Global
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { generatePseudoEmbedding } from '../../lib/rag';
 
-// Mock the db module before importing rag functions that depend on it
+// Shared mock pool so vi.spyOn attaches to the same instance rag.ts uses
+const mockQuery = vi.fn();
+const mockPool = { query: mockQuery };
+
+// Mock the db module with a SHARED pool instance (not a new one per call)
 vi.mock('../../lib/db', () => ({
-  getPool: vi.fn(() => ({
-    query: vi.fn(),
-  })),
+  getPool: vi.fn(() => mockPool),
 }));
 
 describe('RAG Module', () => {
+  beforeEach(() => {
+    mockQuery.mockReset();
+  });
+
   describe('generatePseudoEmbedding', () => {
     it('returns a 1536-dimensional array', () => {
       const embedding = generatePseudoEmbedding('test text');
@@ -48,7 +54,6 @@ describe('RAG Module', () => {
 
     it('empty string returns all zeros', () => {
       const embedding = generatePseudoEmbedding('');
-      // All values should be 0 for empty string (max would be 0)
       expect(embedding).toHaveLength(1536);
     });
 
@@ -61,15 +66,13 @@ describe('RAG Module', () => {
 
   describe('storeUserFeedback (mocked)', () => {
     it('pool.query is called with correct SQL structure', async () => {
-      const { getPool } = await import('../../lib/db');
-      const pool = getPool();
-      const querySpy = vi.spyOn(pool, 'query');
-
       const { storeUserFeedback } = await import('../../lib/rag');
+      mockQuery.mockResolvedValueOnce({ rows: [], command: '', rowCount: 0 });
+
       await storeUserFeedback('user-1', 'reading-1', 5, 'Great reading!', 'bazi');
 
-      expect(querySpy).toHaveBeenCalled();
-      const callArg = querySpy.mock.calls[0][0] as string;
+      expect(mockQuery).toHaveBeenCalled();
+      const callArg = mockQuery.mock.calls[0][0] as string;
       expect(callArg).toContain('INSERT INTO user_feedback');
       expect(callArg).toContain('user_id');
       expect(callArg).toContain('reading_id');
@@ -77,15 +80,13 @@ describe('RAG Module', () => {
     });
 
     it('storeUserFeedback passes correct parameter values', async () => {
-      const { getPool } = await import('../../lib/db');
-      const pool = getPool();
-      const querySpy = vi.spyOn(pool, 'query');
-
       const { storeUserFeedback } = await import('../../lib/rag');
+      mockQuery.mockResolvedValueOnce({ rows: [], command: '', rowCount: 0 });
+
       await storeUserFeedback('user-123', 'reading-456', 4, '测试反馈', 'tarot');
 
-      expect(querySpy).toHaveBeenCalled();
-      const params = querySpy.mock.calls[0][1] as unknown[];
+      expect(mockQuery).toHaveBeenCalled();
+      const params = mockQuery.mock.calls[0][1] as unknown[];
       expect(params).toContain('user-123');
       expect(params).toContain('reading-456');
       expect(params).toContain(4);
@@ -96,8 +97,7 @@ describe('RAG Module', () => {
 
   describe('querySimilarReadings (mocked)', () => {
     it('returns array of SimilarReading objects', async () => {
-      const { getPool } = await import('../../lib/db');
-      const pool = getPool();
+      const { querySimilarReadings } = await import('../../lib/rag');
       const mockRows = [
         {
           reading_id: 'r1',
@@ -114,9 +114,8 @@ describe('RAG Module', () => {
           created_at: new Date(),
         },
       ];
-      vi.spyOn(pool, 'query').mockResolvedValueOnce({ rows: mockRows, command: '', rowCount: 2 } as any);
+      mockQuery.mockResolvedValueOnce({ rows: mockRows, command: '', rowCount: 2 });
 
-      const { querySimilarReadings } = await import('../../lib/rag');
       const embedding = generatePseudoEmbedding('test query');
       const results = await querySimilarReadings('bazi', embedding, 5);
 
@@ -130,8 +129,7 @@ describe('RAG Module', () => {
     });
 
     it('maps row fields correctly to SimilarReading interface', async () => {
-      const { getPool } = await import('../../lib/db');
-      const pool = getPool();
+      const { querySimilarReadings } = await import('../../lib/rag');
       const mockRows = [
         {
           reading_id: 'abc-123',
@@ -141,9 +139,8 @@ describe('RAG Module', () => {
           created_at: new Date('2024-01-01'),
         },
       ];
-      vi.spyOn(pool, 'query').mockResolvedValueOnce({ rows: mockRows, command: '', rowCount: 1 } as any);
+      mockQuery.mockResolvedValueOnce({ rows: mockRows, command: '', rowCount: 1 });
 
-      const { querySimilarReadings } = await import('../../lib/rag');
       const results = await querySimilarReadings('yijing', generatePseudoEmbedding('test'), 3);
 
       expect(results[0].readingId).toBe('abc-123');
@@ -153,15 +150,13 @@ describe('RAG Module', () => {
     });
 
     it('querySimilarReadings calls pool.query with vector cosine similarity SQL', async () => {
-      const { getPool } = await import('../../lib/db');
-      const pool = getPool();
-      const querySpy = vi.spyOn(pool, 'query').mockResolvedValueOnce({ rows: [], command: '', rowCount: 0 } as any);
-
       const { querySimilarReadings } = await import('../../lib/rag');
+      mockQuery.mockResolvedValueOnce({ rows: [], command: '', rowCount: 0 });
+
       await querySimilarReadings('bazi', generatePseudoEmbedding('test'), 5);
 
-      expect(querySpy).toHaveBeenCalled();
-      const sql = querySpy.mock.calls[0][0] as string;
+      expect(mockQuery).toHaveBeenCalled();
+      const sql = mockQuery.mock.calls[0][0] as string;
       expect(sql).toContain('reading_embeddings');
       expect(sql).toContain('embedding');
       expect(sql).toContain('1 - (embedding <=>');
@@ -170,35 +165,29 @@ describe('RAG Module', () => {
 
   describe('isRAGAvailable (mocked)', () => {
     it('returns true when pgvector extension exists', async () => {
-      const { getPool } = await import('../../lib/db');
-      const pool = getPool();
-      vi.spyOn(pool, 'query').mockResolvedValueOnce({
+      const { isRAGAvailable } = await import('../../lib/rag');
+      mockQuery.mockResolvedValueOnce({
         rows: [{ extname: 'vector' }],
         command: '',
         rowCount: 1,
-      } as any);
+      });
 
-      const { isRAGAvailable } = await import('../../lib/rag');
       const available = await isRAGAvailable();
       expect(available).toBe(true);
     });
 
     it('returns false when pgvector extension does not exist', async () => {
-      const { getPool } = await import('../../lib/db');
-      const pool = getPool();
-      vi.spyOn(pool, 'query').mockResolvedValueOnce({ rows: [], command: '', rowCount: 0 } as any);
-
       const { isRAGAvailable } = await import('../../lib/rag');
+      mockQuery.mockResolvedValueOnce({ rows: [], command: '', rowCount: 0 });
+
       const available = await isRAGAvailable();
       expect(available).toBe(false);
     });
 
     it('returns false gracefully when pool.query throws', async () => {
-      const { getPool } = await import('../../lib/db');
-      const pool = getPool();
-      vi.spyOn(pool, 'query').mockRejectedValueOnce(new Error('Connection failed'));
-
       const { isRAGAvailable } = await import('../../lib/rag');
+      mockQuery.mockRejectedValueOnce(new Error('Connection failed'));
+
       const available = await isRAGAvailable();
       expect(available).toBe(false);
     });

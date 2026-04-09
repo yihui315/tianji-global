@@ -549,3 +549,173 @@ export function formatCost(costUSD: number): string {
   if (costUSD < 1) return `$${costUSD.toFixed(4)}`;
   return `$${costUSD.toFixed(2)}`;
 }
+
+// ─── Streaming ─────────────────────────────────────────────────────────────────
+
+/**
+ * Stream a text generation as a ReadableStream of SSE-formatted strings.
+ * Yields "data: {...}\n\n" chunks for client-side consumption.
+ */
+export async function* streamGenerate(
+  request: ReportRequest,
+  env?: Record<string, string>
+): AsyncGenerator<string, void, unknown> {
+  const resolvedEnv = env || process.env as Record<string, string>;
+
+  const getKey = (p: ModelProvider) => {
+    switch (p) {
+      case 'openai': return resolvedEnv.OPENAI_API_KEY;
+      case 'anthropic': return resolvedEnv.ANTHROPIC_API_KEY;
+      case 'grok': return resolvedEnv.GROK_API_KEY;
+      case 'gemini': return resolvedEnv.GEMINI_API_KEY || resolvedEnv.GOOGLE_API_KEY;
+      case 'ollama': return undefined;
+    }
+  };
+
+  const modelId = request.preferredModel || selectBestModel(request.taskType || 'analysis', request.preferredProvider);
+  const [providerPrefix, modelName] = modelId.split('/') as [ModelProvider, string];
+  const apiKey = getKey(providerPrefix);
+  const baseUrl = getBaseUrl(providerPrefix);
+
+  if (!apiKey && providerPrefix !== 'ollama') {
+    const available = getAvailableProviders().filter(p => getKey(p));
+    if (available.length === 0) {
+      yield `data: ${JSON.stringify({ error: 'No AI provider API keys configured' })}\n\n`;
+      return;
+    }
+    const fallback = available[0];
+    const fallbackModel = MODEL_REGISTRY.find(m => m.provider === fallback);
+    if (!fallbackModel) return;
+    yield* streamGenerate({ ...request, preferredModel: fallbackModel.id }, env);
+    return;
+  }
+
+  if (providerPrefix === 'anthropic') {
+    const { temperature = 0.7, maxTokens = 4096 } = request;
+    const body: Record<string, unknown> = {
+      model: modelName,
+      messages: request.systemPrompt
+        ? [{ role: 'user', content: `${request.systemPrompt}\n\n${request.prompt}` }]
+        : [{ role: 'user', content: request.prompt }],
+      stream: true,
+      temperature,
+      max_tokens: maxTokens,
+    };
+
+    const response = await fetch(`${baseUrl}/messages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey!,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      yield `data: ${JSON.stringify({ error: `Anthropic API error ${response.status}: ${error}` })}\n\n`;
+      return;
+    }
+
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') continue;
+
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.type === 'content_block_delta') {
+              const text = parsed.delta?.text || '';
+              if (text) {
+                yield `data: ${JSON.stringify({ text })}\n\n`;
+              }
+            }
+          } catch {
+            // skip malformed SSE
+          }
+        }
+      }
+    } finally {
+      reader.releaseLock();
+    }
+  } else if (providerPrefix === 'openai') {
+    // OpenAI-compatible streaming
+    const { temperature = 0.7, maxTokens = 4096 } = request;
+    const body: Record<string, unknown> = {
+      model: modelName,
+      messages: request.systemPrompt
+        ? [{ role: 'system', content: request.systemPrompt }, { role: 'user', content: request.prompt }]
+        : [{ role: 'user', content: request.prompt }],
+      stream: true,
+      temperature,
+      max_tokens: maxTokens,
+    };
+
+    const response = await fetch(`${baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      yield `data: ${JSON.stringify({ error: `OpenAI API error ${response.status}: ${error}` })}\n\n`;
+      return;
+    }
+
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') continue;
+
+          try {
+            const parsed = JSON.parse(data);
+            const content = parsed.choices?.[0]?.delta?.content;
+            if (content) {
+              yield `data: ${JSON.stringify({ text: content })}\n\n`;
+            }
+          } catch {
+            // skip malformed SSE
+          }
+        }
+      }
+    } finally {
+      reader.releaseLock();
+    }
+  } else {
+    // Non-streaming fallback for grok/gemini/ollama
+    const result = await generateReport(request, env);
+    yield `data: ${JSON.stringify({ text: result.content })}\n\n`;
+  }
+}

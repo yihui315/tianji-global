@@ -3,7 +3,7 @@
  */
 import { describe, it, expect } from 'vitest';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const yijing = require('../../utils/yijing');
+const yijing = require('../../lib/yijing');
 
 describe('YiJing API', () => {
   describe('castHexagram', () => {

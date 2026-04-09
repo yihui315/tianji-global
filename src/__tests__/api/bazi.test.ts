@@ -3,7 +3,7 @@
  */
 import { describe, it, expect } from 'vitest';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const { calculateBaZi } = require('../../utils/bazi');
+const { calculateBaZi } = require('../../lib/bazi');
 
 describe('BaZi API', () => {
   describe('calculateBaZi', () => {

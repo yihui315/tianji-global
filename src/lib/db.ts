@@ -20,3 +20,10 @@ export const pool: Pool =
 if (process.env.NODE_ENV !== 'production') {
   globalForPool.pool = pool;
 }
+
+/** Get the pool instance (for test mocking via vi.mock) */
+export function getPool(): Pool {
+  return pool;
+}
+
+export { pool as pgPool };
