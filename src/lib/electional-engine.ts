@@ -133,7 +133,8 @@ function getJD(year: number, month: number, day: number): number {
 function getPlanetLon(jd: number, seId: number): number | null {
   try {
     const r = calc(jd, seId, constants.SEFLG_SWIEPH);
-    if (r.flag !== constants.SEFLG_SWIEPH) return null;
+    // flag < 0 means error (sweph returns status code, not the input iflag)
+    if (r.flag < 0) return null;
     return normalizeAngle(r.data[0] as number);
   } catch {
     return null;
@@ -161,10 +162,11 @@ function getMoonPhaseData(jd: number): { longitude: number; phase: 'new' | 'waxi
 function getMoonSpeed(jd: number): number {
   try {
     const r = calc(jd, constants.SE_MOON, constants.SEFLG_SPEED | constants.SEFLG_SWIEPH);
-    if (r.flag !== (constants.SEFLG_SPEED | constants.SEFLG_SWIEPH)) {
+    // flag < 0 means error (sweph returns status code, not the input iflag)
+    if (r.flag < 0) {
       // fallback without speed
       const r2 = calc(jd, constants.SE_MOON, constants.SEFLG_SWIEPH);
-      if (r2.flag !== constants.SEFLG_SWIEPH) return 13; // average speed
+      if (r2.flag < 0) return 13; // average speed
       return 13; // approximate
     }
     return Math.abs(r.data[3] as number); // degrees per day
