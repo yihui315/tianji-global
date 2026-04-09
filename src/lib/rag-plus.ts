@@ -2,30 +2,50 @@
  * RAG++ Engine — TianJi Global
  * Retrieval-Augmented Generation with anti-hallucination constraints.
  * Leverages the structured KB for grounded AI interpretations.
+ *
+ * Enhancements v2:
+ * - Full Tarot KB support with card retrieval
+ * - Cross-service retrieval (bazi/ziwei/yijing/tarot)
+ * - Citation verification (checks if AI output actually cites KB entries)
+ * - Confidence scoring based on KB coverage
+ * - Structured JSON schema constraints for AI output
  */
 
 import {
-  baziKnowledgeBase,
   buildBaZiCorpus,
   STEM_MEANINGS,
   BRANCH_MEANINGS,
   JIAZI_COMBINATIONS,
   ELEMENT_CYCLE,
+  STEM_COMBINATIONS,
+  BRANCH_COMBINATIONS,
   type StemMeaning,
   type BranchMeaning,
   type JiaZiEntry,
   type ElementCycleEntry,
 } from '@/data/bazi-knowledge-base';
 import {
-  ziweiKnowledgeBase,
   buildZiweiCorpus,
   PALACE_MEANINGS,
   STAR_MEANINGS,
   MINGZHU_COMBINATIONS,
+  STAR_GROUPS,
+  PALACE_STAR_INFLUENCE,
   type PalaceMeaning,
   type StarMeaning,
   type MingzhuCombination,
 } from '@/data/ziwei-knowledge-base';
+import {
+  TAROT_CARDS,
+  TAROT_MAJOR_ARCANA,
+  TAROT_WANDS,
+  TAROT_CUPS,
+  TAROT_SWORDS,
+  TAROT_PENTACLES,
+  buildTarotCorpus,
+  getCardByName,
+  type TarotCard,
+} from '@/data/tarot-knowledge-base';
 import { detectHallucinations } from './hallucination-detector';
 
 export { detectHallucinations };
@@ -43,6 +63,10 @@ interface KBRow {
   content: string;
   source: string;
 }
+
+// ─── Service Types ─────────────────────────────────────────────────────────────
+
+export type ServiceType = 'bazi' | 'ziwei' | 'yijing' | 'tarot';
 
 // ─── Keyword scoring helpers ─────────────────────────────────────────────────
 
@@ -111,6 +135,27 @@ function buildBaziRows(): KBRow[] {
     });
   }
 
+  for (const sc of STEM_COMBINATIONS) {
+    rows.push({
+      id: sc.id,
+      content:
+        `Stem Combination ${sc.combination}: ${sc.meaning_zh} | ${sc.meaning_en}. ` +
+        `Interaction: ${sc.interaction_zh} | ${sc.interaction_en}. ` +
+        `Example: ${sc.example_zh} | ${sc.example_en}.`,
+      source: 'bazi-stem-combo',
+    });
+  }
+
+  for (const bc of BRANCH_COMBINATIONS) {
+    rows.push({
+      id: bc.id,
+      content:
+        `Branch Combination ${bc.combination}: ${bc.meaning_zh} | ${bc.meaning_en}. ` +
+        `Compatibility: ${bc.compat_zh} | ${bc.compat_en}.`,
+      source: 'bazi-branch-combo',
+    });
+  }
+
   return rows;
 }
 
@@ -151,13 +196,29 @@ function buildZiweiRows(): KBRow[] {
     });
   }
 
+  for (const g of STAR_GROUPS) {
+    rows.push({
+      id: g.id,
+      content:
+        `Star Group ${g.group_name_zh} (${g.group_name_en}): ${g.description_zh} | ${g.description_en}. ` +
+        `Stars: ${g.stars.join(', ')}.`,
+      source: 'ziwei-star-group',
+    });
+  }
+
+  for (const psi of PALACE_STAR_INFLUENCE) {
+    rows.push({
+      id: psi.palaceId + '-' + psi.starId,
+      content:
+        `Palace-Star Influence: ${psi.influence_zh} | ${psi.influence_en}. Strength: ${psi.strength}.`,
+      source: 'ziwei-palace-star',
+    });
+  }
+
   return rows;
 }
 
-// ─── Yijing KB (basic corpus) ─────────────────────────────────────────────────
-
 function buildYijingRows(): KBRow[] {
-  // Yi Jing hexagrams — structural reference only
   const HEXAGRAMS: Array<{
     id: string;
     name: string;
@@ -176,6 +237,16 @@ function buildYijingRows(): KBRow[] {
     { id: 'hex-8', name: '比', above: '水', below: '地', judgment_zh: '吉。原筮，元永贞', judgment_en: 'Holding Together / Fellowship' },
     { id: 'hex-9', name: '小畜', above: '风', below: '天', judgment_zh: '亨。密云不雨，自我西郊', judgment_en: 'Small Harvest / Taming' },
     { id: 'hex-10', name: '履', above: '天', below: '泽', judgment_zh: '履虎尾，不咥人，亨', judgment_en: 'Conduct / Treading' },
+    { id: 'hex-11', name: '泰', above: '地', below: '天', judgment_zh: '小往大来，吉亨', judgment_en: 'Peace / Spring' },
+    { id: 'hex-12', name: '否', above: '天', below: '地', judgment_zh: '否之匪人，不利君子贞', judgment_en: 'Standstill / Winter' },
+    { id: 'hex-13', name: '同人', above: '天', below: '火', judgment_zh: '同人于野，亨', judgment_en: 'Fellowship / Harmony' },
+    { id: 'hex-14', name: '大有', above: '火', below: '天', judgment_zh: '大有，元亨', judgment_en: 'Great Possession / Harvest' },
+    { id: 'hex-15', name: '谦', above: '地', below: '山', judgment_zh: '谦，亨，君子有终', judgment_en: 'Modesty / Humility' },
+    { id: 'hex-16', name: '豫', above: '雷', below: '地', judgment_zh: '豫，利建侯行师', judgment_en: 'Enthusiasm / Zeal' },
+    { id: 'hex-17', name: '随', above: '泽', below: '雷', judgment_zh: '随，元亨利贞，无咎', judgment_en: 'Following / Flexibility' },
+    { id: 'hex-18', name: '蛊', above: '山', below: '风', judgment_zh: '蛊，元亨利涉大川', judgment_en: 'Decay / Disorder' },
+    { id: 'hex-19', name: '临', above: '地', below: '泽', judgment_zh: '临，元亨利贞', judgment_en: 'Approach / Nearing' },
+    { id: 'hex-20', name: '观', above: '风', below: '地', judgment_zh: '观，盥而不荐，有孚颙若', judgment_en: 'Contemplation / Watching' },
   ];
 
   return HEXAGRAMS.map((h) => ({
@@ -185,34 +256,48 @@ function buildYijingRows(): KBRow[] {
   }));
 }
 
+function buildTarotRows(): KBRow[] {
+  return buildTarotCorpus();
+}
+
 // ─── RAG++ Engine ─────────────────────────────────────────────────────────────
 
 export class RAGPlusEngine {
   private baziRows: KBRow[] = [];
   private ziweiRows: KBRow[] = [];
   private yijingRows: KBRow[] = [];
+  private tarotRows: KBRow[] = [];
   private currentKB: KBRow[] = [];
 
   constructor() {
-    // Build corpora once at construction
     this.baziRows = buildBaziRows();
     this.ziweiRows = buildZiweiRows();
     this.yijingRows = buildYijingRows();
+    this.tarotRows = buildTarotRows();
   }
 
-  loadKnowledgeBase(serviceType: 'bazi' | 'ziwei' | 'yijing'): void {
-    if (serviceType === 'bazi') this.currentKB = this.baziRows;
-    else if (serviceType === 'ziwei') this.currentKB = this.ziweiRows;
-    else if (serviceType === 'yijing') this.currentKB = this.yijingRows;
+  loadKnowledgeBase(serviceType: ServiceType): void {
+    switch (serviceType) {
+      case 'bazi':
+        this.currentKB = this.baziRows;
+        break;
+      case 'ziwei':
+        this.currentKB = this.ziweiRows;
+        break;
+      case 'yijing':
+        this.currentKB = this.yijingRows;
+        break;
+      case 'tarot':
+        this.currentKB = this.tarotRows;
+        break;
+    }
   }
 
   /**
    * Retrieve the top-K most relevant KB chunks for a given query.
-   * Uses simple keyword matching scored by term frequency.
    */
   retrieve(query: string, topK: number = 5): RetrievedChunk[] {
     if (this.currentKB.length === 0) {
-      // Default to bazi if nothing loaded
       this.currentKB = this.baziRows;
     }
 
@@ -231,14 +316,29 @@ export class RAGPlusEngine {
   }
 
   /**
-   * Retrieve chunks for multiple service types (for cross-domain queries).
+   * Retrieve chunks for multiple service types.
    */
-  retrieveMulti(query: string, serviceTypes: Array<'bazi' | 'ziwei' | 'yijing'>, topK: number = 5): RetrievedChunk[] {
+  retrieveMulti(
+    query: string,
+    serviceTypes: ServiceType[],
+    topK: number = 5
+  ): RetrievedChunk[] {
     const allRows: KBRow[] = [];
     for (const st of serviceTypes) {
-      if (st === 'bazi') allRows.push(...this.baziRows);
-      else if (st === 'ziwei') allRows.push(...this.ziweiRows);
-      else if (st === 'yijing') allRows.push(...this.yijingRows);
+      switch (st) {
+        case 'bazi':
+          allRows.push(...this.baziRows);
+          break;
+        case 'ziwei':
+          allRows.push(...this.ziweiRows);
+          break;
+        case 'yijing':
+          allRows.push(...this.yijingRows);
+          break;
+        case 'tarot':
+          allRows.push(...this.tarotRows);
+          break;
+      }
     }
 
     return allRows
@@ -246,18 +346,60 @@ export class RAGPlusEngine {
       .filter((x) => x.score > 0)
       .sort((a, b) => b.score - a.score)
       .slice(0, topK)
-      .map((x) => ({ id: x.row.id, content: x.row.content, source: x.row.source, relevance: x.score }));
+      .map((x) => ({
+        id: x.row.id,
+        content: x.row.content,
+        source: x.row.source,
+        relevance: x.score,
+      }));
   }
 
   /**
-   * Build a grounded prompt with KB constraints and citation markers.
+   * Verify if AI output contains valid KB citations.
+   * Returns a report of found citations and any that couldn't be verified.
+   */
+  verifyCitations(
+    aiOutput: string,
+    serviceType: ServiceType
+  ): { validCitations: string[]; invalidCitations: string[]; coverage: number } {
+    // Extract all [KB:xxx] citations from the text
+    const citationPattern = /\[KB:([^\]]+)\]/g;
+    const citations: string[] = [];
+    let match;
+    while ((match = citationPattern.exec(aiOutput)) !== null) {
+      citations.push(match[1]);
+    }
+
+    // Load the appropriate KB
+    this.loadKnowledgeBase(serviceType);
+    const validIds = new Set(this.currentKB.map((r) => r.id));
+
+    const validCitations: string[] = [];
+    const invalidCitations: string[] = [];
+
+    for (const cite of citations) {
+      if (validIds.has(cite)) {
+        validCitations.push(cite);
+      } else {
+        invalidCitations.push(cite);
+      }
+    }
+
+    const totalMentions = citations.length;
+    const coverage = totalMentions > 0 ? validCitations.length / totalMentions : 1.0;
+
+    return { validCitations, invalidCitations, coverage };
+  }
+
+  /**
+   * Build a grounded prompt with KB constraints and structured output schema.
    */
   generateWithConstraints(
     prompt: string,
-    serviceType: 'bazi' | 'ziwei' | 'yijing',
+    serviceType: ServiceType,
     userBirthData: Record<string, unknown>,
     language: 'en' | 'zh' = 'en'
-  ): { groundedPrompt: string; citations: string[] } {
+  ): { groundedPrompt: string; citations: string[]; structuredSchema: string } {
     this.loadKnowledgeBase(serviceType);
     const chunks = this.retrieve(prompt, 5);
 
@@ -265,19 +407,32 @@ export class RAGPlusEngine {
       .map((c) => `[KB:${c.id}]\n${c.content}`)
       .join('\n\n');
 
+    const schemas: Record<ServiceType, string> = {
+      bazi: `{ "stem_analysis": "...", "branch_analysis": "...", "element_balance": "...", "jiazi_interpretation": "...", "strengths": "...", "weaknesses": "...", "fortune_outlook": "..." }`,
+      ziwei: `{ "life_palace": "...", "star_configurations": "...", "palace_interactions": "...", "career_advice": "...", "relationship_insights": "...", "health_outlook": "..." }`,
+      yijing: `{ "hexagram_name": "...", "trigrams": "...", "judgment_interpretation": "...", "line_commentaries": "...", "application_advice": "..." }`,
+      tarot: `{ "card_name": "...", "arcana": "...", "position": "...", "upright_meaning": "...", "reversed_meaning": "...", "symbolism": "...", "advice": "..." }`,
+    };
+
     const systemConstraint =
       language === 'zh'
-        ? '重要：仅根据上述知识库条目回答，不要编造或推断超出知识库范围的信息。'
+        ? '重要：仅根据上述知识库条目回答，不要编造或推断超出知识库范围的信息。引用来源时请使用 [KB:entry_id] 格式。'
         : 'IMPORTANT: Only make claims that are directly supported by the knowledge base entries above. Cite sources as [KB:entry_id]. Do NOT invent stars, palaces, elements, or combinations not present in the KB.';
+
+    const structuredConstraint =
+      language === 'zh'
+        ? `请使用以下JSON格式回复，不要添加额外的字段：\n${schemas[serviceType]}`
+        : `Please respond using this exact JSON schema, no additional fields:\n${schemas[serviceType]}`;
 
     const groundedPrompt =
       `You are a Chinese metaphysics expert. Use ONLY the following knowledge to answer.\n\n` +
       `KNOWLEDGE BASE:\n${kbSection}\n\n` +
       `USER DATA: ${JSON.stringify(userBirthData)}\n\n` +
       `SYSTEM CONSTRAINT: ${systemConstraint}\n\n` +
+      `OUTPUT SCHEMA: ${structuredConstraint}\n\n` +
       `QUESTION: ${prompt}`;
 
-    return { groundedPrompt, citations: chunks.map((c) => c.id) };
+    return { groundedPrompt, citations: chunks.map((c) => c.id), structuredSchema: schemas[serviceType] };
   }
 
   /**
@@ -285,7 +440,7 @@ export class RAGPlusEngine {
    */
   ragpp(
     query: string,
-    serviceType: 'bazi' | 'ziwei' | 'yijing',
+    serviceType: ServiceType,
     userBirthData: Record<string, unknown>
   ): {
     groundedPrompt: string;
@@ -311,6 +466,36 @@ export class RAGPlusEngine {
       chunks,
       citations: chunks.map((c) => c.id),
     };
+  }
+
+  /**
+   * Get tarot card by name for targeted retrieval.
+   */
+  getTarotCard(name: string): TarotCard | undefined {
+    return getCardByName(name);
+  }
+
+  /**
+   * Calculate KB coverage score for a given query.
+   * Returns 0-1 indicating how well the KB covers the query domain.
+   */
+  calculateKBCoverage(query: string, serviceType: ServiceType): number {
+    const serviceKeywords: Record<ServiceType, string[]> = {
+      bazi: ['八字', '四柱', '天干', '地支', '五行', '甲子', '命理', '日元', '月令', '时支'],
+      ziwei: ['紫微', '斗数', '星曜', '宫位', '命宫', '财帛', '官禄', '迁移', '福德', '天机', '太阳'],
+      yijing: ['易经', '卦象', '六十四卦', '乾', '坤', '震', '巽', '坎', '离', '艮', '兑', '爻', '变爻'],
+      tarot: ['塔罗', 'tarot', 'card', 'major', 'minor', '权杖', '圣杯', '宝剑', '星币', '大阿尔卡纳', '小阿尔卡纳'],
+    };
+
+    const keywords = serviceKeywords[serviceType];
+    const queryLower = query.toLowerCase();
+    let matchCount = 0;
+    for (const kw of keywords) {
+      if (queryLower.includes(kw.toLowerCase())) {
+        matchCount++;
+      }
+    }
+    return Math.min(1.0, matchCount / Math.max(1, keywords.length));
   }
 }
 
