@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "serve": "NODE_ENV=production node src/index.js",
-    "test": "jest --coverage",
+    "test": "vitest run --coverage",
     "lint": "next lint"
   },
   "keywords": [
@@ -70,6 +70,7 @@
   "devDependencies": {
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "vitest": "^4.1.3"
   }
 }

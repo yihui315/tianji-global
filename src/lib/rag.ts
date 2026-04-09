@@ -35,7 +35,7 @@ export interface SimilarReading {
  * Generate a pseudo-embedding from text (placeholder until OpenAI is configured)
  * Uses a simple hash-based approach for deterministic results
  */
-function generatePseudoEmbedding(text: string): number[] {
+export function generatePseudoEmbedding(text: string): number[] {
   const dim = 1536;
   const embedding = new Array(dim).fill(0);
   for (let i = 0; i < text.length; i++) {
