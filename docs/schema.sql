@@ -318,3 +318,33 @@ CREATE INDEX idx_reading_embeddings_vector ON reading_embeddings
 CREATE INDEX idx_reading_embeddings_service_type ON reading_embeddings(service_type);
 
 COMMENT ON TABLE reading_embeddings IS 'Pre-computed text embeddings for similarity search (RAG)';
+
+-- ============================================================
+-- Email Digests (Daily Fortune Push)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS email_digests (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    service_type VARCHAR(20),
+    email_type VARCHAR(20) DEFAULT 'daily_digest'
+);
+
+CREATE INDEX idx_email_digests_user_id  ON email_digests(user_id);
+CREATE INDEX idx_email_digests_sent_at  ON email_digests(sent_at DESC);
+
+-- ============================================================
+-- User Subscriptions (Email Digest Preferences)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS user_subscriptions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    service_type VARCHAR(20) NOT NULL,
+    frequency VARCHAR(20) DEFAULT 'daily',
+    enabled BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE(user_id, service_type)
+);
+
+CREATE INDEX idx_user_subscriptions_user_id ON user_subscriptions(user_id);
+CREATE INDEX idx_user_subscriptions_enabled ON user_subscriptions(enabled) WHERE enabled = true;
