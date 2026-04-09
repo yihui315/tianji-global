@@ -133,10 +133,12 @@ function getPlanetaryPositions(birthDate: string, birthTime: string, _lat: numbe
 
   for (const [name, id] of Object.entries(PLANET_IDS)) {
     const result = calc(jd_et, id, flags);
-    if (result.flag !== flags) {
+    // flag >= 0 means calculation succeeded (returned flag is a STATUS code, not the input iflag)
+    // flag < 0 means error
+    if (result.flag < 0) {
       // Fallback: try without speed flag
       const fallback = calc(jd_et, id, constants.SEFLG_SWIEPH);
-      if (fallback.flag !== constants.SEFLG_SWIEPH) continue;
+      if (fallback.flag < 0) continue;
       const lon = fallback.data[0] as number;
       const lat = fallback.data[1] as number;
       const dist = fallback.data[2] as number;

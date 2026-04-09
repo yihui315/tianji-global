@@ -103,7 +103,9 @@ function getJD(year: number, month: number, day: number, hour: number): number {
 function getPlanetLon(jd: number, seId: number): number | null {
   try {
     const r = calc(jd, seId, constants.SEFLG_SWIEPH);
-    if (r.flag !== constants.SEFLG_SWIEPH) return null;
+    // flag >= 0 means calculation succeeded (0=full precision, 2=reduced precision, etc.)
+    // flag < 0 means error (e.g. -1 = planet not found, -2 =Sweph error)
+    if (r.flag < 0 || !r.data?.[0]) return null;
     return normalizeAngle(r.data[0] as number);
   } catch {
     return null;
