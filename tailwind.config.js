@@ -16,6 +16,12 @@ module.exports = {
           'gold-light': '#FCD34D',
         },
       },
+      animation: {
+        'gradient-shift': 'gradient-shift 4s ease-in-out infinite',
+        'pulse-subtle': 'pulse-subtle 3s ease-in-out infinite',
+        'mystic-float': 'mystic-float 8s ease-in-out infinite',
+        'mystic-float-delay': 'mystic-float 10s ease-in-out infinite 3s',
+      },
     },
   },
   plugins: [],

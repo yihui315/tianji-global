@@ -1,3 +1,131 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ══════════════════════════════════════════════════════════════
+   Mystic Fortune-Telling Theme — CSS Custom Properties & Animations
+   ══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Core palette */
+  --mystic-bg-primary: #030014;
+  --mystic-bg-nebula: rgba(88, 28, 135, 0.3);
+  --mystic-accent-gold: #f59e0b;
+  --mystic-accent-purple: #7c3aed;
+  --mystic-glow-color: rgba(168, 130, 255, 0.3);
+
+  /* Tunable parameters (changed via ConfigPanel) */
+  --vignette-intensity: 0.8;
+  --wobble-intensity: 0.6;
+  --particle-density: 25;
+  --breathing-speed: 0.0003;
+}
+
+/* ── Global resets for mystic pages ── */
+.mystic-page {
+  background: var(--mystic-bg-primary);
+  overflow-x: hidden;
+}
+
+/* ── Glowing title text-shadow ── */
+.mystic-title {
+  text-shadow:
+    0 0 40px rgba(168, 130, 255, 0.15),
+    0 0 80px rgba(245, 158, 11, 0.08),
+    0 0 120px rgba(124, 58, 237, 0.05);
+}
+
+/* ── Gradient text shift animation ── */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-shift {
+  animation: gradient-shift 4s ease-in-out infinite;
+}
+
+/* ── Subtle pulse for badge ── */
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+/* ── Floating decorative elements ── */
+@keyframes mystic-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-12px) rotate(1deg); }
+  66% { transform: translateY(-6px) rotate(-0.5deg); }
+}
+.animate-mystic-float {
+  animation: mystic-float 8s ease-in-out infinite;
+}
+.animate-mystic-float-delay {
+  animation: mystic-float 10s ease-in-out infinite 3s;
+}
+
+/* ── Mouse-trailing zodiac symbols ── */
+.mystic-trail-symbol {
+  position: absolute;
+  font-size: 14px;
+  color: rgba(168, 130, 255, 0.6);
+  pointer-events: none;
+  animation: trail-fade 1.2s ease-out forwards;
+  z-index: 20;
+}
+
+@keyframes trail-fade {
+  0% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -80%) scale(0.3) rotate(180deg);
+  }
+}
+
+/* ── Config panel slider styling ── */
+.mystic-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+.mystic-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--mystic-accent-gold);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+.mystic-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--mystic-accent-gold);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
+/* ── Reduced motion support ── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-gradient-shift,
+  .animate-pulse-subtle,
+  .animate-mystic-float,
+  .animate-mystic-float-delay {
+    animation: none !important;
+  }
+  .mystic-trail-symbol {
+    display: none !important;
+  }
+}
