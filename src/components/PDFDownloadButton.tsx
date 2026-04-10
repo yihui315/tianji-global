@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-type ServiceType = 'bazi' | 'ziwei' | 'yijing' | 'tarot' | 'fortune' | 'synastry';
+type ServiceType = 'bazi' | 'ziwei' | 'yijing' | 'tarot' | 'fortune' | 'synastry' | 'western';
 
 interface PDFDownloadButtonProps {
   serviceType: ServiceType;
@@ -33,7 +33,14 @@ export default function PDFDownloadButton({
   const handleDownload = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/report/pdf', {
+      // Use different API endpoints for western and synastry
+      const apiEndpoint = serviceType === 'western' 
+        ? '/api/report/western' 
+        : serviceType === 'synastry'
+        ? '/api/report/synastry'
+        : '/api/report/pdf';
+
+      const res = await fetch(apiEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

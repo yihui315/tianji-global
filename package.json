@@ -52,6 +52,8 @@
     "dotenv": "^16.4.1",
     "framer-motion": "^12.38.0",
     "iztro": "^2.5.8",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.7",
     "next": "^15.5.14",
     "next-auth": "^5.0.0-beta.22",
     "next-intl": "^4.9.0",

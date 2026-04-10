@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import PDFDownloadButton from '@/components/PDFDownloadButton';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -529,6 +530,20 @@ export default function WesternPage() {
                   <div className="text-blue-300 text-sm">{chartData.houses.midheaven}°</div>
                 </div>
               </div>
+            </div>
+
+            {/* PDF Download */}
+            <div className="flex justify-center mt-6">
+              <PDFDownloadButton
+                serviceType="western"
+                resultData={chartData as unknown as Record<string, unknown>}
+                birthData={{
+                  birthday: birthday,
+                  birthTime: birthTime,
+                  name: language === 'zh' ? '西方星盘' : 'Western Natal',
+                }}
+                language={language}
+              />
             </div>
 
             {/* Calculation Info */}
