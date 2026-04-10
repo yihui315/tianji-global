@@ -1,0 +1,102 @@
+[
+  {
+    "id": "elon-musk",
+    "name": "Elon Musk",
+    "birthDate": "1971-06-28",
+    "birthTime": "22:32",
+    "lat": -25.7617,
+    "lng": 28.2618,
+    "profession": "Entrepreneur",
+    "description": "CEO of Tesla and SpaceX, pioneering electric vehicles and commercial space travel."
+  },
+  {
+    "id": "steve-jobs",
+    "name": "Steve Jobs",
+    "birthDate": "1955-02-24",
+    "birthTime": "22:00",
+    "lat": 44.5144,
+    "lng": -88.0197,
+    "profession": "Entrepreneur",
+    "description": "Co-founder of Apple Inc., pioneer of the personal computer revolution."
+  },
+  {
+    "id": "albert-einstein",
+    "name": "Albert Einstein",
+    "birthDate": "1879-03-14",
+    "birthTime": "09:00",
+    "lat": 48.8054,
+    "lng": 9.6532,
+    "profession": "Scientist",
+    "description": "Theoretical physicist who developed the theory of relativity and shaped modern physics."
+  },
+  {
+    "id": "marie-curie",
+    "name": "Marie Curie",
+    "birthDate": "1867-11-07",
+    "birthTime": "00:00",
+    "lat": 52.2297,
+    "lng": 21.0122,
+    "profession": "Scientist",
+    "description": "Physicist and chemist who pioneered research on radioactivity, double Nobel laureate."
+  },
+  {
+    "id": "taylor-swift",
+    "name": "Taylor Swift",
+    "birthDate": "1989-12-13",
+    "birthTime": "05:00",
+    "lat": 40.3062,
+    "lng": -75.9242,
+    "profession": "Artist",
+    "description": "Grammy-winning singer-songwriter known for narrative songwriting and genre-blending albums."
+  },
+  {
+    "id": "oprah-winfrey",
+    "name": "Oprah Winfrey",
+    "birthDate": "1954-01-29",
+    "birthTime": "12:00",
+    "lat": 35.2271,
+    "lng": -80.8431,
+    "profession": "Entrepreneur",
+    "description": "Media mogul, television host, actress, and philanthropist."
+  },
+  {
+    "id": "beyonce",
+    "name": "Beyoncé",
+    "birthDate": "1981-09-04",
+    "birthTime": "10:00",
+    "lat": 29.7604,
+    "lng": -95.3698,
+    "profession": "Artist",
+    "description": "Global music icon, lead singer of Destiny's Child and solo superstar."
+  },
+  {
+    "id": "bill-gates",
+    "name": "Bill Gates",
+    "birthDate": "1955-10-28",
+    "birthTime": "21:00",
+    "lat": 47.6062,
+    "lng": -122.3321,
+    "profession": "Entrepreneur",
+    "description": "Co-founder of Microsoft, leading software pioneer and philanthropist."
+  },
+  {
+    "id": "michael-jordan",
+    "name": "Michael Jordan",
+    "birthDate": "1963-02-17",
+    "birthTime": "12:00",
+    "lat": 35.2072,
+    "lng": -80.8314,
+    "profession": "Athlete",
+    "description": "Six-time NBA champion, widely regarded as the greatest basketball player ever."
+  },
+  {
+    "id": "nikola-tesla",
+    "name": "Nikola Tesla",
+    "birthDate": "1856-07-10",
+    "birthTime": "00:00",
+    "lat": 45.2655,
+    "lng": 19.8554,
+    "profession": "Scientist",
+    "description": "Inventor and electrical engineer, father of AC power systems and wireless communication."
+  }
+]
