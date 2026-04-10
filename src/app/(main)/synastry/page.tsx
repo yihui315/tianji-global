@@ -8,6 +8,8 @@ import AnimatedShareButton from '@/components/AnimatedShareButton';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
+type SynastryType = 'overlay' | 'composite' | 'davison';
+
 interface PlanetPosition {
   name: string;
   longitude: number;
@@ -44,11 +46,30 @@ interface Aspect {
   polarityScore: number;
 }
 
+interface MidpointStructure {
+  midpoint: number;
+  planet1: string;
+  planet2: string;
+  aspectToThird: number;
+  thirdPlanet: string;
+  structureType: 'T-square' | 'Grand Trine' | 'Yod' | 'Castle' | 'Bow';
+  sensitivity: 'high' | 'medium' | 'low';
+}
+
+interface CompositeChartData {
+  planets: PlanetPosition[];
+  houses: HousePlacements;
+  midpointStructures: MidpointStructure[];
+}
+
 interface SynastryResponse {
   person1Chart: ChartData;
   person2Chart: ChartData;
   aspects: Aspect[];
   overallScore: number;
+  compositeChart?: CompositeChartData;
+  davisonChart?: CompositeChartData;
+  meta?: { type: SynastryType };
   aiInterpretation?: string;
   disclaimer?: string;
 }
@@ -441,6 +462,7 @@ function PersonForm({ label, colorClass, data: d, onChange, language }: PersonFo
 
 export default function SynastryPage() {
   const [language, setLanguage] = useState<'zh' | 'en'>('zh');
+  const [synastryType, setSynastryType] = useState<SynastryType>('overlay');
   const [person1Data, setPerson1Data] = useState({ birthDate: '2000-08-16', birthTime: '12:00', lat: '35.6762', lng: '139.6503' });
   const [person2Data, setPerson2Data] = useState({ birthDate: '1998-05-22', birthTime: '14:30', lat: '40.7128', lng: '-74.0060' });
   const [enhanceWithAI, setEnhanceWithAI] = useState(false);
@@ -473,6 +495,7 @@ export default function SynastryPage() {
           },
           enhanceWithAI,
           language,
+          type: synastryType,
         }),
       });
 
@@ -579,7 +602,38 @@ export default function SynastryPage() {
         </div>
 
         {/* Options */}
-        <div className="flex flex-wrap items-center gap-4 p-4 bg-slate-800/30 rounded-xl border border-slate-700/30">
+        <div className="space-y-3 p-4 bg-slate-800/30 rounded-xl border border-slate-700/30">
+          {/* Synastry Type Tabs */}
+          <div>
+            <label className="block text-slate-400 text-xs mb-2">
+              {language === 'zh' ? '分析模式' : 'Analysis Mode'}
+            </label>
+            <div className="flex gap-2">
+              {(['overlay', 'composite', 'davison'] as SynastryType[]).map(t => (
+                <button
+                  key={t}
+                  onClick={() => setSynastryType(t)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                    synastryType === t
+                      ? t === 'overlay' ? 'bg-blue-600 text-white'
+                      : t === 'composite' ? 'bg-violet-600 text-white'
+                      : 'bg-emerald-600 text-white'
+                      : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
+                  }`}
+                >
+                  {t === 'overlay' ? (language === 'zh' ? '叠盘' : 'Overlay') :
+                   t === 'composite' ? (language === 'zh' ? '复合盘' : 'Composite') :
+                   (language === 'zh' ? '戴维森盘' : 'Davison')}
+                </button>
+              ))}
+            </div>
+            <p className="text-slate-500 text-xs mt-1">
+              {synastryType === 'overlay' ? (language === 'zh' ? '两人星盘叠加对比，分析行星相位' : 'Overlay both charts, analyze planetary aspects between them') :
+               synastryType === 'composite' ? (language === 'zh' ? '计算两人星盘中点，形成第三张共同星盘' : 'Compute midpoints of both charts to form a combined relationship chart') :
+               (language === 'zh' ? '时间加权中点盘，更精确反映关系本质' : 'Time-weighted midpoint chart, more accurately reflects relationship essence')}
+            </p>
+          </div>
+
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -664,13 +718,74 @@ export default function SynastryPage() {
               ))}
             </div>
 
-            {/* Aspects */}
-            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4">
-              <h3 className="text-violet-400 font-bold mb-3">
-                {language === 'zh' ? '相位列表' : 'Aspect List'}
-              </h3>
-              <AspectList aspects={result.aspects} />
-            </div>
+            {/* Aspects — only for overlay synastry */}
+            {(!result.meta || result.meta.type === 'overlay') && result.aspects && (
+              <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4">
+                <h3 className="text-violet-400 font-bold mb-3">
+                  {language === 'zh' ? '相位列表' : 'Aspect List'}
+                </h3>
+                <AspectList aspects={result.aspects} />
+              </div>
+            )}
+
+            {/* Midpoint Structures — for composite and davison */}
+            {(result.compositeChart || result.davisonChart) && (
+              (() => {
+                const chartData = result.compositeChart ?? result.davisonChart;
+                const chartType = result.meta?.type ?? 'composite';
+                return (
+                  <>
+                    {/* Composite/Davison Planet Table */}
+                    <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4">
+                      <h3 className="text-violet-400 font-bold mb-3">
+                        {chartType === 'davison'
+                          ? (language === 'zh' ? '戴维森盘行星位置' : 'Davison Chart Planetary Positions')
+                          : (language === 'zh' ? '复合盘行星位置' : 'Composite Chart Planetary Positions')}
+                      </h3>
+                      <div className="space-y-1">
+                        {chartData?.planets.map(p => (
+                          <div key={p.name} className="flex items-center justify-between py-1 border-b border-slate-700/30 last:border-0">
+                            <span className="text-slate-300 text-sm w-20">{p.name}</span>
+                            <span className="text-slate-400 text-sm">{p.signSymbol} {p.signName} {p.degree.toFixed(1)}°</span>
+                            <span className="text-slate-600 text-xs w-16 text-right">{p.longitude.toFixed(1)}°</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-3 pt-2 border-t border-slate-700/30 text-xs text-slate-500">
+                        ASC: {chartData?.houses.ascendant.toFixed(1)}° · MC: {chartData?.houses.midheaven.toFixed(1)}°
+                      </div>
+                    </div>
+
+                    {/* Midpoint Structures */}
+                    {chartData?.midpointStructures && chartData.midpointStructures.length > 0 && (
+                      <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4">
+                        <h3 className="text-amber-400 font-bold mb-3">
+                          {language === 'zh' ? '中间点结构' : 'Midpoint Structures'}
+                        </h3>
+                        <div className="space-y-2 max-h-64 overflow-y-auto">
+                          {chartData.midpointStructures.map((ms, i) => (
+                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-slate-700/30">
+                              <div className={`w-2 h-2 rounded-full ${
+                                ms.sensitivity === 'high' ? 'bg-red-500' :
+                                ms.sensitivity === 'medium' ? 'bg-amber-500' : 'bg-green-500'
+                              }`} />
+                              <span className="text-sm text-slate-300">
+                                <span className="text-blue-400">{ms.planet1}</span>
+                                <span className="text-slate-500 mx-1">Midpoint</span>
+                                <span className="text-red-400">{ms.planet2}</span>
+                              </span>
+                              <span className="text-xs text-slate-500 ml-auto">
+                                {ms.structureType} · {ms.thirdPlanet} @ {ms.aspectToThird}°
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()
+            )}
 
             {/* PDF Download */}
             <PDFDownloadButton

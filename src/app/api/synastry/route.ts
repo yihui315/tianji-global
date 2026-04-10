@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { computeSynastry } from '@/lib/synastry-engine';
+import { computeSynastry, computeCompositeChart, computeDavisonChart, SynastryType } from '@/lib/synastry-engine';
 import { generateReport } from '@/lib/ai-orchestrator';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -16,6 +16,7 @@ interface SynastryRequest {
   person2: PersonData;
   enhanceWithAI?: boolean;
   language?: 'en' | 'zh';
+  type?: SynastryType; // 'overlay' (default) | 'composite' | 'davison'
 }
 
 // ─── AI Prompt Builder ────────────────────────────────────────────────────────
@@ -88,7 +89,7 @@ Use warm, professional, and insightful language. Include a disclaimer.`;
 export async function POST(request: NextRequest) {
   try {
     const body: SynastryRequest = await request.json();
-    const { person1, person2, enhanceWithAI = false, language = 'zh' } = body;
+    const { person1, person2, enhanceWithAI = false, language = 'zh', type = 'overlay' } = body;
 
     if (!person1?.birthDate || !person1?.birthTime || !person2?.birthDate || !person2?.birthTime) {
       return NextResponse.json(
@@ -97,52 +98,65 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Compute synastry
-    const result = computeSynastry(person1, person2);
-
     const response: Record<string, unknown> = {
-      person1Chart: result.person1Chart,
-      person2Chart: result.person2Chart,
-      aspects: result.aspects,
-      overallScore: result.overallScore,
-      meta: { platform: 'TianJi Global | 天机全球', version: '1.0.0' },
+      meta: { platform: 'TianJi Global | 天机全球', version: '1.0.0', type },
     };
 
-    // AI enhancement
-    if (enhanceWithAI) {
-      try {
-        const aiPrompt = buildSynastryPrompt(
-          result.person1Chart,
-          result.person2Chart,
-          result.aspects,
-          result.overallScore,
-          language
-        );
+    // Compute based on type
+    if (type === 'composite') {
+      const composite = computeCompositeChart(person1, person2);
+      response.compositeChart = composite;
+      response.person1Chart = composite; // Return composite as person1Chart for compatibility
+      response.person2Chart = composite;
+    } else if (type === 'davison') {
+      const davison = computeDavisonChart(person1, person2);
+      response.davisonChart = davison;
+      response.person1Chart = davison;
+      response.person2Chart = davison;
+    } else {
+      // Default: overlay synastry
+      const synResult = computeSynastry(person1, person2);
+      response.person1Chart = synResult.person1Chart;
+      response.person2Chart = synResult.person2Chart;
+      response.aspects = synResult.aspects;
+      response.overallScore = synResult.overallScore;
 
-        const systemPrompt = language === 'zh'
-          ? '你是一位融合传统占星学与现代心理学的专业西方占星师。请用JSON格式回复。'
-          : 'You are a professional Western Astrologer specializing in psychological astrology and modern psychology. Please respond in JSON format.';
+      // AI enhancement (only for overlay synastry)
+      if (enhanceWithAI) {
+        try {
+          const aiPrompt = buildSynastryPrompt(
+            synResult.person1Chart,
+            synResult.person2Chart,
+            synResult.aspects,
+            synResult.overallScore,
+            language
+          );
 
-        const aiResult = await generateReport({
-          prompt: aiPrompt,
-          systemPrompt,
-          taskType: 'analysis',
-          responseFormat: 'text',
-          maxTokens: 2048,
-        });
+          const systemPrompt = language === 'zh'
+            ? '你是一位融合传统占星学与现代心理学的专业西方占星师。请用JSON格式回复。'
+            : 'You are a professional Western Astrologer specializing in psychological astrology and modern psychology. Please respond in JSON format.';
 
-        response.aiInterpretation = aiResult.content;
-        response.disclaimer = language === 'zh'
-          ? '本报告仅供娱乐与自我探索，不构成医疗、法律或财务建议。重要人生决策请咨询具备资质的专业人士。'
-          : 'This reading is for entertainment and self-reflection purposes only. It does not constitute medical, legal, or financial advice. Always consult a qualified professional for important life decisions.';
-        response.aiMeta = {
-          provider: aiResult.provider,
-          model: aiResult.model,
-          latencyMs: aiResult.latencyMs,
-          costUSD: aiResult.costUSD,
-        };
-      } catch (aiErr) {
-        response.aiError = aiErr instanceof Error ? aiErr.message : 'AI interpretation failed';
+          const aiResult = await generateReport({
+            prompt: aiPrompt,
+            systemPrompt,
+            taskType: 'analysis',
+            responseFormat: 'text',
+            maxTokens: 2048,
+          });
+
+          response.aiInterpretation = aiResult.content;
+          response.disclaimer = language === 'zh'
+            ? '本报告仅供娱乐与自我探索，不构成医疗、法律或财务建议。重要人生决策请咨询具备资质的专业人士。'
+            : 'This reading is for entertainment and self-reflection purposes only. It does not constitute medical, legal, or financial advice. Always consult a qualified professional for important life decisions.';
+          response.aiMeta = {
+            provider: aiResult.provider,
+            model: aiResult.model,
+            latencyMs: aiResult.latencyMs,
+            costUSD: aiResult.costUSD,
+          };
+        } catch (aiErr) {
+          response.aiError = aiErr instanceof Error ? aiErr.message : 'AI interpretation failed';
+        }
       }
     }
 
