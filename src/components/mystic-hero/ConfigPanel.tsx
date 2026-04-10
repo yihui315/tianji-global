@@ -79,12 +79,12 @@ export default function ConfigPanel() {
     document.documentElement.style.setProperty(name, value);
   }, []);
 
-  // Init CSS vars on mount
+  // Init CSS vars on mount with default values
   useEffect(() => {
-    setVar('--vignette-intensity', String(vignetteIntensity));
-    setVar('--wobble-intensity', String(wobbleIntensity));
-    setVar('--particle-density', String(particleDensity));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    setVar('--vignette-intensity', '0.8');
+    setVar('--wobble-intensity', '0.6');
+    setVar('--particle-density', '25');
+  }, [setVar]);
 
   const applyPreset = useCallback((preset: Preset) => {
     Object.entries(preset.vars).forEach(([k, v]) => setVar(k, v));
