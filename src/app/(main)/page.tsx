@@ -1,6 +1,6 @@
 'use client';
 
-import MysticHero from '@/components/mystic-hero/MysticHero';
+import DynamicHero from '@/components/hero/DynamicHero';
 import { SERVICES } from '@/data/services';
 
 /**
@@ -9,18 +9,16 @@ import { SERVICES } from '@/data/services';
  * Features:
  * - Full-screen cosmic background with stardust & floating zodiac symbols
  * - Crystal-ball vignette overlay
- * - Perlin-noise breathing wobble on hero elements
- * - Decorative 3D tarot card flip
- * - Bilingual glowing title + CTA with mouse-trailing symbols
+ * - Canvas-based star animation with constellation lines
+ * - Bilingual glowing title + CTA
  * - Minimal navigation (mobile-responsive)
- * - Live config panel for parameter tuning
  */
 
 export default function Home() {
   return (
     <div className="mystic-page bg-[#030014] text-white min-h-screen">
       {/* ═══════ Immersive Mystic Hero ═══════ */}
-      <MysticHero />
+      <DynamicHero />
 
       {/* ═══════ Services Section ═══════ */}
       <section id="services" className="relative z-10 py-20 sm:py-24">
