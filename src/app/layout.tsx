@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
-import { Cinzel, Noto_Serif_SC } from 'next/font/google';
+import { Cinzel, Noto_Serif_SC, Instrument_Serif, Barlow } from 'next/font/google';
 
 export const metadata: Metadata = {
   title: 'TianJi Global | 天机全球',
@@ -34,6 +34,21 @@ const notoSerifSC = Noto_Serif_SC({
   display: 'swap',
 });
 
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  variable: '--font-instrument-serif',
+  display: 'swap',
+});
+
+const barlow = Barlow({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-barlow',
+  display: 'swap',
+});
+
 function Providers({ children }: { children: React.ReactNode }) {
   return <SessionProvider>{children}</SessionProvider>;
 }
@@ -44,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-CN" className={`${cinzel.variable} ${notoSerifSC.variable}`}>
+    <html lang="zh-CN" className={`${cinzel.variable} ${notoSerifSC.variable} ${instrumentSerif.variable} ${barlow.variable}`}>
       <body>
         <Providers>{children}</Providers>
       </body>
