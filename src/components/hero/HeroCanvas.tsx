@@ -90,6 +90,10 @@ export default function HeroCanvas() {
       v.addEventListener('stalled', () => {
         if (v) v.style.display = 'none';
       });
+      // Force play on mount (belt-and-suspenders for autoplay policy)
+      v.play().catch(() => {
+        // Autoplay blocked — silently ignore
+      });
     });
 
     // Floating particles
@@ -128,7 +132,7 @@ export default function HeroCanvas() {
         className="heroVideo"
         autoPlay
         loop
-        muted
+        muted={true}
         playsInline
       >
         <source src="/assets/hero/hero-video.mp4" type="video/mp4" />
@@ -143,7 +147,7 @@ export default function HeroCanvas() {
         className="zodiacParticles"
         autoPlay
         loop
-        muted
+        muted={true}
         playsInline
       >
         <source src="/assets/hero/zodiac-particles.mp4" type="video/mp4" />
@@ -155,7 +159,7 @@ export default function HeroCanvas() {
         className="tarotOverlay"
         autoPlay
         loop
-        muted
+        muted={true}
         playsInline
       >
         <source src="/assets/hero/tarot-overlay.mp4" type="video/mp4" />
