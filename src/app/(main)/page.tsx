@@ -562,111 +562,121 @@ function InsightChips() {
 }
 
 /* ═══════════════════════════════════════════
-   Testimonial Data — Replace with real testimonials in production
+   Testimonial Data
+   NOTE: Replace these placeholder quotes with real, verified customer
+   testimonials before going live. Ensure proper consent is obtained.
    ═══════════════════════════════════════════ */
 const TESTIMONIALS = [
   {
-    name: '张小姐',
-    nameEn: 'Ms. Zhang',
-    role: '创业者',
-    roleEn: 'Entrepreneur',
-    quote: '天机的紫微斗数分析精准到令人吃惊，帮助我在创业路上做出了关键决策。',
+    name: 'Mei',
+    location: '新加坡',
+    locationEn: 'Singapore',
+    quote:
+      '天机的紫微斗数报告让我重新理解了自己的职业方向——精确、优雅、深刻，远超我用过的任何平台。',
     quoteEn:
-      'TianJi\'s Zi Wei analysis was astonishingly accurate and helped me make critical decisions on my entrepreneurial journey.',
-    avatar: '🌟',
-    rating: 5,
+      'TianJi\'s Zi Wei report gave me a completely new perspective on my career path — precise, elegant, and profoundly insightful.',
+    avatar: '✦',
   },
   {
-    name: 'David L.',
-    nameEn: 'David L.',
-    role: '软件工程师',
-    roleEn: 'Software Engineer',
-    quote: '西方星盘和八字的结合分析，让我对自己的职业方向有了全新的理解。',
+    name: 'Sophia',
+    location: '伦敦',
+    locationEn: 'London',
+    quote:
+      '作为一个对东方命理好奇的西方人，这里的双语报告让我毫无障碍地理解了八字和星盘的深层含义。',
     quoteEn:
-      'The combination of Western astrology and BaZi analysis gave me a completely new understanding of my career path.',
-    avatar: '⭐',
-    rating: 5,
+      'As a Westerner curious about Eastern metaphysics, the bilingual reports let me understand BaZi and natal charts without any barrier.',
+    avatar: '◈',
   },
   {
-    name: '李女士',
-    nameEn: 'Ms. Li',
-    role: '心理咨询师',
-    roleEn: 'Psychologist',
-    quote: '作为心理学从业者，我对天机将古典智慧与现代心理学融合的方式印象深刻。',
+    name: 'Daniel',
+    location: '多伦多',
+    locationEn: 'Toronto',
+    quote:
+      '我把天机的流年分析存在手机里，每个季度回顾一次。它对人生节律的把握令人惊叹。',
     quoteEn:
-      'As a psychology practitioner, I\'m impressed by how TianJi integrates classical wisdom with modern psychology.',
-    avatar: '💫',
-    rating: 5,
-  },
-  {
-    name: 'Sarah K.',
-    nameEn: 'Sarah K.',
-    role: '瑜伽导师',
-    roleEn: 'Yoga Instructor',
-    quote: '每日运势和塔罗指引已经成为我早晨冥想的一部分，非常精准和有启发性。',
-    quoteEn:
-      'Daily horoscope and tarot guidance have become part of my morning meditation — very precise and inspiring.',
-    avatar: '🔮',
-    rating: 5,
+      'I saved TianJi\'s annual transit analysis on my phone and review it every quarter. Its grasp of life rhythms is remarkable.',
+    avatar: '◇',
   },
 ];
 
+/** Social proof stat chips — replace values with real analytics data */
+const SOCIAL_PROOF_STATS = [
+  { value: '120K+', zh: '结构化解读', en: 'Structured Readings' },
+  { value: '50K+', zh: '双语报告', en: 'Bilingual Reports' },
+  { value: '30K+', zh: '收藏洞察', en: 'Saved Insights' },
+];
+
 /* ═══════════════════════════════════════════
-   Pricing Data — Replace with real pricing in production
+   Pricing Data
+   NOTE: These are mock placeholder prices. Replace with real Stripe
+   product/price IDs and dynamic data from your billing API before launch.
+   See: https://stripe.com/docs/api/prices
    ═══════════════════════════════════════════ */
 const PRICING_PLANS = [
   {
-    name: '探索',
-    nameEn: 'Explorer',
-    price: '免费',
-    priceEn: 'Free',
+    name: '免费版',
+    nameEn: 'Free',
+    price: '¥0',
+    priceEn: '$0',
     period: '',
     periodEn: '',
+    description: '轻松探索命理世界',
+    descriptionEn: 'Explore the world of divination',
     features: [
       { zh: '每日星座运势', en: 'Daily horoscope' },
       { zh: '基础星盘查看', en: 'Basic chart viewing' },
       { zh: '单次塔罗占卜', en: 'Single tarot reading' },
+      { zh: '社区讨论', en: 'Community access' },
     ],
     cta: '免费开始',
     ctaEn: 'Start Free',
+    /* TODO: Replace with Stripe checkout link or dynamic route */
     href: '/western',
     highlighted: false,
   },
   {
-    name: '专业版',
-    nameEn: 'Professional',
+    name: '高级版',
+    nameEn: 'Premium',
     price: '¥29',
     priceEn: '$4.99',
     period: '/月',
     periodEn: '/mo',
+    description: '解锁全部命理工具与AI深度分析',
+    descriptionEn: 'Unlock all tools & AI deep analysis',
     features: [
       { zh: '全部12种命理工具', en: 'All 12 divination tools' },
       { zh: 'AI深度分析报告', en: 'AI deep analysis reports' },
       { zh: '紫微 + 八字 + 星盘', en: 'Zi Wei + BaZi + Chart' },
       { zh: '合盘 & 推运分析', en: 'Synastry & transit analysis' },
       { zh: 'PDF报告导出', en: 'PDF report export' },
+      { zh: '双语报告生成', en: 'Bilingual report generation' },
     ],
     cta: '立即升级',
     ctaEn: 'Upgrade Now',
+    /* TODO: Replace with Stripe checkout link for premium_monthly price */
     href: '/pricing',
     highlighted: true,
   },
   {
-    name: '年度至尊',
-    nameEn: 'Annual Premium',
-    price: '¥249',
-    priceEn: '$39.99',
-    period: '/年',
-    periodEn: '/yr',
+    name: '深度解读',
+    nameEn: 'Deep Reading',
+    price: '¥99',
+    priceEn: '$14.99',
+    period: '/次',
+    periodEn: '/session',
+    description: '专家级一对一命理深度解析',
+    descriptionEn: 'Expert-level one-on-one deep reading',
     features: [
-      { zh: '专业版全部功能', en: 'All Professional features' },
-      { zh: '名人命盘对照', en: 'Celebrity chart comparison' },
-      { zh: '流年大运完整分析', en: 'Full annual transit analysis' },
-      { zh: '优先AI分析队列', en: 'Priority AI analysis queue' },
-      { zh: '省17%', en: 'Save 17%' },
+      { zh: '高级版全部功能', en: 'All Premium features' },
+      { zh: '名人命盘对照分析', en: 'Celebrity chart comparison' },
+      { zh: '流年大运完整推演', en: 'Full annual transit analysis' },
+      { zh: '优先AI深度队列', en: 'Priority AI analysis queue' },
+      { zh: '个性化命理建议', en: 'Personalized guidance report' },
+      { zh: '30天内无限次修正', en: '30-day unlimited revisions' },
     ],
-    cta: '最佳选择',
-    ctaEn: 'Best Value',
+    cta: '预约深度解读',
+    ctaEn: 'Book Deep Reading',
+    /* TODO: Replace with Stripe checkout link for deep_reading price */
     href: '/pricing',
     highlighted: false,
   },
@@ -1133,37 +1143,55 @@ export default function Home() {
         </div>
         <div className="max-w-6xl mx-auto px-6 sm:px-8 relative">
           <SectionHeading
-            zh="用户真实评价"
-            en="What Our Users Say"
-            subtitle="来自全球命理爱好者的真实反馈"
+            zh="全球用户的信赖之选"
+            en="Trusted by Seekers Worldwide"
+            subtitle="来自世界各地命理探索者的真实感受"
           />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+
+          {/* Social proof stat chips */}
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12 sm:mb-16">
+            {SOCIAL_PROOF_STATS.map((stat, i) => (
+              <motion.div
+                key={stat.en}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-2 bg-white/[0.04] border border-white/[0.07] rounded-full px-4 py-2"
+              >
+                <span className="text-amber-300/80 text-sm font-serif">{stat.value}</span>
+                <span className="text-white/40 text-xs">
+                  {stat.zh}{' '}
+                  <span className="text-white/20">{stat.en}</span>
+                </span>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Testimonial cards — NOTE: replace placeholder quotes with real customer testimonials */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
             {TESTIMONIALS.map((t, i) => (
-              <FadeInWhenVisible key={i} delay={i * 0.1}>
+              <FadeInWhenVisible key={t.name} delay={i * 0.12}>
                 <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 h-full flex flex-col">
-                  {/* Stars */}
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: t.rating }).map((_, j) => (
-                      <span key={j} className="text-amber-400 text-sm">
-                        ★
-                      </span>
-                    ))}
-                  </div>
+                  {/* Decorative quote mark */}
+                  <span className="text-amber-400/20 text-4xl font-serif leading-none mb-3">&ldquo;</span>
                   {/* Quote */}
-                  <p className="text-white/70 text-sm leading-relaxed flex-1">
-                    &ldquo;{t.quote}&rdquo;
+                  <p className="text-white/65 text-sm leading-relaxed flex-1">
+                    {t.quote}
                   </p>
-                  <p className="text-white/30 text-xs mt-2 leading-relaxed">
-                    &ldquo;{t.quoteEn}&rdquo;
+                  <p className="text-white/25 text-xs mt-2 leading-relaxed italic">
+                    {t.quoteEn}
                   </p>
                   {/* Author */}
-                  <div className="flex items-center gap-3 mt-5 pt-5 border-t border-white/[0.06]">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600/30 to-amber-500/20 flex items-center justify-center text-lg">
+                  <div className="flex items-center gap-3 mt-6 pt-5 border-t border-white/[0.06]">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-600/25 to-amber-500/15 flex items-center justify-center text-white/40 text-sm">
                       {t.avatar}
                     </div>
                     <div>
                       <p className="text-white/80 text-sm font-medium">{t.name}</p>
-                      <p className="text-white/30 text-xs">{t.role} · {t.roleEn}</p>
+                      <p className="text-white/30 text-[11px]">
+                        {t.location} · {t.locationEn}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1174,12 +1202,15 @@ export default function Home() {
       </section>
 
       {/* ═══════ 7. Pricing Preview ═══════ */}
+      {/* NOTE: Replace mock prices with live Stripe product data.
+          Each plan.href should point to a Stripe Checkout session URL
+          or a dynamic route that creates one via your billing API. */}
       <section id="pricing" className="relative z-10 py-20 sm:py-28">
         <div className="max-w-5xl mx-auto px-6 sm:px-8">
           <SectionHeading
             zh="选择你的方案"
             en="Choose Your Plan"
-            subtitle="从免费探索到专业深度分析，满足不同需求"
+            subtitle="从免费探索到专家级深度解读，满足每一位命理探索者"
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {PRICING_PLANS.map((plan, i) => (
@@ -1191,16 +1222,22 @@ export default function Home() {
                       : 'from-white/[0.03] to-white/[0.06] border border-white/[0.08]'
                   }`}
                 >
-                  {/* Popular badge */}
+                  {/* Recommended badge */}
                   {plan.highlighted && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-black text-[10px] font-bold px-4 py-1 rounded-full tracking-wider uppercase">
-                      Most Popular · 最受欢迎
+                      Recommended · 推荐
                     </div>
                   )}
-                  <div className="mb-6">
+                  <div className="mb-4">
                     <h3 className="text-lg font-serif text-white">{plan.name}</h3>
                     <p className="text-white/30 text-xs">{plan.nameEn}</p>
                   </div>
+                  {/* Description */}
+                  <p className="text-white/40 text-xs mb-5 leading-relaxed">
+                    {plan.description}
+                    <span className="block text-white/20 mt-0.5">{plan.descriptionEn}</span>
+                  </p>
+                  {/* Price — TODO: pull from Stripe price object */}
                   <div className="mb-6">
                     <span className="text-3xl sm:text-4xl font-serif text-white">{plan.price}</span>
                     <span className="text-white/40 text-sm ml-1">{plan.period}</span>
@@ -1220,6 +1257,7 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
+                  {/* CTA — TODO: wire to Stripe Checkout or dynamic billing route */}
                   <a
                     href={plan.href}
                     className={`block text-center py-3 sm:py-4 rounded-full text-sm font-medium transition-all duration-300 ${
