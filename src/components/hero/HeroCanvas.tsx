@@ -6,6 +6,8 @@ import { ArrowUpRight, Play } from 'lucide-react';
 export default function HeroCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const zodiacVideoRef = useRef<HTMLVideoElement>(null);
+  const tarotVideoRef = useRef<HTMLVideoElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   // ── BlurText Animation ──
@@ -120,9 +122,9 @@ export default function HeroCanvas() {
     }
     const particleInterval = setInterval(spawnParticle, 3000);
 
-    // Video autoplay enforcement
-    const videos = [heroVideoRef.current];
-    videos.forEach((v) => {
+    // Video autoplay enforcement — all three layers
+    const allVideos = [heroVideoRef.current, zodiacVideoRef.current, tarotVideoRef.current];
+    allVideos.forEach((v) => {
       if (!v) return;
       v.addEventListener('error', () => { if (v) v.style.display = 'none'; });
       v.addEventListener('stalled', () => { if (v) v.style.display = 'none'; });
@@ -157,8 +159,32 @@ export default function HeroCanvas() {
         <source src="/assets/hero/hero-video.mp4" type="video/mp4" />
       </video>
 
-      {/* Layer 3: Canvas stars */}
+      {/* Layer 3: Zodiac particles overlay */}
+      <video
+        ref={zodiacVideoRef}
+        className="hero-zodiac-particles"
+        autoPlay
+        loop
+        muted={true}
+        playsInline
+      >
+        <source src="/assets/hero/zodiac-particles.mp4" type="video/mp4" />
+      </video>
+
+      {/* Layer 4: Canvas stars */}
       <canvas ref={canvasRef} className="hero-stars-canvas" />
+
+      {/* Layer 5: Tarot card overlay */}
+      <video
+        ref={tarotVideoRef}
+        className="hero-tarot-overlay"
+        autoPlay
+        loop
+        muted={true}
+        playsInline
+      >
+        <source src="/assets/hero/tarot-overlay.mp4" type="video/mp4" />
+      </video>
 
       {/* Layer 4: Dark overlay */}
       <div className="hero-layer-overlay" />
