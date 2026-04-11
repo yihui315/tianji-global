@@ -630,7 +630,7 @@ const PRICING_PLANS = [
     ],
     cta: '免费开始',
     ctaEn: 'Start Free',
-    /* TODO: Replace with Stripe checkout link or dynamic route */
+    /* TODO: Replace with sign-up flow or Stripe checkout URL for free tier */
     href: '/western',
     highlighted: false,
   },
@@ -653,7 +653,7 @@ const PRICING_PLANS = [
     ],
     cta: '立即升级',
     ctaEn: 'Upgrade Now',
-    /* TODO: Replace with Stripe checkout link for premium_monthly price */
+    /* TODO: Replace with Stripe checkout URL for price_premium_monthly */
     href: '/pricing',
     highlighted: true,
   },
@@ -676,7 +676,7 @@ const PRICING_PLANS = [
     ],
     cta: '预约深度解读',
     ctaEn: 'Book Deep Reading',
-    /* TODO: Replace with Stripe checkout link for deep_reading price */
+    /* TODO: Replace with Stripe checkout URL for price_deep_reading_session */
     href: '/pricing',
     highlighted: false,
   },
