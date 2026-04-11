@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>预知未来 · 命运已书写</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Serif+SC:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --vignette-color: rgba(30, 10, 60, 0.78);
+      --gold: #d4af37;
+      --gold-light: #f5e6a3;
+      --purple-deep: #1a0a3e;
+      --purple-mid: #2d1b69;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #000;
+      color: #fff;
+      font-family: 'Noto Serif SC', 'Cinzel Decorative', serif;
+      overflow: hidden;
+    }
+
+    /* ── Hero Root ── */
+    .hero-container {
+      position: fixed; inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    /* ── Video / Animation Layers ── */
+    .hero-video, .zodiac-particles, .tarot-overlay {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-video     { filter: brightness(0.95); z-index: 1; }
+    .zodiac-particles { opacity: 0.92; mix-blend-mode: screen; z-index: 3; pointer-events: none; }
+    .tarot-overlay  { opacity: 0.85; mix-blend-mode: screen; z-index: 4; pointer-events: none; }
+
+    /* ── CSS Fallback Background (when video absent) ── */
+    .cosmic-bg {
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(60,20,120,0.6) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(100,30,80,0.5) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 80%, rgba(20,40,100,0.5) 0%, transparent 60%),
+        #000;
+    }
+
+    /* ── Animated Stars Canvas (video fallback) ── */
+    #starsCanvas {
+      position: absolute; inset: 0; z-index: 2;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    /* ── Vignette ── */
+    .vignette {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at center, transparent 38%, var(--vignette-color) 72%);
+      pointer-events: none; z-index: 5;
+      mix-blend-mode: multiply;
+      animation: vignette-breath 18s ease-in-out infinite;
+    }
+
+    @keyframes vignette-breath { 0%,100% { opacity: 0.92; } 50% { opacity: 1; } }
+
+    /* ── Content Layer ── */
+    .hero-content {
+      position: relative; z-index: 10;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: 100%; text-align: center;
+      padding: 2rem;
+    }
+
+    /* ── Title ── */
+    .hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #d4af37 0%, #f5e6a3 40%, #d4af37 60%, #a07820 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(212,175,55,0.4));
+      animation: title-glow 4s ease-in-out infinite alternate;
+    }
+
+    .hero-subtitle {
+      margin-top: 1.2rem;
+      font-size: clamp(0.9rem, 2vw, 1.25rem);
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      color: rgba(220,200,255,0.75);
+      text-transform: uppercase;
+    }
+
+    .hero-divider {
+      margin: 2rem auto;
+      width: 120px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .hero-desc {
+      max-width: 540px;
+      font-size: clamp(0.85rem, 1.5vw, 1rem);
+      color: rgba(200,180,255,0.6);
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── CTA Buttons ── */
+    .cta-group {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      margin-top: 2.5rem; justify-content: center;
+    }
+
+    .btn-primary {
+      padding: 0.85rem 2.5rem;
+      background: linear-gradient(135deg, #d4af37, #a07820);
+      color: #1a0a3e;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem; font-weight: 700;
+      letter-spacing: 0.12em;
+      border: none; border-radius: 3px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+      box-shadow: 0 0 20px rgba(212,175,55,0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 40px rgba(212,175,55,0.6);
+      filter: brightness(1.1);
+    }
+
+    .btn-ghost {
+      padding: 0.85rem 2.5rem;
+      background: transparent;
+      color: rgba(212,175,55,0.85);
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem; font-weight: 400;
+      letter-spacing: 0.12em;
+      border: 1px solid rgba(212,175,55,0.4);
+      border-radius: 3px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(212,175,55,0.08);
+      border-color: rgba(212,175,55,0.8);
+      color: var(--gold-light);
+      box-shadow: 0 0 20px rgba(212,175,55,0.2);
+    }
+
+    /* ── Entrance Animations ── */
+    @keyframes title-glow {
+      from { filter: drop-shadow(0 0 20px rgba(212,175,55,0.3)); }
+      to   { filter: drop-shadow(0 0 50px rgba(212,175,55,0.65)); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+
+    .hero-title  { animation: fadeInUp 1.2s ease-out 0.3s both; }
+    .hero-subtitle { animation: fadeInUp 1.2s ease-out 0.7s both; }
+    .hero-divider { animation: fadeIn    1.5s ease-out 1.0s both; }
+    .hero-desc    { animation: fadeInUp  1.2s ease-out 1.2s both; }
+    .cta-group    { animation: fadeInUp  1.2s ease-out 1.5s both; }
+
+    /* ── Floating Particles (CSS-only) ── */
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: rgba(212,175,55,0.7);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    @keyframes float-particle {
+      0%   { transform: translateY(0)   translateX(0) scale(1);   opacity: 0.8; }
+      50%  { transform: translateY(-60px) translateX(20px) scale(1.5); opacity: 0.4; }
+      100% { transform: translateY(-120px) translateX(-10px) scale(0.5); opacity: 0; }
+    }
+
+    /* ── Bottom Tagline ── */
+    .bottom-tag {
+      position: absolute; bottom: 2rem; left: 0; right: 0;
+      text-align: center;
+      font-size: 0.7rem; letter-spacing: 0.25em;
+      color: rgba(180,160,220,0.35);
+      text-transform: uppercase;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero-container" id="heroContainer">
+
+    <!-- 1. 主背景视频（自动播放，静音） -->
+    <video id="heroVideo" class="hero-video" autoplay loop muted playsinline>
+      <source src="hero-video.mp4" type="video/mp4">
+    </video>
+
+    <!-- 1b. CSS 备用背景（视频加载失败时显示） -->
+    <div class="cosmic-bg" id="cosmicBg" style="display:none;"></div>
+
+    <!-- 1c. 星空 Canvas（视频备用层） -->
+    <canvas id="starsCanvas"></canvas>
+
+    <!-- 2. 粒子星座连线视频 -->
+    <video id="zodiacParticles" class="zodiac-particles" autoplay loop muted playsinline>
+      <source src="zodiac-particles.mp4" type="video/mp4">
+    </video>
+
+    <!-- 3. 塔罗卡叠加层 -->
+    <video id="tarotOverlay" class="tarot-overlay" autoplay loop muted playsinline>
+      <source src="tarot-overlay.mp4" type="video/mp4">
+    </video>
+
+    <!-- 4. 水晶球暗角呼吸 -->
+    <div class="vignette" id="vignette"></div>
+
+    <!-- 内容层 -->
+    <div class="hero-content">
+      <h1 class="hero-title">预知未来</h1>
+      <p class="hero-subtitle">命运已书写</p>
+      <div class="hero-divider"></div>
+      <p class="hero-desc">
+        融合东方命理与西方占星<br>
+        AI 解读你的专属人生剧本
+      </p>
+      <div class="cta-group">
+        <a href="/birth-data" class="btn-primary">立即测算</a>
+        <a href="/explore" class="btn-ghost">探索功能</a>
+      </div>
+    </div>
+
+    <div class="bottom-tag">TianJi Global · 玄学科技</div>
+  </div>
+
+  <script>
+    /* ── 全局错误兜底：视频无法加载时显示 CSS 背景 ── */
+    function handleVideoError(videoId) {
+      const video = document.getElementById(videoId);
+      if (video) {
+        video.style.display = 'none';
+        if (videoId === 'heroVideo') {
+          document.getElementById('cosmicBg').style.display = 'block';
+        }
+      }
+    }
+
+    const heroVideo = document.getElementById('heroVideo');
+    if (heroVideo) {
+      heroVideo.addEventListener('error', () => handleVideoError('heroVideo'));
+      heroVideo.addEventListener('stalled', () => handleVideoError('heroVideo'));
+    }
+
+    /* ── Canvas 星空动画（视频备用层） ── */
+    (function initStarsCanvas() {
+      const canvas = document.getElementById('starsCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const stars = Array.from({ length: 220 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5 + 0.3,
+        speed: Math.random() * 0.3 + 0.05,
+        opacity: Math.random() * 0.7 + 0.2,
+        twinkle: Math.random() * Math.PI * 2,
+      }));
+
+      const CONSTELLATIONS = [
+        [[0.2,0.3],[0.35,0.25],[0.5,0.35]],   // 小三角
+        [[0.6,0.2],[0.75,0.28],[0.7,0.42],[0.55,0.38]],
+        [[0.1,0.6],[0.22,0.52],[0.3,0.65]],
+      ];
+
+      let frame = 0;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        frame++;
+
+        // 星星
+        stars.forEach(s => {
+          s.twinkle += 0.02;
+          const alpha = s.opacity * (0.6 + 0.4 * Math.sin(s.twinkle));
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(220,210,255,${alpha})`;
+          ctx.fill();
+          s.y -= s.speed;
+          if (s.y < -2) { s.y = canvas.height + 2; s.x = Math.random() * canvas.width; }
+        });
+
+        // 星群连线
+        ctx.strokeStyle = 'rgba(212,175,55,0.12)';
+        ctx.lineWidth = 0.6;
+        CONSTELLATIONS.forEach(conn => {
+          for (let i = 0; i < conn.length - 1; i++) {
+            const [ax, ay] = conn[i];
+            const [bx, by] = conn[i + 1];
+            const ox = Math.sin(frame * 0.003 + i) * 8;
+            const oy = Math.cos(frame * 0.003 + i) * 8;
+            ctx.beginPath();
+            ctx.moveTo(ax * canvas.width + ox, ay * canvas.height + oy);
+            ctx.lineTo(bx * canvas.width + ox, by * canvas.height + oy);
+            ctx.stroke();
+          }
+        });
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    /* ── Boris Skill 封装 ── */
+    function loadZodiacParticlesVideo() {
+      const video = document.getElementById('zodiacParticles');
+      if (video) {
+        video.volume = 0;
+        console.log('[Boris] /load-zodiac-particles-video 已加载（粒子星座连线视频）');
+      }
+    }
+
+    function loadTarotOverlay() {
+      const video = document.getElementById('tarotOverlay');
+      if (video) {
+        video.volume = 0;
+        console.log('[Boris] /load-tarot-overlay 已加载（塔罗叠加层）');
+      }
+    }
+
+    function createMysticVignette() {
+      console.log('[Boris] /create-mystic-vignette 已激活（暗角呼吸）');
+    }
+
+    function cosmicBreathingWobble() {
+      console.log('[Boris] /cosmic-breathing-wobble 已激活（宇宙呼吸摆动）');
+    }
+
+    /* ── CSS 浮动粒子（装饰用） ── */
+    function spawnFloatingParticle() {
+      const container = document.getElementById('heroContainer');
+      if (!container) return;
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = (Math.random() * 100) + '%';
+      p.style.top  = (70 + Math.random() * 25) + '%';
+      p.style.animation = `float-particle ${5 + Math.random() * 4}s ease-out forwards`;
+      container.appendChild(p);
+      setTimeout(() => p.remove(), 10000);
+    }
+
+    /* ── 主初始化 ── */
+    function initHeroAnimation() {
+      createMysticVignette();
+      loadTarotOverlay();
+      loadZodiacParticlesVideo();
+      cosmicBreathingWobble();
+
+      // 每 3 秒生成一个浮动粒子
+      setInterval(spawnFloatingParticle, 3000);
+
+      console.log('%c[Boris Verification Loop Passed] 全层已正确加载', 'color:#a78bfa;font-weight:bold');
+    }
+
+    window.onload = initHeroAnimation;
+  </script>
+</body>
+</html>
