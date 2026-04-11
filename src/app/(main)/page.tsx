@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import DynamicHero from '@/components/hero/DynamicHero';
 import { SERVICES } from '@/data/services';
 
@@ -84,118 +84,474 @@ function FadeInWhenVisible({
 }
 
 /* ═══════════════════════════════════════════
-   Mock Chart Component
+   Sticky Storytelling — Data & Visual Card
    ═══════════════════════════════════════════ */
-function MockRadarChart() {
-  // Simplified SVG radar chart for visual display
-  const axes = 6;
-  const size = 200;
-  const center = size / 2;
-  const radius = 70;
-  // Mock data values (0-1 range) — replace with real data in production
-  const values = [0.85, 0.72, 0.91, 0.68, 0.78, 0.88];
-  const labels = ['财运', '事业', '健康', '感情', '学业', '人际'];
 
-  const getPoint = (index: number, value: number) => {
-    const angle = (Math.PI * 2 * index) / axes - Math.PI / 2;
-    return {
-      x: center + radius * value * Math.cos(angle),
-      y: center + radius * value * Math.sin(angle),
-    };
+/** Text blocks for the left-scrolling column. Replace copy in production. */
+const STORY_BLOCKS = [
+  {
+    id: 'chart',
+    badge: '命盘结构',
+    badgeEn: 'Chart Structure',
+    title: '精密的命盘架构',
+    titleEn: 'Precision Chart Architecture',
+    body: '从紫微十二宫到西方黄道十二宫，每一颗星曜的位置都经过瑞士星历表（Swiss Ephemeris）精确到角秒级别的计算。',
+    bodyEn:
+      'From Zi Wei\'s 12 palaces to the Western zodiac, every celestial body is computed to arc-second precision via Swiss Ephemeris.',
+    accent: 'purple' as const,
+  },
+  {
+    id: 'relationship',
+    badge: '关系洞察',
+    badgeEn: 'Relationship Insights',
+    title: '深层关系解读',
+    titleEn: 'Deep Relationship Analysis',
+    body: '合盘分析、复合盘与戴维森盘，多维度揭示两人之间的能量互动与成长契机。',
+    bodyEn:
+      'Synastry, composite, and Davison charts reveal multi-dimensional energy dynamics and growth opportunities between two people.',
+    accent: 'amber' as const,
+  },
+  {
+    id: 'rhythm',
+    badge: '生命节律',
+    badgeEn: 'Life Rhythm',
+    title: '长周期运势节律',
+    titleEn: 'Long-Term Life Rhythm',
+    body: '大运流年、Transit推运与太阳返照，精准追踪人生各阶段的能量高峰与转折点。',
+    bodyEn:
+      'Decade luck pillars, transits, and solar returns precisely track energy peaks and turning points across life stages.',
+    accent: 'purple' as const,
+  },
+];
+
+/** Individual story block — extracted to satisfy React hooks rules */
+function StoryBlock({
+  block,
+  onActive,
+}: {
+  block: typeof STORY_BLOCKS[number];
+  onActive: (id: string) => void;
+}) {
+  const blockRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(blockRef, { margin: '-40% 0px -40% 0px' });
+
+  // Update active story when this block enters center viewport
+  if (isInView) {
+    onActive(block.id);
+  }
+
+  return (
+    <motion.div
+      ref={blockRef}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.1 }}
+      viewport={{ once: true, margin: '-60px' }}
+      className="lg:min-h-[50vh] flex flex-col justify-center"
+    >
+      <span
+        className={`inline-block text-[10px] tracking-widest uppercase mb-3 ${
+          block.accent === 'amber' ? 'text-amber-400/60' : 'text-purple-400/60'
+        }`}
+      >
+        {block.badge} · {block.badgeEn}
+      </span>
+      <h3 className="text-2xl sm:text-3xl font-serif text-white mb-2">
+        {block.title}
+      </h3>
+      <p className="text-white/30 text-xs mb-4">{block.titleEn}</p>
+      <p className="text-white/55 text-sm sm:text-base leading-relaxed">
+        {block.body}
+      </p>
+      <p className="text-white/25 text-xs mt-2 leading-relaxed">
+        {block.bodyEn}
+      </p>
+
+      {/* Mobile: inline visual card (hidden on lg) */}
+      <div className="mt-8 lg:hidden">
+        <StoryVisualCard activeId={block.id} />
+      </div>
+    </motion.div>
+  );
+}
+function StoryVisualCard({ activeId }: { activeId: string }) {
+  /* Data layers — replace with real chart data in production */
+  const layers = [
+    { label: '命宫', labelEn: 'Life', value: 0.88, color: 'rgba(168,130,255,0.7)' },
+    { label: '财帛', labelEn: 'Wealth', value: 0.72, color: 'rgba(245,158,11,0.6)' },
+    { label: '官禄', labelEn: 'Career', value: 0.81, color: 'rgba(168,130,255,0.5)' },
+    { label: '夫妻', labelEn: 'Partner', value: 0.65, color: 'rgba(245,158,11,0.45)' },
+    { label: '迁移', labelEn: 'Travel', value: 0.77, color: 'rgba(168,130,255,0.4)' },
+  ];
+
+  const emphasisMap: Record<string, number[]> = {
+    chart: [0, 2],
+    relationship: [3, 4],
+    rhythm: [0, 1, 2],
   };
+  const emphasisIndices = emphasisMap[activeId] ?? [0];
 
-  const dataPoints = values.map((v, i) => getPoint(i, v));
-  const dataPath = dataPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ') + 'Z';
+  return (
+    <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 w-full">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h4 className="text-sm font-serif text-white/80">命盘能量分布</h4>
+          <p className="text-white/25 text-[10px] mt-0.5">Palace Energy Distribution</p>
+        </div>
+        <span className="text-white/15 text-[10px] bg-white/[0.04] px-2.5 py-1 rounded-full">
+          LIVE · 实时
+        </span>
+      </div>
+
+      {/* Animated horizontal bars */}
+      <div className="space-y-4">
+        {layers.map((layer, i) => {
+          const isActive = emphasisIndices.includes(i);
+          return (
+            <div key={layer.labelEn}>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[11px] text-white/50">
+                  {layer.label}{' '}
+                  <span className="text-white/20">{layer.labelEn}</span>
+                </span>
+                <span className="text-[10px] text-white/30 tabular-nums">
+                  {Math.round(layer.value * 100)}
+                </span>
+              </div>
+              <div className="h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ background: layer.color }}
+                  initial={{ width: 0 }}
+                  animate={{
+                    width: `${layer.value * 100}%`,
+                    opacity: isActive ? 1 : 0.35,
+                  }}
+                  transition={{ duration: 0.8, delay: i * 0.08, ease: 'easeOut' }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Status badges */}
+      <div className="flex flex-wrap gap-2 mt-6">
+        {[
+          { label: '甲木日主', en: 'Day Master: Jia', active: activeId === 'chart' },
+          { label: '天蝎上升', en: 'ASC Scorpio', active: activeId === 'relationship' },
+          { label: '大运·壬寅', en: 'Decade: Ren-Yin', active: activeId === 'rhythm' },
+        ].map((badge) => (
+          <motion.span
+            key={badge.en}
+            animate={{ opacity: badge.active ? 1 : 0.3, scale: badge.active ? 1 : 0.97 }}
+            transition={{ duration: 0.4 }}
+            className="text-[10px] bg-white/[0.04] border border-white/[0.06] rounded-full px-3 py-1 text-white/50"
+          >
+            {badge.label} <span className="text-white/20">{badge.en}</span>
+          </motion.span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   Premium Circular Energy Chart (SVG)
+   — replaces old MockRadarChart
+   ═══════════════════════════════════════════ */
+function CircularEnergyChart() {
+  const size = 220;
+  const center = size / 2;
+  const outerR = 85;
+  /* Mock energy arcs — replace values (0-1) with real palace/planet energy data */
+  const arcs = [
+    { label: '财运', labelEn: 'Wealth', value: 0.85, color: '#F59E0B' },
+    { label: '事业', labelEn: 'Career', value: 0.72, color: '#A78BFA' },
+    { label: '健康', labelEn: 'Health', value: 0.91, color: '#34D399' },
+    { label: '感情', labelEn: 'Love', value: 0.68, color: '#F472B6' },
+    { label: '学业', labelEn: 'Study', value: 0.78, color: '#60A5FA' },
+    { label: '人际', labelEn: 'Social', value: 0.88, color: '#FBBF24' },
+  ];
+  const gap = 3; // degrees gap between arcs
+  const arcSpan = (360 - arcs.length * gap) / arcs.length;
+
+  const describeArc = (startAngle: number, endAngle: number, r: number) => {
+    const s = ((startAngle - 90) * Math.PI) / 180;
+    const e = ((endAngle - 90) * Math.PI) / 180;
+    const x1 = center + r * Math.cos(s);
+    const y1 = center + r * Math.sin(s);
+    const x2 = center + r * Math.cos(e);
+    const y2 = center + r * Math.sin(e);
+    const large = endAngle - startAngle > 180 ? 1 : 0;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`;
+  };
 
   return (
     <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-full">
-      {/* Grid rings */}
-      {[0.33, 0.66, 1].map((scale) => (
-        <polygon
-          key={scale}
-          points={Array.from({ length: axes }, (_, i) => {
-            const p = getPoint(i, scale);
-            return `${p.x},${p.y}`;
-          }).join(' ')}
-          fill="none"
-          stroke="rgba(255,255,255,0.08)"
-          strokeWidth="0.5"
-        />
-      ))}
-      {/* Axis lines */}
-      {Array.from({ length: axes }, (_, i) => {
-        const p = getPoint(i, 1);
+      {/* Background ring */}
+      <circle cx={center} cy={center} r={outerR} fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="14" />
+      {/* Energy arcs with animated draw */}
+      {arcs.map((arc, i) => {
+        const startDeg = i * (arcSpan + gap);
+        const endDeg = startDeg + arcSpan * arc.value;
+        const fullEnd = startDeg + arcSpan;
         return (
-          <line
-            key={i}
-            x1={center}
-            y1={center}
-            x2={p.x}
-            y2={p.y}
-            stroke="rgba(255,255,255,0.06)"
-            strokeWidth="0.5"
-          />
+          <g key={arc.labelEn}>
+            {/* Track */}
+            <path
+              d={describeArc(startDeg, fullEnd, outerR)}
+              fill="none"
+              stroke="rgba(255,255,255,0.03)"
+              strokeWidth="14"
+              strokeLinecap="round"
+            />
+            {/* Animated value arc */}
+            <motion.path
+              d={describeArc(startDeg, endDeg, outerR)}
+              fill="none"
+              stroke={arc.color}
+              strokeWidth="14"
+              strokeLinecap="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              whileInView={{ pathLength: 1, opacity: 0.85 }}
+              transition={{ duration: 1.2, delay: i * 0.12, ease: 'easeOut' }}
+              viewport={{ once: true }}
+              style={{ filter: `drop-shadow(0 0 6px ${arc.color}40)` }}
+            />
+            {/* Label */}
+            {(() => {
+              const midDeg = startDeg + arcSpan / 2;
+              const labelR = outerR + 18;
+              const rad = ((midDeg - 90) * Math.PI) / 180;
+              const lx = center + labelR * Math.cos(rad);
+              const ly = center + labelR * Math.sin(rad);
+              return (
+                <text
+                  x={lx}
+                  y={ly}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fill="rgba(255,255,255,0.45)"
+                  fontSize="7"
+                  fontFamily="serif"
+                >
+                  {arc.label}
+                </text>
+              );
+            })()}
+          </g>
         );
       })}
-      {/* Data polygon */}
-      <polygon
-        points={dataPoints.map((p) => `${p.x},${p.y}`).join(' ')}
-        fill="rgba(124,58,237,0.2)"
-        stroke="rgba(168,130,255,0.6)"
-        strokeWidth="1.5"
-      />
-      {/* Data points */}
-      {dataPoints.map((p, i) => (
-        <circle key={i} cx={p.x} cy={p.y} r="3" fill="#A78BFA" />
-      ))}
-      {/* Labels */}
-      {labels.map((label, i) => {
-        const p = getPoint(i, 1.25);
-        return (
-          <text
-            key={i}
-            x={p.x}
-            y={p.y}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill="rgba(255,255,255,0.5)"
-            fontSize="8"
-            fontFamily="serif"
-          >
-            {label}
-          </text>
-        );
-      })}
+      {/* Center score — replace with real composite score */}
+      <text x={center} y={center - 6} textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="22" fontFamily="serif">
+        82
+      </text>
+      <text x={center} y={center + 12} textAnchor="middle" fill="rgba(255,255,255,0.25)" fontSize="7">
+        综合能量 · Overall
+      </text>
     </svg>
   );
 }
 
 /* ═══════════════════════════════════════════
-   Mock Bar Chart Component
+   Premium Line Chart — Life Timeline (SVG)
    ═══════════════════════════════════════════ */
-function MockBarChart() {
-  // Mock monthly fortune data — replace with real data in production
-  const months = ['1月', '2月', '3月', '4月', '5月', '6月'];
-  const values = [72, 85, 64, 91, 78, 88];
+function LifeTimelineChart() {
+  /* Mock decade data — replace with real BaZi decade-luck or transit data */
+  const decades = ['10s', '20s', '30s', '40s', '50s', '60s', '70s'];
+  const values = [55, 68, 82, 75, 91, 84, 72]; // 0-100 scale
+  const w = 340;
+  const h = 140;
+  const padX = 30;
+  const padY = 20;
+  const chartW = w - padX * 2;
+  const chartH = h - padY * 2;
+
+  const points = values.map((v, i) => ({
+    x: padX + (i / (values.length - 1)) * chartW,
+    y: padY + chartH - (v / 100) * chartH,
+  }));
+  const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+  // Gradient area path
+  const areaPath = `${linePath} L${points[points.length - 1].x},${h - padY} L${points[0].x},${h - padY} Z`;
+
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="timeline-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="rgba(168,130,255,0.25)" />
+          <stop offset="100%" stopColor="rgba(168,130,255,0)" />
+        </linearGradient>
+      </defs>
+      {/* Grid lines */}
+      {[0.25, 0.5, 0.75].map((pct) => (
+        <line
+          key={pct}
+          x1={padX}
+          y1={padY + chartH * (1 - pct)}
+          x2={w - padX}
+          y2={padY + chartH * (1 - pct)}
+          stroke="rgba(255,255,255,0.04)"
+          strokeWidth="0.5"
+        />
+      ))}
+      {/* Filled area under curve */}
+      <motion.path
+        d={areaPath}
+        fill="url(#timeline-grad)"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.4 }}
+        viewport={{ once: true }}
+      />
+      {/* Animated line */}
+      <motion.path
+        d={linePath}
+        fill="none"
+        stroke="rgba(168,130,255,0.7)"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0 }}
+        whileInView={{ pathLength: 1 }}
+        transition={{ duration: 1.4, ease: 'easeOut' }}
+        viewport={{ once: true }}
+        style={{ filter: 'drop-shadow(0 0 4px rgba(168,130,255,0.3))' }}
+      />
+      {/* Data points */}
+      {points.map((p, i) => (
+        <motion.circle
+          key={i}
+          cx={p.x}
+          cy={p.y}
+          r="3"
+          fill="#A78BFA"
+          stroke="#030014"
+          strokeWidth="1.5"
+          initial={{ opacity: 0, scale: 0 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.3 + i * 0.1 }}
+          viewport={{ once: true }}
+        />
+      ))}
+      {/* X-axis labels */}
+      {decades.map((label, i) => (
+        <text
+          key={label}
+          x={points[i].x}
+          y={h - 4}
+          textAnchor="middle"
+          fill="rgba(255,255,255,0.3)"
+          fontSize="8"
+        >
+          {label}
+        </text>
+      ))}
+      {/* Peak marker */}
+      {(() => {
+        const peak = values.indexOf(Math.max(...values));
+        return (
+          <text
+            x={points[peak].x}
+            y={points[peak].y - 10}
+            textAnchor="middle"
+            fill="rgba(245,158,11,0.7)"
+            fontSize="8"
+            fontFamily="serif"
+          >
+            ▲ 高峰
+          </text>
+        );
+      })()}
+    </svg>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   Premium Layered Bar Chart (Signal Layers)
+   ═══════════════════════════════════════════ */
+function SignalLayerBars() {
+  /* Mock monthly signal data — replace with real transit/fortune data */
+  const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'];
+  const layers = [
+    { name: '事业', nameEn: 'Career', values: [60, 75, 55, 82, 70, 88, 78, 65], color: 'rgba(168,130,255,0.6)' },
+    { name: '财运', nameEn: 'Wealth', values: [50, 65, 70, 60, 80, 72, 68, 75], color: 'rgba(245,158,11,0.5)' },
+  ];
   const max = 100;
 
   return (
-    <div className="flex items-end gap-3 h-40 px-4">
-      {months.map((month, i) => (
-        <div key={month} className="flex-1 flex flex-col items-center gap-2">
-          <motion.div
-            initial={{ height: 0 }}
-            whileInView={{ height: `${(values[i] / max) * 100}%` }}
-            transition={{ duration: 0.8, delay: i * 0.1, ease: 'easeOut' }}
-            viewport={{ once: true }}
-            className="w-full rounded-t-md bg-gradient-to-t from-purple-600/60 to-amber-400/40 relative"
-          >
-            <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] text-white/50">
-              {values[i]}
+    <div>
+      {/* Legend */}
+      <div className="flex items-center gap-4 mb-4">
+        {layers.map((l) => (
+          <div key={l.nameEn} className="flex items-center gap-1.5">
+            <div className="w-2 h-2 rounded-full" style={{ background: l.color }} />
+            <span className="text-[10px] text-white/40">
+              {l.name} <span className="text-white/20">{l.nameEn}</span>
             </span>
-          </motion.div>
-          <span className="text-[10px] text-white/40">{month}</span>
-        </div>
+          </div>
+        ))}
+      </div>
+      {/* Bars grid */}
+      <div className="flex items-end gap-2 h-36">
+        {months.map((month, mi) => (
+          <div key={month} className="flex-1 flex flex-col items-center gap-1.5">
+            <div className="w-full flex gap-0.5 items-end h-28">
+              {layers.map((layer, li) => (
+                <motion.div
+                  key={layer.nameEn}
+                  className="flex-1 rounded-t-sm"
+                  style={{ background: layer.color }}
+                  initial={{ height: 0 }}
+                  whileInView={{ height: `${(layer.values[mi] / max) * 100}%` }}
+                  transition={{ duration: 0.7, delay: mi * 0.06 + li * 0.15, ease: 'easeOut' }}
+                  viewport={{ once: true }}
+                />
+              ))}
+            </div>
+            <span className="text-[9px] text-white/25">{month}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   Insight Chips — status badges for chart section
+   ═══════════════════════════════════════════ */
+function InsightChips() {
+  /* Mock insights — replace with real AI-generated insight tags in production */
+  const chips = [
+    { label: '事业上升期', en: 'Career Rising', status: 'positive' as const },
+    { label: '感情需关注', en: 'Love: Caution', status: 'warning' as const },
+    { label: '健康良好', en: 'Health: Good', status: 'positive' as const },
+    { label: '财运波动', en: 'Wealth: Volatile', status: 'neutral' as const },
+    { label: '贵人运强', en: 'Strong Benefactors', status: 'positive' as const },
+  ];
+
+  const statusStyles = {
+    positive: 'border-emerald-500/20 text-emerald-400/70',
+    warning: 'border-amber-500/20 text-amber-400/70',
+    neutral: 'border-white/10 text-white/40',
+  };
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {chips.map((chip, i) => (
+        <motion.span
+          key={chip.en}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: i * 0.08 }}
+          viewport={{ once: true }}
+          className={`text-[10px] border rounded-full px-3 py-1 ${statusStyles[chip.status]}`}
+        >
+          {chip.label}{' '}
+          <span className="opacity-50">{chip.en}</span>
+        </motion.span>
       ))}
     </div>
   );
@@ -461,66 +817,67 @@ const FOOTER_SECTIONS = [
    MAIN PAGE COMPONENT
    ═══════════════════════════════════════════════════════════════ */
 export default function Home() {
-  /* Sticky section scroll transforms */
-  const stickyRef = useRef(null);
-  const { scrollYProgress: stickyProgress } = useScroll({
-    target: stickyRef,
-    offset: ['start start', 'end start'],
-  });
-  const stickyOpacity = useTransform(stickyProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
-  const stickyScale = useTransform(stickyProgress, [0, 0.3, 0.7, 1], [0.92, 1, 1, 0.95]);
-  const stickyY = useTransform(stickyProgress, [0, 0.3, 0.7, 1], [60, 0, 0, -40]);
+  /* Active story block for sticky visual — tracked by scroll position */
+  const [activeStory, setActiveStory] = useState('chart');
 
   return (
     <div className="mystic-page bg-[#030014] text-white min-h-screen">
       {/* ═══════ 1. Immersive Mystic Hero ═══════ */}
       <DynamicHero />
 
-      {/* ═══════ 2. Sticky Storytelling Section ═══════ */}
-      <section
-        ref={stickyRef}
-        className="relative z-10 min-h-[200vh]"
-      >
-        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-          <motion.div
-            style={{ opacity: stickyOpacity, scale: stickyScale, y: stickyY }}
-            className="max-w-4xl mx-auto px-6 sm:px-8 text-center"
-          >
-            <p className="text-amber-300/60 text-sm tracking-[0.3em] uppercase mb-6">
-              Ancient Wisdom · Modern Technology
-            </p>
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-white leading-tight mb-8">
-              穿越千年的智慧<br />
-              <span className="text-amber-200/70">遇见前沿AI</span>
-            </h2>
-            <p className="text-white/40 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-              Swiss Ephemeris 精确星历计算 · 紫微斗数经典算法 · 现代心理学框架
-              <br />
-              <span className="text-white/25">
-                Precision astronomical computation meets classical Chinese metaphysics and modern psychology
-              </span>
-            </p>
+      {/* ═══════ 2. Sticky Storytelling Section ═══════
+          Desktop: left-scrolling text blocks + right-sticky visual card
+          Mobile: stacked layout with inline visuals */}
+      <section className="relative z-10 py-20 sm:py-28">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8">
+          <SectionHeading
+            zh="穿越千年的智慧 · 遇见前沿AI"
+            en="Ancient Wisdom Meets Modern Technology"
+            subtitle="Swiss Ephemeris 精确星历计算 · 紫微斗数经典算法 · 现代心理学框架"
+          />
 
-            {/* Animated stats row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mt-12 sm:mt-16">
-              {STATS.map((stat, i) => (
-                <motion.div
-                  key={stat.labelEn}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className="text-center"
-                >
-                  <div className="text-3xl sm:text-4xl font-serif text-amber-300/80 mb-1">
-                    {stat.value}
-                  </div>
-                  <div className="text-white/50 text-xs">{stat.label}</div>
-                  <div className="text-white/25 text-[10px]">{stat.labelEn}</div>
-                </motion.div>
+          {/* Animated stats row (from old sticky section, preserved) */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-16 sm:mb-24">
+            {STATS.map((stat, i) => (
+              <motion.div
+                key={stat.labelEn}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <div className="text-3xl sm:text-4xl font-serif text-amber-300/80 mb-1">
+                  {stat.value}
+                </div>
+                <div className="text-white/50 text-xs">{stat.label}</div>
+                <div className="text-white/25 text-[10px]">{stat.labelEn}</div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Desktop: two-column sticky layout · Mobile: stacked */}
+          <div className="lg:grid lg:grid-cols-2 lg:gap-16">
+            {/* Left column: scrolling text blocks */}
+            <div className="space-y-16 sm:space-y-24 lg:space-y-32">
+              {STORY_BLOCKS.map((block) => (
+                <StoryBlock
+                  key={block.id}
+                  block={block}
+                  onActive={(id) => {
+                    if (activeStory !== id) setActiveStory(id);
+                  }}
+                />
               ))}
             </div>
-          </motion.div>
+
+            {/* Right column: sticky visual card (desktop only) */}
+            <div className="hidden lg:block">
+              <div className="sticky top-[20vh]">
+                <StoryVisualCard activeId={activeStory} />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -613,50 +970,98 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════ 5. Advanced Chart Preview ═══════ */}
+      {/* ═══════ 5. Premium Chart Analytics Preview ═══════ */}
       <section className="relative z-10 py-20 sm:py-28">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
+        {/* Subtle background glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-purple-900/15 rounded-full blur-[120px]" />
+        </div>
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 relative">
           <SectionHeading
             zh="专业级命理图表"
             en="Professional-Grade Chart Analysis"
             subtitle="从紫微星盘到运势曲线，每一份分析都精确呈现"
           />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
-            {/* Radar chart card */}
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10">
+            {/* Circular Energy Chart */}
             <FadeInWhenVisible>
               <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-lg font-serif text-white">六维运势分析</h3>
-                    <p className="text-white/30 text-xs mt-1">Six-Dimension Fortune Radar</p>
+                    <h3 className="text-lg font-serif text-white">六维能量雷达</h3>
+                    <p className="text-white/30 text-xs mt-1">Six-Dimension Energy Radar</p>
                   </div>
-                  <span className="text-white/20 text-xs bg-white/[0.05] px-3 py-1 rounded-full">
-                    示例 / Sample
+                  <span className="text-white/15 text-[10px] bg-white/[0.04] px-3 py-1 rounded-full">
+                    示例 · Sample
                   </span>
                 </div>
-                <div className="w-48 h-48 sm:w-56 sm:h-56 mx-auto">
-                  <MockRadarChart />
+                <div className="w-52 h-52 sm:w-60 sm:h-60 mx-auto">
+                  <CircularEnergyChart />
                 </div>
               </div>
             </FadeInWhenVisible>
 
-            {/* Bar chart card */}
-            <FadeInWhenVisible delay={0.15}>
+            {/* Life Timeline Line Chart */}
+            <FadeInWhenVisible delay={0.12}>
               <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-lg font-serif text-white">月度运势趋势</h3>
-                    <p className="text-white/30 text-xs mt-1">Monthly Fortune Trend</p>
+                    <h3 className="text-lg font-serif text-white">人生运势曲线</h3>
+                    <p className="text-white/30 text-xs mt-1">Life Fortune Timeline</p>
                   </div>
-                  <span className="text-white/20 text-xs bg-white/[0.05] px-3 py-1 rounded-full">
-                    示例 / Sample
+                  <span className="text-white/15 text-[10px] bg-white/[0.04] px-3 py-1 rounded-full">
+                    示例 · Sample
                   </span>
                 </div>
-                <MockBarChart />
+                <div className="h-40 sm:h-44">
+                  <LifeTimelineChart />
+                </div>
               </div>
             </FadeInWhenVisible>
 
-            {/* Sample report card */}
+            {/* Signal Layer Bars */}
+            <FadeInWhenVisible delay={0.08}>
+              <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-lg font-serif text-white">多维信号层叠</h3>
+                    <p className="text-white/30 text-xs mt-1">Multi-Signal Layers</p>
+                  </div>
+                  <span className="text-white/15 text-[10px] bg-white/[0.04] px-3 py-1 rounded-full">
+                    示例 · Sample
+                  </span>
+                </div>
+                <SignalLayerBars />
+              </div>
+            </FadeInWhenVisible>
+
+            {/* Insight Chips Card */}
+            <FadeInWhenVisible delay={0.16}>
+              <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex flex-col">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-lg font-serif text-white">AI洞察标签</h3>
+                    <p className="text-white/30 text-xs mt-1">AI Insight Signals</p>
+                  </div>
+                  <span className="text-white/15 text-[10px] bg-white/[0.04] px-3 py-1 rounded-full">
+                    示例 · Sample
+                  </span>
+                </div>
+                <InsightChips />
+                {/* Mini report snippet */}
+                <div className="mt-6 bg-white/[0.02] rounded-xl p-4 border border-white/[0.04]">
+                  <p className="text-white/40 text-xs leading-relaxed italic">
+                    "当前大运壬寅，印星透干生身，事业运势处于上升通道。建议把握2024-2026年窗口期..."
+                  </p>
+                  <p className="text-white/20 text-[10px] mt-1.5 italic">
+                    "Current decade luck Ren-Yin brings resource star support — career is in an ascending channel..."
+                  </p>
+                </div>
+              </div>
+            </FadeInWhenVisible>
+
+            {/* Full-width Sample Report Card */}
             <FadeInWhenVisible delay={0.1} className="lg:col-span-2">
               <div className="bg-gradient-to-br from-white/[0.02] to-white/[0.05] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-10">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
@@ -673,7 +1078,7 @@ export default function Home() {
                     试试我的星盘 <span className="inline-block">→</span>
                   </a>
                 </div>
-                {/* Mock report content */}
+                {/* Mock report content — replace with real report data */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                   {[
                     {
@@ -692,8 +1097,12 @@ export default function Home() {
                       content: '紫微天府同宫，命宫坐辰，天生领导气质，一生贵人助力。',
                     },
                   ].map((item, i) => (
-                    <div
+                    <motion.div
                       key={i}
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: i * 0.12 }}
+                      viewport={{ once: true }}
                       className="bg-white/[0.03] rounded-xl p-4 border border-white/[0.05]"
                     >
                       <h4 className="text-sm font-serif text-amber-300/70 mb-1">
@@ -701,7 +1110,7 @@ export default function Home() {
                       </h4>
                       <p className="text-white/25 text-[10px] mb-2">{item.titleEn}</p>
                       <p className="text-white/50 text-xs leading-relaxed">{item.content}</p>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
