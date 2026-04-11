@@ -4,8 +4,12 @@ import { useEffect, useRef } from 'react';
 
 export default function HeroCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const zodiacVideoRef = useRef<HTMLVideoElement>(null);
+  const tarotVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    // Canvas star animation (runs alongside videos)
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d')!;
@@ -17,7 +21,7 @@ export default function HeroCanvas() {
     resize();
     window.addEventListener('resize', resize);
 
-    const stars = Array.from({ length: 220 }, () => ({
+    const stars = Array.from({ length: 180 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       r: Math.random() * 1.5 + 0.3,
@@ -72,6 +76,23 @@ export default function HeroCanvas() {
     }
     draw();
 
+    // Video error fallback — show canvas + CSS bg instead
+    const videos = [
+      heroVideoRef.current,
+      zodiacVideoRef.current,
+      tarotVideoRef.current,
+    ];
+    videos.forEach((v) => {
+      if (!v) return;
+      v.addEventListener('error', () => {
+        if (v) v.style.display = 'none';
+      });
+      v.addEventListener('stalled', () => {
+        if (v) v.style.display = 'none';
+      });
+    });
+
+    // Floating particles
     function spawnParticle() {
       if (!document.body) return;
       const p = document.createElement('div');
@@ -79,7 +100,7 @@ export default function HeroCanvas() {
         'position:fixed;width:2px;height:2px;',
         'background:rgba(212,175,55,0.7);border-radius:50%;',
         `left:${Math.random() * 100}%;top:${70 + Math.random() * 25}%;`,
-        'pointer-events:none;z-index:6;',
+        'pointer-events:none;z-index:20;',
         `animation:floatParticle ${5 + Math.random() * 4}s ease-out forwards;`,
       ].join('');
       document.body.appendChild(p);
@@ -98,9 +119,52 @@ export default function HeroCanvas() {
 
   return (
     <div className="heroLoading">
+      {/* CSS 宇宙背景（视频备用） */}
       <div className="cosmicBg" />
+
+      {/* 1. 主背景视频 */}
+      <video
+        ref={heroVideoRef}
+        className="heroVideo"
+        autoPlay
+        loop
+        muted
+        playsInline
+      >
+        <source src="/assets/hero/hero-video.mp4" type="video/mp4" />
+      </video>
+
+      {/* 2. Canvas 星空（叠加在视频上） */}
       <canvas ref={canvasRef} className="starsCanvas" />
+
+      {/* 3. 粒子星座连线视频 */}
+      <video
+        ref={zodiacVideoRef}
+        className="zodiacParticles"
+        autoPlay
+        loop
+        muted
+        playsInline
+      >
+        <source src="/assets/hero/zodiac-particles.mp4" type="video/mp4" />
+      </video>
+
+      {/* 4. 塔罗卡叠加视频 */}
+      <video
+        ref={tarotVideoRef}
+        className="tarotOverlay"
+        autoPlay
+        loop
+        muted
+        playsInline
+      >
+        <source src="/assets/hero/tarot-overlay.mp4" type="video/mp4" />
+      </video>
+
+      {/* 5. 水晶球暗角 */}
       <div className="vignette" />
+
+      {/* 内容层 */}
       <div className="heroContent">
         <h1 className="heroTitle">预知未来</h1>
         <p className="heroSubtitle">命运已书写</p>
@@ -114,6 +178,7 @@ export default function HeroCanvas() {
           <a href="/dashboard" className="btnGhost">探索功能</a>
         </div>
       </div>
+
       <div className="bottomTag">TianJi Global · 玄学科技</div>
     </div>
   );
