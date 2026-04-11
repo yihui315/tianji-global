@@ -683,38 +683,44 @@ const PRICING_PLANS = [
 ];
 
 /* ═══════════════════════════════════════════
-   FAQ Data — Replace or extend in production
+   FAQ Data — Bilingual accordion content
    ═══════════════════════════════════════════ */
 const FAQ_ITEMS = [
   {
-    q: '天机全球和其他占卜平台有什么不同？',
-    qEn: 'What makes TianJi different from other fortune-telling platforms?',
-    a: '天机融合了中国传统命理（紫微斗数、八字、易经）与西方占星术，并运用瑞士星历表（Swiss Ephemeris）进行精准天文计算，再结合AI进行深度心理学解读。这是目前市面上唯一一个东西方命理全覆盖的专业平台。',
-    aEn: 'TianJi combines Chinese metaphysics (Zi Wei, BaZi, Yi Jing) with Western astrology, using Swiss Ephemeris for precision astronomical calculations and AI for deep psychological insights. It\'s the only platform offering comprehensive East-West divination.',
+    q: '开始占卜需要什么？',
+    qEn: 'What do I need to start?',
+    a: '只需你的出生日期（公历或农历均可）。对于紫微斗数和八字分析，准确的出生时间（精确到时辰）会让结果更精准。西方星盘需要出生时间来计算上升星座。如果不确定出生时间，我们也提供不依赖时间的分析工具。',
+    aEn: 'Just your date of birth (Gregorian or lunar). For Zi Wei and BaZi, an accurate birth time (to the hour) greatly improves precision. Western charts need it for your ascendant. If unsure, we offer time-independent tools as well.',
   },
   {
-    q: 'AI分析的准确性如何保证？',
-    qEn: 'How accurate is the AI analysis?',
-    a: '我们的AI系统基于数千年的经典命理文献训练，结合现代心理学框架。星体位置使用瑞士星历表精确到角秒级别。分析结果仅供参考和自我探索，不替代专业建议。',
-    aEn: 'Our AI is trained on thousands of years of classical texts, combined with modern psychology frameworks. Planetary positions are calculated to arc-second precision using Swiss Ephemeris. Results are for reference and self-exploration, not professional advice.',
+    q: '占卜是免费的吗？',
+    qEn: 'Is the reading free?',
+    a: '我们提供免费的基础功能，包括每日星座运势、基础星盘查看和单次塔罗占卜。更深度的AI分析报告、全部12种命理工具和PDF导出等高级功能包含在付费方案中。',
+    aEn: 'We offer free basics — daily horoscope, basic chart viewing, and a single tarot reading. Deeper AI reports, all 12 divination tools, and PDF exports are part of our paid plans.',
   },
   {
-    q: '需要准确的出生时间吗？',
-    qEn: 'Do I need my exact birth time?',
-    a: '对于紫微斗数和八字分析，准确的出生时间（精确到时辰）非常重要。西方星盘的上升星座也需要出生时间。如果不确定出生时间，我们也提供不依赖时间的分析方式。',
-    aEn: 'For Zi Wei and BaZi analysis, an accurate birth time (to the hour) is very important. Western chart ascendant also requires birth time. If uncertain, we offer time-independent analysis methods.',
+    q: '分析结果有多准确？',
+    qEn: 'How accurate is the result?',
+    a: '我们的AI基于数千年的经典命理文献训练，结合现代心理学框架。星体位置使用瑞士星历表（Swiss Ephemeris）精确到角秒级别。分析结果旨在提供有价值的自我反思视角，而非绝对预测。',
+    aEn: 'Our AI draws on thousands of years of classical texts, combined with modern psychology. Planetary positions are calculated to arc-second precision via Swiss Ephemeris. Results aim to offer valuable self-reflection, not absolute predictions.',
   },
   {
-    q: '我的个人数据安全吗？',
-    qEn: 'Is my personal data secure?',
-    a: '绝对安全。我们采用银行级加密传输，不会将你的出生数据分享给任何第三方。你随时可以在账户设置中删除所有个人数据。',
-    aEn: 'Absolutely. We use bank-grade encryption, and we never share your birth data with third parties. You can delete all personal data from your account settings at any time.',
+    q: '我的出生数据安全吗？',
+    qEn: 'Is my birth data private?',
+    a: '绝对安全。我们采用银行级加密传输，不会将你的出生数据分享给任何第三方。你随时可以在账户设置中删除所有个人数据。隐私是我们最核心的承诺之一。',
+    aEn: 'Absolutely. We use bank-grade encryption and never share birth data with third parties. You can delete all personal data from account settings at any time. Privacy is one of our core commitments.',
   },
   {
-    q: '支持哪些语言？',
-    qEn: 'What languages are supported?',
-    a: '目前支持中文和英文双语，分析报告可以选择任一语言生成。我们正在扩展更多语言支持。',
-    aEn: 'Currently Chinese and English are fully supported. Analysis reports can be generated in either language. We are expanding to more languages.',
+    q: '高级版包含什么？',
+    qEn: 'What is included in premium?',
+    a: '高级版解锁全部12种命理工具（紫微斗数、八字、西方星盘、塔罗、易经等），AI深度分析报告、合盘与推运分析、PDF报告导出，以及双语报告生成功能。',
+    aEn: 'Premium unlocks all 12 divination tools (Zi Wei, BaZi, Western chart, tarot, Yi Jing, etc.), AI deep analysis reports, synastry & transit analysis, PDF export, and bilingual report generation.',
+  },
+  {
+    q: '这只是娱乐吗？',
+    qEn: 'Is this for entertainment only?',
+    a: '天机的分析建立在严谨的天文计算和经典命理体系之上，旨在为用户提供有深度的自我探索工具。我们鼓励用户以开放且负责任的态度对待解读结果，将其作为自我反思的参考，而非替代专业建议。',
+    aEn: 'TianJi\'s analysis is built on rigorous astronomical calculations and classical systems, designed as a meaningful tool for self-exploration. We encourage users to approach readings with an open and responsible mindset — as reflective guidance, not a replacement for professional advice.',
   },
 ];
 
@@ -794,35 +800,36 @@ const STATS = [
 const FOOTER_SECTIONS = [
   {
     title: '命理工具',
-    titleEn: 'Divination',
+    titleEn: 'Products',
     links: [
-      { label: '紫微斗数', href: '/ziwei' },
-      { label: '八字命理', href: '/bazi' },
-      { label: '西方星盘', href: '/western' },
-      { label: '塔罗占卜', href: '/tarot' },
-      { label: '易经', href: '/yijing' },
+      { label: '紫微斗数', labelEn: 'Zi Wei', href: '/ziwei' },
+      { label: '八字命理', labelEn: 'BaZi', href: '/bazi' },
+      { label: '西方星盘', labelEn: 'Western Chart', href: '/western' },
+      { label: '塔罗占卜', labelEn: 'Tarot', href: '/tarot' },
+      { label: '易经', labelEn: 'Yi Jing', href: '/yijing' },
     ],
   },
   {
     title: '进阶分析',
     titleEn: 'Advanced',
     links: [
-      { label: '合盘分析', href: '/synastry' },
-      { label: 'Transit推运', href: '/transit' },
-      { label: '太阳返照', href: '/solar-return' },
-      { label: '风水布局', href: '/fengshui' },
-      { label: '择日择吉', href: '/electional' },
+      { label: '合盘分析', labelEn: 'Synastry', href: '/synastry' },
+      { label: 'Transit推运', labelEn: 'Transit', href: '/transit' },
+      { label: '太阳返照', labelEn: 'Solar Return', href: '/solar-return' },
+      { label: '风水布局', labelEn: 'Feng Shui', href: '/fengshui' },
+      { label: '择日择吉', labelEn: 'Electional', href: '/electional' },
     ],
   },
   {
-    title: '关于',
-    titleEn: 'About',
+    title: '信任与法律',
+    titleEn: 'Trust & Legal',
     links: [
-      { label: '关于天机', href: '/about' },
-      { label: '价格方案', href: '/pricing' },
-      { label: '名人命盘', href: '/celebrities' },
-      { label: '隐私政策', href: '/legal/privacy' },
-      { label: '服务条款', href: '/legal/terms' },
+      { label: '关于天机', labelEn: 'About', href: '/about' },
+      { label: '价格方案', labelEn: 'Pricing', href: '/pricing' },
+      { label: '隐私政策', labelEn: 'Privacy', href: '/legal/privacy' },
+      { label: '服务条款', labelEn: 'Terms', href: '/legal/terms' },
+      { label: '免责声明', labelEn: 'Disclaimer', href: '/legal/disclaimer' },
+      { label: '联系我们', labelEn: 'Contact', href: '/about#contact' },
     ],
   },
 ];
@@ -1339,8 +1346,19 @@ export default function Home() {
 
       {/* ═══════ 10. Rich Footer ═══════ */}
       <footer className="relative z-10 border-t border-white/[0.06]">
+        {/* Trust / reflection statement */}
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 pt-12 sm:pt-16 pb-6">
+          <p className="text-center text-white/25 text-xs leading-relaxed max-w-lg mx-auto">
+            天机致力于为用户提供负责任的命理解读。我们珍视你的隐私，鼓励以反思和开放的心态看待每一份报告。
+          </p>
+          <p className="text-center text-white/15 text-[10px] mt-2 max-w-lg mx-auto leading-relaxed">
+            TianJi is committed to responsible interpretation. We value your privacy and encourage
+            a reflective, open-minded approach to every reading.
+          </p>
+        </div>
+
         {/* Main footer content */}
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-10 sm:py-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 sm:gap-8">
             {/* Brand column */}
             <div className="lg:col-span-2">
@@ -1348,7 +1366,7 @@ export default function Home() {
                 <span className="text-amber-300/60 text-xl">☯︎</span>
                 <span className="text-white/80 font-serif text-lg">TianJi Global</span>
               </div>
-              <p className="text-white/40 text-sm leading-relaxed mb-4 max-w-sm">
+              <p className="text-white/40 text-sm leading-relaxed mb-3 max-w-sm">
                 融合东方经典命理与西方占星智慧，以AI科技重新定义命运探索。
               </p>
               <p className="text-white/25 text-xs leading-relaxed max-w-sm">
@@ -1396,8 +1414,9 @@ export default function Home() {
             <p className="text-white/20 text-xs">
               © {new Date().getFullYear()} TianJi Global · 天机全球. All rights reserved.
             </p>
-            <p className="text-white/15 text-[10px]">
-              仅供娱乐参考 · For entertainment purposes only. 不替代专业建议。
+            <p className="text-white/15 text-[10px] text-center sm:text-right max-w-xs">
+              提供自我反思工具，不替代专业建议 · A tool for self-reflection, not a substitute for
+              professional advice. 🌐 Region-neutral · 中英双语
             </p>
           </div>
         </div>
