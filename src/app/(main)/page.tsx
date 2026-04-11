@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import DynamicHero from '@/components/hero/DynamicHero';
 import { SERVICES } from '@/data/services';
@@ -135,10 +135,12 @@ function StoryBlock({
   const blockRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(blockRef, { margin: '-40% 0px -40% 0px' });
 
-  // Update active story when this block enters center viewport
-  if (isInView) {
-    onActive(block.id);
-  }
+  // Move side effect into useEffect to avoid calling setState during render
+  useEffect(() => {
+    if (isInView) {
+      onActive(block.id);
+    }
+  }, [isInView, block.id, onActive]);
 
   return (
     <motion.div
@@ -278,12 +280,14 @@ function CircularEnergyChart() {
   const arcSpan = (360 - arcs.length * gap) / arcs.length;
 
   const describeArc = (startAngle: number, endAngle: number, r: number) => {
+    // Convert from degrees to radians, offsetting -90° so 0° is top-center
     const s = ((startAngle - 90) * Math.PI) / 180;
     const e = ((endAngle - 90) * Math.PI) / 180;
     const x1 = center + r * Math.cos(s);
     const y1 = center + r * Math.sin(s);
     const x2 = center + r * Math.cos(e);
     const y2 = center + r * Math.sin(e);
+    // SVG large-arc-flag: 1 if arc spans > 180°
     const large = endAngle - startAngle > 180 ? 1 : 0;
     return `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`;
   };
@@ -344,7 +348,7 @@ function CircularEnergyChart() {
           </g>
         );
       })}
-      {/* Center score — replace with real composite score */}
+      {/* Center score — replace with real composite score (e.g. weighted average of arc values) */}
       <text x={center} y={center - 6} textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="22" fontFamily="serif">
         82
       </text>
@@ -820,6 +824,11 @@ export default function Home() {
   /* Active story block for sticky visual — tracked by scroll position */
   const [activeStory, setActiveStory] = useState('chart');
 
+  /** Stable callback for StoryBlock to avoid re-renders */
+  const handleStoryActive = useCallback((id: string) => {
+    setActiveStory((prev) => (prev !== id ? id : prev));
+  }, []);
+
   return (
     <div className="mystic-page bg-[#030014] text-white min-h-screen">
       {/* ═══════ 1. Immersive Mystic Hero ═══════ */}
@@ -864,9 +873,7 @@ export default function Home() {
                 <StoryBlock
                   key={block.id}
                   block={block}
-                  onActive={(id) => {
-                    if (activeStory !== id) setActiveStory(id);
-                  }}
+                  onActive={handleStoryActive}
                 />
               ))}
             </div>
