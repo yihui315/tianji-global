@@ -1057,6 +1057,15 @@ function ToolsSection() {
 }
 
 /* ═══════════════════════════════════════════
+   How It Works — step definitions (static, no re-create per render)
+   ═══════════════════════════════════════════ */
+const HOW_IT_WORKS_KEYS = [
+  { step: '01', titleKey: 'how.step1.title', descKey: 'how.step1.desc', icon: '🌙' },
+  { step: '02', titleKey: 'how.step2.title', descKey: 'how.step2.desc', icon: '⚡' },
+  { step: '03', titleKey: 'how.step3.title', descKey: 'how.step3.desc', icon: '📜' },
+] as const;
+
+/* ═══════════════════════════════════════════
    MAIN PAGE COMPONENT
    ═══════════════════════════════════════════ */
 function Home() {
@@ -1066,12 +1075,6 @@ function Home() {
   const handleStoryActive = useCallback((id: string) => {
     setActiveStory((prev) => (prev !== id ? id : prev));
   }, []);
-
-  const howItWorksSteps = [
-    { step: '01', titleKey: 'how.step1.title', descKey: 'how.step1.desc', icon: '🌙' },
-    { step: '02', titleKey: 'how.step2.title', descKey: 'how.step2.desc', icon: '⚡' },
-    { step: '03', titleKey: 'how.step3.title', descKey: 'how.step3.desc', icon: '📜' },
-  ];
 
   return (
     <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
@@ -1127,7 +1130,7 @@ function Home() {
         </div>
         <div className="max-w-5xl mx-auto px-6 sm:px-8 relative">
           <HowItWorksSteps
-            steps={howItWorksSteps.map((item) => ({
+            steps={HOW_IT_WORKS_KEYS.map((item) => ({
               step: item.step,
               icon: item.icon,
               title: t(item.titleKey),

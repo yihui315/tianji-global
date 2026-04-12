@@ -165,13 +165,6 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
       zh: testimonialTokens[2].quote.zh,
       en: testimonialTokens[2].quote.en,
     },
-    'testimonial.author1.name': { zh: testimonialTokens[0].author, en: testimonialTokens[0].author },
-    'testimonial.author1.loc': { zh: testimonialTokens[0].location, en: testimonialTokens[0].location },
-    'testimonial.author2.name': { zh: testimonialTokens[1].author, en: testimonialTokens[1].author },
-    'testimonial.author2.loc': { zh: testimonialTokens[1].location, en: testimonialTokens[1].location },
-    'testimonial.author3.name': { zh: testimonialTokens[2].author, en: testimonialTokens[2].author },
-    'testimonial.author3.loc': { zh: testimonialTokens[2].location, en: testimonialTokens[2].location },
-
     // Social proof
     'social.readings': { zh: '结构化解读', en: 'Structured Readings' },
     'social.reports': { zh: '双语报告', en: 'Bilingual Reports' },
