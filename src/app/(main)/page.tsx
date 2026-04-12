@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import DynamicHero from '@/components/hero/DynamicHero';
 import { SERVICES } from '@/data/services';
@@ -32,7 +32,7 @@ import {
  *
  * Sections:
  * 1. Immersive Hero (existing DynamicHero)
- * 2. Sticky Storytelling / Visual Transition
+ * 2. Storytelling — Three Distinct Visual Systems (Structure / Relationship / Timeline)
  * 3. Services Grid
  * 4. How It Works (HowItWorksSteps)
  * 5. Advanced Chart Mock Preview
@@ -112,73 +112,100 @@ function PrimaryCTA({ href = '/western', className = '' }: { href?: string; clas
 }
 
 /* ═══════════════════════════════════════════
-   STORY BLOCK 1: BaZi Pillar Grid Visual
+   STORY BLOCK 1: BaZi / ZiWei Structured Grid
+   Layout: Full-width centered · Static · No heavy animation
+   Data: Chinese heavenly stems, earthly branches, palace names
    ═══════════════════════════════════════════ */
-function BaZiPillarGrid({ active }: { active: boolean }) {
+function StructureGrid() {
   const { lang } = useLanguage();
+
   const pillars = [
-    { label: '年柱', stem: '壬', branch: '寅', labelEn: 'Year' },
-    { label: '月柱', stem: '戊', branch: '午', labelEn: 'Month' },
-    { label: '日柱', stem: '甲', branch: '子', labelEn: 'Day' },
-    { label: '时柱', stem: '庚', branch: '申', labelEn: 'Time' },
+    { label: '年柱', stem: '壬', branch: '寅', element: '水', elementEn: 'Water', labelEn: 'Year', stemPy: 'Rén', branchPy: 'Yín' },
+    { label: '月柱', stem: '戊', branch: '午', element: '土', elementEn: 'Earth', labelEn: 'Month', stemPy: 'Wù', branchPy: 'Wǔ' },
+    { label: '日柱', stem: '甲', branch: '子', element: '木', elementEn: 'Wood', labelEn: 'Day', stemPy: 'Jiǎ', branchPy: 'Zǐ' },
+    { label: '时柱', stem: '庚', branch: '申', element: '金', elementEn: 'Metal', labelEn: 'Hour', stemPy: 'Gēng', branchPy: 'Shēn' },
   ];
-  const activeIdx = active ? 2 : 0;
-  const badges = lang === 'zh'
-    ? [{ label: '甲木日主', active: activeIdx === 2 }, { label: '天蝎上升', active: false }, { label: '大运·壬寅', active: false }]
-    : [{ label: 'Day Master: Jia', active: activeIdx === 2 }, { label: 'Scorpio Rising', active: false }, { label: 'Decade: Ren-Yin', active: false }];
+
+  const palaces = [
+    { zh: '命宫', en: 'Destiny', star: '紫微', starEn: 'Zi Wei' },
+    { zh: '兄弟', en: 'Siblings', star: '天机', starEn: 'Tian Ji' },
+    { zh: '夫妻', en: 'Spouse', star: '太阳', starEn: 'Tai Yang' },
+    { zh: '子女', en: 'Children', star: '武曲', starEn: 'Wu Qu' },
+    { zh: '财帛', en: 'Wealth', star: '天同', starEn: 'Tian Tong' },
+    { zh: '疾厄', en: 'Health', star: '廉贞', starEn: 'Lian Zhen' },
+    { zh: '迁移', en: 'Travel', star: '天府', starEn: 'Tian Fu' },
+    { zh: '交友', en: 'Friends', star: '太阴', starEn: 'Tai Yin' },
+    { zh: '官禄', en: 'Career', star: '贪狼', starEn: 'Tan Lang' },
+    { zh: '田宅', en: 'Property', star: '巨门', starEn: 'Ju Men' },
+    { zh: '福德', en: 'Fortune', star: '天相', starEn: 'Tian Xiang' },
+    { zh: '父母', en: 'Parents', star: '天梁', starEn: 'Tian Liang' },
+  ];
+
+  const elementColors: Record<string, string> = {
+    '水': 'text-blue-400/70',
+    '土': 'text-yellow-600/70',
+    '木': 'text-emerald-400/70',
+    '金': 'text-amber-300/70',
+  };
 
   return (
-    <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 w-full">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h4 className="text-sm font-serif text-white/80">
-            {lang === 'zh' ? '八字四柱' : 'BaZi Four Pillars'}
+    <div className="w-full">
+      {/* BaZi Four Pillars — Structured Table */}
+      <div className="border border-white/[0.06] rounded-2xl overflow-hidden mb-6">
+        <div className="bg-white/[0.02] px-5 py-3 border-b border-white/[0.06] flex items-center justify-between">
+          <h4 className="text-sm font-serif text-white/70 tracking-wide">
+            {lang === 'zh' ? '八字四柱 · 命盘' : 'BaZi Four Pillars · Chart'}
           </h4>
+          <span className="text-[9px] tracking-widest uppercase text-white/20">
+            {lang === 'zh' ? '结构层' : 'Structure Layer'}
+          </span>
         </div>
-        <span className="text-white/15 text-[10px] bg-white/[0.04] px-2.5 py-1 rounded-full">
-          {lang === 'zh' ? '结构' : 'Structure'}
-        </span>
+        <div className="grid grid-cols-4 divide-x divide-white/[0.04]">
+          {pillars.map((p, i) => (
+            <div key={p.labelEn} className="flex flex-col items-center py-5 px-2 sm:px-4">
+              <span className="text-[9px] tracking-widest uppercase text-white/25 mb-3">
+                {lang === 'zh' ? p.label : p.labelEn}
+              </span>
+              <div className="flex flex-col items-center gap-1 mb-2">
+                <span className="text-2xl sm:text-3xl font-serif text-white/75">{p.stem}</span>
+                <span className="text-[8px] text-white/20">{p.stemPy}</span>
+              </div>
+              <div className="w-6 h-px bg-white/[0.06] my-1" />
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-xl sm:text-2xl text-white/50">{p.branch}</span>
+                <span className="text-[8px] text-white/20">{p.branchPy}</span>
+              </div>
+              <span className={`text-[10px] mt-3 ${elementColors[p.element] || 'text-white/40'}`}>
+                {lang === 'zh' ? p.element : p.elementEn}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="bg-white/[0.015] px-5 py-2.5 border-t border-white/[0.04] flex items-center gap-4">
+          <span className="text-[10px] text-amber-300/50">
+            {lang === 'zh' ? '日主：甲木' : 'Day Master: Jiǎ Wood'}
+          </span>
+          <span className="text-white/10">·</span>
+          <span className="text-[10px] text-white/25">
+            {lang === 'zh' ? '身强 · 偏印格' : 'Strong · Indirect Seal'}
+          </span>
+        </div>
       </div>
-      <div className="grid grid-cols-4 gap-3">
-        {pillars.map((p, i) => (
-          <motion.div
-            key={p.labelEn}
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.08 }}
-            viewport={{ once: true }}
-            className={`flex flex-col items-center rounded-xl border p-3 transition-all duration-300 ${
-              i === activeIdx
-                ? 'border-amber-400/40 bg-amber-400/5 shadow-[0_0_20px_rgba(245,158,11,0.15)]'
-                : 'border-white/[0.06] bg-white/[0.02]'
-            }`}
+
+      {/* ZiWei 12 Palace Grid — 4×3 static grid */}
+      <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+        {palaces.map((p) => (
+          <div
+            key={p.en}
+            className="border border-white/[0.05] rounded-lg bg-white/[0.015] px-2 py-2.5 sm:px-3 sm:py-3 text-center"
           >
-            <span className="text-[10px] text-white/30 mb-1">
-              {lang === 'zh' ? p.label : p.labelEn}
+            <span className="block text-[10px] text-white/25 mb-1">
+              {lang === 'zh' ? p.zh : p.en}
             </span>
-            <span className={`text-xl font-serif ${i === activeIdx ? 'text-amber-300' : 'text-white/60'}`}>
-              {p.stem}
+            <span className="block text-xs font-serif text-purple-300/60">
+              {lang === 'zh' ? p.star : p.starEn}
             </span>
-            <span className={`text-lg ${i === activeIdx ? 'text-amber-200/80' : 'text-white/40'}`}>
-              {p.branch}
-            </span>
-          </motion.div>
-        ))}
-      </div>
-      <div className="flex flex-wrap gap-2 mt-5">
-        {badges.map((badge) => (
-          <motion.span
-            key={badge.label}
-            animate={{ opacity: badge.active ? 1 : 0.3, scale: badge.active ? 1 : 0.97 }}
-            transition={{ duration: 0.4 }}
-            className={`text-[10px] border rounded-full px-3 py-1 ${
-              badge.active
-                ? 'border-amber-400/30 text-amber-300/70'
-                : 'border-white/[0.06] text-white/50'
-            }`}
-          >
-            {badge.label}
-          </motion.span>
+          </div>
         ))}
       </div>
     </div>
@@ -186,335 +213,457 @@ function BaZiPillarGrid({ active }: { active: boolean }) {
 }
 
 /* ═══════════════════════════════════════════
-   STORY BLOCK 2: Two-Circle Venn Diagram
+   STORY BLOCK 2: Dual-Line Relationship Graph
+   Layout: SVG dual-line chart · Two entities' energy across dimensions
+   Data: Dimensional labels with two overlapping line plots
    ═══════════════════════════════════════════ */
-function TwoCircleDiagram({ active }: { active: boolean }) {
+function RelationshipDualGraph() {
   const { lang } = useLanguage();
-  return (
-    <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 w-full">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h4 className="text-sm font-serif text-white/80">
-            {lang === 'zh' ? '合盘关系' : 'Relationship Synastry'}
-          </h4>
-        </div>
-        <span className="text-white/15 text-[10px] bg-white/[0.04] px-2.5 py-1 rounded-full">
-          {lang === 'zh' ? '互动' : 'Interaction'}
-        </span>
-      </div>
-      <div className="relative w-48 h-36 mx-auto">
-        {/* Left circle */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-28 h-28 rounded-full border-2 border-purple-400/40 bg-purple-400/5 flex flex-col items-center justify-center"
-          style={{ boxShadow: '0 0 30px rgba(168,130,255,0.1)' }}
-        >
-          <span className="text-purple-300/80 text-xs font-serif">
-            {lang === 'zh' ? '天府' : 'Tian Fu'}
-          </span>
-          <span className="text-purple-200/60 text-[10px]">
-            {lang === 'zh' ? '紫微' : 'Zi Wei'}
-          </span>
-        </motion.div>
-        {/* Right circle */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          viewport={{ once: true }}
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-28 h-28 rounded-full border-2 border-amber-400/40 bg-amber-400/5 flex flex-col items-center justify-center"
-          style={{ boxShadow: '0 0 30px rgba(245,158,11,0.1)' }}
-        >
-          <span className="text-amber-300/80 text-xs font-serif">
-            {lang === 'zh' ? '贪狼' : 'Tan Lang'}
-          </span>
-          <span className="text-amber-200/60 text-[10px]">
-            {lang === 'zh' ? '武曲' : 'Wu Qu'}
-          </span>
-        </motion.div>
-        {/* Overlap area highlight */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: active ? 1 : 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center"
-        >
-          <span className="text-[8px] text-white/60">{lang === 'zh' ? '缘' : '∞'}</span>
-        </motion.div>
-        {/* Animated energy lines */}
-        {[0, 1, 2].map((i) => (
-          <motion.line
-            key={i}
-            x1="56"
-            y1="18"
-            x2="108"
-            y2="18"
-            stroke="rgba(168,130,255,0.4)"
-            strokeWidth="1"
-            initial={{ pathLength: 0, opacity: 0 }}
-            whileInView={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 + i * 0.15 }}
-            viewport={{ once: true }}
-            style={{
-              transformOrigin: '56px 18px',
-              transform: `rotate(${i * 30}deg)`,
-            }}
-          />
-        ))}
-      </div>
-      <div className="flex flex-wrap gap-2 mt-5">
-        {(lang === 'zh'
-          ? [{ label: '天府', color: 'purple' }, { label: '贪狼', color: 'amber' }, { label: '紫微', color: 'purple' }, { label: '武曲', color: 'amber' }]
-          : [{ label: 'Tian Fu', color: 'purple' }, { label: 'Tan Lang', color: 'amber' }, { label: 'Zi Wei', color: 'purple' }, { label: 'Wu Qu', color: 'amber' }]
-        ).map((badge) => (
-          <span
-            key={badge.label}
-            className={`text-[10px] border rounded-full px-3 py-1 ${
-              badge.color === 'purple'
-                ? 'border-purple-400/20 text-purple-300/60'
-                : 'border-amber-400/20 text-amber-300/60'
-            }`}
-          >
-            {badge.label}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
 
-/* ═══════════════════════════════════════════
-   STORY BLOCK 3: Life Timeline SVG
-   ═══════════════════════════════════════════ */
-function LifeTimelineVisual({ active }: { active: boolean }) {
-  const { lang } = useLanguage();
-  const decades = ['10s', '20s', '30s', '40s', '50s', '60s', '70s'];
-  const values = [55, 68, 82, 75, 91, 84, 72];
-  const w = 340;
-  const h = 140;
-  const padX = 30;
-  const padY = 20;
-  const chartW = w - padX * 2;
-  const chartH = h - padY * 2;
+  const dimensions = lang === 'zh'
+    ? ['沟通', '信任', '激情', '成长', '稳定', '默契', '包容']
+    : ['Comm.', 'Trust', 'Passion', 'Growth', 'Stability', 'Sync', 'Tolerance'];
 
-  const points = values.map((v, i) => ({
-    x: padX + (i / (values.length - 1)) * chartW,
-    y: padY + chartH - (v / 100) * chartH,
+  const personA = [0.78, 0.65, 0.92, 0.70, 0.55, 0.88, 0.74];
+  const personB = [0.62, 0.85, 0.58, 0.90, 0.82, 0.72, 0.68];
+
+  const w = 420;
+  const h = 200;
+  const padL = 55;
+  const padR = 20;
+  const padT = 30;
+  const padB = 30;
+  const chartW = w - padL - padR;
+  const chartH = h - padT - padB;
+
+  const pointsA = personA.map((v, i) => ({
+    x: padL + (i / (personA.length - 1)) * chartW,
+    y: padT + chartH - v * chartH,
   }));
-  const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
-  const areaPath = `${linePath} L${points[points.length - 1].x},${h - padY} L${points[0].x},${h - padY} Z`;
+  const pointsB = personB.map((v, i) => ({
+    x: padL + (i / (personB.length - 1)) * chartW,
+    y: padT + chartH - v * chartH,
+  }));
+
+  const toPath = (pts: { x: number; y: number }[]) =>
+    pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+
+  const pathA = toPath(pointsA);
+  const pathB = toPath(pointsB);
+
+  // Find tension zones (where lines cross or are close)
+  const tensionZones: { x: number; y: number; type: 'harmony' | 'tension' }[] = [];
+  for (let i = 0; i < personA.length; i++) {
+    const diff = Math.abs(personA[i] - personB[i]);
+    if (diff < 0.1) {
+      tensionZones.push({
+        x: pointsA[i].x,
+        y: (pointsA[i].y + pointsB[i].y) / 2,
+        type: 'harmony',
+      });
+    } else if (diff > 0.25) {
+      tensionZones.push({
+        x: pointsA[i].x,
+        y: (pointsA[i].y + pointsB[i].y) / 2,
+        type: 'tension',
+      });
+    }
+  }
 
   return (
-    <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 w-full">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h4 className="text-sm font-serif text-white/80">
-            {lang === 'zh' ? '人生运势曲线' : 'Life Fortune Timeline'}
-          </h4>
+    <div className="w-full">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-purple-400/70" />
+            <span className="text-[11px] text-white/40 font-serif">
+              {lang === 'zh' ? '甲方 · 天府星系' : 'Person A · Tian Fu'}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-amber-400/70" />
+            <span className="text-[11px] text-white/40 font-serif">
+              {lang === 'zh' ? '乙方 · 贪狼星系' : 'Person B · Tan Lang'}
+            </span>
+          </div>
         </div>
-        <span className="text-white/15 text-[10px] bg-white/[0.04] px-2.5 py-1 rounded-full">
-          {lang === 'zh' ? '时间线' : 'Timeline'}
-        </span>
       </div>
-      <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-full" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <linearGradient id="timeline-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(168,130,255,0.25)" />
-            <stop offset="100%" stopColor="rgba(168,130,255,0)" />
-          </linearGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        {/* Filled area */}
-        <motion.path
-          d={areaPath}
-          fill="url(#timeline-fill)"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          viewport={{ once: true }}
-        />
-        {/* Animated line */}
-        <motion.path
-          d={linePath}
-          fill="none"
-          stroke="rgba(168,130,255,0.7)"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          transition={{ duration: 1.4, ease: 'easeOut' }}
-          viewport={{ once: true }}
-          style={{ filter: 'drop-shadow(0 0 4px rgba(168,130,255,0.3))' }}
-        />
-        {/* Data points */}
-        {points.map((p, i) => (
-          <motion.circle
-            key={i}
-            cx={p.x}
-            cy={p.y}
-            r="3"
-            fill="#A78BFA"
-            stroke="#030014"
-            strokeWidth="1.5"
-            initial={{ opacity: 0, scale: 0 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: 0.3 + i * 0.1 }}
+
+      {/* SVG Dual-Line Chart */}
+      <div className="border border-white/[0.06] rounded-2xl bg-white/[0.015] p-4 sm:p-5">
+        <svg viewBox={`0 0 ${w} ${h}`} className="w-full" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="rel-grad-a" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(168,130,255,0.2)" />
+              <stop offset="100%" stopColor="rgba(168,130,255,0)" />
+            </linearGradient>
+            <linearGradient id="rel-grad-b" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(245,158,11,0.15)" />
+              <stop offset="100%" stopColor="rgba(245,158,11,0)" />
+            </linearGradient>
+          </defs>
+
+          {/* Horizontal grid */}
+          {[0.25, 0.5, 0.75].map((pct) => (
+            <line key={pct} x1={padL} y1={padT + chartH * (1 - pct)} x2={w - padR} y2={padT + chartH * (1 - pct)} stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
+          ))}
+
+          {/* Area fills */}
+          <motion.path
+            d={`${pathA} L${pointsA[pointsA.length - 1].x},${padT + chartH} L${pointsA[0].x},${padT + chartH} Z`}
+            fill="url(#rel-grad-a)"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
             viewport={{ once: true }}
           />
-        ))}
-        {/* Decade labels */}
-        {decades.map((label, i) => (
-          <text key={label} x={points[i].x} y={h - 4} textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize="8">
-            {label}
-          </text>
-        ))}
-        {/* Peak badge */}
-        {(() => {
-          const peak = values.indexOf(Math.max(...values));
-          return (
-            <g>
+          <motion.path
+            d={`${pathB} L${pointsB[pointsB.length - 1].x},${padT + chartH} L${pointsB[0].x},${padT + chartH} Z`}
+            fill="url(#rel-grad-b)"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            viewport={{ once: true }}
+          />
+
+          {/* Line A */}
+          <motion.path
+            d={pathA}
+            fill="none"
+            stroke="rgba(168,130,255,0.75)"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1 }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
+            viewport={{ once: true }}
+            style={{ filter: 'drop-shadow(0 0 6px rgba(168,130,255,0.3))' }}
+          />
+          {/* Line B */}
+          <motion.path
+            d={pathB}
+            fill="none"
+            stroke="rgba(245,158,11,0.75)"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1 }}
+            transition={{ duration: 1.2, delay: 0.2, ease: 'easeOut' }}
+            viewport={{ once: true }}
+            style={{ filter: 'drop-shadow(0 0 6px rgba(245,158,11,0.3))' }}
+          />
+
+          {/* Data points A */}
+          {pointsA.map((p, i) => (
+            <motion.circle
+              key={`a-${i}`}
+              cx={p.x}
+              cy={p.y}
+              r="3.5"
+              fill="#A78BFA"
+              stroke="#030014"
+              strokeWidth="1.5"
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.4 + i * 0.08 }}
+              viewport={{ once: true }}
+            />
+          ))}
+          {/* Data points B */}
+          {pointsB.map((p, i) => (
+            <motion.circle
+              key={`b-${i}`}
+              cx={p.x}
+              cy={p.y}
+              r="3.5"
+              fill="#F59E0B"
+              stroke="#030014"
+              strokeWidth="1.5"
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.5 + i * 0.08 }}
+              viewport={{ once: true }}
+            />
+          ))}
+
+          {/* Tension / Harmony zone markers */}
+          {tensionZones.map((z, i) => (
+            <motion.g
+              key={`zone-${i}`}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 1 + i * 0.15 }}
+              viewport={{ once: true }}
+            >
+              <circle
+                cx={z.x}
+                cy={z.y}
+                r="10"
+                fill="none"
+                stroke={z.type === 'harmony' ? 'rgba(52,211,153,0.3)' : 'rgba(239,68,68,0.25)'}
+                strokeWidth="1"
+                strokeDasharray="2 2"
+              />
               <text
-                x={points[peak].x}
-                y={points[peak].y - 10}
+                x={z.x}
+                y={z.y - 16}
                 textAnchor="middle"
-                fill="rgba(245,158,11,0.8)"
+                fill={z.type === 'harmony' ? 'rgba(52,211,153,0.6)' : 'rgba(239,68,68,0.5)'}
                 fontSize="7"
-                fontFamily="serif"
               >
-                {lang === 'zh' ? '▲ 高峰' : '▲ Peak'}
+                {z.type === 'harmony'
+                  ? (lang === 'zh' ? '共鸣' : 'Sync')
+                  : (lang === 'zh' ? '张力' : 'Tension')}
               </text>
-            </g>
-          );
-        })()}
-        {/* Transition badge */}
-        {(() => {
-          return (
-            <g>
-              <text
-                x={points[3].x}
-                y={points[3].y - 10}
-                textAnchor="middle"
-                fill="rgba(168,130,255,0.6)"
-                fontSize="6"
-              >
-                {lang === 'zh' ? '○ 转折' : '○ Shift'}
+            </motion.g>
+          ))}
+
+          {/* Dimension labels */}
+          {dimensions.map((label, i) => {
+            const x = padL + (i / (dimensions.length - 1)) * chartW;
+            return (
+              <text key={label} x={x} y={h - 6} textAnchor="middle" fill="rgba(255,255,255,0.25)" fontSize="8">
+                {label}
               </text>
-            </g>
-          );
-        })()}
-      </svg>
+            );
+          })}
+
+          {/* Y-axis labels */}
+          {[0, 0.5, 1].map((pct) => (
+            <text key={`y-${pct}`} x={padL - 8} y={padT + chartH * (1 - pct) + 3} textAnchor="end" fill="rgba(255,255,255,0.15)" fontSize="7">
+              {Math.round(pct * 100)}
+            </text>
+          ))}
+        </svg>
+      </div>
+
+      {/* Insight badges */}
       <div className="flex flex-wrap gap-2 mt-4">
-        {(lang === 'zh'
-          ? [{ label: '高峰', color: 'amber' }, { label: '平稳', color: 'purple' }, { label: '转折', color: 'purple' }]
-          : [{ label: 'Peak', color: 'amber' }, { label: 'Steady', color: 'purple' }, { label: 'Shift', color: 'purple' }]
-        ).map((badge) => (
-          <span
-            key={badge.label}
-            className={`text-[10px] border rounded-full px-3 py-1 ${
-              badge.color === 'amber'
-                ? 'border-amber-400/20 text-amber-300/60'
-                : 'border-purple-400/20 text-purple-300/60'
-            }`}
-          >
-            {badge.label}
-          </span>
-        ))}
+        <span className="text-[10px] border border-emerald-500/20 text-emerald-400/60 rounded-full px-3 py-1">
+          {lang === 'zh' ? '默契度高' : 'High Sync'}
+        </span>
+        <span className="text-[10px] border border-red-500/15 text-red-400/50 rounded-full px-3 py-1">
+          {lang === 'zh' ? '激情差异' : 'Passion Gap'}
+        </span>
+        <span className="text-[10px] border border-white/[0.06] text-white/35 rounded-full px-3 py-1">
+          {lang === 'zh' ? '合盘评分 · 样本' : 'Synastry · Sample'}
+        </span>
       </div>
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════
-   Sticky Storytelling — Data & Visual Card
+   STORY BLOCK 3: Life Timeline — Wide Horizontal
+   Layout: Full-width scrollable · Animated line · Event markers
+   Data: Year-based (25-year span) with life events
    ═══════════════════════════════════════════ */
-const STORY_BLOCKS = [
-  {
-    id: 'chart',
-    badgeKey: 'story.badge.chart',
-    titleKey: 'story.title.chart',
-    bodyKey: 'story.body.chart',
-    accent: 'purple' as const,
-  },
-  {
-    id: 'relationship',
-    badgeKey: 'story.badge.relationship',
-    titleKey: 'story.title.relationship',
-    bodyKey: 'story.body.relationship',
-    accent: 'amber' as const,
-  },
-  {
-    id: 'rhythm',
-    badgeKey: 'story.badge.rhythm',
-    titleKey: 'story.title.rhythm',
-    bodyKey: 'story.body.rhythm',
-    accent: 'purple' as const,
-  },
-];
+function LifeTimelineWide() {
+  const { lang } = useLanguage();
 
-/** Individual story block */
-function StoryBlock({
-  block,
-  onActive,
-}: {
-  block: (typeof STORY_BLOCKS)[number];
-  onActive: (id: string) => void;
-}) {
-  const { t } = useLanguage();
-  const blockRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(blockRef, { margin: '-40% 0px -40% 0px' });
+  const startYear = 2000;
+  const years = Array.from({ length: 26 }, (_, i) => startYear + i);
+  const fortune = [
+    40, 48, 55, 52, 60, 72, 68, 75, 82, 78,
+    85, 92, 88, 80, 72, 65, 70, 78, 85, 90,
+    95, 88, 82, 78, 85, 90,
+  ];
 
-  useEffect(() => {
-    if (isInView) {
-      onActive(block.id);
-    }
-  }, [isInView, block.id, onActive]);
+  const events: { year: number; label: { zh: string; en: string }; type: 'peak' | 'valley' | 'shift' }[] = [
+    { year: 2005, label: { zh: '求学', en: 'School' }, type: 'shift' },
+    { year: 2010, label: { zh: '事业起步', en: 'Career Start' }, type: 'peak' },
+    { year: 2014, label: { zh: '低谷', en: 'Valley' }, type: 'valley' },
+    { year: 2020, label: { zh: '大运转换', en: 'Decade Shift' }, type: 'shift' },
+    { year: 2025, label: { zh: '高峰期', en: 'Peak Phase' }, type: 'peak' },
+  ];
+
+  const w = 800;
+  const h = 180;
+  const padL = 30;
+  const padR = 30;
+  const padT = 40;
+  const padB = 35;
+  const chartW = w - padL - padR;
+  const chartH = h - padT - padB;
+
+  const points = fortune.map((v, i) => ({
+    x: padL + (i / (fortune.length - 1)) * chartW,
+    y: padT + chartH - ((v - 30) / 70) * chartH,
+  }));
+
+  // Smooth curve using cubic bezier
+  const smoothPath = points.reduce((acc, p, i, arr) => {
+    if (i === 0) return `M${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+    const prev = arr[i - 1];
+    const cpx1 = prev.x + (p.x - prev.x) * 0.4;
+    const cpx2 = p.x - (p.x - prev.x) * 0.4;
+    return `${acc} C${cpx1.toFixed(1)},${prev.y.toFixed(1)} ${cpx2.toFixed(1)},${p.y.toFixed(1)} ${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+  }, '');
+
+  const areaPath = `${smoothPath} L${points[points.length - 1].x},${padT + chartH} L${points[0].x},${padT + chartH} Z`;
 
   return (
-    <motion.div
-      ref={blockRef}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.1 }}
-      viewport={{ once: true, margin: '-60px' }}
-      className="lg:min-h-[50vh] flex flex-col justify-center"
-    >
-      <span
-        className={`inline-block text-[10px] tracking-widest uppercase mb-3 ${
-          block.accent === 'amber' ? 'text-amber-400/60' : 'text-purple-400/60'
-        }`}
-      >
-        {t(block.badgeKey)}
-      </span>
-      <h3 className="text-2xl sm:text-3xl font-serif text-white mb-4 max-w-2xl">
-        {t(block.titleKey)}
-      </h3>
-      <p className="text-white/55 text-sm sm:text-base leading-relaxed max-w-2xl">
-        {t(block.bodyKey)}
-      </p>
+    <div className="w-full">
+      {/* Wide timeline — horizontally scrollable on mobile */}
+      <div className="overflow-x-auto -mx-4 px-4 pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10">
+        <div className="min-w-[640px]">
+          <svg viewBox={`0 0 ${w} ${h}`} className="w-full" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="life-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgba(168,130,255,0.2)" />
+                <stop offset="50%" stopColor="rgba(124,58,237,0.08)" />
+                <stop offset="100%" stopColor="transparent" />
+              </linearGradient>
+              <linearGradient id="life-line-grad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="rgba(124,58,237,0.6)" />
+                <stop offset="50%" stopColor="rgba(168,130,255,0.9)" />
+                <stop offset="100%" stopColor="rgba(245,158,11,0.7)" />
+              </linearGradient>
+            </defs>
 
-      {/* Mobile: inline visual (hidden on lg) */}
-      <div className="mt-8 lg:hidden">
-        <StoryVisualCard activeId={block.id} />
+            {/* Horizontal grid lines */}
+            {[0.25, 0.5, 0.75].map((pct) => (
+              <line key={pct} x1={padL} y1={padT + chartH * (1 - pct)} x2={w - padR} y2={padT + chartH * (1 - pct)} stroke="rgba(255,255,255,0.025)" strokeWidth="0.5" />
+            ))}
+
+            {/* Area fill */}
+            <motion.path
+              d={areaPath}
+              fill="url(#life-grad)"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1.2, delay: 0.3 }}
+              viewport={{ once: true }}
+            />
+
+            {/* Animated fortune line */}
+            <motion.path
+              d={smoothPath}
+              fill="none"
+              stroke="url(#life-line-grad)"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              transition={{ duration: 2.5, ease: 'easeInOut' }}
+              viewport={{ once: true }}
+              style={{ filter: 'drop-shadow(0 0 8px rgba(168,130,255,0.4))' }}
+            />
+
+            {/* Event markers */}
+            {events.map((evt, i) => {
+              const idx = evt.year - startYear;
+              if (idx < 0 || idx >= points.length) return null;
+              const pt = points[idx];
+              const markerColor =
+                evt.type === 'peak' ? 'rgba(245,158,11,0.8)' :
+                evt.type === 'valley' ? 'rgba(239,68,68,0.6)' :
+                'rgba(168,130,255,0.7)';
+              return (
+                <motion.g
+                  key={evt.year}
+                  initial={{ opacity: 0, y: 5 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 1.2 + i * 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  {/* Vertical line from point to axis */}
+                  <line x1={pt.x} y1={pt.y} x2={pt.x} y2={padT + chartH} stroke={markerColor} strokeWidth="0.5" strokeDasharray="3 3" opacity="0.4" />
+                  {/* Marker dot */}
+                  <circle cx={pt.x} cy={pt.y} r="5" fill={markerColor} stroke="#030014" strokeWidth="2" />
+                  {/* Pulsing ring for peaks */}
+                  {evt.type === 'peak' && (
+                    <motion.circle
+                      cx={pt.x}
+                      cy={pt.y}
+                      r="9"
+                      fill="none"
+                      stroke={markerColor}
+                      strokeWidth="1"
+                      animate={{ r: [9, 14, 9], opacity: [0.4, 0, 0.4] }}
+                      transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                  )}
+                  {/* Event label */}
+                  <text
+                    x={pt.x}
+                    y={pt.y - 14}
+                    textAnchor="middle"
+                    fill={markerColor}
+                    fontSize="7.5"
+                    fontFamily="serif"
+                  >
+                    {lang === 'zh' ? evt.label.zh : evt.label.en}
+                  </text>
+                </motion.g>
+              );
+            })}
+
+            {/* Year labels — every 5 years */}
+            {years.map((yr, i) => {
+              if (yr % 5 !== 0) return null;
+              return (
+                <text key={yr} x={points[i].x} y={h - 8} textAnchor="middle" fill="rgba(255,255,255,0.2)" fontSize="8">
+                  {yr}
+                </text>
+              );
+            })}
+
+            {/* Decade boundary lines */}
+            {years.map((yr, i) => {
+              if (yr % 10 !== 0 || i === 0) return null;
+              return (
+                <line key={`dec-${yr}`} x1={points[i].x} y1={padT} x2={points[i].x} y2={padT + chartH} stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" strokeDasharray="4 4" />
+              );
+            })}
+
+            {/* Current year indicator */}
+            {(() => {
+              const currentIdx = 2025 - startYear;
+              if (currentIdx < 0 || currentIdx >= points.length) return null;
+              const pt = points[currentIdx];
+              return (
+                <motion.g
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 2 }}
+                  viewport={{ once: true }}
+                >
+                  <line x1={pt.x} y1={padT - 5} x2={pt.x} y2={padT + chartH} stroke="rgba(245,158,11,0.3)" strokeWidth="1" />
+                  <text x={pt.x} y={padT - 10} textAnchor="middle" fill="rgba(245,158,11,0.6)" fontSize="7">
+                    {lang === 'zh' ? '▼ 当前' : '▼ Now'}
+                  </text>
+                </motion.g>
+              );
+            })()}
+          </svg>
+        </div>
       </div>
-    </motion.div>
-  );
-}
 
-function StoryVisualCard({ activeId }: { activeId: string }) {
-  if (activeId === 'chart') return <BaZiPillarGrid active={activeId === 'chart'} />;
-  if (activeId === 'relationship') return <TwoCircleDiagram active={activeId === 'relationship'} />;
-  return <LifeTimelineVisual active={activeId === 'rhythm'} />;
+      {/* Legend row */}
+      <div className="flex flex-wrap items-center gap-4 mt-4">
+        <div className="flex items-center gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-amber-400/70" />
+          <span className="text-[10px] text-white/30">{lang === 'zh' ? '高峰' : 'Peak'}</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-red-400/60" />
+          <span className="text-[10px] text-white/30">{lang === 'zh' ? '低谷' : 'Valley'}</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-purple-400/70" />
+          <span className="text-[10px] text-white/30">{lang === 'zh' ? '运势转折' : 'Fortune Shift'}</span>
+        </div>
+        <span className="text-[9px] text-white/15 ml-auto">
+          {lang === 'zh' ? '← 滑动查看完整时间线 →' : '← Scroll for full timeline →'}
+        </span>
+      </div>
+    </div>
+  );
 }
 
 /* ═══════════════════════════════════════════
@@ -1088,11 +1237,6 @@ const HOW_IT_WORKS_KEYS = [
    ═══════════════════════════════════════════ */
 function Home() {
   const { t, lang } = useLanguage();
-  const [activeStory, setActiveStory] = useState('chart');
-
-  const handleStoryActive = useCallback((id: string) => {
-    setActiveStory((prev) => (prev !== id ? id : prev));
-  }, []);
 
   return (
     <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
@@ -1104,27 +1248,62 @@ function Home() {
       {/* ═══════ 1. Immersive Mystic Hero ═══════ */}
       <DynamicHero />
 
-      {/* ═══════ 2. Sticky Storytelling Section ═══════ */}
+      {/* ═══════ 2. Storytelling — Three Distinct Visual Systems ═══════ */}
       <ParallaxSection offset={20} className="relative z-10 py-28 sm:py-36">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
           <SectionHeader title={t('story.heading')} />
 
-          {/* Desktop: two-column sticky layout · Mobile: stacked */}
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16">
-            {/* Left column: scrolling text blocks */}
-            <div className="space-y-16 sm:space-y-24 lg:space-y-32">
-              {STORY_BLOCKS.map((block) => (
-                <StoryBlock key={block.id} block={block} onActive={handleStoryActive} />
-              ))}
+          {/* ── BLOCK 1: Structure — Centered full-width grid ── */}
+          <FadeInWhenVisible className="mb-28 sm:mb-36">
+            <div className="max-w-3xl mx-auto text-center mb-10">
+              <span className="inline-block text-[10px] tracking-widest uppercase mb-3 text-purple-400/60">
+                {t('story.badge.chart')}
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-serif text-white mb-4">
+                {t('story.title.chart')}
+              </h3>
+              <p className="text-white/55 text-sm sm:text-base leading-relaxed">
+                {t('story.body.chart')}
+              </p>
             </div>
+            <StructureGrid />
+          </FadeInWhenVisible>
 
-            {/* Right column: sticky visual card (desktop only) */}
-            <div className="hidden lg:block">
-              <div className="sticky top-[20vh]">
-                <StoryVisualCard activeId={activeStory} />
+          {/* ── BLOCK 2: Relationship — Text left, graph right ── */}
+          <FadeInWhenVisible delay={0.1} className="mb-28 sm:mb-36">
+            <div className="lg:grid lg:grid-cols-5 lg:gap-12 items-start">
+              <div className="lg:col-span-2 mb-8 lg:mb-0 lg:sticky lg:top-[25vh]">
+                <span className="inline-block text-[10px] tracking-widest uppercase mb-3 text-amber-400/60">
+                  {t('story.badge.relationship')}
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-serif text-white mb-4">
+                  {t('story.title.relationship')}
+                </h3>
+                <p className="text-white/55 text-sm sm:text-base leading-relaxed">
+                  {t('story.body.relationship')}
+                </p>
+              </div>
+              <div className="lg:col-span-3">
+                <RelationshipDualGraph />
               </div>
             </div>
-          </div>
+          </FadeInWhenVisible>
+
+          {/* ── BLOCK 3: Life Timeline — Full-width horizontal ── */}
+          <FadeInWhenVisible delay={0.15} className="mb-16 sm:mb-24">
+            <div className="mb-8 sm:mb-10">
+              <span className="inline-block text-[10px] tracking-widest uppercase mb-3 text-purple-400/60">
+                {t('story.badge.rhythm')}
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-serif text-white mb-4">
+                {t('story.title.rhythm')}
+              </h3>
+              <p className="text-white/55 text-sm sm:text-base leading-relaxed max-w-2xl">
+                {t('story.body.rhythm')}
+              </p>
+            </div>
+            <LifeTimelineWide />
+          </FadeInWhenVisible>
 
           {/* CTA after storytelling */}
           <div className="flex justify-center mt-16 sm:mt-24">
