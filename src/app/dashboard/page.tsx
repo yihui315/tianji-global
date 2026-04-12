@@ -34,19 +34,25 @@ export default function DashboardPage() {
             Welcome{session.user?.name ? `, ${session.user.name}` : ''}
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          {session.user?.image && (
-            <img
-              src={session.user.image}
-              alt="Avatar"
-              className="w-10 h-10 rounded-full border-2 border-purple-400"
-            />
-          )}
+        <div className="flex items-center gap-3">
+          <a
+            href="/profile"
+            className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-sm transition"
+          >
+            {session.user?.image ? (
+              <img src={session.user.image} alt="Avatar" className="w-6 h-6 rounded-full" />
+            ) : (
+              <span className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-xs">
+                {session.user?.name?.[0] ?? '?'}
+              </span>
+            )}
+            <span>{session.user?.name ?? 'Profile'}</span>
+          </a>
           <button
             onClick={() => signOut({ callbackUrl: '/' })}
             className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-sm transition"
           >
-            {language === 'zh' ? '退出登录' : 'Sign Out'}
+            {language === 'zh' ? '退出' : 'Sign Out'}
           </button>
         </div>
       </header>
