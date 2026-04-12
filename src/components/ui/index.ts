@@ -27,3 +27,21 @@ export type { PricingCardProps, PricingFeature } from './PricingCard';
 
 export { TestimonialCard } from './TestimonialCard';
 export type { TestimonialCardProps } from './TestimonialCard';
+
+export { LanguageSwitch } from './LanguageSwitch';
+export type { LanguageSwitchProps } from './LanguageSwitch';
+
+export { FinalCTA } from './FinalCTA';
+export type { FinalCTAProps } from './FinalCTA';
+
+export { MethodBadge } from './MethodBadge';
+export type { MethodBadgeProps } from './MethodBadge';
+
+export { PrivacyNote } from './PrivacyNote';
+export type { PrivacyNoteProps } from './PrivacyNote';
+
+export { ResponsibleUseNotice } from './ResponsibleUseNotice';
+export type { ResponsibleUseNoticeProps } from './ResponsibleUseNotice';
+
+export { HowItWorksSteps } from './HowItWorksSteps';
+export type { HowItWorksStepsProps, HowItWorksStep } from './HowItWorksSteps';
