@@ -33,14 +33,18 @@ import {
  * Sections:
  * 1. Immersive Hero (existing DynamicHero)
  * 2. Storytelling — Three Distinct Visual Systems (Structure / Relationship / Timeline)
- * 3. Services Grid
- * 4. How It Works (HowItWorksSteps)
- * 5. Advanced Chart Mock Preview
- * 6. Testimonials / Social Proof (TestimonialCard + StatBadge)
+ * 3. How It Works (HowItWorksSteps)
+ * 4. Advanced Chart Mock Preview
+ * 5. Testimonials / Social Proof (TestimonialCard + StatBadge)
+ * 6. Trust Section (TrustPillars)
  * 7. Pricing Preview (PricingCard)
+ * 7.5. Tools — Secondary Exploration (6 tools + "View All Tools")
  * 8. FAQ (FAQAccordion)
  * 9. Final CTA (FinalCTA)
  * 10. Rich Footer (ResponsibleUseNotice)
+ *
+ * Main flow: Hero → Story → Results → Trust → Pricing → CTA
+ * Tools are secondary, placed after Pricing as optional exploration.
  *
  * All sections consume design-system tokens and UI atom components.
  */
@@ -1203,7 +1207,7 @@ function FAQSection() {
 }
 
 /* ═══════════════════════════════════════════
-   Tools Grid Section — Compressed, uses SectionHeader + GlassCard
+   Tools Grid Section — Secondary exploration, reduced visual weight
    ═══════════════════════════════════════════ */
 function ToolsSection() {
   const { t, lang } = useLanguage();
@@ -1211,43 +1215,42 @@ function ToolsSection() {
   const displayServices = expanded ? SERVICES : SERVICES.slice(0, 6);
 
   return (
-    <section id="services" className="relative z-10 py-20 sm:py-28">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
-        <SectionHeader titleKey="services" />
-        <p className="text-center text-xs tracking-widest uppercase mb-10" style={{ color: colors.textMuted }}>
+    <section id="services" className="relative z-10 py-14 sm:py-20">
+      <div className="max-w-5xl mx-auto px-6 sm:px-8">
+        {/* Section label — secondary exploration */}
+        <p className="text-center text-[10px] tracking-[0.25em] uppercase mb-2" style={{ color: colors.textMuted }}>
+          {lang === 'zh' ? '探索更多工具' : 'Explore More Tools'}
+        </p>
+        <p className="text-center text-xs mb-8" style={{ color: colors.textTertiary }}>
           {t('tools.subtitle')}
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 opacity-90">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 opacity-75">
           {displayServices.map((s, i) => (
-            <FadeInWhenVisible key={s.href} delay={i * 0.04}>
+            <FadeInWhenVisible key={s.href} delay={i * 0.03}>
               <a
                 href={s.href}
-                className="group block rounded-xl overflow-hidden border border-white/[0.06] hover:border-amber-300/30 transition-all duration-200 hover:-translate-y-0.5"
+                className="group block rounded-lg overflow-hidden border border-white/[0.04] hover:border-white/[0.12] transition-all duration-200"
               >
-                {/* Card content — compact */}
-                <div className="p-3 sm:p-4 bg-white/[0.015]">
-                  <div className="text-2xl mb-2">{s.icon}</div>
-                  <h3 className="text-sm font-serif text-white mb-0.5 group-hover:text-amber-100 transition-colors">
+                <div className="p-2.5 sm:p-3 bg-white/[0.01]">
+                  <div className="text-lg mb-1">{s.icon}</div>
+                  <h3 className="text-xs font-serif text-white/70 mb-0.5 group-hover:text-white/90 transition-colors">
                     {s.title[lang]}
                   </h3>
-                  <p className="text-white/30 text-[11px] leading-relaxed">{s.desc[lang]}</p>
-                  <div className="mt-2 text-amber-300/40 group-hover:text-amber-200 flex items-center gap-1 text-[11px] transition-colors duration-200">
-                    {t('tools.start')}
-                    <span className="text-xs group-hover:translate-x-0.5 transition-transform inline-block">→</span>
-                  </div>
+                  <p className="text-white/20 text-[10px] leading-relaxed line-clamp-1">{s.desc[lang]}</p>
                 </div>
               </a>
             </FadeInWhenVisible>
           ))}
         </div>
-        {/* Expand button */}
-        {!expanded && (
-          <div className="flex justify-center mt-8">
-            <MysticButton variant="outline" size="md" onClick={() => setExpanded(true)}>
-              {lang === 'zh' ? '探索全部工具' : 'Explore More Tools'} →
-            </MysticButton>
-          </div>
-        )}
+        {/* View All / Collapse */}
+        <div className="flex justify-center mt-6">
+          <MysticButton variant="outline" size="md" onClick={() => setExpanded(!expanded)}>
+            {expanded
+              ? (lang === 'zh' ? '收起' : 'Show Less')
+              : (lang === 'zh' ? '查看全部工具' : 'View All Tools')
+            } {expanded ? '↑' : '→'}
+          </MysticButton>
+        </div>
       </div>
     </section>
   );
@@ -1343,11 +1346,6 @@ function Home() {
             </div>
           </div>
         </div>
-      </ParallaxSection>
-
-      {/* ═══════ 3. Tools Grid ═══════ */}
-      <ParallaxSection offset={15}>
-        <ToolsSection />
       </ParallaxSection>
 
       {/* ═══════ 4. How It Works — HowItWorksSteps from design system ═══════ */}
@@ -1508,6 +1506,9 @@ function Home() {
 
       {/* ═══════ 7. Pricing Preview ═══════ */}
       <PricingSection />
+
+      {/* ═══════ 7.5. Tools — Secondary Exploration ═══════ */}
+      <ToolsSection />
 
       {/* ═══════ 8. FAQ ═══════ */}
       <FAQSection />
