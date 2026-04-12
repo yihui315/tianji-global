@@ -1040,6 +1040,42 @@ function ToolsSection() {
                   </div>
                 </a>
               </GlassCard>
+              <a
+                href={s.href}
+                className="group block rounded-2xl overflow-hidden border border-white/[0.06] hover:border-amber-300/30 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/[0.12]"
+              >
+                {/* AI-generated service image */}
+                <div className="relative h-36 overflow-hidden">
+                  {s.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={s.image}
+                      alt={s.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-purple-900/40 to-indigo-900/60 flex items-center justify-center">
+                      <span className="text-4xl opacity-40">{s.icon}</span>
+                    </div>
+                  )}
+                  {/* Icon badge overlay */}
+                  <div className="absolute top-3 left-3 w-9 h-9 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-lg shadow-lg">
+                    {s.icon}
+                  </div>
+                  {/* Gradient overlay for text readability */}
+                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/60 to-transparent" />
+                </div>
+                {/* Card content */}
+                <div className="p-4 bg-white/[0.015]">
+                  <h3 className="text-sm font-serif text-white mb-0.5 group-hover:text-amber-100 transition-colors">{s.title}</h3>
+                  <p className="text-white/35 text-xs leading-relaxed">{s.desc}</p>
+                  <div className="mt-3 text-amber-300/50 group-hover:text-amber-200 flex items-center gap-1.5 text-xs transition-colors duration-200">
+                    {t('tools.start')}
+                    <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">→</span>
+                  </div>
+                </div>
+              </a>
             </FadeInWhenVisible>
           ))}
         </div>
