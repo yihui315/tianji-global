@@ -33,6 +33,8 @@ export interface PricingCardProps {
   ctaHref?: string;
   /** Highlight this card as popular */
   highlighted?: boolean;
+  /** Identity badge text, e.g. "Most Popular" */
+  identityBadge?: string;
   /** Extra class names */
   className?: string;
 }
@@ -49,6 +51,7 @@ export function PricingCard({
   ctaLabel,
   ctaHref = '#',
   highlighted = false,
+  identityBadge,
   className = '',
 }: PricingCardProps) {
   return (
@@ -71,15 +74,15 @@ export function PricingCard({
     >
       {/* Header */}
       <div className="mb-6">
-        {highlighted && (
+        {identityBadge && (
           <span
             className="inline-block text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full mb-3"
             style={{
-              background: colors.goldDim,
-              color: colors.gold,
+              background: highlighted ? colors.goldDim : colors.purpleDim,
+              color: highlighted ? colors.gold : colors.purpleLight,
             }}
           >
-            Most Popular
+            {identityBadge}
           </span>
         )}
         <h3

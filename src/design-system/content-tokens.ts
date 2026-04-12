@@ -124,50 +124,121 @@ export const disclaimers = {
 export const pricingPlans = {
   free: {
     name: { zh: '探索', en: 'Explore' },
-    tagline: { zh: '先体验命盘结构', en: 'Start with a taste' },
+    identity: { zh: '免费体验', en: 'Free' },
+    tagline: { zh: '先体验命盘结构，了解你的星辰基因', en: 'Discover your chart structure and cosmic blueprint' },
     price: '$0',
     period: { zh: '永久免费', en: 'Free forever' },
   },
   premium: {
     name: { zh: '星辰', en: 'Stellar' },
-    tagline: { zh: '解锁完整命盘与AI深度分析', en: 'Full charts + AI deep analysis' },
+    identity: { zh: '最受欢迎', en: 'Most Popular' },
+    tagline: { zh: '解锁完整命盘、运势模式与长周期洞察', en: 'Unlock your full chart, patterns, and long-term insights' },
     price: '$9.9',
     period: { zh: '/月', en: '/mo' },
   },
   deep: {
     name: { zh: '天机', en: 'TianJi Pro' },
-    tagline: { zh: 'AI深度解读，为你专属定制', en: 'Personalized AI guidance, tailored to your chart' },
+    identity: { zh: '深度洞察', en: 'For Deep Insight' },
+    tagline: { zh: '针对你当前人生阶段的个性化深度解读', en: 'Personalized interpretation for your specific life phase' },
     price: '$29.9',
     period: { zh: '/月', en: '/mo' },
   },
 } as const;
 
 // ────────────────────────────────────────────
-// 7. Testimonial Copy
+// 7. Testimonial Copy — Behavior-driven social proof
 // ────────────────────────────────────────────
 export const testimonials = [
   {
     quote: {
-      zh: '每个月做重大决策前我都会看推运报告，它帮我提前六个月预见了职业转型。',
-      en: 'I check my Transit report every month before making big decisions. It helped me spot a career shift 6 months early.',
+      zh: '每个月我都会回来看运势曲线的变化。它帮我提前六个月预见了职业转型的关键窗口。',
+      en: 'I come back every month to check my timeline shifts. It helped me spot a career pivot 6 months before it happened.',
     },
-    author: 'Sophia',
-    location: 'London',
+    author: 'Sophia L.',
+    location: { zh: '伦敦', en: 'London, UK' },
+    avatar: '🇬🇧',
   },
   {
     quote: {
-      zh: '我以前对八字持怀疑态度。天机的解读方式让我第一次同时理解了中西方命理。',
-      en: 'I was skeptical about BaZi. TianJi explained it in a way that finally made Western astrology click for me too.',
+      zh: '合盘分析让我理解了为什么我的关系总在重复同样的模式。省了好几个月的困惑。',
+      en: 'It helped me understand why my relationships repeat the same patterns. Saved me months of confusion.',
     },
-    author: 'Marcus',
-    location: 'Toronto',
+    author: 'Marcus T.',
+    location: { zh: '多伦多', en: 'Toronto, CA' },
+    avatar: '🇨🇦',
   },
   {
     quote: {
-      zh: '合盘分析帮我省了好几个月的困惑。它把我感受到但说不清的关系模式清晰地呈现了出来。',
-      en: 'The relationship compatibility report saved me months of confusion. It named patterns I\'d felt but couldn\'t articulate.',
+      zh: '没想到AI解读能做到这种深度。紫微和西方星盘的双引擎分析，完全超出预期。',
+      en: 'I didn\'t expect this level of depth from an AI reading. The dual-engine Zi Wei + Western chart blew me away.',
     },
-    author: 'Yuki',
-    location: 'Tokyo',
+    author: 'Yuki M.',
+    location: { zh: '东京', en: 'Tokyo, JP' },
+    avatar: '🇯🇵',
+  },
+  {
+    quote: {
+      zh: '作为一个创作者，我用它来理解自己的创造力周期。现在我知道什么时候该冲刺，什么时候该休息。',
+      en: 'As a creator, I use it to understand my creative cycles. Now I know when to push and when to rest.',
+    },
+    author: 'Ava R.',
+    location: { zh: '柏林', en: 'Berlin, DE' },
+    avatar: '🇩🇪',
+  },
+  {
+    quote: {
+      zh: '八字报告里对我日主的分析精准得让我起鸡皮疙瘩。感觉它比我更了解我自己。',
+      en: 'The Day Master analysis was so accurate it gave me chills. It felt like it knew me better than I know myself.',
+    },
+    author: 'James K.',
+    location: { zh: '纽约', en: 'New York, US' },
+    avatar: '🇺🇸',
+  },
+  {
+    quote: {
+      zh: '我给团队里的每个人都做了命盘分析。现在我们用它来理解团队动态和协作方式。',
+      en: 'I ran charts for everyone on my team. We now use it to understand group dynamics and how we collaborate best.',
+    },
+    author: 'Lin W.',
+    location: { zh: '新加坡', en: 'Singapore, SG' },
+    avatar: '🇸🇬',
+  },
+] as const;
+
+// ────────────────────────────────────────────
+// 8. Trust Section Copy
+// ────────────────────────────────────────────
+export const trustPillars = [
+  {
+    icon: '🔬',
+    title: { zh: '结构化计算', en: 'Structured Calculation' },
+    desc: {
+      zh: '基于瑞士星历表(Swiss Ephemeris)精确到角秒级别的天文计算，非随机生成。',
+      en: 'Built on Swiss Ephemeris arc-second astronomical calculations, not random generation.',
+    },
+  },
+  {
+    icon: '🧠',
+    title: { zh: 'AI解释，不编造', en: 'AI Explains, Not Invents' },
+    desc: {
+      zh: 'AI基于经典命理文献和心理学框架进行解读，忠于原始星盘数据。',
+      en: 'AI interprets based on classical texts and psychological frameworks, faithful to raw chart data.',
+    },
+  },
+  {
+    icon: '🔒',
+    title: { zh: '隐私优先', en: 'Privacy-First' },
+    desc: {
+      zh: '银行级加密传输，绝不分享出生数据给第三方，随时可删除。',
+      en: 'Bank-grade encryption. Birth data is never shared with third parties. Delete anytime.',
+    },
+  },
+  {
+    icon: '⚖️',
+    title: { zh: '负责任的解读', en: 'Responsible Interpretation' },
+    desc: {
+      zh: '提供有深度的自我探索工具，明确标注为参考而非绝对预测。',
+      en: 'A tool for deep self-exploration, clearly framed as insight — not absolute prediction.',
+    },
   },
 ] as const;
