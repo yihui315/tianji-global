@@ -891,8 +891,8 @@ function TestimonialsSection() {
         <div className="relative overflow-hidden">
           <motion.div
             className="flex gap-6"
-            animate={{ x: [0, '-50%'] }}
-            transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
+            animate={{ x: [0, `-${100 / 2}%`] }}
+            transition={{ duration: testimonialData.length * 6, repeat: Infinity, ease: 'linear' }}
           >
             {[...testimonialData, ...testimonialData].map((item, i) => (
               <div
