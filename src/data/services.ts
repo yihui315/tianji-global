@@ -11,19 +11,20 @@ export interface ServiceItem {
   image?: string;
 }
 
+/** Local AI-generated preview images served from /public/assets/services/ */
 const IMG = {
-  ziwei:      'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2Fc23d4d4b-9592-4daf-8c18-ab130678a843_aigc.jpeg',
-  bazi:       'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2F66916bde-89ae-4701-a2e5-17af95f8caff_aigc.jpeg',
-  yijing:     'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2Fb1f57a13-1199-4896-91c2-397b405ad9ee_aigc.jpeg',
-  western:    'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2Fa045568b-75eb-4ea7-b784-a3a854272534_aigc.jpeg',
-  synastry:   'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2F087fe8e4-e349-4475-a3e3-ee88b6740260_aigc.jpeg',
-  tarot:      'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2Fa5fa25e1-45e0-417e-86c1-268d16477196_aigc.jpeg',
-  numerology: 'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2F37ba284d-c183-4ee0-9a1e-74e24fc688b5_aigc.jpeg',
-  solreturn:  'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2Fafc7b38d-d56f-4aae-8bbd-7d4b146eed14_aigc.jpeg',
-  transit:    'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2Fe0a9c236-3fbb-4f19-8e84-73a6ecda76e2_aigc.jpeg',
-  fengshui:   'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2F744ffd4c-a1da-48c1-a213-083978c3a966_aigc.jpeg',
-  electional: 'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2F8d3be982-36bf-4a3a-8b35-4bcb26083112_aigc.jpeg',
-  horary:     'https://hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/image_inference_output%2Ftalkie%2Fprod%2Fimg%2F2026-04-12%2F4fbed2f5-def8-4182-a5c2-9b6de72a6eba_aigc.jpeg',
+  ziwei:      '/assets/services/ziwei.jpg',
+  bazi:       '/assets/services/bazi.jpg',
+  yijing:     '/assets/services/yijing.jpg',
+  western:    '/assets/services/western.jpg',
+  synastry:   '/assets/services/synastry.jpg',
+  tarot:      '/assets/services/tarot.jpg',
+  numerology: '/assets/services/numerology.jpg',
+  solreturn:  '/assets/services/solar-return.jpg',
+  transit:    '/assets/services/transit.jpg',
+  fengshui:   '/assets/services/fengshui.jpg',
+  electional: '/assets/services/electional.jpg',
+  horary:     '/assets/services/horary.jpg',
 };
 
 export const SERVICES: ServiceItem[] = [
