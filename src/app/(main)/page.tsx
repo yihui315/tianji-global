@@ -116,6 +116,14 @@ function PrimaryCTA({ href = '/western', className = '' }: { href?: string; clas
    Layout: Full-width centered · Static · No heavy animation
    Data: Chinese heavenly stems, earthly branches, palace names
    ═══════════════════════════════════════════ */
+const ELEMENT_COLORS: Record<string, string> = {
+  '水': 'text-blue-400/70',
+  '火': 'text-red-400/70',
+  '土': 'text-yellow-600/70',
+  '木': 'text-emerald-400/70',
+  '金': 'text-amber-300/70',
+};
+
 function StructureGrid() {
   const { lang } = useLanguage();
 
@@ -140,14 +148,6 @@ function StructureGrid() {
     { zh: '福德', en: 'Fortune', star: '天相', starEn: 'Tian Xiang' },
     { zh: '父母', en: 'Parents', star: '天梁', starEn: 'Tian Liang' },
   ];
-
-  const elementColors: Record<string, string> = {
-    '水': 'text-blue-400/70',
-    '火': 'text-red-400/70',
-    '土': 'text-yellow-600/70',
-    '木': 'text-emerald-400/70',
-    '金': 'text-amber-300/70',
-  };
 
   return (
     <div className="w-full">
@@ -176,7 +176,7 @@ function StructureGrid() {
                 <span className="text-xl sm:text-2xl text-white/50">{p.branch}</span>
                 <span className="text-[8px] text-white/20">{p.branchPy}</span>
               </div>
-              <span className={`text-[10px] mt-3 ${elementColors[p.element] || 'text-white/40'}`}>
+              <span className={`text-[10px] mt-3 ${ELEMENT_COLORS[p.element] || 'text-white/40'}`}>
                 {lang === 'zh' ? p.element : p.elementEn}
               </span>
             </div>
