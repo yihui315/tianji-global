@@ -143,6 +143,7 @@ function StructureGrid() {
 
   const elementColors: Record<string, string> = {
     '水': 'text-blue-400/70',
+    '火': 'text-red-400/70',
     '土': 'text-yellow-600/70',
     '木': 'text-emerald-400/70',
     '金': 'text-amber-300/70',
@@ -494,7 +495,8 @@ function LifeTimelineWide() {
     y: padT + chartH - ((v - 30) / 70) * chartH,
   }));
 
-  // Smooth curve using cubic bezier
+  // Smooth curve using cubic bezier — control points at 40% of segment width
+  // creates natural curves without overshooting between data points
   const smoothPath = points.reduce((acc, p, i, arr) => {
     if (i === 0) return `M${p.x.toFixed(1)},${p.y.toFixed(1)}`;
     const prev = arr[i - 1];
