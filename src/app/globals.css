@@ -9,12 +9,25 @@
    ══════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Core palette */
-  --mystic-bg-primary: #030014;
-  --mystic-bg-nebula: rgba(88, 28, 135, 0.3);
-  --mystic-accent-gold: #f59e0b;
-  --mystic-accent-purple: #7c3aed;
-  --mystic-glow-color: rgba(168, 130, 255, 0.3);
+  /*
+   * Core palette — synced with src/design-system/design-tokens.ts
+   * When updating brand colors, update design-tokens.ts first,
+   * then mirror changes here for CSS-only consumers.
+   */
+  --mystic-bg-primary: #030014;          /* colors.bgPrimary   */
+  --mystic-bg-nebula: rgba(88, 28, 135, 0.3); /* colors.bgNebula */
+  --mystic-accent-gold: #F59E0B;         /* colors.gold         */
+  --mystic-accent-purple: #7C3AED;       /* colors.purple       */
+  --mystic-glow-color: rgba(168, 130, 255, 0.3); /* colors.glowPurple */
+
+  /* Extended tokens from design-tokens.ts */
+  --mystic-accent-gold-light: #FCD34D;   /* colors.goldLight    */
+  --mystic-accent-purple-light: #A78BFA; /* colors.purpleLight  */
+  --mystic-text-primary: #FFFFFF;         /* colors.textPrimary  */
+  --mystic-text-secondary: rgba(255, 255, 255, 0.7);  /* colors.textSecondary */
+  --mystic-text-tertiary: rgba(255, 255, 255, 0.4);   /* colors.textTertiary  */
+  --mystic-text-muted: rgba(255, 255, 255, 0.25);     /* colors.textMuted     */
+  --mystic-border-subtle: rgba(255, 255, 255, 0.06);  /* colors.borderSubtle  */
 
   /* Tunable parameters (changed via ConfigPanel) */
   --vignette-intensity: 0.8;
