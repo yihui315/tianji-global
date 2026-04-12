@@ -282,6 +282,7 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
     'footer.solreturn': { zh: '太阳返照', en: 'Solar Return' },
     'footer.fengshui': { zh: '风水布局', en: 'Feng Shui' },
     'footer.electional': { zh: '择日择吉', en: 'Electional' },
+    'footer.relationship': { zh: '关系合盘', en: 'Relationship' },
     'footer.about': { zh: '关于天机', en: 'About TianJi' },
     'footer.pricing.link': { zh: '价格方案', en: 'Pricing' },
     'footer.privacy': { zh: '隐私政策', en: 'Privacy Policy' },

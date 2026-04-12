@@ -1574,6 +1574,7 @@ function Home() {
                   { key: 'footer.solreturn', href: '/solar-return' },
                   { key: 'footer.fengshui', href: '/fengshui' },
                   { key: 'footer.electional', href: '/electional' },
+                  { key: 'footer.relationship', href: '/relationship/new' },
                 ].map((link) => (
                   <li key={link.href}>
                     <a href={link.href} className="text-sm transition-colors duration-200" style={{ color: colors.textMuted }}>
