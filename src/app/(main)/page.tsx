@@ -24,6 +24,7 @@ import {
   pricingPlans,
   testimonials as testimonialTokens,
   ctaLabels,
+  trustPillars,
 } from '@/design-system/content-tokens';
 
 /**
@@ -114,6 +115,7 @@ function PrimaryCTA({ href = '/western', className = '' }: { href?: string; clas
    STORY BLOCK 1: BaZi Pillar Grid Visual
    ═══════════════════════════════════════════ */
 function BaZiPillarGrid({ active }: { active: boolean }) {
+  const { lang } = useLanguage();
   const pillars = [
     { label: '年柱', stem: '壬', branch: '寅', labelEn: 'Year' },
     { label: '月柱', stem: '戊', branch: '午', labelEn: 'Month' },
@@ -121,16 +123,20 @@ function BaZiPillarGrid({ active }: { active: boolean }) {
     { label: '时柱', stem: '庚', branch: '申', labelEn: 'Time' },
   ];
   const activeIdx = active ? 2 : 0;
+  const badges = lang === 'zh'
+    ? [{ label: '甲木日主', active: activeIdx === 2 }, { label: '天蝎上升', active: false }, { label: '大运·壬寅', active: false }]
+    : [{ label: 'Day Master: Jia', active: activeIdx === 2 }, { label: 'Scorpio Rising', active: false }, { label: 'Decade: Ren-Yin', active: false }];
 
   return (
     <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 w-full">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h4 className="text-sm font-serif text-white/80">八字四柱</h4>
-          <p className="text-white/25 text-[10px] mt-0.5">BaZi Pillar Structure</p>
+          <h4 className="text-sm font-serif text-white/80">
+            {lang === 'zh' ? '八字四柱' : 'BaZi Four Pillars'}
+          </h4>
         </div>
         <span className="text-white/15 text-[10px] bg-white/[0.04] px-2.5 py-1 rounded-full">
-          LIVE · 实时
+          {lang === 'zh' ? '结构' : 'Structure'}
         </span>
       </div>
       <div className="grid grid-cols-4 gap-3">
@@ -147,7 +153,9 @@ function BaZiPillarGrid({ active }: { active: boolean }) {
                 : 'border-white/[0.06] bg-white/[0.02]'
             }`}
           >
-            <span className="text-[10px] text-white/30 mb-1">{p.labelEn}</span>
+            <span className="text-[10px] text-white/30 mb-1">
+              {lang === 'zh' ? p.label : p.labelEn}
+            </span>
             <span className={`text-xl font-serif ${i === activeIdx ? 'text-amber-300' : 'text-white/60'}`}>
               {p.stem}
             </span>
@@ -158,11 +166,7 @@ function BaZiPillarGrid({ active }: { active: boolean }) {
         ))}
       </div>
       <div className="flex flex-wrap gap-2 mt-5">
-        {[
-          { label: '甲木日主', active: activeIdx === 2 },
-          { label: '天蝎上升', active: false },
-          { label: '大运·壬寅', active: false },
-        ].map((badge) => (
+        {badges.map((badge) => (
           <motion.span
             key={badge.label}
             animate={{ opacity: badge.active ? 1 : 0.3, scale: badge.active ? 1 : 0.97 }}
@@ -185,15 +189,17 @@ function BaZiPillarGrid({ active }: { active: boolean }) {
    STORY BLOCK 2: Two-Circle Venn Diagram
    ═══════════════════════════════════════════ */
 function TwoCircleDiagram({ active }: { active: boolean }) {
+  const { lang } = useLanguage();
   return (
     <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 w-full">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h4 className="text-sm font-serif text-white/80">合盘关系</h4>
-          <p className="text-white/25 text-[10px] mt-0.5">Relationship Synastry</p>
+          <h4 className="text-sm font-serif text-white/80">
+            {lang === 'zh' ? '合盘关系' : 'Relationship Synastry'}
+          </h4>
         </div>
         <span className="text-white/15 text-[10px] bg-white/[0.04] px-2.5 py-1 rounded-full">
-          LIVE · 实时
+          {lang === 'zh' ? '互动' : 'Interaction'}
         </span>
       </div>
       <div className="relative w-48 h-36 mx-auto">
@@ -206,8 +212,12 @@ function TwoCircleDiagram({ active }: { active: boolean }) {
           className="absolute left-0 top-1/2 -translate-y-1/2 w-28 h-28 rounded-full border-2 border-purple-400/40 bg-purple-400/5 flex flex-col items-center justify-center"
           style={{ boxShadow: '0 0 30px rgba(168,130,255,0.1)' }}
         >
-          <span className="text-purple-300/80 text-xs font-serif">天府</span>
-          <span className="text-purple-200/60 text-[10px]">紫微</span>
+          <span className="text-purple-300/80 text-xs font-serif">
+            {lang === 'zh' ? '天府' : 'Tian Fu'}
+          </span>
+          <span className="text-purple-200/60 text-[10px]">
+            {lang === 'zh' ? '紫微' : 'Zi Wei'}
+          </span>
         </motion.div>
         {/* Right circle */}
         <motion.div
@@ -218,8 +228,12 @@ function TwoCircleDiagram({ active }: { active: boolean }) {
           className="absolute right-0 top-1/2 -translate-y-1/2 w-28 h-28 rounded-full border-2 border-amber-400/40 bg-amber-400/5 flex flex-col items-center justify-center"
           style={{ boxShadow: '0 0 30px rgba(245,158,11,0.1)' }}
         >
-          <span className="text-amber-300/80 text-xs font-serif">贪狼</span>
-          <span className="text-amber-200/60 text-[10px]">武曲</span>
+          <span className="text-amber-300/80 text-xs font-serif">
+            {lang === 'zh' ? '贪狼' : 'Tan Lang'}
+          </span>
+          <span className="text-amber-200/60 text-[10px]">
+            {lang === 'zh' ? '武曲' : 'Wu Qu'}
+          </span>
         </motion.div>
         {/* Overlap area highlight */}
         <motion.div
@@ -229,7 +243,7 @@ function TwoCircleDiagram({ active }: { active: boolean }) {
           viewport={{ once: true }}
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center"
         >
-          <span className="text-[8px] text-white/60">缘</span>
+          <span className="text-[8px] text-white/60">{lang === 'zh' ? '缘' : '∞'}</span>
         </motion.div>
         {/* Animated energy lines */}
         {[0, 1, 2].map((i) => (
@@ -253,12 +267,10 @@ function TwoCircleDiagram({ active }: { active: boolean }) {
         ))}
       </div>
       <div className="flex flex-wrap gap-2 mt-5">
-        {[
-          { label: '天府', color: 'purple' },
-          { label: '贪狼', color: 'amber' },
-          { label: '紫微', color: 'purple' },
-          { label: '武曲', color: 'amber' },
-        ].map((badge) => (
+        {(lang === 'zh'
+          ? [{ label: '天府', color: 'purple' }, { label: '贪狼', color: 'amber' }, { label: '紫微', color: 'purple' }, { label: '武曲', color: 'amber' }]
+          : [{ label: 'Tian Fu', color: 'purple' }, { label: 'Tan Lang', color: 'amber' }, { label: 'Zi Wei', color: 'purple' }, { label: 'Wu Qu', color: 'amber' }]
+        ).map((badge) => (
           <span
             key={badge.label}
             className={`text-[10px] border rounded-full px-3 py-1 ${
@@ -279,6 +291,7 @@ function TwoCircleDiagram({ active }: { active: boolean }) {
    STORY BLOCK 3: Life Timeline SVG
    ═══════════════════════════════════════════ */
 function LifeTimelineVisual({ active }: { active: boolean }) {
+  const { lang } = useLanguage();
   const decades = ['10s', '20s', '30s', '40s', '50s', '60s', '70s'];
   const values = [55, 68, 82, 75, 91, 84, 72];
   const w = 340;
@@ -299,11 +312,12 @@ function LifeTimelineVisual({ active }: { active: boolean }) {
     <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.06] border border-white/[0.08] rounded-2xl sm:rounded-3xl p-6 sm:p-8 w-full">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h4 className="text-sm font-serif text-white/80">人生运势曲线</h4>
-          <p className="text-white/25 text-[10px] mt-0.5">Life Fortune Timeline</p>
+          <h4 className="text-sm font-serif text-white/80">
+            {lang === 'zh' ? '人生运势曲线' : 'Life Fortune Timeline'}
+          </h4>
         </div>
         <span className="text-white/15 text-[10px] bg-white/[0.04] px-2.5 py-1 rounded-full">
-          LIVE · 实时
+          {lang === 'zh' ? '时间线' : 'Timeline'}
         </span>
       </div>
       <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-full" preserveAspectRatio="xMidYMid meet">
@@ -378,7 +392,7 @@ function LifeTimelineVisual({ active }: { active: boolean }) {
                 fontSize="7"
                 fontFamily="serif"
               >
-                ▲ Peak · 高峰
+                {lang === 'zh' ? '▲ 高峰' : '▲ Peak'}
               </text>
             </g>
           );
@@ -394,18 +408,17 @@ function LifeTimelineVisual({ active }: { active: boolean }) {
                 fill="rgba(168,130,255,0.6)"
                 fontSize="6"
               >
-                ○ Transition · 转折
+                {lang === 'zh' ? '○ 转折' : '○ Shift'}
               </text>
             </g>
           );
         })()}
       </svg>
       <div className="flex flex-wrap gap-2 mt-4">
-        {[
-          { label: '高峰', sub: 'Peak', color: 'amber' },
-          { label: '平稳', sub: 'Steady', color: 'purple' },
-          { label: '转折', sub: 'Transition', color: 'purple' },
-        ].map((badge) => (
+        {(lang === 'zh'
+          ? [{ label: '高峰', color: 'amber' }, { label: '平稳', color: 'purple' }, { label: '转折', color: 'purple' }]
+          : [{ label: 'Peak', color: 'amber' }, { label: 'Steady', color: 'purple' }, { label: 'Shift', color: 'purple' }]
+        ).map((badge) => (
           <span
             key={badge.label}
             className={`text-[10px] border rounded-full px-3 py-1 ${
@@ -414,7 +427,7 @@ function LifeTimelineVisual({ active }: { active: boolean }) {
                 : 'border-purple-400/20 text-purple-300/60'
             }`}
           >
-            {badge.label} · {badge.sub}
+            {badge.label}
           </span>
         ))}
       </div>
@@ -508,17 +521,17 @@ function StoryVisualCard({ activeId }: { activeId: string }) {
    Premium Circular Energy Chart (SVG) — Enhanced
    ═══════════════════════════════════════════ */
 function CircularEnergyChart() {
-  const { t } = useLanguage();
+  const { lang } = useLanguage();
   const size = 220;
   const center = size / 2;
   const outerR = 85;
   const arcs = [
-    { label: '财运', labelEn: 'Wealth', value: 0.85, color: '#F59E0B' },
-    { label: '事业', labelEn: 'Career', value: 0.72, color: '#A78BFA' },
-    { label: '健康', labelEn: 'Health', value: 0.91, color: '#34D399' },
-    { label: '感情', labelEn: 'Love', value: 0.68, color: '#F472B6' },
-    { label: '学业', labelEn: 'Study', value: 0.78, color: '#60A5FA' },
-    { label: '人际', labelEn: 'Social', value: 0.88, color: '#FBBF24' },
+    { label: lang === 'zh' ? '财运' : 'Wealth', value: 0.85, color: '#F59E0B' },
+    { label: lang === 'zh' ? '事业' : 'Career', value: 0.72, color: '#A78BFA' },
+    { label: lang === 'zh' ? '健康' : 'Health', value: 0.91, color: '#34D399' },
+    { label: lang === 'zh' ? '感情' : 'Love', value: 0.68, color: '#F472B6' },
+    { label: lang === 'zh' ? '学业' : 'Study', value: 0.78, color: '#60A5FA' },
+    { label: lang === 'zh' ? '人际' : 'Social', value: 0.88, color: '#FBBF24' },
   ];
   const gap = 3;
   const arcSpan = (360 - arcs.length * gap) / arcs.length;
@@ -570,7 +583,7 @@ function CircularEnergyChart() {
           const endDeg = startDeg + arcSpan * arc.value;
           const fullEnd = startDeg + arcSpan;
           return (
-            <g key={arc.labelEn}>
+            <g key={arc.label}>
               <path
                 d={describeArc(startDeg, fullEnd, outerR)}
                 fill="none"
@@ -623,7 +636,7 @@ function CircularEnergyChart() {
           82
         </text>
         <text x={center} y={center + 12} textAnchor="middle" fill="rgba(255,255,255,0.25)" fontSize="7">
-          {t('charts.sample').split('·')[0].trim()} · Overall
+          {lang === 'zh' ? '示例' : 'Sample'} · Overall
         </text>
       </svg>
     </div>
@@ -634,6 +647,7 @@ function CircularEnergyChart() {
    Premium Line Chart — Life Timeline (SVG) — Enhanced
    ═══════════════════════════════════════════ */
 function LifeTimelineChart() {
+  const { lang } = useLanguage();
   const decades = ['10s', '20s', '30s', '40s', '50s', '60s', '70s'];
   const values = [55, 68, 82, 75, 91, 84, 72];
   const w = 340;
@@ -719,7 +733,7 @@ function LifeTimelineChart() {
         const peak = values.indexOf(Math.max(...values));
         return (
           <text x={points[peak].x} y={points[peak].y - 10} textAnchor="middle" fill="rgba(245,158,11,0.8)" fontSize="7" fontFamily="serif">
-            ▲ Peak · 高峰
+            {lang === 'zh' ? '▲ 高峰' : '▲ Peak'}
           </text>
         );
       })()}
@@ -727,7 +741,7 @@ function LifeTimelineChart() {
       {(() => {
         return (
           <text x={points[3].x} y={points[3].y - 10} textAnchor="middle" fill="rgba(168,130,255,0.6)" fontSize="6">
-            ○ Transition · 转折
+            {lang === 'zh' ? '○ 转折' : '○ Shift'}
           </text>
         );
       })()}
@@ -739,11 +753,13 @@ function LifeTimelineChart() {
    Signal Layer Bars — Enhanced
    ═══════════════════════════════════════════ */
 function SignalLayerBars() {
-  const { t } = useLanguage();
-  const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'];
+  const { t, lang } = useLanguage();
+  const months = lang === 'zh'
+    ? ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月']
+    : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
   const layers = [
-    { name: '事业', nameEn: 'Career', values: [60, 75, 55, 82, 70, 88, 78, 65], color: 'rgba(168,130,255,0.6)' },
-    { name: '财运', nameEn: 'Wealth', values: [50, 65, 70, 60, 80, 72, 68, 75], color: 'rgba(245,158,11,0.5)' },
+    { name: lang === 'zh' ? '事业' : 'Career', values: [60, 75, 55, 82, 70, 88, 78, 65], color: 'rgba(168,130,255,0.6)' },
+    { name: lang === 'zh' ? '财运' : 'Wealth', values: [50, 65, 70, 60, 80, 72, 68, 75], color: 'rgba(245,158,11,0.5)' },
   ];
   const max = 100;
 
@@ -752,10 +768,10 @@ function SignalLayerBars() {
       {/* Legend */}
       <div className="flex items-center gap-4 mb-4">
         {layers.map((l) => (
-          <div key={l.nameEn} className="flex items-center gap-1.5">
+          <div key={l.name} className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full" style={{ background: l.color }} />
             <span className="text-[10px] text-white/40">
-              {l.name} <span className="text-white/20">{l.nameEn}</span>
+              {l.name}
             </span>
           </div>
         ))}
@@ -769,7 +785,7 @@ function SignalLayerBars() {
             <div className="w-full flex gap-0.5 items-end h-28">
               {layers.map((layer, li) => (
                 <motion.div
-                  key={layer.nameEn}
+                  key={layer.name}
                   className="flex-1 rounded-t-sm relative group cursor-pointer"
                   style={{ background: layer.color }}
                   initial={{ height: 0 }}
@@ -797,13 +813,13 @@ function SignalLayerBars() {
    Insight Chips
    ═══════════════════════════════════════════ */
 function InsightChips() {
-  const { t, lang } = useLanguage();
+  const { lang } = useLanguage();
   const chips = [
-    { label: '事业上升期', en: 'Career Rising', status: 'positive' as const },
-    { label: '感情需关注', en: 'Love: Caution', status: 'warning' as const },
-    { label: '健康良好', en: 'Health: Good', status: 'positive' as const },
-    { label: '财运波动', en: 'Wealth: Volatile', status: 'neutral' as const },
-    { label: '贵人运强', en: 'Strong Benefactors', status: 'positive' as const },
+    { zh: '事业上升期', en: 'Career Rising', status: 'positive' as const },
+    { zh: '感情需关注', en: 'Love: Caution', status: 'warning' as const },
+    { zh: '健康良好', en: 'Health: Good', status: 'positive' as const },
+    { zh: '财运波动', en: 'Wealth: Volatile', status: 'neutral' as const },
+    { zh: '贵人运强', en: 'Strong Benefactors', status: 'positive' as const },
   ];
 
   const statusStyles = {
@@ -823,7 +839,7 @@ function InsightChips() {
           viewport={{ once: true }}
           className={`text-[10px] border rounded-full px-3 py-1 ${statusStyles[chip.status]}`}
         >
-          {lang === 'zh' ? chip.label : chip.en}
+          {lang === 'zh' ? chip.zh : chip.en}
         </motion.span>
       ))}
     </div>
@@ -836,11 +852,11 @@ function InsightChips() {
 function TestimonialsSection() {
   const { t, lang } = useLanguage();
 
-  const testimonialData = testimonialTokens.map((item, i) => ({
+  const testimonialData = testimonialTokens.map((item) => ({
     quote: item.quote[lang],
     author: item.author,
-    location: item.location,
-    flag: ['🇬🇧', '🇨🇦', '🇯🇵'][i],
+    location: item.location[lang],
+    flag: item.avatar,
   }));
 
   const stats = [
@@ -875,8 +891,8 @@ function TestimonialsSection() {
         <div className="relative overflow-hidden">
           <motion.div
             className="flex gap-6"
-            animate={{ x: [0, '-33.333%'] }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            animate={{ x: [0, '-50%'] }}
+            transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
           >
             {[...testimonialData, ...testimonialData].map((item, i) => (
               <div
@@ -933,7 +949,7 @@ function PricingSection() {
       <div className="max-w-5xl mx-auto px-6 sm:px-8">
         <SectionHeader titleKey="pricing" subtitle={t('pricing.subtitle')} />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-start">
           {plans.map((plan) => {
             const planToken = pricingPlans[plan.key];
             return (
@@ -943,6 +959,7 @@ function PricingSection() {
                 tagline={planToken.tagline[lang]}
                 price={planToken.price}
                 period={planToken.period[lang]}
+                identityBadge={planToken.identity[lang]}
                 features={plan.features.map((fKey) => ({
                   label: t(fKey),
                   included: true,
@@ -950,7 +967,7 @@ function PricingSection() {
                 ctaLabel={plan.cta}
                 ctaHref={plan.href}
                 highlighted={plan.highlighted}
-                className={plan.highlighted ? 'scale-105' : ''}
+                className={plan.highlighted ? 'md:scale-105 md:-my-4 relative z-10' : ''}
               />
             );
           })}
@@ -1007,72 +1024,37 @@ function FAQSection() {
 }
 
 /* ═══════════════════════════════════════════
-   Tools Grid Section — uses SectionHeader + GlassCard from design system
+   Tools Grid Section — Compressed, uses SectionHeader + GlassCard
    ═══════════════════════════════════════════ */
 function ToolsSection() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [expanded, setExpanded] = useState(false);
   const displayServices = expanded ? SERVICES : SERVICES.slice(0, 6);
 
   return (
-    <section id="services" className="relative z-10 py-28 sm:py-36">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+    <section id="services" className="relative z-10 py-20 sm:py-28">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <SectionHeader titleKey="services" />
-        <p className="text-center text-xs tracking-widest uppercase mb-12" style={{ color: colors.textMuted }}>
+        <p className="text-center text-xs tracking-widest uppercase mb-10" style={{ color: colors.textMuted }}>
           {t('tools.subtitle')}
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 opacity-90">
           {displayServices.map((s, i) => (
             <FadeInWhenVisible key={s.href} delay={i * 0.04}>
-              <GlassCard level="card" hoverLift>
-                <a
-                  href={s.href}
-                  className="block p-4"
-                >
-                  <div className="text-3xl mb-3">
-                    {s.icon}
-                  </div>
-                  <h3 className="text-base font-serif mb-1" style={{ color: colors.textPrimary }}>{s.title}</h3>
-                  <p className="text-xs" style={{ color: colors.textTertiary }}>{s.desc}</p>
-                  <div className="mt-4 flex items-center gap-1.5 text-xs" style={{ color: colors.goldDim }}>
-                    {t('tools.start')}
-                    <span className="text-sm inline-block">→</span>
-                  </div>
-                </a>
-              </GlassCard>
               <a
                 href={s.href}
-                className="group block rounded-2xl overflow-hidden border border-white/[0.06] hover:border-amber-300/30 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/[0.12]"
+                className="group block rounded-xl overflow-hidden border border-white/[0.06] hover:border-amber-300/30 transition-all duration-200 hover:-translate-y-0.5"
               >
-                {/* AI-generated service image */}
-                <div className="relative h-36 overflow-hidden">
-                  {s.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={s.image}
-                      alt={s.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-purple-900/40 to-indigo-900/60 flex items-center justify-center">
-                      <span className="text-4xl opacity-40">{s.icon}</span>
-                    </div>
-                  )}
-                  {/* Icon badge overlay */}
-                  <div className="absolute top-3 left-3 w-9 h-9 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-lg shadow-lg">
-                    {s.icon}
-                  </div>
-                  {/* Gradient overlay for text readability */}
-                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/60 to-transparent" />
-                </div>
-                {/* Card content */}
-                <div className="p-4 bg-white/[0.015]">
-                  <h3 className="text-sm font-serif text-white mb-0.5 group-hover:text-amber-100 transition-colors">{s.title}</h3>
-                  <p className="text-white/35 text-xs leading-relaxed">{s.desc}</p>
-                  <div className="mt-3 text-amber-300/50 group-hover:text-amber-200 flex items-center gap-1.5 text-xs transition-colors duration-200">
+                {/* Card content — compact */}
+                <div className="p-3 sm:p-4 bg-white/[0.015]">
+                  <div className="text-2xl mb-2">{s.icon}</div>
+                  <h3 className="text-sm font-serif text-white mb-0.5 group-hover:text-amber-100 transition-colors">
+                    {s.title[lang]}
+                  </h3>
+                  <p className="text-white/30 text-[11px] leading-relaxed">{s.desc[lang]}</p>
+                  <div className="mt-2 text-amber-300/40 group-hover:text-amber-200 flex items-center gap-1 text-[11px] transition-colors duration-200">
                     {t('tools.start')}
-                    <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">→</span>
+                    <span className="text-xs group-hover:translate-x-0.5 transition-transform inline-block">→</span>
                   </div>
                 </div>
               </a>
@@ -1083,7 +1065,7 @@ function ToolsSection() {
         {!expanded && (
           <div className="flex justify-center mt-8">
             <MysticButton variant="outline" size="md" onClick={() => setExpanded(true)}>
-              {t('tools.cta')} →
+              {lang === 'zh' ? '探索全部工具' : 'Explore More Tools'} →
             </MysticButton>
           </div>
         )}
@@ -1240,7 +1222,9 @@ function Home() {
                 <InsightChips />
                 <div className="mt-5 rounded-xl p-3" style={{ background: colors.bgSurface, border: `1px solid ${colors.borderSubtle}` }}>
                   <p className="text-xs leading-relaxed italic" style={{ color: colors.textMuted }}>
-                    &quot;当前大运壬寅，印星透干生身，事业运势处于上升通道。建议把握2024-2026年窗口期...&quot;
+                    {lang === 'zh'
+                      ? '"当前大运壬寅，印星透干生身，事业运势处于上升通道。建议把握2024-2026年窗口期..."'
+                      : '"Current decade pillar Ren-Yin: Indirect Resource star supports the Day Master. Career momentum is rising. Seize the 2024–2026 window..."'}
                   </p>
                 </div>
               </GlassCard>
@@ -1256,11 +1240,18 @@ function Home() {
                   </a>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {[
-                    { titleKey: 'charts.daymaster', content: '甲木日主，生于春月，得令旺相。天干透壬水为印星，有生发之力。' },
-                    { titleKey: 'charts.ascendant', content: '天蝎座上升，冥王星合轴，赋予强大的洞察力和转化能力。' },
-                    { titleKey: 'charts.primarystar', content: '紫微天府同宫，命宫坐辰，天生领导气质，一生贵人助力。' },
-                  ].map((item, i) => (
+                  {(lang === 'zh'
+                    ? [
+                        { titleKey: 'charts.daymaster', content: '甲木日主，生于春月，得令旺相。天干透壬水为印星，有生发之力。' },
+                        { titleKey: 'charts.ascendant', content: '天蝎座上升，冥王星合轴，赋予强大的洞察力和转化能力。' },
+                        { titleKey: 'charts.primarystar', content: '紫微天府同宫，命宫坐辰，天生领导气质，一生贵人助力。' },
+                      ]
+                    : [
+                        { titleKey: 'charts.daymaster', content: 'Jia Wood Day Master, born in spring. Heavenly Stem reveals Ren Water as Indirect Resource, fueling growth.' },
+                        { titleKey: 'charts.ascendant', content: 'Scorpio Rising with Pluto conjunct axis grants deep perception and transformative ability.' },
+                        { titleKey: 'charts.primarystar', content: 'Zi Wei + Tian Fu share the Life Palace in Chen, conferring natural leadership and lifelong benefactors.' },
+                      ]
+                  ).map((item, i) => (
                     <motion.div
                       key={i}
                       initial={{ opacity: 0, y: 12 }}
@@ -1283,6 +1274,28 @@ function Home() {
 
       {/* ═══════ 6. Testimonials / Social Proof ═══════ */}
       <TestimonialsSection />
+
+      {/* ═══════ 6.5. Trust Section ═══════ */}
+      <section className="relative z-10 py-20 sm:py-28">
+        <div className="max-w-5xl mx-auto px-6 sm:px-8">
+          <SectionHeader title={t('trust.heading')} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {trustPillars.map((pillar, i) => (
+              <FadeInWhenVisible key={pillar.icon} delay={i * 0.08}>
+                <GlassCard level="card" className="p-5 sm:p-6 text-center h-full">
+                  <span className="text-2xl mb-3 block">{pillar.icon}</span>
+                  <h3 className="text-sm font-medium mb-2" style={{ color: colors.textPrimary }}>
+                    {pillar.title[lang]}
+                  </h3>
+                  <p className="text-[11px] leading-relaxed" style={{ color: colors.textTertiary }}>
+                    {pillar.desc[lang]}
+                  </p>
+                </GlassCard>
+              </FadeInWhenVisible>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ═══════ 7. Pricing Preview ═══════ */}
       <PricingSection />
@@ -1326,15 +1339,15 @@ function Home() {
               <h4 className="text-sm font-medium mb-3" style={{ color: colors.textTertiary }}>{t('footer.products')}</h4>
               <ul className="space-y-2">
                 {[
-                  { label: '紫微斗数', href: '/ziwei' },
-                  { label: '八字命理', href: '/bazi' },
-                  { label: '西方星盘', href: '/western' },
-                  { label: '塔罗占卜', href: '/tarot' },
-                  { label: '易经', href: '/yijing' },
+                  { key: 'footer.ziwei', href: '/ziwei' },
+                  { key: 'footer.bazi', href: '/bazi' },
+                  { key: 'footer.western', href: '/western' },
+                  { key: 'footer.tarot', href: '/tarot' },
+                  { key: 'footer.yijing', href: '/yijing' },
                 ].map((link) => (
                   <li key={link.href}>
                     <a href={link.href} className="text-sm transition-colors duration-200" style={{ color: colors.textMuted }}>
-                      {link.label}
+                      {t(link.key)}
                     </a>
                   </li>
                 ))}
@@ -1346,15 +1359,15 @@ function Home() {
               <h4 className="text-sm font-medium mb-3" style={{ color: colors.textTertiary }}>{t('footer.advanced')}</h4>
               <ul className="space-y-2">
                 {[
-                  { label: '合盘分析', href: '/synastry' },
-                  { label: 'Transit推运', href: '/transit' },
-                  { label: '太阳返照', href: '/solar-return' },
-                  { label: '风水布局', href: '/fengshui' },
-                  { label: '择日择吉', href: '/electional' },
+                  { key: 'footer.synastry', href: '/synastry' },
+                  { key: 'footer.transit', href: '/transit' },
+                  { key: 'footer.solreturn', href: '/solar-return' },
+                  { key: 'footer.fengshui', href: '/fengshui' },
+                  { key: 'footer.electional', href: '/electional' },
                 ].map((link) => (
                   <li key={link.href}>
                     <a href={link.href} className="text-sm transition-colors duration-200" style={{ color: colors.textMuted }}>
-                      {link.label}
+                      {t(link.key)}
                     </a>
                   </li>
                 ))}
@@ -1366,15 +1379,15 @@ function Home() {
               <h4 className="text-sm font-medium mb-3" style={{ color: colors.textTertiary }}>{t('footer.trust.links')}</h4>
               <ul className="space-y-2">
                 {[
-                  { label: '关于天机', href: '/about' },
-                  { label: '价格方案', href: '/pricing' },
-                  { label: '隐私政策', href: '/legal/privacy' },
-                  { label: '服务条款', href: '/legal/terms' },
-                  { label: '联系我们', href: '/about#contact' },
+                  { key: 'footer.about', href: '/about' },
+                  { key: 'footer.pricing.link', href: '/pricing' },
+                  { key: 'footer.privacy', href: '/legal/privacy' },
+                  { key: 'footer.terms', href: '/legal/terms' },
+                  { key: 'footer.contact', href: '/about#contact' },
                 ].map((link) => (
                   <li key={link.href}>
                     <a href={link.href} className="text-sm transition-colors duration-200" style={{ color: colors.textMuted }}>
-                      {link.label}
+                      {t(link.key)}
                     </a>
                   </li>
                 ))}
@@ -1387,12 +1400,10 @@ function Home() {
         <div style={{ borderTop: `1px solid ${colors.borderSubtle}` }}>
           <div className="max-w-7xl mx-auto px-6 sm:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-xs" style={{ color: colors.textMuted }}>
-              © {new Date().getFullYear()} TianJi Global · 天机全球. All rights reserved.
+              © {new Date().getFullYear()} TianJi Global. All rights reserved.
             </p>
             <p className="text-[10px] text-center sm:text-right max-w-xs" style={{ color: colors.textMuted }}>
-              {lang === 'zh'
-                ? '提供自我反思工具，不替代专业建议 · 🌐 中英双语'
-                : 'A tool for self-reflection, not a substitute for professional advice. 🌐 Bilingual'}
+              {t('footer.disclaimer')}
             </p>
           </div>
         </div>

@@ -150,8 +150,8 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
       en: sectionHeadings.testimonials.en,
     },
     'testimonials.subheading': {
-      zh: '真实用户，真实体验',
-      en: 'Real insights. Real people.',
+      zh: '来自全球思考者、创作者与探索者的真实使用体验',
+      en: 'Trusted by thinkers, creators, and seekers worldwide',
     },
     'testimonial.1': {
       zh: testimonialTokens[0].quote.zh,
@@ -270,6 +270,33 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
     'footer.products': { zh: '产品', en: 'Products' },
     'footer.advanced': { zh: '高级工具', en: 'Advanced' },
     'footer.trust.links': { zh: '信任与法律', en: 'Trust & Legal' },
+
+    // ── Footer link labels ──────────────────────
+    'footer.ziwei': { zh: '紫微斗数', en: 'Zi Wei Dou Shu' },
+    'footer.bazi': { zh: '八字命理', en: 'BaZi Analysis' },
+    'footer.western': { zh: '西方星盘', en: 'Western Chart' },
+    'footer.tarot': { zh: '塔罗占卜', en: 'Tarot Reading' },
+    'footer.yijing': { zh: '易经', en: 'Yi Jing Oracle' },
+    'footer.synastry': { zh: '合盘分析', en: 'Synastry' },
+    'footer.transit': { zh: 'Transit推运', en: 'Transits' },
+    'footer.solreturn': { zh: '太阳返照', en: 'Solar Return' },
+    'footer.fengshui': { zh: '风水布局', en: 'Feng Shui' },
+    'footer.electional': { zh: '择日择吉', en: 'Electional' },
+    'footer.about': { zh: '关于天机', en: 'About TianJi' },
+    'footer.pricing.link': { zh: '价格方案', en: 'Pricing' },
+    'footer.privacy': { zh: '隐私政策', en: 'Privacy Policy' },
+    'footer.terms': { zh: '服务条款', en: 'Terms of Service' },
+    'footer.contact': { zh: '联系我们', en: 'Contact Us' },
+    'footer.disclaimer': {
+      zh: '提供自我反思工具，不替代专业建议',
+      en: 'A tool for self-reflection, not a substitute for professional advice.',
+    },
+
+    // ── Trust Section ───────────────────────────
+    'trust.heading': {
+      zh: '为什么信赖天机',
+      en: 'Why Trust TianJi',
+    },
   };
 }
 

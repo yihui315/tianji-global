@@ -2,8 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 import { ArrowUpRight, Play } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function HeroCanvas() {
+  const { lang } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
   const zodiacVideoRef = useRef<HTMLVideoElement>(null);
@@ -139,7 +141,7 @@ export default function HeroCanvas() {
   }, []);
 
   // Split heading text into blur-word spans
-  const headingText = 'Destiny Awaits';
+  const headingText = lang === 'zh' ? '命运 已书写' : 'Destiny Awaits';
   const words = headingText.split(' ');
 
   return (
@@ -199,8 +201,8 @@ export default function HeroCanvas() {
       <div className="hero-content">
         {/* Badge */}
         <div className="hero-badge">
-          <span className="hero-badge-new">New</span>
-          <span>AI-Powered Fortune Telling</span>
+          <span className="hero-badge-new">{lang === 'zh' ? '全新' : 'New'}</span>
+          <span>{lang === 'zh' ? 'AI驱动命运解读' : 'AI-Powered Fortune Telling'}</span>
         </div>
 
         {/* Heading with BlurText animation */}
@@ -219,27 +221,42 @@ export default function HeroCanvas() {
 
         {/* Subtitle */}
         <p className="hero-subtitle">
-          Pure black background · Liquid glass UI<br />
-          Instrument Serif &amp; Barlow typography<br />
-          Stunning motion, wildly reimagined.
+          {lang === 'zh' ? (
+            <>
+              紫微 · 八字 · 星盘 · 塔罗<br />
+              中西命理全覆盖<br />
+              AI赋能 · 精准解读
+            </>
+          ) : (
+            <>
+              Zi Wei · BaZi · Western Chart · Tarot<br />
+              East meets West divination<br />
+              AI-powered precision readings
+            </>
+          )}
         </p>
 
         {/* CTA Buttons */}
         <div className="hero-cta">
           <a href="/birth-data" className="btn-glass btn-glass-solid">
-            Get Started <ArrowUpRight size={16} strokeWidth={2} />
+            {lang === 'zh' ? '开始探索' : 'Get Started'} <ArrowUpRight size={16} strokeWidth={2} />
           </a>
           <a href="/dashboard" className="btn-glass btn-glass-outline">
-            Watch Demo <Play size={14} strokeWidth={2} />
+            {lang === 'zh' ? '观看演示' : 'Watch Demo'} <Play size={14} strokeWidth={2} />
           </a>
         </div>
       </div>
 
       {/* ── Partners Bar ── */}
       <div className="hero-partners">
-        <div className="hero-partners-badge">Trusted by fortune seekers worldwide</div>
+        <div className="hero-partners-badge">
+          {lang === 'zh' ? '全球命运探索者信赖' : 'Trusted by fortune seekers worldwide'}
+        </div>
         <div className="hero-partners-names">
-          {['紫微斗数', '八字命理', '易经', '西方星盘', '塔罗'].map((name) => (
+          {(lang === 'zh'
+            ? ['紫微斗数', '八字命理', '易经', '西方星盘', '塔罗']
+            : ['Zi Wei', 'BaZi', 'Yi Jing', 'Western Chart', 'Tarot']
+          ).map((name) => (
             <span key={name} className="hero-partner-name">{name}</span>
           ))}
         </div>

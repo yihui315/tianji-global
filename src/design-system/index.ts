@@ -46,4 +46,5 @@ export {
   disclaimers,
   pricingPlans,
   testimonials,
+  trustPillars,
 } from './content-tokens';
