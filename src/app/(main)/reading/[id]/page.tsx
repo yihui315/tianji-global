@@ -214,6 +214,11 @@ function ReadingPageContent() {
 
     // Demo chart data
     const demoChartData: WesternChartData = {
+      bigThree: {
+        sun: { sign: 'Leo', signZh: '狮子', symbol: '♌', degree: 12.5 },
+        moon: { sign: 'Scorpio', signZh: '天蝎', symbol: '♏', degree: 28.3 },
+        rising: { sign: 'Capricorn', signZh: '摩羯', symbol: '♑', degree: 5.7 },
+      },
       sun: { sign: 'Leo', signZh: '狮子', symbol: '♌', degree: 12.5 },
       moon: { sign: 'Scorpio', signZh: '天蝎', symbol: '♏', degree: 28.3 },
       rising: { sign: 'Capricorn', signZh: '摩羯', symbol: '♑', degree: 5.7 },

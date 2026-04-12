@@ -29,6 +29,12 @@ export interface ElementScores {
 // ─── Chart Data ────────────────────────────────────────────────────────────────
 
 export interface WesternChartData {
+  /** Convenience alias — same data as sun */
+  bigThree: {
+    sun: { sign: string; signZh: string; symbol: string; degree: number; };
+    moon: { sign: string; signZh: string; symbol: string; degree: number; };
+    rising: { sign: string; signZh: string; symbol: string; degree: number; };
+  };
   sun: { sign: string; signZh: string; symbol: string; degree: number; };
   moon: { sign: string; signZh: string; symbol: string; degree: number; };
   rising: { sign: string; signZh: string; symbol: string; degree: number; };
