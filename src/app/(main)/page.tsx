@@ -193,87 +193,103 @@ function StructureGrid() {
         </div>
       </div>
 
-      {/* ZiWei 12 Palace Grid — 4×3 static grid */}
+      {/* ZiWei 12 Palace Grid — 4×3 static grid with highlighted Destiny palace */}
       <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-        {palaces.map((p) => (
-          <div
-            key={p.en}
-            className="border border-white/[0.05] rounded-lg bg-white/[0.015] px-2 py-2.5 sm:px-3 sm:py-3 text-center"
-          >
-            <span className="block text-[10px] text-white/25 mb-1">
-              {lang === 'zh' ? p.zh : p.en}
-            </span>
-            <span className="block text-xs font-serif text-purple-300/60">
-              {lang === 'zh' ? p.star : p.starEn}
-            </span>
-          </div>
-        ))}
+        {palaces.map((p) => {
+          const isDestiny = p.en === 'Destiny';
+          return (
+            <div
+              key={p.en}
+              className={`rounded-lg px-2 py-2.5 sm:px-3 sm:py-3 text-center ${
+                isDestiny
+                  ? 'border border-amber-400/25 bg-amber-400/[0.04] shadow-[0_0_12px_rgba(245,158,11,0.06)]'
+                  : 'border border-white/[0.05] bg-white/[0.015]'
+              }`}
+            >
+              <span className={`block text-[10px] mb-1 ${isDestiny ? 'text-amber-300/50' : 'text-white/25'}`}>
+                {lang === 'zh' ? p.zh : p.en}
+              </span>
+              <span className={`block text-xs font-serif ${isDestiny ? 'text-amber-200/70' : 'text-purple-300/60'}`}>
+                {lang === 'zh' ? p.star : p.starEn}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════
-   STORY BLOCK 2: Dual-Line Relationship Graph
-   Layout: SVG dual-line chart · Two entities' energy across dimensions
-   Data: Dimensional labels with two overlapping line plots
+   STORY BLOCK 2: Radar / Spider Chart — Relationship Synastry
+   Layout: Circular radar overlay · Two polygons for two entities
+   Data: Dimensional comparison scores (0–1) across relationship axes
    ═══════════════════════════════════════════ */
-function RelationshipDualGraph() {
+function RelationshipRadarChart() {
   const { lang } = useLanguage();
 
-  const dimensions = lang === 'zh'
-    ? ['沟通', '信任', '激情', '成长', '稳定', '默契', '包容']
-    : ['Comm.', 'Trust', 'Passion', 'Growth', 'Stability', 'Sync', 'Tolerance'];
+  const axes = [
+    { zh: '沟通', en: 'Comm.' },
+    { zh: '信任', en: 'Trust' },
+    { zh: '激情', en: 'Passion' },
+    { zh: '成长', en: 'Growth' },
+    { zh: '稳定', en: 'Stability' },
+    { zh: '默契', en: 'Sync' },
+  ];
 
-  const personA = [0.78, 0.65, 0.92, 0.70, 0.55, 0.88, 0.74];
-  const personB = [0.62, 0.85, 0.58, 0.90, 0.82, 0.72, 0.68];
+  const personA = [0.82, 0.65, 0.93, 0.70, 0.55, 0.88];
+  const personB = [0.60, 0.88, 0.52, 0.91, 0.80, 0.73];
 
-  const w = 420;
-  const h = 200;
-  const padL = 55;
-  const padR = 20;
-  const padT = 30;
-  const padB = 30;
-  const chartW = w - padL - padR;
-  const chartH = h - padT - padB;
+  const size = 300;
+  const cx = size / 2;
+  const cy = size / 2;
+  const maxR = 110;
+  const levels = 4;
+  const n = axes.length;
 
-  const pointsA = personA.map((v, i) => ({
-    x: padL + (i / (personA.length - 1)) * chartW,
-    y: padT + chartH - v * chartH,
-  }));
-  const pointsB = personB.map((v, i) => ({
-    x: padL + (i / (personB.length - 1)) * chartW,
-    y: padT + chartH - v * chartH,
-  }));
+  // Helper: polar → cartesian
+  const polar = (angle: number, r: number) => ({
+    x: cx + r * Math.cos(angle - Math.PI / 2),
+    y: cy + r * Math.sin(angle - Math.PI / 2),
+  });
 
-  const toPath = (pts: { x: number; y: number }[]) =>
-    pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  // Build polygon path for a data set
+  const toPolygon = (values: number[]) => {
+    return values
+      .map((v, i) => {
+        const angle = (2 * Math.PI * i) / n;
+        const pt = polar(angle, v * maxR);
+        return `${i === 0 ? 'M' : 'L'}${pt.x.toFixed(1)},${pt.y.toFixed(1)}`;
+      })
+      .join(' ') + ' Z';
+  };
 
-  const pathA = toPath(pointsA);
-  const pathB = toPath(pointsB);
+  const polyA = toPolygon(personA);
+  const polyB = toPolygon(personB);
 
-  // Find tension zones (where lines cross or are close)
-  const tensionZones: { x: number; y: number; type: 'harmony' | 'tension' }[] = [];
-  for (let i = 0; i < personA.length; i++) {
+  // Grid rings
+  const gridRings = Array.from({ length: levels }, (_, i) => {
+    const r = (maxR / levels) * (i + 1);
+    return axes
+      .map((_, ai) => {
+        const angle = (2 * Math.PI * ai) / n;
+        const pt = polar(angle, r);
+        return `${ai === 0 ? 'M' : 'L'}${pt.x.toFixed(1)},${pt.y.toFixed(1)}`;
+      })
+      .join(' ') + ' Z';
+  });
+
+  // Determine overlap / tension per axis
+  const insights = axes.map((_, i) => {
     const diff = Math.abs(personA[i] - personB[i]);
-    if (diff < 0.1) {
-      tensionZones.push({
-        x: pointsA[i].x,
-        y: (pointsA[i].y + pointsB[i].y) / 2,
-        type: 'harmony',
-      });
-    } else if (diff > 0.25) {
-      tensionZones.push({
-        x: pointsA[i].x,
-        y: (pointsA[i].y + pointsB[i].y) / 2,
-        type: 'tension',
-      });
-    }
-  }
+    if (diff < 0.1) return 'harmony' as const;
+    if (diff > 0.3) return 'tension' as const;
+    return null;
+  });
 
   return (
     <div className="w-full">
-      {/* Header */}
+      {/* Legend */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
@@ -291,163 +307,175 @@ function RelationshipDualGraph() {
         </div>
       </div>
 
-      {/* SVG Dual-Line Chart */}
-      <div className="border border-white/[0.06] rounded-2xl bg-white/[0.015] p-4 sm:p-5">
-        <svg viewBox={`0 0 ${w} ${h}`} className="w-full" preserveAspectRatio="xMidYMid meet">
+      {/* Radar Chart */}
+      <div className="border border-white/[0.06] rounded-2xl bg-white/[0.015] p-4 sm:p-6 flex justify-center">
+        <svg viewBox={`0 0 ${size} ${size}`} className="w-full max-w-[320px]" preserveAspectRatio="xMidYMid meet">
           <defs>
-            <linearGradient id="rel-grad-a" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(168,130,255,0.2)" />
-              <stop offset="100%" stopColor="rgba(168,130,255,0)" />
-            </linearGradient>
-            <linearGradient id="rel-grad-b" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(245,158,11,0.15)" />
-              <stop offset="100%" stopColor="rgba(245,158,11,0)" />
-            </linearGradient>
+            <radialGradient id="radar-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="rgba(168,130,255,0.06)" />
+              <stop offset="100%" stopColor="transparent" />
+            </radialGradient>
           </defs>
 
-          {/* Horizontal grid */}
-          {[0.25, 0.5, 0.75].map((pct) => (
-            <line key={pct} x1={padL} y1={padT + chartH * (1 - pct)} x2={w - padR} y2={padT + chartH * (1 - pct)} stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
+          {/* Background glow */}
+          <circle cx={cx} cy={cy} r={maxR + 10} fill="url(#radar-glow)" />
+
+          {/* Grid rings (hexagonal) */}
+          {gridRings.map((d, i) => (
+            <path
+              key={`ring-${i}`}
+              d={d}
+              fill="none"
+              stroke="rgba(255,255,255,0.04)"
+              strokeWidth="0.5"
+            />
           ))}
 
-          {/* Area fills */}
+          {/* Axis lines from center to outer */}
+          {axes.map((_, i) => {
+            const angle = (2 * Math.PI * i) / n;
+            const outer = polar(angle, maxR);
+            return (
+              <line
+                key={`axis-${i}`}
+                x1={cx}
+                y1={cy}
+                x2={outer.x}
+                y2={outer.y}
+                stroke="rgba(255,255,255,0.05)"
+                strokeWidth="0.5"
+              />
+            );
+          })}
+
+          {/* Person A polygon — filled */}
           <motion.path
-            d={`${pathA} L${pointsA[pointsA.length - 1].x},${padT + chartH} L${pointsA[0].x},${padT + chartH} Z`}
-            fill="url(#rel-grad-a)"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            d={polyA}
+            fill="rgba(168,130,255,0.12)"
+            stroke="rgba(168,130,255,0.7)"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+            initial={{ opacity: 0, scale: 0.6 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
             viewport={{ once: true }}
-          />
-          <motion.path
-            d={`${pathB} L${pointsB[pointsB.length - 1].x},${padT + chartH} L${pointsB[0].x},${padT + chartH} Z`}
-            fill="url(#rel-grad-b)"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            viewport={{ once: true }}
+            style={{ transformOrigin: `${cx}px ${cy}px`, filter: 'drop-shadow(0 0 6px rgba(168,130,255,0.2))' }}
           />
 
-          {/* Line A */}
+          {/* Person B polygon — filled */}
           <motion.path
-            d={pathA}
-            fill="none"
-            stroke="rgba(168,130,255,0.75)"
-            strokeWidth="2"
-            strokeLinecap="round"
+            d={polyB}
+            fill="rgba(245,158,11,0.10)"
+            stroke="rgba(245,158,11,0.7)"
+            strokeWidth="1.5"
             strokeLinejoin="round"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            transition={{ duration: 1.2, ease: 'easeOut' }}
+            initial={{ opacity: 0, scale: 0.6 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.15, ease: 'easeOut' }}
             viewport={{ once: true }}
-            style={{ filter: 'drop-shadow(0 0 6px rgba(168,130,255,0.3))' }}
-          />
-          {/* Line B */}
-          <motion.path
-            d={pathB}
-            fill="none"
-            stroke="rgba(245,158,11,0.75)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            transition={{ duration: 1.2, delay: 0.2, ease: 'easeOut' }}
-            viewport={{ once: true }}
-            style={{ filter: 'drop-shadow(0 0 6px rgba(245,158,11,0.3))' }}
+            style={{ transformOrigin: `${cx}px ${cy}px`, filter: 'drop-shadow(0 0 6px rgba(245,158,11,0.2))' }}
           />
 
           {/* Data points A */}
-          {pointsA.map((p, i) => (
-            <motion.circle
-              key={`a-${i}`}
-              cx={p.x}
-              cy={p.y}
-              r="3.5"
-              fill="#A78BFA"
-              stroke="#030014"
-              strokeWidth="1.5"
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.4 + i * 0.08 }}
-              viewport={{ once: true }}
-            />
-          ))}
-          {/* Data points B */}
-          {pointsB.map((p, i) => (
-            <motion.circle
-              key={`b-${i}`}
-              cx={p.x}
-              cy={p.y}
-              r="3.5"
-              fill="#F59E0B"
-              stroke="#030014"
-              strokeWidth="1.5"
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.5 + i * 0.08 }}
-              viewport={{ once: true }}
-            />
-          ))}
-
-          {/* Tension / Harmony zone markers */}
-          {tensionZones.map((z, i) => (
-            <motion.g
-              key={`zone-${i}`}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 1 + i * 0.15 }}
-              viewport={{ once: true }}
-            >
-              <circle
-                cx={z.x}
-                cy={z.y}
-                r="10"
-                fill="none"
-                stroke={z.type === 'harmony' ? 'rgba(52,211,153,0.3)' : 'rgba(239,68,68,0.25)'}
-                strokeWidth="1"
-                strokeDasharray="2 2"
-              />
-              <text
-                x={z.x}
-                y={z.y - 16}
-                textAnchor="middle"
-                fill={z.type === 'harmony' ? 'rgba(52,211,153,0.6)' : 'rgba(239,68,68,0.5)'}
-                fontSize="7"
-              >
-                {z.type === 'harmony'
-                  ? (lang === 'zh' ? '共鸣' : 'Sync')
-                  : (lang === 'zh' ? '张力' : 'Tension')}
-              </text>
-            </motion.g>
-          ))}
-
-          {/* Dimension labels */}
-          {dimensions.map((label, i) => {
-            const x = padL + (i / (dimensions.length - 1)) * chartW;
+          {personA.map((v, i) => {
+            const angle = (2 * Math.PI * i) / n;
+            const pt = polar(angle, v * maxR);
             return (
-              <text key={label} x={x} y={h - 6} textAnchor="middle" fill="rgba(255,255,255,0.25)" fontSize="8">
-                {label}
+              <motion.circle
+                key={`a-${i}`}
+                cx={pt.x}
+                cy={pt.y}
+                r="3"
+                fill="#A78BFA"
+                stroke="#030014"
+                strokeWidth="1.5"
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.5 + i * 0.06 }}
+                viewport={{ once: true }}
+              />
+            );
+          })}
+
+          {/* Data points B */}
+          {personB.map((v, i) => {
+            const angle = (2 * Math.PI * i) / n;
+            const pt = polar(angle, v * maxR);
+            return (
+              <motion.circle
+                key={`b-${i}`}
+                cx={pt.x}
+                cy={pt.y}
+                r="3"
+                fill="#F59E0B"
+                stroke="#030014"
+                strokeWidth="1.5"
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.6 + i * 0.06 }}
+                viewport={{ once: true }}
+              />
+            );
+          })}
+
+          {/* Axis labels */}
+          {axes.map((axis, i) => {
+            const angle = (2 * Math.PI * i) / n;
+            const pt = polar(angle, maxR + 20);
+            return (
+              <text
+                key={axis.en}
+                x={pt.x}
+                y={pt.y}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill="rgba(255,255,255,0.3)"
+                fontSize="9"
+              >
+                {lang === 'zh' ? axis.zh : axis.en}
               </text>
             );
           })}
 
-          {/* Y-axis labels */}
-          {[0, 0.5, 1].map((pct) => (
-            <text key={`y-${pct}`} x={padL - 8} y={padT + chartH * (1 - pct) + 3} textAnchor="end" fill="rgba(255,255,255,0.15)" fontSize="7">
-              {Math.round(pct * 100)}
-            </text>
-          ))}
+          {/* Harmony / Tension markers at axis tips */}
+          {insights.map((type, i) => {
+            if (!type) return null;
+            const angle = (2 * Math.PI * i) / n;
+            const midV = (personA[i] + personB[i]) / 2;
+            const pt = polar(angle, midV * maxR);
+            return (
+              <motion.g
+                key={`insight-${i}`}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 1 + i * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <circle
+                  cx={pt.x}
+                  cy={pt.y}
+                  r="8"
+                  fill="none"
+                  stroke={type === 'harmony' ? 'rgba(52,211,153,0.35)' : 'rgba(239,68,68,0.3)'}
+                  strokeWidth="1"
+                  strokeDasharray="2 2"
+                />
+              </motion.g>
+            );
+          })}
+
+          {/* Center dot */}
+          <circle cx={cx} cy={cy} r="2" fill="rgba(255,255,255,0.15)" />
         </svg>
       </div>
 
       {/* Insight badges */}
       <div className="flex flex-wrap gap-2 mt-4">
         <span className="text-[10px] border border-emerald-500/20 text-emerald-400/60 rounded-full px-3 py-1">
-          {lang === 'zh' ? '默契度高' : 'High Sync'}
+          {lang === 'zh' ? '沟通 · 共鸣' : 'Comm. · Sync'}
         </span>
         <span className="text-[10px] border border-red-500/15 text-red-400/50 rounded-full px-3 py-1">
-          {lang === 'zh' ? '激情差异' : 'Passion Gap'}
+          {lang === 'zh' ? '激情 · 张力' : 'Passion · Tension'}
         </span>
         <span className="text-[10px] border border-white/[0.06] text-white/35 rounded-full px-3 py-1">
           {lang === 'zh' ? '合盘评分 · 样本' : 'Synastry · Sample'}
@@ -1286,7 +1314,7 @@ function Home() {
                 </p>
               </div>
               <div className="lg:col-span-3">
-                <RelationshipDualGraph />
+                <RelationshipRadarChart />
               </div>
             </div>
           </FadeInWhenVisible>
