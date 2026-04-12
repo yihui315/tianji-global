@@ -48,7 +48,7 @@ export function ActionSection({ actions, isPremium, onUnlock, lang }: ActionSect
               </h3>
             </div>
             <ul className="space-y-2">
-              {actions.do.map((item, i) => (
+              {(actions.do ?? []).map((item, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'rgba(226,232,240,0.8)' }}>
                   <span style={{ color: '#34D399' }}>✦</span>
                   <span>{item}</span>
@@ -66,7 +66,7 @@ export function ActionSection({ actions, isPremium, onUnlock, lang }: ActionSect
               </h3>
             </div>
             <ul className="space-y-2">
-              {actions.avoid.map((item, i) => (
+              {(actions.avoid ?? []).map((item, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'rgba(226,232,240,0.8)' }}>
                   <span style={{ color: '#F87171' }}>✕</span>
                   <span>{item}</span>

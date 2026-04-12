@@ -63,7 +63,7 @@ export function TimelineSection({ timeline, isPremium, onUnlock, lang }: Timelin
           <div className="absolute left-4 top-0 bottom-0 w-px" style={{ background: 'rgba(255,255,255,0.08)' }} />
 
           <div className="space-y-4">
-            {timeline.phases.map((phase, i) => (
+            {(timeline.phases ?? []).map((phase, i) => (
               <motion.div
                 key={phase.ageRange}
                 initial={{ opacity: 0, x: -20 }}

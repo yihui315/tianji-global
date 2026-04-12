@@ -112,11 +112,11 @@ function LifeTimeline({ timeline, lang }: { timeline: ReadingTimeline; lang: Lan
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return;
 
-    const labels = timeline.phases.map(p => p.ageRange);
-    const overall = timeline.phases.map(p => p.overall);
-    const career = timeline.phases.map(p => p.career);
-    const love = timeline.phases.map(p => p.love);
-    const wealth = timeline.phases.map(p => p.wealth);
+    const labels = (timeline.phases ?? []).map(p => p.ageRange);
+    const overall = (timeline.phases ?? []).map(p => p.overall);
+    const career = (timeline.phases ?? []).map(p => p.career);
+    const love = (timeline.phases ?? []).map(p => p.love);
+    const wealth = (timeline.phases ?? []).map(p => p.wealth);
 
     chartRef.current = new Chart(ctx, {
       type: 'line',
@@ -164,12 +164,12 @@ function SignalLayers({ timeline, lang }: { timeline: ReadingTimeline; lang: Lan
     chartRef.current = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: timeline.phases.map(p => p.ageRange),
+        labels: (timeline.phases ?? []).map(p => p.ageRange),
         datasets: [
-          { label: lang === 'zh' ? '事业' : 'Career', data: timeline.phases.map(p => p.career), backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 4 },
-          { label: lang === 'zh' ? '感情' : 'Love', data: timeline.phases.map(p => p.love), backgroundColor: 'rgba(244,114,182,0.7)', borderRadius: 4 },
-          { label: lang === 'zh' ? '财富' : 'Wealth', data: timeline.phases.map(p => p.wealth), backgroundColor: 'rgba(52,211,153,0.7)', borderRadius: 4 },
-          { label: lang === 'zh' ? '健康' : 'Health', data: timeline.phases.map(p => p.health), backgroundColor: 'rgba(96,165,250,0.7)', borderRadius: 4 },
+          { label: lang === 'zh' ? '事业' : 'Career', data: (timeline.phases ?? []).map(p => p.career), backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 4 },
+          { label: lang === 'zh' ? '感情' : 'Love', data: (timeline.phases ?? []).map(p => p.love), backgroundColor: 'rgba(244,114,182,0.7)', borderRadius: 4 },
+          { label: lang === 'zh' ? '财富' : 'Wealth', data: (timeline.phases ?? []).map(p => p.wealth), backgroundColor: 'rgba(52,211,153,0.7)', borderRadius: 4 },
+          { label: lang === 'zh' ? '健康' : 'Health', data: (timeline.phases ?? []).map(p => p.health), backgroundColor: 'rgba(96,165,250,0.7)', borderRadius: 4 },
         ],
       },
       options: {
