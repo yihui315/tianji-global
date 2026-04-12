@@ -5,60 +5,44 @@ import { motion, useInView, AnimatePresence, useScroll, useTransform } from 'fra
 import DynamicHero from '@/components/hero/DynamicHero';
 import { SERVICES } from '@/data/services';
 import { LanguageProvider, useLanguage } from '@/hooks/useLanguage';
+import { colors } from '@/design-system';
+import {
+  SectionHeader,
+  MysticButton,
+  GlassCard,
+  FAQAccordion,
+  PricingCard,
+  TestimonialCard,
+  StatBadge,
+  LanguageSwitch,
+  FinalCTA,
+  HowItWorksSteps,
+  ResponsibleUseNotice,
+  TrustChip,
+} from '@/components/ui';
+import {
+  pricingPlans,
+  testimonials as testimonialTokens,
+  ctaLabels,
+} from '@/design-system/content-tokens';
 
 /**
- * TianJi Global — Premium Commercial Landing Page (Refactored)
+ * TianJi Global — Premium Commercial Landing Page
  *
  * Sections:
  * 1. Immersive Hero (existing DynamicHero)
  * 2. Sticky Storytelling / Visual Transition
- * 3. Services Grid (enhanced)
- * 4. How It Works (enhanced with animations)
+ * 3. Services Grid
+ * 4. How It Works (HowItWorksSteps)
  * 5. Advanced Chart Mock Preview
- * 6. Testimonials / Social Proof
- * 7. Pricing Preview
- * 8. FAQ
- * 9. Final CTA
- * 10. Rich Footer
+ * 6. Testimonials / Social Proof (TestimonialCard + StatBadge)
+ * 7. Pricing Preview (PricingCard)
+ * 8. FAQ (FAQAccordion)
+ * 9. Final CTA (FinalCTA)
+ * 10. Rich Footer (ResponsibleUseNotice)
+ *
+ * All sections consume design-system tokens and UI atom components.
  */
-
-/* ═══════════════════════════════════════════
-   Language Toggle Button
-   ═══════════════════════════════════════════ */
-function LangToggle() {
-  const { lang, setLang } = useLanguage();
-  return (
-    <button
-      onClick={() => setLang(lang === 'en' ? 'zh' : 'en')}
-      className="flex items-center gap-1.5 text-[10px] text-white/40 hover:text-white/70 border border-white/[0.08] hover:border-white/[0.15] rounded-full px-3 py-1.5 transition-all duration-200 hover:scale-105"
-    >
-      <span className={lang === 'zh' ? 'text-white/70' : 'text-white/30'}>中</span>
-      <span className="text-white/[0.15]">|</span>
-      <span className={lang === 'en' ? 'text-white/70' : 'text-white/30'}>EN</span>
-    </button>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   Section Heading Component (Simplified — no en subtitle)
-   ═══════════════════════════════════════════ */
-function SectionHeading({ titleKey }: { titleKey: string }) {
-  const { t } = useLanguage();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-80px' });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
-      className="text-center mb-12 sm:mb-16"
-    >
-      <h2 className="text-4xl sm:text-5xl font-serif text-white">{t(titleKey)}</h2>
-    </motion.div>
-  );
-}
 
 /* ═══════════════════════════════════════════
    Fade-In Wrapper
@@ -115,18 +99,14 @@ function ParallaxSection({
 }
 
 /* ═══════════════════════════════════════════
-   Unified CTA Button
+   Unified CTA Button — uses MysticButton from design system
    ═══════════════════════════════════════════ */
 function PrimaryCTA({ href = '/western', className = '' }: { href?: string; className?: string }) {
-  const { t } = useLanguage();
+  const { lang } = useLanguage();
   return (
-    <a
-      href={href}
-      className={`inline-flex items-center justify-center px-10 sm:px-12 py-4 sm:py-5 text-base sm:text-lg bg-white text-black font-medium rounded-full hover:scale-[1.03] hover:shadow-[0_0_60px_-10px_rgba(255,255,255,0.3)] transition-all duration-200 ${className}`}
-    >
-      {t('hero.cta')} · {t('hero.cta.en')}
-      <span className="ml-2 text-black/50 text-sm" />
-    </a>
+    <MysticButton variant="solid" size="lg" href={href} className={className}>
+      {ctaLabels.primary[lang]}
+    </MysticButton>
   );
 }
 
@@ -851,86 +831,64 @@ function InsightChips() {
 }
 
 /* ═══════════════════════════════════════════
-   Testimonials Carousel
+   Testimonials — uses TestimonialCard + StatBadge from design system
    ═══════════════════════════════════════════ */
 function TestimonialsSection() {
   const { t, lang } = useLanguage();
-  const testimonials = [
-    {
-      quote: t('testimonial.1'),
-      name: t('testimonial.author1.name'),
-      loc: t('testimonial.author1.loc'),
-      flag: '🇬🇧',
-    },
-    {
-      quote: t('testimonial.2'),
-      name: t('testimonial.author2.name'),
-      loc: t('testimonial.author2.loc'),
-      flag: '🇨🇦',
-    },
-    {
-      quote: t('testimonial.3'),
-      name: t('testimonial.author3.name'),
-      loc: t('testimonial.author3.loc'),
-      flag: '🇯🇵',
-    },
+
+  const testimonialData = testimonialTokens.map((item, i) => ({
+    quote: item.quote[lang],
+    author: item.author,
+    location: item.location,
+    flag: ['🇬🇧', '🇨🇦', '🇯🇵'][i],
+  }));
+
+  const stats = [
+    { value: '120K+', label: t('social.readings') },
+    { value: '50K+', label: t('social.reports') },
+    { value: '30K+', label: t('social.saved') },
   ];
 
   return (
     <div className="relative z-10 overflow-hidden py-28 sm:py-36">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[100px]" />
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] rounded-full blur-[100px]" style={{ background: colors.goldDim }} />
       </div>
       <div className="max-w-6xl mx-auto px-6 sm:px-8 relative">
-        <SectionHeading titleKey="testimonials.heading" />
-        <p className="text-center text-white/30 text-xs tracking-widest uppercase mb-12">
+        <SectionHeader titleKey="testimonials" />
+        <p className="text-center text-xs tracking-widest uppercase mb-12" style={{ color: colors.textTertiary }}>
           {t('testimonials.subheading')}
         </p>
 
-        {/* Social proof stat chips */}
+        {/* Social proof stats — StatBadge */}
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12 sm:mb-16">
-          {[
-            { value: '120K+', zh: t('social.readings'), en: 'Structured Readings' },
-            { value: '50K+', zh: t('social.reports'), en: 'Bilingual Reports' },
-            { value: '30K+', zh: t('social.saved'), en: 'Saved Insights' },
-          ].map((stat, i) => (
-            <motion.div
-              key={stat.en}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              viewport={{ once: true }}
-              className="flex items-center gap-2 bg-white/[0.02] border border-white/[0.05] rounded-full px-4 py-2"
-            >
-              <span className="text-amber-300/80 text-sm font-serif">{stat.value}</span>
-              <span className="text-white/40 text-xs">{lang === 'zh' ? stat.zh : stat.en}</span>
-            </motion.div>
+          {stats.map((stat) => (
+            <StatBadge
+              key={stat.label}
+              value={stat.value}
+              label={stat.label}
+            />
           ))}
         </div>
 
-        {/* Auto-scrolling carousel */}
+        {/* Auto-scrolling carousel — TestimonialCard */}
         <div className="relative overflow-hidden">
           <motion.div
             className="flex gap-6"
             animate={{ x: [0, '-33.333%'] }}
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
           >
-            {[...testimonials, ...testimonials].map((t, i) => (
+            {[...testimonialData, ...testimonialData].map((item, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] bg-gradient-to-br from-white/[0.02] to-white/[0.04] border border-white/[0.06] rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex flex-col"
+                className="flex-shrink-0 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
               >
-                <span className="text-amber-400/15 text-4xl font-serif leading-none mb-3">&ldquo;</span>
-                <p className="text-white/65 text-sm leading-relaxed flex-1">{t.quote}</p>
-                <div className="flex items-center gap-3 mt-6 pt-5 border-t border-white/[0.06]">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-600/20 to-amber-500/10 flex items-center justify-center text-white/40 text-sm">
-                    {t.flag}
-                  </div>
-                  <div>
-                    <p className="text-white/80 text-sm font-medium">{t.name}</p>
-                    <p className="text-white/30 text-[11px]">{t.loc}</p>
-                  </div>
-                </div>
+                <TestimonialCard
+                  quote={item.quote}
+                  author={item.author}
+                  location={item.location}
+                  avatar={item.flag}
+                />
               </div>
             ))}
           </motion.div>
@@ -941,145 +899,61 @@ function TestimonialsSection() {
 }
 
 /* ═══════════════════════════════════════════
-   Pricing Section
+   Pricing Section — uses PricingCard from design system
    ═══════════════════════════════════════════ */
 function PricingSection() {
   const { t, lang } = useLanguage();
 
   const plans = [
     {
-      key: 'free',
-      intentLabel: lang === 'zh' ? '探索' : 'Explore',
-      intentLabelEn: 'Explore',
-      copy: lang === 'zh' ? '先尝一口命运' : 'Start with a taste',
-      price: '¥0',
-      priceAlt: '$0',
-      period: '',
-      features: [
-        { key: 'feature.daily' },
-        { key: 'feature.basic' },
-        { key: 'feature.tarot' },
-        { key: 'feature.community' },
-      ],
+      key: 'free' as const,
+      features: ['feature.daily', 'feature.basic', 'feature.tarot', 'feature.community'],
       cta: lang === 'zh' ? '免费开始' : 'Start Free',
       href: '/western',
       highlighted: false,
-      scale: '',
     },
     {
-      key: 'premium',
-      intentLabel: lang === 'zh' ? '最受欢迎' : 'Most Popular',
-      intentLabelEn: 'Most Popular',
-      copy: lang === 'zh' ? '解锁完整命盘，洞察当下星象' : 'See your full chart, patterns, and what the stars are saying right now',
-      price: '¥29',
-      priceAlt: '$4.99',
-      period: '/月',
-      periodAlt: '/mo',
-      features: [
-        { key: 'feature.all12' },
-        { key: 'feature.ai' },
-        { key: 'feature.three' },
-        { key: 'feature.synastry' },
-        { key: 'feature.pdf' },
-        { key: 'feature.bilingual' },
-      ],
+      key: 'premium' as const,
+      features: ['feature.all12', 'feature.ai', 'feature.three', 'feature.synastry', 'feature.pdf', 'feature.bilingual'],
       cta: lang === 'zh' ? '立即升级' : 'Upgrade Now',
       href: '/pricing',
       highlighted: true,
-      scale: 'scale-105',
     },
     {
-      key: 'deep',
-      intentLabel: lang === 'zh' ? '深度解读' : 'For Serious Insight',
-      intentLabelEn: 'For Serious Insight',
-      copy: lang === 'zh' ? 'AI深度解读，为你专属定制' : 'Personalized guidance from AI-trained interpreters, tailored to your exact chart',
-      price: '¥99',
-      priceAlt: '$14.99',
-      period: '/次',
-      periodAlt: '/session',
-      features: [
-        { key: 'feature.premium' },
-        { key: 'feature.celebrity' },
-        { key: 'feature.annual' },
-        { key: 'feature.priority' },
-        { key: 'feature.personal' },
-        { key: 'feature.revisions' },
-      ],
+      key: 'deep' as const,
+      features: ['feature.premium', 'feature.celebrity', 'feature.annual', 'feature.priority', 'feature.personal', 'feature.revisions'],
       cta: lang === 'zh' ? '预约深度解读' : 'Book Deep Reading',
       href: '/pricing',
       highlighted: false,
-      scale: '',
     },
   ];
 
   return (
     <section id="pricing" className="relative z-10 py-28 sm:py-36">
       <div className="max-w-5xl mx-auto px-6 sm:px-8">
-        <SectionHeading titleKey="pricing.heading" />
-        <p className="text-center text-white/40 text-sm mb-10 max-w-2xl mx-auto leading-relaxed">
-          {lang === 'zh' ? '从免费探索到专家级深度解读，满足每一位命理探索者' : 'From free exploration to expert-level deep readings, for every seeker of wisdom'}
-        </p>
+        <SectionHeader titleKey="pricing" subtitle={t('pricing.subtitle')} />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {plans.map((plan) => (
-            <FadeInWhenVisible key={plan.key} className={plan.scale}>
-              <div
-                className={`relative bg-gradient-to-br rounded-2xl sm:rounded-3xl p-5 sm:p-6 h-full flex flex-col transition-all duration-300 hover:-translate-y-1 ${
-                  plan.highlighted
-                    ? 'from-purple-900/40 to-amber-900/20 border-2 border-amber-400/40 shadow-lg shadow-amber-500/15'
-                    : 'from-white/[0.015] to-white/[0.03] border border-white/[0.05]'
-                }`}
-              >
-                {/* Intent label */}
-                <div className="mb-4">
-                  <span className={`text-[10px] tracking-wider uppercase ${
-                    plan.highlighted ? 'text-amber-300/80' : 'text-white/30'
-                  }`}>
-                    {plan.intentLabel}
-                  </span>
-                </div>
-
-                {/* Emotional copy */}
-                <p className="text-white/50 text-xs mb-4 leading-relaxed max-w-full">
-                  {plan.copy}
-                </p>
-
-                {/* Price */}
-                <div className="mb-5">
-                  <span className="text-3xl sm:text-4xl font-serif text-white">{plan.price}</span>
-                  <span className="text-white/40 text-sm ml-1">{plan.period}</span>
-                  <div className="text-white/20 text-xs mt-1">
-                    {plan.priceAlt}{plan.periodAlt}
-                  </div>
-                </div>
-
-                {/* Feature comparison — 3 rows */}
-                <ul className="space-y-2.5 flex-1 mb-6">
-                  {plan.features.slice(0, 3).map((f, j) => (
-                    <li key={j} className="flex items-start gap-2 text-xs">
-                      <span className="text-amber-400/60 mt-0.5">✓</span>
-                      <span>
-                        <span className="text-white/50">{t(`${f.key}.zh`)}</span>
-                        <span className="text-white/20 text-[10px] block">{t(`${f.key}`)}</span>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* CTA */}
-                <a
-                  href={plan.href}
-                  className={`block text-center py-3 sm:py-3.5 rounded-full text-sm font-medium transition-all duration-200 hover:scale-[1.03] ${
-                    plan.highlighted
-                      ? 'bg-amber-400 text-black hover:bg-amber-300 hover:shadow-lg hover:shadow-amber-400/25'
-                      : 'bg-white/[0.05] text-white/70 border border-white/[0.08] hover:bg-white/[0.08] hover:text-white'
-                  }`}
-                >
-                  {plan.cta}
-                </a>
-              </div>
-            </FadeInWhenVisible>
-          ))}
+          {plans.map((plan) => {
+            const planToken = pricingPlans[plan.key];
+            return (
+              <PricingCard
+                key={plan.key}
+                name={planToken.name[lang]}
+                tagline={planToken.tagline[lang]}
+                price={planToken.price}
+                period={planToken.period[lang]}
+                features={plan.features.map((fKey) => ({
+                  label: t(fKey),
+                  included: true,
+                }))}
+                ctaLabel={plan.cta}
+                ctaHref={plan.href}
+                highlighted={plan.highlighted}
+                className={plan.highlighted ? 'scale-105' : ''}
+              />
+            );
+          })}
         </div>
 
         {/* Urgency line */}
@@ -1088,11 +962,10 @@ function PricingSection() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           viewport={{ once: true }}
-          className="text-center text-white/30 text-xs mt-10"
+          className="text-center text-xs mt-10"
+          style={{ color: colors.textTertiary }}
         >
-          {lang === 'zh'
-            ? '大多数用户在首次解读后升级'
-            : 'Most users upgrade after their first reading'}
+          {t('pricing.urgency')}
         </motion.p>
 
         {/* CTA after pricing */}
@@ -1105,87 +978,36 @@ function PricingSection() {
 }
 
 /* ═══════════════════════════════════════════
-   FAQ Section
+   FAQ Section — uses FAQAccordion from design system
    ═══════════════════════════════════════════ */
 function FAQSection() {
-  const { t, lang } = useLanguage();
-  const faqItems = [
-    { qKey: 'faq.q1', qZh: 'faq.q1.zh', aKey: 'faq.a1', aZh: 'faq.a1.zh' },
-    { qKey: 'faq.q2', qZh: 'faq.q2.zh', aKey: 'faq.a2', aZh: 'faq.a2.zh' },
-    { qKey: 'faq.q3', qZh: 'faq.q3.zh', aKey: 'faq.a3', aZh: 'faq.a3.zh' },
-    { qKey: 'faq.q4', qZh: 'faq.q4.zh', aKey: 'faq.a4', aZh: 'faq.a4.zh' },
-    { qKey: 'faq.q5', qZh: 'faq.q5.zh', aKey: 'faq.a5', aZh: 'faq.a5.zh' },
-    { qKey: 'faq.q6', qZh: 'faq.q6.zh', aKey: 'faq.a6', aZh: 'faq.a6.zh' },
+  const { t } = useLanguage();
+  const faqKeys = [
+    { qKey: 'faq.q1', aKey: 'faq.a1' },
+    { qKey: 'faq.q2', aKey: 'faq.a2' },
+    { qKey: 'faq.q3', aKey: 'faq.a3' },
+    { qKey: 'faq.q4', aKey: 'faq.a4' },
+    { qKey: 'faq.q5', aKey: 'faq.a5' },
+    { qKey: 'faq.q6', aKey: 'faq.a6' },
   ];
+
+  const faqItems = faqKeys.map((item) => ({
+    question: t(item.qKey),
+    answer: t(item.aKey),
+  }));
 
   return (
     <section id="faq" className="relative z-10 py-28 sm:py-36">
       <div className="max-w-3xl mx-auto px-6 sm:px-8">
-        <SectionHeading titleKey="faq.heading" />
-        <div>
-          {faqItems.map((item, i) => (
-            <FAQItem
-              key={i}
-              q={t(item.qZh)}
-              qEn={t(item.qKey)}
-              a={t(item.aZh)}
-              aEn={t(item.aKey)}
-              index={i}
-            />
-          ))}
-        </div>
+        <SectionHeader titleKey="faq" />
+        <FAQAccordion items={faqItems} />
       </div>
     </section>
   );
 }
 
-function FAQItem({ q, qEn, a, aEn, index }: { q: string; qEn: string; a: string; aEn: string; index: number }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <FadeInWhenVisible delay={index * 0.08}>
-      <div className="border-b border-white/[0.05]">
-        <button
-          onClick={() => setOpen(!open)}
-          className="w-full flex items-center justify-between py-5 sm:py-6 text-left group"
-        >
-          <div className="flex-1 pr-4">
-            <p className="text-base sm:text-lg font-serif text-white group-hover:text-amber-200/80 transition-colors duration-200">
-              {q}
-            </p>
-            <p className="text-white/25 text-xs mt-1">{qEn}</p>
-          </div>
-          <motion.span
-            animate={{ rotate: open ? 45 : 0 }}
-            transition={{ duration: 0.2 }}
-            className="text-white/35 text-xl flex-shrink-0"
-          >
-            +
-          </motion.span>
-        </button>
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="overflow-hidden"
-            >
-              <div className="pb-5 sm:pb-6">
-                <p className="text-white/55 text-sm leading-relaxed">{a}</p>
-                <p className="text-white/25 text-xs mt-2 leading-relaxed">{aEn}</p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </FadeInWhenVisible>
-  );
-}
-
 /* ═══════════════════════════════════════════
-   Tools Grid Section (Weakened)
+   Tools Grid Section — uses SectionHeader + GlassCard from design system
    ═══════════════════════════════════════════ */
 function ToolsSection() {
   const { t } = useLanguage();
@@ -1195,13 +1017,29 @@ function ToolsSection() {
   return (
     <section id="services" className="relative z-10 py-28 sm:py-36">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
-        <SectionHeading titleKey="section.tools" />
-        <p className="text-center text-white/35 text-xs tracking-widest uppercase mb-12">
+        <SectionHeader titleKey="services" />
+        <p className="text-center text-xs tracking-widest uppercase mb-12" style={{ color: colors.textMuted }}>
           {t('tools.subtitle')}
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {displayServices.map((s, i) => (
             <FadeInWhenVisible key={s.href} delay={i * 0.04}>
+              <GlassCard level="card" hoverLift>
+                <a
+                  href={s.href}
+                  className="block p-4"
+                >
+                  <div className="text-3xl mb-3">
+                    {s.icon}
+                  </div>
+                  <h3 className="text-base font-serif mb-1" style={{ color: colors.textPrimary }}>{s.title}</h3>
+                  <p className="text-xs" style={{ color: colors.textTertiary }}>{s.desc}</p>
+                  <div className="mt-4 flex items-center gap-1.5 text-xs" style={{ color: colors.goldDim }}>
+                    {t('tools.start')}
+                    <span className="text-sm inline-block">→</span>
+                  </div>
+                </a>
+              </GlassCard>
               <a
                 href={s.href}
                 className="group block rounded-2xl overflow-hidden border border-white/[0.06] hover:border-amber-300/30 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/[0.12]"
@@ -1244,12 +1082,9 @@ function ToolsSection() {
         {/* Expand button */}
         {!expanded && (
           <div className="flex justify-center mt-8">
-            <button
-              onClick={() => setExpanded(true)}
-              className="text-white/35 hover:text-white/60 text-sm transition-all duration-200 hover:scale-[1.02] border border-white/[0.06] hover:border-white/[0.1] rounded-full px-6 py-2.5"
-            >
+            <MysticButton variant="outline" size="md" onClick={() => setExpanded(true)}>
               {t('tools.cta')} →
-            </button>
+            </MysticButton>
           </div>
         )}
       </div>
@@ -1258,10 +1093,19 @@ function ToolsSection() {
 }
 
 /* ═══════════════════════════════════════════
+   How It Works — step definitions (static, no re-create per render)
+   ═══════════════════════════════════════════ */
+const HOW_IT_WORKS_KEYS = [
+  { step: '01', titleKey: 'how.step1.title', descKey: 'how.step1.desc', icon: '🌙' },
+  { step: '02', titleKey: 'how.step2.title', descKey: 'how.step2.desc', icon: '⚡' },
+  { step: '03', titleKey: 'how.step3.title', descKey: 'how.step3.desc', icon: '📜' },
+] as const;
+
+/* ═══════════════════════════════════════════
    MAIN PAGE COMPONENT
    ═══════════════════════════════════════════ */
 function Home() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [activeStory, setActiveStory] = useState('chart');
 
   const handleStoryActive = useCallback((id: string) => {
@@ -1269,10 +1113,10 @@ function Home() {
   }, []);
 
   return (
-    <div className="mystic-page bg-[#030014] text-white min-h-screen">
-      {/* Language toggle — top right */}
+    <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
+      {/* Language toggle — top right — LanguageSwitch from design system */}
       <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50">
-        <LangToggle />
+        <LanguageSwitch />
       </div>
 
       {/* ═══════ 1. Immersive Mystic Hero ═══════ */}
@@ -1281,7 +1125,7 @@ function Home() {
       {/* ═══════ 2. Sticky Storytelling Section ═══════ */}
       <ParallaxSection offset={20} className="relative z-10 py-28 sm:py-36">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <SectionHeading titleKey="story.heading" />
+          <SectionHeader title={t('story.heading')} />
 
           {/* Desktop: two-column sticky layout · Mobile: stacked */}
           <div className="lg:grid lg:grid-cols-2 lg:gap-16">
@@ -1304,150 +1148,110 @@ function Home() {
           <div className="flex justify-center mt-16 sm:mt-24">
             <div className="text-center">
               <PrimaryCTA />
-              <p className="text-white/30 text-xs mt-3">{t('hero.helper')}</p>
+              <p className="text-xs mt-3" style={{ color: colors.textTertiary }}>{t('hero.helper')}</p>
             </div>
           </div>
         </div>
       </ParallaxSection>
 
-      {/* ═══════ 3. Tools Grid (Weakened) ═══════ */}
+      {/* ═══════ 3. Tools Grid ═══════ */}
       <ParallaxSection offset={15}>
         <ToolsSection />
       </ParallaxSection>
 
-      {/* ═══════ 4. How It Works ═══════ */}
+      {/* ═══════ 4. How It Works — HowItWorksSteps from design system ═══════ */}
       <ParallaxSection offset={20} className="relative z-10 py-28 sm:py-36 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-900/15 rounded-full blur-[120px]" />
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[120px]" style={{ background: colors.purpleDim }} />
         </div>
-        <div className="max-w-5xl mx-auto px-6 sm:px-8 text-center relative">
-          <SectionHeading titleKey="how.heading" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-12">
-            {[
-              {
-                step: '01',
-                titleKey: 'how.step1.title',
-                descKey: 'how.step1.desc',
-                icon: '🌙',
-              },
-              {
-                step: '02',
-                titleKey: 'how.step2.title',
-                descKey: 'how.step2.desc',
-                icon: '⚡',
-              },
-              {
-                step: '03',
-                titleKey: 'how.step3.title',
-                descKey: 'how.step3.desc',
-                icon: '📜',
-              },
-            ].map((item, i) => (
-              <FadeInWhenVisible key={item.step} delay={i * 0.15}>
-                <div className="text-center group">
-                  <div className="relative mx-auto w-20 h-20 mb-6 flex items-center justify-center">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-600/15 to-amber-500/8 group-hover:from-purple-600/25 group-hover:to-amber-500/15 transition-all duration-500" />
-                    <span className="text-3xl relative z-10">{item.icon}</span>
-                  </div>
-                  <div className="text-5xl sm:text-6xl font-serif text-amber-300/8 mb-3">{item.step}</div>
-                  <h3 className="text-lg sm:text-xl font-serif text-white mb-1">{t(item.titleKey)}</h3>
-                  <p className="text-white/45 text-sm">{t(item.descKey)}</p>
-                </div>
-              </FadeInWhenVisible>
-            ))}
-          </div>
+        <div className="max-w-5xl mx-auto px-6 sm:px-8 relative">
+          <HowItWorksSteps
+            steps={HOW_IT_WORKS_KEYS.map((item) => ({
+              step: item.step,
+              icon: item.icon,
+              title: t(item.titleKey),
+              description: t(item.descKey),
+            }))}
+          />
         </div>
       </ParallaxSection>
 
       {/* ═══════ 5. Premium Chart Analytics Preview ═══════ */}
       <ParallaxSection offset={15} className="relative z-10 py-28 sm:py-36">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-purple-900/12 rounded-full blur-[120px]" />
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px]" style={{ background: colors.purpleDim }} />
         </div>
         <div className="max-w-6xl mx-auto px-6 sm:px-8 relative">
-          <SectionHeading titleKey="charts.heading" />
-          <p className="text-center text-white/35 text-sm mb-12 max-w-2xl mx-auto leading-relaxed">
-            {t('charts.subtitle')}
-          </p>
+          <SectionHeader titleKey="charts" subtitle={t('charts.subtitle')} />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {/* Circular Energy Chart */}
             <FadeInWhenVisible>
-              <div className="bg-white/[0.015] border border-white/[0.05] rounded-2xl p-5 sm:p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-500/[0.06]">
+              <GlassCard level="card" hoverLift className="p-5 sm:p-6">
                 <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <h3 className="text-base font-serif text-white">{t('charts.radar')}</h3>
-                  </div>
-                  <span className="text-white/12 text-[10px] bg-white/[0.02] px-2.5 py-1 rounded-full">
+                  <h3 className="text-base font-serif" style={{ color: colors.textPrimary }}>{t('charts.radar')}</h3>
+                  <span className="text-[10px] px-2.5 py-1 rounded-full" style={{ color: colors.textMuted, background: colors.bgSurface }}>
                     {t('charts.sample')}
                   </span>
                 </div>
                 <div className="w-52 h-52 sm:w-56 sm:h-56 mx-auto">
                   <CircularEnergyChart />
                 </div>
-              </div>
+              </GlassCard>
             </FadeInWhenVisible>
 
             {/* Life Timeline Line Chart */}
             <FadeInWhenVisible delay={0.12}>
-              <div className="bg-white/[0.015] border border-white/[0.05] rounded-2xl p-5 sm:p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-500/[0.06]">
+              <GlassCard level="card" hoverLift className="p-5 sm:p-6">
                 <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <h3 className="text-base font-serif text-white">{t('charts.timeline')}</h3>
-                  </div>
-                  <span className="text-white/12 text-[10px] bg-white/[0.02] px-2.5 py-1 rounded-full">
+                  <h3 className="text-base font-serif" style={{ color: colors.textPrimary }}>{t('charts.timeline')}</h3>
+                  <span className="text-[10px] px-2.5 py-1 rounded-full" style={{ color: colors.textMuted, background: colors.bgSurface }}>
                     {t('charts.sample')}
                   </span>
                 </div>
                 <div className="h-36 sm:h-40">
                   <LifeTimelineChart />
                 </div>
-              </div>
+              </GlassCard>
             </FadeInWhenVisible>
 
             {/* Signal Layer Bars */}
             <FadeInWhenVisible delay={0.08}>
-              <div className="bg-white/[0.015] border border-white/[0.05] rounded-2xl p-5 sm:p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-500/[0.06]">
+              <GlassCard level="card" hoverLift className="p-5 sm:p-6">
                 <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <h3 className="text-base font-serif text-white">{t('charts.layers')}</h3>
-                  </div>
-                  <span className="text-white/12 text-[10px] bg-white/[0.02] px-2.5 py-1 rounded-full">
+                  <h3 className="text-base font-serif" style={{ color: colors.textPrimary }}>{t('charts.layers')}</h3>
+                  <span className="text-[10px] px-2.5 py-1 rounded-full" style={{ color: colors.textMuted, background: colors.bgSurface }}>
                     {t('charts.sample')}
                   </span>
                 </div>
                 <SignalLayerBars />
-              </div>
+              </GlassCard>
             </FadeInWhenVisible>
 
             {/* Insight Chips Card */}
             <FadeInWhenVisible delay={0.16}>
-              <div className="bg-white/[0.015] border border-white/[0.05] rounded-2xl p-5 sm:p-6 flex flex-col transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-500/[0.06]">
+              <GlassCard level="card" hoverLift className="p-5 sm:p-6 flex flex-col">
                 <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <h3 className="text-base font-serif text-white">{t('charts.insights')}</h3>
-                  </div>
-                  <span className="text-white/12 text-[10px] bg-white/[0.02] px-2.5 py-1 rounded-full">
+                  <h3 className="text-base font-serif" style={{ color: colors.textPrimary }}>{t('charts.insights')}</h3>
+                  <span className="text-[10px] px-2.5 py-1 rounded-full" style={{ color: colors.textMuted, background: colors.bgSurface }}>
                     {t('charts.sample')}
                   </span>
                 </div>
                 <InsightChips />
-                <div className="mt-5 bg-white/[0.01] rounded-xl p-3 border border-white/[0.03]">
-                  <p className="text-white/35 text-xs leading-relaxed italic">
+                <div className="mt-5 rounded-xl p-3" style={{ background: colors.bgSurface, border: `1px solid ${colors.borderSubtle}` }}>
+                  <p className="text-xs leading-relaxed italic" style={{ color: colors.textMuted }}>
                     &quot;当前大运壬寅，印星透干生身，事业运势处于上升通道。建议把握2024-2026年窗口期...&quot;
                   </p>
                 </div>
-              </div>
+              </GlassCard>
             </FadeInWhenVisible>
 
             {/* Full-width Sample Report Card */}
             <FadeInWhenVisible delay={0.1} className="lg:col-span-2">
-              <div className="bg-white/[0.01] border border-white/[0.05] rounded-2xl p-5 sm:p-8">
+              <GlassCard level="card" className="p-5 sm:p-8">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
-                  <div>
-                    <h3 className="text-base font-serif text-white">{t('charts.report.title')}</h3>
-                  </div>
-                  <a href="/western" className="text-amber-300/60 hover:text-amber-200 text-xs flex items-center gap-1 transition-colors duration-200">
+                  <h3 className="text-base font-serif" style={{ color: colors.textPrimary }}>{t('charts.report.title')}</h3>
+                  <a href="/western" className="text-xs flex items-center gap-1 transition-colors duration-200" style={{ color: colors.goldDim }}>
                     {t('charts.report.cta')} <span className="inline-block">→</span>
                   </a>
                 </div>
@@ -1463,14 +1267,15 @@ function Home() {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: i * 0.1 }}
                       viewport={{ once: true }}
-                      className="bg-white/[0.015] rounded-xl p-3 border border-white/[0.04]"
+                      className="rounded-xl p-3"
+                      style={{ background: colors.bgSurface, border: `1px solid ${colors.borderSubtle}` }}
                     >
-                      <h4 className="text-xs font-serif text-amber-300/60 mb-1">{t(item.titleKey)}</h4>
-                      <p className="text-white/45 text-[11px] leading-relaxed">{item.content}</p>
+                      <h4 className="text-xs font-serif mb-1" style={{ color: colors.goldDim }}>{t(item.titleKey)}</h4>
+                      <p className="text-[11px] leading-relaxed" style={{ color: colors.textTertiary }}>{item.content}</p>
                     </motion.div>
                   ))}
                 </div>
-              </div>
+              </GlassCard>
             </FadeInWhenVisible>
           </div>
         </div>
@@ -1485,33 +1290,14 @@ function Home() {
       {/* ═══════ 8. FAQ ═══════ */}
       <FAQSection />
 
-      {/* ═══════ 9. Final CTA ═══════ */}
-      <section className="relative z-10 py-28 sm:py-36 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-purple-900/25 rounded-full blur-[120px]" />
-        </div>
-        <div className="relative max-w-3xl mx-auto px-6 sm:px-8 text-center">
-          <FadeInWhenVisible>
-            <p className="text-amber-300/40 text-xs tracking-[0.3em] uppercase mb-6">Destiny Awaits</p>
-            <h2 className="text-3xl sm:text-5xl font-serif text-white mb-6">{t('cta.title')}</h2>
-            <p className="text-white/30 text-sm mb-10 max-w-md mx-auto leading-relaxed">
-              {t('cta.subtitle')}
-            </p>
-            <div className="text-center">
-              <PrimaryCTA />
-              <p className="text-white/30 text-xs mt-4">{t('hero.helper')}</p>
-            </div>
-          </FadeInWhenVisible>
-        </div>
-      </section>
+      {/* ═══════ 9. Final CTA — FinalCTA from design system ═══════ */}
+      <FinalCTA />
 
       {/* ═══════ 10. Rich Footer ═══════ */}
-      <footer className="relative z-10 border-t border-white/[0.05]">
-        {/* Trust statement */}
+      <footer className="relative z-10" style={{ borderTop: `1px solid ${colors.borderSubtle}` }}>
+        {/* Trust statement — ResponsibleUseNotice from design system */}
         <div className="max-w-7xl mx-auto px-6 sm:px-8 pt-12 sm:pt-16 pb-6">
-          <p className="text-center text-white/20 text-xs leading-relaxed max-w-lg mx-auto">
-            {t('footer.trust')}
-          </p>
+          <ResponsibleUseNotice />
         </div>
 
         {/* Main footer content */}
@@ -1520,15 +1306,15 @@ function Home() {
             {/* Brand column */}
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-amber-300/50 text-xl">☯︎</span>
-                <span className="text-white/70 font-serif text-lg">TianJi Global</span>
+                <span className="text-xl" style={{ color: colors.goldDim }}>☯︎</span>
+                <span className="font-serif text-lg" style={{ color: colors.textSecondary }}>TianJi Global</span>
               </div>
-              <p className="text-white/35 text-sm leading-relaxed mb-3 max-w-sm">
+              <p className="text-sm leading-relaxed mb-3 max-w-sm" style={{ color: colors.textMuted }}>
                 {t('footer.brand.desc')}
               </p>
               <div className="flex gap-4 mt-5">
                 {['Twitter', 'GitHub', 'Discord'].map((platform) => (
-                  <span key={platform} className="text-white/15 hover:text-white/40 text-xs cursor-pointer transition-colors duration-200">
+                  <span key={platform} className="text-xs cursor-pointer transition-colors duration-200" style={{ color: colors.textMuted }}>
                     {platform}
                   </span>
                 ))}
@@ -1537,7 +1323,7 @@ function Home() {
 
             {/* Products */}
             <div>
-              <h4 className="text-white/50 text-sm font-medium mb-3">{t('footer.products')}</h4>
+              <h4 className="text-sm font-medium mb-3" style={{ color: colors.textTertiary }}>{t('footer.products')}</h4>
               <ul className="space-y-2">
                 {[
                   { label: '紫微斗数', href: '/ziwei' },
@@ -1547,7 +1333,7 @@ function Home() {
                   { label: '易经', href: '/yijing' },
                 ].map((link) => (
                   <li key={link.href}>
-                    <a href={link.href} className="text-white/30 hover:text-white/55 text-sm transition-colors duration-200">
+                    <a href={link.href} className="text-sm transition-colors duration-200" style={{ color: colors.textMuted }}>
                       {link.label}
                     </a>
                   </li>
@@ -1557,7 +1343,7 @@ function Home() {
 
             {/* Advanced */}
             <div>
-              <h4 className="text-white/50 text-sm font-medium mb-3">{t('footer.advanced')}</h4>
+              <h4 className="text-sm font-medium mb-3" style={{ color: colors.textTertiary }}>{t('footer.advanced')}</h4>
               <ul className="space-y-2">
                 {[
                   { label: '合盘分析', href: '/synastry' },
@@ -1567,7 +1353,7 @@ function Home() {
                   { label: '择日择吉', href: '/electional' },
                 ].map((link) => (
                   <li key={link.href}>
-                    <a href={link.href} className="text-white/30 hover:text-white/55 text-sm transition-colors duration-200">
+                    <a href={link.href} className="text-sm transition-colors duration-200" style={{ color: colors.textMuted }}>
                       {link.label}
                     </a>
                   </li>
@@ -1577,7 +1363,7 @@ function Home() {
 
             {/* Trust & Legal */}
             <div>
-              <h4 className="text-white/50 text-sm font-medium mb-3">{t('footer.trust.links')}</h4>
+              <h4 className="text-sm font-medium mb-3" style={{ color: colors.textTertiary }}>{t('footer.trust.links')}</h4>
               <ul className="space-y-2">
                 {[
                   { label: '关于天机', href: '/about' },
@@ -1587,7 +1373,7 @@ function Home() {
                   { label: '联系我们', href: '/about#contact' },
                 ].map((link) => (
                   <li key={link.href}>
-                    <a href={link.href} className="text-white/30 hover:text-white/55 text-sm transition-colors duration-200">
+                    <a href={link.href} className="text-sm transition-colors duration-200" style={{ color: colors.textMuted }}>
                       {link.label}
                     </a>
                   </li>
@@ -1598,13 +1384,15 @@ function Home() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/[0.03]">
+        <div style={{ borderTop: `1px solid ${colors.borderSubtle}` }}>
           <div className="max-w-7xl mx-auto px-6 sm:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p className="text-white/15 text-xs">
+            <p className="text-xs" style={{ color: colors.textMuted }}>
               © {new Date().getFullYear()} TianJi Global · 天机全球. All rights reserved.
             </p>
-            <p className="text-white/10 text-[10px] text-center sm:text-right max-w-xs">
-              提供自我反思工具，不替代专业建议 · A tool for self-reflection, not a substitute for professional advice. 🌐 Region-neutral · 中英双语
+            <p className="text-[10px] text-center sm:text-right max-w-xs" style={{ color: colors.textMuted }}>
+              {lang === 'zh'
+                ? '提供自我反思工具，不替代专业建议 · 🌐 中英双语'
+                : 'A tool for self-reflection, not a substitute for professional advice. 🌐 Bilingual'}
             </p>
           </div>
         </div>
