@@ -129,59 +129,14 @@ function LoginForm() {
             </div>
           ) : (
             <>
-              {/* Magic Link Form */}
-              <form onSubmit={handleMagicLink} className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-xs mb-2" style={{ color: 'rgba(226,232,240,0.5)' }}>
-                    Email address
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="w-full px-4 py-3 rounded-xl text-sm"
-                    style={{
-                      background: 'rgba(255,255,255,0.04)',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      color: '#E2E8F0',
-                      outline: 'none',
-                    }}
-                    required
-                  />
-                </div>
-
-                {error && (
-                  <p className="text-xs px-3 py-2 rounded-lg" style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.2)', color: '#F87171' }}>
-                    {error}
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-3 rounded-xl text-sm font-medium transition-all"
-                  style={{
-                    background: isLoading ? 'rgba(167,139,250,0.3)' : 'linear-gradient(135deg, rgba(167,139,250,0.2), rgba(244,114,182,0.2))',
-                    border: '1px solid rgba(167,139,250,0.3)',
-                    color: '#E2E8F0',
-                    cursor: isLoading ? 'not-allowed' : 'pointer',
-                  }}
-                >
-                  {isLoading ? 'Sending...' : '🔮 Send Magic Link'}
-                </button>
-              </form>
-
-              {/* Divider */}
-              <div className="relative mb-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }} />
-                </div>
-                <div className="relative flex justify-center text-xs">
-                  <span className="px-3" style={{ background: 'rgba(10,10,26,0.8)', color: 'rgba(226,232,240,0.3)' }}>
-                    or
-                  </span>
-                </div>
+              {/* Magic Link coming soon — requires EMAIL_FROM domain verification in Resend */}
+              <div className="mb-6 p-4 rounded-xl text-center" style={{ background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.15)' }}>
+                <p className="text-sm" style={{ color: 'rgba(226,232,240,0.6)' }}>
+                  🔮 Magic Link sign-in coming soon
+                </p>
+                <p className="text-xs mt-1" style={{ color: 'rgba(226,232,240,0.35)' }}>
+                  Sign in with Google below for now
+                </p>
               </div>
 
               {/* Google OAuth */}

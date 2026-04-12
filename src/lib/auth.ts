@@ -14,7 +14,6 @@
 import NextAuth from 'next-auth';
 import type { NextAuthConfig } from 'next-auth';
 import Google from 'next-auth/providers/google';
-import Resend from 'next-auth/providers/resend';
 import { isSupabaseConfigured, getSupabaseAdmin } from '@/lib/supabase';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -24,12 +23,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
       allowDangerousEmailAccountLinking: true,
     }),
-
-    Resend({
-      apiKey: process.env.RESEND_API_KEY,
-      from: process.env.EMAIL_FROM ?? 'TianJi Global <noreply@tianji.global>',
-    }),
   ],
+
+  // TODO: Add Resend Magic Link provider once EMAIL_FROM domain is verified in Resend.
+  // To re-enable: uncomment the Resend import and provider block below.
+  // Requires: (1) verify tianji.global domain in Resend, OR (2) use onboarding@resend.dev
+  // Resend({
+  //   apiKey: process.env.RESEND_API_KEY,
+  //   from: process.env.EMAIL_FROM ?? 'TianJi Global <onboarding@resend.dev>',
+  // }),
+
 
   // JWT strategy — no DB required for auth
   session: { strategy: 'jwt', maxAge: 30 * 24 * 60 * 60 },
