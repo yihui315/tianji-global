@@ -1,76 +1,23 @@
 /**
- * Authentication Configuration — TianJi Global
+ * Authentication — TianJi Global
  *
- * NextAuth v5 with PostgreSQL database sessions.
- * Supports email magic link + Google OAuth.
+ * NextAuth v5 with JWT sessions + Resend Magic Link + Google OAuth.
  *
- * Session data is stored in the PostgreSQL `sessions` table.
- * User records are created/updated in the `users` table on first sign-in.
+ * Strategy: JWT (no database required for auth).
+ * User records are created in Supabase `users` table on first sign-in via
+ * the Supabase Admin client (relationship tables already use Supabase).
+ *
+ * To upgrade to database sessions: set DATABASE_URL to a PostgreSQL connection
+ * string, add @auth/pg-adapter, and switch strategy to 'database'.
  */
 
 import NextAuth from 'next-auth';
 import type { NextAuthConfig } from 'next-auth';
-import PgAdapter from '@auth/pg-adapter';
 import Google from 'next-auth/providers/google';
-import Email from 'next-auth/providers/email';
-import type { NodemailerConfig } from '@auth/core/providers/nodemailer';
-import type { Theme } from '@auth/core/types.js';
-import { pool } from '@/lib/db';
-import nodemailer from 'nodemailer';
-
-// ---------------------------------------------------------------------------
-// Database adapter
-// ---------------------------------------------------------------------------
-
-const adapter = PgAdapter(pool);
-
-// ---------------------------------------------------------------------------
-// Email transport (magic link)
-// ---------------------------------------------------------------------------
-
-const emailTransporter = nodemailer.createTransport({
-  host: process.env.EMAIL_SMTP_HOST,
-  port: Number(process.env.EMAIL_SMTP_PORT ?? 587),
-  secure: Number(process.env.EMAIL_SMTP_PORT ?? 587) === 465,
-  auth: {
-    user: process.env.EMAIL_SMTP_USER,
-    pass: process.env.EMAIL_SMTP_PASS,
-  },
-});
-
-async function sendVerificationRequest(params: {
-  identifier: string;
-  url: string;
-  expires: Date;
-  provider: NodemailerConfig;
-  token: string;
-  theme: string;
-  request: Request;
-}) {
-  const { identifier, url, provider } = params;
-  const host = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
-
-  await emailTransporter.sendMail({
-    to: identifier,
-    from: process.env.EMAIL_FROM ?? provider.from ?? 'noreply@tianji.global',
-    subject: `Sign in to ${host}`,
-    html: `
-      <p>Hi,</p>
-      <p>Click the link below to sign in to your ${host} account:</p>
-      <p><a href="${url}">${url}</a></p>
-      <p>If you didn't request this, you can safely ignore this email.</p>
-    `,
-    text: `Hi,\n\nClick the link below to sign in to your ${host} account:\n\n${url}\n\nIf you didn't request this, you can safely ignore this email.`,
-  });
-}
-
-// ---------------------------------------------------------------------------
-// NextAuth v5 handlers
-// ---------------------------------------------------------------------------
+import Resend from 'next-auth/providers/resend';
+import { isSupabaseConfigured, getSupabaseAdmin } from '@/lib/supabase';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter,
-
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
@@ -78,25 +25,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       allowDangerousEmailAccountLinking: true,
     }),
 
-    Email({
-      server: {
-        host: process.env.EMAIL_SMTP_HOST,
-        port: Number(process.env.EMAIL_SMTP_PORT ?? 587),
-        auth: {
-          user: process.env.EMAIL_SMTP_USER,
-          pass: process.env.EMAIL_SMTP_PASS,
-        },
-      },
-      from: process.env.EMAIL_FROM ?? 'noreply@tianji.global',
-      sendVerificationRequest,
+    Resend({
+      apiKey: process.env.RESEND_API_KEY,
+      from: process.env.EMAIL_FROM ?? 'TianJi Global <noreply@tianji.global>',
     }),
   ],
 
-  // Store sessions in PostgreSQL instead of JWT
-  session: {
-    strategy: 'database',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
+  // JWT strategy — no DB required for auth
+  session: { strategy: 'jwt', maxAge: 30 * 24 * 60 * 60 },
 
   pages: {
     signIn: '/login',
@@ -106,19 +42,47 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   callbacks: {
     /**
-     * Called on every sign-in. The adapter's createUser hook
-     * creates the user record in the `users` table on first sign-in.
+     * Called on every sign-in.
+     * Creates a user record in Supabase `users` table on first Google sign-in.
      */
     async signIn({ user, account }) {
+      if (account?.provider === 'google' && user.email) {
+        if (isSupabaseConfigured()) {
+          try {
+            const supabase = getSupabaseAdmin();
+            await supabase
+              .from('users')
+              .upsert({
+                email: user.email,
+                name: user.name ?? null,
+                avatar_url: user.image ?? null,
+                provider: 'google',
+              }, { onConflict: 'email' });
+          } catch (err) {
+            // Non-fatal — auth continues even if DB write fails
+            console.warn('[auth] Failed to upsert user in Supabase:', err);
+          }
+        }
+      }
       return true;
     },
 
     /**
-     * Merge adapter user data (e.g. id) into the session.
+     * Put user id into JWT for session.user.id access.
      */
-    async session({ session, user }) {
-      if (session.user && user) {
-        session.user.id = user.id as string;
+    async jwt({ token, user }) {
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
+    },
+
+    /**
+     * Expose user id in session.
+     */
+    async session({ session, token }) {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
       }
       return session;
     },
