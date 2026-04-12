@@ -1315,6 +1315,13 @@ function Home() {
                 <p className="text-white/55 text-sm sm:text-base leading-relaxed">
                   {t('story.body.relationship')}
                 </p>
+                <a
+                  href="/relationship/new"
+                  className="mt-5 inline-flex items-center gap-2 text-sm font-medium transition-colors duration-200"
+                  style={{ color: '#A78BFA' }}
+                >
+                  {t('story.cta.relationship') || '🔮 尝试关系合盘 →'}
+                </a>
               </div>
               <div className="lg:col-span-3">
                 <RelationshipRadarChart />

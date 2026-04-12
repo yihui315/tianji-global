@@ -66,6 +66,7 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
     'story.title.chart': { zh: '精密的命盘架构', en: 'Precision Chart Architecture' },
     'story.title.relationship': { zh: '深层关系解读', en: 'Deep Relationship Analysis' },
     'story.title.rhythm': { zh: '长周期运势节律', en: 'Long-Cycle Fortune Rhythms' },
+    'story.cta.relationship': { zh: '🔮 尝试关系合盘 →', en: '🔮 Try Relationship Analysis →' },
     'story.body.chart': {
       zh: '从紫微十二宫到西方黄道十二宫，每一颗星曜的位置都经过瑞士星历表（Swiss Ephemeris）精确到角秒级别的计算。',
       en: 'From Zi Wei\'s twelve palaces to the Western zodiac, every stellar position is calculated to arc-second precision via Swiss Ephemeris.',
