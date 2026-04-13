@@ -48,9 +48,9 @@ export function FinalCTA({
     >
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {/* MiniMax AI-generated portal background */}
+        {/* MiniMax AI-generated cosmic interface background */}
         <img
-          src="/assets/hero/final-cta-portal.png"
+          src="/assets/hero/hero-cosmic-interface.png"
           alt=""
           className="absolute inset-0 w-full h-full object-cover opacity-40"
           aria-hidden="true"
