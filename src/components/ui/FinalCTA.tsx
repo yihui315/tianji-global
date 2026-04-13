@@ -48,6 +48,13 @@ export function FinalCTA({
     >
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {/* MiniMax AI-generated portal background */}
+        <img
+          src="/assets/hero/final-cta-portal.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
+          aria-hidden="true"
+        />
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full blur-[120px]"
           style={{ background: colors.purpleDim }}

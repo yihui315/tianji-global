@@ -56,6 +56,17 @@ interface ShareCardProps {
 function ShareCard({ reading, lang }: ShareCardProps) {
   const [copied, setCopied] = useState(false);
 
+  // MiniMax AI-generated share card backgrounds by service type
+  const SHARE_BACKGROUNDS: Record<string, string> = {
+    synastry: '/assets/share/share-relationship-card.png',
+    ziwei:    '/assets/share/share-fortune-chart.png',
+    bazi:     '/assets/share/share-fortune-chart.png',
+    western:  '/assets/share/share-fortune-chart.png',
+    tarot:    '/assets/share/share-ai-card.png',
+    yijing:   '/assets/share/share-ai-card.png',
+  };
+  const bgImage = SHARE_BACKGROUNDS[reading.type] || '/assets/share/share-ai-card.png';
+
   const handleCopy = async () => {
     const text = `${reading.summary.headline}\n${reading.summary.keywords.join(' · ')}\n\n🔮 TianJi Global`;
     await navigator.clipboard.writeText(text);
@@ -69,20 +80,24 @@ function ShareCard({ reading, lang }: ShareCardProps) {
         {lang === 'zh' ? '📱 一句话分享卡片' : '📱 One-Line Share Card'}
       </div>
       <div
-        className="p-4 rounded-xl text-center mb-3"
+        className="p-4 rounded-xl text-center mb-3 relative overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, rgba(124,58,237,0.15), rgba(251,191,36,0.08))',
-          border: '1px solid rgba(167,139,250,0.2)',
+          background: `linear-gradient(135deg, rgba(124,58,237,0.6), rgba(251,191,36,0.3)), url(${bgImage}) center/cover`,
+          border: '1px solid rgba(167,139,250,0.3)',
         }}
       >
-        <p className="text-sm font-serif font-bold text-white mb-1">{reading.summary.headline}</p>
-        <div className="flex flex-wrap justify-center gap-1 mt-2">
-          {reading.summary.keywords.slice(0, 3).map((k, i) => (
-            <span key={i} className="text-xs px-2 py-0.5 rounded-full"
-              style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(226,232,240,0.7)' }}>
-              {k}
-            </span>
-          ))}
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 rounded-xl" style={{ background: 'rgba(3,0,20,0.5)' }} />
+        <div className="relative z-10">
+          <p className="text-sm font-serif font-bold text-white mb-1">{reading.summary.headline}</p>
+          <div className="flex flex-wrap justify-center gap-1 mt-2">
+            {reading.summary.keywords.slice(0, 3).map((k, i) => (
+              <span key={i} className="text-xs px-2 py-0.5 rounded-full"
+                style={{ background: 'rgba(255,255,255,0.15)', color: 'rgba(226,232,240,0.9)' }}>
+                {k}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
       <button

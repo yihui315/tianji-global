@@ -12,20 +12,20 @@ export interface ServiceItem {
   image?: string;
 }
 
-/** Local AI-generated preview images served from /public/assets/services/ */
+/** MiniMax AI-generated icon images served from /public/assets/icons/ */
 const IMG = {
-  ziwei:      '/assets/services/ziwei.jpg',
-  bazi:       '/assets/services/bazi.jpg',
-  yijing:     '/assets/services/yijing.jpg',
-  western:    '/assets/services/western.jpg',
-  synastry:   '/assets/services/synastry.jpg',
-  tarot:      '/assets/services/tarot.jpg',
-  numerology: '/assets/services/numerology.jpg',
-  solreturn:  '/assets/services/solar-return.jpg',
-  transit:    '/assets/services/transit.jpg',
-  fengshui:   '/assets/services/fengshui.jpg',
-  electional: '/assets/services/electional.jpg',
-  horary:     '/assets/services/horary.jpg',
+  ziwei:      '/assets/icons/icon-ziwei.png',
+  bazi:       '/assets/icons/icon-bazi.png',
+  yijing:     '/assets/icons/icon-yijing.png',
+  western:    '/assets/icons/icon-western.png',
+  synastry:   '/assets/icons/icon-synastry.png',
+  tarot:      '/assets/icons/icon-tarot.png',
+  numerology: '/assets/icons/icon-ai.png',     // numerology → AI icon
+  solreturn:  '/assets/icons/icon-solar.png',  // solar return → solar icon
+  transit:    '/assets/icons/icon-transit.png',
+  fengshui:   '/assets/icons/icon-fengshui.png',
+  electional: '/assets/icons/icon-electional.png',
+  horary:     '/assets/icons/icon-yijing.png', // horary → yijing icon
 };
 
 export const SERVICES: ServiceItem[] = [

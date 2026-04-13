@@ -1232,7 +1232,18 @@ function ToolsSection() {
                 className="group block rounded-lg overflow-hidden border border-white/[0.04] hover:border-white/[0.12] transition-all duration-200"
               >
                 <div className="p-2.5 sm:p-3 bg-white/[0.01]">
-                  <div className="text-lg mb-1">{s.icon}</div>
+                  <div className="mb-2">
+                    {s.image ? (
+                      <img
+                        src={s.image}
+                        alt={s.title[lang]}
+                        className="w-10 h-10 object-contain"
+                        style={{ filter: 'drop-shadow(0 0 6px rgba(167,139,250,0.3))' }}
+                      />
+                    ) : (
+                      <span className="text-lg">{s.icon}</span>
+                    )}
+                  </div>
                   <h3 className="text-xs font-serif text-white/70 mb-0.5 group-hover:text-white/90 transition-colors">
                     {s.title[lang]}
                   </h3>
