@@ -2,14 +2,40 @@
 
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+
+type Reading = {
+  id: string;
+  reading_type: string;
+  title: string;
+  summary: string;
+  created_at: string;
+};
+
+const TYPE_META: Record<string, { label: string; labelEn: string; color: string; emoji: string }> = {
+  ziwei:   { label: '紫微斗数', labelEn: 'Zi Wei',    color: 'text-purple-300',   emoji: '🔮' },
+  bazi:    { label: '八字命理', labelEn: 'Ba Zi',     color: 'text-amber-300',    emoji: '🎴' },
+  yijing:  { label: '易经占卜', labelEn: 'Yi Jing',   color: 'text-emerald-300',  emoji: '☯'  },
+  western: { label: '西方占星', labelEn: 'Western',   color: 'text-blue-300',     emoji: '⭐' },
+  tarot:    { label: '塔罗牌',   labelEn: 'Tarot',     color: 'text-rose-300',     emoji: '🃏' },
+};
+
+function formatDate(iso: string, lang: 'zh' | 'en') {
+  const d = new Date(iso);
+  if (lang === 'zh') {
+    return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [language, setLanguage] = useState<'zh' | 'en'>('zh');
   const [portalLoading, setPortalLoading] = useState(false);
+  const [readings, setReadings] = useState<Reading[]>([]);
+  const [readingsLoading, setReadingsLoading] = useState(true);
 
   if (status === 'loading') {
     return (
@@ -23,6 +49,18 @@ export default function DashboardPage() {
     router.push('/login');
     return null;
   }
+
+  // Fetch recent readings
+  useEffect(() => {
+    if (!session?.user) return;
+    fetch('/api/readings')
+      .then(r => r.json())
+      .then(data => {
+        setReadings(data.readings ?? []);
+        setReadingsLoading(false);
+      })
+      .catch(() => setReadingsLoading(false));
+  }, [session?.user]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900 text-white">
@@ -153,14 +191,59 @@ export default function DashboardPage() {
 
         {/* Recent Readings */}
         <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/10">
-          <h2 className="text-xl font-semibold mb-4">
-            {language === 'zh' ? '最近解读' : 'Recent Readings'}
-          </h2>
-          <div className="text-purple-300 text-sm">
-            {language === 'zh'
-              ? '完成第一次解读后，您的历史记录将显示在这里'
-              : 'Your reading history will appear here after you complete your first reading.'}
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold">
+              {language === 'zh' ? '最近解读' : 'Recent Readings'}
+            </h2>
+            <span className="text-xs text-slate-500">
+              {readings.length > 0 ? `${readings.length} records` : ''}
+            </span>
           </div>
+
+          {readingsLoading ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="h-16 bg-white/5 rounded-lg animate-pulse" />
+              ))}
+            </div>
+          ) : readings.length === 0 ? (
+            <div className="text-purple-300 text-sm">
+              {language === 'zh'
+                ? '完成第一次解读后，您的历史记录将显示在这里'
+                : 'Your reading history will appear here after you complete your first reading.'}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {readings.map(reading => {
+                const meta = TYPE_META[reading.reading_type] ?? {
+                  label: reading.reading_type,
+                  labelEn: reading.reading_type,
+                  color: 'text-slate-300',
+                  emoji: '✨',
+                };
+                return (
+                  <a
+                    key={reading.id}
+                    href={`/reading/${reading.id}`}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 transition group"
+                  >
+                    <span className="text-2xl">{meta.emoji}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-white truncate group-hover:text-purple-300 transition">
+                        {reading.title}
+                      </div>
+                      <div className={`text-xs ${meta.color}`}>
+                        {language === 'zh' ? meta.label : meta.labelEn}
+                        {' · '}
+                        <span className="text-slate-500">{formatDate(reading.created_at, language)}</span>
+                      </div>
+                    </div>
+                    <span className="text-slate-600 group-hover:text-white transition">→</span>
+                  </a>
+                );
+              })}
+            </div>
+          )}
         </div>
       </main>
     </div>

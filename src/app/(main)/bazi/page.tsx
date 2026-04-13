@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import SharePanel from '@/components/SharePanel';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
+import { saveReading } from '@/lib/save-reading';
 import BaziWheelAnimation from '@/components/animations/BaziWheelAnimation';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
 
@@ -160,6 +161,12 @@ export default function BaZiPage() {
       if (!res.ok) throw new Error(json.aiError || json.interpretation || 'Calculation failed');
 
       setResult(json);
+      saveReading({
+        reading_type: 'bazi',
+        title: `${json.birthDate} ${json.gender === 'male' ? '男' : '女'} 八字命理`,
+        summary: json.interpretation?.slice(0, 120) ?? '',
+        reading_data: json as unknown as Record<string, unknown>,
+      });
       setElementCounts(countElements(json.chart));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');

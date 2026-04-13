@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import SharePanel from '@/components/SharePanel';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
+import { saveReading } from '@/lib/save-reading';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
 import TarotCardAnimation from '@/components/animations/TarotCardAnimation';
 import { spreadLayouts, type TarotCard, type SpreadLayout, type DrawnCard } from '@/lib/tarot';
@@ -63,6 +64,12 @@ export default function TarotPage() {
 
       const data: TarotReadingResponse = await response.json();
       setReading(data);
+      saveReading({
+        reading_type: 'tarot',
+        title: `${language === 'zh' ? '塔罗' : 'Tarot'} — ${data.spread.name}`,
+        summary: data.aiInterpretation?.slice(0, 120) ?? '',
+        reading_data: data as unknown as Record<string, unknown>,
+      });
     } catch {
       setError(language === 'zh' ? '抽卡失败，请重试' : 'Failed to draw cards. Please try again.');
     } finally {

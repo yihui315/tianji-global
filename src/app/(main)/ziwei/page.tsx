@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { Iztrolabe } from 'react-iztro';
 import ZiWeiPalaceAnimation from '@/components/animations/ZiWeiPalaceAnimation';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
+import { saveReading } from '@/lib/save-reading';
 
 interface ZiweiAIResponse {
   aiInterpretation?: string;
@@ -55,6 +56,12 @@ export default function ZiweiPage() {
 
         const data: ZiweiAIResponse = await res.json();
         setAiResult(data);
+        saveReading({
+          reading_type: 'ziwei',
+          title: `${birthday} ${birthdayType === 'lunar' ? '农历' : '阳历'} ${gender === 'male' ? '男' : '女'} 紫微斗数`,
+          summary: data.aiInterpretation?.slice(0, 120) ?? '',
+          reading_data: data as unknown as Record<string, unknown>,
+        });
       } catch (err) {
         console.error('Ziwei AI fetch failed:', err);
         setAiResult({

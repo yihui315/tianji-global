@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import SharePanel from '@/components/SharePanel';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
+import { saveReading } from '@/lib/save-reading';
 
 type Language = 'zh' | 'en';
 
@@ -154,6 +155,12 @@ export default function YiJingPage() {
         lines: data.lines,
         hasChangingLines: data.hasChangingLines,
         aiInterpretation: data.aiInterpretation,
+      });
+      saveReading({
+        reading_type: 'yijing',
+        title: `易经 — ${data.hexagram?.name ?? '占卜'}`,
+        summary: data.aiInterpretation?.slice(0, 120) ?? '',
+        reading_data: data as unknown as Record<string, unknown>,
       });
     } catch (err) {
       console.error(err);

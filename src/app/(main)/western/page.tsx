@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
+import { saveReading } from '@/lib/save-reading';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -206,6 +207,12 @@ export default function WesternPage() {
 
       const data: ChartApiResponse = await response.json();
       setChartData(data);
+      saveReading({
+        reading_type: 'western',
+        title: `${birthday} Western Natal Chart`,
+        summary: data.natal?.summary?.slice(0, 120) ?? '',
+        reading_data: data as unknown as Record<string, unknown>,
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
