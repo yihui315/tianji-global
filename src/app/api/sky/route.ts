@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import sw from 'sweph'
-const { utc_to_jd, calc, azalt, pheno, constants } = sw
+import { CalendarGregorianToJD } from 'astronomia/julian'
+import { Planet } from 'astronomia/planetposition'
+import { position as moonPosition } from 'astronomia/moonposition'
+import earthData from 'astronomia/data/vsop87Bearth'
+import mercuryData from 'astronomia/data/vsop87Bmercury'
+import venusData from 'astronomia/data/vsop87Bvenus'
+import marsData from 'astronomia/data/vsop87Bmars'
+import jupiterData from 'astronomia/data/vsop87Bjupiter'
+import saturnData from 'astronomia/data/vsop87Bsaturn'
+import uranusData from 'astronomia/data/vsop87Buranus'
+import neptuneData from 'astronomia/data/vsop87Bneptune'
 
 const ZODIAC_SIGNS = [
   { name: 'Aries', nameZh: '白羊', symbol: '♈' },
@@ -22,45 +31,111 @@ function getZodiacSign(lon: number): { name: string; nameZh: string; symbol: str
   return ZODIAC_SIGNS[signIndex]
 }
 
-function jdToDate(jd: number): Date {
-  const z = Math.floor(jd + 0.5)
-  const f = jd + 0.5 - z
-  let a: number
-  if (z < 2299161) {
-    a = z
-  } else {
-    const alpha = Math.floor((z - 1867216.25) / 36524.25)
-    a = z + 1 + alpha - Math.floor(alpha / 4)
-  }
-  const b = a + 1524
-  const c = Math.floor((b - 122.1) / 365.25)
-  const d = Math.floor(365.25 * c)
-  const e = Math.floor((b - d) / 30.6001)
-  const day = b - d - Math.floor(30.6001 * e) + f
-  const month = e < 14 ? e - 1 : e - 13
-  const year = month > 2 ? c - 4716 : c - 4715
-  const hours = (day % 1) * 24
-  const minutes = (hours % 1) * 60
-  const seconds = (minutes % 1) * 60
-  return new Date(
-    year,
-    month - 1,
-    Math.floor(day),
-    Math.floor(hours),
-    Math.floor(minutes),
-    Math.floor(seconds)
-  )
+function radToDeg(rad: number): number {
+  return (rad * 180 / Math.PI + 360) % 360
 }
 
-function getPlanets(): { id: number; name: string; nameZh: string }[] {
+function degToRad(deg: number): number {
+  return deg * Math.PI / 180
+}
+
+function normalizeAngle(a: number): number {
+  a = a % 360
+  return a < 0 ? a + 360 : a
+}
+
+// Convert ecliptic coordinates (lon, lat in degrees) to horizontal (alt, az in degrees)
+// Using standard astronomical transformation
+function eclipticToHorizontal(
+  eclLon: number, eclLat: number,
+  jd: number, lat: number, lng: number
+): { alt: number; az: number } {
+  // Obliquity of the ecliptic
+  const T = (jd - 2451545.0) / 36525
+  const eps = (23.439291111 - 0.0130042 * T - 0.00000016 * T * T + 0.000000504 * T * T * T) * Math.PI / 180
+
+  // Ecliptic to equatorial (RA, Dec)
+  const lonRad = degToRad(eclLon)
+  const latRad = degToRad(eclLat)
+
+  const sinDec = Math.sin(latRad) * Math.cos(eps) - Math.cos(latRad) * Math.sin(eps) * Math.sin(lonRad)
+  const dec = Math.asin(sinDec)
+
+  const cosRA = Math.cos(latRad) * Math.cos(lonRad) / Math.cos(dec)
+  const sinRA = Math.cos(latRad) * Math.sin(eps) * Math.sin(lonRad) + Math.sin(latRad) * Math.cos(eps)
+  const RA = Math.atan2(sinRA, cosRA)
+
+  // Local sidereal time
+  const lst = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * T * T - lng
+  const lstRad = degToRad(lst % 360)
+
+  // Hour angle
+  const HA = lstRad - RA
+
+  // Horizontal coordinates
+  const latRadObs = degToRad(lat)
+  const sinAlt = Math.sin(dec) * Math.sin(latRadObs) + Math.cos(dec) * Math.cos(latRadObs) * Math.cos(HA)
+  const alt = Math.asin(sinAlt)
+
+  const cosAz = (Math.sin(dec) - Math.sin(alt) * Math.sin(latRadObs)) / (Math.cos(alt) * Math.cos(latRadObs))
+  const sinAz = -Math.cos(dec) * Math.sin(HA) / Math.cos(alt)
+  let az = Math.atan2(sinAz, cosAz)
+
+  return {
+    alt: radToDeg(alt),
+    az: normalizeAngle(radToDeg(az)),
+  }
+}
+
+// Get moon phase (0=new, 0.5=full, returns value 0-1)
+function getMoonPhase(jd: number): number {
+  try {
+    const moon = moonPosition(jd)
+    const earth = new Planet(earthData)
+    const earthPos = earth.position(jd)
+    const sunLon = radToDeg((earthPos.lon + Math.PI) % (2 * Math.PI))
+    const moonLon = radToDeg(moon.lon)
+
+    let elongation = moonLon - sunLon
+    while (elongation > 180) elongation -= 360
+    while (elongation < -180) elongation += 360
+
+    return Math.abs(elongation) / 180
+  } catch {
+    return 0.5
+  }
+}
+
+// Planet data setup
+const earth = new Planet(earthData)
+const mercury = new Planet(mercuryData)
+const venus = new Planet(venusData)
+const mars = new Planet(marsData)
+const jupiter = new Planet(jupiterData)
+const saturn = new Planet(saturnData)
+const uranus = new Planet(uranusData)
+const neptune = new Planet(neptuneData)
+
+const PLANET_DATA: Record<string, { getPosition: (jd: number) => { lon: number; lat: number; distance: number } }> = {
+  Sun:     { getPosition: (jd) => { const p = earth.position(jd); return { lon: (p.lon + Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Mercury: { getPosition: (jd) => { const p = mercury.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Venus:   { getPosition: (jd) => { const p = venus.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Mars:    { getPosition: (jd) => { const p = mars.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Jupiter: { getPosition: (jd) => { const p = jupiter.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Saturn:  { getPosition: (jd) => { const p = saturn.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Uranus:  { getPosition: (jd) => { const p = uranus.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Neptune: { getPosition: (jd) => { const p = neptune.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+}
+
+function getPlanets(): { id: string; name: string; nameZh: string }[] {
   return [
-    { id: constants.SE_MERCURY, name: 'Mercury', nameZh: '水星' },
-    { id: constants.SE_VENUS, name: 'Venus', nameZh: '金星' },
-    { id: constants.SE_MARS, name: 'Mars', nameZh: '火星' },
-    { id: constants.SE_JUPITER, name: 'Jupiter', nameZh: '木星' },
-    { id: constants.SE_SATURN, name: 'Saturn', nameZh: '土星' },
-    { id: constants.SE_URANUS, name: 'Uranus', nameZh: '天王星' },
-    { id: constants.SE_NEPTUNE, name: 'Neptune', nameZh: '海王星' },
+    { id: 'Mercury', name: 'Mercury', nameZh: '水星' },
+    { id: 'Venus', name: 'Venus', nameZh: '金星' },
+    { id: 'Mars', name: 'Mars', nameZh: '火星' },
+    { id: 'Jupiter', name: 'Jupiter', nameZh: '木星' },
+    { id: 'Saturn', name: 'Saturn', nameZh: '土星' },
+    { id: 'Uranus', name: 'Uranus', nameZh: '天王星' },
+    { id: 'Neptune', name: 'Neptune', nameZh: '海王星' },
   ]
 }
 
@@ -87,75 +162,56 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const flags = constants.SEFLG_SWIEPH
-  const jd = utc_to_jd(
+  const jd = CalendarGregorianToJD(
     date.getUTCFullYear(),
     date.getUTCMonth() + 1,
-    date.getUTCDate(),
-    date.getUTCHours(),
-    date.getUTCMinutes(),
-    date.getUTCSeconds(),
-    constants.SE_GREG_CAL
+    date.getUTCDate() + date.getUTCHours() / 24 + date.getUTCMinutes() / 1440
   )
-
-  if (jd.flag !== constants.OK) {
-    return NextResponse.json({ error: jd.error }, { status: 500 })
-  }
-
-  const [jd_et, jd_ut] = jd.data
-  const geopos: [number, number, number] = [lng, lat, 0]
-  const atpress = 1013.25
-  const attemp = 15.0
+  const jd_et = jd + 1 / 86400
 
   // Sun
-  const sunCalc = calc(jd_et, constants.SE_SUN, flags)
-  const sunAzAlt = azalt(jd_ut, constants.SE_ECL2HOR, geopos, atpress, attemp, [
-    sunCalc.data[0],
-    sunCalc.data[1],
-    sunCalc.data[2],
-  ])
-  const sunZodiac = getZodiacSign(sunCalc.data[0])
+  const sunPos = earth.position(jd_et)
+  const sunLon = radToDeg((sunPos.lon + Math.PI) % (2 * Math.PI))
+  const sunHoriz = eclipticToHorizontal(sunLon, radToDeg(sunPos.lat), jd, lat, lng)
+  const sunZodiac = getZodiacSign(sunLon)
 
   // Moon
-  const moonCalc = calc(jd_et, constants.SE_MOON, flags)
-  const moonAzAlt = azalt(jd_ut, constants.SE_ECL2HOR, geopos, atpress, attemp, [
-    moonCalc.data[0],
-    moonCalc.data[1],
-    moonCalc.data[2],
-  ])
-  const moonPheno = pheno(jd_et, constants.SE_MOON, flags)
-  const moonZodiac = getZodiacSign(moonCalc.data[0])
-  const moonPhase = moonPheno.flag === constants.OK ? moonPheno.data[1] : 0.5
+  const moon = moonPosition(jd_et)
+  const moonLon = radToDeg(moon.lon)
+  const moonLat = radToDeg(moon.lat)
+  const moonHoriz = eclipticToHorizontal(moonLon, moonLat, jd, lat, lng)
+  const moonZodiac = getZodiacSign(moonLon)
+  const moonPhase = getMoonPhase(jd_et)
 
   // Planets
   const planets = getPlanets().map((p) => {
-    const planetCalc = calc(jd_et, p.id, flags)
-    const planetAzAlt = azalt(jd_ut, constants.SE_ECL2HOR, geopos, atpress, attemp, [
-      planetCalc.data[0],
-      planetCalc.data[1],
-      planetCalc.data[2],
-    ])
-    const planetZodiac = getZodiacSign(planetCalc.data[0])
+    const pd = PLANET_DATA[p.id]
+    if (!pd) return { name: p.name, nameZh: p.nameZh, alt: 0, az: 0, sign: '?', signName: 'Unknown' }
+    const pos = pd.getPosition(jd_et)
+    const lonDeg = radToDeg(pos.lon)
+    const latDeg = radToDeg(pos.lat)
+    const horiz = eclipticToHorizontal(lonDeg, latDeg, jd, lat, lng)
+    const zodiac = getZodiacSign(lonDeg)
     return {
       name: p.name,
       nameZh: p.nameZh,
-      alt: parseFloat((planetAzAlt[1] || 0).toFixed(2)),
-      az: parseFloat((planetAzAlt[0] || 0).toFixed(2)),
-      sign: planetZodiac.symbol,
-      signName: planetZodiac.name,
+      alt: parseFloat((horiz.alt || 0).toFixed(2)),
+      az: parseFloat((horiz.az || 0).toFixed(2)),
+      sign: zodiac.symbol,
+      signName: zodiac.name,
     }
   })
 
   const result = {
     sun: {
-      alt: parseFloat((sunAzAlt[1] || 0).toFixed(2)),
-      az: parseFloat((sunAzAlt[0] || 0).toFixed(2)),
+      alt: parseFloat((sunHoriz.alt || 0).toFixed(2)),
+      az: parseFloat((sunHoriz.az || 0).toFixed(2)),
       sign: sunZodiac.symbol,
       signName: sunZodiac.name,
     },
     moon: {
-      alt: parseFloat((moonAzAlt[1] || 0).toFixed(2)),
-      az: parseFloat((moonAzAlt[0] || 0).toFixed(2)),
+      alt: parseFloat((moonHoriz.alt || 0).toFixed(2)),
+      az: parseFloat((moonHoriz.az || 0).toFixed(2)),
       phase: parseFloat(moonPhase.toFixed(3)),
       sign: moonZodiac.symbol,
       signName: moonZodiac.name,

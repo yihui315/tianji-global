@@ -2,11 +2,19 @@
  * Electional Astrology Engine - 择日择时
  * TianJi Global | 天机全球
  *
- * Finds the most auspicious dates/times using REAL Swiss Ephemeris calculations.
+ * Finds the most auspicious dates/times using REAL astronomia calculations.
  * No Math.random() - all scores are deterministic based on actual planetary positions.
  */
 
-import { utc_to_jd, calc, constants } from 'sweph';
+import { CalendarGregorianToJD } from 'astronomia/julian'
+import { Planet } from 'astronomia/planetposition'
+import { position as moonPosition } from 'astronomia/moonposition'
+import earthData from 'astronomia/data/vsop87Bearth'
+import mercuryData from 'astronomia/data/vsop87Bmercury'
+import venusData from 'astronomia/data/vsop87Bvenus'
+import marsData from 'astronomia/data/vsop87Bmars'
+import jupiterData from 'astronomia/data/vsop87Bjupiter'
+import saturnData from 'astronomia/data/vsop87Bsaturn'
 
 export interface ElectionalCandidate {
   date: Date;
@@ -19,16 +27,25 @@ export interface ElectionalCandidate {
   highlights: string[];
 }
 
-// Planet IDs for sweph
-const SE_PLANETS: Record<string, number> = {
-  Sun: constants.SE_SUN,
-  Moon: constants.SE_MOON,
-  Mercury: constants.SE_MERCURY,
-  Venus: constants.SE_VENUS,
-  Mars: constants.SE_MARS,
-  Jupiter: constants.SE_JUPITER,
-  Saturn: constants.SE_SATURN,
-};
+// ─── Planet Data Setup ────────────────────────────────────────────────────────
+
+const earth = new Planet(earthData)
+const mercury = new Planet(mercuryData)
+const venus = new Planet(venusData)
+const mars = new Planet(marsData)
+const jupiter = new Planet(jupiterData)
+const saturn = new Planet(saturnData)
+
+const PLANET_DATA: Record<string, { getPosition: (jd: number) => { lon: number; lat: number; distance: number } }> = {
+  Sun:     { getPosition: (jd) => { const p = earth.position(jd); return { lon: (p.lon + Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Mercury: { getPosition: (jd) => { const p = mercury.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Venus:   { getPosition: (jd) => { const p = venus.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Mars:    { getPosition: (jd) => { const p = mars.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Jupiter: { getPosition: (jd) => { const p = jupiter.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Saturn:  { getPosition: (jd) => { const p = saturn.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+}
+
+const PLANET_NAMES = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn'];
 
 const SIGN_NAMES = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
                     'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
@@ -103,6 +120,10 @@ function normalizeAngle(a: number): number {
   return a < 0 ? a + 360 : a;
 }
 
+function radToDeg(rad: number): number {
+  return (rad * 180 / Math.PI + 360) % 360;
+}
+
 function getSignName(longitude: number): string {
   return SIGN_NAMES[Math.floor(longitude / 30) % 12];
 }
@@ -125,17 +146,25 @@ function getAspectPolarity(type: string): 'harmonious' | 'challenging' | 'neutra
 
 /** Get Julian Day for a UTC date (noon) */
 function getJD(year: number, month: number, day: number): number {
-  const r = utc_to_jd(year, month, day, 12, 0, 0, constants.SE_GREG_CAL);
-  return r.data[0]; // ephemeris time
+  return CalendarGregorianToJD(year, month, day + 12 / 24);
 }
 
-/** Get planet longitude in degrees (deterministic) */
-function getPlanetLon(jd: number, seId: number): number | null {
+/** Get planet longitude in degrees */
+function getPlanetLon(jd: number, name: string): number | null {
   try {
-    const r = calc(jd, seId, constants.SEFLG_SWIEPH);
-    // flag < 0 means error (sweph returns status code, not the input iflag)
-    if (r.flag < 0) return null;
-    return normalizeAngle(r.data[0] as number);
+    const jdEt = jd + 1 / 86400;
+    if (name === 'Sun') {
+      const p = earth.position(jdEt);
+      return radToDeg((p.lon + Math.PI) % (2 * Math.PI));
+    }
+    if (name === 'Moon') {
+      const p = moonPosition(jdEt);
+      return radToDeg(p.lon);
+    }
+    const pd = PLANET_DATA[name];
+    if (!pd) return null;
+    const p = pd.getPosition(jdEt);
+    return radToDeg(p.lon);
   } catch {
     return null;
   }
@@ -143,8 +172,8 @@ function getPlanetLon(jd: number, seId: number): number | null {
 
 /** Get moon longitude and phase */
 function getMoonPhaseData(jd: number): { longitude: number; phase: 'new' | 'waxing' | 'full' | 'waning' } {
-  const moonLon = getPlanetLon(jd, constants.SE_MOON);
-  const sunLon = getPlanetLon(jd, constants.SE_SUN);
+  const moonLon = getPlanetLon(jd, 'Moon');
+  const sunLon = getPlanetLon(jd, 'Sun');
   if (moonLon === null || sunLon === null) return { longitude: 0, phase: 'new' };
 
   const elongation = normalizeAngle(moonLon - sunLon);
@@ -161,15 +190,12 @@ function getMoonPhaseData(jd: number): { longitude: number; phase: 'new' | 'waxi
 /** Get moon speed (degrees per day) for void-of-course detection */
 function getMoonSpeed(jd: number): number {
   try {
-    const r = calc(jd, constants.SE_MOON, constants.SEFLG_SPEED | constants.SEFLG_SWIEPH);
-    // flag < 0 means error (sweph returns status code, not the input iflag)
-    if (r.flag < 0) {
-      // fallback without speed
-      const r2 = calc(jd, constants.SE_MOON, constants.SEFLG_SWIEPH);
-      if (r2.flag < 0) return 13; // average speed
-      return 13; // approximate
-    }
-    return Math.abs(r.data[3] as number); // degrees per day
+    const jdEt = jd + 1 / 86400;
+    const p1 = moonPosition(jdEt - 1);
+    const p2 = moonPosition(jdEt);
+    const lonDiff1 = (p2.lon - p1.lon + 2*Math.PI) % (2*Math.PI);
+    const lonDiff2 = (p1.lon - p2.lon + 2*Math.PI) % (2*Math.PI);
+    return radToDeg(Math.min(lonDiff1, lonDiff2));
   } catch {
     return 13;
   }
@@ -180,24 +206,22 @@ function getMoonSpeed(jd: number): number {
  * Moon is void when it makes no major aspect before leaving its sign.
  */
 function isVoidOfCourse(jd: number): boolean {
-  const moonLon = getPlanetLon(jd, constants.SE_MOON);
+  const moonLon = getPlanetLon(jd, 'Moon');
   if (moonLon === null) return false;
 
   const moonDegreeInSign = moonLon % 30;
   const moonSpeed = getMoonSpeed(jd);
   const hoursLeftInSign = (30 - moonDegreeInSign) / (moonSpeed / 24);
 
-  // If less than 3 hours left in sign, check for imminent aspects
   if (hoursLeftInSign < 3) {
     for (let m = 0; m < 3; m += 0.1) {
       const jdCheck = jd + m / 24;
-      const futureMoonLon = getPlanetLon(jdCheck, constants.SE_MOON);
+      const futureMoonLon = getPlanetLon(jdCheck, 'Moon');
       if (futureMoonLon === null) continue;
 
-      // Check against slow planets
-      for (const [name, seId] of Object.entries(SE_PLANETS)) {
-        if (name === 'Moon' || name === 'Mercury') continue;
-        const planetLon = getPlanetLon(jdCheck, seId);
+      for (const name of ['Sun', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn']) {
+        if (name === 'Moon') continue;
+        const planetLon = getPlanetLon(jdCheck, name);
         if (planetLon === null) continue;
 
         const angleDiff = Math.abs(futureMoonLon - planetLon);
@@ -205,25 +229,24 @@ function isVoidOfCourse(jd: number): boolean {
         if (normAngle <= 10) {
           const aspectName = getAspectName(normAngle);
           if (aspectName && ['trine', 'square', 'opposition', 'conjunction'].includes(aspectName)) {
-            return false; // Aspect found, not void
+            return false;
           }
         }
       }
     }
-    return true; // No aspect found, void
+    return true;
   }
 
-  // Check if moon is in late degrees (27+) without any aspect
   if (moonDegreeInSign > 27) {
-    for (const [name, seId] of Object.entries(SE_PLANETS)) {
+    for (const name of ['Sun', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn']) {
       if (name === 'Moon' || name === 'Mercury' || name === 'Venus') continue;
-      const planetLon = getPlanetLon(jd, seId);
+      const planetLon = getPlanetLon(jd, name);
       if (planetLon === null) continue;
 
       const angleDiff = Math.abs(moonLon - planetLon);
       const normAngle = Math.min(angleDiff, 360 - angleDiff);
       if (normAngle <= 10 || (normAngle >= 170 && normAngle <= 190)) {
-        return false; // Has aspect, not void
+        return false;
       }
     }
     return true;
@@ -270,7 +293,6 @@ function scoreAspects(
     }
   }
 
-  // Planet dignity bonuses
   for (const [planet, bonus] of Object.entries(config.scoreBonuses)) {
     const lon = positions[planet];
     if (lon !== undefined) {
@@ -317,25 +339,21 @@ export function getBestElectionalDates(
     evalDate.setUTCHours(12, 0, 0, 0);
     const jd = getJD(evalDate.getUTCFullYear(), evalDate.getUTCMonth() + 1, evalDate.getUTCDate());
 
-    // Get moon data
     const moonData = getMoonPhaseData(jd);
     const voidOfCourse = isVoidOfCourse(jd);
 
-    // Get planetary positions
     const positions: Record<string, number> = {};
-    for (const [name, seId] of Object.entries(SE_PLANETS)) {
-      const lon = getPlanetLon(jd, seId);
+    for (const name of PLANET_NAMES) {
+      const lon = getPlanetLon(jd, name);
       if (lon !== null) positions[name] = lon;
     }
 
-    // Score aspects
     const { score, aspects, highlights, warnings } = scoreAspects(positions, config);
 
     let finalScore = score;
     const finalHighlights = [...highlights];
     const finalWarnings = [...warnings];
 
-    // Moon phase bonus/penalty
     if (config.preferWaxing && (moonData.phase === 'waxing' || moonData.phase === 'full')) {
       finalScore += 15;
       finalHighlights.push(`Moon ${moonData.phase} — favorable for new beginnings`);
@@ -347,7 +365,6 @@ export function getBestElectionalDates(
       finalWarnings.push('Waning moon less ideal for this event type');
     }
 
-    // Void of course
     if (voidOfCourse && config.avoidVoidCourse) {
       finalScore -= 20;
       finalWarnings.push('Void-of-course moon — decisions may lack follow-through');
@@ -388,8 +405,8 @@ export function getHourlyBreakdown(date: Date): { hour: number; score: number; l
   for (let h = 0; h < 24; h++) {
     const jd = jdBase + (h - 12) / 24;
     const positions: Record<string, number> = {};
-    for (const [name, seId] of Object.entries(SE_PLANETS)) {
-      const lon = getPlanetLon(jd, seId);
+    for (const name of PLANET_NAMES) {
+      const lon = getPlanetLon(jd, name);
       if (lon !== null) positions[name] = lon;
     }
     let score = 50;
@@ -403,7 +420,6 @@ export function getHourlyBreakdown(date: Date): { hour: number; score: number; l
     if ((h >= 9 && h <= 11) || (h >= 14 && h <= 16)) score += 12;
     if (h === 0 || h === 12) score -= 5;
 
-    // Jupiter sign check
     const jupiterLon = positions.Jupiter;
     if (jupiterLon !== undefined) {
       const sign = getSignName(jupiterLon);

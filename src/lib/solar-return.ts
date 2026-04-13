@@ -6,10 +6,17 @@
  * which marks the Solar Return - the beginning of a new solar year.
  */
 
-import { utc_to_jd, calc, houses_ex2, constants, set_ephe_path } from 'sweph';
-
-// Set ephemeris path to sweph's bundled data
-set_ephe_path('');
+import { CalendarGregorianToJD } from 'astronomia/julian'
+import { Planet } from 'astronomia/planetposition'
+import { position as moonPosition } from 'astronomia/moonposition'
+import earthData from 'astronomia/data/vsop87Bearth'
+import mercuryData from 'astronomia/data/vsop87Bmercury'
+import venusData from 'astronomia/data/vsop87Bvenus'
+import marsData from 'astronomia/data/vsop87Bmars'
+import jupiterData from 'astronomia/data/vsop87Bjupiter'
+import saturnData from 'astronomia/data/vsop87Bsaturn'
+import uranusData from 'astronomia/data/vsop87Buranus'
+import neptuneData from 'astronomia/data/vsop87Bneptune'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -64,18 +71,29 @@ const ZODIAC_SIGNS = [
   { name: 'Pisces',    nameZh: '双鱼', symbol: '♓' },
 ];
 
-const PLANET_IDS: Record<string, number> = {
-  Sun:     constants.SE_SUN,
-  Moon:    constants.SE_MOON,
-  Mercury: constants.SE_MERCURY,
-  Venus:   constants.SE_VENUS,
-  Mars:    constants.SE_MARS,
-  Jupiter: constants.SE_JUPITER,
-  Saturn:  constants.SE_SATURN,
-  Uranus:  constants.SE_URANUS,
-  Neptune: constants.SE_NEPTUNE,
-  Pluto:   constants.SE_PLUTO,
-};
+// ─── Planet Data Setup ──────────────────────────────────────────────────────
+
+const earth = new Planet(earthData)
+const mercury = new Planet(mercuryData)
+const venus = new Planet(venusData)
+const mars = new Planet(marsData)
+const jupiter = new Planet(jupiterData)
+const saturn = new Planet(saturnData)
+const uranus = new Planet(uranusData)
+const neptune = new Planet(neptuneData)
+
+const PLANET_DATA: Record<string, { getPosition: (jd: number) => { lon: number; lat: number; distance: number } }> = {
+  Sun:     { getPosition: (jd) => { const p = earth.position(jd); return { lon: (p.lon + Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Mercury: { getPosition: (jd) => { const p = mercury.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Venus:   { getPosition: (jd) => { const p = venus.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Mars:    { getPosition: (jd) => { const p = mars.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Jupiter: { getPosition: (jd) => { const p = jupiter.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Saturn:  { getPosition: (jd) => { const p = saturn.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Uranus:  { getPosition: (jd) => { const p = uranus.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Neptune: { getPosition: (jd) => { const p = neptune.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+}
+
+const PLANET_NAMES = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
 
 // ─── Date Parsing ─────────────────────────────────────────────────────────────
 
@@ -87,14 +105,10 @@ function parseBirthDateTime(birthDate: string, birthTime: string): { year: numbe
 }
 
 function getJulianDay(year: number, month: number, day: number, hour: number): number {
-  const result = utc_to_jd(year, month, day, hour, 0, 0, constants.SE_GREG_CAL);
-  if (result.flag !== constants.OK) throw new Error(result.error ?? 'Julian day conversion failed');
-  return result.data[0];
+  return CalendarGregorianToJD(year, month, day + hour / 24);
 }
 
 function julianDayToDateTime(jd: number): { year: number; month: number; day: number; hour: number } {
-  // Convert Julian Day back to calendar date
-  // Using the inverse of utc_to_jd calculation
   const z = Math.floor(jd + 0.5);
   const f = (jd + 0.5) - z;
   let a: number;
@@ -115,7 +129,6 @@ function julianDayToDateTime(jd: number): { year: number; month: number; day: nu
   const month = e < 14 ? e - 1 : e - 13;
   const year = month > 2 ? c - 4716 : c - 4715;
   
-  // Calculate hour from fractional day
   const hourDecimal = f * 24;
   const h = Math.floor(hourDecimal);
   const mDecimal = (hourDecimal - h) * 60;
@@ -133,6 +146,10 @@ function formatDateTimeISO(dt: { year: number; month: number; day: number; hour:
 
 // ─── Sign Calculation ─────────────────────────────────────────────────────────
 
+function radToDeg(rad: number): number {
+  return (rad * 180 / Math.PI + 360) % 360;
+}
+
 function getSign(longitude: number): { sign: number; signName: string; signSymbol: string; degree: number } {
   const sign = Math.floor(longitude / 30) % 12;
   const degree = longitude % 30;
@@ -142,40 +159,38 @@ function getSign(longitude: number): { sign: number; signName: string; signSymbo
 
 // ─── Sun Position ─────────────────────────────────────────────────────────────
 
-function getSunLongitude(jd_et: number): number {
-  const result = calc(jd_et, constants.SE_SUN, constants.SEFLG_SWIEPH | constants.SEFLG_SPEED);
-  if (result.flag < 0) {
-    const fallback = calc(jd_et, constants.SE_SUN, constants.SEFLG_SWIEPH);
-    if (fallback.flag < 0) throw new Error('Failed to calculate Sun position');
-    return (fallback.data[0] as number) % 360;
-  }
-  return (result.data[0] as number) % 360;
+function getSunLongitude(jd: number): number {
+  const jdEt = jd + 1 / 86400;
+  const p = earth.position(jdEt);
+  return radToDeg((p.lon + Math.PI) % (2 * Math.PI));
 }
 
 // ─── Planetary Positions ──────────────────────────────────────────────────────
 
-function getPlanetaryPositions(jd_et: number): PlanetPosition[] {
-  const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
+function getPlanetaryPositions(jd: number): PlanetPosition[] {
+  const jdEt = jd + 1 / 86400;
   const planets: PlanetPosition[] = [];
 
-  for (const [name, id] of Object.entries(PLANET_IDS)) {
-    const result = calc(jd_et, id, flags);
-    
-    if (result.flag < 0) {
-      const fallback = calc(jd_et, id, constants.SEFLG_SWIEPH);
-      if (fallback.flag < 0) continue;
-      const lon = fallback.data[0] as number;
-      const lat = fallback.data[1] as number;
-      const dist = fallback.data[2] as number;
-      const { sign, signName, signSymbol, degree } = getSign(lon);
-      planets.push({ name, longitude: lon % 360, latitude: lat, sign, signName, signSymbol, degree, orb: dist });
-    } else {
-      const lon = result.data[0] as number;
-      const lat = result.data[1] as number;
-      const dist = result.data[2] as number;
-      const { sign, signName, signSymbol, degree } = getSign(lon);
-      planets.push({ name, longitude: lon % 360, latitude: lat, sign, signName, signSymbol, degree, orb: dist });
-    }
+  // Sun
+  const sunPos = earth.position(jdEt);
+  const sunLon = radToDeg((sunPos.lon + Math.PI) % (2 * Math.PI));
+  const { sign: sunSign, signName: sunSignName, signSymbol: sunSignSymbol, degree: sunDegree } = getSign(sunLon);
+  planets.push({ name: 'Sun', longitude: sunLon, latitude: radToDeg(sunPos.lat), sign: sunSign, signName: sunSignName, signSymbol: sunSignSymbol, degree: sunDegree, orb: sunPos.distance });
+
+  // Moon
+  const moon = moonPosition(jdEt);
+  const moonLon = radToDeg(moon.lon);
+  const { sign: moonSign, signName: moonSignName, signSymbol: moonSignSymbol, degree: moonDegree } = getSign(moonLon);
+  planets.push({ name: 'Moon', longitude: moonLon, latitude: radToDeg(moon.lat), sign: moonSign, signName: moonSignName, signSymbol: moonSignSymbol, degree: moonDegree, orb: moon.distance });
+
+  // Other planets
+  for (const name of ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']) {
+    const pd = PLANET_DATA[name];
+    if (!pd) continue;
+    const p = pd.getPosition(jdEt);
+    const lon = radToDeg(p.lon);
+    const { sign, signName, signSymbol, degree } = getSign(lon);
+    planets.push({ name, longitude: lon, latitude: radToDeg(p.lat), sign, signName, signSymbol, degree, orb: p.distance });
   }
 
   return planets;
@@ -183,34 +198,47 @@ function getPlanetaryPositions(jd_et: number): PlanetPosition[] {
 
 // ─── House Placements ────────────────────────────────────────────────────────
 
-function getHouses(jd_ut: number, lat: number, lng: number): HousePlacements {
-  const hResult = houses_ex2(jd_ut, 0, lat, lng, 'P') as { flag: number; error: string; data: { houses: number[] } };
-  if (hResult.flag !== constants.OK) throw new Error(hResult.error ?? 'House calculation failed');
+function getHouses(jd: number, lat: number, lng: number): HousePlacements {
+  // Simplified house calculation
+  const T = (jd - 2451545.0) / 36525;
+  const lst = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * T * T;
+  const lstRad = ((lst - lng) % 360) * Math.PI / 180;
+  const latRad = lat * Math.PI / 180;
+  const obliquity = (23.439 - 0.00000036 * T) * Math.PI / 180;
 
-  const houses = hResult.data.houses.map(h => ((h % 360) + 360) % 360);
-  const ascendant = houses[0];
-  const midheaven = houses[9] ?? houses[1];
+  const ascRad = Math.atan2(
+    Math.cos(lstRad),
+    -(Math.sin(lstRad) * Math.cos(obliquity) + Math.tan(latRad) * Math.sin(obliquity))
+  );
+  const mcRad = Math.atan2(Math.sin(lstRad) * Math.cos(obliquity), -Math.sin(obliquity));
 
-  return { houses, ascendant, midheaven };
+  const ascendant = ((ascRad * 180 / Math.PI) + 360) % 360;
+  const midheaven = ((mcRad * 180 / Math.PI) + 360) % 360;
+
+  const houses: number[] = [];
+  houses[0] = ascendant;
+  houses[9] = midheaven;
+  houses[3] = (ascendant + 180) % 360;
+  houses[6] = (midheaven + 180) % 360;
+
+  for (let i = 1; i < 12; i++) {
+    if (i === 3 || i === 6 || i === 9) continue;
+    houses[i] = (houses[0] + i * 30) % 360;
+  }
+
+  return { houses: houses.slice(0, 12), ascendant, midheaven };
 }
 
 // ─── Solar Return Core Calculation ──────────────────────────────────────────
 
-/**
- * Find the exact moment of Solar Return using binary search
- * The Solar Return occurs when the Sun returns to its birth longitude
- */
 function findSolarReturnExactTime(
   birthDate: string,
   birthTime: string,
   targetYear: number,
   birthSunLongitude: number
 ): { jd: number; datetime: string } {
-  // Parse birth info
   const birth = parseBirthDateTime(birthDate, birthTime);
   
-  // Get birthday for target year (same month/day)
-  // Solar Return typically occurs around the birthday
   const birthdayThisYear: { year: number; month: number; day: number; hour: number } = {
     year: targetYear,
     month: birth.month,
@@ -218,62 +246,39 @@ function findSolarReturnExactTime(
     hour: birth.hour + birth.min / 60,
   };
   
-  // Get Julian Day for noon on birthday
   const jd_birthday = getJulianDay(birthdayThisYear.year, birthdayThisYear.month, birthdayThisYear.day, 12);
   
-  // Get Sun longitude at noon on birthday
   const sunAtNoon = getSunLongitude(jd_birthday);
   
-  // Calculate the difference - we need to find when Sun = birthSunLongitude
-  // Sun moves approximately 1 degree per day
-  // If Sun at noon is past birth longitude, SR was earlier that day
-  // If Sun at noon is before birth longitude, SR will be later
-  
-  // Calculate approximate days difference
   let diff = birthSunLongitude - sunAtNoon;
   
-  // Normalize difference to -180 to 180 range
   while (diff > 180) diff -= 360;
   while (diff < -180) diff += 360;
   
-  // Convert degrees difference to days (approximately 1 day per degree for the Sun)
-  // But we need more precision - Sun moves about 1 degree per day
-  // So we search within a window of about 2 days around the birthday
-  
-  // Start with a search window of +/- 2 days from noon
   const searchWindowDays = 2;
-  const dayFraction = 1 / 24; // 1 hour steps for initial search
+  const dayFraction = 1 / 24;
   
-  // Binary search for exact Solar Return time
-  // Start with jd_birthday and search forward/backward
   let jd_start = jd_birthday - searchWindowDays;
   let jd_end = jd_birthday + searchWindowDays;
   
-  // First, do a coarse search to find the crossing point
   let prevSunLon = getSunLongitude(jd_start);
-  let crossingFound = false;
   
   for (let jd = jd_start + dayFraction; jd <= jd_end; jd += dayFraction) {
     const currentSunLon = getSunLongitude(jd);
     
-    // Check if we crossed the birth longitude
-    // Handle wrap-around at 0 degrees
     const prevDiff = normalizeDiff(prevSunLon, birthSunLongitude);
     const currDiff = normalizeDiff(currentSunLon, birthSunLongitude);
     
-    // Check for zero crossing (sign change in difference)
     if (prevDiff * currDiff < 0 || Math.abs(currDiff) < 0.01) {
-      // Found the crossing - use binary search to find exact time
       let lo = jd - dayFraction;
       let hi = jd;
       
-      for (let i = 0; i < 20; i++) { // 20 iterations for precision
+      for (let i = 0; i < 20; i++) {
         const mid = (lo + hi) / 2;
         const midSunLon = getSunLongitude(mid);
         const midDiff = normalizeDiff(midSunLon, birthSunLongitude);
         
         if (Math.abs(midDiff) < 0.0001) {
-          // Found exact match
           const dt = julianDayToDateTime(mid);
           return { jd: mid, datetime: formatDateTimeISO(dt) };
         }
@@ -285,25 +290,20 @@ function findSolarReturnExactTime(
         }
       }
       
-      // If we didn't find exact match, return the midpoint
       const finalJd = (lo + hi) / 2;
       const dt = julianDayToDateTime(finalJd);
-      crossingFound = true;
       return { jd: finalJd, datetime: formatDateTimeISO(dt) };
     }
     
     prevSunLon = currentSunLon;
   }
   
-  // If no crossing found in the window, use the birthday noon as approximation
-  // This can happen near the solstices or equinoxes where Sun speed changes
   const dt = julianDayToDateTime(jd_birthday);
   return { jd: jd_birthday, datetime: formatDateTimeISO(dt) };
 }
 
 function normalizeDiff(currentSunLon: number, targetLon: number): number {
   let diff = currentSunLon - targetLon;
-  // Normalize to -180 to 180
   while (diff > 180) diff -= 360;
   while (diff < -180) diff += 360;
   return diff;
@@ -311,16 +311,6 @@ function normalizeDiff(currentSunLon: number, targetLon: number): number {
 
 // ─── Main Solar Return Function ─────────────────────────────────────────────
 
-/**
- * Calculate Solar Return for a given birth date and target year
- * 
- * @param birthDate - Birth date in YYYY-MM-DD format
- * @param birthTime - Birth time in HH:MM format
- * @param lat - Birth latitude
- * @param lng - Birth longitude
- * @param targetYear - The year for which to calculate Solar Return
- * @returns SolarReturnResult with exact timing and full chart data
- */
 export function calculateSolarReturn(
   birthDate: string,
   birthTime: string,
@@ -328,30 +318,22 @@ export function calculateSolarReturn(
   lng: number,
   targetYear: number
 ): SolarReturnResult {
-  // Step 1: Get birth Sun longitude
   const birth = parseBirthDateTime(birthDate, birthTime);
   const birthJD = getJulianDay(birth.year, birth.month, birth.day, birth.hour);
   const birthSunLongitude = getSunLongitude(birthJD);
   
-  // Step 2: Find exact Solar Return time for target year
   const { jd, datetime } = findSolarReturnExactTime(birthDate, birthTime, targetYear, birthSunLongitude);
   
-  // Step 3: Calculate full chart for Solar Return moment
-  // For houses, we need jd_ut
-  const jdResult = utc_to_jd(
+  const jdResult = getJulianDay(
     julianDayToDateTime(jd).year,
     julianDayToDateTime(jd).month,
     julianDayToDateTime(jd).day,
-    julianDayToDateTime(jd).hour,
-    0, 0, constants.SE_GREG_CAL
+    julianDayToDateTime(jd).hour
   );
-  const jd_ut = jdResult.data[1];
-  const jd_et = jdResult.data[0];
   
-  const planets = getPlanetaryPositions(jd_et);
-  const houses = getHouses(jd_ut, lat, lng);
+  const planets = getPlanetaryPositions(jdResult);
+  const houses = getHouses(jdResult, lat, lng);
   
-  // Step 4: Generate interpretation
   const interpretation = generateSolarReturnInterpretation(planets, birthSunLongitude, targetYear);
   
   return {
@@ -361,7 +343,7 @@ export function calculateSolarReturn(
     birthSunLongitude,
     birthdayExactTime: datetime,
     birthdayExactJulianDay: jd,
-    chart: { planets, houses, julianDay: jd_ut },
+    chart: { planets, houses, julianDay: jdResult },
     interpretation,
   };
 }
@@ -378,8 +360,7 @@ function generateSolarReturnInterpretation(planets: PlanetPosition[], birthSunLo
     interpretation += `This is your Solar Return chart - the chart active for this year of your life.\n`;
   }
   
-  // Find planets near the Ascendant (within 5 degrees)
-  const ascendant = planets.find(p => p.name === 'Sun'); // We use Sun as reference
+  const ascendant = planets.find(p => p.name === 'Sun');
   if (ascendant) {
     interpretation += `\nKey positions:\n`;
     interpretation += `- Sun (identity): ${sun?.signSymbol} ${sun?.signName} ${sun?.degree.toFixed(1)}°\n`;

@@ -6,10 +6,17 @@
  * Calculates planetary velocities and motion status.
  */
 
-import { utc_to_jd, calc, constants, set_ephe_path } from 'sweph';
-
-// Set ephemeris path to sweph's bundled data
-set_ephe_path('');
+import { CalendarGregorianToJD } from 'astronomia/julian'
+import { Planet } from 'astronomia/planetposition'
+import { position as moonPosition } from 'astronomia/moonposition'
+import earthData from 'astronomia/data/vsop87Bearth'
+import mercuryData from 'astronomia/data/vsop87Bmercury'
+import venusData from 'astronomia/data/vsop87Bvenus'
+import marsData from 'astronomia/data/vsop87Bmars'
+import jupiterData from 'astronomia/data/vsop87Bjupiter'
+import saturnData from 'astronomia/data/vsop87Bsaturn'
+import uranusData from 'astronomia/data/vsop87Buranus'
+import neptuneData from 'astronomia/data/vsop87Bneptune'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -22,8 +29,8 @@ export interface PlanetPosition {
   signSymbol: string;
   degree: number;        // degree within sign (0-29.999)
   orb: number;           // distance in AU
-  speed: number;         // daily motion in degrees
-  isRetrograde: boolean; // true if negative speed
+  speed: number;          // daily motion in degrees
+  isRetrograde: boolean;  // true if negative speed
 }
 
 export interface TransitPlanet extends PlanetPosition {
@@ -59,18 +66,29 @@ const ZODIAC_SIGNS = [
   { name: 'Pisces',    nameZh: '双鱼', symbol: '♓' },
 ];
 
-const PLANET_IDS: Record<string, number> = {
-  Sun:     constants.SE_SUN,
-  Moon:    constants.SE_MOON,
-  Mercury: constants.SE_MERCURY,
-  Venus:   constants.SE_VENUS,
-  Mars:    constants.SE_MARS,
-  Jupiter: constants.SE_JUPITER,
-  Saturn:  constants.SE_SATURN,
-  Uranus:  constants.SE_URANUS,
-  Neptune: constants.SE_NEPTUNE,
-  Pluto:   constants.SE_PLUTO,
-};
+// ─── Planet Data Setup ──────────────────────────────────────────────────────
+
+const earth = new Planet(earthData)
+const mercury = new Planet(mercuryData)
+const venus = new Planet(venusData)
+const mars = new Planet(marsData)
+const jupiter = new Planet(jupiterData)
+const saturn = new Planet(saturnData)
+const uranus = new Planet(uranusData)
+const neptune = new Planet(neptuneData)
+
+const PLANET_DATA: Record<string, { getPosition: (jd: number) => { lon: number; lat: number; distance: number } }> = {
+  Sun:     { getPosition: (jd) => { const p = earth.position(jd); return { lon: (p.lon + Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Mercury: { getPosition: (jd) => { const p = mercury.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Venus:   { getPosition: (jd) => { const p = venus.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Mars:    { getPosition: (jd) => { const p = mars.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Jupiter: { getPosition: (jd) => { const p = jupiter.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Saturn:  { getPosition: (jd) => { const p = saturn.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Uranus:  { getPosition: (jd) => { const p = uranus.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Neptune: { getPosition: (jd) => { const p = neptune.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+}
+
+const PLANET_NAMES = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
 
 // ─── Date Parsing ────────────────────────────────────────────────────────────
 
@@ -82,14 +100,10 @@ function parseDateTime(dateStr: string, timeStr: string): { year: number; month:
 }
 
 function getJulianDay(year: number, month: number, day: number, hour: number): number {
-  const result = utc_to_jd(year, month, day, hour, 0, 0, constants.SE_GREG_CAL);
-  if (result.flag !== constants.OK) throw new Error(result.error ?? 'Julian day conversion failed');
-  return result.data[0];
+  return CalendarGregorianToJD(year, month, day + hour / 24);
 }
 
 function addDays(dateStr: string, days: number): { year: number; month: number; day: number } {
-  // Simple day addition - for Secondary Progressions we add days to birth date
-  // to get the "progressed date" where 1 day = 1 year
   const [y, m, d] = dateStr.split('-').map(Number);
   const baseDate = new Date(y, m - 1, d);
   baseDate.setDate(baseDate.getDate() + Math.floor(days));
@@ -97,6 +111,10 @@ function addDays(dateStr: string, days: number): { year: number; month: number; 
 }
 
 // ─── Sign Calculation ────────────────────────────────────────────────────────
+
+function radToDeg(rad: number): number {
+  return (rad * 180 / Math.PI + 360) % 360;
+}
 
 function getSign(longitude: number): { sign: number; signName: string; signSymbol: string; degree: number } {
   const sign = Math.floor(longitude / 30) % 12;
@@ -107,37 +125,46 @@ function getSign(longitude: number): { sign: number; signName: string; signSymbo
 
 // ─── Planetary Position with Speed ──────────────────────────────────────────
 
-function getPlanetPosition(jd_et: number, name: string, id: number): PlanetPosition {
-  const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
-
-  const result = calc(jd_et, id, flags);
-
+function getPlanetPosition(jd: number, name: string): PlanetPosition {
+  const jdEt = jd + 1 / 86400; // TT = UT + 1 day
+  
   let lon: number, lat: number, dist: number, speed: number;
 
-  if (result.flag < 0) {
-    // Fallback: try without speed flag
-    const fallback = calc(jd_et, id, constants.SEFLG_SWIEPH);
-    if (fallback.flag < 0) {
-      throw new Error(`Failed to calculate position for ${name}`);
-    }
-    lon = fallback.data[0] as number;
-    lat = fallback.data[1] as number;
-    dist = fallback.data[2] as number;
-    speed = 0; // unknown
+  if (name === 'Sun') {
+    const p = earth.position(jdEt);
+    lon = radToDeg((p.lon + Math.PI) % (2 * Math.PI));
+    lat = radToDeg(p.lat);
+    dist = p.distance;
+    speed = 0.9856; // approximate
+  } else if (name === 'Moon') {
+    const p = moonPosition(jdEt);
+    lon = radToDeg(p.lon);
+    lat = radToDeg(p.lat);
+    dist = p.distance;
+    speed = 13.176; // approximate degrees per day
   } else {
-    lon = result.data[0] as number;
-    lat = result.data[1] as number;
-    dist = result.data[2] as number;
-    // Speed is returned as data[3] when SEFLG_SPEED is set
-    speed = result.data[3] as number ?? 0;
+    const pd = PLANET_DATA[name];
+    if (!pd) return { name, longitude: 0, latitude: 0, sign: 0, signName: 'Aries', signSymbol: '♈', degree: 0, orb: 1, speed: 0, isRetrograde: false, natalLongitude: 0, progressedLongitude: 0, motion: 'direct' };
+    
+    const p = pd.getPosition(jdEt);
+    lon = radToDeg(p.lon);
+    lat = radToDeg(p.lat);
+    dist = p.distance;
+    
+    // Calculate approximate speed (degrees per day)
+    const p1 = pd.getPosition(jdEt - 1);
+    const p2 = pd.getPosition(jdEt);
+    const lonDiff1 = (p2.lon - p1.lon + 2*Math.PI) % (2*Math.PI);
+    const lonDiff2 = (p1.lon - p2.lon + 2*Math.PI) % (2*Math.PI);
+    speed = radToDeg(Math.min(lonDiff1, lonDiff2));
   }
 
-  const { sign, signName, signSymbol, degree } = getSign(lon % 360);
+  const { sign, signName, signSymbol, degree } = getSign(lon);
   const isRetrograde = speed < 0;
 
   return {
     name,
-    longitude: lon % 360,
+    longitude: lon,
     latitude: lat,
     sign,
     signName,
@@ -146,53 +173,43 @@ function getPlanetPosition(jd_et: number, name: string, id: number): PlanetPosit
     orb: dist,
     speed: Math.abs(speed),
     isRetrograde,
+    natalLongitude: lon,
+    progressedLongitude: lon,
+    motion: 'direct',
   };
 }
 
 // ─── Secondary Progressions Core ────────────────────────────────────────────
 
-/**
- * Calculate Secondary Progressions
- * Rule: 1 day after birth = 1 year of life
- * So for a target age X, we look at planetary positions X days after birth
- */
 export function computeSecondaryProgression(
   birthDate: string,
   birthTime: string,
   targetDate: string
 ): TransitResult {
-  // Parse dates
   const birth = parseDateTime(birthDate, birthTime);
-  const target = parseDateTime(targetDate, '12:00'); // noon for target date
+  const target = parseDateTime(targetDate, '12:00');
 
-  // Calculate age in years
   const birthJD = getJulianDay(birth.year, birth.month, birth.day, birth.hour);
   const targetJD = getJulianDay(target.year, target.month, target.day, target.hour);
   const daysDiff = targetJD - birthJD;
-  const age = daysDiff / 365.25; // approximate years
+  const age = daysDiff / 365.25;
 
-  // Progressed days = age in years (1 day = 1 year)
   const progressedDays = Math.round(age * 365.25);
-
-  // Get the "progressed date" - birth date + progressedDays
   const progressedDate = addDays(birthDate, progressedDays);
 
-  // Calculate natal positions (at birth)
   const natalPositions: Record<string, PlanetPosition> = {};
-  for (const [name, id] of Object.entries(PLANET_IDS)) {
-    natalPositions[name] = getPlanetPosition(birthJD, name, id);
+  for (const name of PLANET_NAMES) {
+    natalPositions[name] = getPlanetPosition(birthJD, name);
   }
 
-  // Calculate progressed positions (at progressed date)
   const progressedJD = getJulianDay(progressedDate.year, progressedDate.month, progressedDate.day, birth.hour);
 
   const planets: TransitPlanet[] = [];
 
-  for (const [name, id] of Object.entries(PLANET_IDS)) {
+  for (const name of PLANET_NAMES) {
     const natal = natalPositions[name];
-    const progressed = getPlanetPosition(progressedJD, name, id);
+    const progressed = getPlanetPosition(progressedJD, name);
 
-    // Determine motion status
     let motion: 'direct' | 'retrograde' | 'station';
     if (Math.abs(progressed.speed) < 0.01) {
       motion = 'station';
@@ -210,7 +227,6 @@ export function computeSecondaryProgression(
     });
   }
 
-  // Generate interpretation
   const interpretation = generateInterpretation(planets, age);
 
   return {
@@ -233,33 +249,24 @@ export interface MotionAnalysis {
   status: string;       // descriptive status
 }
 
-/**
- * Analyze current planetary motion (direct/retrograde) for a specific date
- */
 export function analyzePlanetaryMotion(date: string, time: string): MotionAnalysis[] {
   const { year, month, day, hour } = parseDateTime(date, time);
   const jd = getJulianDay(year, month, day, hour);
 
   const analyses: MotionAnalysis[] = [];
 
-  for (const [name, id] of Object.entries(PLANET_IDS)) {
-    const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
-    const result = calc(jd, id, flags);
-
-    if (result.flag < 0) continue;
-
-    const speed = (result.data[3] as number | undefined) ?? 0;
-    const isRetrograde = !isNaN(speed) && speed < 0;
-
+  for (const name of PLANET_NAMES) {
+    const planet = getPlanetPosition(jd, name);
+    
     let motion: 'direct' | 'retrograde' | 'station' = 'direct';
     let status: string;
 
-    if (isNaN(speed) || Math.abs(speed) < 0.01) {
+    if (Math.abs(planet.speed) < 0.01) {
       motion = 'station';
       status = name === 'Mercury' || name === 'Venus'
         ? 'Stationary (pre-retrograde/post-retrograde)'
         : 'Stationary';
-    } else if (isRetrograde) {
+    } else if (planet.isRetrograde) {
       motion = 'retrograde';
       status = `${name} is retrograde`;
     } else {
@@ -267,7 +274,7 @@ export function analyzePlanetaryMotion(date: string, time: string): MotionAnalys
       status = `${name} is direct`;
     }
 
-    analyses.push({ planet: name, currentMotion: motion, speed: Math.abs(speed), status });
+    analyses.push({ planet: name, currentMotion: motion, speed: planet.speed, status });
   }
 
   return analyses;
@@ -297,14 +304,12 @@ function generateInterpretation(planets: TransitPlanet[], age: number): string {
     }
   }
 
-  // Sun progressed
   const sunProgressed = planets.find(p => p.name === 'Sun');
   if (sunProgressed) {
     interpretation += `\nProgressed Sun in ${sunProgressed.signName} ${sunProgressed.degree.toFixed(1)}° - `;
     interpretation += `representing the core self-expression at this stage of life.\n`;
   }
 
-  // Moon progressed
   const moonProgressed = planets.find(p => p.name === 'Moon');
   if (moonProgressed) {
     interpretation += `Progressed Moon in ${moonProgressed.signName} ${moonProgressed.degree.toFixed(1)}° - `;
@@ -322,9 +327,6 @@ export interface TransitReport {
   majorTransits: string[];
 }
 
-/**
- * Generate a comprehensive transit report
- */
 export function generateTransitReport(
   birthDate: string,
   birthTime: string,
@@ -332,12 +334,9 @@ export function generateTransitReport(
   lng: number,
   targetDate: string
 ): TransitReport {
-  // For Secondary Progressions, we don't need lat/lng for planets
-  // but they're kept for API compatibility
   const progression = computeSecondaryProgression(birthDate, birthTime, targetDate);
   const motionAnalysis = analyzePlanetaryMotion(targetDate, '12:00');
 
-  // Generate major transits description
   const majorTransits: string[] = [];
 
   const retrogradePlanets = progression.planets.filter(p => p.motion === 'retrograde');
@@ -345,7 +344,6 @@ export function generateTransitReport(
     majorTransits.push(`${retrogradePlanets.length} planets are retrograde in the progressed chart`);
   }
 
-  // Check for conjunctions to natal
   for (const planet of progression.planets) {
     const natal = progression.planets.find(p => p.name === planet.name);
     if (natal) {

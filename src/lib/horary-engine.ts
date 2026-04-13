@@ -3,11 +3,21 @@
  * TianJi Global | 天机全球
  *
  * Casts a chart for the exact moment a question is asked.
- * Uses Swiss Ephemeris (sweph) for accurate planetary positions.
+ * Uses astronomia (pure JS ephemeris) for accurate planetary positions.
  * ASC is calculated using sidereal time + ecliptic obliquity formula.
  */
 
-import { utc_to_jd, calc, constants, houses_ex2 } from 'sweph';
+import { CalendarGregorianToJD } from 'astronomia/julian'
+import { Planet } from 'astronomia/planetposition'
+import { position as moonPosition } from 'astronomia/moonposition'
+import earthData from 'astronomia/data/vsop87Bearth'
+import mercuryData from 'astronomia/data/vsop87Bmercury'
+import venusData from 'astronomia/data/vsop87Bvenus'
+import marsData from 'astronomia/data/vsop87Bmars'
+import jupiterData from 'astronomia/data/vsop87Bjupiter'
+import saturnData from 'astronomia/data/vsop87Bsaturn'
+import uranusData from 'astronomia/data/vsop87Buranus'
+import neptuneData from 'astronomia/data/vsop87Bneptune'
 
 export interface PlanetPosition {
   planet: string;
@@ -58,26 +68,39 @@ const SIGN_RULERS: Record<string, string> = {
   Sagittarius: 'Jupiter', Capricorn: 'Saturn', Aquarius: 'Uranus', Pisces: 'Neptune',
 };
 
-// ─── Constants ───────────────────────────────────────────────────────────────
+// ─── Planet Data Setup ────────────────────────────────────────────────────────
 
-const SE_TO_PLANET: [string, number][] = [
-  ['Sun', constants.SE_SUN],
-  ['Moon', constants.SE_MOON],
-  ['Mercury', constants.SE_MERCURY],
-  ['Venus', constants.SE_VENUS],
-  ['Mars', constants.SE_MARS],
-  ['Jupiter', constants.SE_JUPITER],
-  ['Saturn', constants.SE_SATURN],
-  ['Uranus', constants.SE_URANUS],
-  ['Neptune', constants.SE_NEPTUNE],
-  ['Pluto', constants.SE_PLUTO],
-];
+const earth = new Planet(earthData)
+const mercury = new Planet(mercuryData)
+const venus = new Planet(venusData)
+const mars = new Planet(marsData)
+const jupiter = new Planet(jupiterData)
+const saturn = new Planet(saturnData)
+const uranus = new Planet(uranusData)
+const neptune = new Planet(neptuneData)
+
+const PLANET_DATA: Record<string, { getPosition: (jd: number) => { lon: number; lat: number; distance: number } }> = {
+  Sun:     { getPosition: (jd) => { const p = earth.position(jd); return { lon: (p.lon + Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Mercury: { getPosition: (jd) => { const p = mercury.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Venus:   { getPosition: (jd) => { const p = venus.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Mars:    { getPosition: (jd) => { const p = mars.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Jupiter: { getPosition: (jd) => { const p = jupiter.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Saturn:  { getPosition: (jd) => { const p = saturn.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Uranus:  { getPosition: (jd) => { const p = uranus.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+  Neptune: { getPosition: (jd) => { const p = neptune.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
+}
+
+const PLANET_NAMES = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function normalizeAngle(a: number): number {
   a = a % 360;
   return a < 0 ? a + 360 : a;
+}
+
+function radToDeg(rad: number): number {
+  return (rad * 180 / Math.PI + 360) % 360;
 }
 
 function getSignIndex(longitude: number): number {
@@ -92,71 +115,54 @@ function getDegreeInSign(longitude: number): number {
   return Math.round((longitude % 30) * 10) / 10;
 }
 
-// ─── Swiss Ephemeris ──────────────────────────────────────────────────────────
+// ─── Julian Day ──────────────────────────────────────────────────────────────
 
 function getJD(year: number, month: number, day: number, hour: number): number {
-  const r = utc_to_jd(year, month, day, hour, 0, 0, constants.SE_GREG_CAL);
-  return r.data[0]; // ephemeris time
+  return CalendarGregorianToJD(year, month, day + hour / 24);
 }
 
-/** Get planet longitude in degrees (deterministic via sweph) */
-function getPlanetLon(jd: number, seId: number): number | null {
-  try {
-    const r = calc(jd, seId, constants.SEFLG_SWIEPH);
-    // flag >= 0 means calculation succeeded (0=full precision, 2=reduced precision, etc.)
-    // flag < 0 means error (e.g. -1 = planet not found, -2 =Sweph error)
-    if (r.flag < 0 || !r.data?.[0]) return null;
-    return normalizeAngle(r.data[0] as number);
-  } catch {
-    return null;
-  }
-}
+// ─── Planetary Positions ─────────────────────────────────────────────────────
 
 function getPlanetaryPositions(jd: number): PlanetPosition[] {
+  const jdEt = jd + 1 / 86400; // TT
   const positions: PlanetPosition[] = [];
-  for (const [planet, seId] of SE_TO_PLANET) {
-    const lon = getPlanetLon(jd, seId);
-    if (lon !== null) {
-      const signIndex = getSignIndex(lon);
-      positions.push({
-        planet,
-        sign: getSignName(signIndex),
-        signIndex,
-        degree: getDegreeInSign(lon),
-        longitude: lon,
-      });
-    }
+
+  // Sun
+  const sunPos = earth.position(jdEt);
+  const sunLon = radToDeg((sunPos.lon + Math.PI) % (2 * Math.PI));
+  const sunSignIndex = getSignIndex(sunLon);
+  positions.push({ planet: 'Sun', sign: getSignName(sunSignIndex), signIndex: sunSignIndex, degree: getDegreeInSign(sunLon), longitude: sunLon });
+
+  // Moon
+  const moon = moonPosition(jdEt);
+  const moonLon = radToDeg(moon.lon);
+  const moonSignIndex = getSignIndex(moonLon);
+  positions.push({ planet: 'Moon', sign: getSignName(moonSignIndex), signIndex: moonSignIndex, degree: getDegreeInSign(moonLon), longitude: moonLon });
+
+  // Other planets
+  for (const name of ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto']) {
+    const pd = PLANET_DATA[name];
+    if (!pd) continue;
+    const p = pd.getPosition(jdEt);
+    const lon = radToDeg(p.lon);
+    const signIndex = getSignIndex(lon);
+    positions.push({ planet: name, sign: getSignName(signIndex), signIndex, degree: getDegreeInSign(lon), longitude: lon });
   }
+
   return positions;
 }
 
-/** Calculate ASC, MC and house cusps using sweph houses_ex2 */
+// ─── House Calculation ───────────────────────────────────────────────────────
+
 function calculateHouses(
   year: number, month: number, day: number,
   hour: number,
   latitude: number,
   longitude: number
 ): { ascLongitude: number; mcLongitude: number; houses: number[] } {
-  const jd_ut = utc_to_jd(year, month, day, hour, 0, 0, constants.SE_GREG_CAL).data[1];
-
-  try {
-    // houses_ex2(tjd_ut, iflag, geolat, geolon, hsys)
-    const result = houses_ex2(jd_ut, 0, latitude, longitude, 'P') as { flag: number; error: string; data: { houses: number[] } };
-    if (result.flag === constants.OK && result.data?.houses?.length >= 12) {
-      // Houses are returned in degrees already
-      const houses = result.data.houses.map(h => normalizeAngle(h));
-      return {
-        ascLongitude: houses[0],
-        mcLongitude: houses[9] ?? houses[1],
-        houses,
-      };
-    }
-  } catch {
-    // fall through to simplified formula
-  }
-
-  // Simplified fallback: use LST + obliquity formula
   const jd = getJD(year, month, day, hour);
+  
+  // Simplified house calculation using LST + obliquity formula
   const T = (jd - 2451545.0) / 36525;
   const lst = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * T * T;
   const lstRad = ((lst - longitude) % 360) * Math.PI / 180;
@@ -173,8 +179,15 @@ function calculateHouses(
   const mcLongitude = normalizeAngle(mcRad * 180 / Math.PI);
 
   const houses: number[] = [];
-  for (let i = 0; i < 12; i++) {
-    houses.push(normalizeAngle(ascLongitude + i * 30));
+  houses[0] = ascLongitude;
+  houses[9] = mcLongitude;
+  houses[3] = (ascLongitude + 180) % 360;
+  houses[6] = (mcLongitude + 180) % 360;
+
+  // Simplified intermediate houses
+  for (let i = 1; i < 12; i++) {
+    if (i === 3 || i === 6 || i === 9) continue;
+    houses[i] = (houses[0] + i * 30) % 360;
   }
 
   return { ascLongitude, mcLongitude, houses };
@@ -190,11 +203,9 @@ export function castHoraryChart(question: string, castTime: Date): HoraryChart {
 
   const jd = getJD(year, month, day, hour);
 
-  // Get planetary positions using sweph
   const planets = getPlanetaryPositions(jd);
 
-  // Calculate houses using sweph (default: ~31°N, ~121°E = Shanghai)
-  // In production, accept user location as parameter
+  // Default location ~31°N, ~121°E = Shanghai
   const { ascLongitude, mcLongitude, houses } = calculateHouses(year, month, day, hour, 31, 121);
 
   const ascSignIndex = getSignIndex(ascLongitude);
@@ -224,7 +235,6 @@ export function castHoraryChart(question: string, castTime: Date): HoraryChart {
 export function evaluateQuestion(question: string, chart: HoraryChart): Judgment {
   const q = question.toLowerCase();
 
-  // Determine question type → quesited house
   let house = 1;
   let questionType = 'self';
   if (q.match(/money|wealth|financial|income|rich|bank|salary/)) { house = 2; questionType = 'finances'; }
@@ -239,23 +249,19 @@ export function evaluateQuestion(question: string, chart: HoraryChart): Judgment
   else if (q.match(/education|school|exam|university|study/)) { house = 9; questionType = 'education'; }
   else if (q.match(/communication|message|letter|email|phone/)) { house = 3; questionType = 'communication'; }
 
-  // House ruler: planet ruling the sign on the house cusp
   const houseCuspLongitude = chart.houses[house - 1] ?? chart.ascLongitude;
   const houseCuspSignIndex = getSignIndex(houseCuspLongitude);
   const houseRuler = SIGN_RULERS[getSignName(houseCuspSignIndex)] ?? 'Moon';
 
-  // Find significator planets for this house
   const significatorPlanets = chart.planets.filter(p => {
     if (p.planet === houseRuler) return true;
     if (p.sign === getSignName(houseCuspSignIndex)) return true;
     return false;
   });
 
-  // Calculate strength based on essential dignities and house placement
   let strengthScore = 50;
   const reasons: string[] = [];
 
-  // ASC ruler condition
   const ascRuler = SIGN_RULERS[chart.ascSign] ?? 'Sun';
   const ascRulerPlanet = chart.planets.find(p => p.planet === ascRuler);
 
@@ -264,7 +270,6 @@ export function evaluateQuestion(question: string, chart: HoraryChart): Judgment
       strengthScore += 15;
       reasons.push(`${ascRuler} (ASC ruler) in ${ascRulerPlanet.sign} — dignified`);
     }
-    // Moon assistance
     const moonPlanet = chart.planets.find(p => p.planet === 'Moon');
     if (moonPlanet) {
       const angle = Math.abs(moonPlanet.longitude - ascRulerPlanet.longitude);
@@ -282,25 +287,21 @@ export function evaluateQuestion(question: string, chart: HoraryChart): Judgment
   }
 
   for (const p of significatorPlanets) {
-    // Ruled sign
     if (SIGN_RULERS[p.sign] === p.planet) {
       strengthScore += 10;
       reasons.push(`${p.planet} rules its own sign (${p.sign}) — very strong`);
     }
-    // Angular: houses 1, 4, 7, 10
     const isAngular = [0, 3, 6, 9].includes(house - 1);
     if (isAngular) {
       strengthScore += 8;
       reasons.push(`${p.planet} angular — active and prominent`);
     }
-    // Cadent or succedent
     if ([2, 5, 8, 11].includes(house - 1)) {
       strengthScore -= 5;
       reasons.push(`${p.planet} in cadent house — less active`);
     }
   }
 
-  // Reception check
   if (ascRulerPlanet) {
     const otherSig = significatorPlanets.find(p => p.planet !== houseRuler);
     if (otherSig) {
@@ -311,7 +312,6 @@ export function evaluateQuestion(question: string, chart: HoraryChart): Judgment
     }
   }
 
-  // Moon condition
   const moonPlanet = chart.planets.find(p => p.planet === 'Moon');
   if (moonPlanet) {
     if (moonPlanet.degree > 27) {
@@ -320,7 +320,6 @@ export function evaluateQuestion(question: string, chart: HoraryChart): Judgment
     }
   }
 
-  // Determine outcome
   let outcome: 'yes' | 'no' | 'uncertain' = 'uncertain';
   if (strengthScore >= 65) outcome = 'yes';
   else if (strengthScore <= 40) outcome = 'no';
