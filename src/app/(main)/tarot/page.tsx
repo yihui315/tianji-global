@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import SharePanel from '@/components/SharePanel';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
 import { saveReading } from '@/lib/save-reading';
@@ -9,6 +10,23 @@ import TarotCardAnimation from '@/components/animations/TarotCardAnimation';
 import { spreadLayouts, type TarotCard, type SpreadLayout, type DrawnCard } from '@/lib/tarot';
 import { GlassCard, MysticButton, LanguageSwitch, SectionHeader } from '@/components/ui';
 import { colors } from '@/design-system';
+
+// ─── Fade-In Motion ───────────────────────────────────────────────────────────
+function FadeInWhenVisible({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-60px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 type SpreadType = 'single' | 'three-card' | 'celtic-cross';
 type Language = 'en' | 'zh';
@@ -85,6 +103,12 @@ export default function TarotPage() {
 
   return (
     <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
+      {/* Multi-layer Cosmic Background */}
+      <div className="fixed inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse at 50% 0%, ${colors.bgNebula} 0%, transparent 55%)`, zIndex: 0 }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 20% 20%, rgba(59,20,75,0.35) 0%, transparent 50%)', zIndex: 0 }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 80%, rgba(6,30,60,0.45) 0%, transparent 50%)', zIndex: 0 }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(80,40,100,0.2) 0%, transparent 40%)', zIndex: 0 }} />
+
       <div className="fixed top-4 right-4 z-50"><LanguageSwitch /></div>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-12 w-full">
         <SectionHeader
@@ -94,8 +118,9 @@ export default function TarotPage() {
         />
 
         {/* Spread Selection */}
-        <GlassCard level="card" className="p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 text-purple-300">
+        <FadeInWhenVisible delay={0.1}>
+        <GlassCard level="card" className="p-6 mb-6 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
+          <h2 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4">
             {language === 'zh' ? '选择牌阵' : 'Choose Your Spread'}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -178,6 +203,7 @@ export default function TarotPage() {
               : (language === 'zh' ? '抽取你的牌' : 'Draw Your Cards')}
           </MysticButton>
         </GlassCard>
+        </FadeInWhenVisible>
 
         {/* Error Message */}
         {error && (

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import SharePanel from '@/components/SharePanel';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
 import { saveReading } from '@/lib/save-reading';
@@ -8,6 +9,23 @@ import BaziWheelAnimation from '@/components/animations/BaziWheelAnimation';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
 import { GlassCard, MysticButton, LanguageSwitch, SectionHeader } from '@/components/ui';
 import { colors } from '@/design-system';
+
+// ─── Fade-In Motion ───────────────────────────────────────────────────────────
+function FadeInWhenVisible({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-60px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 type Language = 'zh' | 'en';
 type Gender = 'male' | 'female';
@@ -187,6 +205,12 @@ export default function BaZiPage() {
 
   return (
     <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
+      {/* Multi-layer Cosmic Background */}
+      <div className="fixed inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse at 50% 0%, ${colors.bgNebula} 0%, transparent 55%)`, zIndex: 0 }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 20% 20%, rgba(59,20,75,0.35) 0%, transparent 50%)', zIndex: 0 }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 80%, rgba(6,30,60,0.45) 0%, transparent 50%)', zIndex: 0 }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(80,40,100,0.2) 0%, transparent 40%)', zIndex: 0 }} />
+
       <div className="fixed top-4 right-4 z-50"><LanguageSwitch /></div>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-20 pb-12 w-full">
         <SectionHeader
@@ -196,30 +220,31 @@ export default function BaZiPage() {
         />
 
         {/* Input Form */}
-        <GlassCard level="card" className="p-6 mb-6">
+        <FadeInWhenVisible delay={0.1}>
+        <GlassCard level="card" className="p-6 mb-6 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {/* Birthday */}
             <div>
-              <label className="block text-amber-300 text-sm font-medium mb-2">
+              <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
                 {language === 'zh' ? '出生日期 / Birthday' : '出生日期 / Birthday'}
               </label>
               <input
                 type="date"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-amber-500 focus:outline-none"
+                className="w-full rounded-xl px-3 py-3 text-sm text-white bg-white/[0.04] border border-white/[0.06] transition-all focus:outline-none focus:ring-2 focus:ring-purple-500/40"
               />
             </div>
 
             {/* Birth Time */}
             <div>
-              <label className="block text-amber-300 text-sm font-medium mb-2">
+              <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
                 {language === 'zh' ? '出生时辰 / Birth Hour' : '出生时辰 / Birth Hour'}
               </label>
               <select
                 value={birthTime}
                 onChange={(e) => setBirthTime(Number(e.target.value))}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-amber-500 focus:outline-none"
+                className="w-full rounded-xl px-3 py-3 text-sm text-white bg-white/[0.04] border border-white/[0.06] transition-all focus:outline-none focus:ring-2 focus:ring-purple-500/40"
               >
                 {TIME_PERIODS.map((period) => (
                   <option key={period.value} value={period.value}>
@@ -231,7 +256,7 @@ export default function BaZiPage() {
 
             {/* Gender */}
             <div>
-              <label className="block text-amber-300 text-sm font-medium mb-2">
+              <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
                 {language === 'zh' ? '性别 / Gender' : '性别 / Gender'}
               </label>
               <div className="flex gap-4">
@@ -260,7 +285,7 @@ export default function BaZiPage() {
 
             {/* Language */}
             <div>
-              <label className="block text-amber-300 text-sm font-medium mb-2">
+              <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
                 {language === 'zh' ? '显示语言 / Language' : '显示语言 / Language'}
               </label>
               <div className="flex gap-4">
@@ -310,6 +335,7 @@ export default function BaZiPage() {
             </MysticButton>
           </div>
         </GlassCard>
+        </FadeInWhenVisible>
 
         {/* Error Message */}
         {error && (
@@ -322,8 +348,9 @@ export default function BaZiPage() {
         {result && (
           <div className="space-y-6">
             {/* Four Pillars Chart */}
-            <div className="bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm border border-slate-700/50">
-              <h2 className="text-2xl font-bold text-amber-300 mb-6 text-center">
+            <FadeInWhenVisible delay={0.1}>
+            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
+              <h2 className="text-lg font-serif font-bold mb-6 text-center text-amber-400/80">
                 {language === 'zh' ? '四柱八字' : 'Four Pillars Chart'}
               </h2>
 
@@ -365,10 +392,12 @@ export default function BaZiPage() {
                 ))}
               </div>
             </div>
+            </FadeInWhenVisible>
 
             {/* Day Master */}
-            <div className="bg-gradient-to-r from-amber-900/30 to-orange-900/30 rounded-xl p-6 border border-amber-600/30">
-              <h3 className="text-xl font-bold text-amber-300 mb-4 text-center">
+            <FadeInWhenVisible delay={0.15}>
+            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
+              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
                 {language === 'zh' ? '日主 (Day Master)' : '日主 (Day Master)'}
               </h3>
               <div className="text-center">
@@ -377,17 +406,19 @@ export default function BaZiPage() {
                   {ELEMENT_LABELS[language][result.chart.dayMasterElement]}
                 </span>
               </div>
-              <p className="text-slate-300 text-center mt-4">
+              <p className="text-white/60 text-center mt-4">
                 {language === 'zh'
                   ? `${result.chart.day.heavenlyStem}日主，属于${ELEMENT_LABELS['zh'][result.chart.dayMasterElement]}行`
                   : `Day Master ${result.chart.day.heavenlyStem}, ${ELEMENT_LABELS['en'][result.chart.dayMasterElement]} element`}
               </p>
             </div>
+            </FadeInWhenVisible>
 
             {/* Five Elements Distribution */}
             {elementCounts && (
-              <div className="bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm border border-slate-700/50">
-                <h3 className="text-xl font-bold text-amber-300 mb-6 text-center">
+              <FadeInWhenVisible delay={0.2}>
+              <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
+                <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-6 text-center">
                   {language === 'zh' ? '五行分布' : 'Five Elements Distribution'}
                 </h3>
                 <div className="space-y-3">
@@ -412,46 +443,51 @@ export default function BaZiPage() {
                             style={{ width: `${percentage}%` }}
                           />
                         </div>
-                        <span className="text-slate-300 w-8 text-right">{count}</span>
+                        <span className="text-white/60 w-8 text-right">{count}</span>
                       </div>
                     );
                   })}
                 </div>
               </div>
+              </FadeInWhenVisible>
             )}
 
             {/* Interpretation */}
-            <div className="bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm border border-slate-700/50">
-              <h3 className="text-xl font-bold text-amber-300 mb-4 text-center">
+            <FadeInWhenVisible delay={0.25}>
+            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
+              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
                 {language === 'zh' ? '命理简析' : 'Brief Interpretation'}
               </h3>
-              <p className="text-slate-300 text-center leading-relaxed">
+              <p className="text-white/60 text-center leading-relaxed">
                 {language === 'zh'
                   ? `您的日主为${result.chart.day.heavenlyStem}，属${ELEMENT_LABELS['zh'][result.chart.dayMasterElement]}行。${result.chart.year.heavenlyStem}年、${result.chart.month.heavenlyStem}月、${result.chart.day.heavenlyStem}日、${result.chart.hour.heavenlyStem}时，构成了独特的八字命盘。`
                   : `Your Day Master is ${result.chart.day.heavenlyStem}, belonging to the ${ELEMENT_LABELS['en'][result.chart.dayMasterElement]} element. The combination of ${result.chart.year.heavenlyStem} (Year), ${result.chart.month.heavenlyStem} (Month), ${result.chart.day.heavenlyStem} (Day), and ${result.chart.hour.heavenlyStem} (Hour) creates your unique Ba Zi chart.`}
               </p>
             </div>
+            </FadeInWhenVisible>
 
             {/* AI Interpretation */}
             {result.aiInterpretation && (
-              <div className="bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-xl p-6 border border-purple-600/30">
-                <h3 className="text-xl font-bold text-purple-300 mb-4 text-center">
+              <FadeInWhenVisible delay={0.3}>
+              <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
+                <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
                   {language === 'zh' ? '✨ AI 深度解读' : '✨ AI Deep Interpretation'}
                 </h3>
-                <p className="text-slate-200 text-center leading-relaxed whitespace-pre-wrap">
+                <p className="text-white/60 text-center leading-relaxed whitespace-pre-wrap">
                   {result.aiInterpretation}
                 </p>
                 {result.disclaimer && (
-                  <p className="text-slate-500 text-xs mt-4 italic">
+                  <p className="text-white/20 text-xs mt-4 italic">
                     {result.disclaimer}
                   </p>
                 )}
                 {result.aiMeta && (
-                  <p className="text-slate-600 text-xs mt-2">
+                  <p className="text-white/15 text-xs mt-2">
                     {result.aiMeta.provider} · {result.aiMeta.model} · {result.aiMeta.latencyMs}ms
                   </p>
                 )}
               </div>
+              </FadeInWhenVisible>
             )}
 
             {result.aiError && (
@@ -468,8 +504,9 @@ export default function BaZiPage() {
             />
 
             {/* Animated BaZi Wheel */}
-            <div className="bg-slate-800/30 rounded-xl p-6 border border-slate-700/50">
-              <h3 className="text-xl font-bold text-amber-300 mb-4 text-center">
+            <FadeInWhenVisible delay={0.35}>
+            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
+              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
                 ✨ Animated BaZi Wheel
               </h3>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
@@ -493,6 +530,7 @@ export default function BaZiPage() {
                 />
               </div>
             </div>
+            </FadeInWhenVisible>
 
             {/* PDF Download */}
             <PDFDownloadButton

@@ -1,11 +1,29 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import SharePanel from '@/components/SharePanel';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
 import { saveReading } from '@/lib/save-reading';
 import { GlassCard, MysticButton, LanguageSwitch, SectionHeader } from '@/components/ui';
 import { colors } from '@/design-system';
+
+// ─── Fade-In Motion ───────────────────────────────────────────────────────────
+function FadeInWhenVisible({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-60px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 type Language = 'zh' | 'en';
 
@@ -190,15 +208,11 @@ export default function YiJingPage() {
 
   return (
     <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
-      {/* Deep cosmic background */}
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[#030014]" />
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-950/40 via-[#030014] to-amber-950/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        {/* Ambient glow orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-600/10 rounded-full blur-[100px]" />
-      </div>
+      {/* Multi-layer Cosmic Background */}
+      <div className="fixed inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse at 50% 0%, ${colors.bgNebula} 0%, transparent 55%)`, zIndex: 0 }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 20% 20%, rgba(59,20,75,0.35) 0%, transparent 50%)', zIndex: 0 }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 80%, rgba(6,30,60,0.45) 0%, transparent 50%)', zIndex: 0 }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(80,40,100,0.2) 0%, transparent 40%)', zIndex: 0 }} />
 
       <div className="fixed top-4 right-4 z-50"><LanguageSwitch /></div>
 
@@ -479,10 +493,11 @@ export default function YiJingPage() {
       {/* Global Glass Morphism Styles */}
       <style jsx global>{`
         .glass-panel {
-          background: rgba(15, 10, 30, 0.6);
+          background: rgba(255, 255, 255, 0.015);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(168, 85, 247, 0.15);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          border-radius: 1rem;
           box-shadow: 
             0 8px 32px rgba(0, 0, 0, 0.4),
             inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -493,51 +508,52 @@ export default function YiJingPage() {
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.06);
+          border-radius: 0.75rem;
         }
         
         .glass-button {
           background: rgba(255, 255, 255, 0.05);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(168, 85, 247, 0.2);
-          color: rgba(251, 191, 36, 0.7);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          color: rgba(255, 255, 255, 0.7);
         }
         
         .glass-button:hover {
           background: rgba(255, 255, 255, 0.08);
-          border-color: rgba(168, 85, 247, 0.35);
-          color: rgba(251, 191, 36, 0.9);
+          border-color: rgba(255, 255, 255, 0.12);
+          color: rgba(255, 255, 255, 0.9);
         }
         
         .glass-button-active {
-          background: rgba(245, 158, 11, 0.15);
+          background: rgba(168, 85, 247, 0.15);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(245, 158, 11, 0.4);
-          color: rgba(251, 191, 36, 1);
+          border: 1px solid rgba(168, 85, 247, 0.4);
+          color: rgba(255, 255, 255, 1);
           box-shadow: 
-            0 0 20px rgba(245, 158, 11, 0.15),
+            0 0 20px rgba(168, 85, 247, 0.15),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         
         .glass-input {
-          background: rgba(255, 255, 255, 0.05);
+          background: rgba(255, 255, 255, 0.04);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(168, 85, 247, 0.2);
-          color: rgba(251, 191, 36, 0.9);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          color: white;
           transition: all 0.3s ease;
         }
         
         .glass-input::placeholder {
-          color: rgba(251, 191, 36, 0.35);
+          color: rgba(255, 255, 255, 0.3);
         }
         
         .glass-input:focus {
           outline: none;
-          border-color: rgba(245, 158, 11, 0.5);
-          box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
-          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(168, 85, 247, 0.4);
+          box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+          background: rgba(255, 255, 255, 0.06);
         }
         
         .glass-warning {
