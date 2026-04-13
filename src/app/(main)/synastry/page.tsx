@@ -527,9 +527,16 @@ export default function SynastryPage() {
     : '';
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900">
-      {/* Header */}
-      <header className="p-6 border-b border-slate-800">
+    <main className="min-h-screen bg-gradient-to-br from-[#030014] via-[#0f0a1e] to-[#030014] relative overflow-hidden">
+      {/* Animated background gradient orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-violet-600/20 rounded-full blur-[128px] animate-pulse" />
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-600/20 rounded-full blur-[128px] animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-violet-600/10 rounded-full blur-[150px]" />
+      </div>
+
+      {/* Glassmorphic Header */}
+      <header className="relative p-6 border-b border-violet-500/20 bg-black/20 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="text-slate-400 hover:text-white transition-colors">
@@ -538,7 +545,7 @@ export default function SynastryPage() {
               </svg>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 {language === 'zh' ? '星盘合盘' : 'Synastry'}
               </h1>
               <p className="text-slate-500 text-sm">Western Astrology · {language === 'zh' ? '西方占星合盘' : 'Relationship Compatibility'}</p>
@@ -547,13 +554,13 @@ export default function SynastryPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setLanguage('zh')}
-              className={`px-3 py-1 rounded-full text-sm transition-all ${language === 'zh' ? 'bg-violet-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+              className={`px-3 py-1 rounded-full text-sm transition-all backdrop-blur-sm ${language === 'zh' ? 'bg-violet-500/30 text-white border border-violet-400/50' : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 border border-transparent'}`}
             >
               中文
             </button>
             <button
               onClick={() => setLanguage('en')}
-              className={`px-3 py-1 rounded-full text-sm transition-all ${language === 'en' ? 'bg-violet-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+              className={`px-3 py-1 rounded-full text-sm transition-all backdrop-blur-sm ${language === 'en' ? 'bg-violet-500/30 text-white border border-violet-400/50' : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 border border-transparent'}`}
             >
               EN
             </button>
@@ -561,13 +568,13 @@ export default function SynastryPage() {
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
-        {/* Input Forms */}
+      <div className="relative max-w-6xl mx-auto px-6 py-8 space-y-8">
+        {/* Input Forms - Glass Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Person A */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6">
+          <div className="bg-gradient-to-br from-violet-950/40 via-slate-900/80 to-purple-950/40 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-6 shadow-[0_0_40px_rgba(124,58,237,0.1)]">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-3 h-3 rounded-full bg-blue-500" />
+              <div className="w-3 h-3 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
               <span className="text-blue-400 font-medium">
                 {language === 'zh' ? '人物A' : 'Person A'}
               </span>
@@ -583,9 +590,9 @@ export default function SynastryPage() {
           </div>
 
           {/* Person B */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6">
+          <div className="bg-gradient-to-br from-red-950/40 via-slate-900/80 to-pink-950/40 backdrop-blur-xl border border-red-500/20 rounded-2xl p-6 shadow-[0_0_40px_rgba(244,63,94,0.1)]">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <div className="w-3 h-3 rounded-full bg-red-400 shadow-[0_0_10px_rgba(244,63,94,0.5)]" />
               <span className="text-red-400 font-medium">
                 {language === 'zh' ? '人物B' : 'Person B'}
               </span>
@@ -601,8 +608,8 @@ export default function SynastryPage() {
           </div>
         </div>
 
-        {/* Options */}
-        <div className="space-y-3 p-4 bg-slate-800/30 rounded-xl border border-slate-700/30">
+        {/* Options - Glass Panel */}
+        <div className="space-y-3 p-4 bg-black/30 backdrop-blur-xl rounded-xl border border-violet-500/20">
           {/* Synastry Type Tabs */}
           <div>
             <label className="block text-slate-400 text-xs mb-2">
@@ -613,12 +620,12 @@ export default function SynastryPage() {
                 <button
                   key={t}
                   onClick={() => setSynastryType(t)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all backdrop-blur-sm ${
                     synastryType === t
-                      ? t === 'overlay' ? 'bg-blue-600 text-white'
-                      : t === 'composite' ? 'bg-violet-600 text-white'
-                      : 'bg-emerald-600 text-white'
-                      : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
+                      ? t === 'overlay' ? 'bg-blue-500/30 text-blue-300 border border-blue-400/50'
+                      : t === 'composite' ? 'bg-violet-500/30 text-violet-300 border border-violet-400/50'
+                      : 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/50'
+                      : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 border border-transparent'
                   }`}
                 >
                   {t === 'overlay' ? (language === 'zh' ? '叠盘' : 'Overlay') :
@@ -639,7 +646,7 @@ export default function SynastryPage() {
               type="checkbox"
               checked={enhanceWithAI}
               onChange={e => setEnhanceWithAI(e.target.checked)}
-              className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-violet-500 focus:ring-violet-500"
+              className="w-4 h-4 rounded border-violet-500/50 bg-violet-950/50 text-violet-400 focus:ring-violet-500 focus:ring-offset-0"
             />
             <span className="text-slate-300 text-sm">
               {language === 'zh' ? '✨ AI 增强解读' : '✨ AI Enhanced Interpretation'}
@@ -647,11 +654,11 @@ export default function SynastryPage() {
           </label>
         </div>
 
-        {/* Calculate Button */}
+        {/* Calculate Button - Glassmorphic Gradient */}
         <button
           onClick={handleCalculate}
           disabled={isCalculating}
-          className="w-full py-4 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 font-bold text-lg text-white transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99]"
+          className="w-full py-4 rounded-xl bg-gradient-to-r from-violet-600/80 via-purple-600/80 to-pink-600/80 hover:from-violet-500/90 hover:via-purple-500/90 hover:to-pink-500/90 font-bold text-lg text-white transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99] backdrop-blur-xl border border-violet-400/30 shadow-[0_0_30px_rgba(124,58,237,0.3)]"
         >
           {isCalculating
             ? (language === 'zh' ? '计算中...' : 'Calculating...')
@@ -659,7 +666,7 @@ export default function SynastryPage() {
         </button>
 
         {error && (
-          <div className="p-4 bg-red-900/20 border border-red-700/30 rounded-xl text-red-400 text-sm">
+          <div className="p-4 bg-red-950/40 border border-red-500/30 rounded-xl text-red-400 text-sm backdrop-blur-xl">
             Error: {error}
           </div>
         )}
@@ -669,8 +676,8 @@ export default function SynastryPage() {
           <div ref={resultRef} className="space-y-6">
             {/* Score + Wheel */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Score */}
-              <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center">
+              {/* Score - Glass Card */}
+              <div className="bg-gradient-to-br from-violet-950/50 via-slate-900/90 to-purple-950/50 backdrop-blur-xl border border-violet-500/30 rounded-2xl p-6 flex flex-col items-center shadow-[0_0_50px_rgba(124,58,237,0.15)]">
                 <h2 className="text-lg font-bold text-slate-200 mb-4">
                   {language === 'zh' ? '综合评分' : 'Overall Score'}
                 </h2>
@@ -684,8 +691,8 @@ export default function SynastryPage() {
                 </div>
               </div>
 
-              {/* Wheel */}
-              <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4">
+              {/* Wheel - Glass Card */}
+              <div className="bg-gradient-to-br from-violet-950/30 via-slate-900/80 to-purple-950/30 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-4 shadow-[0_0_40px_rgba(124,58,237,0.1)]">
                 <SynastryWheel
                   chart1={result.person1Chart}
                   chart2={result.person2Chart}
@@ -694,13 +701,13 @@ export default function SynastryPage() {
               </div>
             </div>
 
-            {/* Planet Tables */}
+            {/* Planet Tables - Glass Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
                 { label: language === 'zh' ? '人物A 行星位置' : 'Person A Planetary Positions', chart: result.person1Chart, color: 'blue' },
                 { label: language === 'zh' ? '人物B 行星位置' : 'Person B Planetary Positions', chart: result.person2Chart, color: 'red' },
               ].map(({ label, chart, color }) => (
-                <div key={label} className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4">
+                <div key={label} className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 backdrop-blur-xl border border-slate-700/30 rounded-2xl p-4">
                   <h3 className={`text-${color}-400 font-bold mb-3`}>{label}</h3>
                   <div className="space-y-1">
                     {chart.planets.map(p => (
@@ -720,7 +727,7 @@ export default function SynastryPage() {
 
             {/* Aspects — only for overlay synastry */}
             {(!result.meta || result.meta.type === 'overlay') && result.aspects && (
-              <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4">
+              <div className="bg-gradient-to-br from-violet-950/40 to-slate-900/80 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-4 shadow-[0_0_40px_rgba(124,58,237,0.1)]">
                 <h3 className="text-violet-400 font-bold mb-3">
                   {language === 'zh' ? '相位列表' : 'Aspect List'}
                 </h3>
@@ -736,7 +743,7 @@ export default function SynastryPage() {
                 return (
                   <>
                     {/* Composite/Davison Planet Table */}
-                    <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4">
+                    <div className="bg-gradient-to-br from-violet-950/40 to-slate-900/80 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-4">
                       <h3 className="text-violet-400 font-bold mb-3">
                         {chartType === 'davison'
                           ? (language === 'zh' ? '戴维森盘行星位置' : 'Davison Chart Planetary Positions')
@@ -758,13 +765,13 @@ export default function SynastryPage() {
 
                     {/* Midpoint Structures */}
                     {chartData?.midpointStructures && chartData.midpointStructures.length > 0 && (
-                      <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4">
+                      <div className="bg-gradient-to-br from-amber-950/40 to-slate-900/80 backdrop-blur-xl border border-amber-500/20 rounded-2xl p-4">
                         <h3 className="text-amber-400 font-bold mb-3">
                           {language === 'zh' ? '中间点结构' : 'Midpoint Structures'}
                         </h3>
                         <div className="space-y-2 max-h-64 overflow-y-auto">
                           {chartData.midpointStructures.map((ms, i) => (
-                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-slate-700/30">
+                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-slate-800/50">
                               <div className={`w-2 h-2 rounded-full ${
                                 ms.sensitivity === 'high' ? 'bg-red-500' :
                                 ms.sensitivity === 'medium' ? 'bg-amber-500' : 'bg-green-500'
@@ -812,9 +819,9 @@ export default function SynastryPage() {
               variant="secondary"
             />
 
-            {/* AI Interpretation */}
+            {/* AI Interpretation - Glowing Glass */}
             {result.aiInterpretation && (
-              <div className="bg-gradient-to-br from-violet-900/40 to-purple-900/40 backdrop-blur-sm border border-violet-600/30 rounded-2xl p-6">
+              <div className="bg-gradient-to-br from-violet-950/60 via-slate-900/90 to-purple-950/60 backdrop-blur-xl border border-violet-500/40 rounded-2xl p-6 shadow-[0_0_60px_rgba(124,58,237,0.2)]">
                 <h3 className="text-violet-300 font-bold mb-4 text-lg">
                   ✨ {language === 'zh' ? 'AI 深度解读' : 'AI Deep Interpretation'}
                 </h3>

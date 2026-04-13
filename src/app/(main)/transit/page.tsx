@@ -275,13 +275,20 @@ export default function TransitPage() {
   }, [birthDate, birthTime, lat, lng, targetDate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Header */}
-      <div className="bg-slate-800/50 border-b border-slate-700">
+    <div className="min-h-screen bg-gradient-to-br from-[#030014] via-[#0f0a1e] to-[#030014] relative overflow-hidden">
+      {/* Animated background gradient orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-600/15 rounded-full blur-[128px] animate-pulse" />
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-600/15 rounded-full blur-[128px] animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[150px]" />
+      </div>
+
+      {/* Glassmorphic Header */}
+      <div className="relative bg-black/20 border-b border-blue-500/20 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                 {language === 'zh' ? '次限推运' : 'Secondary Progressions'}
               </h1>
               <p className="text-slate-400 text-sm mt-1">
@@ -292,7 +299,7 @@ export default function TransitPage() {
             </div>
             <button
               onClick={() => setLanguage(l => l === 'zh' ? 'en' : 'zh')}
-              className="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm transition-colors"
+              className="px-3 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-sm transition-colors border border-blue-400/30 backdrop-blur-sm"
             >
               {language === 'zh' ? 'EN' : '中文'}
             </button>
@@ -300,11 +307,11 @@ export default function TransitPage() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="relative max-w-6xl mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Input Form */}
+          {/* Input Form - Glass Card */}
           <div className="space-y-6">
-            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+            <div className="bg-gradient-to-br from-blue-950/40 via-slate-900/80 to-purple-950/40 rounded-xl p-6 border border-blue-500/20 backdrop-blur-xl shadow-[0_0_40px_rgba(59,130,246,0.1)]">
               <h2 className="text-lg font-semibold text-white mb-4">
                 {language === 'zh' ? '出生信息' : 'Birth Information'}
               </h2>
@@ -319,7 +326,7 @@ export default function TransitPage() {
                       type="date"
                       value={birthDate}
                       onChange={e => setBirthDate(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white text-sm focus:border-blue-500 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-800/50 border border-slate-700 text-white text-sm focus:border-blue-500 focus:outline-none backdrop-blur-sm"
                     />
                   </div>
                   <div>
@@ -330,7 +337,7 @@ export default function TransitPage() {
                       type="time"
                       value={birthTime}
                       onChange={e => setBirthTime(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white text-sm focus:border-blue-500 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-800/50 border border-slate-700 text-white text-sm focus:border-blue-500 focus:outline-none backdrop-blur-sm"
                     />
                   </div>
                 </div>
@@ -346,7 +353,7 @@ export default function TransitPage() {
                       min="-90" max="90"
                       value={lat}
                       onChange={e => setLat(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white text-sm focus:border-blue-500 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-800/50 border border-slate-700 text-white text-sm focus:border-blue-500 focus:outline-none backdrop-blur-sm"
                     />
                   </div>
                   <div>
@@ -359,14 +366,14 @@ export default function TransitPage() {
                       min="-180" max="180"
                       value={lng}
                       onChange={e => setLng(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white text-sm focus:border-blue-500 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-800/50 border border-slate-700 text-white text-sm focus:border-blue-500 focus:outline-none backdrop-blur-sm"
                     />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+            <div className="bg-gradient-to-br from-purple-950/40 via-slate-900/80 to-blue-950/40 rounded-xl p-6 border border-purple-500/20 backdrop-blur-xl shadow-[0_0_40px_rgba(139,92,246,0.1)]">
               <h2 className="text-lg font-semibold text-white mb-4">
                 {language === 'zh' ? '目标日期' : 'Target Date'}
               </h2>
@@ -379,7 +386,7 @@ export default function TransitPage() {
                   type="date"
                   value={targetDate}
                   onChange={e => setTargetDate(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white text-sm focus:border-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-800/50 border border-slate-700 text-white text-sm focus:border-blue-500 focus:outline-none backdrop-blur-sm"
                 />
                 <p className="text-xs text-slate-500 mt-1">
                   {language === 'zh'
@@ -389,10 +396,11 @@ export default function TransitPage() {
               </div>
             </div>
 
+            {/* Calculate Button - Glassmorphic Gradient */}
             <button
               onClick={handleCalculate}
               disabled={isCalculating}
-              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-500/90 hover:to-purple-500/90 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-xl border border-blue-400/30 shadow-[0_0_30px_rgba(59,130,246,0.2)]"
             >
               {isCalculating
                 ? (language === 'zh' ? '计算中...' : 'Calculating...')
@@ -400,7 +408,7 @@ export default function TransitPage() {
             </button>
 
             {error && (
-              <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+              <div className="p-4 rounded-lg bg-red-950/40 border border-red-500/30 text-red-400 text-sm backdrop-blur-xl">
                 {error}
               </div>
             )}
@@ -410,11 +418,11 @@ export default function TransitPage() {
           <div className="space-y-6">
             {result ? (
               <>
-                {/* Summary Card */}
+                {/* Summary Card - Glass Card */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-slate-800/50 rounded-xl p-6 border border-slate-700"
+                  className="bg-gradient-to-br from-blue-950/50 via-slate-900/90 to-purple-950/50 rounded-xl p-6 border border-blue-500/20 backdrop-blur-xl shadow-[0_0_50px_rgba(59,130,246,0.15)]"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-white">
@@ -429,19 +437,19 @@ export default function TransitPage() {
                   </div>
 
                   <div className="grid grid-cols-3 gap-4 text-center">
-                    <div className="p-3 rounded-lg bg-slate-700/30">
+                    <div className="p-3 rounded-lg bg-slate-800/50 backdrop-blur-sm border border-slate-700/30">
                       <div className="text-xs text-slate-400">
                         {language === 'zh' ? '出生日期' : 'Birth'}
                       </div>
                       <div className="text-sm text-white">{result.birthDate}</div>
                     </div>
-                    <div className="p-3 rounded-lg bg-slate-700/30">
+                    <div className="p-3 rounded-lg bg-slate-800/50 backdrop-blur-sm border border-slate-700/30">
                       <div className="text-xs text-slate-400">
                         {language === 'zh' ? '目标日期' : 'Target'}
                       </div>
                       <div className="text-sm text-white">{result.targetDate}</div>
                     </div>
-                    <div className="p-3 rounded-lg bg-slate-700/30">
+                    <div className="p-3 rounded-lg bg-slate-800/50 backdrop-blur-sm border border-slate-700/30">
                       <div className="text-xs text-slate-400">
                         {language === 'zh' ? '推运天数' : 'Prog. Days'}
                       </div>
@@ -450,12 +458,12 @@ export default function TransitPage() {
                   </div>
                 </motion.div>
 
-                {/* Planet Wheel */}
+                {/* Planet Wheel - Glass Card */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="bg-slate-800/50 rounded-xl p-6 border border-slate-700"
+                  className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 rounded-xl p-6 border border-slate-700/30 backdrop-blur-xl"
                 >
                   <h3 className="text-lg font-semibold text-white mb-4">
                     {language === 'zh' ? '星体位置图' : 'Planetary Positions'}
@@ -471,12 +479,12 @@ export default function TransitPage() {
                   </p>
                 </motion.div>
 
-                {/* Planet List */}
+                {/* Planet List - Glass Card */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="bg-slate-800/50 rounded-xl p-6 border border-slate-700"
+                  className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 rounded-xl p-6 border border-slate-700/30 backdrop-blur-xl"
                 >
                   <h3 className="text-lg font-semibold text-white mb-4">
                     {language === 'zh' ? '行星详情' : 'Planet Details'}
@@ -484,13 +492,13 @@ export default function TransitPage() {
                   <PlanetList planets={result.planets} language={language} />
                 </motion.div>
 
-                {/* Major Transits */}
+                {/* Major Transits - Glass Card */}
                 {result.majorTransits.length > 0 && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-slate-800/50 rounded-xl p-6 border border-slate-700"
+                    className="bg-gradient-to-br from-purple-950/40 to-slate-900/80 rounded-xl p-6 border border-purple-500/20 backdrop-blur-xl"
                   >
                     <h3 className="text-lg font-semibold text-white mb-4">
                       {language === 'zh' ? '重要推运' : 'Major Progressions'}
@@ -506,13 +514,13 @@ export default function TransitPage() {
                   </motion.div>
                 )}
 
-                {/* Interpretation */}
+                {/* Interpretation - Glass Card */}
                 {result.interpretation && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="bg-slate-800/50 rounded-xl p-6 border border-slate-700"
+                    className="bg-gradient-to-br from-blue-950/40 to-slate-900/80 rounded-xl p-6 border border-blue-500/20 backdrop-blur-xl"
                   >
                     <h3 className="text-lg font-semibold text-white mb-4">
                       {language === 'zh' ? '解读' : 'Interpretation'}
@@ -524,7 +532,8 @@ export default function TransitPage() {
                 )}
               </>
             ) : (
-              <div className="bg-slate-800/50 rounded-xl p-12 border border-slate-700 text-center">
+              /* Empty State - Glass Card */
+              <div className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 rounded-xl p-12 border border-slate-700/30 text-center backdrop-blur-xl">
                 <div className="text-5xl mb-4">🔮</div>
                 <h3 className="text-lg font-semibold text-white mb-2">
                   {language === 'zh' ? '准备计算推运' : 'Ready to Calculate'}

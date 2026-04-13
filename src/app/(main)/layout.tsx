@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { LanguageProvider } from '@/hooks/useLanguage';
 
 /**
  * Premium Homepage Metadata — TianJi Global
@@ -76,5 +77,5 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <LanguageProvider>{children}</LanguageProvider>;
 }

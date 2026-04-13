@@ -3,6 +3,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
 import { saveReading } from '@/lib/save-reading';
+import { GlassCard, MysticButton, LanguageSwitch } from '@/components/ui';
+import { colors, glass, radii, shadows } from '@/design-system';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -81,17 +83,17 @@ const ZODIAC_SIGNS = [
 ];
 
 const ELEMENT_COLORS: Record<string, string> = {
-  Fire: 'text-red-400',
-  Earth: 'text-yellow-500',
-  Air: 'text-blue-400',
-  Water: 'text-cyan-400',
+  Fire: colors.gold,
+  Earth: '#D97706',
+  Air: colors.dataCyan,
+  Water: '#06B6D4',
 };
 
 const ELEMENT_BG: Record<string, string> = {
-  Fire: 'from-red-900/40 to-orange-900/40',
-  Earth: 'from-yellow-900/40 to-amber-900/40',
-  Air: 'from-blue-900/40 to-cyan-900/40',
-  Water: 'from-cyan-900/40 to-teal-900/40',
+  Fire: 'rgba(239, 68, 68, 0.15)',
+  Earth: 'rgba(217, 119, 6, 0.15)',
+  Air: 'rgba(6, 182, 212, 0.15)',
+  Water: 'rgba(6, 182, 212, 0.15)',
 };
 
 const PLANET_SYMBOLS: Record<string, string> = {
@@ -210,7 +212,7 @@ export default function WesternPage() {
       saveReading({
         reading_type: 'western',
         title: `${birthday} Western Natal Chart`,
-        summary: data.natal?.summary?.slice(0, 120) ?? '',
+        summary: `${language === 'zh' ? '西方星盘' : 'Western Natal Chart'} - ${birthday}`,
         reading_data: data as unknown as Record<string, unknown>,
       });
     } catch (err) {
@@ -276,50 +278,80 @@ export default function WesternPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white p-4 md:p-8">
-      <div className="max-w-5xl mx-auto">
+    <main
+      className="min-h-screen text-white p-4 md:p-8"
+      style={{ backgroundColor: colors.bgPrimary }}
+    >
+      {/* Cosmic Background Effect */}
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at 50% 0%, ${colors.bgNebula} 0%, transparent 60%)`,
+          zIndex: 0,
+        }}
+      />
+
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+          <h1
+            className="text-4xl md:text-5xl font-bold mb-2"
+            style={{
+              background: `linear-gradient(135deg, ${colors.purpleLight}, ${colors.dataCyan})`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
             {language === 'zh' ? '西方星盘' : 'Western Natal Chart'}
           </h1>
-          <p className="text-blue-300/80 text-lg">
-            {language === 'zh' ? '使用瑞士星历表(SWEPH)精确计算 · AstroChart专业可视化' : 'Swiss Ephemeris Precision · AstroChart Visualization'}
+          <p className="text-lg" style={{ color: colors.textSecondary }}>
+            {language === 'zh'
+              ? '使用瑞士星历表(SWEPH)精确计算 · AstroChart专业可视化'
+              : 'Swiss Ephemeris Precision · AstroChart Visualization'}
           </p>
         </div>
 
         {/* Input Form */}
-        <div className="bg-slate-800/50 rounded-xl p-6 mb-6 backdrop-blur-sm border border-slate-700/50">
+        <GlassCard level="card" className="p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {/* Birthday */}
             <div>
-              <label className="block text-blue-300 text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: colors.textSecondary }}>
                 {language === 'zh' ? '出生日期' : 'Birthday'}
               </label>
               <input
                 type="date"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-blue-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg text-white transition-all duration-200 focus:outline-none focus:ring-2"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.05)',
+                  border: `1px solid ${colors.borderMedium}`,
+                }}
               />
             </div>
 
             {/* Birth Time */}
             <div>
-              <label className="block text-blue-300 text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: colors.textSecondary }}>
                 {language === 'zh' ? '出生时间' : 'Birth Time'}
               </label>
               <input
                 type="time"
                 value={birthTime}
                 onChange={(e) => setBirthTime(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-blue-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg text-white transition-all duration-200 focus:outline-none focus:ring-2"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.05)',
+                  border: `1px solid ${colors.borderMedium}`,
+                }}
               />
             </div>
 
             {/* Latitude */}
             <div>
-              <label className="block text-blue-300 text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: colors.textSecondary }}>
                 {language === 'zh' ? '出生纬度' : 'Latitude'}
               </label>
               <input
@@ -329,13 +361,17 @@ export default function WesternPage() {
                 max="90"
                 value={lat}
                 onChange={(e) => setLat(parseFloat(e.target.value) || 0)}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-blue-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg text-white transition-all duration-200 focus:outline-none focus:ring-2"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.05)',
+                  border: `1px solid ${colors.borderMedium}`,
+                }}
               />
             </div>
 
             {/* Longitude */}
             <div>
-              <label className="block text-blue-300 text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2" style={{ color: colors.textSecondary }}>
                 {language === 'zh' ? '出生经度' : 'Longitude'}
               </label>
               <input
@@ -345,52 +381,48 @@ export default function WesternPage() {
                 max="180"
                 value={lng}
                 onChange={(e) => setLng(parseFloat(e.target.value) || 0)}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-blue-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg text-white transition-all duration-200 focus:outline-none focus:ring-2"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.05)',
+                  border: `1px solid ${colors.borderMedium}`,
+                }}
               />
             </div>
           </div>
 
-          {/* Language Toggle */}
-          <div className="flex gap-4 mb-6">
-            <button
-              onClick={() => setLanguage('zh')}
-              className={`flex-1 py-2.5 rounded-lg border-2 transition-all ${
-                language === 'zh'
-                  ? 'border-blue-500 bg-blue-500/20 text-blue-300'
-                  : 'border-slate-600 bg-slate-700/50 text-slate-400 hover:border-slate-500'
-              }`}
+          {/* Language Toggle & Calculate Button Row */}
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+            <LanguageSwitch />
+
+            <MysticButton
+              variant="solid"
+              size="lg"
+              onClick={fetchChartData}
+              disabled={isLoading}
+              className="flex-1"
+              style={{
+                background: `linear-gradient(135deg, ${colors.purple}, ${colors.dataCyan})`,
+              }}
             >
-              中文
-            </button>
-            <button
-              onClick={() => setLanguage('en')}
-              className={`flex-1 py-2.5 rounded-lg border-2 transition-all ${
-                language === 'en'
-                  ? 'border-blue-500 bg-blue-500/20 text-blue-300'
-                  : 'border-slate-600 bg-slate-700/50 text-slate-400 hover:border-slate-500'
-              }`}
-            >
-              English
-            </button>
+              {isLoading
+                ? (language === 'zh' ? '计算中...' : 'Calculating...')
+                : (language === 'zh' ? '生成星盘' : 'Generate Chart')}
+            </MysticButton>
           </div>
 
-          {/* Calculate Button */}
-          <button
-            onClick={fetchChartData}
-            disabled={isLoading}
-            className="w-full py-4 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 font-bold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading
-              ? (language === 'zh' ? '计算中...' : 'Calculating...')
-              : (language === 'zh' ? '生成星盘' : 'Generate Chart')}
-          </button>
-
           {error && (
-            <div className="mt-4 p-4 rounded-lg bg-red-900/30 border border-red-600/50 text-red-300 text-center">
+            <div
+              className="mt-4 p-4 rounded-lg text-center"
+              style={{
+                backgroundColor: colors.riskRedDim,
+                border: `1px solid ${colors.riskRed}`,
+                color: colors.riskRed,
+              }}
+            >
               {error}
             </div>
           )}
-        </div>
+        </GlassCard>
 
         {/* Results */}
         {chartData && (
@@ -398,54 +430,69 @@ export default function WesternPage() {
             {/* Big Three */}
             <div className="grid grid-cols-3 gap-4">
               {/* Sun */}
-              <div className={`bg-gradient-to-b ${ELEMENT_BG[getSignElement(chartData.bigThree.sun.sign)]} rounded-xl p-5 border border-amber-600/30 text-center`}>
+              <GlassCard
+                level="card"
+                hoverLift
+                glowColor={colors.gold}
+                className="p-5 text-center"
+              >
                 <div className="text-3xl mb-1">☀️</div>
-                <div className="text-xs text-amber-400 mb-1">
+                <div className="text-xs mb-1" style={{ color: colors.gold }}>
                   {language === 'zh' ? '太阳' : 'Sun'}
                 </div>
                 <div className="text-2xl mb-1">{chartData.bigThree.sun.symbol}</div>
                 <div className="text-lg font-bold text-white mb-1">
                   {language === 'zh' ? chartData.bigThree.sun.signZh : chartData.bigThree.sun.sign}
                 </div>
-                <div className={`text-sm ${ELEMENT_COLORS[getSignElement(chartData.bigThree.sun.sign)]}`}>
+                <div className="text-sm" style={{ color: ELEMENT_COLORS[getSignElement(chartData.bigThree.sun.sign)] }}>
                   {chartData.bigThree.sun.degree}°
                 </div>
-              </div>
+              </GlassCard>
 
               {/* Moon */}
-              <div className={`bg-gradient-to-b ${ELEMENT_BG[getSignElement(chartData.bigThree.moon.sign)]} rounded-xl p-5 border border-slate-500/30 text-center`}>
+              <GlassCard
+                level="card"
+                hoverLift
+                glowColor={colors.textSecondary}
+                className="p-5 text-center"
+              >
                 <div className="text-3xl mb-1">🌙</div>
-                <div className="text-xs text-slate-400 mb-1">
+                <div className="text-xs mb-1" style={{ color: colors.textSecondary }}>
                   {language === 'zh' ? '月亮' : 'Moon'}
                 </div>
                 <div className="text-2xl mb-1">{chartData.bigThree.moon.symbol}</div>
                 <div className="text-lg font-bold text-white mb-1">
                   {language === 'zh' ? chartData.bigThree.moon.signZh : chartData.bigThree.moon.sign}
                 </div>
-                <div className={`text-sm ${ELEMENT_COLORS[getSignElement(chartData.bigThree.moon.sign)]}`}>
+                <div className="text-sm" style={{ color: ELEMENT_COLORS[getSignElement(chartData.bigThree.moon.sign)] }}>
                   {chartData.bigThree.moon.degree}°
                 </div>
-              </div>
+              </GlassCard>
 
               {/* Rising */}
-              <div className={`bg-gradient-to-b ${ELEMENT_BG[getSignElement(chartData.bigThree.rising.sign)]} rounded-xl p-5 border border-purple-600/30 text-center`}>
+              <GlassCard
+                level="card"
+                hoverLift
+                glowColor={colors.purpleLight}
+                className="p-5 text-center"
+              >
                 <div className="text-3xl mb-1">⬆️</div>
-                <div className="text-xs text-purple-400 mb-1">
+                <div className="text-xs mb-1" style={{ color: colors.purpleLight }}>
                   {language === 'zh' ? '上升' : 'Rising'}
                 </div>
                 <div className="text-2xl mb-1">{chartData.bigThree.rising.symbol}</div>
                 <div className="text-lg font-bold text-white mb-1">
                   {language === 'zh' ? chartData.bigThree.rising.signZh : chartData.bigThree.rising.sign}
                 </div>
-                <div className={`text-sm ${ELEMENT_COLORS[getSignElement(chartData.bigThree.rising.sign)]}`}>
+                <div className="text-sm" style={{ color: ELEMENT_COLORS[getSignElement(chartData.bigThree.rising.sign)] }}>
                   {chartData.bigThree.rising.degree}°
                 </div>
-              </div>
+              </GlassCard>
             </div>
 
             {/* AstroChart SVG Visualization */}
-            <div className="bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm border border-slate-700/50">
-              <h3 className="text-xl font-bold text-blue-300 mb-4 text-center">
+            <GlassCard level="card" className="p-6">
+              <h3 className="text-xl font-bold mb-4 text-center" style={{ color: colors.purpleLight }}>
                 {language === 'zh' ? '专业星盘' : 'Natal Chart'}
               </h3>
               <div className="flex justify-center">
@@ -455,36 +502,33 @@ export default function WesternPage() {
                   className="w-full max-w-md"
                 />
               </div>
-            </div>
+            </GlassCard>
 
             {/* Planet Positions Table */}
-            <div className="bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm border border-slate-700/50">
-              <h3 className="text-xl font-bold text-blue-300 mb-4 text-center">
+            <GlassCard level="card" className="p-6">
+              <h3 className="text-xl font-bold mb-4 text-center" style={{ color: colors.purpleLight }}>
                 {language === 'zh' ? '行星位置' : 'Planetary Positions'}
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {chartData.planets.map((planet) => (
-                  <div
-                    key={planet.name}
-                    className="bg-slate-700/30 rounded-lg p-3 text-center border border-slate-600/30"
-                  >
+                  <GlassCard key={planet.name} level="soft" className="p-3 text-center">
                     <div className="text-lg mb-1" style={{ color: PLANET_COLORS[planet.name] }}>
                       {PLANET_SYMBOLS[planet.name]}
                     </div>
                     <div className="text-white font-medium text-sm">
                       {language === 'zh' ? getChinesePlanetName(planet.name) : planet.name}
                     </div>
-                    <div className="text-blue-300 text-xs mt-1">
+                    <div className="text-sm mt-1" style={{ color: colors.dataCyan }}>
                       {planet.signSymbol} {language === 'zh' ? planet.signZh : planet.sign} {planet.degree}°
                     </div>
-                  </div>
+                  </GlassCard>
                 ))}
               </div>
-            </div>
+            </GlassCard>
 
             {/* House Cusps */}
-            <div className="bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm border border-slate-700/50">
-              <h3 className="text-xl font-bold text-blue-300 mb-4 text-center">
+            <GlassCard level="card" className="p-6">
+              <h3 className="text-xl font-bold mb-4 text-center" style={{ color: colors.purpleLight }}>
                 {language === 'zh' ? '宫位' : 'Houses'}
               </h3>
               <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
@@ -492,28 +536,25 @@ export default function WesternPage() {
                   const signIndex = Math.floor(cusp / 30) % 12;
                   const sign = ZODIAC_SIGNS[signIndex];
                   return (
-                    <div
-                      key={index}
-                      className="bg-slate-700/30 rounded-lg p-3 text-center border border-slate-600/30"
-                    >
-                      <div className="text-slate-400 text-xs mb-1">
+                    <GlassCard key={index} level="soft" className="p-3 text-center">
+                      <div className="text-xs mb-1" style={{ color: colors.textMuted }}>
                         {language === 'zh' ? `第${index + 1}宫` : `House ${index + 1}`}
                       </div>
                       <div className="text-white font-medium text-sm">
                         {sign.symbol}
                       </div>
-                      <div className="text-blue-300 text-xs">
+                      <div className="text-sm" style={{ color: colors.textSecondary }}>
                         {language === 'zh' ? sign.nameZh : sign.name}
                       </div>
-                    </div>
+                    </GlassCard>
                   );
                 })}
               </div>
 
               {/* Ascendant & Midheaven */}
               <div className="mt-4 grid grid-cols-2 gap-4">
-                <div className="bg-purple-900/20 rounded-lg p-4 text-center border border-purple-600/30">
-                  <div className="text-xs text-purple-400 mb-1">
+                <GlassCard level="soft" className="p-4 text-center">
+                  <div className="text-xs mb-1" style={{ color: colors.purpleLight }}>
                     {language === 'zh' ? '上升星座' : 'Ascendant'}
                   </div>
                   <div className="text-2xl mb-1">
@@ -522,10 +563,10 @@ export default function WesternPage() {
                   <div className="text-white font-medium">
                     {language === 'zh' ? chartData.houses.ascendantSignZh : chartData.houses.ascendantSign}
                   </div>
-                  <div className="text-purple-300 text-sm">{chartData.houses.ascendant}°</div>
-                </div>
-                <div className="bg-blue-900/20 rounded-lg p-4 text-center border border-blue-600/30">
-                  <div className="text-xs text-blue-400 mb-1">
+                  <div className="text-sm" style={{ color: colors.purpleLight }}>{chartData.houses.ascendant}°</div>
+                </GlassCard>
+                <GlassCard level="soft" className="p-4 text-center">
+                  <div className="text-xs mb-1" style={{ color: colors.dataCyan }}>
                     {language === 'zh' ? '天顶' : 'Midheaven'}
                   </div>
                   <div className="text-2xl mb-1">
@@ -534,10 +575,10 @@ export default function WesternPage() {
                   <div className="text-white font-medium">
                     {language === 'zh' ? chartData.houses.mcSignZh : chartData.houses.mcSign}
                   </div>
-                  <div className="text-blue-300 text-sm">{chartData.houses.midheaven}°</div>
-                </div>
+                  <div className="text-sm" style={{ color: colors.dataCyan }}>{chartData.houses.midheaven}°</div>
+                </GlassCard>
               </div>
-            </div>
+            </GlassCard>
 
             {/* PDF Download */}
             <div className="flex justify-center mt-6">
@@ -554,17 +595,17 @@ export default function WesternPage() {
             </div>
 
             {/* Calculation Info */}
-            <div className="text-center text-slate-500 text-xs">
-              <p>{chartData.meta.platform} · v{chartData.meta.version}</p>
-              <p className="mt-1">{chartData.meta.calculationMode}</p>
+            <div className="text-center" style={{ color: colors.textMuted }}>
+              <p className="text-xs">{chartData.meta.platform} · v{chartData.meta.version}</p>
+              <p className="mt-1 text-xs">{chartData.meta.calculationMode}</p>
             </div>
           </div>
         )}
 
         {/* Footer */}
-        <div className="mt-12 text-center text-slate-500 text-sm">
-          <p>© 2024 TianJi Global · 天机全球</p>
-          <p className="mt-1">
+        <div className="mt-12 text-center" style={{ color: colors.textMuted }}>
+          <p className="text-sm">© 2024 TianJi Global · 天机全球</p>
+          <p className="mt-1 text-xs">
             {language === 'zh'
               ? '使用瑞士星历表(SWEPH)进行高精度天文计算'
               : 'High-precision astronomical calculations using Swiss Ephemeris (SWEPH)'}

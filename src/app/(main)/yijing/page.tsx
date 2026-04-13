@@ -4,6 +4,8 @@ import { useState, useCallback } from 'react';
 import SharePanel from '@/components/SharePanel';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
 import { saveReading } from '@/lib/save-reading';
+import { GlassCard, MysticButton, LanguageSwitch, SectionHeader } from '@/components/ui';
+import { colors } from '@/design-system';
 
 type Language = 'zh' | 'en';
 
@@ -187,37 +189,46 @@ export default function YiJingPage() {
   const displayedHexagram = mode === 'cast' ? castResult?.hexagram : searchResult;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-red-950 to-slate-900 text-white p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
-            {language === 'zh' ? '易经占卜' : 'Yi Jing'}
-          </h1>
-          <p className="text-red-300/80 text-lg">
-            {language === 'zh' ? '六十四卦 · I Ching Oracle' : '六十四卦 · I Ching Oracle'}
-          </p>
-        </div>
+    <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
+      {/* Deep cosmic background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-[#030014]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-950/40 via-[#030014] to-amber-950/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        {/* Ambient glow orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-600/10 rounded-full blur-[100px]" />
+      </div>
 
-        {/* Mode Selection */}
-        <div className="bg-slate-800/50 rounded-xl p-6 mb-6 backdrop-blur-sm border border-slate-700/50">
-          <div className="flex gap-4 mb-6">
+      <div className="fixed top-4 right-4 z-50"><LanguageSwitch /></div>
+
+      <div className="max-w-4xl mx-auto px-4 py-8 md:py-12 pt-20">
+        <SectionHeader
+          title={language === 'zh' ? '易经占卜' : 'Yi Jing'}
+          subtitle={language === 'zh' ? '六十四卦 · I Ching Oracle' : '六十四卦 · I Ching Oracle'}
+          badge="🔮"
+        />
+
+        {/* Glass Container */}
+        <div className="glass-panel rounded-2xl p-6 md:p-8 mb-8">
+          {/* Mode Selection */}
+          <div className="flex gap-3 mb-6">
             <button
               onClick={() => { setMode('cast'); setCastResult(null); setSearchResult(null); }}
-              className={`flex-1 py-3 rounded-lg border-2 transition-all ${
+              className={`flex-1 py-3.5 rounded-xl border transition-all duration-300 ${
                 mode === 'cast'
-                  ? 'border-red-500 bg-red-500/20'
-                  : 'border-slate-600 bg-slate-700/50 hover:border-slate-500'
+                  ? 'glass-button-active'
+                  : 'glass-button'
               }`}
             >
               {language === 'zh' ? '🪙 硬币投掷' : '🪙 Coin Toss'}
             </button>
             <button
               onClick={() => { setMode('search'); setCastResult(null); setSearchResult(null); }}
-              className={`flex-1 py-3 rounded-lg border-2 transition-all ${
+              className={`flex-1 py-3.5 rounded-xl border transition-all duration-300 ${
                 mode === 'search'
-                  ? 'border-red-500 bg-red-500/20'
-                  : 'border-slate-600 bg-slate-700/50 hover:border-slate-500'
+                  ? 'glass-button-active'
+                  : 'glass-button'
               }`}
             >
               {language === 'zh' ? '🔍 查找卦象' : '🔍 Search Hexagram'}
@@ -225,16 +236,24 @@ export default function YiJingPage() {
           </div>
 
           {/* Language Toggle */}
-          <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="flex items-center justify-center gap-3 mb-6">
             <button
               onClick={() => setLanguage('zh')}
-              className={`px-4 py-2 rounded-lg ${language === 'zh' ? 'bg-red-600' : 'bg-slate-700 hover:bg-slate-600'}`}
+              className={`px-5 py-2 rounded-lg transition-all duration-300 ${
+                language === 'zh' 
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' 
+                  : 'glass-button'
+              }`}
             >
               中文
             </button>
             <button
               onClick={() => setLanguage('en')}
-              className={`px-4 py-2 rounded-lg ${language === 'en' ? 'bg-red-600' : 'bg-slate-700 hover:bg-slate-600'}`}
+              className={`px-5 py-2 rounded-lg transition-all duration-300 ${
+                language === 'en' 
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' 
+                  : 'glass-button'
+              }`}
             >
               English
             </button>
@@ -243,31 +262,33 @@ export default function YiJingPage() {
           {/* Coin Toss Interface */}
           {mode === 'cast' && (
             <div className="text-center">
-              <div className={`mb-6 ${coinAnimating ? 'animate-bounce' : ''}`}>
-                <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-5xl shadow-lg shadow-yellow-500/30">
+              <div className={`mb-8 ${coinAnimating ? 'animate-bounce' : ''}`}>
+                <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600 text-5xl shadow-[0_0_40px_rgba(245,158,11,0.4)] relative">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-yellow-400/30 to-transparent blur-xl" />
                   🪙
                 </div>
               </div>
+              
               {/* Question Input */}
-              <div className="mb-4">
+              <div className="mb-5">
                 <input
                   type="text"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   placeholder={language === 'zh' ? '请输入您的问题（可选）' : 'Your question (optional)'}
-                  className="w-full max-w-md px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:border-red-500 focus:outline-none"
+                  className="glass-input w-full max-w-md px-5 py-3.5 rounded-xl"
                 />
               </div>
 
               {/* Gender Selection */}
               <div className="mb-6 flex items-center justify-center gap-4">
-                <span className="text-slate-300">
+                <span className="text-amber-200/70">
                   {language === 'zh' ? '性别：' : 'Gender:'}
                 </span>
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="px-4 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-red-500 focus:outline-none"
+                  className="glass-input px-4 py-2.5 rounded-xl cursor-pointer"
                 >
                   <option value="">{language === 'zh' ? '选择' : 'Select'}</option>
                   <option value="male">{language === 'zh' ? '男' : 'Male'}</option>
@@ -275,7 +296,7 @@ export default function YiJingPage() {
                 </select>
               </div>
 
-              <p className="text-slate-300 mb-6">
+              <p className="text-amber-200/50 mb-6">
                 {language === 'zh' 
                   ? '点击按钮进行三次硬币投掷' 
                   : 'Click to perform three coin tosses'}
@@ -283,10 +304,10 @@ export default function YiJingPage() {
               <button
                 onClick={handleCast}
                 disabled={isCasting}
-                className="px-8 py-4 rounded-lg bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 font-bold text-lg transition-all disabled:opacity-50"
+                className="group px-10 py-4 rounded-xl bg-gradient-to-r from-amber-500/80 to-orange-500/80 hover:from-amber-400/90 hover:to-orange-400/90 font-bold text-lg transition-all duration-300 disabled:opacity-50 shadow-[0_0_30px_rgba(245,158,11,0.25)] hover:shadow-[0_0_40px_rgba(245,158,11,0.4)]"
               >
                 {isCasting 
-                  ? (language === 'zh' ? 'AI解读中...' : 'AI Interpreting...')
+                  ? (language === 'zh' ? '✨ AI解读中...' : '✨ AI Interpreting...')
                   : (language === 'zh' ? '投掷硬币' : 'Toss Coins')}
               </button>
             </div>
@@ -295,7 +316,7 @@ export default function YiJingPage() {
           {/* Search Interface */}
           {mode === 'search' && (
             <div className="text-center">
-              <div className="mb-4">
+              <div className="mb-5">
                 <input
                   type="number"
                   min="1"
@@ -303,17 +324,17 @@ export default function YiJingPage() {
                   value={searchNumber}
                   onChange={(e) => setSearchNumber(e.target.value)}
                   placeholder={language === 'zh' ? '输入卦象编号 (1-64)' : 'Enter hexagram number (1-64)'}
-                  className="w-full max-w-xs px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:border-red-500 focus:outline-none"
+                  className="glass-input w-full max-w-xs px-5 py-3.5 rounded-xl"
                 />
               </div>
               <button
                 onClick={handleSearch}
-                className="px-8 py-3 rounded-lg bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 font-bold transition-all"
+                className="px-10 py-3.5 rounded-xl bg-gradient-to-r from-amber-500/80 to-orange-500/80 hover:from-amber-400/90 hover:to-orange-400/90 font-bold transition-all duration-300 shadow-[0_0_25px_rgba(245,158,11,0.25)] hover:shadow-[0_0_35px_rgba(245,158,11,0.4)]"
               >
                 {language === 'zh' ? '查找' : 'Search'}
               </button>
               {searchError && (
-                <p className="text-red-400 mt-4">{searchError}</p>
+                <p className="text-red-400/80 mt-4 glass-text">{searchError}</p>
               )}
             </div>
           )}
@@ -321,73 +342,86 @@ export default function YiJingPage() {
 
         {/* Hexagram Display */}
         {displayedHexagram && (
-          <div className="bg-gradient-to-b from-slate-800/50 to-slate-900/50 rounded-xl p-6 border border-slate-700/50">
+          <div className="glass-panel rounded-2xl p-6 md:p-8">
             {/* Hexagram Symbol */}
-            <div className="flex justify-center mb-6">
-              <div className="bg-amber-900/30 rounded-xl p-6 border border-amber-600/30">
-                <div className="text-8xl text-center mb-2">{displayedHexagram.name}</div>
-                <div className="text-center text-amber-400 text-lg">
-                  {displayedHexagram.pinyin}
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                <div className="absolute inset-0 bg-amber-500/10 rounded-2xl blur-xl" />
+                <div className="relative glass-inner rounded-2xl p-8 border border-amber-500/20">
+                  <div className="text-8xl text-center mb-3 drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+                    {displayedHexagram.name}
+                  </div>
+                  <div className="text-center text-amber-400/80 text-xl tracking-wider">
+                    {displayedHexagram.pinyin}
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Hexagram Info */}
-            <div className="text-center mb-6">
-              <div className="text-3xl font-bold text-amber-400 mb-2">
+            <div className="text-center mb-8">
+              <div className="text-3xl font-bold text-amber-300 mb-2 tracking-wide">
                 {displayedHexagram.name} 卦 · #{displayedHexagram.number}
               </div>
-              <div className="text-xl text-slate-300">
+              <div className="text-xl text-amber-200/60">
                 {displayedHexagram.english}
               </div>
             </div>
 
             {/* Lines Display (for cast mode) */}
             {castResult && (
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-amber-300 text-center mb-4">
+              <div className="mb-8">
+                <h3 className="text-lg font-semibold text-amber-300/80 text-center mb-5 tracking-wider">
                   {language === 'zh' ? '六爻' : 'Six Lines'}
                 </h3>
                 <div className="space-y-2">
                   {[...castResult.lines].reverse().map((line, index) => (
-                    <div key={index} className="flex items-center justify-center gap-4 bg-slate-700/30 rounded-lg py-2">
-                      <span className="text-slate-400 w-8 text-right">{6 - index}</span>
-                      <span className="text-2xl font-mono text-white w-32 text-center">
+                    <div key={index} className="flex items-center justify-center gap-4 glass-inner rounded-xl py-3">
+                      <span className="text-amber-200/40 w-8 text-right font-mono">{6 - index}</span>
+                      <span className="text-3xl font-mono text-amber-100 w-36 text-center tracking-widest">
                         {line.isYang ? (line.isChanging ? '— × —' : '— ——') : (line.isChanging ? '— ○ —' : '— — —')}
                       </span>
-                      <span className={`text-sm ${line.isChanging ? 'text-red-400' : 'text-slate-400'}`}>
+                      <span className={`text-sm w-48 text-left ${line.isChanging ? 'text-red-400/90' : 'text-amber-200/50'}`}>
                         {language === 'zh' ? line.meaning : line.meaningEn}
                       </span>
                     </div>
                   ))}
                 </div>
                 {castResult.hasChangingLines && (
-                  <div className="mt-4 text-center text-red-400 font-semibold">
-                    {language === 'zh' ? '⚠️ 有动爻（变卦）' : '⚠️ Has changing lines (transforming hexagram)'}
+                  <div className="mt-5 text-center">
+                    <span className="glass-warning">
+                      {language === 'zh' ? '⚠️ 有动爻（变卦）' : '⚠️ Has changing lines (transforming hexagram)'}
+                    </span>
                   </div>
                 )}
               </div>
             )}
 
             {/* Judgment */}
-            <div className="bg-amber-900/20 rounded-xl p-6 border border-amber-600/30">
-              <h3 className="text-lg font-semibold text-amber-300 mb-3 text-center">
-                {language === 'zh' ? '卦辞' : 'Judgement'}
-              </h3>
-              <p className="text-slate-200 text-center text-lg leading-relaxed">
-                {displayedHexagram.judgement}
-              </p>
+            <div className="relative mb-6">
+              <div className="absolute inset-0 bg-amber-500/5 rounded-2xl blur-xl" />
+              <div className="relative glass-inner rounded-2xl p-6 border border-amber-500/20">
+                <h3 className="text-lg font-semibold text-amber-300/80 mb-4 text-center tracking-wider">
+                  {language === 'zh' ? '卦辞' : 'Judgement'}
+                </h3>
+                <p className="text-amber-100/90 text-center text-lg leading-relaxed">
+                  {displayedHexagram.judgement}
+                </p>
+              </div>
             </div>
 
             {/* AI Interpretation */}
             {castResult?.aiInterpretation && (
-              <div className="mt-6 bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-xl p-6 border border-purple-600/30">
-                <h3 className="text-lg font-semibold text-purple-300 mb-3 text-center">
-                  {language === 'zh' ? '✨ AI 解读' : '✨ AI Interpretation'}
-                </h3>
-                <p className="text-slate-200 text-center text-lg leading-relaxed whitespace-pre-wrap">
-                  {castResult.aiInterpretation}
-                </p>
+              <div className="relative mb-6">
+                <div className="absolute inset-0 bg-purple-500/10 rounded-2xl blur-xl" />
+                <div className="relative glass-inner rounded-2xl p-6 border border-purple-500/30">
+                  <h3 className="text-lg font-semibold text-purple-300/80 mb-4 text-center tracking-wider">
+                    {language === 'zh' ? '✨ AI 解读' : '✨ AI Interpretation'}
+                  </h3>
+                  <p className="text-amber-100/90 text-center text-lg leading-relaxed whitespace-pre-wrap">
+                    {castResult.aiInterpretation}
+                  </p>
+                </div>
               </div>
             )}
 
@@ -409,36 +443,125 @@ export default function YiJingPage() {
 
         {/* Hexagram Reference Grid (for search mode) */}
         {mode === 'search' && (
-          <div className="mt-8">
-            <h3 className="text-xl font-bold text-amber-300 mb-4 text-center">
+          <div className="mt-10">
+            <h3 className="text-xl font-bold text-amber-300/70 mb-6 text-center tracking-wider">
               {language === 'zh' ? '六十四卦表' : '64 Hexagrams'}
             </h3>
-            <div className="grid grid-cols-8 gap-2">
-              {HEXAGRAMS.map((hex) => (
-                <button
-                  key={hex.number}
-                  onClick={() => {
-                    setSearchNumber(hex.number.toString());
-                    setSearchResult(hex);
-                  }}
-                  className={`aspect-square rounded flex items-center justify-center text-xl font-bold transition-all ${
-                    searchResult?.number === hex.number
-                      ? 'bg-red-600 text-white'
-                      : 'bg-slate-700/50 text-amber-400 hover:bg-slate-600'
-                  }`}
-                >
-                  {hex.name}
-                </button>
-              ))}
+            <div className="glass-panel rounded-2xl p-4">
+              <div className="grid grid-cols-8 gap-2">
+                {HEXAGRAMS.map((hex) => (
+                  <button
+                    key={hex.number}
+                    onClick={() => {
+                      setSearchNumber(hex.number.toString());
+                      setSearchResult(hex);
+                    }}
+                    className={`aspect-square rounded-lg flex items-center justify-center text-xl font-bold transition-all duration-300 ${
+                      searchResult?.number === hex.number
+                        ? 'bg-gradient-to-br from-amber-500/40 to-orange-500/40 text-white shadow-[0_0_20px_rgba(245,158,11,0.3)] border border-amber-500/50'
+                        : 'glass-inner text-amber-400/80 hover:text-amber-300 hover:border-amber-500/30'
+                    }`}
+                  >
+                    {hex.name}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}
 
         {/* Footer */}
-        <div className="mt-12 text-center text-slate-500 text-sm">
-          <p>© 2024 TianJi Global · 天机全球</p>
+        <div className="mt-16 text-center">
+          <p className="text-amber-200/30 text-sm tracking-wider">© 2024 TianJi Global · 天机全球</p>
         </div>
       </div>
-    </main>
+
+      {/* Global Glass Morphism Styles */}
+      <style jsx global>{`
+        .glass-panel {
+          background: rgba(15, 10, 30, 0.6);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(168, 85, 247, 0.15);
+          box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        .glass-inner {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        .glass-button {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(168, 85, 247, 0.2);
+          color: rgba(251, 191, 36, 0.7);
+        }
+        
+        .glass-button:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(168, 85, 247, 0.35);
+          color: rgba(251, 191, 36, 0.9);
+        }
+        
+        .glass-button-active {
+          background: rgba(245, 158, 11, 0.15);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(245, 158, 11, 0.4);
+          color: rgba(251, 191, 36, 1);
+          box-shadow: 
+            0 0 20px rgba(245, 158, 11, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-input {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(168, 85, 247, 0.2);
+          color: rgba(251, 191, 36, 0.9);
+          transition: all 0.3s ease;
+        }
+        
+        .glass-input::placeholder {
+          color: rgba(251, 191, 36, 0.35);
+        }
+        
+        .glass-input:focus {
+          outline: none;
+          border-color: rgba(245, 158, 11, 0.5);
+          box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
+          background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-warning {
+          display: inline-block;
+          padding: 0.5rem 1rem;
+          background: rgba(239, 68, 68, 0.15);
+          border: 1px solid rgba(239, 68, 68, 0.3);
+          border-radius: 0.75rem;
+          color: rgba(239, 68, 68, 0.9);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+        
+        /* Animations */
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.2); }
+          50% { box-shadow: 0 0 40px rgba(245, 158, 11, 0.4); }
+        }
+      `}</style>
+    </div>
   );
 }

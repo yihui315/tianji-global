@@ -367,8 +367,15 @@ export default function SolarReturnPage() {
   }, [chartData, isClient]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-amber-950 to-slate-900 text-white p-4 md:p-8">
-      <div className="max-w-5xl mx-auto">
+    <main className="min-h-screen bg-gradient-to-br from-[#030014] via-[#0f0a1e] to-[#030014] text-white p-4 md:p-8 relative overflow-hidden">
+      {/* Animated background gradient orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-amber-600/15 rounded-full blur-[128px] animate-pulse" />
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-orange-600/15 rounded-full blur-[128px] animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600/10 rounded-full blur-[150px]" />
+      </div>
+
+      <div className="relative max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
@@ -381,8 +388,8 @@ export default function SolarReturnPage() {
           </p>
         </div>
 
-        {/* Input Form */}
-        <div className="bg-slate-800/50 rounded-xl p-6 mb-6 backdrop-blur-sm border border-slate-700/50">
+        {/* Input Form - Glass Card */}
+        <div className="bg-gradient-to-br from-amber-950/40 via-slate-900/80 to-orange-950/40 rounded-xl p-6 mb-6 backdrop-blur-xl border border-amber-500/20 shadow-[0_0_40px_rgba(245,158,11,0.1)]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             {/* Birthday */}
             <div>
@@ -393,7 +400,7 @@ export default function SolarReturnPage() {
                 type="date"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-white focus:border-amber-500 focus:outline-none backdrop-blur-sm"
               />
             </div>
 
@@ -406,7 +413,7 @@ export default function SolarReturnPage() {
                 type="time"
                 value={birthTime}
                 onChange={(e) => setBirthTime(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-white focus:border-amber-500 focus:outline-none backdrop-blur-sm"
               />
             </div>
 
@@ -422,7 +429,7 @@ export default function SolarReturnPage() {
                 max="90"
                 value={lat}
                 onChange={(e) => setLat(parseFloat(e.target.value) || 0)}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-white focus:border-amber-500 focus:outline-none backdrop-blur-sm"
               />
             </div>
 
@@ -438,7 +445,7 @@ export default function SolarReturnPage() {
                 max="180"
                 value={lng}
                 onChange={(e) => setLng(parseFloat(e.target.value) || 0)}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-white focus:border-amber-500 focus:outline-none backdrop-blur-sm"
               />
             </div>
 
@@ -453,7 +460,7 @@ export default function SolarReturnPage() {
                 max="2100"
                 value={targetYear}
                 onChange={(e) => setTargetYear(parseInt(e.target.value) || new Date().getFullYear())}
-                className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 text-white focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-white focus:border-amber-500 focus:outline-none backdrop-blur-sm"
               />
             </div>
           </div>
@@ -462,31 +469,31 @@ export default function SolarReturnPage() {
           <div className="flex gap-4 mb-6">
             <button
               onClick={() => setLanguage('zh')}
-              className={`flex-1 py-2.5 rounded-lg border-2 transition-all ${
+              className={`flex-1 py-2.5 rounded-lg border-2 transition-all backdrop-blur-sm ${
                 language === 'zh'
-                  ? 'border-amber-500 bg-amber-500/20 text-amber-300'
-                  : 'border-slate-600 bg-slate-700/50 text-slate-400 hover:border-slate-500'
+                  ? 'border-amber-500/50 bg-amber-500/20 text-amber-300'
+                  : 'border-slate-700 bg-slate-800/50 text-slate-400 hover:border-slate-600'
               }`}
             >
               中文
             </button>
             <button
               onClick={() => setLanguage('en')}
-              className={`flex-1 py-2.5 rounded-lg border-2 transition-all ${
+              className={`flex-1 py-2.5 rounded-lg border-2 transition-all backdrop-blur-sm ${
                 language === 'en'
-                  ? 'border-amber-500 bg-amber-500/20 text-amber-300'
-                  : 'border-slate-600 bg-slate-700/50 text-slate-400 hover:border-slate-500'
+                  ? 'border-amber-500/50 bg-amber-500/20 text-amber-300'
+                  : 'border-slate-700 bg-slate-800/50 text-slate-400 hover:border-slate-600'
               }`}
             >
               English
             </button>
           </div>
 
-          {/* Calculate Button */}
+          {/* Calculate Button - Glassmorphic Gradient */}
           <button
             onClick={fetchSolarReturnData}
             disabled={isLoading}
-            className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600/80 to-orange-600/80 hover:from-amber-500/90 hover:to-orange-500/90 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-xl border border-amber-400/30 shadow-[0_0_30px_rgba(245,158,11,0.2)]"
           >
             {isLoading
               ? (language === 'zh' ? '计算中...' : 'Calculating...')
@@ -494,7 +501,7 @@ export default function SolarReturnPage() {
           </button>
 
           {error && (
-            <div className="mt-4 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+            <div className="mt-4 p-4 rounded-lg bg-red-950/40 border border-red-500/30 text-red-400 text-sm backdrop-blur-xl">
               {error}
             </div>
           )}
@@ -503,30 +510,30 @@ export default function SolarReturnPage() {
         {/* Results */}
         {chartData && (
           <div className="space-y-6">
-            {/* Solar Return Info */}
+            {/* Solar Return Info - Glass Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-slate-800/50 rounded-xl p-6 border border-amber-500/30"
+              className="bg-gradient-to-br from-amber-950/50 to-slate-900/80 rounded-xl p-6 border border-amber-500/20 backdrop-blur-xl shadow-[0_0_40px_rgba(245,158,11,0.1)]"
             >
               <h2 className="text-lg font-semibold text-amber-300 mb-4">
                 {language === 'zh' ? '太阳返照精确时间' : 'Solar Return Exact Time'}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 rounded-lg bg-slate-700/30 text-center">
+                <div className="p-4 rounded-lg bg-slate-800/50 text-center backdrop-blur-sm border border-slate-700/30">
                   <div className="text-xs text-slate-400 mb-1">
                     {language === 'zh' ? '出生日期' : 'Birth Date'}
                   </div>
                   <div className="text-white font-medium">{chartData.birthDate}</div>
                   <div className="text-xs text-slate-500">{chartData.birthTime}</div>
                 </div>
-                <div className="p-4 rounded-lg bg-amber-500/10 text-center border border-amber-500/30">
+                <div className="p-4 rounded-lg bg-amber-500/10 text-center border border-amber-500/30 backdrop-blur-sm">
                   <div className="text-xs text-amber-400 mb-1">
                     {language === 'zh' ? '返照精确时间' : 'SR Exact Time'}
                   </div>
                   <div className="text-white font-medium">{chartData.birthdayExactTime}</div>
                 </div>
-                <div className="p-4 rounded-lg bg-slate-700/30 text-center">
+                <div className="p-4 rounded-lg bg-slate-800/50 text-center backdrop-blur-sm border border-slate-700/30">
                   <div className="text-xs text-slate-400 mb-1">
                     {language === 'zh' ? '出生太阳黄经' : 'Birth Sun Longitude'}
                   </div>
@@ -535,12 +542,12 @@ export default function SolarReturnPage() {
               </div>
             </motion.div>
 
-            {/* Chart */}
+            {/* Chart - Glass Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-slate-800/50 rounded-xl p-6 border border-slate-700"
+              className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 rounded-xl p-6 border border-slate-700/30 backdrop-blur-xl"
             >
               <h2 className="text-lg font-semibold text-white mb-4">
                 {language === 'zh' ? '太阳返照星盘' : 'Solar Return Chart'}
@@ -565,12 +572,12 @@ export default function SolarReturnPage() {
               </p>
             </motion.div>
 
-            {/* Planet List */}
+            {/* Planet List - Glass Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-slate-800/50 rounded-xl p-6 border border-slate-700"
+              className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 rounded-xl p-6 border border-slate-700/30 backdrop-blur-xl"
             >
               <h2 className="text-lg font-semibold text-white mb-4">
                 {language === 'zh' ? '行星位置' : 'Planetary Positions'}
@@ -578,18 +585,18 @@ export default function SolarReturnPage() {
               <PlanetList planets={chartData.chart.planets} language={language} />
             </motion.div>
 
-            {/* House Cusps */}
+            {/* House Cusps - Glass Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-slate-800/50 rounded-xl p-6 border border-slate-700"
+              className="bg-gradient-to-br from-amber-950/40 to-slate-900/80 rounded-xl p-6 border border-amber-500/20 backdrop-blur-xl"
             >
               <h2 className="text-lg font-semibold text-white mb-4">
                 {language === 'zh' ? '宫位信息' : 'House Information'}
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="p-3 rounded-lg bg-slate-700/30 text-center">
+                <div className="p-3 rounded-lg bg-slate-800/50 text-center backdrop-blur-sm border border-slate-700/30">
                   <div className="text-xs text-slate-400">
                     {language === 'zh' ? '上升点' : 'Ascendant'}
                   </div>
@@ -598,7 +605,7 @@ export default function SolarReturnPage() {
                     {(chartData.chart.houses.ascendant % 30).toFixed(1)}°
                   </div>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-700/30 text-center">
+                <div className="p-3 rounded-lg bg-slate-800/50 text-center backdrop-blur-sm border border-slate-700/30">
                   <div className="text-xs text-slate-400">
                     {language === 'zh' ? '天顶' : 'Midheaven'}
                   </div>
@@ -607,7 +614,7 @@ export default function SolarReturnPage() {
                     {(chartData.chart.houses.midheaven % 30).toFixed(1)}°
                   </div>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-700/30 text-center">
+                <div className="p-3 rounded-lg bg-slate-800/50 text-center backdrop-blur-sm border border-slate-700/30">
                   <div className="text-xs text-slate-400">
                     {language === 'zh' ? '下降点' : 'Descendant'}
                   </div>
@@ -616,7 +623,7 @@ export default function SolarReturnPage() {
                     {((chartData.chart.houses.ascendant + 180) % 30).toFixed(1)}°
                   </div>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-700/30 text-center">
+                <div className="p-3 rounded-lg bg-slate-800/50 text-center backdrop-blur-sm border border-slate-700/30">
                   <div className="text-xs text-slate-400">
                     {language === 'zh' ? '天底' : 'IC'}
                   </div>
@@ -628,13 +635,13 @@ export default function SolarReturnPage() {
               </div>
             </motion.div>
 
-            {/* Interpretation */}
+            {/* Interpretation - Glass Card */}
             {chartData.interpretation && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-slate-800/50 rounded-xl p-6 border border-slate-700"
+                className="bg-gradient-to-br from-amber-950/40 to-slate-900/80 rounded-xl p-6 border border-amber-500/20 backdrop-blur-xl"
               >
                 <h2 className="text-lg font-semibold text-white mb-4">
                   {language === 'zh' ? '解读' : 'Interpretation'}

@@ -7,6 +7,8 @@ import { saveReading } from '@/lib/save-reading';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
 import TarotCardAnimation from '@/components/animations/TarotCardAnimation';
 import { spreadLayouts, type TarotCard, type SpreadLayout, type DrawnCard } from '@/lib/tarot';
+import { GlassCard, MysticButton, LanguageSwitch, SectionHeader } from '@/components/ui';
+import { colors } from '@/design-system';
 
 type SpreadType = 'single' | 'three-card' | 'celtic-cross';
 type Language = 'en' | 'zh';
@@ -82,18 +84,17 @@ export default function TarotPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-purple-900 via-slate-900 to-black text-white p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Tarot Reading
-          </h1>
-          <p className="text-purple-300 text-lg">塔罗牌占卜 · TianJi Global</p>
-        </div>
+    <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
+      <div className="fixed top-4 right-4 z-50"><LanguageSwitch /></div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-12 w-full">
+        <SectionHeader
+          title="Tarot Reading"
+          subtitle="塔罗牌占卜 · TianJi Global"
+          badge="🃏"
+        />
 
         {/* Spread Selection */}
-        <div className="bg-slate-800/50 rounded-xl p-6 mb-6 backdrop-blur-sm">
+        <GlassCard level="card" className="p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4 text-purple-300">
             {language === 'zh' ? '选择牌阵' : 'Choose Your Spread'}
           </h2>
@@ -165,16 +166,18 @@ export default function TarotPage() {
           </div>
 
           {/* Draw Button */}
-          <button
+          <MysticButton
+            variant="solid"
+            size="lg"
+            className="w-full"
             onClick={drawCards}
             disabled={isLoading}
-            className="w-full py-4 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading
               ? (language === 'zh' ? '正在抽牌...' : 'Drawing cards...')
               : (language === 'zh' ? '抽取你的牌' : 'Draw Your Cards')}
-          </button>
-        </div>
+          </MysticButton>
+        </GlassCard>
 
         {/* Error Message */}
         {error && (
@@ -298,7 +301,7 @@ export default function TarotPage() {
           <p className="mt-1">78 Cards · {language === 'zh' ? '大阿卡纳与小子阿卡纳' : 'Major & Minor Arcana'}</p>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 

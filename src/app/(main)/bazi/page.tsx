@@ -6,6 +6,8 @@ import PDFDownloadButton from '@/components/PDFDownloadButton';
 import { saveReading } from '@/lib/save-reading';
 import BaziWheelAnimation from '@/components/animations/BaziWheelAnimation';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
+import { GlassCard, MysticButton, LanguageSwitch, SectionHeader } from '@/components/ui';
+import { colors } from '@/design-system';
 
 type Language = 'zh' | 'en';
 type Gender = 'male' | 'female';
@@ -184,20 +186,17 @@ export default function BaZiPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-amber-950 to-slate-900 text-white p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
-            {language === 'zh' ? '八字命理' : 'Ba Zi'}
-          </h1>
-          <p className="text-amber-300/80 text-lg">
-            {language === 'zh' ? '四柱命理 · Four Pillars of Destiny' : '四柱命理 · Four Pillars of Destiny'}
-          </p>
-        </div>
+    <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
+      <div className="fixed top-4 right-4 z-50"><LanguageSwitch /></div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-20 pb-12 w-full">
+        <SectionHeader
+          title={language === 'zh' ? '八字命理' : 'Ba Zi'}
+          subtitle={language === 'zh' ? '四柱命理 · Four Pillars of Destiny' : '四柱命理 · Four Pillars of Destiny'}
+          badge="📊"
+        />
 
         {/* Input Form */}
-        <div className="bg-slate-800/50 rounded-xl p-6 mb-6 backdrop-blur-sm border border-slate-700/50">
+        <GlassCard level="card" className="p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {/* Birthday */}
             <div>
@@ -291,22 +290,26 @@ export default function BaZiPage() {
 
           {/* Calculate Button */}
           <div className="flex gap-4">
-            <button
+            <MysticButton
+              variant="outline"
+              size="lg"
+              className="flex-1"
               onClick={() => handleCalculate(false)}
               disabled={loading}
-              className="flex-1 py-4 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 font-bold text-lg transition-all disabled:opacity-50"
             >
               {loading && !loadingAI ? (language === 'zh' ? '计算中...' : 'Calculating...') : (language === 'zh' ? '分析八字' : 'Calculate Ba Zi')}
-            </button>
-            <button
+            </MysticButton>
+            <MysticButton
+              variant="solid"
+              size="lg"
+              className="flex-1"
               onClick={() => { setLoadingAI(true); handleCalculate(true); }}
               disabled={loading}
-              className="flex-1 py-4 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 font-bold text-lg transition-all disabled:opacity-50"
             >
               {loadingAI ? (language === 'zh' ? 'AI解读中...' : 'AI Interpreting...') : (language === 'zh' ? '✨ AI 深度解读' : '✨ AI Deep Interpretation')}
-            </button>
+            </MysticButton>
           </div>
-        </div>
+        </GlassCard>
 
         {/* Error Message */}
         {error && (
@@ -506,6 +509,6 @@ export default function BaZiPage() {
           <p>© 2024 TianJi Global · 天机全球</p>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
