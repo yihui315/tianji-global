@@ -195,9 +195,19 @@ export default function DashboardPage() {
             <h2 className="text-xl font-semibold">
               {language === 'zh' ? '最近解读' : 'Recent Readings'}
             </h2>
-            <span className="text-xs text-slate-500">
-              {readings.length > 0 ? `${readings.length} records` : ''}
-            </span>
+            <div className="flex items-center gap-3">
+              {readings.length > 0 && (
+                <a
+                  href="/readings"
+                  className="text-xs text-purple-400 hover:text-purple-300 transition"
+                >
+                  {language === 'zh' ? '查看全部 →' : 'View all →'}
+                </a>
+              )}
+              <span className="text-xs text-slate-500">
+                {readings.length > 0 ? `${readings.length} records` : ''}
+              </span>
+            </div>
           </div>
 
           {readingsLoading ? (

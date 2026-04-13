@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
     }
 
     if (!isSupabaseConfigured()) {
-      // Store in localStorage on client as fallback
       return NextResponse.json({ success: true, local: true });
     }
 
@@ -70,6 +69,38 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, id: data.id });
   } catch (err) {
     console.error('[api/readings] POST error:', err);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    if (!id) {
+      return NextResponse.json({ error: 'id is required' }, { status: 400 });
+    }
+
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json({ success: true });
+    }
+
+    const supabase = getSupabaseAdmin();
+    const { error } = await supabase
+      .from('readings')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', session.user.id!);
+
+    if (error) throw error;
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error('[api/readings] DELETE error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
