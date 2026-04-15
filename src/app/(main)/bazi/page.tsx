@@ -9,6 +9,8 @@ import BaziWheelAnimation from '@/components/animations/BaziWheelAnimation';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
 import { GlassCard, MysticButton, LanguageSwitch, SectionHeader } from '@/components/ui';
 import { colors } from '@/design-system';
+import BaZiChat from '@/components/chat/BaZiChat';
+import FortuneWheel from '@/components/widgets/FortuneWheel';
 
 // ─── Fade-In Motion ───────────────────────────────────────────────────────────
 function FadeInWhenVisible({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -495,6 +497,50 @@ export default function BaZiPage() {
                 {language === 'zh' ? 'AI 解读失败' : 'AI Interpretation Failed'}: {result.aiError}
               </div>
             )}
+
+            {/* Fortune Wheel - 四维图 */}
+            <FadeInWhenVisible delay={0.32}>
+            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
+              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
+                {language === 'zh' ? '✨ 四维运势图' : '✨ Fortune Radar'}
+              </h3>
+              <FortuneWheel
+                data={{
+                  career: 72,
+                  love: 68,
+                  wealth: 65,
+                  health: 78,
+                  date: birthday
+                }}
+                language={language}
+              />
+            </div>
+            </FadeInWhenVisible>
+
+            {/* BaZiChat - 多轮对话 */}
+            <FadeInWhenVisible delay={0.34}>
+            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
+              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
+                {language === 'zh' ? '🔮 AI 多轮对话占卜' : '🔮 AI Multi-Turn Chat'}
+              </h3>
+              <BaZiChat
+                birthDate={birthday}
+                birthTime={TIME_PERIODS[birthTime]?.labelEn?.split(' ')[0]
+                  ? `${String(birthTime * 2 + 23).padStart(2, '0')}:00`
+                  : '02:00'}
+                gender={gender}
+                language={language}
+                baziChart={result ? {
+                  dayHeavenlyStem: result.chart.day.heavenlyStem,
+                  dayMasterElement: result.chart.dayMasterElement,
+                  year: result.chart.year.heavenlyStem,
+                  month: result.chart.month.heavenlyStem,
+                  day: result.chart.day.heavenlyStem,
+                  hour: result.chart.hour.heavenlyStem
+                } : undefined}
+              />
+            </div>
+            </FadeInWhenVisible>
 
             {/* Share Panel */}
             <SharePanel
