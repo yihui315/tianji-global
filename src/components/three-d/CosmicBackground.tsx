@@ -1,0 +1,113 @@
+'use client';
+
+/**
+ * CosmicBackground — 全屏宇宙背景
+ */
+
+import { useEffect, useRef } from 'react';
+
+interface CosmicBackgroundProps {
+  children?: React.ReactNode;
+  particleCount?: number;
+  nebulaIntensity?: number;
+}
+
+export default function CosmicBackground({
+  children,
+  particleCount = 200,
+  nebulaIntensity = 0.3
+}: CosmicBackgroundProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const particles: Array<{ x: number; y: number; size: number; speed: number; opacity: number }> = [];
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 0.5,
+        speed: Math.random() * 0.3 + 0.1,
+        opacity: Math.random() * 0.5 + 0.3
+      });
+    }
+
+    let animationId: number;
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Nebula gradient
+      const gradient = ctx.createRadialGradient(
+        canvas.width * 0.2, canvas.height * 0.3, 0,
+        canvas.width * 0.2, canvas.height * 0.3, canvas.width * 0.5
+      );
+      gradient.addColorStop(0, `rgba(124, 58, 237, ${nebulaIntensity * 0.3})`);
+      gradient.addColorStop(1, 'transparent');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const gradient2 = ctx.createRadialGradient(
+        canvas.width * 0.8, canvas.height * 0.7, 0,
+        canvas.width * 0.8, canvas.height * 0.7, canvas.width * 0.4
+      );
+      gradient2.addColorStop(0, `rgba(236, 72, 153, ${nebulaIntensity * 0.2})`);
+      gradient2.addColorStop(1, 'transparent');
+      ctx.fillStyle = gradient2;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Particles
+      particles.forEach(p => {
+        p.y -= p.speed;
+        if (p.y < -10) {
+          p.y = canvas.height + 10;
+          p.x = Math.random() * canvas.width;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+        ctx.fill();
+
+        if (p.size > 1.5) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(168, 130, 255, ${p.opacity * 0.3})`;
+          ctx.fill();
+        }
+      });
+
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animate();
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animationId);
+    };
+  }, [particleCount, nebulaIntensity]);
+
+  return (
+    <div style={{ position: 'relative', minHeight: '100vh' }}>
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: -1,
+          pointerEvents: 'none'
+        }}
+      />
+      {children}
+    </div>
+  );
+}
