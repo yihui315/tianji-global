@@ -45,14 +45,13 @@ export default function DashboardPage() {
     );
   }
 
-  if (!session) {
-    router.push('/login');
-    return null;
-  }
-
   // Fetch recent readings
   useEffect(() => {
-    if (!session?.user) return;
+    if (status === 'unauthenticated') {
+      router.push('/login');
+      return;
+    }
+    if (status !== 'authenticated' || !session?.user) return;
     fetch('/api/readings')
       .then(r => r.json())
       .then(data => {
@@ -60,7 +59,19 @@ export default function DashboardPage() {
         setReadingsLoading(false);
       })
       .catch(() => setReadingsLoading(false));
-  }, [session?.user]);
+  }, [status, session?.user, router]);
+
+  if (status === 'loading' || status === 'idle') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (status === 'unauthenticated') {
+    return null; // will redirect via useEffect above
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900 text-white">
