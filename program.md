@@ -1,49 +1,52 @@
-# TianJi Autonomous Upgrade Program
+# TianJi Autonomous Upgrade Program — A/B Evolution Mode
 
-## Active module
-**Relationship** — 增长引擎 · 转化 + 裂变核心
+## Current focus
+Run A/B evolution for Relationship module only.
 
-## Evolution faces (choose ONE per run)
-| Face | Focus | Goal |
-|------|-------|------|
-| A | Hero Summary | Upgrade conversion |
-| B | Five Dimension Cards | Clarity + human tone |
-| C | Relationship Pattern | Shareability + virality |
-| D | Current Window | Return-visit + urgency |
-| E | Share Card | Growth + emotional punch |
+## Experiment surfaces (ONE per run)
+1. **Hero Summary** — headline, one-liner, CTA copy
+2. **Relationship Pattern** — naming, one-liner, tags
+3. **Dimension Card Explanations** — five dimension descriptions
+4. **Premium Upgrade Section** — lock文案, premium收益, CTA强度
 
-## Allowed files
+## A/B Rules
+- Generate exactly 2 variants per experiment
+- Variant A = emotional/qualitative framing
+- Variant B = functional/conversion framing
+- Compare both, keep ONLY the winner
+- Discard the weaker variant permanently
+
+## Allowed files (Relationship only)
 - src/app/relationship/**
 - src/components/relationship/**
 - src/components/share/**
 - src/lib/relationship-engine.ts
 - src/lib/synastry-engine.ts
 
-## Protected files (NEVER touch)
+## Protected (NEVER touch)
 - auth, billing, deployment config
 - privacy policy, share privacy safeguards
 - environment config, other modules
 
 ## Success criteria
-Must ALL pass:
-- pass all CI checks
-- Relationship score improves by ≥ 2 points
-- preserve privacy safety
-- improve at least one: relationship clarity / share usability / upgrade conversion
+A winning variant must:
+- pass all audits
+- improve relationship score
+- improve at least one: clarity / emotional resonance / upgrade strength
 
 ## Failure policy
 Discard if:
-- score margin < 2 (prevents fake improvements)
+- both variants score below baseline
 - audit fails
-- privacy regression
+- privacy/share regression
 - bilingual duplication increases
 
-## Scoring function
+## Scoring
 scripts/calculate-relationship-score.ts
 
-## Iteration rules
-- one module per run (Relationship ONLY)
-- max 5 files changed
-- max 1 retry on failure
-- must produce codex-relationship-report.md
-- record every run in experiments/manifest.json
+## Output
+- experiments/relationship/variant-a.json
+- experiments/relationship/variant-b.json
+- ab-result.json (winner)
+- experiments/manifest.json (run history)
+- codex-upgrade-report.md

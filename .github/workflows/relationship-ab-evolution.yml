@@ -1,0 +1,73 @@
+name: relationship-ab-evolution
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  evolve-relationship:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      # Baseline audits
+      - name: Baseline audits
+        run: |
+          npm run audit:routes
+          npm run audit:copy
+          npm run audit:share
+          npm run audit:upgrade
+
+      # A/B Experiment via Codex
+      - name: Run Codex A/B experiment
+        uses: openai/codex-action@v1
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          prompt: |
+            Read program.md.
+
+            Run one A/B experiment for the Relationship module.
+            Focus on: Hero Summary (headline, one-liner, CTA copy).
+
+            Create two variants:
+            - Variant A: emotional framing ("You feel something real, but...")
+            - Variant B: functional framing ("This connection has long-term potential, but...")
+
+            Write both to:
+            - experiments/relationship/variant-a.json
+            - experiments/relationship/variant-b.json
+
+            Then run the comparison:
+            npx tsx scripts/compare-ab-variants.ts
+
+            Output: codex-upgrade-report.md
+          codex_args: "exec -c model_reasoning_effort=high"
+
+      # Compare variants
+      - name: Compare A/B variants
+        run: npx tsx scripts/compare-ab-variants.ts
+
+      # Record experiment
+      - name: Record experiment
+        run: npx tsx scripts/record-experiment.ts
+
+      # Create PR only if experiment succeeded
+      - name: Create PR
+        if: success()
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: codex/relationship-ab
+          title: "Codex: Relationship A/B evolution — winner"
+          body-path: codex-upgrade-report.md
