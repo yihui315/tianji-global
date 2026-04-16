@@ -169,33 +169,33 @@ function dimensionSummary(dimension: string, score: number, lang = 'zh'): string
     attraction_zh: score > 80 ? '你们之间存在强烈的自然吸引和情感好奇心，这种磁场往往在初次接触时就很明显。' :
                    score > 60 ? '存在明显的吸引力，双方容易被对方的特点所触动。' :
                    score > 40 ? '吸引力的建立需要更多时间，初期较为平淡。' : '吸引不是你们关系的主要驱动力。',
-    attraction_en: score > 80 ? 'There is a strong natural pull and emotional curiosity between you.' :
-                   score > 60 ? 'There is clear attraction and emotional resonance.' :
-                   score > 40 ? 'Attraction builds gradually over time.' : 'Attraction is not the main driver of this connection.',
+    attraction_en: score > 80 ? 'You feel the pull between you — strong, sometimes almost overwhelming. The question is whether you\'re both feeling it at the same intensity.' :
+                   score > 60 ? 'There\'s real attraction here. It\'s not always loud, but it\'s consistent — when you\'re both present.' :
+                   score > 40 ? 'The attraction is honest — but without intention, it stays where it is.' : 'Attraction isn\'t the main language of this connection. That doesn\'t mean depth isn\'t there.',
     communication_zh: score > 80 ? '你们的沟通方式高度契合，能够轻松理解彼此的表达习惯。' :
                      score > 60 ? '沟通整体顺畅，偶尔需要澄清，但理解能力较强。' :
                      score > 40 ? '沟通需要双方主动调整风格，初期容易产生误解。' : '表达方式差异较大，需要有意识地建立沟通规则。',
-    communication_en: score > 80 ? 'Your communication styles are highly compatible and you understand each other easily.' :
-                      score > 60 ? 'Communication is generally smooth with occasional need for clarification.' :
-                      score > 40 ? 'Different expression styles require conscious effort to align.' : 'Major communication gaps need intentional bridge-building.',
+    communication_en: score > 80 ? 'You understand each other\'s silences as much as the words. That\'s rare — and worth protecting.' :
+                      score > 60 ? 'Communication is a strength. The risk is assuming you\'re clearer than you are — check in more than you think you need to.' :
+                      score > 40 ? 'You understand each other partly. The gap is in how much you\'re both willing to be understood.' : 'Communication takes real effort here. The work is worth it — if you both keep showing up for it.',
     conflict_zh: score > 75 ? '冲突在你们关系中较少出现，即使有分歧也能较快修复。' :
                  score > 55 ? '冲突可被管理，关键在于建立"冲突后修复"的共识。' :
                  score > 35 ? '冲突模式明显，需要学习如何建设性地处理分歧。' : '冲突是当前关系的主要挑战，需要专业支持。',
-    conflict_en: score > 75 ? 'Conflict is rare in your relationship and repair comes easily.' :
-                 score > 55 ? 'Conflict is manageable; establish post-friction repair rituals.' :
-                 score > 35 ? 'Conflict patterns are visible; learn constructive disagreement.' : 'Conflict is a major challenge requiring conscious management.',
+    conflict_en: score > 75 ? 'Conflict rarely shows up here — and when it does, you both know how to come back.' :
+                 score > 55 ? 'You feel the tension, but you can move through it. The key is not letting it calcify into habit.' :
+                 score > 35 ? 'Conflict shows up in ways you don\'t always predict. The patterns are learnable — once you\'re ready to look at them honestly.' : 'The friction is constant. This isn\'t a sign to leave — it\'s a sign to get support.',
     rhythm_zh: score > 75 ? '你们在情感节奏上高度同步，几乎不需要互相适应。' :
                score > 55 ? '节奏整体一致，轻微差异可通过沟通调节。' :
                score > 35 ? '节奏差异明显，一方可能感到被催促或被拖慢。' : '节奏错位是关系的持续张力源。',
-    rhythm_en: score > 75 ? 'Your emotional rhythms are highly synchronized.' :
-               score > 55 ? 'Generally aligned with minor pacing differences.' :
-               score > 35 ? 'Noticeable pacing gaps—one may feel rushed or held back.' : 'Timing misalignment is a constant source of friction.',
+    rhythm_en: score > 75 ? 'You move at the same pace without having to think about it. That ease is the foundation.' :
+               score > 55 ? 'You\'re generally on the same rhythm. The occasional off-beat is navigable — when you both name it.' :
+               score > 35 ? 'You feel the pace gap. One of you wants to move faster; the other wants to slow down. Neither is wrong — it\'s about whose pace you\'re actually living in.' : 'The timing gap is a constant. It\'s not a death sentence — it\'s a calibration problem. Someone has to lead.',
     longTerm_zh: score > 75 ? '长期关系基础扎实，稳定性高，成长空间大。' :
                  score > 55 ? '具备长期发展潜力，需要建立共同习惯和期待管理。' :
                  score > 35 ? '长期关系需要主动投资，双方的成长方向需要定期对齐。' : '长期稳定性存在较大挑战，需要双方共同努力。',
-    longTerm_en: score > 75 ? 'Strong foundation for a lasting relationship with high stability.' :
-                 score > 55 ? 'Good long-term potential with intentional habit-building.' :
-                 score > 35 ? 'Long-term success requires active investment and alignment.' : 'Significant long-term stability challenges need concerted effort.',
+    longTerm_en: score > 75 ? 'You have something built to last. The question isn\'t whether — it\'s whether you both keep choosing it.' :
+                 score > 55 ? 'This connection has real long-term bones. What it becomes depends on how intentionally you both build it.' :
+                 score > 35 ? 'Long-term takes active investment here. The good news: you\'re both capable of it — when you\'re honest about what it requires.' : 'The long-term picture is the work. Not impossible — just not automatic.',
   };
   const key = `${dimension}_${lang}`;
   return summaries[key] ?? summaries[`${dimension}_en`] ?? '';
@@ -291,46 +291,78 @@ function generateTopPattern(
   relationType: RelationshipType,
   lang = 'zh',
 ): string {
-  const patterns: Record<RelationshipType, Array<{ condition: (d: RelationshipDimensions) => boolean; zh: string; en: string }>> = {
+  const patterns: Record<RelationshipType, Array<{ condition: (d: RelationshipDimensions) => boolean; zh: string; en: string; enContrast?: string }>> = {
     romantic: [
       { condition: d => d.attraction.score > 80 && d.rhythm.score < 50,
-        zh: '高吸引 + 节奏错位型', en: 'High Attraction, Unaligned Rhythm' },
+        zh: '高吸引 + 节奏错位型',
+        en: 'High Attraction, Unaligned Rhythm',
+        enContrast: 'You feel the pull — but you\'re moving at different speeds' },
+      { condition: d => d.attraction.score > 70 && d.communication.score < 55,
+        zh: '强吸引 + 沟通挑战型',
+        en: 'Intense Chemistry, Unclear Communication',
+        enContrast: 'There\'s real chemistry here — but you\'re not sure how to talk about it' },
       { condition: d => d.communication.score > 75 && d.conflict.score > 65,
-        zh: '顺畅沟通 + 高张力型', en: 'Smooth Communication, High Tension' },
+        zh: '顺畅沟通 + 高张力型',
+        en: 'Smooth Communication, High Tension',
+        enContrast: 'You understand each other easily — but that clarity sometimes sharpens the conflict' },
       { condition: d => d.longTerm.score > 75,
-        zh: '长期潜力优秀型', en: 'High Long-Term Potential' },
+        zh: '长期潜力优秀型',
+        en: 'High Long-Term Potential',
+        enContrast: 'You have something built to last — if you both keep choosing it' },
       { condition: d => d.attraction.score > 70 && d.attraction.score < 85,
-        zh: '稳定吸引型', en: 'Steady Attraction' },
+        zh: '稳定吸引型',
+        en: 'Steady Attraction',
+        enContrast: 'The attraction is real — not dramatic, just honest' },
       { condition: d => d.conflict.score < 45,
-        zh: '高冲突型', en: 'High Conflict Pattern' },
+        zh: '高冲突型',
+        en: 'High Conflict Pattern',
+        enContrast: 'The friction is real — so is the question of whether you can move through it together' },
       { condition: d => d.rhythm.score > 70,
-        zh: '节奏同步型', en: 'Rhythm-Synchronized' },
+        zh: '节奏同步型',
+        en: 'Rhythm-Synchronized',
+        enContrast: 'You move at the same pace — without having to think about it' },
     ],
     friendship: [
       { condition: d => d.communication.score > 75,
-        zh: '灵魂朋友型', en: 'Soulmate Friendship' },
+        zh: '灵魂朋友型',
+        en: 'Soulmate Friendship',
+        enContrast: 'You get each other without having to explain — that\'s rare' },
       { condition: d => d.rhythm.score > 70,
-        zh: '节奏合拍型', en: 'Effortless Sync' },
+        zh: '节奏合拍型',
+        en: 'Effortless Sync',
+        enContrast: 'You can sit in silence and it doesn\'t feel empty' },
       { condition: d => d.attraction.score > 65,
-        zh: '相互激励型', en: 'Mutual Inspiration' },
+        zh: '相互激励型',
+        en: 'Mutual Inspiration',
+        enContrast: 'You push each other forward — but at your own pace' },
     ],
     work: [
       { condition: d => d.communication.score > 75,
-        zh: '高效协作型', en: 'Efficient Collaboration' },
+        zh: '高效协作型',
+        en: 'Efficient Collaboration',
+        enContrast: 'The trust is there — now it\'s about how you handle the gaps' },
       { condition: d => d.longTerm.score > 70,
-        zh: '长期搭档型', en: 'Long-Term Partnership' },
+        zh: '长期搭档型',
+        en: 'Long-Term Partnership',
+        enContrast: 'Built for the long haul — if you both stay intentional about it' },
       { condition: d => d.conflict.score > 60,
-        zh: '建设性张力型', en: 'Constructive Tension' },
+        zh: '建设性张力型',
+        en: 'Constructive Tension',
+        enContrast: 'The friction is productive — when you both know how to use it' },
     ],
   };
 
   const candidates = patterns[relationType] ?? patterns.romantic;
   for (const p of candidates) {
     if (p.condition(dimensions)) {
+      // Use enhanced en pattern with contrast
+      if (lang === 'en' && p.enContrast) {
+        return `${p.en} — ${p.enContrast}`;
+      }
       return p[lang] ?? p.en;
     }
   }
-  return lang === 'zh' ? '多元互补型' : 'Diversely Complementary';
+  return lang === 'zh' ? '多元互补型' : 'Diversely Complementary — connected, but still figuring out the shape of it';
 }
 
 // ─── Summary Generator ─────────────────────────────────────────────────────────
@@ -412,17 +444,17 @@ function generateTimeline(dimensions: RelationshipDimensions, relationType: Rela
       ? '张力磨合期'
       : '初始建立期';
   const phaseEn = dimensions.rhythm.score > 60
-    ? 'Stable relationship development'
+    ? 'You\'re in the steady part — the question is what you do with it'
     : dimensions.conflict.score < 50
-      ? 'Tension and calibration period'
-      : 'Initial bonding phase';
+      ? 'You\'re in the friction — it\'s real, and it\'s telling you something'
+      : 'You\'re in the early calibration — pay attention to what\'s working';
 
   const next30Zh = dimensions.communication.score < 60
     ? '建议进行至少一次深度对话，明确双方期待'
     : '适合共同体验新活动，加深连接';
   const next30En = dimensions.communication.score < 60
-    ? 'Consider at least one deep conversation to align expectations'
-    : 'Good time for shared new experiences to deepen connection';
+    ? 'Have one real conversation this month — not about logistics, about what you actually feel'
+    : 'The next 30 days are good for shared experiences. What you do together matters more than what you plan.';
 
   return {
     currentPhase: lang === 'zh' ? phaseZh : phaseEn,

@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
-    const lang = body.personA.birthDate < '2000-01-01' ? 'zh' : 'zh'; // Always zh for now
+    const lang = body.lang ?? 'zh';
 
     // Run compatibility analysis
     const { reading, dbData } = analyzeRelationship(
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       personB.nickname,
       personA.birthTime,
       personB.birthTime,
-      'zh',
+      lang,
     );
 
     // Try to persist to Supabase if configured
