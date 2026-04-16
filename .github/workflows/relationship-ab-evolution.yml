@@ -23,10 +23,9 @@ jobs:
         with:
           node-version: 20
 
-      # ── Install dependencies (allow exit 1 from peer dep noise) ───────────
+      # ── Install dependencies ───────────────────────────────────────────────
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps || true
-        continue-on-error: true
+        run: npm install --legacy-peer-deps
 
       # ── Baseline score ────────────────────────────────────────────────────
       - name: Collect baseline score
