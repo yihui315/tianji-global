@@ -1,4 +1,4 @@
-name: codex-self-evolution
+name: codex-relationship-evolution
 
 on:
   workflow_dispatch:
@@ -22,48 +22,76 @@ jobs:
 
       - run: npm ci
 
-      # 1️⃣ 记录当前分数
+      # 1️⃣ Record current Relationship score
       - name: Score BEFORE
         run: |
-          npx tsx scripts/calculate-upgrade-score.ts
-          cp upgrade-score.json upgrade-score-before.json
+          npx tsx scripts/calculate-relationship-score.ts
+          cp relationship-score.json relationship-score-before.json
 
-      # 2️⃣ Codex 执行实验
+      # 2️⃣ Codex — Relationship module only
       - name: Codex Run
         uses: openai/codex-action@v1
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           prompt: |
-            Read AGENTS.md and program.md.
+            Read program.md.
 
-            Only improve the current experiment focus.
+            ONLY improve the Relationship module.
+            Focus on: clarity, emotional resonance, shareability, upgrade conversion.
 
-            Make small, high-confidence changes.
+            Improve ONE of these per run:
+            A) Hero summary (headline, one-liner, CTA copy)
+            B) Five dimension card descriptions (make them human, specific)
+            C) Relationship pattern naming (make it sharable, memorable)
+            D) Current window copy (urgency, action guidance)
+            E) Share card copy (emotional punch, visual intent)
+
+            Do NOT change other modules (auth, billing, other pages, etc.)
+
+            Keep changes small. Max 5 files.
+
             Then run:
-            npm run audit:routes
-            npm run audit:copy
             npm run audit:share
-            npm run audit:upgrade
+            npm run audit:copy
 
             If failing, repair once.
 
-            Output codex-upgrade-report.md.
+            Output codex-relationship-report.md.
 
-      # 3️⃣ 再算分数
+      # 3️⃣ Score AFTER
       - name: Score AFTER
         run: |
-          npx tsx scripts/calculate-upgrade-score.ts
-          cp upgrade-score.json upgrade-score-after.json
+          npx tsx scripts/calculate-relationship-score.ts
+          cp relationship-score.json relationship-score-after.json
 
-      # 4️⃣ 决策（核心）
+      # 4️⃣ Decision gate
       - name: Decide keep or discard
         run: npx tsx scripts/decide-keep-or-discard.ts
 
-      # 5️⃣ 只在提升时提PR
+      # 5️⃣ Record experiment run
+      - name: Record experiment
+        run: |
+          node -e "
+          const fs = require('fs');
+          const manifest = JSON.parse(fs.readFileSync('experiments/manifest.json','utf8'));
+          const before = JSON.parse(fs.readFileSync('relationship-score-before.json','utf8')).score;
+          const after = JSON.parse(fs.readFileSync('relationship-score-after.json','utf8')).score;
+          const decision = after > before + 1 ? 'keep' : 'discard';
+          const run = {
+            id: 'rel-' + String(Date.now()).slice(-6),
+            before, after, decision,
+            timestamp: new Date().toISOString()
+          };
+          manifest.runs.push(run);
+          fs.writeFileSync('experiments/manifest.json', JSON.stringify(manifest, null, 2));
+          console.log('Recorded:', run);
+          "
+
+      # 6️⃣ Only PR on improvement
       - name: Create PR
         if: success()
         uses: peter-evans/create-pull-request@v7
         with:
-          branch: codex/evolution
-          title: "Codex Evolution: improved system"
-          body-path: codex-upgrade-report.md
+          branch: codex/relationship-evolution
+          title: "Codex Relationship Evolution"
+          body-path: codex-relationship-report.md

@@ -1,3 +1,12 @@
 {
-  "runs": []
+  "version": 1,
+  "module": "relationship",
+  "runs": [],
+  "experimentFaces": {
+    "A": "Hero Summary (headline, one-liner, CTA — upgrade conversion)",
+    "B": "Five Dimension Cards (clarity, human tone, specificity)",
+    "C": "Relationship Pattern (pattern naming, one-liner, tags — shareability)",
+    "D": "Current Window (time expression, urgency, action guidance)",
+    "E": "Share Card (one-liner, visual style, emotional intensity)"
+  }
 }

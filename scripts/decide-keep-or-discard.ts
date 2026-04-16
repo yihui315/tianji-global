@@ -4,8 +4,8 @@ interface ScoreFile {
   score: number;
 }
 
-const BEFORE_PATH = "upgrade-score-before.json";
-const AFTER_PATH = "upgrade-score-after.json";
+const BEFORE_PATH = "relationship-score-before.json";
+const AFTER_PATH = "relationship-score-after.json";
 
 function readScore(path: string): number {
   if (!fs.existsSync(path)) return 0;
@@ -16,27 +16,28 @@ function readScore(path: string): number {
 const before = readScore(BEFORE_PATH);
 const after = readScore(AFTER_PATH);
 
+// Prevent fake improvements — must improve by at least 2 points
 let decision = "discard";
-
-if (after > before) decision = "keep";
+if (after > before + 1) decision = "keep";
 
 const result = {
   before,
   after,
   decision,
-  improved: after > before
+  improved: after > before + 1,
+  margin: after - before
 };
 
 fs.writeFileSync(
-  "upgrade-decision.json",
+  "relationship-decision.json",
   JSON.stringify(result, null, 2)
 );
 
 console.log(result);
 
-// exit code 控制 CI
+// exit code controls CI
 if (decision === "discard") {
-  console.log("❌ Discarding experiment");
+  console.log("❌ Discarding experiment (margin < 2)");
   process.exit(1);
 } else {
   console.log("✅ Keeping experiment");
