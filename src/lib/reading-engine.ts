@@ -123,6 +123,7 @@ export function computeLifeCurve(birthYear: number) {
   ];
   return phases.map(p => ({
     ageRange: `${p.start}-${p.end}`,
+    labelZh: p.labelZh,
     label: p.labelZh,
     labelEn: p.labelEn,
     isCurrent: p.label === '当前',

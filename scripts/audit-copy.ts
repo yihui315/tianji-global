@@ -89,3 +89,5 @@ if (flagged.length) {
 }
 
 console.log('audit-copy: OK');
+
+export {};

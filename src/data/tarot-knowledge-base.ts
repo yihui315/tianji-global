@@ -1635,9 +1635,9 @@ export function buildTarotCorpus(): TarotCorpusEntry[] {
     content:
       `Tarot ${card.arcana === 'major' ? 'Major' : card.suit} — ${card.name_en} (${card.name_zh}): ` +
       `Upright: ${card.keywords_upright_en.join(', ')} | ${card.keywords_upright_zh.join(', ')}. ` +
-      `Meaning: ${card.mean_upright_en} | ${card.mean_upright_zh}. ` +
+      `Meaning: ${card.meaning_upright_en} | ${card.meaning_upright_zh}. ` +
       `Reversed: ${card.keywords_reversed_en.join(', ')} | ${card.keywords_reversed_zh.join(', ')}. ` +
-      `Reversed Meaning: ${card.mean_reversed_en} | ${card.mean_reversed_zh}. ` +
+      `Reversed Meaning: ${card.meaning_reversed_en} | ${card.meaning_reversed_zh}. ` +
       `Symbolism: ${card.symbolism_en} | ${card.symbolism_zh}.`,
     source: `tarot-${card.arcana}-${card.suit ?? 'major'}`,
   }));

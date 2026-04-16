@@ -67,6 +67,7 @@ export const PLANET_COLORS: Record<string, string> = {
 export const ELEMENTS_ORDER = ['wood', 'fire', 'earth', 'metal', 'water'];
 export const ELEMENTS_ZH = { wood: '木', fire: '火', earth: '土', metal: '金', water: '水' };
 export const ELEMENTS_EN = { wood: 'Wood', fire: 'Fire', earth: 'Earth', metal: 'Air', water: 'Water' };
+export const ELEMENTS = ELEMENTS_EN;
 
 export function getSignData(signName: string): ZodiacSign {
   return ZODIAC_DATA.find(s => s.name === signName) ?? ZODIAC_DATA[0];

@@ -37,14 +37,6 @@ export default function DashboardPage() {
   const [readings, setReadings] = useState<Reading[]>([]);
   const [readingsLoading, setReadingsLoading] = useState(true);
 
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
-    );
-  }
-
   // Fetch recent readings
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -61,16 +53,12 @@ export default function DashboardPage() {
       .catch(() => setReadingsLoading(false));
   }, [status, session?.user, router]);
 
-  if (status === 'loading' || status === 'idle') {
+  if (status !== 'authenticated' || !session?.user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900">
         <div className="text-white text-xl">Loading...</div>
       </div>
     );
-  }
-
-  if (status === 'unauthenticated') {
-    return null; // will redirect via useEffect above
   }
 
   return (
@@ -80,7 +68,7 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-2xl font-bold">TianJi Dashboard</h1>
           <p className="text-purple-300 text-sm">
-            Welcome{session.user?.name ? `, ${session.user.name}` : ''}
+            Welcome{session.user.name ? `, ${session.user.name}` : ''}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -88,14 +76,14 @@ export default function DashboardPage() {
             href="/profile"
             className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-sm transition"
           >
-            {session.user?.image ? (
+            {session.user.image ? (
               <img src={session.user.image} alt="Avatar" className="w-6 h-6 rounded-full" />
             ) : (
               <span className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-xs">
-                {session.user?.name?.[0] ?? '?'}
+                {session.user.name?.[0] ?? '?'}
               </span>
             )}
-            <span>{session.user?.name ?? 'Profile'}</span>
+            <span>{session.user.name ?? 'Profile'}</span>
           </a>
           <button
             onClick={() => signOut({ callbackUrl: '/' })}

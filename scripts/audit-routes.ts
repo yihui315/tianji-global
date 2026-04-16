@@ -57,3 +57,5 @@ if (missing.length > 0) {
 }
 
 console.log('audit-routes: OK');
+
+export {};

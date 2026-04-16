@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
     const interpretations = yearlyChart.palaces.map(palace => ({
       position: palace.position,
       direction: palace.direction,
-      star: palace.currentStar,
+      star: palace.currentStar || 5,
       interpretation: getStarInterpretation(palace.currentStar || 5, palace.position),
     }));
 

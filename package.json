@@ -57,6 +57,7 @@
     "autoprefixer": "^10.4.27",
     "chart.js": "^4.5.1",
     "dotenv": "^16.4.1",
+    "eslint-config-next": "^15.5.14",
     "framer-motion": "^11.18.2",
     "iztro": "^2.5.8",
     "jspdf": "^4.2.1",

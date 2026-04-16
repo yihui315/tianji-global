@@ -31,6 +31,9 @@ export interface PlanetPosition {
   orb: number;           // distance in AU
   speed: number;          // daily motion in degrees
   isRetrograde: boolean;  // true if negative speed
+  natalLongitude?: number;
+  progressedLongitude?: number;
+  motion?: 'direct' | 'retrograde' | 'station';
 }
 
 export interface TransitPlanet extends PlanetPosition {

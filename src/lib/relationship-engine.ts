@@ -102,8 +102,8 @@ function scoreDimension(
       const rhythmDiff = featuresA.paceType !== featuresB.paceType ? 20 : 0;
       // Guarded + open = high tension
       const tension =
-        (featuresA.intimacyType === 'guarded' && featuresB.intimacyType === 'open') ||
-        (featuresA.intimacyType === 'open' && featuresB.intimacyType === 'guarded')
+        (featuresA.intimacyType === 'cautious' && featuresB.intimacyType === 'open') ||
+        (featuresA.intimacyType === 'open' && featuresB.intimacyType === 'cautious')
           ? 25
           : 0;
       // Base compatibility
@@ -138,7 +138,11 @@ function scoreDimension(
 
 // ─── Score to Label Mapping ───────────────────────────────────────────────────
 
-function scoreLabel(dimension: 'attraction' | 'communication' | 'conflict' | 'rhythm' | 'longTerm', score: number, lang = 'zh'): string {
+function scoreLabel(
+  dimension: 'attraction' | 'communication' | 'conflict' | 'rhythm' | 'longTerm',
+  score: number,
+  lang: 'zh' | 'en' = 'zh',
+): string {
   const labels: Record<string, Record<string, string>> = {
     attraction: {
       zh: score > 80 ? '非常强烈' : score > 60 ? '较强吸引' : score > 40 ? '中等吸引' : '较弱吸引',
@@ -164,8 +168,8 @@ function scoreLabel(dimension: 'attraction' | 'communication' | 'conflict' | 'rh
   return labels[dimension]?.[lang] ?? labels[dimension]?.['en'] ?? '';
 }
 
-function dimensionSummary(dimension: string, score: number, lang = 'zh'): string {
-  const summaries: Record<string, Record<string, string>> = {
+function dimensionSummary(dimension: string, score: number, lang: 'zh' | 'en' = 'zh'): string {
+  const summaries: Record<string, string> = {
     attraction_zh: score > 80 ? '你们之间存在强烈的自然吸引和情感好奇心，这种磁场往往在初次接触时就很明显。' :
                    score > 60 ? '存在明显的吸引力，双方容易被对方的特点所触动。' :
                    score > 40 ? '吸引力的建立需要更多时间，初期较为平淡。' : '吸引不是你们关系的主要驱动力。',
@@ -201,7 +205,7 @@ function dimensionSummary(dimension: string, score: number, lang = 'zh'): string
   return summaries[key] ?? summaries[`${dimension}_en`] ?? '';
 }
 
-function dimensionStrengths(dimension: string, score: number, lang = 'zh'): string[] {
+function dimensionStrengths(dimension: string, score: number, lang: 'zh' | 'en' = 'zh'): string[] {
   const strengths: Record<string, { zh: string[]; en: string[] }> = {
     attraction: {
       zh: ['快速建立情感连接', '磁场相互吸引', '容易产生共同话题'],
@@ -229,7 +233,7 @@ function dimensionStrengths(dimension: string, score: number, lang = 'zh'): stri
   return arr.slice(0, 1);
 }
 
-function dimensionRisks(dimension: string, score: number, lang = 'zh'): string[] {
+function dimensionRisks(dimension: string, score: number, lang: 'zh' | 'en' = 'zh'): string[] {
   const risks: Record<string, { zh: string[]; en: string[] }> = {
     attraction: {
       zh: score > 80 ? ['容易过度理想化', '忽视现实差异'] : ['吸引力建立慢', '初期动力不足'],
@@ -257,7 +261,7 @@ function dimensionRisks(dimension: string, score: number, lang = 'zh'): string[]
   return arr.slice(0, 1);
 }
 
-function dimensionAdvice(dimension: string, score: number, lang = 'zh'): string[] {
+function dimensionAdvice(dimension: string, score: number, lang: 'zh' | 'en' = 'zh'): string[] {
   const advice: Record<string, { zh: string[]; en: string[] }> = {
     attraction: {
       zh: ['放慢期待建立的速度', '主动看到对方的完整性而非理想化'],
@@ -289,7 +293,7 @@ function dimensionAdvice(dimension: string, score: number, lang = 'zh'): string[
 function generateTopPattern(
   dimensions: RelationshipDimensions,
   relationType: RelationshipType,
-  lang = 'zh',
+  lang: 'zh' | 'en' = 'zh',
 ): string {
   const patterns: Record<RelationshipType, Array<{ condition: (d: RelationshipDimensions) => boolean; zh: string; en: string }>> = {
     romantic: [
@@ -339,7 +343,7 @@ function generateSummary(
   dimensions: RelationshipDimensions,
   relationType: RelationshipType,
   pattern: string,
-  lang = 'zh',
+  lang: 'zh' | 'en' = 'zh',
 ): RelationshipSummary {
   const overallAvg = Math.round(
     (dimensions.attraction.score + dimensions.communication.score +
@@ -393,7 +397,11 @@ function generateSummary(
 
 // ─── Timeline ─────────────────────────────────────────────────────────────────
 
-function generateTimeline(dimensions: RelationshipDimensions, relationType: RelationshipType, lang = 'zh'): RelationshipTimeline {
+function generateTimeline(
+  dimensions: RelationshipDimensions,
+  relationType: RelationshipType,
+  lang: 'zh' | 'en' = 'zh',
+): RelationshipTimeline {
   const phaseZh = dimensions.rhythm.score > 60
     ? '关系稳定发展期'
     : dimensions.conflict.score < 50
@@ -443,7 +451,7 @@ export function analyzeRelationship(
   personBNickname: string,
   personABirthTime?: string,
   personBBirthTime?: string,
-  lang = 'zh',
+  lang: 'zh' | 'en' = 'zh',
 ): AnalyzeResult {
   // Extract features from birth data
   const featuresA = extractCompatibilityFeatures(personABirthDate, personABirthTime);

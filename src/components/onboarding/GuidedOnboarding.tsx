@@ -14,7 +14,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface OnboardingData {
-  fortuneType: 'bazi' | 'ziwei' | 'tarot' | 'yijing' | 'western' | null;
+  fortuneType: 'bazi' | 'ziwei' | 'tarot' | 'yijing' | 'western' | 'synastry' | null;
   birthday: string;
   birthTime: string;
   gender: 'male' | 'female' | null;

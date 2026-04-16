@@ -211,7 +211,7 @@ export function MultiRingProgress({ rings, size = 200 }: MultiRingProgressProps)
                 strokeLinecap="round"
                 strokeDasharray={circumference}
                 initial={{ strokeDashoffset: circumference }}
-                animate={{ strokeDashoffset }}
+                animate={{ strokeDashoffset: dashOffset }}
                 transition={{ duration: 1.5, delay: i * 0.2, ease: 'easeOut' }}
                 style={{ transform: 'rotate(-90deg)', transformOrigin: 'center' }}
               />

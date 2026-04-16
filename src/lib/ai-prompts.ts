@@ -63,6 +63,8 @@ export interface FortuneCycle {
 }
 
 export interface FortuneData {
+  date?: string;
+  type?: string;
   birthYear: number;
   birthMonth: number;
   birthDay: number;
@@ -80,10 +82,15 @@ export interface FortuneData {
 export interface TarotCard {
   name: string;
   nameEn: string;
+  nameChinese?: string;
   suit?: string;
   arcana: 'major' | 'minor';
+  meaning?: string;
+  meaningChinese?: string;
   uprightMeaning: string;
   reversedMeaning: string;
+  isReversed?: boolean;
+  position?: number;
 }
 
 export interface TarotSpread {
@@ -414,11 +421,27 @@ ${OUTPUT_SCHEMA_EN}`;
  * Returns a bilingual prompt for generating a Fortune (人生运势) AI report.
  */
 export function getFortuneReportPrompt(data: FortuneData, language: Language = 'en'): string {
-  const currentCycle = data.fortuneCycles.find(
-    c => data.currentAge >= c.ageStart && data.currentAge <= c.ageEnd
+  const cycles = data.fortuneCycles ?? [];
+  const bestPeriods = data.bestPeriods ?? [];
+  const challengingPeriods = data.challengingPeriods ?? [];
+
+  if (cycles.length === 0 || data.currentAge === undefined) {
+    const liteContext = [
+      data.date ? `Date: ${data.date}` : 'Date: today',
+      data.type ? `Focus: ${data.type}` : 'Focus: general fortune',
+      data.gender ? `Gender: ${data.gender}` : undefined,
+    ].filter(Boolean).join('\n');
+
+    return language === 'zh'
+      ? `浣犳槸涓€浣嶈瀺鍚堜紶缁熷懡鐞嗕笌鐜颁唬蹇冪悊瀛︾殑涓撲笟鍛界悊甯堛€?\n\n鐢ㄦ埛褰撳墠杩愬娍涓婁笅鏂囷細\n${liteContext}\n\n璇锋彁渚涗竴浠界畝娲佺殑姣忔棩杩愬娍瑙ｈ锛屽寘鍚綋鏃ユ婚銆佹敞鎰忎簨椤广€佸彲鎵ц寤鸿锛屽苟淇濇寔璋ㄦ厧鍏嶈矗澹版槑銆?\n\n${OUTPUT_SCHEMA_ZH}`
+      : `You are a professional fortune consultant blending metaphysics with modern psychology.\n\nCurrent context:\n${liteContext}\n\nProvide a concise daily fortune reading with an overall theme, watch-outs, practical guidance, and a careful disclaimer.\n\n${OUTPUT_SCHEMA_EN}`;
+  }
+
+  const currentCycle = cycles.find(
+    c => data.currentAge! >= c.ageStart && data.currentAge! <= c.ageEnd
   );
 
-  const cycleSummary = data.fortuneCycles
+  const cycleSummary = cycles
     .map(c => {
       const bar = '★'.repeat(Math.round(c.overall / 10)) + '☆'.repeat(10 - Math.round(c.overall / 10));
       return `  ${c.phaseEn} (${c.ageStart}-${c.ageEnd}): ${bar} ${c.overall}/100 | Career:${c.career} Wealth:${c.wealth} Love:${c.love} Health:${c.health}`;
@@ -469,8 +492,8 @@ ${cycleSummary}
 Current cycle assessment:
 ${currentCycle ? `  Overall: ${currentCycle.overall}/100 | Career: ${currentCycle.career} | Wealth: ${currentCycle.wealth} | Love: ${currentCycle.love} | Health: ${currentCycle.health}` : 'N/A'}
 
-Best periods: ${data.bestPeriods.join('; ')}
-Challenging periods: ${data.challengingPeriods.join('; ')}
+Best periods: ${bestPeriods.join('; ')}
+Challenging periods: ${challengingPeriods.join('; ')}
 
 Please based on the fortune data above:
 1. Analyse the challenges and opportunities in the current life phase

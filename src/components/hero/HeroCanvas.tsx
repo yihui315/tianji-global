@@ -42,9 +42,12 @@ export default function HeroCanvas() {
 
   // ── Canvas Star Animation ──
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d')!;
+    const canvasEl = canvasRef.current;
+    if (!canvasEl) return;
+    const ctx = canvasEl.getContext('2d');
+    if (!ctx) return;
+    const canvas = canvasEl;
+    const context = ctx;
 
     function resize() {
       canvas.width = window.innerWidth;
@@ -72,16 +75,16 @@ export default function HeroCanvas() {
     let animId: number;
 
     function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      context.clearRect(0, 0, canvas.width, canvas.height);
       frame++;
 
       stars.forEach((s) => {
         s.twinkle += 0.02;
         const alpha = s.opacity * (0.5 + 0.5 * Math.sin(s.twinkle));
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(220,210,255,${alpha})`;
-        ctx.fill();
+        context.beginPath();
+        context.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        context.fillStyle = `rgba(220,210,255,${alpha})`;
+        context.fill();
         s.y -= s.speed;
         if (s.y < -2) {
           s.y = canvas.height + 2;
@@ -89,18 +92,18 @@ export default function HeroCanvas() {
         }
       });
 
-      ctx.strokeStyle = 'rgba(180,160,255,0.1)';
-      ctx.lineWidth = 0.5;
+      context.strokeStyle = 'rgba(180,160,255,0.1)';
+      context.lineWidth = 0.5;
       CONSTELLATIONS.forEach((conn) => {
         for (let i = 0; i < conn.length - 1; i++) {
           const [ax, ay] = conn[i];
           const [bx, by] = conn[i + 1];
           const ox = Math.sin(frame * 0.003 + i) * 6;
           const oy = Math.cos(frame * 0.003 + i) * 6;
-          ctx.beginPath();
-          ctx.moveTo(ax * canvas.width + ox, ay * canvas.height + oy);
-          ctx.lineTo(bx * canvas.width + ox, by * canvas.height + oy);
-          ctx.stroke();
+          context.beginPath();
+          context.moveTo(ax * canvas.width + ox, ay * canvas.height + oy);
+          context.lineTo(bx * canvas.width + ox, by * canvas.height + oy);
+          context.stroke();
         }
       });
 

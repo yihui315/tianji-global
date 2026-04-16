@@ -18,10 +18,18 @@ interface BigThree { sun: { sign: string; signZh: string; symbol: string; degree
 interface ChartApiResponse {
   chart: Record<string, unknown>; planets: PlanetData[]; houses: HouseData; bigThree: BigThree; meta: Record<string, string>;
 }
+type WesternElement = 'Fire' | 'Earth' | 'Air' | 'Water';
+interface ZodiacEntry {
+  name: string;
+  nameZh: string;
+  symbol: string;
+  element: WesternElement;
+  quality: string;
+}
 
 // ─── Zodiac Data ─────────────────────────────────────────────────────────────
 
-const ZODIAC = [
+const ZODIAC: ZodiacEntry[] = [
   { name: 'Aries', nameZh: '白羊', symbol: '♈', element: 'Fire', quality: 'Cardinal' },
   { name: 'Taurus', nameZh: '金牛', symbol: '♉', element: 'Earth', quality: 'Fixed' },
   { name: 'Gemini', nameZh: '双子', symbol: '♊', element: 'Air', quality: 'Mutable' },
@@ -36,9 +44,9 @@ const ZODIAC = [
   { name: 'Pisces', nameZh: '双鱼', symbol: '♓', element: 'Water', quality: 'Mutable' },
 ];
 
-const ELEMENTS = ['Fire', 'Earth', 'Air', 'Water'];
-const ELEM_COLORS = { Fire: '#FF6B6B', Earth: '#F59E0B', Air: '#60A5FA', Water: '#34D399' };
-const ELEM_BG = { Fire: 'rgba(255,107,107,0.15)', Earth: 'rgba(245,158,11,0.15)', Air: 'rgba(96,165,250,0.15)', Water: 'rgba(52,211,153,0.15)' };
+const ELEMENTS: WesternElement[] = ['Fire', 'Earth', 'Air', 'Water'];
+const ELEM_COLORS: Record<WesternElement, string> = { Fire: '#FF6B6B', Earth: '#F59E0B', Air: '#60A5FA', Water: '#34D399' };
+const ELEM_BG: Record<WesternElement, string> = { Fire: 'rgba(255,107,107,0.15)', Earth: 'rgba(245,158,11,0.15)', Air: 'rgba(96,165,250,0.15)', Water: 'rgba(52,211,153,0.15)' };
 const PLANET_COLORS: Record<string, string> = { Sun: '#FFD700', Moon: '#C0C0C0', Mercury: '#B8860B', Venus: '#98FB98', Mars: '#FF6347', Jupiter: '#DAA520', Saturn: '#708090', Uranus: '#40E0D0', Neptune: '#4169E1', Pluto: '#8B008B' };
 
 // ─── Interpretation Engine ────────────────────────────────────────────────────
@@ -89,6 +97,10 @@ const RISK_TIPS: Record<string, { zh: string[]; en: string[] }> = {
 
 function getSignData(signName: string) {
   return ZODIAC.find(s => s.name === signName) ?? ZODIAC[0];
+}
+
+function getWesternElementColor(element: string): string {
+  return ELEM_COLORS[(ELEMENTS.includes(element as WesternElement) ? element : 'Fire') as WesternElement];
 }
 
 function computeElements(planets: PlanetData[]) {
@@ -143,14 +155,14 @@ function BigThreeCard({ label, data, accentColor, lang }: { label: string; data:
       <div className="text-2xl mb-1">{data.symbol}</div>
       <div className="text-xs mb-2" style={{ color: accentColor }}>{label}</div>
       <div className="text-xl font-serif font-bold text-white mb-1">{lang === 'zh' ? data.signZh : data.sign}</div>
-      <div className="text-sm" style={{ color: ELEM_COLORS[signData.element] }}>{data.degree}° · {signData.element}</div>
+      <div className="text-sm" style={{ color: getWesternElementColor(signData.element) }}>{data.degree}° · {signData.element}</div>
     </GlassCard>
   );
 }
 
 // ─── EnergyRadar Chart ───────────────────────────────────────────────────────
 
-function EnergyRadar({ elements, lang }: { elements: Record<string, number>; lang: 'zh' | 'en' }) {
+function EnergyRadar({ elements, lang }: { elements: Record<WesternElement, number>; lang: 'zh' | 'en' }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
 

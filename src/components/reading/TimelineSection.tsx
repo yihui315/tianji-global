@@ -83,8 +83,7 @@ export function TimelineSection({ timeline, isPremium, onUnlock, lang }: Timelin
 
                 <GlassCard
                   level={phase.isCurrent ? 'strong' : 'card'}
-                  className={`p-4 ${phase.isCurrent ? 'ring-1' : ''}`}
-                  style={phase.isCurrent ? { ringColor: 'rgba(167,139,250,0.3)' } : {}}
+                  className={`p-4 ${phase.isCurrent ? 'ring-1 ring-purple-400/30' : ''}`}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">

@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface StaggeredRevealProps {
-  children: React.ReactNode[];
+  children: React.ReactNode;
   staggerDelay?: number;      // 每个元素延迟 (ms)
   duration?: number;          // 动画时长 (s)
   direction?: 'up' | 'down' | 'left' | 'right' | 'fade';
@@ -33,6 +33,7 @@ export default function StaggeredReveal({
 }: StaggeredRevealProps) {
   const [isVisible, setIsVisible] = useState(!staggerOnly);
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const childArray = React.Children.toArray(children);
 
   // 观察器模式
   useEffect(() => {
@@ -69,7 +70,7 @@ export default function StaggeredReveal({
   return (
     <div ref={containerRef} className={`staggered-container ${className}`}>
       <AnimatePresence>
-        {children.map((child, index) => (
+        {childArray.map((child, index) => (
           <motion.div
             key={index}
             initial={{
@@ -111,7 +112,7 @@ export default function StaggeredReveal({
 
 // 网格布局版本
 interface StaggeredGridProps {
-  children: React.ReactNode[];
+  children: React.ReactNode;
   columns?: number;
   staggerDelay?: number;
   duration?: number;
@@ -129,6 +130,7 @@ export function StaggeredGrid({
 }: StaggeredGridProps) {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const childArray = React.Children.toArray(children);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -158,7 +160,7 @@ export function StaggeredGrid({
         gap: `${gap}px`
       }}
     >
-      {children.map((child, index) => {
+      {childArray.map((child, index) => {
         // 计算行列索引，用于波浪效果
         const row = Math.floor(index / columns);
         const col = index % columns;

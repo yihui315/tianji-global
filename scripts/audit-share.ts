@@ -66,3 +66,5 @@ if (flagged.length) {
 }
 
 console.log('audit-share: OK');
+
+export {};

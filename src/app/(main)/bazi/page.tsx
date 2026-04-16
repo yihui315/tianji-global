@@ -54,6 +54,8 @@ interface BaZiResponse {
   disclaimer?: string;
   aiMeta?: AiMeta;
   aiError?: string;
+  birthDate?: string;
+  gender?: Gender;
 }
 
 const HEAVENLY_STEMS = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];

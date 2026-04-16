@@ -724,7 +724,7 @@ function SynastrySummary({ person1, person2, aspects, overallScore, aiInterpreta
 
 // ─── Main PDF Document ────────────────────────────────────────────────────────
 
-export type ServiceType = 'bazi' | 'ziwei' | 'yijing' | 'tarot' | 'fortune' | 'synastry';
+export type ServiceType = 'bazi' | 'ziwei' | 'yijing' | 'tarot' | 'fortune' | 'synastry' | 'numerology';
 
 export interface PDFReportData {
   serviceType: ServiceType;

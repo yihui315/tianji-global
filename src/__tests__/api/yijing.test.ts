@@ -2,7 +2,6 @@
  * YiJing API Tests — TianJi Global
  */
 import { describe, it, expect } from 'vitest';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const yijing = require('../../lib/yijing');
 
 describe('YiJing API', () => {

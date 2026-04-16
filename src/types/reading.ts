@@ -105,6 +105,7 @@ export interface TimelinePhase {
   ageRange: string;       // "18-25"
   label: string;          // "探索期"
   labelEn: string;
+  isCurrent?: boolean;
   description: string;    // 详细描述 (premium)
   summary: string;        // 简短摘要 (free)
   overall: number;        // 0-100 综合运势

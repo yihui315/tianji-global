@@ -20,13 +20,14 @@ export default function CosmicBackground({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const canvasEl = canvasRef.current;
+    if (!canvasEl) return;
+    const ctx = canvasEl.getContext('2d');
+    if (!ctx) return;
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvasEl.width = window.innerWidth;
+      canvasEl.height = window.innerHeight;
     };
     resize();
     window.addEventListener('resize', resize);
@@ -34,8 +35,8 @@ export default function CosmicBackground({
     const particles: Array<{ x: number; y: number; size: number; speed: number; opacity: number }> = [];
     for (let i = 0; i < particleCount; i++) {
       particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: Math.random() * canvasEl.width,
+        y: Math.random() * canvasEl.height,
         size: Math.random() * 2 + 0.5,
         speed: Math.random() * 0.3 + 0.1,
         opacity: Math.random() * 0.5 + 0.3
@@ -44,33 +45,33 @@ export default function CosmicBackground({
 
     let animationId: number;
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
 
       // Nebula gradient
       const gradient = ctx.createRadialGradient(
-        canvas.width * 0.2, canvas.height * 0.3, 0,
-        canvas.width * 0.2, canvas.height * 0.3, canvas.width * 0.5
+        canvasEl.width * 0.2, canvasEl.height * 0.3, 0,
+        canvasEl.width * 0.2, canvasEl.height * 0.3, canvasEl.width * 0.5
       );
       gradient.addColorStop(0, `rgba(124, 58, 237, ${nebulaIntensity * 0.3})`);
       gradient.addColorStop(1, 'transparent');
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
 
       const gradient2 = ctx.createRadialGradient(
-        canvas.width * 0.8, canvas.height * 0.7, 0,
-        canvas.width * 0.8, canvas.height * 0.7, canvas.width * 0.4
+        canvasEl.width * 0.8, canvasEl.height * 0.7, 0,
+        canvasEl.width * 0.8, canvasEl.height * 0.7, canvasEl.width * 0.4
       );
       gradient2.addColorStop(0, `rgba(236, 72, 153, ${nebulaIntensity * 0.2})`);
       gradient2.addColorStop(1, 'transparent');
       ctx.fillStyle = gradient2;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
 
       // Particles
       particles.forEach(p => {
         p.y -= p.speed;
         if (p.y < -10) {
-          p.y = canvas.height + 10;
-          p.x = Math.random() * canvas.width;
+          p.y = canvasEl.height + 10;
+          p.x = Math.random() * canvasEl.width;
         }
 
         ctx.beginPath();

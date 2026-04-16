@@ -278,7 +278,7 @@ export default function FortuneTimeline({
       // Label for major cycles
       if (d.type === 'major_cycle' || d.type === 'milestone') {
         const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        const labelY = d.type === 'challenge' ? y + 35 : y - 25;
+        const labelY = y - 25;
         label.setAttribute('x', String(x));
         label.setAttribute('y', String(labelY));
         label.setAttribute('text-anchor', 'middle');

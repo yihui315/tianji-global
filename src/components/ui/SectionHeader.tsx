@@ -11,6 +11,8 @@ export interface SectionHeaderProps {
   titleKey?: keyof typeof sectionHeadings;
   /** Override: raw title string (takes precedence over titleKey) */
   title?: string;
+  /** Optional badge shown above the title */
+  badge?: string;
   /** Optional subtitle */
   subtitle?: string;
   /** Extra class names */
@@ -25,6 +27,7 @@ export interface SectionHeaderProps {
 export function SectionHeader({
   titleKey,
   title,
+  badge,
   subtitle,
   className = '',
 }: SectionHeaderProps) {
@@ -46,6 +49,11 @@ export function SectionHeader({
       animate={isInView ? 'visible' : 'hidden'}
       className={`text-center mb-12 sm:mb-16 ${className}`}
     >
+      {badge && (
+        <div className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-amber-300/80">
+          {badge}
+        </div>
+      )}
       <h2 className="text-4xl sm:text-5xl font-serif text-white">
         {resolvedTitle}
       </h2>

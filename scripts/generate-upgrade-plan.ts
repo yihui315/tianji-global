@@ -45,3 +45,5 @@ fs.writeFileSync(
 );
 
 console.log('Generated upgrade-plan.generated.json');
+
+export {};

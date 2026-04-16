@@ -21,3 +21,5 @@ if (missing.length) {
 }
 
 console.log('audit-upgrade: OK');
+
+export {};

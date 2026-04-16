@@ -117,7 +117,7 @@ function LoginForm() {
                 <strong style={{ color: '#A78BFA' }}>{email}</strong>
               </p>
               <p className="text-xs" style={{ color: 'rgba(226,232,240,0.35)' }}>
-                The link expires in 1 hour. Check your spam folder if you don't see it.
+                The link expires in 1 hour. Check your spam folder if you do not see it.
               </p>
               <button
                 onClick={() => { setMagicSent(false); setEmail(''); }}

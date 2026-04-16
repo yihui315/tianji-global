@@ -19,13 +19,22 @@ interface ChartSectionProps {
 const TAB_LABELS_ZH = ['五行能量', '人生曲线', '多维信号'];
 const TAB_LABELS_EN = ['Energy', 'Fortune', 'Signals'];
 
+function getElementColor(element: string): string {
+  const key = (element.charAt(0).toUpperCase() + element.slice(1)) as keyof typeof ELEM_COLORS;
+  return ELEM_COLORS[key];
+}
+
+function getElementLabel(element: string): string {
+  return ELEMENTS_ZH[element as keyof typeof ELEMENTS_ZH] ?? element;
+}
+
 function ElementBars({ elements, lang }: { elements: ElementScores; lang: Language }) {
   return (
     <div className="space-y-3">
       {ELEMENTS_ORDER.map((el, i) => (
         <div key={el} className="flex items-center gap-3">
-          <span className="text-xs w-5 font-medium" style={{ color: ELEM_COLORS[el.charAt(0).toUpperCase() + el.slice(1)] }}>
-            {ELEMENTS_ZH[el]}
+          <span className="text-xs w-5 font-medium" style={{ color: getElementColor(el) }}>
+            {getElementLabel(el)}
           </span>
           <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
             <motion.div
@@ -34,11 +43,11 @@ function ElementBars({ elements, lang }: { elements: ElementScores; lang: Langua
               transition={{ duration: 1.2, delay: i * 0.1, ease: 'easeOut' }}
               className="h-full rounded-full"
               style={{
-                background: `linear-gradient(90deg, ${ELEM_COLORS[el.charAt(0).toUpperCase() + el.slice(1)]}80, ${ELEM_COLORS[el.charAt(0).toUpperCase() + el.slice(1)]})`,
+                background: `linear-gradient(90deg, ${getElementColor(el)}80, ${getElementColor(el)})`,
               }}
             />
           </div>
-          <span className="text-xs w-8 text-right" style={{ color: ELEM_COLORS[el.charAt(0).toUpperCase() + el.slice(1)] }}>
+          <span className="text-xs w-8 text-right" style={{ color: getElementColor(el) }}>
             {elements[el as keyof ElementScores]}%
           </span>
         </div>
@@ -58,7 +67,7 @@ function EnergyRadar({ elements, lang }: { elements: ElementScores; lang: Langua
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return;
 
-    const labels = ELEMENTS_ORDER.map(e => ELEMENTS_ZH[e]);
+    const labels = ELEMENTS_ORDER.map((e) => getElementLabel(e));
     const values = ELEMENTS_ORDER.map(e => elements[e as keyof ElementScores]);
 
     chartRef.current = new Chart(ctx, {

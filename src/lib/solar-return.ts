@@ -150,6 +150,18 @@ function radToDeg(rad: number): number {
   return (rad * 180 / Math.PI + 360) % 360;
 }
 
+function getApproxPlutoPosition(jd: number): { lon: number; lat: number; distance: number } {
+  const daysSinceJ2000 = jd - 2451545.0;
+  const meanMotion = 360 / (247.94 * 365.25);
+  const lonDeg = ((250 + daysSinceJ2000 * meanMotion) % 360 + 360) % 360;
+  const latDeg = Math.sin((daysSinceJ2000 / (365.25 * 40)) * Math.PI * 2) * 3;
+  return {
+    lon: (lonDeg * Math.PI) / 180,
+    lat: (latDeg * Math.PI) / 180,
+    distance: 39.5,
+  };
+}
+
 function getSign(longitude: number): { sign: number; signName: string; signSymbol: string; degree: number } {
   const sign = Math.floor(longitude / 30) % 12;
   const degree = longitude % 30;
@@ -184,10 +196,11 @@ function getPlanetaryPositions(jd: number): PlanetPosition[] {
   planets.push({ name: 'Moon', longitude: moonLon, latitude: radToDeg(moon.lat), sign: moonSign, signName: moonSignName, signSymbol: moonSignSymbol, degree: moonDegree, orb: moon.distance });
 
   // Other planets
-  for (const name of ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']) {
-    const pd = PLANET_DATA[name];
-    if (!pd) continue;
-    const p = pd.getPosition(jdEt);
+  for (const name of ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto']) {
+    const p = name === 'Pluto'
+      ? getApproxPlutoPosition(jdEt)
+      : PLANET_DATA[name]?.getPosition(jdEt);
+    if (!p) continue;
     const lon = radToDeg(p.lon);
     const { sign, signName, signSymbol, degree } = getSign(lon);
     planets.push({ name, longitude: lon, latitude: radToDeg(p.lat), sign, signName, signSymbol, degree, orb: p.distance });

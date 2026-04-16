@@ -143,8 +143,22 @@ async function cmdLove(chatId: string, dateStr: string): Promise<void> {
 
   // Quick love compatibility stub — delegates to interpretFortune
   const { interpretFortune } = await import('@/lib/ai-interpreter');
+  const [birthYear, birthMonth, birthDay] = dateStr.split('-').map(Number);
+  const currentAge = new Date().getFullYear() - birthYear;
   const { aiInterpretation, disclaimer } = await interpretFortune(
-    { date: dateStr, type: 'love' },
+    {
+      date: dateStr,
+      type: 'love',
+      birthYear,
+      birthMonth,
+      birthDay,
+      currentAge,
+      currentPhase: 'love',
+      currentPhaseEn: 'love',
+      fortuneCycles: [],
+      bestPeriods: [],
+      challengingPeriods: [],
+    },
     'zh'
   );
 
