@@ -1,57 +1,39 @@
-# AGENTS.md — TianJi Global Autonomous Upgrade System
+# AGENTS.md — TianJi Codex System Instructions
 
-> This file defines how all AI agents (Codex, Copilot, Claude, etc.) interact with
-> the TianJi Global codebase. It is the authoritative agent instruction document.
-> CLAUDE.md is the project lore; AGENTS.md is the operating system for autonomous upgrades.
+> This file defines how ALL AI agents (Codex, Copilot, Claude, etc.) operate within the
+> TianJi Global codebase. It is the authoritative operating document for autonomous upgrades.
+> CLAUDE.md provides project context; AGENTS.md governs agent behavior.
 
 ---
 
 ## Mission
 
-Improve TianJi Global through **small, measurable, reviewable experiments**.
+Continuously improve TianJi through **small, measurable, reviewable experiments**.
 Every change must be: intentional, scored, recorded, and reversible.
 
 ---
 
-## System Overview
+## Current Priority
 
-```
-program.md
-    ↓
-relationship-ab-evolution.yml  (or codex-self-evolution.yml)
-    ↓
-┌─────────────────────────────────────────────┐
-│  1. Baseline score (calculate-relationship-score.ts)  │
-│  2. Codex generates A/B variants                          │
-│  3. Compare variants (compare-ab-variants.ts)            │
-│  4. Decide keep/discard (decide-keep-or-discard.ts)       │
-│  5. Generate report (generate-upgrade-report.ts)         │
-│  6. Record to manifest (record-experiment.ts)            │
-│  7. Commit + PR                                           │
-└─────────────────────────────────────────────┘
-```
+**Relationship module is the active experimental focus.**
+No other module may be modified during an experiment run.
 
 ---
 
-## Current Experimental Focus
+## Core Principles
 
-**Relationship module only.**
-
-No other module may be modified during an experiment run unless explicitly included
-in `program.md`'s allowed-files list.
+1. Only one experiment surface per run
+2. Prefer small, high-confidence changes
+3. Preserve privacy-safe defaults at all times
+4. Preserve premium dark product aesthetic
+5. AI must explain decisions — not invent internal calculations
+6. Never expose birthDate, birthTime, birthLocation, or timezone in share outputs by default
+7. Never remove pricing, FAQ, trust signals, disclaimers, or premium upgrade paths
 
 ---
 
-## Experiment Rules (Non-Negotiable)
+## Allowed Experiment Areas
 
-### One surface per run
-Pick ONE experiment surface per workflow run:
-1. Hero Summary (headline, one-liner, CTA)
-2. Pattern Naming (relationship archetype labels)
-3. Dimension Cards (five dimension explanations)
-4. Premium Upgrade Section (lock copy, CTA)
-
-### Only touch allowed files
 ```
 ALLOWED:
   - src/app/relationship/**
@@ -63,230 +45,189 @@ ALLOWED:
 NEVER TOUCH:
   - src/app/auth/**
   - src/app/billing/**
-  - src/app/api/** (except relationship endpoints)
-  - .env, .env.local, next.config.js
-  - .github/workflows/ci.yml
-  - Any module not listed above
+  - deployment configs (.github/, vercel.json)
+  - env files, .env, .env.local
+  - privacy policy
+  - share privacy safeguards
+  - any API route not in relationship/
 ```
-
-### Do not weaken privacy defaults
-- Share cards must NEVER expose birthDate, birthTime, birthLocation, timezone
-- No biometric or precise birth data in share outputs
-- Share defaults must be "off" for personal identifiers
-
-### Do not degrade bilingual quality
-- If you change English copy, check Chinese copy still renders
-- If you change Chinese copy, check English copy still renders
-- Every copy change requires bilingual mirror check
-
-### No breaking changes
-- All `npm run build` must pass
-- All `npm run audit:*` must pass (or explicitly documented as ignored)
-- No TypeScript errors introduced
 
 ---
 
-## Experiment Lifecycle
+## Experiment Lifecycle (7 Steps)
 
-### 1. Before experiment
-```bash
-npx tsx scripts/calculate-relationship-score.ts
-# → relationship-score.json (BEFORE score)
 ```
-
-### 2. Codex generates variants
-- Write `experiments/relationship/variant-a.json` (emotional framing)
-- Write `experiments/relationship/variant-b.json` (functional framing)
-- Both JSONs must include a `metrics` object
-
-### 3. Compare
-```bash
-npx tsx scripts/compare-ab-variants.ts
-# → ab-result.json
+1. calculate-relationship-score.ts → relationship-score-before.json
+2. Codex generates variant-a.json + variant-b.json
+3. compare-ab-variants.ts → ab-result.json
+4. decide-keep-or-discard.ts → relationship-decision.json
+5. apply-winning-copy.ts (only if decision=keep)
+6. generate-upgrade-report.ts → codex-upgrade-report.md
+7. record-experiment.ts → experiments/manifest.json (SINGLE SOURCE OF TRUTH)
 ```
-
-### 4. Decide
-```bash
-npx tsx scripts/decide-keep-or-discard.ts
-# → relationship-decision.json
-# Exit code 0 = keep, Exit code 1 = discard
-# Keep rule: after > before + 1 (margin ≥ 2)
-```
-
-### 5. Report
-```bash
-npx tsx scripts/generate-upgrade-report.ts
-# → codex-upgrade-report.md (REQUIRED — workflow gate)
-```
-
-### 6. Record
-```bash
-npx tsx scripts/record-experiment.ts ab-result.json
-# → experiments/manifest.json (runs[] grows)
-```
-
-### 7. Commit + PR
-- Commit winning copy to `src/lib/relationship-engine.ts`
-- Update `experiments/relationship/variant-*.json`
-- Update `experiments/manifest.json`
-- Open PR via `peter-evans/create-pull-request@v7`
 
 ---
 
-## Required Checks
+## Scoring System (Relationship — max 140 pts)
 
-Every experiment run must pass these before committing:
+```
+Base (74 pts):
+  hasHeroSummary          = 10
+  hasPattern             = 10
+  hasFiveDimensions       = 15
+  hasCurrentWindow       = 10
+  hasPracticalGuidance   = 10
+  hasPremiumSection      = 10
+  shareModes (3 max)      =  9
+
+Copy Quality (66 pts):
+  headlineStrength        = 0–20
+  patternClarity          = 0–15
+  emotionalResonance      = 0–15
+  upgradeStrength         = 0–15
+
+TOTAL                   = 74–140 pts
+```
+
+**Keeping rule:** Score delta ≥ 2 pts → keep | < 2 pts → discard
+
+---
+
+## Required Outputs (Every Run)
+
+1. `ab-result.json` — unified experiment result
+2. `codex-upgrade-report.md` — human-readable upgrade report
+3. `experiments/manifest.json` — **SINGLE SOURCE OF TRUTH**, runs[] must grow
+
+If any of these is missing after a run → **workflow fails**
+
+---
+
+## Required Checks (All Must Pass)
 
 ```bash
-npm run audit:routes    # No broken API routes
-npm run audit:copy      # No copy degradation
-npm run audit:share     # Share privacy safeguards intact
-npm run audit:upgrade  # Premium upgrade section functional
+npm run typecheck     # TypeScript compiles without errors
+npm run lint          # ESLint passes
+npm run test          # Test suite passes
+npm run build         # Next.js build succeeds
+npm run audit:routes  # API routes healthy
+npm run audit:copy    # Copy quality maintained
+npm run audit:share   # Privacy safeguards intact
+npm run audit:upgrade # Premium upgrade section functional
 ```
 
-If any check fails → experiment is **discarded**, no PR opened.
+If any check fails → experiment is **discarded**
 
 ---
 
-## Scoring System
+## Experiment Surfaces
 
-### Relationship module score (max 140 pts)
-```
-Base:
-  hasHeroSummary         = 10 pts
-  hasPattern             = 10 pts
-  hasFiveDimensions      = 15 pts
-  hasCurrentWindow       = 10 pts
-  hasPracticalGuidance   = 10 pts
-  hasPremiumSection      = 10 pts
-  shareModes (max 3×3)    =  9 pts
-                         ─────────
-  Base total             = 74 pts
+| Surface | Description |
+|---------|-------------|
+| `hero_summary` | Headline, one-liner, CTA — upgrade conversion |
+| `pattern_naming` | Relationship archetype labels, one-liner, tags |
+| `dimension_cards` | Five dimension explanations — clarity and tone |
+| `current_window` | Time expression, urgency, action guidance |
+| `share_card` | One-liner for share output, emotional intensity |
 
-Copy quality:
-  headlineStrength       = 0–20 pts
-  patternClarity         = 0–15 pts
-  emotionalResonance     = 0–15 pts
-  upgradeStrength        = 0–15 pts
-                         ─────────
-  Copy total             = 0–65 pts
-
-Grand total              = 74–140 pts
-```
-
-### Winning criteria
-- `after > before + 1` → **KEEP** (commit winning copy)
-- `after ≤ before + 1` → **DISCARD** (abort, no PR)
+One surface per run. Rotate surfaces across runs.
 
 ---
 
-## Privacy Rules (Non-Negotiable)
+## Privacy Non-Negotiables
 
-- `birthDate` is NEVER shown in share cards by default
-- `birthTime` is NEVER shown in any user-facing output
-- `birthLocation` is NEVER shown without explicit opt-in
-- `timezone` is NEVER exposed in share metadata
-- OG images must not contain readable birth data
+- `birthDate` — NEVER in share cards by default
+- `birthTime` — NEVER in any user-facing output
+- `birthLocation` — NEVER without explicit opt-in
+- `timezone` — NEVER exposed in share metadata
 - All share outputs must pass `npm run audit:share`
 
 ---
 
-## Upgrade Report Requirements
+## Success vs Failure
 
-Every experiment MUST produce `codex-upgrade-report.md` containing:
+### Keep (commit + PR)
+- Checks pass
+- Score delta ≥ 2 pts
+- No privacy regression
+- Experiment recorded in manifest
 
-```markdown
-# Codex Upgrade Report — rel-ab-XXX
+### Discard (abort, no PR)
+- Any check fails
+- Score delta < 2 pts
+- Privacy regression detected
+- Bilingual mirror quality decreased
 
-## Variant A
-(emotional copy description + metrics)
+---
 
-## Variant B
-(functional copy description + metrics)
+## Analytics Schema (Future — Phase 2)
 
-## Winner
-A or B
+For real user behavior validation:
 
-## Score
-Before: N | After: N | Delta: ±N
-
-## Decision
-KEEP or DISCARD
-
-## Checks
-- audit:routes ✅
-- audit:copy ✅
-- audit:share ✅
-- audit:upgrade ✅
-- codex-upgrade-report.md generated ✅
-
-## Risks
-(what's still unknown or needs real-user validation)
-
-## Next Focus
-(suggested next experiment surface)
+```
+relationship_view           — user opened results page
+relationship_share_click    — clicked share button
+relationship_share_success — share completed
+relationship_upgrade_click  — clicked premium unlock
+relationship_upgrade_success — upgrade/payment completed
+relationship_dimension_expand — expanded a dimension card
+relationship_return_7d     — returned within 7 days
 ```
 
-If `codex-upgrade-report.md` does not exist after the experiment → **workflow fails**.
+Primary metric: `upgrade_click_rate`
+Secondary metric: `share_click_rate`
 
 ---
 
 ## File Map
 
 ```
-TianJi Global
-├── program.md                          ← Current focus + experiment surfaces
-├── AGENTS.md                            ← THIS FILE (agent operating system)
-├── CLAUDE.md                            ← Project lore + technical details
+tianji-global/
+├── AGENTS.md                           ← THIS FILE (agent operating system)
+├── CLAUDE.md                           ← Project lore + context
+├── program.md                          ← Current focus + surfaces
 │
 ├── .github/workflows/
-│   ├── ci.yml                           ← Build + type check gate
-│   ├── codex-self-evolution.yml         ← Generic self-improvement (all modules)
-│   ├── relationship-ab-evolution.yml    ← Relationship module A/B (PRIMARY)
-│   └── guardrails.yml                   ← Daily privacy + security audit
+│   ├── ci.yml                         ← Build gate
+│   ├── codex-self-evolution.yml        ← Generic self-improvement
+│   ├── relationship-ab-evolution.yml   ← PRIMARY experiment pipeline
+│   └── guardrails.yml                  ← Daily privacy + quality audit
 │
 ├── experiments/
-│   ├── manifest.json                    ← ALL experiment history (runs[])
+│   ├── manifest.json                   ← SINGLE SOURCE OF TRUTH
+│   ├── ab-test-results.json            ← [DEPRECATED — export only]
+│   ├── all-modules-ab-results.json      ← [DEPRECATED — export only]
 │   └── relationship/
-│       ├── variant-a.json               ← Latest Variant A
-│       ├── variant-b.json               ← Latest Variant B
-│       └── rel-ab-001-variant-a.json    ← Archived experiments
+│       ├── variant-a.json
+│       ├── variant-b.json
+│       └── rel-*-variant-a.json        ← Archived per-experiment
 │
 ├── scripts/
-│   ├── calculate-relationship-score.ts  ← Score the current module state
-│   ├── compare-ab-variants.ts           ← Compare A vs B, output ab-result.json
-│   ├── decide-keep-or-discard.ts        ← Keep rule: margin ≥ 2
-│   ├── generate-upgrade-report.ts       ← Produce codex-upgrade-report.md
-│   ├── record-experiment.ts             ← Append to manifest.json runs[]
-│   ├── audit-routes.ts                  ← API route health check
-│   ├── audit-copy.ts                    ← Copy quality check
-│   ├── audit-share.ts                   ← Privacy safeguard check
-│   └── audit-upgrade.ts                 ← Upgrade section check
+│   ├── calculate-relationship-score.ts
+│   ├── compare-ab-variants.ts          ← Produces ab-result.json
+│   ├── decide-keep-or-discard.ts
+│   ├── apply-winning-copy.ts
+│   ├── generate-upgrade-report.ts       ← Produces codex-upgrade-report.md
+│   ├── record-experiment.ts             ← Updates manifest.json
+│   ├── create-pr.ts
+│   ├── audit-routes.ts
+│   ├── audit-copy.ts
+│   ├── audit-share.ts
+│   └── audit-upgrade.ts
 │
-└── codex-upgrade-report.md              ← Latest experiment report (auto-generated)
+└── codex-upgrade-report.md             ← Latest experiment report
 ```
-
----
-
-## Failure Modes (and what to do)
-
-| Failure | Response |
-|---------|----------|
-| Both variants score below baseline | Discard experiment |
-| Audit fails | Fix before proceeding |
-| Privacy regression | Abort immediately, do not PR |
-| TypeScript errors | Fix before proceeding |
-| Margin < 2 | Discard, log in report |
-| PR merge conflict | Re-base, retry once |
 
 ---
 
 ## Evolution Status
 
-- **L1** ✅ Automated CI
-- **L2** ✅ Audit scripts + rubric
-- **L3** ✅ Auto-PR + report output
-- **L4** ⏳ In progress — manifest accumulation + upgrade reports
-- **L5** ❌ Real user signal feedback loop
+| Level | Description | Status |
+|-------|-------------|--------|
+| L1 | Automated CI + tests | ✅ |
+| L2 | Audit scripts + rubric | ✅ |
+| L3 | Auto-PR + report output | ✅ |
+| **L4** | **Single-source manifest + keep/discard + upgrade reports** | **⏳ In progress** |
+| L5 | Real user signal feedback | ❌ |
 
-Current target: **L4** — manifest runs must grow with each experiment.
+**Current target:** L4 — manifest runs growing with each experiment.

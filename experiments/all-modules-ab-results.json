@@ -25,5 +25,10 @@
     "modulesWonByA": 1,
     "modulesWonByB": 0,
     "modulesTied": 0
+  },
+  "_deprecated": {
+    "note": "DEPRECATED \u2014 all records moved to experiments/manifest.json",
+    "superseded_by": "experiments/manifest.json",
+    "reason": "Unified experiment source of truth per AGENTS.md"
   }
 }

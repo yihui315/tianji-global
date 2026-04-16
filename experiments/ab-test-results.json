@@ -11,11 +11,11 @@
       "round": 1,
       "surface": "hero_summary",
       "variantA": {
-        "name": "Variant A — hero_summary (round 1)",
+        "name": "Variant A \u2014 hero_summary (round 1)",
         "surface": "hero_summary",
         "copy": {
-          "headline": "You feel something real — synchronized growth is already underway",
-          "oneLiner": "You feel the connection — but are you building it, or just experiencing it?"
+          "headline": "You feel something real \u2014 synchronized growth is already underway",
+          "oneLiner": "You feel the connection \u2014 but are you building it, or just experiencing it?"
         },
         "metrics": {
           "headlineStrength": 20,
@@ -26,10 +26,10 @@
         }
       },
       "variantB": {
-        "name": "Variant B — hero_summary (round 1)",
+        "name": "Variant B \u2014 hero_summary (round 1)",
         "surface": "hero_summary",
         "copy": {
-          "headline": "High compatibility confirmed — unlock full pattern analysis",
+          "headline": "High compatibility confirmed \u2014 unlock full pattern analysis",
           "oneLiner": "Your compatibility profile is ready. Unlock the full relationship map."
         },
         "metrics": {
@@ -50,12 +50,12 @@
       "round": 2,
       "surface": "pattern_naming",
       "variantA": {
-        "name": "Variant A — pattern_naming (round 2)",
+        "name": "Variant A \u2014 pattern_naming (round 2)",
         "surface": "pattern_naming",
         "copy": {
-          "romantic": "Intense Chemistry, Pacing Gap — the pull is real, the sync isn't",
-          "friendship": "Deep Compatible Friends — the bond is real, but how visible is it?",
-          "work": "Strategic Partnership — high potential, the gap is in pace"
+          "romantic": "Intense Chemistry, Pacing Gap \u2014 the pull is real, the sync isn't",
+          "friendship": "Deep Compatible Friends \u2014 the bond is real, but how visible is it?",
+          "work": "Strategic Partnership \u2014 high potential, the gap is in pace"
         },
         "metrics": {
           "headlineStrength": 17,
@@ -66,12 +66,12 @@
         }
       },
       "variantB": {
-        "name": "Variant B — pattern_naming (round 2)",
+        "name": "Variant B \u2014 pattern_naming (round 2)",
         "surface": "pattern_naming",
         "copy": {
-          "romantic": "Intense Chemistry, Pacing Gap — score indexed",
-          "friendship": "Deep Compatible Friends — index calculated",
-          "work": "Strategic Partnership — potential indexed"
+          "romantic": "Intense Chemistry, Pacing Gap \u2014 score indexed",
+          "friendship": "Deep Compatible Friends \u2014 index calculated",
+          "work": "Strategic Partnership \u2014 potential indexed"
         },
         "metrics": {
           "headlineStrength": 10,
@@ -91,10 +91,10 @@
       "round": 3,
       "surface": "dimension_copy",
       "variantA": {
-        "name": "Variant A — dimension_copy (round 3)",
+        "name": "Variant A \u2014 dimension_copy (round 3)",
         "surface": "dimension_copy",
         "copy": {
-          "attraction": "The attraction is genuine — not just physical. It's the kind that makes you want to know someone fully.",
+          "attraction": "The attraction is genuine \u2014 not just physical. It's the kind that makes you want to know someone fully.",
           "communication": "You have a rhythm in conversation. Sometimes you anticipate each other. Sometimes you miss."
         },
         "metrics": {
@@ -106,7 +106,7 @@
         }
       },
       "variantB": {
-        "name": "Variant B — dimension_copy (round 3)",
+        "name": "Variant B \u2014 dimension_copy (round 3)",
         "surface": "dimension_copy",
         "copy": {
           "attraction": "Attraction profile: MAGNETIC. Recommended: pursue.",
@@ -130,10 +130,10 @@
       "round": 4,
       "surface": "upgrade_section",
       "variantA": {
-        "name": "Variant A — upgrade_section (round 4)",
+        "name": "Variant A \u2014 upgrade_section (round 4)",
         "surface": "upgrade_section",
         "copy": {
-          "headline": "You feel something real — see where it's heading",
+          "headline": "You feel something real \u2014 see where it's heading",
           "cta": "See what your pattern means for the next 12 months"
         },
         "metrics": {
@@ -145,11 +145,11 @@
         }
       },
       "variantB": {
-        "name": "Variant B — upgrade_section (round 4)",
+        "name": "Variant B \u2014 upgrade_section (round 4)",
         "surface": "upgrade_section",
         "copy": {
-          "headline": "Premium unlocked — full relationship analysis",
-          "cta": "Upgrade to Premium — full analysis, no restrictions"
+          "headline": "Premium unlocked \u2014 full relationship analysis",
+          "cta": "Upgrade to Premium \u2014 full analysis, no restrictions"
         },
         "metrics": {
           "headlineStrength": 10,
@@ -169,11 +169,11 @@
       "round": 5,
       "surface": "hero_summary",
       "variantA": {
-        "name": "Variant A — hero_summary (round 5)",
+        "name": "Variant A \u2014 hero_summary (round 5)",
         "surface": "hero_summary",
         "copy": {
-          "headline": "There's genuine chemistry — what happens next depends on pacing",
-          "oneLiner": "You feel the connection — but are you building it, or just experiencing it?"
+          "headline": "There's genuine chemistry \u2014 what happens next depends on pacing",
+          "oneLiner": "You feel the connection \u2014 but are you building it, or just experiencing it?"
         },
         "metrics": {
           "headlineStrength": 17,
@@ -184,11 +184,11 @@
         }
       },
       "variantB": {
-        "name": "Variant B — hero_summary (round 5)",
+        "name": "Variant B \u2014 hero_summary (round 5)",
         "surface": "hero_summary",
         "copy": {
-          "headline": "Synergy confirmed — premium reveals the complete collaboration map",
-          "oneLiner": "Compatibility indexed. Full pattern, timing, and 5-year forecast — in premium."
+          "headline": "Synergy confirmed \u2014 premium reveals the complete collaboration map",
+          "oneLiner": "Compatibility indexed. Full pattern, timing, and 5-year forecast \u2014 in premium."
         },
         "metrics": {
           "headlineStrength": 12,
@@ -208,12 +208,12 @@
       "round": 6,
       "surface": "pattern_naming",
       "variantA": {
-        "name": "Variant A — pattern_naming (round 6)",
+        "name": "Variant A \u2014 pattern_naming (round 6)",
         "surface": "pattern_naming",
         "copy": {
-          "romantic": "Magnetic Connection, Off-Beat Pace — you want the same thing, differently",
-          "friendship": "Effortless Sync Friends — you get each other, fully",
-          "work": "High Synergy Colleagues — aligned on goals, different on method"
+          "romantic": "Magnetic Connection, Off-Beat Pace \u2014 you want the same thing, differently",
+          "friendship": "Effortless Sync Friends \u2014 you get each other, fully",
+          "work": "High Synergy Colleagues \u2014 aligned on goals, different on method"
         },
         "metrics": {
           "headlineStrength": 17,
@@ -224,12 +224,12 @@
         }
       },
       "variantB": {
-        "name": "Variant B — pattern_naming (round 6)",
+        "name": "Variant B \u2014 pattern_naming (round 6)",
         "surface": "pattern_naming",
         "copy": {
-          "romantic": "Magnetic Connection, Off-Beat Pace — pattern confirmed",
-          "friendship": "Effortless Sync Friends — sync confirmed",
-          "work": "High Synergy Colleagues — alignment confirmed"
+          "romantic": "Magnetic Connection, Off-Beat Pace \u2014 pattern confirmed",
+          "friendship": "Effortless Sync Friends \u2014 sync confirmed",
+          "work": "High Synergy Colleagues \u2014 alignment confirmed"
         },
         "metrics": {
           "headlineStrength": 12,
@@ -249,11 +249,11 @@
       "round": 7,
       "surface": "dimension_copy",
       "variantA": {
-        "name": "Variant A — dimension_copy (round 7)",
+        "name": "Variant A \u2014 dimension_copy (round 7)",
         "surface": "dimension_copy",
         "copy": {
-          "attraction": "You feel the pull between you — strong, sometimes overwhelming. The question is whether you're both feeling it at the same intensity.",
-          "communication": "You understand each other's silences as much as words. But silence can be read wrong — check intent."
+          "attraction": "You feel the pull between you \u2014 strong, sometimes overwhelming. The question is whether you're both feeling it at the same intensity.",
+          "communication": "You understand each other's silences as much as words. But silence can be read wrong \u2014 check intent."
         },
         "metrics": {
           "headlineStrength": 17,
@@ -264,7 +264,7 @@
         }
       },
       "variantB": {
-        "name": "Variant B — dimension_copy (round 7)",
+        "name": "Variant B \u2014 dimension_copy (round 7)",
         "surface": "dimension_copy",
         "copy": {
           "attraction": "Attraction score: HIGH. Compatibility index: FAVORABLE.",
@@ -288,11 +288,11 @@
       "round": 8,
       "surface": "upgrade_section",
       "variantA": {
-        "name": "Variant A — upgrade_section (round 8)",
+        "name": "Variant A \u2014 upgrade_section (round 8)",
         "surface": "upgrade_section",
         "copy": {
-          "headline": "The connection is honest — here's what happens next",
-          "cta": "Unlock your relationship timing — when it peaks, when it needs work"
+          "headline": "The connection is honest \u2014 here's what happens next",
+          "cta": "Unlock your relationship timing \u2014 when it peaks, when it needs work"
         },
         "metrics": {
           "headlineStrength": 17,
@@ -303,11 +303,11 @@
         }
       },
       "variantB": {
-        "name": "Variant B — upgrade_section (round 8)",
+        "name": "Variant B \u2014 upgrade_section (round 8)",
         "surface": "upgrade_section",
         "copy": {
-          "headline": "Upgrade to premium — complete pattern breakdown",
-          "cta": "Get the complete report — premium features unlocked"
+          "headline": "Upgrade to premium \u2014 complete pattern breakdown",
+          "cta": "Get the complete report \u2014 premium features unlocked"
         },
         "metrics": {
           "headlineStrength": 10,
@@ -327,11 +327,11 @@
       "round": 9,
       "surface": "hero_summary",
       "variantA": {
-        "name": "Variant A — hero_summary (round 9)",
+        "name": "Variant A \u2014 hero_summary (round 9)",
         "surface": "hero_summary",
         "copy": {
-          "headline": "You have a real connection — the pace is the question",
-          "oneLiner": "You feel the connection — but are you building it, or just experiencing it?"
+          "headline": "You have a real connection \u2014 the pace is the question",
+          "oneLiner": "You feel the connection \u2014 but are you building it, or just experiencing it?"
         },
         "metrics": {
           "headlineStrength": 20,
@@ -342,10 +342,10 @@
         }
       },
       "variantB": {
-        "name": "Variant B — hero_summary (round 9)",
+        "name": "Variant B \u2014 hero_summary (round 9)",
         "surface": "hero_summary",
         "copy": {
-          "headline": "Compatibility score calculated — deeper pattern unlocked in full report",
+          "headline": "Compatibility score calculated \u2014 deeper pattern unlocked in full report",
           "oneLiner": "Your relationship map is calculated. See the complete breakdown in premium."
         },
         "metrics": {
@@ -366,12 +366,12 @@
       "round": 10,
       "surface": "pattern_naming",
       "variantA": {
-        "name": "Variant A — pattern_naming (round 10)",
+        "name": "Variant A \u2014 pattern_naming (round 10)",
         "surface": "pattern_naming",
         "copy": {
-          "romantic": "High Attraction, Unaligned Rhythm — you feel it, but at different speeds",
-          "friendship": "Soulmate Friendship — you understand each other without words",
-          "work": "Efficient Collaboration — the trust is there, execution is the lever"
+          "romantic": "High Attraction, Unaligned Rhythm \u2014 you feel it, but at different speeds",
+          "friendship": "Soulmate Friendship \u2014 you understand each other without words",
+          "work": "Efficient Collaboration \u2014 the trust is there, execution is the lever"
         },
         "metrics": {
           "headlineStrength": 17,
@@ -382,12 +382,12 @@
         }
       },
       "variantB": {
-        "name": "Variant B — pattern_naming (round 10)",
+        "name": "Variant B \u2014 pattern_naming (round 10)",
         "surface": "pattern_naming",
         "copy": {
-          "romantic": "High Attraction, Unaligned Rhythm — compatibility confirmed",
-          "friendship": "Soulmate Friendship — compatibility confirmed",
-          "work": "Efficient Collaboration — synergy confirmed"
+          "romantic": "High Attraction, Unaligned Rhythm \u2014 compatibility confirmed",
+          "friendship": "Soulmate Friendship \u2014 compatibility confirmed",
+          "work": "Efficient Collaboration \u2014 synergy confirmed"
         },
         "metrics": {
           "headlineStrength": 12,
@@ -407,11 +407,11 @@
       "round": 11,
       "surface": "dimension_copy",
       "variantA": {
-        "name": "Variant A — dimension_copy (round 11)",
+        "name": "Variant A \u2014 dimension_copy (round 11)",
         "surface": "dimension_copy",
         "copy": {
           "attraction": "There's real chemistry here. But chemistry alone doesn't sync your schedules or align your expectations.",
-          "communication": "Communication is a strength — you both speak the same underlying language. The risk: assuming you're clearer than you are."
+          "communication": "Communication is a strength \u2014 you both speak the same underlying language. The risk: assuming you're clearer than you are."
         },
         "metrics": {
           "headlineStrength": 20,
@@ -422,7 +422,7 @@
         }
       },
       "variantB": {
-        "name": "Variant B — dimension_copy (round 11)",
+        "name": "Variant B \u2014 dimension_copy (round 11)",
         "surface": "dimension_copy",
         "copy": {
           "attraction": "Attraction: 85/100. Chemistry index: positive.",
@@ -446,11 +446,11 @@
       "round": 12,
       "surface": "upgrade_section",
       "variantA": {
-        "name": "Variant A — upgrade_section (round 12)",
+        "name": "Variant A \u2014 upgrade_section (round 12)",
         "surface": "upgrade_section",
         "copy": {
-          "headline": "There's genuine potential — unlock the full picture",
-          "cta": "See the full picture — your pattern, your timing, your forecast"
+          "headline": "There's genuine potential \u2014 unlock the full picture",
+          "cta": "See the full picture \u2014 your pattern, your timing, your forecast"
         },
         "metrics": {
           "headlineStrength": 17,
@@ -461,11 +461,11 @@
         }
       },
       "variantB": {
-        "name": "Variant B — upgrade_section (round 12)",
+        "name": "Variant B \u2014 upgrade_section (round 12)",
         "surface": "upgrade_section",
         "copy": {
-          "headline": "Premium insights — 5-year forecast, timing analysis",
-          "cta": "Unlock all insights — premium relationship map"
+          "headline": "Premium insights \u2014 5-year forecast, timing analysis",
+          "cta": "Unlock all insights \u2014 premium relationship map"
         },
         "metrics": {
           "headlineStrength": 12,
@@ -485,11 +485,11 @@
       "round": 13,
       "surface": "hero_summary",
       "variantA": {
-        "name": "Variant A — hero_summary (round 13)",
+        "name": "Variant A \u2014 hero_summary (round 13)",
         "surface": "hero_summary",
         "copy": {
-          "headline": "Something is real here — but are you both meeting it?",
-          "oneLiner": "You feel the connection — but are you building it, or just experiencing it?"
+          "headline": "Something is real here \u2014 but are you both meeting it?",
+          "oneLiner": "You feel the connection \u2014 but are you building it, or just experiencing it?"
         },
         "metrics": {
           "headlineStrength": 20,
@@ -500,10 +500,10 @@
         }
       },
       "variantB": {
-        "name": "Variant B — hero_summary (round 13)",
+        "name": "Variant B \u2014 hero_summary (round 13)",
         "surface": "hero_summary",
         "copy": {
-          "headline": "Relationship compatibility indexed — full breakdown in premium",
+          "headline": "Relationship compatibility indexed \u2014 full breakdown in premium",
           "oneLiner": "Your compatibility profile is ready. Unlock the full relationship map."
         },
         "metrics": {
@@ -524,12 +524,12 @@
       "round": 14,
       "surface": "pattern_naming",
       "variantA": {
-        "name": "Variant A — pattern_naming (round 14)",
+        "name": "Variant A \u2014 pattern_naming (round 14)",
         "surface": "pattern_naming",
         "copy": {
-          "romantic": "Intense Chemistry, Pacing Gap — the pull is real, the sync isn't",
-          "friendship": "Deep Compatible Friends — the bond is real, but how visible is it?",
-          "work": "Strategic Partnership — high potential, the gap is in pace"
+          "romantic": "Intense Chemistry, Pacing Gap \u2014 the pull is real, the sync isn't",
+          "friendship": "Deep Compatible Friends \u2014 the bond is real, but how visible is it?",
+          "work": "Strategic Partnership \u2014 high potential, the gap is in pace"
         },
         "metrics": {
           "headlineStrength": 17,
@@ -540,12 +540,12 @@
         }
       },
       "variantB": {
-        "name": "Variant B — pattern_naming (round 14)",
+        "name": "Variant B \u2014 pattern_naming (round 14)",
         "surface": "pattern_naming",
         "copy": {
-          "romantic": "Intense Chemistry, Pacing Gap — score indexed",
-          "friendship": "Deep Compatible Friends — index calculated",
-          "work": "Strategic Partnership — potential indexed"
+          "romantic": "Intense Chemistry, Pacing Gap \u2014 score indexed",
+          "friendship": "Deep Compatible Friends \u2014 index calculated",
+          "work": "Strategic Partnership \u2014 potential indexed"
         },
         "metrics": {
           "headlineStrength": 10,
@@ -565,10 +565,10 @@
       "round": 15,
       "surface": "dimension_copy",
       "variantA": {
-        "name": "Variant A — dimension_copy (round 15)",
+        "name": "Variant A \u2014 dimension_copy (round 15)",
         "surface": "dimension_copy",
         "copy": {
-          "attraction": "The attraction is genuine — not just physical. It's the kind that makes you want to know someone fully.",
+          "attraction": "The attraction is genuine \u2014 not just physical. It's the kind that makes you want to know someone fully.",
           "communication": "You have a rhythm in conversation. Sometimes you anticipate each other. Sometimes you miss."
         },
         "metrics": {
@@ -580,7 +580,7 @@
         }
       },
       "variantB": {
-        "name": "Variant B — dimension_copy (round 15)",
+        "name": "Variant B \u2014 dimension_copy (round 15)",
         "surface": "dimension_copy",
         "copy": {
           "attraction": "Attraction profile: MAGNETIC. Recommended: pursue.",
@@ -604,10 +604,10 @@
       "round": 16,
       "surface": "upgrade_section",
       "variantA": {
-        "name": "Variant A — upgrade_section (round 16)",
+        "name": "Variant A \u2014 upgrade_section (round 16)",
         "surface": "upgrade_section",
         "copy": {
-          "headline": "You feel something real — see where it's heading",
+          "headline": "You feel something real \u2014 see where it's heading",
           "cta": "See what your pattern means for the next 12 months"
         },
         "metrics": {
@@ -619,11 +619,11 @@
         }
       },
       "variantB": {
-        "name": "Variant B — upgrade_section (round 16)",
+        "name": "Variant B \u2014 upgrade_section (round 16)",
         "surface": "upgrade_section",
         "copy": {
-          "headline": "Premium unlocked — full relationship analysis",
-          "cta": "Upgrade to Premium — full analysis, no restrictions"
+          "headline": "Premium unlocked \u2014 full relationship analysis",
+          "cta": "Upgrade to Premium \u2014 full analysis, no restrictions"
         },
         "metrics": {
           "headlineStrength": 10,
@@ -643,11 +643,11 @@
       "round": 17,
       "surface": "hero_summary",
       "variantA": {
-        "name": "Variant A — hero_summary (round 17)",
+        "name": "Variant A \u2014 hero_summary (round 17)",
         "surface": "hero_summary",
         "copy": {
-          "headline": "The pull between you is genuine — the question is timing",
-          "oneLiner": "You feel the connection — but are you building it, or just experiencing it?"
+          "headline": "The pull between you is genuine \u2014 the question is timing",
+          "oneLiner": "You feel the connection \u2014 but are you building it, or just experiencing it?"
         },
         "metrics": {
           "headlineStrength": 20,
@@ -658,11 +658,11 @@
         }
       },
       "variantB": {
-        "name": "Variant B — hero_summary (round 17)",
+        "name": "Variant B \u2014 hero_summary (round 17)",
         "surface": "hero_summary",
         "copy": {
-          "headline": "Compatibility profile generated — premium insights available",
-          "oneLiner": "Compatibility indexed. Full pattern, timing, and 5-year forecast — in premium."
+          "headline": "Compatibility profile generated \u2014 premium insights available",
+          "oneLiner": "Compatibility indexed. Full pattern, timing, and 5-year forecast \u2014 in premium."
         },
         "metrics": {
           "headlineStrength": 12,
@@ -682,12 +682,12 @@
       "round": 18,
       "surface": "pattern_naming",
       "variantA": {
-        "name": "Variant A — pattern_naming (round 18)",
+        "name": "Variant A \u2014 pattern_naming (round 18)",
         "surface": "pattern_naming",
         "copy": {
-          "romantic": "Magnetic Connection, Off-Beat Pace — you want the same thing, differently",
-          "friendship": "Effortless Sync Friends — you get each other, fully",
-          "work": "High Synergy Colleagues — aligned on goals, different on method"
+          "romantic": "Magnetic Connection, Off-Beat Pace \u2014 you want the same thing, differently",
+          "friendship": "Effortless Sync Friends \u2014 you get each other, fully",
+          "work": "High Synergy Colleagues \u2014 aligned on goals, different on method"
         },
         "metrics": {
           "headlineStrength": 17,
@@ -698,12 +698,12 @@
         }
       },
       "variantB": {
-        "name": "Variant B — pattern_naming (round 18)",
+        "name": "Variant B \u2014 pattern_naming (round 18)",
         "surface": "pattern_naming",
         "copy": {
-          "romantic": "Magnetic Connection, Off-Beat Pace — pattern confirmed",
-          "friendship": "Effortless Sync Friends — sync confirmed",
-          "work": "High Synergy Colleagues — alignment confirmed"
+          "romantic": "Magnetic Connection, Off-Beat Pace \u2014 pattern confirmed",
+          "friendship": "Effortless Sync Friends \u2014 sync confirmed",
+          "work": "High Synergy Colleagues \u2014 alignment confirmed"
         },
         "metrics": {
           "headlineStrength": 12,
@@ -723,11 +723,11 @@
       "round": 19,
       "surface": "dimension_copy",
       "variantA": {
-        "name": "Variant A — dimension_copy (round 19)",
+        "name": "Variant A \u2014 dimension_copy (round 19)",
         "surface": "dimension_copy",
         "copy": {
-          "attraction": "You feel the pull between you — strong, sometimes overwhelming. The question is whether you're both feeling it at the same intensity.",
-          "communication": "You understand each other's silences as much as words. But silence can be read wrong — check intent."
+          "attraction": "You feel the pull between you \u2014 strong, sometimes overwhelming. The question is whether you're both feeling it at the same intensity.",
+          "communication": "You understand each other's silences as much as words. But silence can be read wrong \u2014 check intent."
         },
         "metrics": {
           "headlineStrength": 17,
@@ -738,7 +738,7 @@
         }
       },
       "variantB": {
-        "name": "Variant B — dimension_copy (round 19)",
+        "name": "Variant B \u2014 dimension_copy (round 19)",
         "surface": "dimension_copy",
         "copy": {
           "attraction": "Attraction score: HIGH. Compatibility index: FAVORABLE.",
@@ -762,11 +762,11 @@
       "round": 20,
       "surface": "upgrade_section",
       "variantA": {
-        "name": "Variant A — upgrade_section (round 20)",
+        "name": "Variant A \u2014 upgrade_section (round 20)",
         "surface": "upgrade_section",
         "copy": {
-          "headline": "The connection is honest — here's what happens next",
-          "cta": "Unlock your relationship timing — when it peaks, when it needs work"
+          "headline": "The connection is honest \u2014 here's what happens next",
+          "cta": "Unlock your relationship timing \u2014 when it peaks, when it needs work"
         },
         "metrics": {
           "headlineStrength": 17,
@@ -777,11 +777,11 @@
         }
       },
       "variantB": {
-        "name": "Variant B — upgrade_section (round 20)",
+        "name": "Variant B \u2014 upgrade_section (round 20)",
         "surface": "upgrade_section",
         "copy": {
-          "headline": "Upgrade to premium — complete pattern breakdown",
-          "cta": "Get the complete report — premium features unlocked"
+          "headline": "Upgrade to premium \u2014 complete pattern breakdown",
+          "cta": "Get the complete report \u2014 premium features unlocked"
         },
         "metrics": {
           "headlineStrength": 10,
@@ -797,5 +797,10 @@
       "margin": 1,
       "apiLatencyMs": 1174
     }
-  ]
+  ],
+  "_deprecated": {
+    "note": "DEPRECATED \u2014 all records moved to experiments/manifest.json",
+    "superseded_by": "experiments/manifest.json",
+    "reason": "Unified experiment source of truth per AGENTS.md"
+  }
 }
