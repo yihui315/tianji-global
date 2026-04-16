@@ -1,0 +1,407 @@
+{
+  "timestamp": "2026-04-16T08:22:43.008Z",
+  "totalRounds": 10,
+  "winsA": 10,
+  "winsB": 0,
+  "ties": 0,
+  "avgScoreA": 102.5,
+  "avgScoreB": 91,
+  "results": [
+    {
+      "round": 1,
+      "surface": "hero_summary",
+      "variantA": {
+        "name": "Variant A — hero_summary (round 1)",
+        "surface": "hero_summary",
+        "copy": {
+          "headline": "You feel something real — synchronized growth is already underway",
+          "oneLiner": "You feel the connection — but are you building it, or just experiencing it?"
+        },
+        "metrics": {
+          "headlineStrength": 20,
+          "emotionalResonance": 10,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 108
+        }
+      },
+      "variantB": {
+        "name": "Variant B — hero_summary (round 1)",
+        "surface": "hero_summary",
+        "copy": {
+          "headline": "High compatibility confirmed — unlock full pattern analysis",
+          "oneLiner": "Your compatibility profile is ready. Unlock the full relationship map."
+        },
+        "metrics": {
+          "headlineStrength": 12,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 90
+        }
+      },
+      "winner": "A",
+      "scoreA": 108,
+      "scoreB": 90,
+      "margin": 18,
+      "apiLatencyMs": 1189
+    },
+    {
+      "round": 2,
+      "surface": "pattern_naming",
+      "variantA": {
+        "name": "Variant A — pattern_naming (round 2)",
+        "surface": "pattern_naming",
+        "copy": {
+          "romantic": "Intense Chemistry, Pacing Gap — the pull is real, the sync isn't",
+          "friendship": "Deep Compatible Friends — the bond is real, but how visible is it?",
+          "work": "Strategic Partnership — high potential, the gap is in pace"
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 0,
+          "patternClarity": 11,
+          "upgradeStrength": 5,
+          "score": 101
+        }
+      },
+      "variantB": {
+        "name": "Variant B — pattern_naming (round 2)",
+        "surface": "pattern_naming",
+        "copy": {
+          "romantic": "Intense Chemistry, Pacing Gap — score indexed",
+          "friendship": "Deep Compatible Friends — index calculated",
+          "work": "Strategic Partnership — potential indexed"
+        },
+        "metrics": {
+          "headlineStrength": 10,
+          "emotionalResonance": 0,
+          "patternClarity": 8,
+          "upgradeStrength": 5,
+          "score": 91
+        }
+      },
+      "winner": "A",
+      "scoreA": 101,
+      "scoreB": 91,
+      "margin": 10,
+      "apiLatencyMs": 1180
+    },
+    {
+      "round": 3,
+      "surface": "dimension_copy",
+      "variantA": {
+        "name": "Variant A — dimension_copy (round 3)",
+        "surface": "dimension_copy",
+        "copy": {
+          "attraction": "The attraction is genuine — not just physical. It's the kind that makes you want to know someone fully.",
+          "communication": "You have a rhythm in conversation. Sometimes you anticipate each other. Sometimes you miss."
+        },
+        "metrics": {
+          "headlineStrength": 20,
+          "emotionalResonance": 4,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 102
+        }
+      },
+      "variantB": {
+        "name": "Variant B — dimension_copy (round 3)",
+        "surface": "dimension_copy",
+        "copy": {
+          "attraction": "Attraction profile: MAGNETIC. Recommended: pursue.",
+          "communication": "Communication profile: HARMONIZED. Sync rate: 82%."
+        },
+        "metrics": {
+          "headlineStrength": 5,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 83
+        }
+      },
+      "winner": "A",
+      "scoreA": 102,
+      "scoreB": 83,
+      "margin": 19,
+      "apiLatencyMs": 1185
+    },
+    {
+      "round": 4,
+      "surface": "upgrade_section",
+      "variantA": {
+        "name": "Variant A — upgrade_section (round 4)",
+        "surface": "upgrade_section",
+        "copy": {
+          "headline": "You feel something real — see where it's heading",
+          "cta": "See what your pattern means for the next 12 months"
+        },
+        "metrics": {
+          "headlineStrength": 20,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 0,
+          "score": 93
+        }
+      },
+      "variantB": {
+        "name": "Variant B — upgrade_section (round 4)",
+        "surface": "upgrade_section",
+        "copy": {
+          "headline": "Premium unlocked — full relationship analysis",
+          "cta": "Upgrade to Premium — full analysis, no restrictions"
+        },
+        "metrics": {
+          "headlineStrength": 10,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 10,
+          "score": 93
+        }
+      },
+      "winner": "A",
+      "scoreA": 93,
+      "scoreB": 93,
+      "margin": 0,
+      "apiLatencyMs": 1218
+    },
+    {
+      "round": 5,
+      "surface": "hero_summary",
+      "variantA": {
+        "name": "Variant A — hero_summary (round 5)",
+        "surface": "hero_summary",
+        "copy": {
+          "headline": "There's genuine chemistry — what happens next depends on pacing",
+          "oneLiner": "You feel the connection — but are you building it, or just experiencing it?"
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 10,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 105
+        }
+      },
+      "variantB": {
+        "name": "Variant B — hero_summary (round 5)",
+        "surface": "hero_summary",
+        "copy": {
+          "headline": "Synergy confirmed — premium reveals the complete collaboration map",
+          "oneLiner": "Compatibility indexed. Full pattern, timing, and 5-year forecast — in premium."
+        },
+        "metrics": {
+          "headlineStrength": 12,
+          "emotionalResonance": 2,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 92
+        }
+      },
+      "winner": "A",
+      "scoreA": 105,
+      "scoreB": 92,
+      "margin": 13,
+      "apiLatencyMs": 1176
+    },
+    {
+      "round": 6,
+      "surface": "pattern_naming",
+      "variantA": {
+        "name": "Variant A — pattern_naming (round 6)",
+        "surface": "pattern_naming",
+        "copy": {
+          "romantic": "Magnetic Connection, Off-Beat Pace — you want the same thing, differently",
+          "friendship": "Effortless Sync Friends — you get each other, fully",
+          "work": "High Synergy Colleagues — aligned on goals, different on method"
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 2,
+          "patternClarity": 11,
+          "upgradeStrength": 5,
+          "score": 103
+        }
+      },
+      "variantB": {
+        "name": "Variant B — pattern_naming (round 6)",
+        "surface": "pattern_naming",
+        "copy": {
+          "romantic": "Magnetic Connection, Off-Beat Pace — pattern confirmed",
+          "friendship": "Effortless Sync Friends — sync confirmed",
+          "work": "High Synergy Colleagues — alignment confirmed"
+        },
+        "metrics": {
+          "headlineStrength": 12,
+          "emotionalResonance": 0,
+          "patternClarity": 11,
+          "upgradeStrength": 5,
+          "score": 96
+        }
+      },
+      "winner": "A",
+      "scoreA": 103,
+      "scoreB": 96,
+      "margin": 7,
+      "apiLatencyMs": 1214
+    },
+    {
+      "round": 7,
+      "surface": "dimension_copy",
+      "variantA": {
+        "name": "Variant A — dimension_copy (round 7)",
+        "surface": "dimension_copy",
+        "copy": {
+          "attraction": "You feel the pull between you — strong, sometimes overwhelming. The question is whether you're both feeling it at the same intensity.",
+          "communication": "You understand each other's silences as much as words. But silence can be read wrong — check intent."
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 7,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 102
+        }
+      },
+      "variantB": {
+        "name": "Variant B — dimension_copy (round 7)",
+        "surface": "dimension_copy",
+        "copy": {
+          "attraction": "Attraction score: HIGH. Compatibility index: FAVORABLE.",
+          "communication": "Communication score: STRONG. Communication style: aligned."
+        },
+        "metrics": {
+          "headlineStrength": 7,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 85
+        }
+      },
+      "winner": "A",
+      "scoreA": 102,
+      "scoreB": 85,
+      "margin": 17,
+      "apiLatencyMs": 1185
+    },
+    {
+      "round": 8,
+      "surface": "upgrade_section",
+      "variantA": {
+        "name": "Variant A — upgrade_section (round 8)",
+        "surface": "upgrade_section",
+        "copy": {
+          "headline": "The connection is honest — here's what happens next",
+          "cta": "Unlock your relationship timing — when it peaks, when it needs work"
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 2,
+          "patternClarity": 5,
+          "upgradeStrength": 0,
+          "score": 92
+        }
+      },
+      "variantB": {
+        "name": "Variant B — upgrade_section (round 8)",
+        "surface": "upgrade_section",
+        "copy": {
+          "headline": "Upgrade to premium — complete pattern breakdown",
+          "cta": "Get the complete report — premium features unlocked"
+        },
+        "metrics": {
+          "headlineStrength": 10,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 8,
+          "score": 91
+        }
+      },
+      "winner": "A",
+      "scoreA": 92,
+      "scoreB": 91,
+      "margin": 1,
+      "apiLatencyMs": 1195
+    },
+    {
+      "round": 9,
+      "surface": "hero_summary",
+      "variantA": {
+        "name": "Variant A — hero_summary (round 9)",
+        "surface": "hero_summary",
+        "copy": {
+          "headline": "You have a real connection — the pace is the question",
+          "oneLiner": "You feel the connection — but are you building it, or just experiencing it?"
+        },
+        "metrics": {
+          "headlineStrength": 20,
+          "emotionalResonance": 10,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 108
+        }
+      },
+      "variantB": {
+        "name": "Variant B — hero_summary (round 9)",
+        "surface": "hero_summary",
+        "copy": {
+          "headline": "Compatibility score calculated — deeper pattern unlocked in full report",
+          "oneLiner": "Your relationship map is calculated. See the complete breakdown in premium."
+        },
+        "metrics": {
+          "headlineStrength": 12,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 90
+        }
+      },
+      "winner": "A",
+      "scoreA": 108,
+      "scoreB": 90,
+      "margin": 18,
+      "apiLatencyMs": 1173
+    },
+    {
+      "round": 10,
+      "surface": "pattern_naming",
+      "variantA": {
+        "name": "Variant A — pattern_naming (round 10)",
+        "surface": "pattern_naming",
+        "copy": {
+          "romantic": "High Attraction, Unaligned Rhythm — you feel it, but at different speeds",
+          "friendship": "Soulmate Friendship — you understand each other without words",
+          "work": "Efficient Collaboration — the trust is there, execution is the lever"
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 7,
+          "patternClarity": 14,
+          "upgradeStrength": 5,
+          "score": 111
+        }
+      },
+      "variantB": {
+        "name": "Variant B — pattern_naming (round 10)",
+        "surface": "pattern_naming",
+        "copy": {
+          "romantic": "High Attraction, Unaligned Rhythm — compatibility confirmed",
+          "friendship": "Soulmate Friendship — compatibility confirmed",
+          "work": "Efficient Collaboration — synergy confirmed"
+        },
+        "metrics": {
+          "headlineStrength": 12,
+          "emotionalResonance": 0,
+          "patternClarity": 14,
+          "upgradeStrength": 5,
+          "score": 99
+        }
+      },
+      "winner": "A",
+      "scoreA": 111,
+      "scoreB": 99,
+      "margin": 12,
+      "apiLatencyMs": 1174
+    }
+  ]
+}
