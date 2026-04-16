@@ -349,15 +349,27 @@ function generateSummary(
   const headlines: Record<string, Record<string, string>> = {
     romantic: {
       zh: overallAvg > 70 ? '相互吸引，成长同步' : overallAvg > 50 ? '有差异，但吸引力存在' : '需要主动经营的一对',
-      en: overallAvg > 70 ? 'Mutual attraction, synchronized growth' : overallAvg > 50 ? 'Differences exist, attraction is real' : 'A pair requiring active investment',
+      en: overallAvg > 70
+        ? 'You feel something real — synchronized growth is already underway'
+        : overallAvg > 50
+        ? 'The attraction is genuine — the question is whether you\'re both ready to meet it'
+        : 'The pull between you is honest — without intention, it stays still',
     },
     friendship: {
       zh: overallAvg > 70 ? '默契十足的朋友' : overallAvg > 50 ? '可以深聊的伙伴' : '需要跨越差异的朋友',
-      en: overallAvg > 70 ? 'Highly默契 friends' : overallAvg > 50 ? 'Compatible companions' : 'Friends bridging differences',
+      en: overallAvg > 70
+        ? 'You understand each other in ways that don\'t need explaining'
+        : overallAvg > 50
+        ? 'This friendship has real depth — the gap is in how much you let it be seen'
+        : 'You\'re compatible enough to matter to each other — that\'s worth something',
     },
     work: {
       zh: overallAvg > 70 ? '高效互信的搭档' : overallAvg > 50 ? '有潜力的合作关系' : '需要磨合的工作伙伴',
-      en: overallAvg > 70 ? 'Highly effective partners' : overallAvg > 50 ? 'Promising professional bond' : 'Colleagues needing alignment',
+      en: overallAvg > 70
+        ? 'You work well together — the trust is there, now it\'s about pace'
+        : overallAvg > 50
+        ? 'This partnership has potential — the question is who adjusts first'
+        : 'You\'re functional as colleagues — bridging differences is where the work begins',
     },
   };
 
@@ -367,16 +379,16 @@ function generateSummary(
         ? '你们之间的连接感很强，节奏同步是接下来最重要的课题。'
         : '吸引是真实的，但建立深度信任需要时间和有意识的沟通。',
       en: dimensions.attraction.score > 70
-        ? 'Your connection is strong; rhythm synchronization is the key next step.'
-        : 'Attraction is real, but deep trust requires time and intentional communication.',
+        ? 'You feel the connection — but are you building it, or just experiencing it?'
+        : 'The attraction is honest — without intention, it simply stays still.',
     },
     friendship: {
       zh: '你们的友谊建立在相互理解之上，沟通让你们的关系持续加深。',
-      en: 'Your friendship is built on mutual understanding; communication deepens the bond.',
+      en: 'You get each other — but how much of that are you actually letting be seen?',
     },
     work: {
       zh: '合作关系的效果取决于你们能否有效管理节奏和沟通风格的差异。',
-      en: 'The effectiveness of this partnership depends on managing rhythm and communication differences.',
+      en: 'The foundation is real — what happens next depends on how you handle the gaps.',
     },
   };
 
