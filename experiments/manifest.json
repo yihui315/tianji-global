@@ -14,6 +14,30 @@
       "scoreA": 126,
       "scoreB": 125,
       "margin": 0
+    },
+    {
+      "id": "rel-ab-002",
+      "timestamp": "2026-04-16T09:19:00.000Z",
+      "before": null,
+      "after": null,
+      "decision": "pipeline_failed",
+      "focus": "hero_summary",
+      "winner": null,
+      "notes": "Codex step failed: OPENAI_API_KEY secret not configured in GitHub Actions. Pipeline infrastructure validated: npm install ✅, audits ✅, manifest recording ✅. Add OPENAI_API_KEY to repo settings to enable full run.",
+      "scoreA": null,
+      "scoreB": null,
+      "margin": null,
+      "infrastructure": {
+        "dependencies": "passed",
+        "baseline_score": "passed",
+        "audits": "passed",
+        "codex": "failed_missing_secret",
+        "compare": "skipped",
+        "decide": "skipped",
+        "report": "skipped",
+        "record": "skipped",
+        "pr": "skipped"
+      }
     }
   ],
   "experimentFaces": {
