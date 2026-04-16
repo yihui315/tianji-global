@@ -22,7 +22,13 @@ jobs:
 
       - run: npm ci
 
-      # Baseline audits
+      # ── Baseline score (before experiment) ─────────────────────────────────
+      - name: Collect baseline score
+        run: |
+          npx tsx scripts/calculate-relationship-score.ts
+          cp relationship-score.json relationship-score-before.json
+
+      # ── Baseline audits ──────────────────────────────────────────────────────
       - name: Baseline audits
         run: |
           npm run audit:routes
@@ -30,7 +36,7 @@ jobs:
           npm run audit:share
           npm run audit:upgrade
 
-      # A/B Experiment via Codex
+      # ── A/B Experiment via Codex ─────────────────────────────────────────────
       - name: Run Codex A/B experiment
         uses: openai/codex-action@v1
         with:
@@ -39,7 +45,7 @@ jobs:
             Read program.md.
 
             Run one A/B experiment for the Relationship module.
-            Focus on: Hero Summary (headline, one-liner, CTA copy).
+            Focus on ONE surface: Hero Summary (headline, one-liner, CTA copy).
 
             Create two variants:
             - Variant A: emotional framing ("You feel something real, but...")
@@ -49,25 +55,74 @@ jobs:
             - experiments/relationship/variant-a.json
             - experiments/relationship/variant-b.json
 
-            Then run the comparison:
-            npx tsx scripts/compare-ab-variants.ts
+            Each variant JSON must include:
+            {
+              "name": "Variant A — Hero Summary emotional",
+              "focus": "hero_summary",
+              "metrics": {
+                "hasHeroSummary": true,
+                "hasPattern": true,
+                "hasFiveDimensions": true,
+                "hasCurrentWindow": true,
+                "hasPracticalGuidance": true,
+                "hasPremiumSection": true,
+                "shareModes": 3,
+                "headlineStrength": 14,
+                "patternClarity": 12,
+                "emotionalResonance": 13,
+                "upgradeStrength": 10
+              }
+            }
 
-            Output: codex-upgrade-report.md
-          codex_args: "exec -c model_reasoning_effort=high"
+            IMPORTANT: also update the actual source files (relationship-engine.ts)
+            with the winning copy AFTER comparison is done. Codex should produce the
+            winning copy, not just the variant JSON files.
 
-      # Compare variants
+      # ── Compare A/B variants ────────────────────────────────────────────────
       - name: Compare A/B variants
         run: npx tsx scripts/compare-ab-variants.ts
 
-      # Record experiment
-      - name: Record experiment
-        run: npx tsx scripts/record-experiment.ts
+      # ── Current score (after experiment) ────────────────────────────────────
+      - name: Collect current score
+        run: |
+          npx tsx scripts/calculate-relationship-score.ts
+          cp relationship-score.json relationship-score-after.json
 
-      # Create PR only if experiment succeeded
+      # ── Decide keep or discard ──────────────────────────────────────────────
+      - name: Decide keep or discard
+        run: npx tsx scripts/decide-keep-or-discard.ts
+        continue-on-error: true
+
+      # ── Generate upgrade report (REQUIRED gate) ──────────────────────────────
+      - name: Generate upgrade report
+        run: npx tsx scripts/generate-upgrade-report.ts
+
+      # ── GATE: codex-upgrade-report.md must exist ─────────────────────────────
+      - name: Verify report exists
+        run: test -f codex-upgrade-report.md || { echo "❌ codex-upgrade-report.md not generated"; exit 1; }
+
+      # ── Record experiment in manifest ───────────────────────────────────────
+      - name: Record experiment
+        run: npx tsx scripts/record-experiment.ts ab-result.json
+
+      # ── Commit winning copy to main (skip if discard) ──────────────────────
+      - name: Commit winning copy
+        if: success() && !contains(needs.*.result, 'skipped')
+        run: |
+          git config user.name "Codex Agent"
+          git config user.email "codex@tianji.global"
+          git add src/lib/relationship-engine.ts
+          git add experiments/relationship/
+          git add experiments/manifest.json
+          git add codex-upgrade-report.md
+          git diff --cached --quiet && echo "No changes to commit" || \
+            git commit -m "$(cat codex-upgrade-report.md | head -5)"
+
+      # ── Create PR ────────────────────────────────────────────────────────────
       - name: Create PR
         if: success()
         uses: peter-evans/create-pull-request@v7
         with:
           branch: codex/relationship-ab
-          title: "Codex: Relationship A/B evolution — winner"
+          title: "Codex: Relationship A/B evolution — rel-ab-latest"
           body-path: codex-upgrade-report.md

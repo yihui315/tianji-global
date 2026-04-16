@@ -13,7 +13,9 @@
     "audit:routes": "tsx scripts/audit-routes.ts",
     "audit:copy": "tsx scripts/audit-copy.ts",
     "audit:share": "tsx scripts/audit-share.ts",
-    "audit:upgrade": "tsx scripts/calculate-relationship-score.ts"
+    "audit:upgrade": "tsx scripts/calculate-relationship-score.ts",
+    "experiment:report": "tsx scripts/generate-upgrade-report.ts",
+    "experiment:record": "tsx scripts/record-experiment.ts"
   },
   "keywords": [
     "fortune",

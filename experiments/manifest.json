@@ -1,7 +1,21 @@
 {
   "version": 1,
   "module": "relationship",
-  "runs": [],
+  "runs": [
+    {
+      "id": "rel-ab-001",
+      "timestamp": "2026-04-16T09:03:04.649Z",
+      "before": 85,
+      "after": 85,
+      "decision": "discard",
+      "focus": "hero_summary",
+      "winner": "A",
+      "notes": "Score improved by 0 pts (< 2pt threshold) — experiment discarded",
+      "scoreA": 126,
+      "scoreB": 125,
+      "margin": 0
+    }
+  ],
   "experimentFaces": {
     "A": "Hero Summary (headline, one-liner, CTA — upgrade conversion)",
     "B": "Five Dimension Cards (clarity, human tone, specificity)",
