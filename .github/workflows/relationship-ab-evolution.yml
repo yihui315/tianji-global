@@ -72,7 +72,10 @@ jobs:
 
       # ── Compare A/B ───────────────────────────────────────────────────────
       - name: Compare A/B variants
-        run: npx tsx scripts/compare-ab-variants.ts
+        run: |
+          npx tsx scripts/compare-ab-variants.ts \
+            experiments/relationship/variant-a.json \
+            experiments/relationship/variant-b.json
 
       # ── Decide keep or discard ────────────────────────────────────────────
       - name: Decide keep or discard

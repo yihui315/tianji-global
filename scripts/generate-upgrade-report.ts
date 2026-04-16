@@ -77,8 +77,14 @@ const runId = `rel-ab-${String(
   JSON.parse(fs.readFileSync(path.join(CWD, "experiments/manifest.json"), "utf8")?.runs?.length ?? 0
 ) + 1).padStart(3, "0")}`;
 
-const beforeScore = currentScore?.score ?? abResult.beforeScore ?? abResult.before ?? 0;
-const afterScore = currentScore?.score ?? abResult.afterScore ?? abResult.after ?? abResult.scoreA ?? 0;
+const beforeScore =
+  (currentScore?.score as number)
+  ?? ((currentScore as Record<string, number>)?.score ?? 0);
+
+const afterScore =
+  ((scoreData as Record<string, {score?:number}>).score ?? 0)
+  ?? (abResult.scoreA as number)
+  ?? 0;
 const margin = afterScore - beforeScore;
 const winner = abResult.winner ?? decision?.decision === "keep" ? "A" : "B";
 const decision_ = decision?.decision ?? (margin >= 2 ? "keep" : "discard");
