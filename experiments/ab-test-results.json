@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-04-16T08:22:43.008Z",
-  "totalRounds": 10,
-  "winsA": 10,
+  "timestamp": "2026-04-16T08:25:20.774Z",
+  "totalRounds": 20,
+  "winsA": 20,
   "winsB": 0,
   "ties": 0,
-  "avgScoreA": 102.5,
-  "avgScoreB": 91,
+  "avgScoreA": 101.9,
+  "avgScoreB": 90.25,
   "results": [
     {
       "round": 1,
@@ -44,7 +44,7 @@
       "scoreA": 108,
       "scoreB": 90,
       "margin": 18,
-      "apiLatencyMs": 1189
+      "apiLatencyMs": 1215
     },
     {
       "round": 2,
@@ -85,7 +85,7 @@
       "scoreA": 101,
       "scoreB": 91,
       "margin": 10,
-      "apiLatencyMs": 1180
+      "apiLatencyMs": 1203
     },
     {
       "round": 3,
@@ -124,7 +124,7 @@
       "scoreA": 102,
       "scoreB": 83,
       "margin": 19,
-      "apiLatencyMs": 1185
+      "apiLatencyMs": 1245
     },
     {
       "round": 4,
@@ -163,7 +163,7 @@
       "scoreA": 93,
       "scoreB": 93,
       "margin": 0,
-      "apiLatencyMs": 1218
+      "apiLatencyMs": 1203
     },
     {
       "round": 5,
@@ -202,7 +202,7 @@
       "scoreA": 105,
       "scoreB": 92,
       "margin": 13,
-      "apiLatencyMs": 1176
+      "apiLatencyMs": 1201
     },
     {
       "round": 6,
@@ -243,7 +243,7 @@
       "scoreA": 103,
       "scoreB": 96,
       "margin": 7,
-      "apiLatencyMs": 1214
+      "apiLatencyMs": 1191
     },
     {
       "round": 7,
@@ -282,7 +282,7 @@
       "scoreA": 102,
       "scoreB": 85,
       "margin": 17,
-      "apiLatencyMs": 1185
+      "apiLatencyMs": 1169
     },
     {
       "round": 8,
@@ -321,7 +321,7 @@
       "scoreA": 92,
       "scoreB": 91,
       "margin": 1,
-      "apiLatencyMs": 1195
+      "apiLatencyMs": 1198
     },
     {
       "round": 9,
@@ -360,7 +360,7 @@
       "scoreA": 108,
       "scoreB": 90,
       "margin": 18,
-      "apiLatencyMs": 1173
+      "apiLatencyMs": 1205
     },
     {
       "round": 10,
@@ -401,6 +401,400 @@
       "scoreA": 111,
       "scoreB": 99,
       "margin": 12,
+      "apiLatencyMs": 1194
+    },
+    {
+      "round": 11,
+      "surface": "dimension_copy",
+      "variantA": {
+        "name": "Variant A — dimension_copy (round 11)",
+        "surface": "dimension_copy",
+        "copy": {
+          "attraction": "There's real chemistry here. But chemistry alone doesn't sync your schedules or align your expectations.",
+          "communication": "Communication is a strength — you both speak the same underlying language. The risk: assuming you're clearer than you are."
+        },
+        "metrics": {
+          "headlineStrength": 20,
+          "emotionalResonance": 7,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 105
+        }
+      },
+      "variantB": {
+        "name": "Variant B — dimension_copy (round 11)",
+        "surface": "dimension_copy",
+        "copy": {
+          "attraction": "Attraction: 85/100. Chemistry index: positive.",
+          "communication": "Communication index: 78/100. Type: COMPATIBLE."
+        },
+        "metrics": {
+          "headlineStrength": 5,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 83
+        }
+      },
+      "winner": "A",
+      "scoreA": 105,
+      "scoreB": 83,
+      "margin": 22,
+      "apiLatencyMs": 1209
+    },
+    {
+      "round": 12,
+      "surface": "upgrade_section",
+      "variantA": {
+        "name": "Variant A — upgrade_section (round 12)",
+        "surface": "upgrade_section",
+        "copy": {
+          "headline": "There's genuine potential — unlock the full picture",
+          "cta": "See the full picture — your pattern, your timing, your forecast"
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 2,
+          "patternClarity": 5,
+          "upgradeStrength": 7,
+          "score": 99
+        }
+      },
+      "variantB": {
+        "name": "Variant B — upgrade_section (round 12)",
+        "surface": "upgrade_section",
+        "copy": {
+          "headline": "Premium insights — 5-year forecast, timing analysis",
+          "cta": "Unlock all insights — premium relationship map"
+        },
+        "metrics": {
+          "headlineStrength": 12,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 6,
+          "score": 91
+        }
+      },
+      "winner": "A",
+      "scoreA": 99,
+      "scoreB": 91,
+      "margin": 8,
+      "apiLatencyMs": 1213
+    },
+    {
+      "round": 13,
+      "surface": "hero_summary",
+      "variantA": {
+        "name": "Variant A — hero_summary (round 13)",
+        "surface": "hero_summary",
+        "copy": {
+          "headline": "Something is real here — but are you both meeting it?",
+          "oneLiner": "You feel the connection — but are you building it, or just experiencing it?"
+        },
+        "metrics": {
+          "headlineStrength": 20,
+          "emotionalResonance": 10,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 108
+        }
+      },
+      "variantB": {
+        "name": "Variant B — hero_summary (round 13)",
+        "surface": "hero_summary",
+        "copy": {
+          "headline": "Relationship compatibility indexed — full breakdown in premium",
+          "oneLiner": "Your compatibility profile is ready. Unlock the full relationship map."
+        },
+        "metrics": {
+          "headlineStrength": 12,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 90
+        }
+      },
+      "winner": "A",
+      "scoreA": 108,
+      "scoreB": 90,
+      "margin": 18,
+      "apiLatencyMs": 1171
+    },
+    {
+      "round": 14,
+      "surface": "pattern_naming",
+      "variantA": {
+        "name": "Variant A — pattern_naming (round 14)",
+        "surface": "pattern_naming",
+        "copy": {
+          "romantic": "Intense Chemistry, Pacing Gap — the pull is real, the sync isn't",
+          "friendship": "Deep Compatible Friends — the bond is real, but how visible is it?",
+          "work": "Strategic Partnership — high potential, the gap is in pace"
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 0,
+          "patternClarity": 11,
+          "upgradeStrength": 5,
+          "score": 101
+        }
+      },
+      "variantB": {
+        "name": "Variant B — pattern_naming (round 14)",
+        "surface": "pattern_naming",
+        "copy": {
+          "romantic": "Intense Chemistry, Pacing Gap — score indexed",
+          "friendship": "Deep Compatible Friends — index calculated",
+          "work": "Strategic Partnership — potential indexed"
+        },
+        "metrics": {
+          "headlineStrength": 10,
+          "emotionalResonance": 0,
+          "patternClarity": 8,
+          "upgradeStrength": 5,
+          "score": 91
+        }
+      },
+      "winner": "A",
+      "scoreA": 101,
+      "scoreB": 91,
+      "margin": 10,
+      "apiLatencyMs": 1203
+    },
+    {
+      "round": 15,
+      "surface": "dimension_copy",
+      "variantA": {
+        "name": "Variant A — dimension_copy (round 15)",
+        "surface": "dimension_copy",
+        "copy": {
+          "attraction": "The attraction is genuine — not just physical. It's the kind that makes you want to know someone fully.",
+          "communication": "You have a rhythm in conversation. Sometimes you anticipate each other. Sometimes you miss."
+        },
+        "metrics": {
+          "headlineStrength": 20,
+          "emotionalResonance": 4,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 102
+        }
+      },
+      "variantB": {
+        "name": "Variant B — dimension_copy (round 15)",
+        "surface": "dimension_copy",
+        "copy": {
+          "attraction": "Attraction profile: MAGNETIC. Recommended: pursue.",
+          "communication": "Communication profile: HARMONIZED. Sync rate: 82%."
+        },
+        "metrics": {
+          "headlineStrength": 5,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 83
+        }
+      },
+      "winner": "A",
+      "scoreA": 102,
+      "scoreB": 83,
+      "margin": 19,
+      "apiLatencyMs": 1204
+    },
+    {
+      "round": 16,
+      "surface": "upgrade_section",
+      "variantA": {
+        "name": "Variant A — upgrade_section (round 16)",
+        "surface": "upgrade_section",
+        "copy": {
+          "headline": "You feel something real — see where it's heading",
+          "cta": "See what your pattern means for the next 12 months"
+        },
+        "metrics": {
+          "headlineStrength": 20,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 0,
+          "score": 93
+        }
+      },
+      "variantB": {
+        "name": "Variant B — upgrade_section (round 16)",
+        "surface": "upgrade_section",
+        "copy": {
+          "headline": "Premium unlocked — full relationship analysis",
+          "cta": "Upgrade to Premium — full analysis, no restrictions"
+        },
+        "metrics": {
+          "headlineStrength": 10,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 10,
+          "score": 93
+        }
+      },
+      "winner": "A",
+      "scoreA": 93,
+      "scoreB": 93,
+      "margin": 0,
+      "apiLatencyMs": 1218
+    },
+    {
+      "round": 17,
+      "surface": "hero_summary",
+      "variantA": {
+        "name": "Variant A — hero_summary (round 17)",
+        "surface": "hero_summary",
+        "copy": {
+          "headline": "The pull between you is genuine — the question is timing",
+          "oneLiner": "You feel the connection — but are you building it, or just experiencing it?"
+        },
+        "metrics": {
+          "headlineStrength": 20,
+          "emotionalResonance": 10,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 108
+        }
+      },
+      "variantB": {
+        "name": "Variant B — hero_summary (round 17)",
+        "surface": "hero_summary",
+        "copy": {
+          "headline": "Compatibility profile generated — premium insights available",
+          "oneLiner": "Compatibility indexed. Full pattern, timing, and 5-year forecast — in premium."
+        },
+        "metrics": {
+          "headlineStrength": 12,
+          "emotionalResonance": 2,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 92
+        }
+      },
+      "winner": "A",
+      "scoreA": 108,
+      "scoreB": 92,
+      "margin": 16,
+      "apiLatencyMs": 1200
+    },
+    {
+      "round": 18,
+      "surface": "pattern_naming",
+      "variantA": {
+        "name": "Variant A — pattern_naming (round 18)",
+        "surface": "pattern_naming",
+        "copy": {
+          "romantic": "Magnetic Connection, Off-Beat Pace — you want the same thing, differently",
+          "friendship": "Effortless Sync Friends — you get each other, fully",
+          "work": "High Synergy Colleagues — aligned on goals, different on method"
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 2,
+          "patternClarity": 11,
+          "upgradeStrength": 5,
+          "score": 103
+        }
+      },
+      "variantB": {
+        "name": "Variant B — pattern_naming (round 18)",
+        "surface": "pattern_naming",
+        "copy": {
+          "romantic": "Magnetic Connection, Off-Beat Pace — pattern confirmed",
+          "friendship": "Effortless Sync Friends — sync confirmed",
+          "work": "High Synergy Colleagues — alignment confirmed"
+        },
+        "metrics": {
+          "headlineStrength": 12,
+          "emotionalResonance": 0,
+          "patternClarity": 11,
+          "upgradeStrength": 5,
+          "score": 96
+        }
+      },
+      "winner": "A",
+      "scoreA": 103,
+      "scoreB": 96,
+      "margin": 7,
+      "apiLatencyMs": 1210
+    },
+    {
+      "round": 19,
+      "surface": "dimension_copy",
+      "variantA": {
+        "name": "Variant A — dimension_copy (round 19)",
+        "surface": "dimension_copy",
+        "copy": {
+          "attraction": "You feel the pull between you — strong, sometimes overwhelming. The question is whether you're both feeling it at the same intensity.",
+          "communication": "You understand each other's silences as much as words. But silence can be read wrong — check intent."
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 7,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 102
+        }
+      },
+      "variantB": {
+        "name": "Variant B — dimension_copy (round 19)",
+        "surface": "dimension_copy",
+        "copy": {
+          "attraction": "Attraction score: HIGH. Compatibility index: FAVORABLE.",
+          "communication": "Communication score: STRONG. Communication style: aligned."
+        },
+        "metrics": {
+          "headlineStrength": 7,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 5,
+          "score": 85
+        }
+      },
+      "winner": "A",
+      "scoreA": 102,
+      "scoreB": 85,
+      "margin": 17,
+      "apiLatencyMs": 1194
+    },
+    {
+      "round": 20,
+      "surface": "upgrade_section",
+      "variantA": {
+        "name": "Variant A — upgrade_section (round 20)",
+        "surface": "upgrade_section",
+        "copy": {
+          "headline": "The connection is honest — here's what happens next",
+          "cta": "Unlock your relationship timing — when it peaks, when it needs work"
+        },
+        "metrics": {
+          "headlineStrength": 17,
+          "emotionalResonance": 2,
+          "patternClarity": 5,
+          "upgradeStrength": 0,
+          "score": 92
+        }
+      },
+      "variantB": {
+        "name": "Variant B — upgrade_section (round 20)",
+        "surface": "upgrade_section",
+        "copy": {
+          "headline": "Upgrade to premium — complete pattern breakdown",
+          "cta": "Get the complete report — premium features unlocked"
+        },
+        "metrics": {
+          "headlineStrength": 10,
+          "emotionalResonance": 0,
+          "patternClarity": 5,
+          "upgradeStrength": 8,
+          "score": 91
+        }
+      },
+      "winner": "A",
+      "scoreA": 92,
+      "scoreB": 91,
+      "margin": 1,
       "apiLatencyMs": 1174
     }
   ]
