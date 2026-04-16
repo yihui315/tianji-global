@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-04-16T08:47:16.453Z",
+  "modules": [
+    "fortune"
+  ],
+  "rounds": 20,
+  "results": [
+    {
+      "module": "fortune",
+      "rounds": 20,
+      "winsA": 19,
+      "winsB": 1,
+      "ties": 0,
+      "avgScoreA": 32,
+      "avgScoreB": 25,
+      "marginAvg": 7,
+      "apiLatencyAvgMs": 0,
+      "winner": "A",
+      "scoreboard": []
+    }
+  ],
+  "summary": {
+    "totalWinsA": 19,
+    "totalWinsB": 1,
+    "modulesWonByA": 1,
+    "modulesWonByB": 0,
+    "modulesTied": 0
+  }
+}
