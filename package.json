@@ -8,8 +8,14 @@
     "build": "next build",
     "start": "next start",
     "serve": "NODE_ENV=production node src/index.js",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run --coverage",
-    "lint": "next lint"
+    "lint": "next lint",
+    "audit:routes": "node scripts/audit-routes.ts",
+    "audit:copy": "node scripts/audit-copy.ts",
+    "audit:share": "node scripts/audit-share.ts",
+    "audit:upgrade": "node scripts/audit-upgrade.ts",
+    "upgrade:plan": "node scripts/generate-upgrade-plan.ts"
   },
   "keywords": [
     "fortune",
