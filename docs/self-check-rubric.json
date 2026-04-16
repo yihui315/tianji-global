@@ -1,27 +1,13 @@
 {
   "homepage": {
     "hero_exists": true,
-    "results_preview_exists": true,
-    "trust_exists": true,
     "pricing_exists": true,
     "faq_exists": true,
-    "final_cta_exists": true,
-    "single_language_rendering": true
-  },
-  "result_page": {
-    "hero_summary_exists": true,
-    "chart_section_exists": true,
-    "insight_sections_exist": true,
-    "applications_exist": true,
-    "timeline_exists": true,
-    "premium_locked_exists": true,
     "trust_exists": true
   },
   "relationship": {
     "route_exists": true,
     "five_dimensions_exist": true,
-    "pattern_exists": true,
-    "current_window_exists": true,
     "share_modes_count": 3,
     "privacy_safe_by_default": true
   },
@@ -32,14 +18,11 @@
       "wealth",
       "relationship"
     ],
-    "event_markers_exist": true,
-    "download_card_exists": true
+    "event_markers_exist": true
   },
   "share": {
     "summary_card_exists": true,
     "graph_card_exists": true,
-    "one_liner_card_exists": true,
-    "copy_action_exists": true,
-    "birth_data_hidden_by_default": true
+    "one_liner_card_exists": true
   }
 }

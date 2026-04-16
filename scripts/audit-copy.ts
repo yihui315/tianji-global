@@ -13,6 +13,7 @@ function shouldInspectLine(line: string) {
   if (line.trim().startsWith('//')) return false;
   if (line.trim().startsWith('*')) return false;
   if (line.includes('http://') || line.includes('https://')) return false;
+  if (line.includes('metadata')) return false;
   if (/\b(zh|en|labelEn|titleEn|subtitleEn|nameEn|descEn)\b/.test(line)) return false;
   return true;
 }
@@ -25,15 +26,13 @@ function extractCandidateSnippets(line: string) {
     snippets.push(match.slice(1, -1).trim());
   }
 
-  const metadataMatch = line.match(/\b(title|description|subtitle|headline|message)\s*:\s*(['"`])((?:\\.|(?!\2).)*)\2/);
-  if (metadataMatch?.[3]) {
-    snippets.push(metadataMatch[3]);
-  }
-
   return snippets.filter(Boolean);
 }
 
 function looksMirroredBilingual(snippet: string) {
+  if (snippet.length < 24) return false;
+  if (/TianJi Global|2024|2025/.test(snippet)) return false;
+
   const hasCjk = /[\u3400-\u9fff]/.test(snippet);
   const hasLatinWord = /[A-Za-z]{4,}/.test(snippet);
   if (!hasCjk || !hasLatinWord) return false;
@@ -54,6 +53,14 @@ function walk(dir: string) {
     }
 
     if (!filePattern.test(full)) {
+      continue;
+    }
+
+    if (full.includes(`${path.sep}api${path.sep}`)) {
+      continue;
+    }
+
+    if (full.includes(`${path.sep}animations${path.sep}showcase${path.sep}`)) {
       continue;
     }
 

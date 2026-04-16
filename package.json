@@ -11,10 +11,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --coverage",
     "lint": "next lint",
-    "audit:routes": "node scripts/audit-routes.ts",
-    "audit:copy": "node scripts/audit-copy.ts",
-    "audit:share": "node scripts/audit-share.ts",
-    "audit:upgrade": "node scripts/audit-upgrade.ts",
+    "audit:routes": "tsx scripts/audit-routes.ts",
+    "audit:copy": "tsx scripts/audit-copy.ts",
+    "audit:share": "tsx scripts/audit-share.ts",
+    "audit:upgrade": "tsx scripts/audit-upgrade.ts",
     "upgrade:plan": "node scripts/generate-upgrade-plan.ts"
   },
   "keywords": [
@@ -88,6 +88,7 @@
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.0",
+    "tsx": "^4.8.1",
     "vitest": "^4.1.3"
   }
 }

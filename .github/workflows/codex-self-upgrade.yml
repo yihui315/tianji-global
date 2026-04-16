@@ -2,8 +2,6 @@ name: codex-self-upgrade
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 2 * * *"
 
 permissions:
   contents: write
@@ -11,8 +9,11 @@ permissions:
   issues: write
 
 jobs:
-  audit-and-upgrade:
+  upgrade:
     runs-on: ubuntu-latest
+    concurrency:
+      group: codex-self-upgrade
+      cancel-in-progress: true
 
     steps:
       - name: Checkout
@@ -21,13 +22,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20
 
       - name: Install
         run: npm ci
-
-      - name: Generate upgrade plan
-        run: npm run upgrade:plan
 
       - name: Run baseline audits
         run: |
@@ -41,25 +39,24 @@ jobs:
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           prompt: |
-            Read AGENTS.md, docs/upgrade-contract.md, docs/release-gates.md, and docs/self-check-rubric.json.
-            Then:
-            1. Identify the top 1-2 repository gaps.
-            2. Implement only those changes.
-            3. Run:
-               npm run typecheck || true
-               npm run lint || true
-               npm run test || true
-               npm run build || true
-               npm run audit:routes
-               npm run audit:copy
-               npm run audit:share
-               npm run audit:upgrade
-            4. If checks fail, repair once.
-            5. Create a concise upgrade summary in codex-upgrade-report.md
+            Read AGENTS.md and docs/self-check-rubric.json.
+            Identify the highest-value small upgrade that improves TianJi without breaking product behavior.
+            Make only small, high-confidence changes.
+            Then run:
+            npm run typecheck
+            npm run lint
+            npm run test || true
+            npm run build
+            npm run audit:routes
+            npm run audit:copy
+            npm run audit:share
+            npm run audit:upgrade
+            If checks fail, repair once.
+            Write a concise summary to codex-upgrade-report.md.
           codex_args: >
             exec -c model_reasoning_effort="high"
 
-      - name: Create PR
+      - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           branch: codex/self-upgrade
