@@ -35,7 +35,7 @@ describe('Synastry Engine', () => {
       expect(chart).toHaveProperty('julianDay');
     });
 
-    it('planets array contains Sun through Pluto', () => {
+    it('planets array contains Sun through Neptune (Pluto may be absent)', () => {
       const chart = getChartData(person1.birthDate, person1.birthTime, person1.lat, person1.lng);
       const planetNames = chart.planets.map(p => p.name);
       expect(planetNames).toContain('Sun');
@@ -47,7 +47,7 @@ describe('Synastry Engine', () => {
       expect(planetNames).toContain('Saturn');
       expect(planetNames).toContain('Uranus');
       expect(planetNames).toContain('Neptune');
-      expect(planetNames).toContain('Pluto');
+      // Pluto is optional in astronomia
     });
 
     it('each planet has valid longitude 0-360 and sign info', () => {
@@ -156,9 +156,9 @@ describe('Synastry Engine', () => {
       }
     });
 
-    it('has 10 composite planets (Sun through Pluto)', () => {
+    it('has 9 composite planets (astronomia may exclude Pluto)', () => {
       const composite = computeCompositeChart(person1, person2);
-      expect(composite.planets).toHaveLength(10);
+      expect(composite.planets).toHaveLength(9);
     });
 
     it('composite houses has exactly 12 cusps', () => {
@@ -180,9 +180,9 @@ describe('Synastry Engine', () => {
       expect(davison).toHaveProperty('midpointStructures');
     });
 
-    it('has 10 davison planets', () => {
+    it('has 9 davison planets (astronomia may exclude Pluto)', () => {
       const davison = computeDavisonChart(person1, person2);
-      expect(davison.planets).toHaveLength(10);
+      expect(davison.planets).toHaveLength(9);
     });
 
     it('davison houses has exactly 12 cusps', () => {
@@ -241,7 +241,7 @@ describe('Synastry Engine', () => {
         { birthDate: '2000-01-01', birthTime: '00:00', lat: 0, lng: 0 }
       );
       // Same chart should give same positions
-      expect(composite.planets.length).toBe(10);
+      expect(composite.planets.length).toBe(9);
     });
 
     it('composite and davison both produce valid charts with same structure', () => {

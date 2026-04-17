@@ -76,21 +76,36 @@ export interface ZiWeiChartData {
   transformationStars: string[];
 }
 
-// ─── Insights ─────────────────────────────────────────────────────────────────
+// ─── Narrative Insight Block ─────────────────────────────────────────────────
+// Three-layer narrative structure per insight module.
+// Mirrors Codebase Onboarding Engineer output discipline:
+//   1. Resonance hook  — one sentence, emotional connection
+//   2. Deep dive       — evidence, analysis, nuance
+//   3. Action closure   — specific, grounded guidance
+
+export interface NarrativeBlock {
+  hook: string;    // 一句话共鸣开场（情感锚点）
+  body: string;    // 深度展开（证据+分析）
+  closure: string; // 行动收尾（具体指引）
+}
 
 export interface ReadingInsights {
-  structure: string;      // 能量结构分析 (always free)
-  relationship: string;   // 关系模式 (premium)
-  career: string;          // 事业发展 (premium)
-  risk: string;           // 风险预警 (premium)
+  structure: NarrativeBlock;   // 能量结构分析 (always free)
+  relationship: NarrativeBlock; // 关系模式 (premium)
+  career: NarrativeBlock;       // 事业发展 (premium)
+  risk: NarrativeBlock;         // 风险预警 (premium)
 }
 
 // ─── Application Modules ──────────────────────────────────────────────────────
+// Three-layer narrative structure mapping:
+//   hook  → current（共鸣开场，当前状态）
+//   body  → trend（深度分析，未来趋势逻辑）
+//   closure → advice list（行动收尾，3条具体建议）
 
 export interface ApplicationModule {
-  current: string;   // 当前状态
-  trend: string;     // 未来趋势
-  advice: string[];  // 行动建议
+  hook: string;       // 共鸣开场（当前状态，一句话锚定）
+  body: string;       // 深度展开（未来趋势+内在逻辑）
+  advice: string[];   // 行动收尾（3条具体可执行建议）
 }
 
 export interface ReadingApplications {

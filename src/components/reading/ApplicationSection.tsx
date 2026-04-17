@@ -59,22 +59,23 @@ function AppModuleCard({ title, icon, data, accentColor, isLocked, onUnlock, lan
       </div>
 
       <div className="space-y-3">
-        <div>
-          <div className="text-xs font-medium mb-1" style={{ color: accentColor }}>
-            {lang === 'zh' ? '当前状态' : 'Current State'}
-          </div>
-          <p className="text-sm" style={{ color: 'rgba(226,232,240,0.8)' }}>
-            {data?.current ?? '—'}
-          </p>
-        </div>
-        <div>
-          <div className="text-xs font-medium mb-1" style={{ color: accentColor }}>
-            {lang === 'zh' ? '未来趋势' : 'Future Trend'}
-          </div>
-          <p className="text-sm" style={{ color: 'rgba(226,232,240,0.8)' }}>
-            {data?.trend ?? '—'}
-          </p>
-        </div>
+        {/* Layer 1: Hook — resonance opener, highlighted */}
+        <p
+          className="text-sm italic leading-relaxed"
+          style={{ color: 'rgba(251,191,36,0.85)' }}
+        >
+          ✦ {data?.hook ?? '—'}
+        </p>
+
+        {/* Divider */}
+        <div className="h-px w-8" style={{ background: `linear-gradient(to right, ${accentColor}, transparent)` }} />
+
+        {/* Layer 2: Body — deep dive, replaces "未来趋势" */}
+        <p className="text-sm leading-relaxed" style={{ color: 'rgba(226,232,240,0.8)' }}>
+          {data?.body ?? '—'}
+        </p>
+
+        {/* Layer 3: Advice — action items, unchanged */}
         <div>
           <div className="text-xs font-medium mb-1" style={{ color: accentColor }}>
             {lang === 'zh' ? '行动建议' : 'Action Items'}

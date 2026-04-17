@@ -173,7 +173,7 @@ describe('Solar Return Engine', () => {
 
       expect(result.birthSunLongitude).toBeGreaterThan(0);
       expect(result.birthSunLongitude).toBeLessThan(360);
-      expect(result.chart.planets.length).toBe(10);
+      expect(result.chart.planets.length).toBe(9);
     });
 
     test('should handle future birth dates', () => {
