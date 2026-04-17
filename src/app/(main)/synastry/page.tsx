@@ -530,7 +530,7 @@ return (
     <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
       <div className="star-field" aria-hidden="true" />
       <div className="relative z-10">
-      {/* Glassmorphic Header }
+      {/* Glassmorphic Header */}
       <header className="relative p-6 border-b border-violet-500/20 bg-black/20 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
