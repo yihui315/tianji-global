@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -275,7 +276,7 @@ export default function TransitPage() {
   }, [birthDate, birthTime, lat, lng, targetDate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#030014] via-[#0f0a1e] to-[#030014] relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
       {/* Animated background gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-600/15 rounded-full blur-[128px] animate-pulse" />

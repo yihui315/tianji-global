@@ -95,7 +95,7 @@ export default function EmbedPage() {
   const npmCode = buildNpmCode(selectedType);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 text-white p-4 md:p-8">
+    <main className="min-h-screen bg-[#0a0a0a] text-white p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">

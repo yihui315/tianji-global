@@ -47,7 +47,7 @@ export default function ProfilePage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
         <div className="text-white text-xl">Loading...</div>
       </div>
     );
@@ -84,9 +84,9 @@ export default function ProfilePage() {
   const user = session.user;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900 text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Header */}
-      <header className="px-8 py-6 border-b border-white/10">
+      <header className="px-8 py-6 border-b border-white/[0.06]">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/dashboard" className="text-purple-300 hover:text-white transition text-sm flex items-center gap-1">
@@ -115,7 +115,7 @@ export default function ProfilePage() {
       <main className="max-w-4xl mx-auto p-8">
         <div className="space-y-6">
           {/* Avatar + Identity */}
-          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/10 flex items-center gap-6">
+          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/[0.06] flex items-center gap-6">
             {user?.image ? (
               <img
                 src={user.image}
@@ -137,7 +137,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Editable Fields */}
-          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/10 space-y-5">
+          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/[0.06] space-y-5">
             <h3 className="text-lg font-semibold mb-4">
               {language === 'zh' ? '偏好设置' : 'Preferences'}
             </h3>
@@ -152,7 +152,7 @@ export default function ProfilePage() {
                   type="text"
                   value={user?.name ?? ''}
                   readOnly
-                  className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white/50 cursor-not-allowed"
+                  className="flex-1 px-4 py-2.5 bg-white/5 border border-white/[0.06] rounded-lg text-white/50 cursor-not-allowed"
                 />
                 <span className="text-xs text-slate-500 px-2">
                   {language === 'zh' ? '由 Google 管理' : 'Managed by Google'}
@@ -168,7 +168,7 @@ export default function ProfilePage() {
               <select
                 value={timezone}
                 onChange={e => { setTimezone(e.target.value); setSaved(false); }}
-                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white appearance-none cursor-pointer hover:bg-white/10 transition"
+                className="w-full px-4 py-2.5 bg-white/5 border border-white/[0.06] rounded-lg text-white appearance-none cursor-pointer hover:bg-white/10 transition"
                 style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', backgroundSize: '20px' }}
               >
                 {TIMEZONES.map(tz => (
@@ -205,7 +205,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Account Info */}
-          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/10">
+          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/[0.06]">
             <h3 className="text-lg font-semibold mb-4">
               {language === 'zh' ? '账户信息' : 'Account'}
             </h3>
@@ -227,7 +227,7 @@ export default function ProfilePage() {
                 </span>
               </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-white/10">
+            <div className="mt-4 pt-4 border-t border-white/[0.06]">
               <Link
                 href="/pricing"
                 className="text-sm text-amber-400 hover:text-amber-300 transition"

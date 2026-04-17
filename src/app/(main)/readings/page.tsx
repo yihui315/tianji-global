@@ -83,16 +83,16 @@ export default function ReadingsPage() {
 
   if (status === 'loading' || !session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
         <div className="text-white text-xl">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900 text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Header */}
-      <header className="px-8 py-6 border-b border-white/10">
+      <header className="px-8 py-6 border-b border-white/[0.06]">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/dashboard" className="text-purple-300 hover:text-white transition text-sm flex items-center gap-1">
@@ -139,7 +139,7 @@ export default function ReadingsPage() {
               className={`px-4 py-1.5 rounded-full text-sm transition border ${
                 filter === f.value
                   ? 'bg-purple-600 border-purple-500 text-white'
-                  : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10'
+                  : 'bg-white/5 border-white/[0.06] text-slate-300 hover:bg-white/10'
               }`}
             >
               {language === 'zh' ? f.label : f.labelEn}
@@ -198,7 +198,7 @@ export default function ReadingsPage() {
               return (
                 <div
                   key={reading.id}
-                  className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur rounded-xl border border-white/10 hover:bg-white/10 transition group"
+                  className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur rounded-xl border border-white/[0.06] hover:bg-white/10 transition group"
                 >
                   {/* Type badge */}
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${meta.gradient} flex items-center justify-center text-xl shrink-0`}>

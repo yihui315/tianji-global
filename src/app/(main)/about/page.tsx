@@ -70,7 +70,7 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen relative overflow-hidden">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900">
+      <div className="absolute inset-0 bg-[#0a0a0a]">
         <div className="stars-container">
           {[...Array(100)].map((_, i) => (
             <div
@@ -198,7 +198,7 @@ export default function AboutPage() {
           <p className="text-slate-400 mb-6">{t.contactText}</p>
           <a
             href="mailto:hello@tianji.global"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-amber-600 text-white rounded-full font-medium hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-amber-600 text-white rounded-full font-medium hover:opacity-90 transition-opacity"
           >
             <span>📧</span>
             {t.email}

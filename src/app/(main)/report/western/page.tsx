@@ -587,7 +587,7 @@ export default function WesternReportPage() {
   const summary = chartData ? (lang === 'zh' ? SIGN_SUMMARY[chartData.bigThree.sun.sign].zh : SIGN_SUMMARY[chartData.bigThree.sun.sign].en) : '';
 
   return (
-    <main className="min-h-screen bg-[#0a0a0f] text-white">
+    <main className="min-h-screen bg-[#0a0a0a] text-white">
       {/* ─── INPUT SECTION ─── */}
       {!showReport ? (
         <div className="min-h-screen flex items-center justify-center px-4 py-12">

@@ -9,7 +9,7 @@ export default function CancelPage() {
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900">
+      <div className="absolute inset-0 bg-[#0a0a0a]">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-slate-700/20 rounded-full blur-3xl" />
       </div>

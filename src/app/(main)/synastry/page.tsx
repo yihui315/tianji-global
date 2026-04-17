@@ -133,7 +133,7 @@ function ScoreCircle({ score }: { score: number }) {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-4xl font-bold text-white">{animated}</span>
+        <span className="text-4xl font-serif text-white/90">{animated}</span>
         <span className="text-sm text-slate-400">/ 100</span>
       </div>
     </div>
@@ -527,7 +527,7 @@ export default function SynastryPage() {
     : '';
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#030014] via-[#0f0a1e] to-[#030014] relative overflow-hidden">
+    <main className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
       {/* Animated background gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-32 w-96 h-96 bg-violet-600/20 rounded-full blur-[128px] animate-pulse" />
@@ -658,7 +658,7 @@ export default function SynastryPage() {
         <button
           onClick={handleCalculate}
           disabled={isCalculating}
-          className="w-full py-4 rounded-xl bg-gradient-to-r from-violet-600/80 via-purple-600/80 to-pink-600/80 hover:from-violet-500/90 hover:via-purple-500/90 hover:to-pink-500/90 font-bold text-lg text-white transition-all disabled:opacity-50 hover:scale-[1.01] active:scale-[0.99] backdrop-blur-xl border border-violet-400/30 shadow-[0_0_30px_rgba(124,58,237,0.3)]"
+          className="w-full py-4 rounded-xl bg-gradient-to-r from-violet-600/80 via-purple-600/80 to-pink-600/80 hover:from-violet-500/90 hover:via-purple-500/90 hover:to-pink-500/90 font-bold text-lg text-white transition-all disabled:opacity-50 hover:scale-[1.02] backdrop-blur-xl border border-violet-400/30 shadow-[0_0_30px_rgba(124,58,237,0.3)]"
         >
           {isCalculating
             ? (language === 'zh' ? '计算中...' : 'Calculating...')

@@ -34,7 +34,7 @@ export default function LegalPage() {
   return (
     <main className="min-h-screen relative overflow-hidden">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900">
+      <div className="absolute inset-0 bg-[#0a0a0a]">
         <div className="stars-container">
           {[...Array(100)].map((_, i) => (
             <div
@@ -109,7 +109,7 @@ export default function LegalPage() {
             {/* Privacy Policy Card */}
             <Link
               href="/legal/privacy"
-              className="group relative overflow-hidden rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-purple-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 p-8"
+              className="group relative overflow-hidden rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-purple-500/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/20 p-8"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative">
@@ -128,7 +128,7 @@ export default function LegalPage() {
             {/* Terms of Service Card */}
             <Link
               href="/legal/terms"
-              className="group relative overflow-hidden rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-amber-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20 p-8"
+              className="group relative overflow-hidden rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-amber-500/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-amber-500/20 p-8"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-amber-600/20 to-orange-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative">

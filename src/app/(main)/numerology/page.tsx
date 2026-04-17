@@ -130,7 +130,7 @@ export default function NumerologyPage() {
   const t = (en: string, zh: string) => language === 'zh' ? zh : en;
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#030014] via-[#0f0a1e] to-[#030014] text-white p-4 md:p-8 relative overflow-hidden">
+    <main className="min-h-screen bg-[#0a0a0a] text-white p-4 relative overflow-hidden">
       {/* Animated background gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-32 w-96 h-96 bg-amber-600/15 rounded-full blur-[128px] animate-pulse" />

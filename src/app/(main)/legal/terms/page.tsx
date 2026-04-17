@@ -229,7 +229,7 @@ We will respond to your requests as soon as possible.`
   return (
     <main className="min-h-screen relative overflow-hidden">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-amber-950 to-slate-900">
+      <div className="absolute inset-0 bg-[#0a0a0a]">
         <div className="stars-container">
           {[...Array(100)].map((_, i) => (
             <div
