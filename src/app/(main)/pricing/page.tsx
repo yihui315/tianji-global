@@ -66,45 +66,51 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-900/30 rounded-full blur-3xl" />
-      </div>
+      {/* Taste Rule Background: deep space black + nebula glows */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse at 20% 10%, rgba(42,10,58,0.7) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(124,58,237,0.1) 0%, transparent 45%),
+            radial-gradient(ellipse at 60% 50%, rgba(212,175,55,0.04) 0%, transparent 35%),
+            #0a0a0a
+          `,
+        }}
+      />
 
       {/* Content */}
       <div className="relative z-10">
         {/* Header */}
-        <header className="px-6 py-6 border-b border-white/10">
+        <header className="px-4 py-6 border-b border-white/[0.06]">
           <div className="max-w-6xl mx-auto flex justify-between items-center">
             <Link href="/" className="flex items-center gap-3">
               <span className="text-2xl">🔮</span>
               <div>
-                <h1 className="text-xl font-bold text-white">天机全球 TianJi</h1>
-                <p className="text-purple-300 text-xs">TianJi Global</p>
+                <h1 className="text-xl font-serif text-white/90">天机全球 TianJi</h1>
+                <p className="text-purple-400/60 text-xs">TianJi Global</p>
               </div>
             </Link>
 
             <div className="flex items-center gap-4">
               {/* Language Toggle */}
-              <div className="flex items-center gap-2 bg-white/10 rounded-full p-1">
+              <div className="flex items-center gap-2 bg-white/[0.04] rounded-full p-1 border border-white/[0.06]">
                 <button
                   onClick={() => setLanguage('zh')}
-                  className={`px-3 py-1 rounded-full text-sm transition-all ${
+                  className={`px-3 py-1 rounded-full text-sm transition-all duration-300 ${
                     language === 'zh'
-                      ? 'bg-purple-600 text-white'
-                      : 'text-slate-300 hover:text-white'
+                      ? 'bg-purple-600/80 text-white'
+                      : 'text-white/50 hover:text-white/80'
                   }`}
                 >
                   中文
                 </button>
                 <button
                   onClick={() => setLanguage('en')}
-                  className={`px-3 py-1 rounded-full text-sm transition-all ${
+                  className={`px-3 py-1 rounded-full text-sm transition-all duration-300 ${
                     language === 'en'
-                      ? 'bg-purple-600 text-white'
-                      : 'text-slate-300 hover:text-white'
+                      ? 'bg-purple-600/80 text-white'
+                      : 'text-white/50 hover:text-white/80'
                   }`}
                 >
                   EN
@@ -115,14 +121,14 @@ export default function PricingPage() {
               {isAuthenticated ? (
                 <Link
                   href="/dashboard"
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-sm transition"
+                  className="px-4 py-2 bg-white/05 hover:bg-white/10 border border-white/10 text-white/80 rounded-lg text-sm transition-all duration-300 hover:scale-[1.02]"
                 >
                   {language === 'zh' ? '控制台' : 'Dashboard'}
                 </Link>
               ) : (
                 <Link
                   href="/login"
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg text-sm transition"
+                  className="px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-white/80 rounded-lg text-sm transition-all duration-300 hover:scale-[1.02]"
                 >
                   {language === 'zh' ? '登录' : 'Sign In'}
                 </Link>
@@ -132,20 +138,20 @@ export default function PricingPage() {
         </header>
 
         {/* Pricing Section */}
-        <section className="px-6 py-16 max-w-6xl mx-auto">
+        <section className="px-4 py-20 lg:py-32 max-w-6xl mx-auto">
           {/* Title */}
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif text-white/90 mb-4">
               {t.title}
             </h2>
-            <p className="text-slate-400 text-lg max-w-xl mx-auto">
+            <p className="text-white/50 text-lg max-w-xl mx-auto">
               {t.subtitle}
             </p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="max-w-md mx-auto mb-6 p-4 bg-red-500/20 border border-red-500/40 rounded-lg text-red-200 text-sm text-center">
+            <div className="max-w-md mx-auto mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400/80 text-sm text-center">
               {error}
             </div>
           )}
@@ -160,15 +166,15 @@ export default function PricingPage() {
               return (
                 <div
                   key={planId}
-                  className={`relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105 ${
+                  className={`relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] ${
                     isYearly
-                      ? 'bg-gradient-to-br from-purple-900/80 to-indigo-900/80 border-2 border-amber-400/50 shadow-2xl shadow-amber-500/20'
-                      : 'bg-slate-800/60 border border-white/10'
+                      ? 'bg-[#1a0a2e]/60 border-2 border-[#D4AF37]/40 shadow-[0_0_40px_rgba(212,175,55,0.08)]'
+                      : 'bg-white/[0.02] border border-white/[0.06]'
                   }`}
                 >
                   {/* Recommended Badge */}
                   {isYearly && (
-                    <div className="absolute top-0 right-0 bg-amber-400 text-slate-900 text-xs font-bold px-4 py-1 rounded-bl-lg">
+                    <div className="absolute top-0 right-0 bg-[#D4AF37] text-[#0a0a0a] text-xs font-bold px-4 py-1 rounded-bl-lg">
                       ⭐ {t.recommended}
                     </div>
                   )}
@@ -176,10 +182,10 @@ export default function PricingPage() {
                   <div className="p-8">
                     {/* Plan Name */}
                     <div className="mb-6">
-                      <h3 className="text-2xl font-bold text-white mb-1">
+                      <h3 className="text-2xl font-serif text-white/90 mb-1">
                         {language === 'zh' ? plan.nameZh : plan.name}
                       </h3>
-                      <p className="text-slate-400 text-sm">
+                      <p className="text-white/50 text-sm">
                         {language === 'zh' ? plan.descriptionZh : plan.description}
                       </p>
                     </div>
@@ -187,30 +193,30 @@ export default function PricingPage() {
                     {/* Price */}
                     <div className="mb-6">
                       <div className="flex items-baseline gap-1">
-                        <span className="text-4xl font-bold text-white">
+                        <span className="text-4xl font-serif text-white/90">
                           ${plan.price}
                         </span>
-                        <span className="text-slate-400">
+                        <span className="text-white/50">
                           {isYearly ? t.perYear : t.perMonth}
                         </span>
                       </div>
                       {isYearly && (
-                        <p className="text-amber-400 text-sm mt-1 font-medium">
+                        <p className="text-[#D4AF37]/80 text-sm mt-1 font-medium">
                           {t.save}
                         </p>
                       )}
                     </div>
 
                     {/* Divider */}
-                    <div className="border-t border-white/10 mb-6" />
+                    <div className="border-t border-white/[0.06] mb-6" />
 
                     {/* Features */}
                     <ul className="space-y-3 mb-8">
                       {(language === 'zh' ? plan.features.zh : plan.features.en).map(
                         (feature, i) => (
-                          <li key={i} className="flex items-start gap-3 text-slate-300 text-sm">
+                          <li key={i} className="flex items-start gap-3 text-white/60 text-sm">
                             <svg
-                              className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5"
+                              className="w-5 h-5 text-[#A78BFA] flex-shrink-0 mt-0.5"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -232,10 +238,10 @@ export default function PricingPage() {
                     <button
                       onClick={() => handleSubscribe(planId)}
                       disabled={isLoading}
-                      className={`w-full py-3 rounded-lg font-semibold transition-all ${
+                      className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-[1.02] ${
                         isYearly
-                          ? 'bg-amber-400 hover:bg-amber-300 text-slate-900'
-                          : 'bg-purple-600 hover:bg-purple-500 text-white'
+                          ? 'bg-[#D4AF37] hover:bg-[#F5C542] text-[#0a0a0a]'
+                          : 'bg-[#7C3AED]/80 hover:bg-[#7C3AED] text-white'
                       } disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
                       {isLoading
@@ -251,8 +257,8 @@ export default function PricingPage() {
           </div>
 
           {/* Features Overview */}
-          <div className="mt-16 text-center">
-            <h3 className="text-xl font-bold text-white mb-8">{t.features}</h3>
+          <div className="mt-20 text-center">
+            <h3 className="text-xl font-serif text-white/80 mb-8">{t.features}</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {[
                 { icon: '🌟', label: '紫微斗数', labelEn: 'Zi Wei' },
@@ -263,10 +269,10 @@ export default function PricingPage() {
               ].map((item) => (
                 <div
                   key={item.labelEn}
-                  className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-purple-500/30 transition"
+                  className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-4 hover:border-[#A78BFA]/30 transition-all duration-300"
                 >
                   <span className="text-2xl mb-2 block">{item.icon}</span>
-                  <p className="text-white text-sm font-medium">
+                  <p className="text-white/70 text-sm font-serif">
                     {language === 'zh' ? item.label : item.labelEn}
                   </p>
                 </div>
@@ -276,13 +282,13 @@ export default function PricingPage() {
         </section>
 
         {/* Footer */}
-        <footer className="text-center py-8 text-slate-500 text-sm border-t border-white/10">
+        <footer className="text-center py-8 text-white/30 text-sm border-t border-white/[0.06]">
           <div className="flex justify-center gap-4 mb-2">
-            <Link href="/about" className="hover:text-purple-400 transition-colors">
+            <Link href="/about" className="hover:text-[#A78BFA] transition-colors duration-300">
               {language === 'zh' ? '关于我们' : 'About'}
             </Link>
             <span>·</span>
-            <Link href="/legal" className="hover:text-purple-400 transition-colors">
+            <Link href="/legal" className="hover:text-[#A78BFA] transition-colors duration-300">
               {language === 'zh' ? '法律声明' : 'Legal'}
             </Link>
           </div>

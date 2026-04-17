@@ -12,15 +12,15 @@
 // 1. Brand Color Tokens
 // ────────────────────────────────────────────
 export const colors = {
-  /** Core backgrounds */
-  bgPrimary: '#030014',
-  bgNebula: 'rgba(88, 28, 135, 0.3)',
+  /** Core backgrounds — Taste Rule: deep space black + nebula */
+  bgPrimary: '#0a0a0a',
+  bgNebula: 'rgba(42, 10, 58, 0.5)',
   bgSurface: 'rgba(255, 255, 255, 0.02)',
 
-  /** Brand accents */
-  gold: '#F59E0B',
-  goldLight: '#FCD34D',
-  goldDim: 'rgba(245, 158, 11, 0.15)',
+  /** Brand accents — Taste Rule: Gold #D4AF37 / #F5C542, Purple #7C3AED / #A78BFA */
+  gold: '#D4AF37',
+  goldLight: '#F5C542',
+  goldDim: 'rgba(212, 175, 55, 0.15)',
 
   purple: '#7C3AED',
   purpleLight: '#A78BFA',

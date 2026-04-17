@@ -11,23 +11,23 @@
 :root {
   /*
    * Core palette — synced with src/design-system/design-tokens.ts
-   * When updating brand colors, update design-tokens.ts first,
-   * then mirror changes here for CSS-only consumers.
+   * Taste Rule: 深空黑背景 #0a0a0a + 星云紫金渐变
+   * Gold: #D4AF37 / #F5C542, Purple: #7C3AED / #A78BFA
    */
-  --mystic-bg-primary: #030014;          /* colors.bgPrimary   */
-  --mystic-bg-nebula: rgba(88, 28, 135, 0.3); /* colors.bgNebula */
-  --mystic-accent-gold: #F59E0B;         /* colors.gold         */
-  --mystic-accent-purple: #7C3AED;       /* colors.purple       */
-  --mystic-glow-color: rgba(168, 130, 255, 0.3); /* colors.glowPurple */
+  --mystic-bg-primary: #0a0a0a;          /* deep space black   */
+  --mystic-bg-nebula: rgba(42, 10, 58, 0.4); /* nebula purple */
+  --mystic-accent-gold: #D4AF37;         /* gold                */
+  --mystic-accent-gold-bright: #F5C542;  /* bright gold         */
+  --mystic-accent-purple: #7C3AED;       /* purple              */
+  --mystic-accent-purple-light: #A78BFA; /* light purple        */
+  --mystic-glow-color: rgba(167, 139, 250, 0.25); /* soft purple glow */
 
-  /* Extended tokens from design-tokens.ts */
-  --mystic-accent-gold-light: #FCD34D;   /* colors.goldLight    */
-  --mystic-accent-purple-light: #A78BFA; /* colors.purpleLight  */
-  --mystic-text-primary: #FFFFFF;         /* colors.textPrimary  */
-  --mystic-text-secondary: rgba(255, 255, 255, 0.7);  /* colors.textSecondary */
-  --mystic-text-tertiary: rgba(255, 255, 255, 0.4);   /* colors.textTertiary  */
-  --mystic-text-muted: rgba(255, 255, 255, 0.25);     /* colors.textMuted     */
-  --mystic-border-subtle: rgba(255, 255, 255, 0.06);  /* colors.borderSubtle  */
+  /* Extended tokens */
+  --mystic-text-primary: rgba(255, 255, 255, 0.9);    /* text-white/90  */
+  --mystic-text-secondary: rgba(255, 255, 255, 0.5); /* text-white/50  */
+  --mystic-text-tertiary: rgba(255, 255, 255, 0.35);  /* text-white/35  */
+  --mystic-text-muted: rgba(255, 255, 255, 0.2);     /* text-white/20  */
+  --mystic-border-subtle: rgba(255, 255, 255, 0.06);
 
   /* Tunable parameters (changed via ConfigPanel) */
   --vignette-intensity: 0.8;
@@ -38,8 +38,100 @@
 
 /* ── Global resets for mystic pages ── */
 .mystic-page {
-  background: var(--mystic-bg-primary);
+  background:
+    radial-gradient(ellipse at 20% 0%, #2a0a3a 0%, #1a0a2e 40%, #0a0a0a 80%) fixed,
+    var(--mystic-bg-primary);
   overflow-x: hidden;
+}
+
+/* ── CSS Star Field — 50 tiny star dots via box-shadow ── */
+.star-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background: transparent;
+  animation: star-twinkle 8s ease-in-out infinite;
+}
+.star-field::before,
+.star-field::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: transparent;
+  will-change: transform;
+}
+/* Layer 1: 30 gold-tinted micro-stars */
+.star-field::before {
+  width: 2px;
+  height: 2px;
+  box-shadow:
+    120px 80px 0 0 rgba(212,175,55,0.6),
+    340px 150px 0 0 rgba(212,175,55,0.4),
+    560px 60px 0 0 rgba(212,175,55,0.5),
+    780px 200px 0 0 rgba(212,175,55,0.3),
+    1000px 120px 0 0 rgba(212,175,55,0.6),
+    200px 300px 0 0 rgba(212,175,55,0.4),
+    450px 380px 0 0 rgba(212,175,55,0.5),
+    680px 280px 0 0 rgba(212,175,55,0.3),
+    890px 420px 0 0 rgba(212,175,55,0.6),
+    1100px 350px 0 0 rgba(212,175,55,0.4),
+    80px 500px 0 0 rgba(212,175,55,0.5),
+    310px 600px 0 0 rgba(212,175,55,0.3),
+    530px 550px 0 0 rgba(212,175,55,0.6),
+    760px 680px 0 0 rgba(212,175,55,0.4),
+    980px 620px 0 0 rgba(212,175,55,0.5),
+    150px 750px 0 0 rgba(212,175,55,0.3),
+    400px 820px 0 0 rgba(212,175,55,0.6),
+    650px 780px 0 0 rgba(212,175,55,0.4),
+    870px 850px 0 0 rgba(212,175,55,0.5),
+    1050px 900px 0 0 rgba(212,175,55,0.3),
+    50px 950px 0 0 rgba(212,175,55,0.6),
+    280px 1000px 0 0 rgba(212,175,55,0.4),
+    500px 1050px 0 0 rgba(212,175,55,0.5),
+    720px 980px 0 0 rgba(212,175,55,0.3),
+    940px 1080px 0 0 rgba(212,175,55,0.6),
+    1150px 1020px 0 0 rgba(212,175,55,0.4),
+    180px 1150px 0 0 rgba(212,175,55,0.5),
+    420px 1200px 0 0 rgba(212,175,55,0.3),
+    660px 1180px 0 0 rgba(212,175,55,0.6),
+    900px 1250px 0 0 rgba(212,175,55,0.4);
+}
+/* Layer 2: 20 purple-tinted micro-stars */
+.star-field::after {
+  width: 1.5px;
+  height: 1.5px;
+  box-shadow:
+    70px 120px 0 0 rgba(167,139,250,0.5),
+    290px 200px 0 0 rgba(167,139,250,0.35),
+    510px 90px 0 0 rgba(167,139,250,0.45),
+    730px 260px 0 0 rgba(167,139,250,0.3),
+    950px 180px 0 0 rgba(167,139,250,0.5),
+    170px 400px 0 0 rgba(167,139,250,0.35),
+    390px 480px 0 0 rgba(167,139,250,0.45),
+    610px 360px 0 0 rgba(167,139,250,0.3),
+    830px 520px 0 0 rgba(167,139,250,0.5),
+    1070px 440px 0 0 rgba(167,139,250,0.35),
+    30px 650px 0 0 rgba(167,139,250,0.45),
+    250px 720px 0 0 rgba(167,139,250,0.3),
+    470px 800px 0 0 rgba(167,139,250,0.5),
+    700px 740px 0 0 rgba(167,139,250,0.35),
+    920px 810px 0 0 rgba(167,139,250,0.45),
+    1140px 770px 0 0 rgba(167,139,250,0.3),
+    130px 880px 0 0 rgba(167,139,250,0.5),
+    360px 940px 0 0 rgba(167,139,250,0.35),
+    590px 1060px 0 0 rgba(167,139,250,0.45),
+    820px 990px 0 0 rgba(167,139,250,0.3);
+  animation: star-drift 60s linear infinite;
+}
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.55; }
+}
+@keyframes star-drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-200px); }
 }
 
 /* ── Glowing title text-shadow ── */
