@@ -201,7 +201,7 @@ export default function ReadingsPage() {
                   className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur rounded-xl border border-white/[0.06] hover:bg-white/10 transition group"
                 >
                   {/* Type badge */}
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${meta.gradient} flex items-center justify-center text-xl shrink-0`}>
+                  <div className={`w-12 h-12 rounded-xl bg-slate-600/30 flex items-center justify-center text-xl shrink-0`}>
                     {meta.emoji}
                   </div>
 

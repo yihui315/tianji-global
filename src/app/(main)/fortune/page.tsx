@@ -58,8 +58,9 @@ export default function FortunePage() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: 'radial-gradient(ellipse at 20% 0%, #2a0a3a 0%, #1a0a2e 40%, #0a0a0a 80%)' }}>
-      {/* Header */}
+    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
+      {/* Header }
       <header className="px-4 py-6 border-b border-white/[0.06]">
         <h1 className="text-2xl font-serif text-white/90">
           {isZH ? '📊 人生运势图' : '📊 Life Fortune Chart'}
@@ -167,7 +168,7 @@ export default function FortunePage() {
           <div className="space-y-6">
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-gradient-to-br from-purple-900/60 to-purple-950/60 rounded-xl p-5 border border-purple-500/30">
+              <div className="rounded-xl p-5 border border-white/[0.06] bg-white/[0.02]">
                 <div className="text-purple-300 text-sm mb-1">
                   {isZH ? '当前阶段' : 'Current Phase'}
                 </div>
@@ -176,7 +177,7 @@ export default function FortunePage() {
                   {isZH ? `年龄 ${data.currentAge} 岁` : `Age ${data.currentAge}`}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-amber-900/60 to-amber-950/60 rounded-xl p-5 border border-amber-500/30">
+              <div className="rounded-xl p-5 border border-white/[0.06] bg-white/[0.02]">
                 <div className="text-amber-300 text-sm mb-1">
                   {isZH ? '✨ 最佳运势期' : '✨ Best Fortune Periods'}
                 </div>
@@ -184,7 +185,7 @@ export default function FortunePage() {
                   <div key={i} className="text-sm text-gray-200 mt-1">{p}</div>
                 ))}
               </div>
-              <div className="bg-gradient-to-br from-rose-900/60 to-rose-950/60 rounded-xl p-5 border border-rose-500/30">
+              <div className="rounded-xl p-5 border border-white/[0.06] bg-white/[0.02]">
                 <div className="text-rose-300 text-sm mb-1">
                   {isZH ? '⚠ 挑战期' : '⚠ Challenging Periods'}
                 </div>

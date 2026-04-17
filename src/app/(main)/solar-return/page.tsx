@@ -367,15 +367,10 @@ export default function SolarReturnPage() {
   }, [chartData, isClient]);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white p-4 relative overflow-hidden">
-      {/* Animated background gradient orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-amber-600/15 rounded-full blur-[128px] animate-pulse" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-orange-600/15 rounded-full blur-[128px] animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600/10 rounded-full blur-[150px]" />
-      </div>
-
-      <div className="relative max-w-5xl mx-auto">
+    <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
+      <div className="relative z-10 text-white p-4">
+      {/* Content wrapper */}
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
@@ -389,7 +384,7 @@ export default function SolarReturnPage() {
         </div>
 
         {/* Input Form - Glass Card */}
-        <div className="bg-gradient-to-br from-amber-950/40 via-slate-900/80 to-orange-950/40 rounded-xl p-6 mb-6 backdrop-blur-xl border border-amber-500/20 shadow-[0_0_40px_rgba(245,158,11,0.1)]">
+        <div className="rounded-xl p-6 mb-6 backdrop-blur-xl border border-white/[0.06] shadow-[0_0_40px_rgba(245,158,11,0.05)] bg-white/[0.02]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             {/* Birthday */}
             <div>
@@ -514,7 +509,7 @@ export default function SolarReturnPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-amber-950/50 to-slate-900/80 rounded-xl p-6 border border-amber-500/20 backdrop-blur-xl shadow-[0_0_40px_rgba(245,158,11,0.1)]"
+              className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl shadow-[0_0_40px_rgba(245,158,11,0.05)] bg-white/[0.02]"
             >
               <h2 className="text-lg font-semibold text-amber-300 mb-4">
                 {language === 'zh' ? '太阳返照精确时间' : 'Solar Return Exact Time'}
@@ -547,7 +542,7 @@ export default function SolarReturnPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 rounded-xl p-6 border border-slate-700/30 backdrop-blur-xl"
+              className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]"
             >
               <h2 className="text-lg font-semibold text-white mb-4">
                 {language === 'zh' ? '太阳返照星盘' : 'Solar Return Chart'}
@@ -577,7 +572,7 @@ export default function SolarReturnPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 rounded-xl p-6 border border-slate-700/30 backdrop-blur-xl"
+              className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]"
             >
               <h2 className="text-lg font-semibold text-white mb-4">
                 {language === 'zh' ? '行星位置' : 'Planetary Positions'}
@@ -590,7 +585,7 @@ export default function SolarReturnPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-gradient-to-br from-amber-950/40 to-slate-900/80 rounded-xl p-6 border border-amber-500/20 backdrop-blur-xl"
+              className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]"
             >
               <h2 className="text-lg font-semibold text-white mb-4">
                 {language === 'zh' ? '宫位信息' : 'House Information'}
@@ -641,7 +636,7 @@ export default function SolarReturnPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-gradient-to-br from-amber-950/40 to-slate-900/80 rounded-xl p-6 border border-amber-500/20 backdrop-blur-xl"
+                className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]"
               >
                 <h2 className="text-lg font-semibold text-white mb-4">
                   {language === 'zh' ? '解读' : 'Interpretation'}

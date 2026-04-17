@@ -65,19 +65,8 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Taste Rule Background: deep space black + nebula glows */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse at 20% 10%, rgba(42,10,58,0.7) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 80%, rgba(124,58,237,0.1) 0%, transparent 45%),
-            radial-gradient(ellipse at 60% 50%, rgba(212,175,55,0.04) 0%, transparent 35%),
-            #0a0a0a
-          `,
-        }}
-      />
+    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
 
       {/* Content */}
       <div className="relative z-10">

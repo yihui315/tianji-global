@@ -526,16 +526,11 @@ export default function SynastryPage() {
     ? result.overallScore >= 70 ? 'text-green-400' : result.overallScore >= 50 ? 'text-amber-400' : 'text-red-400'
     : '';
 
-  return (
-    <main className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
-      {/* Animated background gradient orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-violet-600/20 rounded-full blur-[128px] animate-pulse" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-600/20 rounded-full blur-[128px] animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-violet-600/10 rounded-full blur-[150px]" />
-      </div>
-
-      {/* Glassmorphic Header */}
+return (
+    <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
+      <div className="relative z-10">
+      {/* Glassmorphic Header }
       <header className="relative p-6 border-b border-violet-500/20 bg-black/20 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -572,7 +567,7 @@ export default function SynastryPage() {
         {/* Input Forms - Glass Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Person A */}
-          <div className="bg-gradient-to-br from-violet-950/40 via-slate-900/80 to-purple-950/40 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-6 shadow-[0_0_40px_rgba(124,58,237,0.1)]">
+          <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6 shadow-[0_0_40px_rgba(124,58,237,0.05)] bg-white/[0.02]">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-3 h-3 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
               <span className="text-blue-400 font-medium">
@@ -590,7 +585,7 @@ export default function SynastryPage() {
           </div>
 
           {/* Person B */}
-          <div className="bg-gradient-to-br from-red-950/40 via-slate-900/80 to-pink-950/40 backdrop-blur-xl border border-red-500/20 rounded-2xl p-6 shadow-[0_0_40px_rgba(244,63,94,0.1)]">
+          <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6 shadow-[0_0_40px_rgba(244,63,94,0.05)] bg-white/[0.02]">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-3 h-3 rounded-full bg-red-400 shadow-[0_0_10px_rgba(244,63,94,0.5)]" />
               <span className="text-red-400 font-medium">
@@ -677,7 +672,7 @@ export default function SynastryPage() {
             {/* Score + Wheel */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Score - Glass Card */}
-              <div className="bg-gradient-to-br from-violet-950/50 via-slate-900/90 to-purple-950/50 backdrop-blur-xl border border-violet-500/30 rounded-2xl p-6 flex flex-col items-center shadow-[0_0_50px_rgba(124,58,237,0.15)]">
+              <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6 flex flex-col items-center shadow-[0_0_50px_rgba(124,58,237,0.05)] bg-white/[0.02]">
                 <h2 className="text-lg font-bold text-slate-200 mb-4">
                   {language === 'zh' ? '综合评分' : 'Overall Score'}
                 </h2>
@@ -692,7 +687,7 @@ export default function SynastryPage() {
               </div>
 
               {/* Wheel - Glass Card */}
-              <div className="bg-gradient-to-br from-violet-950/30 via-slate-900/80 to-purple-950/30 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-4 shadow-[0_0_40px_rgba(124,58,237,0.1)]">
+              <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 shadow-[0_0_40px_rgba(124,58,237,0.05)] bg-white/[0.02]">
                 <SynastryWheel
                   chart1={result.person1Chart}
                   chart2={result.person2Chart}
@@ -707,7 +702,7 @@ export default function SynastryPage() {
                 { label: language === 'zh' ? '人物A 行星位置' : 'Person A Planetary Positions', chart: result.person1Chart, color: 'blue' },
                 { label: language === 'zh' ? '人物B 行星位置' : 'Person B Planetary Positions', chart: result.person2Chart, color: 'red' },
               ].map(({ label, chart, color }) => (
-                <div key={label} className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 backdrop-blur-xl border border-slate-700/30 rounded-2xl p-4">
+                <div key={label} className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 bg-white/[0.02]">
                   <h3 className={`text-${color}-400 font-bold mb-3`}>{label}</h3>
                   <div className="space-y-1">
                     {chart.planets.map(p => (
@@ -727,7 +722,7 @@ export default function SynastryPage() {
 
             {/* Aspects — only for overlay synastry */}
             {(!result.meta || result.meta.type === 'overlay') && result.aspects && (
-              <div className="bg-gradient-to-br from-violet-950/40 to-slate-900/80 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-4 shadow-[0_0_40px_rgba(124,58,237,0.1)]">
+              <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 shadow-[0_0_40px_rgba(124,58,237,0.05)] bg-white/[0.02]">
                 <h3 className="text-violet-400 font-bold mb-3">
                   {language === 'zh' ? '相位列表' : 'Aspect List'}
                 </h3>
@@ -743,7 +738,7 @@ export default function SynastryPage() {
                 return (
                   <>
                     {/* Composite/Davison Planet Table */}
-                    <div className="bg-gradient-to-br from-violet-950/40 to-slate-900/80 backdrop-blur-xl border border-violet-500/20 rounded-2xl p-4">
+                    <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 bg-white/[0.02]">
                       <h3 className="text-violet-400 font-bold mb-3">
                         {chartType === 'davison'
                           ? (language === 'zh' ? '戴维森盘行星位置' : 'Davison Chart Planetary Positions')
@@ -765,7 +760,7 @@ export default function SynastryPage() {
 
                     {/* Midpoint Structures */}
                     {chartData?.midpointStructures && chartData.midpointStructures.length > 0 && (
-                      <div className="bg-gradient-to-br from-amber-950/40 to-slate-900/80 backdrop-blur-xl border border-amber-500/20 rounded-2xl p-4">
+                      <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 bg-white/[0.02]">
                         <h3 className="text-amber-400 font-bold mb-3">
                           {language === 'zh' ? '中间点结构' : 'Midpoint Structures'}
                         </h3>
@@ -821,7 +816,7 @@ export default function SynastryPage() {
 
             {/* AI Interpretation - Glowing Glass */}
             {result.aiInterpretation && (
-              <div className="bg-gradient-to-br from-violet-950/60 via-slate-900/90 to-purple-950/60 backdrop-blur-xl border border-violet-500/40 rounded-2xl p-6 shadow-[0_0_60px_rgba(124,58,237,0.2)]">
+              <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6 shadow-[0_0_60px_rgba(124,58,237,0.1)] bg-white/[0.02]">
                 <h3 className="text-violet-300 font-bold mb-4 text-lg">
                   ✨ {language === 'zh' ? 'AI 深度解读' : 'AI Deep Interpretation'}
                 </h3>
@@ -829,7 +824,7 @@ export default function SynastryPage() {
                   {result.aiInterpretation}
                 </div>
                 {result.disclaimer && (
-                  <p className="mt-4 text-xs text-slate-500 italic border-t border-violet-700/30 pt-3">
+                  <p className="mt-4 text-xs text-white/40 italic border-t border-white/[0.06] pt-3">
                     {result.disclaimer}
                   </p>
                 )}
@@ -837,6 +832,7 @@ export default function SynastryPage() {
             )}
           </div>
         )}
+        </div>
       </div>
     </main>
   );

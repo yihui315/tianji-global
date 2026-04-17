@@ -95,8 +95,10 @@ export default function EmbedPage() {
   const npmCode = buildNpmCode(selectedType);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white p-4">
-      <div className="max-w-6xl mx-auto">
+    <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
+      <div className="relative z-10 text-white p-4">
+        <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-purple-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">

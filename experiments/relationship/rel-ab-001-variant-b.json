@@ -1,0 +1,36 @@
+{
+  "name": "Hero Summary — Functional conversion framing (outcome-driven, benefit-clear, premium hook)",
+  "experimentSurface": "Hero Summary",
+  "focus": "Maximize upgrade conversion with clear outcome framing",
+  "metrics": {
+    "hasHeroSummary": true,
+    "hasPattern": true,
+    "hasFiveDimensions": true,
+    "hasCurrentWindow": true,
+    "hasPracticalGuidance": true,
+    "hasPremiumSection": true,
+    "shareModes": 3,
+    "headlineStrength": 13,
+    "patternClarity": 13,
+    "emotionalResonance": 10,
+    "upgradeStrength": 15
+  },
+  "copy": {
+    "headline": {
+      "romantic_high": "High compatibility: synchronized growth potential confirmed",
+      "romantic_mid": "Compatibility score established — deeper pattern unlocked in full report",
+      "romantic_low": "Investment opportunity: this connection rewards active management",
+      "friendship_high": "Strong friendship index — depth confirmed, expansion potential identified",
+      "friendship_mid": "Friendship compatibility: clear areas for deepening identified",
+      "friendship_low": "Foundation established — relationship requires strategic investment",
+      "work_high": "High professional synergy confirmed — execution sync is the key lever",
+      "work_mid": "Partnership potential confirmed — full collaboration map in premium",
+      "work_low": "Collaboration baseline established — premium reveals full optimization path"
+    },
+    "oneLiner": {
+      "romantic": "Your compatibility profile is ready. Unlock the full relationship map — including your pattern, timing, and 5-year forecast.",
+      "friendship": "Your friendship compatibility is mapped. See the full depth report and what your pattern means for the next 3 years.",
+      "work": "Your professional synergy score is calculated. Unlock the complete collaboration breakdown and growth trajectory."
+    }
+  }
+}

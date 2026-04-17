@@ -32,26 +32,8 @@ export default function LegalPage() {
   const t = content[language];
 
   return (
-    <main className="min-h-screen relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-[#0a0a0a]">
-        <div className="stars-container">
-          {[...Array(100)].map((_, i) => (
-            <div
-              key={i}
-              className="star"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
-              }}
-            />
-          ))}
-        </div>
-        <div className="absolute top-20 left-20 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-      </div>
+    <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
 
       <div className="relative z-10">
         {/* Header */}
@@ -111,7 +93,7 @@ export default function LegalPage() {
               href="/legal/privacy"
               className="group relative overflow-hidden rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-purple-500/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/20 p-8"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 border border-white/[0.06]" />
               <div className="relative">
                 <div className="text-4xl mb-4">🔒</div>
                 <h3 className="text-2xl font-bold text-white mb-2">{t.privacyTitle}</h3>
@@ -130,7 +112,7 @@ export default function LegalPage() {
               href="/legal/terms"
               className="group relative overflow-hidden rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-amber-500/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-amber-500/20 p-8"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-600/20 to-orange-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 border border-white/[0.06]" />
               <div className="relative">
                 <div className="text-4xl mb-4">📜</div>
                 <h3 className="text-2xl font-bold text-white mb-2">{t.termsTitle}</h3>
