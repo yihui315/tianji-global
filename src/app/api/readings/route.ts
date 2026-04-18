@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { getSupabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
 import { getPlatformContext, mapModuleResultRow } from '@/lib/unified-platform';
+import { persistLegacyReadingCompat } from '@/lib/unified-write';
 
 export async function GET() {
   try {
@@ -91,6 +92,20 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (error) throw error;
+
+    const platformContext = await getPlatformContext().catch(() => null);
+    if (platformContext) {
+      await persistLegacyReadingCompat({
+        context: platformContext,
+        readingType: reading_type,
+        title,
+        summary,
+        readingData: reading_data,
+      }).catch((persistError) => {
+        console.warn('[api/readings] unified compatibility persist skipped:', persistError);
+      });
+    }
+
     return NextResponse.json({ success: true, id: data.id });
   } catch (err) {
     console.error('[api/readings] POST error:', err);

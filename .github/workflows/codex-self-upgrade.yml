@@ -39,7 +39,8 @@ jobs:
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           prompt: |
-            Read AGENTS.md and docs/self-check-rubric.json.
+            Read AGENTS.md, program.md, .claude/skills/tianji-self-driving-growth.md, and docs/self-check-rubric.json.
+            Follow the program and skill constraints before making changes.
             Identify the highest-value small upgrade that improves TianJi without breaking product behavior.
             Make only small, high-confidence changes.
             Then run:

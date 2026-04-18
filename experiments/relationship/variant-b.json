@@ -1,0 +1,25 @@
+{
+  "id": "rel-ab-003-B",
+  "module": "relationship",
+  "focus": "hero_summary",
+  "variant": "B",
+  "style": "functional_conversion",
+  "headlineApproach": "Lead with the computed relationship pattern and a clear reading of the current stage.",
+  "oneLinerApproach": "Name the strongest layer, the weakest layer, and the next best action.",
+  "strengths": [
+    "Makes the pattern visible immediately",
+    "Turns the weakest dimension into a concrete next step",
+    "Improves clarity for sharing and premium positioning"
+  ],
+  "risks": [
+    "Slightly less poetic than the emotional option"
+  ],
+  "rubric": {
+    "clarity": 10,
+    "emotionalResonance": 7,
+    "actionability": 9,
+    "shareability": 8,
+    "conversionSupport": 8,
+    "total": 42
+  }
+}

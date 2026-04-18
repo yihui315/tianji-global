@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "module": "relationship",
+  "runs": [
+    {
+      "id": "rel-ab-001",
+      "timestamp": "2026-04-16T09:03:04.649Z",
+      "before": 85,
+      "after": 85,
+      "decision": "discard",
+      "focus": "hero_summary",
+      "winner": "A",
+      "notes": "Score improved by 0 pts (< 2pt threshold) - experiment discarded",
+      "scoreA": 126,
+      "scoreB": 125,
+      "margin": 0
+    },
+    {
+      "id": "rel-ab-002",
+      "timestamp": "2026-04-16T09:19:00.000Z",
+      "before": null,
+      "after": null,
+      "decision": "pipeline_failed",
+      "focus": "hero_summary",
+      "winner": null,
+      "notes": "Codex step failed: OPENAI_API_KEY secret not configured in GitHub Actions. Pipeline infrastructure validated: npm install passed, audits passed, manifest recording passed. Add OPENAI_API_KEY to repo settings to enable full run.",
+      "scoreA": null,
+      "scoreB": null,
+      "margin": null,
+      "infrastructure": {
+        "dependencies": "passed",
+        "baseline_score": "passed",
+        "audits": "passed",
+        "codex": "failed_missing_secret",
+        "compare": "skipped",
+        "decide": "skipped",
+        "report": "skipped",
+        "record": "skipped",
+        "pr": "skipped"
+      }
+    },
+    {
+      "id": "rel-ab-003",
+      "timestamp": "2026-04-17T02:12:11.638Z",
+      "before": 34,
+      "after": 42,
+      "decision": "accepted",
+      "focus": "hero_summary",
+      "winner": "B",
+      "notes": "Variant B won on clarity, pattern visibility, and next-step usefulness under an editorial rubric. Privacy-safe sharing remained unchanged.",
+      "scoreA": 38,
+      "scoreB": 42,
+      "margin": 4,
+      "evaluationMode": "editorial_rubric",
+      "implementedFiles": [
+        "src/lib/relationship-engine.ts"
+      ]
+    }
+  ],
+  "experimentFaces": {
+    "A": "Hero Summary (headline, one-liner, CTA - upgrade conversion)",
+    "B": "Five Dimension Cards (clarity, human tone, specificity)",
+    "C": "Relationship Pattern (pattern naming, one-liner, tags - shareability)",
+    "D": "Current Window (time expression, urgency, action guidance)",
+    "E": "Share Card (one-liner, visual style, emotional intensity)"
+  }
+}

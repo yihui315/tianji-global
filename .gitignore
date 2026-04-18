@@ -6,3 +6,5 @@ dist/
 .next/
 .vercel
 .env.local
+typecheck-errors.txt
+upgrade-plan.generated.json
