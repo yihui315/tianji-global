@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
