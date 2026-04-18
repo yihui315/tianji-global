@@ -102,10 +102,10 @@ const report = [
   `\`\`\``,
   variantA?.name ?? "Variant A",
   variantA?.metrics
-    ? `Headline strength: ${variantA.metrics.headlineStrength}/20`,
-    + ` | Pattern clarity: ${variantA.metrics.patternClarity}/15`,
-    + ` | Emotional resonance: ${variantA.metrics.emotionalResonance}/15`,
-    + ` | Upgrade strength: ${variantA.metrics.upgradeStrength}/15`
+    ? `Headline strength: ${variantA.metrics.headlineStrength}/20`
+      + ` | Pattern clarity: ${variantA.metrics.patternClarity}/15`
+      + ` | Emotional resonance: ${variantA.metrics.emotionalResonance}/15`
+      + ` | Upgrade strength: ${variantA.metrics.upgradeStrength}/15`
     : "",
   `\`\`\``,
   "",
@@ -114,10 +114,10 @@ const report = [
   `\`\`\``,
   variantB?.name ?? "Variant B",
   variantB?.metrics
-    ? `Headline strength: ${variantB.metrics.headlineStrength}/20`,
-    + ` | Pattern clarity: ${variantB.metrics.patternClarity}/15`,
-    + ` | Emotional resonance: ${variantB.metrics.emotionalResonance}/15`,
-    + ` | Upgrade strength: ${variantB.metrics.upgradeStrength}/15`
+    ? `Headline strength: ${variantB.metrics.headlineStrength}/20`
+      + ` | Pattern clarity: ${variantB.metrics.patternClarity}/15`
+      + ` | Emotional resonance: ${variantB.metrics.emotionalResonance}/15`
+      + ` | Upgrade strength: ${variantB.metrics.upgradeStrength}/15`
     : "",
   `\`\`\``,
   "",
