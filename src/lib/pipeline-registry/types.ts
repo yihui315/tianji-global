@@ -26,6 +26,7 @@ export interface WorkflowNode {
 export interface ComponentDefinition {
   id: string;
   name: string;
+  description?: string;
   version: string;
   stage: PipelineStage;
   input: ComponentIOSchema;
@@ -35,10 +36,21 @@ export interface ComponentDefinition {
   dependencies: string[];
 }
 
+export interface ComponentSchemaField {
+  type: 'object' | 'array' | 'string' | 'number' | 'boolean';
+  description?: string;
+  optional?: boolean;
+  required?: string[];
+  properties?: Record<string, ComponentSchemaField>;
+  items?: ComponentSchemaField;
+}
+
 export interface ComponentIOSchema {
   type: 'object' | 'array' | 'string' | 'number' | 'boolean';
   required: string[];
-  properties: Record<string, { type: string; description: string; optional?: boolean }>;
+  description?: string;
+  properties: Record<string, ComponentSchemaField>;
+  items?: ComponentSchemaField;
 }
 
 export interface ComponentExecution {

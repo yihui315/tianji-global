@@ -46,7 +46,8 @@ const ZodiacChart: React.FC<ZodiacChartProps> = memo((props) => {
     onHouseClick
   } = props;
 
-  const { center, outerRing, houseRing, planetRing, innerCircle, signArcDegrees } = CHART_DIMENSIONS;
+  const { center: chartCenter, outerRing, houseRing, planetRing, innerCircle } = CHART_DIMENSIONS;
+  const center = chartCenter.x;
 
   // Theme colors
   const colors = useMemo(() => {
