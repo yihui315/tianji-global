@@ -1,6 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm install --force && npm rebuild sweph",
   "outputDirectory": ".next",
   "crons": [
     {
