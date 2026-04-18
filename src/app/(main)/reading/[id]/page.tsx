@@ -15,27 +15,6 @@ interface LegacyReadingDetail {
   summary: string;
   created_at: string;
   reading_data?: Record<string, unknown>;
-export const dynamic = 'force-dynamic';
-
-import { useState, useEffect, useCallback, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { MysticButton } from '@/components/ui/MysticButton';
-import { HeroSummary } from '@/components/reading/HeroSummary';
-import { ChartSection } from '@/components/reading/ChartSection';
-import { InsightSection } from '@/components/reading/InsightSection';
-import { ApplicationSection } from '@/components/reading/ApplicationSection';
-import { TimelineSection } from '@/components/reading/TimelineSection';
-import { ActionSection } from '@/components/reading/ActionSection';
-import { UpgradeSection } from '@/components/reading/UpgradeSection';
-import { TrustSection } from '@/components/reading/TrustSection';
-import type { Reading, Language, WesternChartData } from '@/types/reading';
-import { generateReading } from '@/lib/reading-engine';
-import { ZODIAC_DATA, ELEM_COLORS } from '@/lib/chart-engine';
-
-function getSignData(signName: string) {
-  return ZODIAC_DATA.find(s => s.name === signName) ?? ZODIAC_DATA[0];
 }
 
 function isUnifiedResult(value: ModuleResult | LegacyReadingDetail | null): value is ModuleResult {
