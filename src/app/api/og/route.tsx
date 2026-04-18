@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 
   const title = searchParams.get('title') || 'TianJi Global';
   const subtitle = searchParams.get('subtitle') || '天机全球 · Premium AI Destiny';
-  const module = searchParams.get('module') || 'tianji';
+  const moduleName = searchParams.get('module') || 'tianji';
 
   // Module color themes — gold primary, purple accent
   const themes: Record<string, { accent: string; secondary: string }> = {
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
     fortune: { accent: '#D4AF37', secondary: '#7C3AED' },
   };
 
-  const c = themes[module] || themes.tianji;
+  const c = themes[moduleName] || themes.tianji;
 
   return new ImageResponse(
     (

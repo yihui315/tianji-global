@@ -275,7 +275,8 @@ function computePalaceOverlay(p1: string, p2: string): PalaceOverlay {
     palace2: p2,
     compatibility,
     score: compat,
-    ...descriptions[compatibility],
+    description: descriptions[compatibility].en,
+    descriptionZh: descriptions[compatibility].zh,
   };
 }
 
@@ -332,7 +333,7 @@ export function extractZiweiSynastryInput(chart: ZiweiChart): ZiweiSynastryInput
   const transformStars: string[] = [];
 
   if (chart.raw && typeof chart.raw === 'object') {
-    const raw = chart.raw as Record<string, unknown>;
+    const raw = chart.raw as unknown as Record<string, unknown>;
     // Extract stars from palaces
     if (Array.isArray(raw.palaces)) {
       for (const palace of raw.palaces as Array<{ mainStars?: string[]; minorStars?: string[]; transformStars?: string[] }>) {
@@ -358,7 +359,7 @@ export function extractZiweiSynastryInput(chart: ZiweiChart): ZiweiSynastryInput
 }
 
 function extractPalaces(chart: ZiweiChart): ZiweiPalaceInput[] {
-  const raw = chart.raw as Record<string, unknown>;
+  const raw = chart.raw as unknown as Record<string, unknown>;
   if (!Array.isArray(raw.palaces)) return [];
 
   return (raw.palaces as Array<{ name?: string; mainStars?: string[] }>).map(p => ({

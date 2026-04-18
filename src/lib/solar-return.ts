@@ -93,7 +93,7 @@ const PLANET_DATA: Record<string, { getPosition: (jd: number) => { lon: number; 
   Neptune: { getPosition: (jd) => { const p = neptune.position(jd); const e = earth.position(jd); return { lon: (p.lon - e.lon + 2*Math.PI) % (2 * Math.PI), lat: p.lat, distance: p.distance } } },
 }
 
-const PLANET_NAMES = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
+const PLANET_NAMES = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'];
 
 // ─── Date Parsing ─────────────────────────────────────────────────────────────
 
@@ -196,10 +196,8 @@ function getPlanetaryPositions(jd: number): PlanetPosition[] {
   planets.push({ name: 'Moon', longitude: moonLon, latitude: radToDeg(moon.lat), sign: moonSign, signName: moonSignName, signSymbol: moonSignSymbol, degree: moonDegree, orb: moon.distance });
 
   // Other planets
-  for (const name of ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto']) {
-    const p = name === 'Pluto'
-      ? getApproxPlutoPosition(jdEt)
-      : PLANET_DATA[name]?.getPosition(jdEt);
+  for (const name of ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']) {
+    const p = PLANET_DATA[name]?.getPosition(jdEt);
     if (!p) continue;
     const lon = radToDeg(p.lon);
     const { sign, signName, signSymbol, degree } = getSign(lon);

@@ -115,6 +115,7 @@ function generateMockReport(config: NarrativeComposerConfig, year: number): Narr
     },
     themes: Array.from({ length: themeCount }, (_, i) => ({
       id: `theme-${i + 1}`,
+      titleZh: `Theme ${i + 1}`,
       title: `主题${i + 1}`,
       timeRange: i === 0 ? '上半年' : '下半年',
       hook: '这个主题如同黎明前的曙光，蕴含着转变的可能...',
