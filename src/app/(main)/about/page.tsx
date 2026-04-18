@@ -68,26 +68,8 @@ export default function AboutPage() {
   const t = content[language];
 
   return (
-    <main className="min-h-screen relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900">
-        <div className="stars-container">
-          {[...Array(100)].map((_, i) => (
-            <div
-              key={i}
-              className="star"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
-              }}
-            />
-          ))}
-        </div>
-        <div className="absolute top-20 left-20 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-      </div>
+    <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
 
       <div className="relative z-10">
         {/* Header */}
@@ -150,7 +132,7 @@ export default function AboutPage() {
 
         {/* Story */}
         <section className="px-6 py-12 max-w-4xl mx-auto">
-          <div className="rounded-2xl bg-gradient-to-br from-purple-900/30 to-amber-900/30 border border-purple-700/30 p-8 md:p-12">
+          <div className="rounded-2xl p-8 md:p-12">
             <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
               <span className="text-3xl">📖</span> {t.story}
             </h3>
@@ -198,7 +180,7 @@ export default function AboutPage() {
           <p className="text-slate-400 mb-6">{t.contactText}</p>
           <a
             href="mailto:hello@tianji.global"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-amber-600 text-white rounded-full font-medium hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-amber-600 text-white rounded-full font-medium hover:opacity-90 transition-opacity"
           >
             <span>📧</span>
             {t.email}

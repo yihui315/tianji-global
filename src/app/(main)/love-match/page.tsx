@@ -500,7 +500,8 @@ export default function LoveMatchPage() {
   const COMPAT = result?.compatibility;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-pink-950 to-slate-900 text-white p-4 md:p-8">
+    <main className="min-h-screen relative overflow-hidden p-4 md:p-8" style={{ background: 'radial-gradient(ellipse at 20% 0%, #2a0a3a 0%, #1a0a2e 40%, #0a0a0a 80%)' }}>
+      <div className="relative z-10">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -744,9 +745,10 @@ export default function LoveMatchPage() {
         )}
 
         {/* Footer */}
-        <div className="mt-12 text-center text-slate-500 text-sm">
+        <div className="mt-12 text-center text-white/30 text-sm">
           <p>© 2024 TianJi Global · 天机全球</p>
         </div>
+      </div>
       </div>
     </main>
   );

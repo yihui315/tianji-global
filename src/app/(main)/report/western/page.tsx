@@ -497,9 +497,9 @@ function UpgradeSection({ lang }: { lang: 'zh' | 'en' }) {
       ];
 
   return (
-    <GlassCard level="strong" className="p-8 text-center relative overflow-hidden">
-      {/* Premium gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-slate-900/80 to-amber-900/20 pointer-events-none" />
+    <GlassCard level="strong" className="p-8 text-center relative overflow-hidden border border-white/[0.06] bg-white/[0.02]">
+      {/* Premium background */}
+      <div className="absolute inset-0 pointer-events-none" />
       <div className="relative z-10">
         <div className="inline-block px-4 py-1.5 rounded-full text-xs font-medium border mb-4"
           style={{ background: 'rgba(251,191,36,0.1)', borderColor: 'rgba(251,191,36,0.3)', color: '#FCD34D' }}>
@@ -599,7 +599,7 @@ export default function WesternReportPage() {
   const summary = chartData ? (lang === 'zh' ? SIGN_SUMMARY[chartData.bigThree.sun.sign].zh : SIGN_SUMMARY[chartData.bigThree.sun.sign].en) : '';
 
   return (
-    <main className="min-h-screen bg-[#0a0a0f] text-white">
+    <main className="min-h-screen bg-[#0a0a0a] text-white">
       {/* ─── INPUT SECTION ─── */}
       {!showReport ? (
         <div className="min-h-screen flex items-center justify-center px-4 py-12">

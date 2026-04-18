@@ -2,7 +2,7 @@
 
 import { GlassCard } from '@/components/ui/GlassCard';
 import { MysticButton } from '@/components/ui/MysticButton';
-import type { ReadingInsights, Language } from '@/types/reading';
+import type { ReadingInsights, Language, NarrativeBlock } from '@/types/reading';
 
 interface InsightSectionProps {
   insights: ReadingInsights;
@@ -18,6 +18,36 @@ const INSIGHT_CONFIG = [
   { key: 'risk' as const, icon: '⚠️', labelZh: '风险预警', labelEn: 'Risk Signals', color: '#F87171', free: false },
 ];
 
+function NarrativeBlock({ block, color, lang }: { block: NarrativeBlock; color: string; lang: Language }) {
+  return (
+    <div className="space-y-3">
+      {/* Layer 1: Resonance Hook — styled as a highlighted callout */}
+      <p
+        className="text-sm leading-relaxed italic"
+        style={{ color: 'rgba(251,191,36,0.9)' }}
+      >
+        ✦ {block.hook}
+      </p>
+
+      {/* Divider */}
+      <div className="h-px w-8" style={{ background: `linear-gradient(to right, ${color}, transparent)` }} />
+
+      {/* Layer 2: Deep Dive — body text */}
+      <p className="text-sm leading-relaxed" style={{ color: 'rgba(226,232,240,0.85)' }}>
+        {block.body}
+      </p>
+
+      {/* Divider */}
+      <div className="h-px w-8" style={{ background: `linear-gradient(to right, ${color}, transparent)` }} />
+
+      {/* Layer 3: Action Closure — styled as guidance */}
+      <p className="text-sm leading-relaxed" style={{ color: `${color}cc` }}>
+        → {block.closure}
+      </p>
+    </div>
+  );
+}
+
 export function InsightSection({ insights, isPremium, onUnlock, lang }: InsightSectionProps) {
   return (
     <section>
@@ -29,7 +59,7 @@ export function InsightSection({ insights, isPremium, onUnlock, lang }: InsightS
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {INSIGHT_CONFIG.map(({ key, icon, labelZh, labelEn, color, free }) => {
-          const content = insights[key];
+          const block = insights[key];
           const locked = !free && !isPremium;
 
           return (
@@ -71,15 +101,15 @@ export function InsightSection({ insights, isPremium, onUnlock, lang }: InsightS
                 </div>
               )}
 
-              <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl">{icon}</span>
                 <h3 className="text-sm font-serif font-bold" style={{ color }}>
                   {lang === 'zh' ? labelZh : labelEn}
                 </h3>
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: 'rgba(226,232,240,0.85)' }}>
-                {content}
-              </p>
+
+              {/* Three-layer narrative rendering */}
+              <NarrativeBlock block={block} color={color} lang={lang} />
             </GlassCard>
           );
         })}

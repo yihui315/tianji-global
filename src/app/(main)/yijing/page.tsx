@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useState, useCallback, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import SharePanel from '@/components/SharePanel';
@@ -207,9 +209,9 @@ export default function YiJingPage() {
   const displayedHexagram = mode === 'cast' ? castResult?.hexagram : searchResult;
 
   return (
-    <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
-      {/* Multi-layer Cosmic Background */}
-      <div className="fixed inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse at 50% 0%, ${colors.bgNebula} 0%, transparent 55%)`, zIndex: 0 }} />
+    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
+      <div className="text-white relative z-10">
       <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 20% 20%, rgba(59,20,75,0.35) 0%, transparent 50%)', zIndex: 0 }} />
       <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 80%, rgba(6,30,60,0.45) 0%, transparent 50%)', zIndex: 0 }} />
       <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(80,40,100,0.2) 0%, transparent 40%)', zIndex: 0 }} />
@@ -277,8 +279,8 @@ export default function YiJingPage() {
           {mode === 'cast' && (
             <div className="text-center">
               <div className={`mb-8 ${coinAnimating ? 'animate-bounce' : ''}`}>
-                <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600 text-5xl shadow-[0_0_40px_rgba(245,158,11,0.4)] relative">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-yellow-400/30 to-transparent blur-xl" />
+                <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-amber-500/20 text-5xl shadow-[0_0_40px_rgba(245,158,11,0.2)] relative border border-amber-500/30">
+                  <div className="absolute inset-0 rounded-full bg-amber-500/10 to-transparent blur-xl" />
                   🪙
                 </div>
               </div>
@@ -472,7 +474,7 @@ export default function YiJingPage() {
                     }}
                     className={`aspect-square rounded-lg flex items-center justify-center text-xl font-bold transition-all duration-300 ${
                       searchResult?.number === hex.number
-                        ? 'bg-gradient-to-br from-amber-500/40 to-orange-500/40 text-white shadow-[0_0_20px_rgba(245,158,11,0.3)] border border-amber-500/50'
+                        ? 'bg-amber-500/20 text-white shadow-[0_0_20px_rgba(245,158,11,0.2)] border border-amber-500/40'
                         : 'glass-inner text-amber-400/80 hover:text-amber-300 hover:border-amber-500/30'
                     }`}
                   >
@@ -578,6 +580,7 @@ export default function YiJingPage() {
           50% { box-shadow: 0 0 40px rgba(245, 158, 11, 0.4); }
         }
       `}</style>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,97 @@
+name: codex-relationship-evolution
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 2 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  evolve:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      # 1️⃣ Record current Relationship score
+      - name: Score BEFORE
+        run: |
+          npx tsx scripts/calculate-relationship-score.ts
+          cp relationship-score.json relationship-score-before.json
+
+      # 2️⃣ Codex — Relationship module only
+      - name: Codex Run
+        uses: openai/codex-action@v1
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          prompt: |
+            Read program.md.
+
+            ONLY improve the Relationship module.
+            Focus on: clarity, emotional resonance, shareability, upgrade conversion.
+
+            Improve ONE of these per run:
+            A) Hero summary (headline, one-liner, CTA copy)
+            B) Five dimension card descriptions (make them human, specific)
+            C) Relationship pattern naming (make it sharable, memorable)
+            D) Current window copy (urgency, action guidance)
+            E) Share card copy (emotional punch, visual intent)
+
+            Do NOT change other modules (auth, billing, other pages, etc.)
+
+            Keep changes small. Max 5 files.
+
+            Then run:
+            npm run audit:share
+            npm run audit:copy
+
+            If failing, repair once.
+
+            Output codex-relationship-report.md.
+
+      # 3️⃣ Score AFTER
+      - name: Score AFTER
+        run: |
+          npx tsx scripts/calculate-relationship-score.ts
+          cp relationship-score.json relationship-score-after.json
+
+      # 4️⃣ Decision gate
+      - name: Decide keep or discard
+        run: npx tsx scripts/decide-keep-or-discard.ts
+
+      # 5️⃣ Record experiment run
+      - name: Record experiment
+        run: |
+          node -e "
+          const fs = require('fs');
+          const manifest = JSON.parse(fs.readFileSync('experiments/manifest.json','utf8'));
+          const before = JSON.parse(fs.readFileSync('relationship-score-before.json','utf8')).score;
+          const after = JSON.parse(fs.readFileSync('relationship-score-after.json','utf8')).score;
+          const decision = after > before + 1 ? 'keep' : 'discard';
+          const run = {
+            id: 'rel-' + String(Date.now()).slice(-6),
+            before, after, decision,
+            timestamp: new Date().toISOString()
+          };
+          manifest.runs.push(run);
+          fs.writeFileSync('experiments/manifest.json', JSON.stringify(manifest, null, 2));
+          console.log('Recorded:', run);
+          "
+
+      # 6️⃣ Only PR on improvement
+      - name: Create PR
+        if: success()
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: codex/relationship-evolution
+          title: "Codex Relationship Evolution"
+          body-path: codex-relationship-report.md

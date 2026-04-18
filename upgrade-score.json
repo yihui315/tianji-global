@@ -1,0 +1,13 @@
+{
+  "metrics": {
+    "routesOk": true,
+    "shareSafe": true,
+    "hasRelationship": true,
+    "hasTimeline": true,
+    "hasShareModes": 1,
+    "hasPremiumSection": false,
+    "hasFaq": true,
+    "hasPricing": true
+  },
+  "score": 75
+}

@@ -156,6 +156,12 @@ export default function ProfilePage() {
     setProfiles(sortedProfiles);
     setSelectedProfileId(profile.id);
     setDraft(toDraft(profile, timezone, profile.language));
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
   }
 
   async function saveAccount() {
@@ -327,6 +333,10 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(124,58,237,0.2),_transparent_35%),linear-gradient(135deg,_#14091f,_#09090f_55%,_#0f172a)] text-white">
       <header className="border-b border-white/10 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-6">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Header */}
+      <header className="px-8 py-6 border-b border-white/[0.06]">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/dashboard" className="text-sm text-purple-300 transition hover:text-purple-200">
               ← {language === 'zh' ? '返回总控台' : 'Back to dashboard'}
@@ -364,6 +374,28 @@ export default function ProfilePage() {
             {language === 'zh'
               ? '统一档案管理依赖 Supabase。当前账号偏好仍可保存，但多档案与统一画像需要数据库连接。'
               : 'Unified profile management needs Supabase. Account preferences still save, but multi-profile and aggregated destiny views need the database connection.'}
+      <main className="max-w-4xl mx-auto p-8">
+        <div className="space-y-6">
+          {/* Avatar + Identity */}
+          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/[0.06] flex items-center gap-6">
+            {user?.image ? (
+              <img
+                src={user.image}
+                alt="Avatar"
+                className="w-20 h-20 rounded-full border-2 border-purple-400"
+              />
+            ) : (
+              <div className="w-20 h-20 rounded-full bg-purple-700 flex items-center justify-center text-3xl border-2 border-purple-400">
+                {user?.name?.[0] ?? '?'}
+              </div>
+            )}
+            <div>
+              <h2 className="text-2xl font-bold">{user?.name ?? 'User'}</h2>
+              <p className="text-purple-300 text-sm">{user?.email}</p>
+              <p className="text-slate-400 text-xs mt-1">
+                {language === 'zh' ? '通过 Google 登录' : 'Signed in via Google'}
+              </p>
+            </div>
           </div>
         ) : null}
 
@@ -389,6 +421,27 @@ export default function ProfilePage() {
               <div>
                 <h2 className="text-2xl font-semibold">{session.user.name ?? account?.name ?? 'User'}</h2>
                 <p className="text-sm text-slate-300">{session.user.email ?? account?.email}</p>
+          {/* Editable Fields */}
+          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/[0.06] space-y-5">
+            <h3 className="text-lg font-semibold mb-4">
+              {language === 'zh' ? '偏好设置' : 'Preferences'}
+            </h3>
+
+            {/* Name (read-only — managed by Google) */}
+            <div>
+              <label className="block text-sm text-slate-400 mb-2">
+                {language === 'zh' ? '显示名称' : 'Display Name'}
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={user?.name ?? ''}
+                  readOnly
+                  className="flex-1 px-4 py-2.5 bg-white/5 border border-white/[0.06] rounded-lg text-white/50 cursor-not-allowed"
+                />
+                <span className="text-xs text-slate-500 px-2">
+                  {language === 'zh' ? '由 Google 管理' : 'Managed by Google'}
+                </span>
               </div>
             </div>
 
@@ -415,6 +468,23 @@ export default function ProfilePage() {
                   ))}
                 </select>
               </label>
+              <select
+                value={timezone}
+                onChange={e => { setTimezone(e.target.value); setSaved(false); }}
+                className="w-full px-4 py-2.5 bg-white/5 border border-white/[0.06] rounded-lg text-white appearance-none cursor-pointer hover:bg-white/10 transition"
+                style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', backgroundSize: '20px' }}
+              >
+                {TIMEZONES.map(tz => (
+                  <option key={tz} value={tz} className="bg-slate-900">
+                    {formatTimezone(tz)}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-slate-500 mt-1.5">
+                {language === 'zh'
+                  ? '用于生时校正和择时吉凶计算'
+                  : 'Used for birth time correction and electional astrology'}
+              </p>
             </div>
 
             <div className="mt-5 flex items-center gap-3">
@@ -468,6 +538,15 @@ export default function ProfilePage() {
                 <h2 className="mt-2 text-2xl font-semibold">
                   {language === 'zh' ? '已接入 unified profile' : 'Profiles on the unified layer'}
                 </h2>
+          {/* Account Info */}
+          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/[0.06]">
+            <h3 className="text-lg font-semibold mb-4">
+              {language === 'zh' ? '账户信息' : 'Account'}
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between">
+                <span className="text-slate-400">{language === 'zh' ? '邮箱' : 'Email'}</span>
+                <span>{user?.email}</span>
               </div>
               <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
                 {profiles.length} {language === 'zh' ? '个档案' : 'profiles'}
@@ -706,6 +785,10 @@ export default function ProfilePage() {
                 onClick={createProfile}
                 disabled={saving === 'create'}
                 className="mt-5 rounded-xl bg-gradient-to-r from-purple-600 to-amber-500 px-5 py-3 text-sm font-semibold transition hover:opacity-90 disabled:opacity-60"
+            <div className="mt-4 pt-4 border-t border-white/[0.06]">
+              <Link
+                href="/pricing"
+                className="text-sm text-amber-400 hover:text-amber-300 transition"
               >
                 {saving === 'create'
                   ? language === 'zh' ? '创建中...' : 'Creating...'

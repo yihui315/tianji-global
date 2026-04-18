@@ -11,6 +11,7 @@
       "focus": "hero_summary",
       "winner": "A",
       "notes": "Score improved by 0 pts (< 2pt threshold) - experiment discarded",
+      "notes": "Score improved by 0 pts (< 2pt threshold) — experiment discarded",
       "scoreA": 126,
       "scoreB": 125,
       "margin": 0
@@ -24,6 +25,7 @@
       "focus": "hero_summary",
       "winner": null,
       "notes": "Codex step failed: OPENAI_API_KEY secret not configured in GitHub Actions. Pipeline infrastructure validated: npm install passed, audits passed, manifest recording passed. Add OPENAI_API_KEY to repo settings to enable full run.",
+      "notes": "Codex step failed: OPENAI_API_KEY secret not configured in GitHub Actions. Pipeline infrastructure validated: npm install ✅, audits ✅, manifest recording ✅. Add OPENAI_API_KEY to repo settings to enable full run.",
       "scoreA": null,
       "scoreB": null,
       "margin": null,
@@ -61,6 +63,12 @@
     "A": "Hero Summary (headline, one-liner, CTA - upgrade conversion)",
     "B": "Five Dimension Cards (clarity, human tone, specificity)",
     "C": "Relationship Pattern (pattern naming, one-liner, tags - shareability)",
+    }
+  ],
+  "experimentFaces": {
+    "A": "Hero Summary (headline, one-liner, CTA — upgrade conversion)",
+    "B": "Five Dimension Cards (clarity, human tone, specificity)",
+    "C": "Relationship Pattern (pattern naming, one-liner, tags — shareability)",
     "D": "Current Window (time expression, urgency, action guidance)",
     "E": "Share Card (one-liner, visual style, emotional intensity)"
   }

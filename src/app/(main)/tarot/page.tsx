@@ -102,9 +102,9 @@ export default function TarotPage() {
   };
 
   return (
-    <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
-      {/* Multi-layer Cosmic Background */}
-      <div className="fixed inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse at 50% 0%, ${colors.bgNebula} 0%, transparent 55%)`, zIndex: 0 }} />
+    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
+      <div className="text-white relative z-10">
       <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 20% 20%, rgba(59,20,75,0.35) 0%, transparent 50%)', zIndex: 0 }} />
       <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 80%, rgba(6,30,60,0.45) 0%, transparent 50%)', zIndex: 0 }} />
       <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(80,40,100,0.2) 0%, transparent 40%)', zIndex: 0 }} />
@@ -245,7 +245,7 @@ export default function TarotPage() {
 
             {/* AI Interpretation */}
             {reading.aiInterpretation && (
-              <div className="bg-gradient-to-br from-purple-900/50 to-slate-800/50 rounded-xl p-6 border border-purple-500/30 backdrop-blur-sm">
+              <div className="rounded-xl p-6 border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
                     AI
@@ -327,6 +327,7 @@ export default function TarotPage() {
           <p className="mt-1">78 Cards · {language === 'zh' ? '大阿卡纳与小子阿卡纳' : 'Major & Minor Arcana'}</p>
         </div>
       </div>
+      </div>
     </div>
   );
 }
@@ -352,7 +353,7 @@ function CardDisplay({
         isExpanded ? 'scale-105' : 'hover:scale-102'
       }`}
     >
-      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-4 border border-slate-600 shadow-xl">
+      <div className="rounded-xl p-4 border border-white/[0.06] bg-white/[0.02] shadow-xl">
         {/* Position Label */}
         <div className="text-center mb-3">
           <span className="text-purple-400 text-sm">
@@ -442,7 +443,7 @@ function CelticCrossLayout({
             onClick={() => onCardClick(index)}
             className={`cursor-pointer transition-all ${showCard === index ? 'scale-110' : 'hover:scale-105'}`}
           >
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-3 border border-slate-600 shadow-xl h-full">
+            <div className="rounded-xl p-3 border border-white/[0.06] bg-white/[0.02] shadow-xl h-full">
               <div className="text-center mb-2">
                 <span className="text-purple-400 text-xs">
                   {language === 'zh' ? `位${index + 1}` : `#${index + 1}`}

@@ -58,51 +58,42 @@ export default function FortunePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-purple-950 to-gray-950 text-white">
-      {/* Header */}
-      <header className="px-8 py-6 border-b border-gray-800">
-        <h1 className="text-2xl font-bold">
-          {isZH ? '📊 人生运势图' : '📊 Life Fortune Chart'}
-        </h1>
-        <p className="text-gray-400 text-sm mt-1">
-          {isZH ? '基于八字/紫微推算人生各阶段运势' : 'Fortune cycles based on your birth chart'}
-        </p>
-      </header>
-
-      <main className="max-w-6xl mx-auto p-8">
+    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
+      <main className="max-w-6xl mx-auto px-4 py-16">
         {/* Input Form */}
         <div className="bg-gray-900/50 backdrop-blur rounded-2xl p-6 border border-gray-700 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-gray-400 text-sm mb-1">
+              <label className="block text-white/50 text-sm mb-1">
                 {isZH ? '出生日期 *' : 'Birth Date *'}
               </label>
               <input
                 type="date"
                 value={birthDate}
                 onChange={e => setBirthDate(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                className="w-full px-4 py-2 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white/80 focus:ring-2 focus:ring-[#7C3AED]/50 focus:outline-none focus:border-[#7C3AED]/30"
               />
             </div>
             <div>
-              <label className="block text-gray-400 text-sm mb-1">
+              <label className="block text-white/50 text-sm mb-1">
                 {isZH ? '出生时辰' : 'Birth Time'}
               </label>
               <input
                 type="time"
                 value={birthTime}
                 onChange={e => setBirthTime(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                className="w-full px-4 py-2 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white/80 focus:ring-2 focus:ring-[#7C3AED]/50 focus:outline-none focus:border-[#7C3AED]/30"
               />
             </div>
             <div>
-              <label className="block text-gray-400 text-sm mb-1">
+              <label className="block text-white/50 text-sm mb-1">
                 {isZH ? '性别' : 'Gender'}
               </label>
               <select
                 value={gender}
                 onChange={e => setGender(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                className="w-full px-4 py-2 bg-white/[0.04] border border-white/[0.08] rounded-lg text-white/80 focus:ring-2 focus:ring-[#7C3AED]/50 focus:outline-none focus:border-[#7C3AED]/30"
               >
                 <option value="unspecified">{isZH ? '未指定' : 'Unspecified'}</option>
                 <option value="male">{isZH ? '男' : 'Male'}</option>
@@ -110,7 +101,7 @@ export default function FortunePage() {
               </select>
             </div>
             <div>
-              <label className="block text-gray-400 text-sm mb-1">
+              <label className="block text-white/50 text-sm mb-1">
                 {isZH ? '语言' : 'Language'}
               </label>
               <div className="flex gap-2">
@@ -148,7 +139,7 @@ export default function FortunePage() {
             <button
               onClick={() => handleGenerate(false)}
               disabled={loading}
-              className="flex-1 px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 disabled:from-gray-600 text-white font-semibold rounded-xl transition"
+              className="flex-1 px-8 py-3 bg-[#7C3AED]/80 hover:bg-[#7C3AED] text-white font-semibold rounded-xl transition-all duration-300 hover:scale-[1.02]"
             >
               {loading && !loadingAI ? (isZH ? '生成中...' : 'Generating...') : (isZH ? '🔮 生成运势图' : '🔮 Generate Fortune Chart')}
             </button>
@@ -167,7 +158,7 @@ export default function FortunePage() {
           <div className="space-y-6">
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-gradient-to-br from-purple-900/60 to-purple-950/60 rounded-xl p-5 border border-purple-500/30">
+              <div className="rounded-xl p-5 border border-white/[0.06] bg-white/[0.02]">
                 <div className="text-purple-300 text-sm mb-1">
                   {isZH ? '当前阶段' : 'Current Phase'}
                 </div>
@@ -176,7 +167,7 @@ export default function FortunePage() {
                   {isZH ? `年龄 ${data.currentAge} 岁` : `Age ${data.currentAge}`}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-amber-900/60 to-amber-950/60 rounded-xl p-5 border border-amber-500/30">
+              <div className="rounded-xl p-5 border border-white/[0.06] bg-white/[0.02]">
                 <div className="text-amber-300 text-sm mb-1">
                   {isZH ? '✨ 最佳运势期' : '✨ Best Fortune Periods'}
                 </div>
@@ -184,7 +175,7 @@ export default function FortunePage() {
                   <div key={i} className="text-sm text-gray-200 mt-1">{p}</div>
                 ))}
               </div>
-              <div className="bg-gradient-to-br from-rose-900/60 to-rose-950/60 rounded-xl p-5 border border-rose-500/30">
+              <div className="rounded-xl p-5 border border-white/[0.06] bg-white/[0.02]">
                 <div className="text-rose-300 text-sm mb-1">
                   {isZH ? '⚠ 挑战期' : '⚠ Challenging Periods'}
                 </div>

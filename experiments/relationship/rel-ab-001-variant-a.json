@@ -1,0 +1,36 @@
+{
+  "name": "Hero Summary — Emotional framing (personal, contrast-driven, curiosity hook)",
+  "experimentSurface": "Hero Summary",
+  "focus": "Strengthen emotional resonance and personal specificity",
+  "metrics": {
+    "hasHeroSummary": true,
+    "hasPattern": true,
+    "hasFiveDimensions": true,
+    "hasCurrentWindow": true,
+    "hasPracticalGuidance": true,
+    "hasPremiumSection": true,
+    "shareModes": 3,
+    "headlineStrength": 16,
+    "patternClarity": 12,
+    "emotionalResonance": 14,
+    "upgradeStrength": 10
+  },
+  "copy": {
+    "headline": {
+      "romantic_high": "You feel something real — but you're not moving at the same speed",
+      "romantic_mid": "This pull between you is genuine — the question is whether you're both ready to meet it",
+      "romantic_low": "The attraction is honest — but without intention, it stays still",
+      "friendship_high": "You understand each other in ways that don't need explaining",
+      "friendship_mid": "This friendship has depth — the gap is in how much you let it be seen",
+      "friendship_low": "You're compatible enough to matter to each other — that's worth something",
+      "work_high": "You work well together — the trust is there, now it's about pace",
+      "work_mid": "This partnership has potential — the question is who adjusts first",
+      "work_low": "You're functional as colleagues — bridging differences is where the work begins"
+    },
+    "oneLiner": {
+      "romantic": "You feel the connection — but are you building it, or just experiencing it?",
+      "friendship": "You get each other — but how much of that are you actually sharing?",
+      "work": "The foundation is real — what happens next depends on how you handle the gaps"
+    }
+  }
+}

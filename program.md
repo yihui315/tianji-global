@@ -305,3 +305,31 @@ do not implement
 ---
 
 End of Program
+
+## Protected (NEVER touch)
+- auth, billing, deployment config
+- privacy policy, share privacy safeguards
+- environment config, other modules
+
+## Success criteria
+A winning variant must:
+- pass all audits
+- improve relationship score
+- improve at least one: clarity / emotional resonance / upgrade strength
+
+## Failure policy
+Discard if:
+- both variants score below baseline
+- audit fails
+- privacy/share regression
+- bilingual duplication increases
+
+## Scoring
+scripts/calculate-relationship-score.ts
+
+## Output
+- experiments/relationship/variant-a.json
+- experiments/relationship/variant-b.json
+- ab-result.json (winner)
+- experiments/manifest.json (run history)
+- codex-upgrade-report.md

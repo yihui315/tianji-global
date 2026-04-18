@@ -133,6 +133,8 @@ export default function ReadingsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-950 via-slate-950 to-indigo-950">
         <div className="text-white text-lg">{language === 'zh' ? '正在加载解读历史...' : 'Loading reading history...'}</div>
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+        <div className="text-white text-xl">Loading...</div>
       </div>
     );
   }
@@ -141,6 +143,10 @@ export default function ReadingsPage() {
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(124,58,237,0.2),_transparent_35%),linear-gradient(135deg,_#14091f,_#09090f_55%,_#0f172a)] text-white">
       <header className="border-b border-white/10 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-6">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Header */}
+      <header className="px-8 py-6 border-b border-white/[0.06]">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/dashboard" className="text-sm text-purple-300 transition hover:text-purple-200">
               ← {language === 'zh' ? '返回总控台' : 'Back to dashboard'}
@@ -180,6 +186,37 @@ export default function ReadingsPage() {
               : 'The full unified tables are not available in this environment yet, so this page falls back to the legacy readings compatibility layer when needed.'}
           </div>
         ) : null}
+      <main className="max-w-4xl mx-auto p-8">
+        {/* Stats bar */}
+        <div className="flex items-center gap-4 mb-6 text-sm text-slate-400">
+          <span>
+            {language === 'zh' ? '共' : 'Total: '}
+            <span className="text-white font-semibold">{readings.length}</span>
+            {language === 'zh' ? ' 条记录' : ' readings'}
+          </span>
+        </div>
+
+        {/* Filter chips */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {FILTERS.map(f => (
+            <button
+              key={f.value}
+              onClick={() => setFilter(f.value)}
+              className={`px-4 py-1.5 rounded-full text-sm transition border ${
+                filter === f.value
+                  ? 'bg-purple-600 border-purple-500 text-white'
+                  : 'bg-white/5 border-white/[0.06] text-slate-300 hover:bg-white/10'
+              }`}
+            >
+              {language === 'zh' ? f.label : f.labelEn}
+              {f.value !== 'all' && (
+                <span className="ml-1.5 text-xs opacity-60">
+                  ({readings.filter(r => r.reading_type === f.value).length})
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
 
         {notice ? (
           <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">
@@ -234,6 +271,11 @@ export default function ReadingsPage() {
                   className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur md:flex-row md:items-start"
                 >
                   <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${meta.gradient} text-2xl`}>
+                  key={reading.id}
+                  className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur rounded-xl border border-white/[0.06] hover:bg-white/10 transition group"
+                >
+                  {/* Type badge */}
+                  <div className={`w-12 h-12 rounded-xl bg-slate-600/30 flex items-center justify-center text-xl shrink-0`}>
                     {meta.emoji}
                   </div>
 

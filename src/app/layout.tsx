@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     description: 'AI-powered fortune platform combining Chinese metaphysics with modern psychology.',
     type: 'website',
     locale: 'en_US',
-    images: ['/og-image.png'],
+    images: ['/api/og?title=TianJi+Global&subtitle=Premium+AI+Destiny+Platform'],
   },
   twitter: {
     card: 'summary_large_image',

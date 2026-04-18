@@ -10,18 +10,14 @@ function SuccessContent() {
   const [language, setLanguage] = useState<'zh' | 'en'>('zh');
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-      </div>
+    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
 
       {/* Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center px-6">
         <div className="text-center max-w-lg mx-auto">
           {/* Success Icon */}
-          <div className="mb-8 inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-purple-600 to-amber-500 shadow-2xl shadow-purple-500/30">
+          <div className="mb-8 inline-flex items-center justify-center w-24 h-24 rounded-full bg-purple-500/30 shadow-2xl shadow-purple-500/20">
             <svg
               className="w-12 h-12 text-white"
               fill="none"
@@ -120,7 +116,7 @@ function SuccessContent() {
 export default function SuccessPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-900">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
         <div className="text-white text-xl">Loading...</div>
       </div>
     }>

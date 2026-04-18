@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -275,13 +276,8 @@ export default function TransitPage() {
   }, [birthDate, birthTime, lat, lng, targetDate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#030014] via-[#0f0a1e] to-[#030014] relative overflow-hidden">
-      {/* Animated background gradient orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-600/15 rounded-full blur-[128px] animate-pulse" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-600/15 rounded-full blur-[128px] animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[150px]" />
-      </div>
+    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+      <div className="star-field" aria-hidden="true" />
 
       {/* Glassmorphic Header */}
       <div className="relative bg-black/20 border-b border-blue-500/20 backdrop-blur-xl">
@@ -311,7 +307,7 @@ export default function TransitPage() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Input Form - Glass Card */}
           <div className="space-y-6">
-            <div className="bg-gradient-to-br from-blue-950/40 via-slate-900/80 to-purple-950/40 rounded-xl p-6 border border-blue-500/20 backdrop-blur-xl shadow-[0_0_40px_rgba(59,130,246,0.1)]">
+            <div className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]">
               <h2 className="text-lg font-semibold text-white mb-4">
                 {language === 'zh' ? '出生信息' : 'Birth Information'}
               </h2>
@@ -373,7 +369,7 @@ export default function TransitPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-950/40 via-slate-900/80 to-blue-950/40 rounded-xl p-6 border border-purple-500/20 backdrop-blur-xl shadow-[0_0_40px_rgba(139,92,246,0.1)]">
+            <div className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]">
               <h2 className="text-lg font-semibold text-white mb-4">
                 {language === 'zh' ? '目标日期' : 'Target Date'}
               </h2>
@@ -422,7 +418,7 @@ export default function TransitPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-gradient-to-br from-blue-950/50 via-slate-900/90 to-purple-950/50 rounded-xl p-6 border border-blue-500/20 backdrop-blur-xl shadow-[0_0_50px_rgba(59,130,246,0.15)]"
+                  className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-white">
@@ -463,7 +459,7 @@ export default function TransitPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 rounded-xl p-6 border border-slate-700/30 backdrop-blur-xl"
+                  className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]"
                 >
                   <h3 className="text-lg font-semibold text-white mb-4">
                     {language === 'zh' ? '星体位置图' : 'Planetary Positions'}
@@ -484,7 +480,7 @@ export default function TransitPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 rounded-xl p-6 border border-slate-700/30 backdrop-blur-xl"
+                  className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]"
                 >
                   <h3 className="text-lg font-semibold text-white mb-4">
                     {language === 'zh' ? '行星详情' : 'Planet Details'}
@@ -498,7 +494,7 @@ export default function TransitPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-gradient-to-br from-purple-950/40 to-slate-900/80 rounded-xl p-6 border border-purple-500/20 backdrop-blur-xl"
+                    className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]"
                   >
                     <h3 className="text-lg font-semibold text-white mb-4">
                       {language === 'zh' ? '重要推运' : 'Major Progressions'}
@@ -520,7 +516,7 @@ export default function TransitPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="bg-gradient-to-br from-blue-950/40 to-slate-900/80 rounded-xl p-6 border border-blue-500/20 backdrop-blur-xl"
+                    className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]"
                   >
                     <h3 className="text-lg font-semibold text-white mb-4">
                       {language === 'zh' ? '解读' : 'Interpretation'}
@@ -533,7 +529,7 @@ export default function TransitPage() {
               </>
             ) : (
               /* Empty State - Glass Card */
-              <div className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 rounded-xl p-12 border border-slate-700/30 text-center backdrop-blur-xl">
+              <div className="rounded-xl p-12 border border-white/[0.06] text-center backdrop-blur-xl bg-white/[0.02]">
                 <div className="text-5xl mb-4">🔮</div>
                 <h3 className="text-lg font-semibold text-white mb-2">
                   {language === 'zh' ? '准备计算推运' : 'Ready to Calculate'}

@@ -105,6 +105,7 @@ export interface RelationshipShare {
 
 export interface AnalyzeRelationshipRequest {
   relationType: RelationshipType;
+  lang?: 'zh' | 'en';
   personA: {
     nickname: string;
     birthDate?: string;

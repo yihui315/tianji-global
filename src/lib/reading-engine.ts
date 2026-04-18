@@ -8,6 +8,7 @@ import type {
   ApplicationModule, ReadingType, Language, WesternChartData,
 } from '@/types/reading';
 import { ZODIAC_DATA, ELEMENTS, ELEM_COLORS_ZH, PLANET_LIST } from './chart-engine';
+import { checkCoherence, type SystemType, type CoherenceResult } from '@/lib/cultural-coherence';
 
 // ─── Sign Interpretations ─────────────────────────────────────────────────────
 
@@ -156,6 +157,11 @@ export function generateSummary(
 }
 
 // ─── Insights Generation ───────────────────────────────────────────────────────
+// Three-layer narrative structure per insight module.
+// Mirrors Codebase Onboarding Engineer output discipline:
+//   1. Resonance hook  — one sentence, emotional connection
+//   2. Deep dive      — evidence, analysis, nuance
+//   3. Action closure  — specific, grounded guidance
 
 export function generateInsights(
   bigThree: { sun: { sign: string; signZh: string }; moon: { sign: string; signZh: string }; rising: { sign: string; signZh: string } },
@@ -166,80 +172,129 @@ export function generateInsights(
   const moonEl = getElement(bigThree.moon.sign);
   const risingEl = getElement(bigThree.rising.sign);
 
-  const structure = lang === 'zh'
-    ? `你的太阳落在${bigThree.sun.signZh}座（${sunEl}元素），月亮落在${bigThree.moon.signZh}座（${moonEl}元素），上升${bigThree.rising.signZh}座（${risingEl}元素）。这种组合意味着你在外部世界中表现出${SIGN_KEYWORDS[bigThree.sun.sign].zh[0]}的特质，情感层面则倾向于${SIGN_KEYWORDS[bigThree.moon.sign].zh[0]}的内在模式。`
-    : `Your Sun in ${bigThree.sun.sign} (${sunEl}) gives you a ${SIGN_KEYWORDS[bigThree.sun.sign].en[0].toLowerCase()} outer expression. Your Moon in ${bigThree.moon.sign} (${moonEl}) shapes your emotional inner world as ${SIGN_KEYWORDS[bigThree.moon.sign].en[0].toLowerCase()}.`;
+  // ── Structure ────────────────────────────────────────────────────────────────
+  const structureHook = lang === 'zh'
+    ? `你是由星辰锻造的独特个体——太阳${bigThree.sun.signZh}座是你生命的燃料，月亮${bigThree.moon.signZh}座是你情感的河流，上升${bigThree.rising.signZh}座是你面对世界的方式。`
+    : `You are forged from starlight — your Sun in ${bigThree.sun.sign} fuels your will, your Moon in ${bigThree.moon.sign} shapes your emotional world, and your Ascendant in ${bigThree.rising.sign} is how you meet the world.`;
 
-  const relationship = lang === 'zh'
-    ? `你的上升${bigThree.rising.signZh}座赋予你在关系中的独特表达方式。你倾向于被${SIGN_KEYWORDS[bigThree.rising.sign].zh[1] || SIGN_KEYWORDS[bigThree.rising.sign].zh[0]}的伴侣吸引，在亲密关系中需要保持一定程度的独立空间。${LOVE_TIPS[moonEl].zh.slice(0, 2).join('，')}将有助于你建立更健康的关系模式。`
-    : `Your Ascendant in ${bigThree.rising.sign} shapes how you appear in relationships. You gravitate toward partners who are ${SIGN_KEYWORDS[bigThree.rising.sign].en[1]?.toLowerCase() || SIGN_KEYWORDS[bigThree.rising.sign].en[0].toLowerCase()}. ${LOVE_TIPS[moonEl].en.slice(0, 2).join('. ')} will help you build healthier relationship patterns.`;
+  const structureBody = lang === 'zh'
+    ? `太阳星座揭示了你核心意志的表达方式：${SIGN_KEYWORDS[bigThree.sun.sign].zh[0]}是你最自然的生存姿态。月亮星座映射你的内在需求和安全感的来源——${SIGN_KEYWORDS[bigThree.moon.sign].zh[0]}的需求往往在童年就已成型，成年后你会不自觉地寻求满足它的方式。上升星座则是你给别人留下的第一印象，它是你在世界中行动的盔甲。三个星座的互动，构成了你独特的人格拼图。`
+    : `Your Sun sign reveals your core will: ${SIGN_KEYWORDS[bigThree.sun.sign].en[0]} is your default mode of self-expression. Your Moon sign maps your inner needs and sense of safety — ${SIGN_KEYWORDS[bigThree.moon.sign].en[0]} often forms in childhood and drives your adult behavior unconsciously. Your Ascendant is the mask you wear in the world, the first impression others receive. These three signs together form your unique personality constellation.`;
 
-  const career = lang === 'zh'
-    ? `最适合你的事业方向围绕${sunEl}能量的表达：${CAREER_TIPS[sunEl].zh.slice(0, 3).join('、')}。你的上升座暗示你在公共形象和外在表达上有独特天赋。${moonEl === 'Water' ? '适合深度研究型工作' : moonEl === 'Fire' ? '适合需要热情和行动力的岗位' : '适合需要耐心积累的方向'}，善用这一优势可以加速职业发展。`
-    : `Your ideal career path revolves around expressing ${sunEl} energy: ${CAREER_TIPS[sunEl].en.slice(0, 3).join(', ')}. Your Ascendant suggests a unique talent for public expression. ${moonEl === 'Water' ? 'Deep research-oriented work suits you' : moonEl === 'Fire' ? 'Roles requiring passion and action suit you' : 'Patience-building careers work well for you'}.`;
+  const structureClosure = lang === 'zh'
+    ? `了解这三个维度的交互，是理解自己为何在某些情境下如此行事的钥匙。`
+    : `Understanding how these three dimensions interact is the key to knowing why you behave the way you do in certain situations.`;
 
-  const risk = lang === 'zh'
-    ? `需要注意的是：${sunEl}能量若过度发挥，可能导致${RISK_TIPS[sunEl].zh.slice(0, 2).join('或')}。建议在重要决策前给自己留出冷静思考的空间，${moonEl === 'Water' ? '特别是在情绪激动时避免做重大决定' : '特别是避免被外部压力推着走'}。`
-    : `Watch out for: ${RISK_TIPS[sunEl].en.slice(0, 2).join(' or ')} if your ${sunEl} energy is over-expressed. Give yourself space for calm reflection before major decisions, ${moonEl === 'Water' ? 'especially when emotionally heightened' : 'especially when pushed by external pressure'}.`;
+  // ── Relationship ───────────────────────────────────────────────────────────
+  const relationshipHook = lang === 'zh'
+    ? `在亲密关系中，你不只是你在"的样子——你是三个星座共同导演的一出戏。`
+    : `In intimate relationships, you are not just who you think you are — you are a play directed by three different星座 simultaneously.`;
 
-  return { structure, relationship, career, risk };
+  const relationshipBody = lang === 'zh'
+    ? `你的上升${bigThree.rising.signZh}座决定了你被什么样的能量吸引——你倾向于被${SIGN_KEYWORDS[bigThree.rising.sign].zh[1] || SIGN_KEYWORDS[bigThree.rising.sign].zh[0]}的伴侣吸引，因为他们的能量能补充你内在的某种空缺。月亮的特质则决定了你情感需求的模式：${moonEl === 'Water' ? '你需要深度的情感连接才能感到安全，浅层次的关系会让你感到空虚。' : moonEl === 'Fire' ? '你需要被看见、被欣赏、被热烈地回应，情感中的冷漠会让你迅速失去兴趣。' : moonEl === 'Earth' ? '你需要一个稳定的情感基础，频繁的情感波动会让你不安。' : '你需要心智层面的交流和空间，过于粘腻的关系会让你想逃。'}理解这些模式，帮助你识别什么样的关系是你真正需要的，什么样的只是你在重复某种童年模式。`
+    : `Your Ascendant in ${bigThree.rising.sign} determines what kind of energy attracts you — you gravitate toward partners who are ${SIGN_KEYWORDS[bigThree.rising.sign].en[1]?.toLowerCase() || SIGN_KEYWORDS[bigThree.rising.sign].en[0].toLowerCase()}. Your Moon sign governs your emotional needs: ${moonEl === 'Water' ? 'You need deep emotional intimacy to feel safe. Shallow connections leave you feeling empty.' : moonEl === 'Fire' ? 'You need to be seen, appreciated, and responded to passionately. Emotional coldness makes you lose interest quickly.' : moonEl === 'Earth' ? 'You need an emotionally stable foundation. Frequent ups and downs make you anxious.' : 'You need intellectual exchange and space. Relationships that are too clingy make you want to escape.'} Understanding these patterns helps you distinguish what you truly need versus what childhood patterns you might be reenacting.`;
+
+  const relationshipClosure = lang === 'zh'
+    ? `${LOVE_TIPS[moonEl].zh.slice(0, 2).join('，')}将是你建立更健康关系模式的关键行动。`
+    : `${LOVE_TIPS[moonEl].en.slice(0, 2).join('. ')} will be key actions for building healthier relationship patterns.`;
+
+  // ── Career ──────────────────────────────────────────────────────────────────
+  const careerHook = lang === 'zh'
+    ? `事业不是你谋生的地方——它是你使命的具体化。理解你的星盘，就是在找到你的天命舞台。`
+    : `Career is not where you earn a living — it is where your mission takes physical form. Understanding your chart is finding your destiny stage.`;
+
+  const careerBody = lang === 'zh'
+    ? `最适合你的事业方向围绕${sunEl}能量的表达：${CAREER_TIPS[sunEl].zh.slice(0, 3).join('、')}。你的太阳星座定义了你最有热情的领域，而月亮星座则揭示了你最深层的舒适区——当事业同时满足这两者时，你往往能进入心流状态。上升星座赋予你在公共领域的独特气质：${SIGN_KEYWORDS[bigThree.rising.sign].zh[0]}是你名片上的第一印象。${moonEl === 'Water' ? '适合深度研究型工作，在需要洞察和耐心的领域最能发挥。' : moonEl === 'Fire' ? '适合需要热情和行动力的岗位，在竞争性能量中茁壮成长。' : moonEl === 'Earth' ? '适合需要扎实积累的领域，耐心是你最大的竞争壁垒。' : moonEl === 'Air' ? '适合需要多元思维和社交的工作，人脉是最有价值的资产。' : '适合需要灵活应变的领域，你的适应力是最大优势。'}善用这些天生的配置，可以加速你的职业发展。`
+    : `Your ideal career path revolves around ${sunEl} energy: ${CAREER_TIPS[sunEl].en.slice(0, 3).join(', ')}. Your Sun defines the area you are most passionate about; your Moon reveals your deepest comfort zone — when both are satisfied simultaneously, you tend to enter flow states. Your Ascendant gives you a unique public presence: ${SIGN_KEYWORDS[bigThree.rising.sign].en[0]} is your first impression. ${moonEl === 'Water' ? 'Deep research-oriented work suits you best, where insight and patience are valued.' : moonEl === 'Fire' ? 'Roles requiring passion and action suit you. You thrive in competitive environments.' : moonEl === 'Earth' ? 'Areas requiring steady accumulation suit you. Patience is your greatest competitive edge.' : moonEl === 'Air' ? 'Work requiring diverse thinking and social skills suits you. Your network is your most valuable asset.' : 'Areas requiring flexibility suit you. Your adaptability is your greatest strength.'} Using these natural configurations can accelerate your career growth.`;
+
+  const careerClosure = lang === 'zh'
+    ? `${CAREER_TIPS[sunEl].zh[0]}是你最具天赋的起跑点，选择它会让你事半功倍。`
+    : `${CAREER_TIPS[sunEl].en[0]} is your strongest starting point — choosing it will multiply your efforts.`;
+
+  // ── Risk ───────────────────────────────────────────────────────────────────
+  const riskHook = lang === 'zh'
+    ? `了解自己的阴影，不是自我设限——而是在暗处点亮一盏灯。`
+    : `Understanding your shadow is not self-limiting — it is lighting a lamp in the dark.`;
+
+  const riskBody = lang === 'zh'
+    ? `每个星座的能量都有其阴暗面。太阳在${bigThree.sun.signZh}座时，${sunEl === 'Fire' ? '过度的热情会让你冲动决策、过度竞争；火焰能照亮道路，也能烧毁桥梁。' : sunEl === 'Earth' ? '过度的稳定需求会让你抗拒变化、执着于物质；大地能承载万物，也能让你深陷泥沼。' : sunEl === 'Air' ? '过度的思维活跃会让你想而不做、浅尝辄止；风能传播思想，也能吹散专注。' : '过度的情感流动会让你边界模糊、逃避现实；水能滋养万物，也能淹没界限。'}月亮在${bigThree.moon.signZh}座的内在模式也会在压力下显现：${RISK_TIPS[moonEl].zh.slice(0, 2).join('或')}往往是你在情感不安全时的下意识反应。`
+    : `Every zodiac sign has a shadow side. When the Sun is in ${bigThree.sun.sign}, ${sunEl === 'Fire' ? 'excessive passion leads to impulsive decisions and over-competition; fire illuminates but also burns bridges.' : sunEl === 'Earth' ? 'excessive need for stability makes you resistant to change and attached to material things; earth sustains but can trap you in mud.' : sunEl === 'Air' ? 'excessive mental activity leads to thinking without action and shallow engagement; wind spreads ideas but scatters focus.' : 'excessive emotional flow blurs boundaries and causes escapism; water nourishes but can also drown.'} The Moon in ${bigThree.moon.sign} pattern also emerges under pressure: ${RISK_TIPS[moonEl].en.slice(0, 2).join(' or ')} are often unconscious reactions when emotionally unsafe.`;
+
+  const riskClosure = lang === 'zh'
+    ? `在重要决策前给自己留出冷静思考的空间，${moonEl === 'Water' ? '特别是在情绪激动时避免做重大决定。' : '特别是避免被外部压力推着走。'}这是你最重要的风险管理动作。`
+    : `Give yourself space for calm reflection before major decisions, ${moonEl === 'Water' ? 'especially when emotionally heightened.' : 'especially when pushed by external pressure.'} This is your most important risk management action.`;
+
+  return {
+    structure: { hook: structureHook, body: structureBody, closure: structureClosure },
+    relationship: { hook: relationshipHook, body: relationshipBody, closure: relationshipClosure },
+    career: { hook: careerHook, body: careerBody, closure: careerClosure },
+    risk: { hook: riskHook, body: riskBody, closure: riskClosure },
+  };
 }
 
 // ─── Applications Generation ──────────────────────────────────────────────────
+// Three-layer narrative structure per application module:
+//   hook  → current state (resonance opener)
+//   body  → trend logic (deep dive)
+//   advice → 3 specific actionable items (closure)
 
 export function generateApplications(
-  bigThree: { sun: { sign: string }; moon: { sign: string } },
+  bigThree: { sun: { sign: string; signZh: string }; moon: { sign: string; signZh: string } },
   elements: ElementScores,
   birthYear: number,
   lang: Language
 ): ReadingApplications {
   const sunEl = getElement(bigThree.sun.sign);
+  const moonEl = getElement(bigThree.moon.sign);
   const now = new Date().getFullYear();
   const age = now - birthYear;
   const lifePhase = age < 30 ? 'early' : age < 45 ? 'mid' : 'late';
 
-  const loveCurrent = lang === 'zh'
-    ? `你目前在感情中表现出${SIGN_KEYWORDS[bigThree.moon.sign].zh[0]}的特质，${lifePhase === 'early' ? '还在探索适合自己的关系模式' : lifePhase === 'mid' ? '感情观逐渐成熟，开始重视深层连接' : '感情趋于稳定，关注陪伴质量'}。`
-    : `You currently show ${SIGN_KEYWORDS[bigThree.moon.sign].en[0].toLowerCase()} qualities in relationships, ${lifePhase === 'early' ? 'still exploring what works for you' : lifePhase === 'mid' ? 'your view of relationships is maturing, beginning to value deep connection' : 'relationships are stabilizing, focusing on quality of companionship'}.`;
+  // ── Love ─────────────────────────────────────────────────────────────────────
+  const loveHook = lang === 'zh'
+    ? `感情不是寻找"对的人"——而是发现自己内在的关系模式，然后在其中成长。`
+    : `Relationships are not about finding the "right person" — they are about discovering your inner relationship patterns and growing through them.`;
 
-  const loveTrend = lang === 'zh'
-    ? `未来两年感情能量${lifePhase === 'early' ? '上升，有遇到志趣相投者的机遇' : lifePhase === 'mid' ? '进入深化期，面临承诺关键节点' : '稳定期，适合巩固现有关系'}。木星过境将带来拓展视野的机会。`
-    : `Romantic energy ${lifePhase === 'early' ? 'rises over the next two years, with opportunities to meet like-minded people' : lifePhase === 'mid' ? 'enters a deepening phase with a key commitment point' : 'stabilizes, good for consolidating existing relationships'}. Jupiter transit brings opportunities to broaden perspectives.`;
+  const loveBody = lang === 'zh'
+    ? `你目前在感情中表现出${SIGN_KEYWORDS[bigThree.moon.sign].zh[0]}的特质，${lifePhase === 'early' ? '还在探索适合自己的关系模式，这是正常的——允许自己多尝试、多体验。' : lifePhase === 'mid' ? '感情观逐渐成熟，你开始重视深层连接而非表面和谐。这是一个关键的成长节点。' : '感情趋于稳定，你更加关注陪伴质量和共同成长的可能。'}月亮星座的内在需求是你感情航行的北极星：${moonEl === 'Water' ? '你需要深度的情感共鸣才能感到满足，浅层次的关系让你感到空虚；允许自己等待那个真正能与你深度连接的人。' : moonEl === 'Fire' ? '你需要被热烈地回应和欣赏，情感中的冷漠会让你怀疑自己的价值；找到一个能让你感到被看见的伴侣非常重要。' : moonEl === 'Earth' ? '你需要一个稳定的情感基础；频繁的争吵和波动让你内心不安；寻找一个能给你安全感的伴侣。' : '你需要心智层面的交流和一定个人空间；过于粘腻或情绪化的关系会让你想逃离。'}未来两年，木星过境将带来拓展视野的机会，无论你是否处于一段关系中，都是深入了解自己感情模式的好时机。`
+    : `You currently show ${SIGN_KEYWORDS[bigThree.moon.sign].en[0].toLowerCase()} qualities in relationships, ${lifePhase === 'early' ? 'still exploring what works for you — allow yourself to experiment and experience. This is normal.' : lifePhase === 'mid' ? 'your relationship perspective is maturing, you are beginning to value deep connection over surface harmony. This is a key growth point.' : 'relationships are stabilizing, you focus more on quality of companionship and shared growth.'} Your Moon sign needs are the north star of your emotional navigation: ${moonEl === 'Water' ? 'You need deep emotional resonance to feel fulfilled. Shallow connections leave you feeling empty. Allow yourself to wait for someone who can truly connect with you deeply.' : moonEl === 'Fire' ? 'You need to be passionately seen and appreciated. Emotional coldness makes you doubt your worth. Finding a partner who makes you feel witnessed is crucial.' : moonEl === 'Earth' ? 'You need an emotionally stable foundation. Frequent conflicts make you anxious. Seek a partner who gives you security.' : 'You need intellectual exchange and personal space. Too clingy or emotional relationships make you want to escape.'} In the next two years, Jupiter transit will bring opportunities to broaden your horizons — whether in a relationship or not, this is a good time to understand your emotional patterns more deeply.`;
 
-  const careerCurrent = lang === 'zh'
-    ? `职业能量正在${lifePhase === 'early' ? '启动期，适合多尝试不同方向' : lifePhase === 'mid' ? '上升期，专业能力被认可' : '收获期，积累开始转化为成果'}。`
-    : `Career energy is ${lifePhase === 'early' ? 'in a startup phase, good for exploring different directions' : lifePhase === 'mid' ? 'in an upswing, professional abilities being recognized' : 'in a harvest phase, accumulation converting to results'}.`;
+  const loveAdvice = lang === 'zh'
+    ? LOVE_TIPS[moonEl].zh
+    : LOVE_TIPS[moonEl].en;
 
-  const careerTrend = lang === 'zh'
-    ? `${lifePhase === 'early' ? '30岁左右有事业方向的关键定位点' : lifePhase === 'mid' ? '40岁左右有晋升或转型机遇' : '55岁前后是传承与回顾的时期'}，建议提前规划。`
-    : `${lifePhase === 'early' ? 'Around 30 there is a key positioning point for career direction' : lifePhase === 'mid' ? 'Around 40 there are promotion or transition opportunities' : 'Around 55 is a time for legacy and reflection'}. Plan ahead.`;
+  // ── Career ───────────────────────────────────────────────────────────────────
+  const careerHook = lang === 'zh'
+    ? `最好的职业不是你最擅长的那个——而是让你在全力以赴时感到活着的那件事。`
+    : `The best career is not what you are best at — it is what makes you feel alive when you give it your all.`;
 
-  const wealthCurrent = lang === 'zh'
-    ? `财务状况${lifePhase === 'early' ? '建立期，重点是养成储蓄习惯' : lifePhase === 'mid' ? '积累期，收入有望稳步增长' : '巩固期，资产配置优化关键'}。`
-    : `Financial situation ${lifePhase === 'early' ? 'is in a building phase, focus on developing savings habits' : lifePhase === 'mid' ? 'is in an accumulation phase, income expected to grow steadily' : 'is in a consolidation phase, asset allocation optimization key'}.`;
+  const careerBody = lang === 'zh'
+    ? `职业能量正在${lifePhase === 'early' ? '启动期，适合多尝试不同方向——不要急于确定"终身职业"，探索本身就是你这阶段最重要的功课。' : lifePhase === 'mid' ? '上升期，你的专业能力正在被更多人认可；这是建立个人品牌和扩大影响力的好时机。' : '收获期，你前期的积累开始转化为可见的成果；这是验证你长期坚持是否有价值的时刻。'}太阳星座代表你最自然的职业能量：${SIGN_KEYWORDS[bigThree.sun.sign].zh[0]}的特质在你工作中自然流露，${sunEl === 'Fire' ? '你适合需要热情、行动力和冒险精神的工作——被动等待会让你枯萎。' : sunEl === 'Earth' ? '你适合需要扎实积累和耐心的领域——快速成功往往伴随着快速崩塌。' : sunEl === 'Air' ? '你适合需要多元思维和社交的工作——被困在单一角色里会让你无聊。' : '你适合需要洞察力和适应力的工作——流水线式的工作模式会消耗你的热情。'}${lifePhase === 'early' ? '30岁左右有事业方向的关键定位点。' : lifePhase === 'mid' ? '40岁左右有晋升或转型机遇，这是中年转型的好时机。' : '这是传承与回顾的时期，你可以开始考虑如何将经验传递下去。'}建议提前规划，而不是被环境推着走。`
+    : `Career energy is ${lifePhase === 'early' ? 'in a startup phase, good for exploring different directions — do not rush to define your "lifelong career." Exploring itself is your most important work at this stage.' : lifePhase === 'mid' ? 'in an upswing — your professional abilities are being recognized by more people. This is a good time to build your personal brand and expand your influence.' : 'in a harvest phase — your earlier accumulation is converting into visible results. This is the moment to validate whether your long-term persistence has paid off.'} Your Sun sign represents your most natural career energy: ${SIGN_KEYWORDS[bigThree.sun.sign].en[0]} qualities flow naturally in your work. ${sunEl === 'Fire' ? 'You are suited for work requiring passion, action, and risk — waiting passively makes you wither.' : sunEl === 'Earth' ? 'You are suited for areas requiring steady accumulation and patience — quick success often comes with quick collapse.' : sunEl === 'Air' ? 'You are suited for work requiring diverse thinking and socializing — being stuck in a single role bores you.' : 'You are suited for work requiring insight and adaptability — assembly-line work patterns drain your enthusiasm.'} ${lifePhase === 'early' ? 'Around 30 there is a key positioning point for your career direction.' : lifePhase === 'mid' ? 'Around 40 there are promotion or transition opportunities — a midlife career pivot is possible.' : 'This is a time for legacy and reflection. You can begin thinking about how to pass on your experience.'} Plan ahead rather than being pushed by circumstances.`;
 
-  const wealthTrend = lang === 'zh'
-    ? `${sunEl === 'Fire' ? '你的火元素特质意味着有机会通过主动行动获得较大收益，但也需要注意风险控制' : sunEl === 'Earth' ? '稳健的土元素能量带来持续积累，耐心是你最大的财富优势' : sunEl === 'Air' ? '风元素能量带来财务上的灵活性，但也需要避免分散投资' : '水元素能量适合长期投资规划，直觉有时能帮你抓住机会'}` : `Your ${sunEl} energy ${sunEl === 'Fire' ? 'means opportunities for significant gains through proactive action, but risk control is needed' : sunEl === 'Earth' ? 'brings steady accumulation, patience is your greatest wealth advantage' : sunEl === 'Air' ? 'brings financial flexibility but also the need to avoid scattered investments' : 'suits long-term investment planning, intuition sometimes helps you seize opportunities'}.`;
+  const careerAdvice = lang === 'zh'
+    ? CAREER_TIPS[sunEl].zh.slice(0, 3)
+    : CAREER_TIPS[sunEl].en.slice(0, 3);
+
+  // ── Wealth ───────────────────────────────────────────────────────────────────
+  const wealthHook = lang === 'zh'
+    ? `财富是实现自由的工具——理解你对钱的态度，就是理解你与自由的关系。`
+    : `Wealth is a tool for achieving freedom — understanding your attitude toward money is understanding your relationship with freedom.`;
+
+  const wealthBody = lang === 'zh'
+    ? `财务状况${lifePhase === 'early' ? '处于建立期，养成储蓄习惯比追求高收益更重要——你现在的任务是挖好蓄水池，而不是急着注水。' : lifePhase === 'mid' ? '处于积累期，收入有望稳步增长；随着专业能力被认可，你的赚钱能力正在进入上升通道。' : '处于巩固期，资产配置优化比单一投资选择更重要；你已经有足够的积累，关键是如何保护和使用它们。'}你的太阳元素能量直接影响你对财富的态度和机遇：${sunEl === 'Fire' ? '你有通过主动行动创造大额收益的潜力，但也容易在冲动决策中失去已有积累。设置硬性的止损规则是你最重要的财务功课。' : sunEl === 'Earth' ? '你擅长稳健积累，耐心是你最大的财富优势；时间是你的朋友，复利是你最好的盟友。不要羡慕别人的快速致富，那不适合你的能量模式。' : sunEl === 'Air' ? '你有财务上的灵活性和多元化思维，但也容易分散投资、浅尝辄止。找到1-2个真正理解的赛道深耕，比同时追逐10个机会更有效。' : '你有长期投资规划的直觉优势，你的洞察力有时能帮你抓住别人看不到的机会。但要注意情绪化决策——在市场波动时保持冷静是你的必修课。'}建立应急基金、控制消费、分散配置——这三件事在任何人生阶段都适用。`
+    : `Financial situation ${lifePhase === 'early' ? 'is in a building phase — developing savings habits matters more than pursuing high returns. Your task now is to dig a reservoir, not to rush to fill it.' : lifePhase === 'mid' ? 'is in an accumulation phase. As your professional abilities are recognized, your earning power is entering an upward channel.' : 'is in a consolidation phase. Asset allocation optimization matters more than picking a single investment. You have enough accumulation — the question is how to protect and use it.'} Your Sun element energy directly affects your attitude toward wealth: ${sunEl === 'Fire' ? 'You have the potential to create large gains through proactive action, but you also tend to lose what you have through impulsive decisions. Setting hard stop-loss rules is your most important financial lesson.' : sunEl === 'Earth' ? 'You excel at steady accumulation. Patience is your greatest wealth advantage. Time is your friend and compound interest is your best ally. Do not envy others quick riches — that energy pattern is not for you.' : sunEl === 'Air' ? 'You have financial flexibility and diverse thinking, but also tend to spread investments thin and jump between shallow opportunities. Finding 1-2 tracks you truly understand and diving deep is more effective than chasing 10 opportunities simultaneously.' : 'You have the advantage of long-term investment planning intuition. Your insight sometimes helps you seize opportunities others cannot see. But watch for emotional decision-making — staying calm during market volatility is your required lesson.'} Building an emergency fund, controlling spending, and diversifying — these three things apply at every life stage.`;
+
+  const wealthAdvice = lang === 'zh'
+    ? WEALTH_TIPS[sunEl].zh
+    : WEALTH_TIPS[sunEl].en;
 
   return {
-    love: {
-      current: loveCurrent,
-      trend: loveTrend,
-      advice: lang === 'zh' ? LOVE_TIPS[sunEl].zh : LOVE_TIPS[sunEl].en,
-    },
-    career: {
-      current: careerCurrent,
-      trend: careerTrend,
-      advice: lang === 'zh' ? CAREER_TIPS[sunEl].zh.slice(0, 3) : CAREER_TIPS[sunEl].en.slice(0, 3),
-    },
-    wealth: {
-      current: wealthCurrent,
-      trend: wealthTrend,
-      advice: lang === 'zh' ? WEALTH_TIPS[sunEl].zh : WEALTH_TIPS[sunEl].en,
-    },
+    love: { hook: loveHook, body: loveBody, advice: loveAdvice },
+    career: { hook: careerHook, body: careerBody, advice: careerAdvice },
+    wealth: { hook: wealthHook, body: wealthBody, advice: wealthAdvice },
   };
 }
-
 // ─── Timeline Generation ──────────────────────────────────────────────────────
 
 export function generateTimeline(birthYear: number, bigThree: { sun: { sign: string } }, lang: Language): ReadingTimeline {
@@ -379,4 +434,148 @@ export function generateReading(
 
 function generateId(): string {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+// ─── Cultural Coherence Check Integration ─────────────────────────────────────
+
+export interface ReadingWithCoherence {
+  reading: Reading;
+  coherenceResult: CoherenceResult | null;
+  canDeliver: boolean;
+  coherenceWarnings: string[];
+  coherenceErrors: string[];
+}
+
+export interface CoherenceCheckConfig {
+  enableCoherenceCheck: boolean;
+  failOnError: boolean;
+  warnOnColorMismatch: boolean;
+}
+
+// Maps ReadingType to SystemType for coherence checking
+function toSystemType(type: ReadingType): SystemType {
+  const map: Record<ReadingType, SystemType> = {
+    western: 'western',
+    bazi: 'bazi',
+    ziwei: 'ziwei',
+  };
+  return map[type];
+}
+
+// Extracts text content from a Reading for coherence checking
+function extractReadingContent(reading: Reading): string {
+  const parts: string[] = [];
+  
+  // Summary
+  parts.push(reading.summary.headline, reading.summary.tagline || '', ...reading.summary.keywords);
+  
+  // Insights
+  if (reading.insights.structure) {
+    const s = reading.insights.structure;
+    parts.push(s.hook || '', s.body || '', s.closure || '');
+  }
+  if (reading.insights.relationship) {
+    const r = reading.insights.relationship;
+    parts.push(typeof r === 'object' ? r.hook || '' : r);
+  }
+  if (reading.insights.career) {
+    const c = reading.insights.career;
+    parts.push(typeof c === 'object' ? c.hook || '' : c);
+  }
+  if (reading.insights.risk) {
+    const r = reading.insights.risk;
+    parts.push(typeof r === 'object' ? r.hook || '' : r);
+  }
+  
+  // Applications
+  const apps = reading.applications;
+  parts.push(apps.love?.hook || '', apps.love?.body || '', ...(apps.love?.advice || []));
+  parts.push(apps.career?.hook || '', apps.career?.body || '', ...(apps.career?.advice || []));
+  parts.push(apps.wealth?.hook || '', apps.wealth?.body || '', ...(apps.wealth?.advice || []));
+  
+  // Timeline phases
+  for (const phase of reading.timeline.phases) {
+    parts.push(phase.label, phase.labelEn, phase.description, phase.summary);
+  }
+  
+  // Actions
+  parts.push(...reading.actions.do, ...reading.actions.avoid);
+  
+  return parts.filter(Boolean).join(' ');
+}
+
+/**
+ * Wraps generateReading with Cultural Coherence checking.
+ * After the reading is generated, it runs through checkCoherence.
+ * If errors and failOnError=true, returns a fallback reading with coherence metadata.
+ * If warnings, attaches them to the response metadata.
+ */
+export function generateReadingWithCoherenceCheck(
+  type: ReadingType,
+  user: { birthDate: string; birthTime?: string; location?: string; lat?: number; lng?: number; name?: string },
+  chartData: WesternChartData | null,
+  lang: Language = 'zh',
+  config: Partial<CoherenceCheckConfig> = {}
+): ReadingWithCoherence {
+  const fullConfig: CoherenceCheckConfig = {
+    enableCoherenceCheck: config.enableCoherenceCheck ?? true,
+    failOnError: config.failOnError ?? true,
+    warnOnColorMismatch: config.warnOnColorMismatch ?? true,
+  };
+
+  // Generate the reading
+  const reading = generateReading(type, user, chartData, lang);
+
+  // If coherence check is disabled, return without checking
+  if (!fullConfig.enableCoherenceCheck) {
+    return {
+      reading,
+      coherenceResult: null,
+      canDeliver: true,
+      coherenceWarnings: [],
+      coherenceErrors: [],
+    };
+  }
+
+  // Extract content and check coherence
+  const content = extractReadingContent(reading);
+  const system = toSystemType(type);
+  const coherenceResult = checkCoherence(content, system);
+
+  const errors = coherenceResult.violations
+    .filter(v => v.severity === 'error')
+    .map(v => v.message);
+  const warnings = coherenceResult.violations
+    .filter(v => v.severity === 'warning')
+    .map(v => v.message);
+
+  const hasErrors = errors.length > 0;
+  const canDeliver = !hasErrors || !fullConfig.failOnError;
+
+  // If blocked due to errors, log and return empty content reading
+  if (hasErrors && fullConfig.failOnError) {
+    // Fire-and-forget analytics tracking
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('[Cultural Coherence] Violation detected in reading:', {
+        system,
+        violationCount: coherenceResult.violations.length,
+        errors: errors.length,
+        warnings: warnings.length
+      });
+    }
+  }
+
+  return {
+    reading: canDeliver ? reading : {
+      ...reading,
+      summary: {
+        ...reading.summary,
+        headline: lang === 'zh' ? '报告生成中...' : 'Generating report...',
+      },
+    },
+    coherenceResult,
+    canDeliver,
+    coherenceWarnings: warnings,
+    coherenceErrors: errors,
+  };
 }
