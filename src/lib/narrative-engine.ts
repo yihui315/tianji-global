@@ -251,7 +251,7 @@ export function generateNarrativeScript(input: NarrativeInput): NarrativeOutput 
   const { bazi, scene, style = 'warm', language = 'zh', additionalContext = {} } = input;
   const template = NARRATIVE_TEMPLATES[scene];
   const element = bazi.dayMasterElement || '木';
-  const elementData = ELEMENT_NARRATIVE[element] || ELEMENT_NARRATIVE['木'];
+  const elementData = ELEMENT_NARRATIVE[element as keyof typeof ELEMENT_NARRATIVE] || ELEMENT_NARRATIVE['木'];
 
   // 构建替换变量
   const variables = {

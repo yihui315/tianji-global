@@ -25,9 +25,10 @@ export default function CosmicParticles({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const canvasEl = canvasRef.current;
+    if (!canvasEl) return;
 
+    const canvas = canvasEl;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 

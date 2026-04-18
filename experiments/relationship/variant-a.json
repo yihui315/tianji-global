@@ -1,1 +1,28 @@
+{
+  "id": "rel-ab-003-A",
+  "module": "relationship",
+  "focus": "hero_summary",
+  "variant": "A",
+  "style": "emotional_qualitative",
+  "headlineApproach": "Lead with emotional atmosphere and relational feeling.",
+  "oneLinerApproach": "Describe chemistry and tension in a softer, more intuitive tone.",
+  "strengths": [
+    "Higher emotional resonance",
+    "Feels more intimate for first-time readers",
+    "Works well for romantic framing"
+  ],
+  "risks": [
+    "Less specific about what to do next",
+    "Uses the computed pattern less directly",
+    "Weaker support for upgrade and share clarity"
+  ],
+  "rubric": {
+    "clarity": 8,
+    "emotionalResonance": 9,
+    "actionability": 6,
+    "shareability": 7,
+    "conversionSupport": 8,
+    "total": 38
+  }
+}
 {"name":"test A","metrics":{"hasHeroSummary":true,"hasPattern":true,"hasFiveDimensions":true,"hasCurrentWindow":true,"hasPracticalGuidance":true,"hasPremiumSection":true,"shareModes":3,"headlineStrength":16,"patternClarity":12,"emotionalResonance":14,"upgradeStrength":11}}

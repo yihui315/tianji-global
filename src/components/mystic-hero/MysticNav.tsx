@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 /**
  * Minimal mystic navigation bar.
@@ -38,7 +39,7 @@ export default function MysticNav() {
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4 sm:py-5 flex items-center justify-between">
           {/* Brand */}
-          <a href="/" className="flex items-center gap-2.5 group">
+          <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-purple-600 flex items-center justify-center text-lg shadow-[0_0_20px_-4px] shadow-amber-400/50 group-hover:shadow-amber-400/80 transition-shadow">
               ☯︎
             </div>
@@ -46,18 +47,18 @@ export default function MysticNav() {
               <span className="text-xl font-serif tracking-tight text-white">TianJi</span>
               <span className="text-xl font-serif tracking-tight text-amber-300">全球</span>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-7">
             {NAV_ITEMS.map(item => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 className="text-white/70 hover:text-amber-300 text-sm tracking-wide transition-colors duration-200"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -68,11 +69,11 @@ export default function MysticNav() {
               <span className="text-white/20">|</span>
               <button className="font-medium text-amber-300">EN</button>
             </div>
-            <a href="/login">
+            <Link href="/login">
               <button className="px-5 py-2.5 bg-white/[0.08] border border-white/15 text-white text-sm rounded-full hover:bg-white/15 hover:border-amber-300/30 transition-all">
                 登入天机
               </button>
-            </a>
+            </Link>
           </div>
 
           {/* Mobile hamburger */}

@@ -1,0 +1,26 @@
+{
+  "runId": "rel-ab-003",
+  "module": "relationship",
+  "focus": "hero_summary",
+  "evaluationMode": "editorial_rubric",
+  "baseline": "The existing hero summary used generic copy and did not fully leverage the computed top pattern.",
+  "winner": "B",
+  "implementedVariant": "B",
+  "discardedVariant": "A",
+  "scores": {
+    "baseline": 34,
+    "A": 38,
+    "B": 42
+  },
+  "decisionReasons": [
+    "Variant B exposes the computed relationship pattern in the first line.",
+    "Variant B translates the weakest dimension into a clear next step.",
+    "Variant B improves clarity and shareability without touching privacy defaults."
+  ],
+  "artifacts": {
+    "variantA": "experiments/relationship/variant-a.json",
+    "variantB": "experiments/relationship/variant-b.json",
+    "manifest": "experiments/manifest.json",
+    "report": "codex-upgrade-report.md"
+  }
+}

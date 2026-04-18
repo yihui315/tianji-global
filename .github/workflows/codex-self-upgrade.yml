@@ -1,0 +1,66 @@
+name: codex-self-upgrade
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: codex-self-upgrade
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install
+        run: npm ci
+
+      - name: Run baseline audits
+        run: |
+          npm run audit:routes
+          npm run audit:copy
+          npm run audit:share
+          npm run audit:upgrade
+
+      - name: Run Codex upgrade
+        uses: openai/codex-action@v1
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          prompt: |
+            Read AGENTS.md, program.md, .claude/skills/tianji-self-driving-growth.md, and docs/self-check-rubric.json.
+            Follow the program and skill constraints before making changes.
+            Identify the highest-value small upgrade that improves TianJi without breaking product behavior.
+            Make only small, high-confidence changes.
+            Then run:
+            npm run typecheck
+            npm run lint
+            npm run test || true
+            npm run build
+            npm run audit:routes
+            npm run audit:copy
+            npm run audit:share
+            npm run audit:upgrade
+            If checks fail, repair once.
+            Write a concise summary to codex-upgrade-report.md.
+          codex_args: >
+            exec -c model_reasoning_effort="high"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: codex/self-upgrade
+          title: "Codex: self-upgrade pass"
+          commit-message: "chore: codex self-upgrade pass"
+          body-path: codex-upgrade-report.md

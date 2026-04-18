@@ -1,0 +1,28 @@
+{
+  "homepage": {
+    "hero_exists": true,
+    "pricing_exists": true,
+    "faq_exists": true,
+    "trust_exists": true
+  },
+  "relationship": {
+    "route_exists": true,
+    "five_dimensions_exist": true,
+    "share_modes_count": 3,
+    "privacy_safe_by_default": true
+  },
+  "timeline": {
+    "dimensions": [
+      "overall",
+      "career",
+      "wealth",
+      "relationship"
+    ],
+    "event_markers_exist": true
+  },
+  "share": {
+    "summary_card_exists": true,
+    "graph_card_exists": true,
+    "one_liner_card_exists": true
+  }
+}

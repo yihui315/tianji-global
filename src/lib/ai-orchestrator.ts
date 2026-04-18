@@ -173,8 +173,8 @@ async function callAnthropic(
       output: data.usage?.output_tokens || 0,
     },
     costUSD: modelEntry
-      ? ((data.usage?.input_tokens || 0) / 1_000_000) * modelEntry.inputCostPer1M +
-        ((data.usage?.output_tokens || 0) / 1_000_000) * modelEntry.outputCostPer1M
+      ? ((data.usage?.input_tokens || 0) / 1_000_000) * (modelEntry.inputCostPer1M ?? 0) +
+        ((data.usage?.output_tokens || 0) / 1_000_000) * (modelEntry.outputCostPer1M ?? 0)
       : undefined,
     latencyMs: Date.now() - start,
     finishReason: data.stop_reason,
@@ -228,8 +228,8 @@ async function callOpenAI(
       output: data.usage?.completion_tokens || 0,
     },
     costUSD: modelEntry
-      ? ((data.usage?.prompt_tokens || 0) / 1_000_000) * modelEntry.inputCostPer1M +
-        ((data.usage?.completion_tokens || 0) / 1_000_000) * modelEntry.outputCostPer1M
+      ? ((data.usage?.prompt_tokens || 0) / 1_000_000) * (modelEntry.inputCostPer1M ?? 0) +
+        ((data.usage?.completion_tokens || 0) / 1_000_000) * (modelEntry.outputCostPer1M ?? 0)
       : undefined,
     latencyMs: Date.now() - start,
   };
@@ -300,8 +300,8 @@ async function callGemini(
       output: data.usageMetadata?.candidatesTokenCount || 0,
     },
     costUSD: modelEntry
-      ? ((data.usageMetadata?.promptTokenCount || 0) / 1_000_000) * modelEntry.inputCostPer1M +
-        ((data.usageMetadata?.candidatesTokenCount || 0) / 1_000_000) * modelEntry.outputCostPer1M
+      ? ((data.usageMetadata?.promptTokenCount || 0) / 1_000_000) * (modelEntry.inputCostPer1M ?? 0) +
+        ((data.usageMetadata?.candidatesTokenCount || 0) / 1_000_000) * (modelEntry.outputCostPer1M ?? 0)
       : undefined,
     latencyMs: Date.now() - start,
     finishReason: data.candidates?.[0]?.finishReason,
@@ -510,6 +510,10 @@ export async function generateReport(
           }
         }, 2);
 
+        if (!result) {
+          throw new Error('Model fallback returned no result');
+        }
+
         return {
           content: result.content,
           provider: result.provider,
@@ -539,8 +543,8 @@ export function estimateCost(
   if (!entry) return 0;
 
   return (
-    (inputTokens / 1_000_000) * entry.inputCostPer1M +
-    (outputTokens / 1_000_000) * entry.outputCostPer1M
+    (inputTokens / 1_000_000) * (entry.inputCostPer1M ?? 0) +
+    (outputTokens / 1_000_000) * (entry.outputCostPer1M ?? 0)
   );
 }
 

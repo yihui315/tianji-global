@@ -25,6 +25,7 @@ interface DestinyResult {
   description: string;
   descriptionChinese: string;
   expressionNumber: number;
+  expressionNumberReduced?: number;
   nameValue: number;
 }
 

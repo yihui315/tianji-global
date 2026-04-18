@@ -234,18 +234,29 @@ export async function sendTarotCard(chatId: string): Promise<void> {
   const isReversed = Math.random() > 0.5;
 
   const cardData = {
-    cards: [
+    spread: {
+      positions: [
+        {
+          name: 'Daily Guidance',
+          nameEn: 'Daily Guidance',
+          description: 'The main energy to focus on today.',
+        },
+      ],
+      cards: [
       {
-        id: card.id,
-        name: card.name,
+        name: card.nameChinese || card.name,
+        nameEn: card.name,
         nameChinese: card.nameChinese,
         arcana: card.arcana,
         meaning: isReversed ? card.reversedMeaning : card.meaning,
         meaningChinese: isReversed ? card.reversedMeaningChinese : card.meaningChinese,
+        uprightMeaning: card.meaning,
+        reversedMeaning: card.reversedMeaning,
         isReversed,
       },
-    ],
-    spreadType: 'single',
+      ],
+    },
+    question: 'What does today want me to notice?',
   };
 
   const { aiInterpretation, disclaimer } = await interpretTarot(cardData, 'zh');

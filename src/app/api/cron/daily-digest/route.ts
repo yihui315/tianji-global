@@ -14,6 +14,7 @@ import type { BaziData, YiJingData, TarotData } from '@/lib/ai-prompts';
 import { Resend } from 'resend';
 import { DailyDigestEmail } from '@/components/emails/DailyDigestEmail';
 import { shuffleDeck, drawCards } from '@/lib/tarot';
+import yijing from '@/lib/yijing';
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -35,6 +36,8 @@ interface FortuneResult {
   luckyColor?: string;
   overallScore?: number;
 }
+
+type DigestSection = Parameters<typeof DailyDigestEmail>[0]['sections'][number];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -145,8 +148,44 @@ async function generateYijingFortune(
     const seed = getDailySeed();
     const hexagramNumber = ((seed + dayOfYear()) % 64) + 1;
 
+    const rawHexagram = yijing.getHexagramByNumber(hexagramNumber);
+    if (!rawHexagram) {
+      return generateFallbackFortune('yijing', language);
+    }
+
+    const enrichedHexagram = yijing.enrichHexagram(rawHexagram, [7, 7, 7, 7, 7, 7]) as {
+      number: number;
+      name: string;
+      english?: string;
+      aboveName?: string;
+      belowName?: string;
+      judgement?: string;
+      judgementEn?: string;
+      judgementZh?: string;
+      image?: string;
+      imageEn?: string;
+      imageZh?: string;
+      changingLines?: Array<{ line?: number; isYang?: boolean; meaning?: string; meaningEn?: string }>;
+    };
+
     const yijingData: YiJingData = {
-      hexagramNumber,
+      hexagram: {
+        number: enrichedHexagram.number,
+        name: enrichedHexagram.name,
+        nameEn: enrichedHexagram.english || enrichedHexagram.name,
+        above: enrichedHexagram.aboveName || '',
+        below: enrichedHexagram.belowName || '',
+        judgement: enrichedHexagram.judgementZh || enrichedHexagram.judgement || '',
+        judgementEn: enrichedHexagram.judgementEn || enrichedHexagram.judgement || '',
+        image: enrichedHexagram.imageZh || enrichedHexagram.image || '',
+        imageEn: enrichedHexagram.imageEn || enrichedHexagram.image || '',
+        changingLines: (enrichedHexagram.changingLines || []).map((line, index) => ({
+          line: line.line || index + 1,
+          isYang: Boolean(line.isYang),
+          meaning: line.meaning || '',
+          meaningEn: line.meaningEn || '',
+        })),
+      },
       question: language === 'zh' ? '今日运势如何？' : 'What is my fortune today?',
     };
 
@@ -173,18 +212,43 @@ async function generateTarotFortune(
     const deck = shuffleDeck();
     const drawn = drawCards(deck, 1);
 
+    const card = drawn.cards[0];
+    const isReversed = drawn.isReversed[0] || false;
+
+    if (!card) {
+      return generateFallbackFortune('tarot', language);
+    }
+
     const tarotData: TarotData = {
-      cards: drawn.map((c) => ({
-        ...c.card,
-        isReversed: c.isReversed,
-        position: c.position,
-      })),
-      spreadType: 'single',
+      spread: {
+        positions: [
+          {
+            name: 'Daily Guidance',
+            nameEn: 'Daily Guidance',
+            description: 'The main energy to notice today.',
+          },
+        ],
+        cards: [
+          {
+            name: card.name,
+            nameEn: card.name,
+            nameChinese: card.nameChinese,
+            suit: card.suit,
+            arcana: card.arcana,
+            meaning: card.meaning,
+            meaningChinese: card.meaningChinese,
+            uprightMeaning: card.meaning,
+            reversedMeaning: card.reversedMeaning,
+            isReversed,
+            position: 1,
+          },
+        ],
+      },
       question: language === 'zh' ? '今日运势如何？' : 'What is my fortune today?',
     };
 
     const { aiInterpretation } = await interpretTarot(tarotData, language);
-    const cardName = drawn[0]?.card?.nameChinese || drawn[0]?.card?.name || '';
+    const cardName = card.nameChinese || card.name || '';
     const summary = aiInterpretation?.slice(0, 200) + (aiInterpretation && aiInterpretation.length > 200 ? '…' : '');
 
     return {
@@ -260,7 +324,7 @@ export async function GET(request: NextRequest) {
             );
             const language: 'zh' | 'en' = (langResult.rows[0]?.language as 'zh' | 'en') || 'zh';
 
-            const sections: FortuneResult[] = [];
+            const sections: DigestSection[] = [];
 
             for (const sub of subsResult.rows) {
               const { service_type: serviceType } = sub;
@@ -287,7 +351,7 @@ export async function GET(request: NextRequest) {
                   ...fortune,
                   serviceType,
                   serviceLabel: serviceLabels[serviceType]?.[language] || serviceType,
-                } as FortuneResult & { serviceType: string; serviceLabel: string });
+                });
               }
             }
 
@@ -300,7 +364,7 @@ export async function GET(request: NextRequest) {
               userName: user.name || user.email?.split('@')[0] || (language === 'zh' ? '您' : 'you'),
               digestUrl,
               unsubscribeUrl,
-              sections: sections as FortuneResult[],
+              sections,
               language,
             });
 

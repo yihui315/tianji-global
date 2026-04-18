@@ -7,16 +7,23 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { auth } from '@/lib/auth';
+import { getPlatformContext } from '@/lib/unified-platform';
+
+const updateProfileSchema = z.object({
+  name: z.string().trim().optional(),
+  timezone: z.string().trim().optional(),
+});
 
 export async function PATCH(req: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user) {
+    const context = await getPlatformContext();
+    if (!context) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await req.json();
+    const body = updateProfileSchema.parse(await req.json());
     const { name, timezone } = body;
 
     // Validate timezone
@@ -25,24 +32,43 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid timezone' }, { status: 400 });
     }
 
-    // With Supabase: update users table
-    // Without Supabase: just acknowledge (client stores in localStorage)
-    const { isSupabaseConfigured, getSupabaseAdmin } = await import('@/lib/supabase');
-    
-    if (isSupabaseConfigured()) {
-      const supabase = getSupabaseAdmin();
-      await supabase
-        .from('users')
-        .update({ 
-          name: name ?? null,
-          timezone: timezone ?? null,
-          updated_at: new Date().toISOString(),
+    await context.supabase
+      .from('users')
+      .update({
+        name: name ?? context.user.name ?? null,
+        timezone: timezone ?? context.user.timezone ?? null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', context.user.id);
+
+    const { data: primaryProfile } = await context.supabase
+      .from('user_profiles')
+      .select('id')
+      .eq('user_id', context.user.id)
+      .eq('is_primary', true)
+      .maybeSingle();
+
+    if (primaryProfile) {
+      await context.supabase
+        .from('user_profiles')
+        .update({
+          display_name: name ?? null,
+          timezone: timezone ?? context.user.timezone ?? null,
         })
-        .eq('email', session.user.email!);
+        .eq('id', primaryProfile.id)
+        .eq('user_id', context.user.id);
     }
 
     return NextResponse.json({ success: true });
   } catch (err) {
+    if (err instanceof Error && err.message === 'Supabase is not configured.') {
+      return NextResponse.json({ success: true, local: true });
+    }
+
+    if (err instanceof z.ZodError) {
+      return NextResponse.json({ error: err.flatten() }, { status: 400 });
+    }
+
     console.error('[api/profile] PATCH error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
@@ -50,34 +76,41 @@ export async function PATCH(req: NextRequest) {
 
 export async function GET() {
   try {
-    const session = await auth();
-    if (!session?.user) {
+    const context = await getPlatformContext();
+    if (!context) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { isSupabaseConfigured, getSupabaseAdmin } = await import('@/lib/supabase');
-    
-    if (isSupabaseConfigured()) {
-      const supabase = getSupabaseAdmin();
-      const { data, error } = await supabase
-        .from('users')
-        .select('name, timezone, avatar_url')
-        .eq('email', session.user.email!)
-        .single();
+    const { data: primaryProfile } = await context.supabase
+      .from('user_profiles')
+      .select('display_name, timezone, language')
+      .eq('user_id', context.user.id)
+      .eq('is_primary', true)
+      .maybeSingle();
 
-      if (!error && data) {
-        return NextResponse.json(data);
-      }
-    }
-
-    // Fallback: return session data
     return NextResponse.json({
-      name: session.user.name ?? null,
-      email: session.user.email ?? null,
-      image: session.user.image ?? null,
-      timezone: null,
+      name: primaryProfile?.display_name ?? context.user.name ?? null,
+      email: context.sessionUserEmail,
+      image: context.user.avatar_url ?? null,
+      timezone: primaryProfile?.timezone ?? context.user.timezone ?? null,
+      language: primaryProfile?.language ?? 'en',
     });
   } catch (err) {
+    if (err instanceof Error && err.message === 'Supabase is not configured.') {
+      const session = await auth();
+      if (!session?.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      return NextResponse.json({
+        name: session.user.name ?? null,
+        email: session.user.email ?? null,
+        image: session.user.image ?? null,
+        timezone: null,
+        language: 'en',
+      });
+    }
+
     console.error('[api/profile] GET error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }

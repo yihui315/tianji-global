@@ -5,9 +5,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { isSupabaseConfigured, getSupabaseAdmin } from '@/lib/supabase';
+import { getSupabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
+import { getPlatformContext, mapModuleResultRow } from '@/lib/unified-platform';
+import { persistLegacyReadingCompat } from '@/lib/unified-write';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const session = await auth();
     if (!session?.user) {
@@ -15,10 +17,34 @@ export async function GET(req: NextRequest) {
     }
 
     if (!isSupabaseConfigured()) {
-      return NextResponse.json({ readings: [] });
+      return NextResponse.json({ readings: [], results: [] });
     }
 
     const supabase = getSupabaseAdmin();
+    const platformContext = await getPlatformContext().catch(() => null);
+    if (platformContext) {
+      const { data: moduleResults, error: moduleResultsError } = await supabase
+        .from('module_results')
+        .select('*')
+        .eq('user_id', platformContext.user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (!moduleResultsError && moduleResults && moduleResults.length > 0) {
+        const results = moduleResults.map(mapModuleResultRow);
+        return NextResponse.json({
+          readings: results.map((result) => ({
+            id: result.id,
+            reading_type: result.moduleType,
+            title: result.title ?? `${result.moduleType} reading`,
+            summary: result.summary ?? result.normalizedPayload.summary.oneLiner ?? '',
+            created_at: result.createdAt,
+          })),
+          results,
+        });
+      }
+    }
+
     const { data, error } = await supabase
       .from('readings')
       .select('id, reading_type, title, summary, created_at')
@@ -27,7 +53,7 @@ export async function GET(req: NextRequest) {
       .limit(20);
 
     if (error) throw error;
-    return NextResponse.json({ readings: data ?? [] });
+    return NextResponse.json({ readings: data ?? [], results: [] });
   } catch (err) {
     console.error('[api/readings] GET error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -66,6 +92,20 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (error) throw error;
+
+    const platformContext = await getPlatformContext().catch(() => null);
+    if (platformContext) {
+      await persistLegacyReadingCompat({
+        context: platformContext,
+        readingType: reading_type,
+        title,
+        summary,
+        readingData: reading_data,
+      }).catch((persistError) => {
+        console.warn('[api/readings] unified compatibility persist skipped:', persistError);
+      });
+    }
+
     return NextResponse.json({ success: true, id: data.id });
   } catch (err) {
     console.error('[api/readings] POST error:', err);

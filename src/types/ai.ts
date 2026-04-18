@@ -11,10 +11,13 @@ export type TaskType = 'analysis' | 'creative' | 'fast' | 'privacy';
 
 export interface ModelEntry {
   id: string;
+  name?: string;
   provider: ModelProvider;
   contextLength: number;
   costPer1kInput?: number;
   costPer1kOutput?: number;
+  inputCostPer1M?: number;
+  outputCostPer1M?: number;
   recommendedFor: TaskType[];
 }
 
@@ -29,13 +32,15 @@ export interface AIModelInfo {
 // ─── Request / Response ───────────────────────────────────────────────────────
 
 export interface ReportRequest {
-  taskType: TaskType;
+  taskType?: TaskType;
   prompt: string;
   systemPrompt?: string;
   preferredProvider?: ModelProvider;
+  preferredModel?: string;
   modelOverride?: string;
   temperature?: number;
   maxTokens?: number;
+  responseFormat?: string;
 }
 
 export interface ReportResponse {
@@ -44,7 +49,10 @@ export interface ReportResponse {
   model: string;
   tokensUsed?: { input: number; output: number };
   cost?: { input: number; output: number; total: number };
-  durationMs: number;
+  durationMs?: number;
+  latencyMs?: number;
+  costUSD?: number;
+  warnings?: string[];
 }
 
 export interface AIResponse {
@@ -53,7 +61,11 @@ export interface AIResponse {
   model: string;
   tokensUsed?: { input: number; output: number };
   cost?: { input: number; output: number; total: number };
-  durationMs: number;
+  durationMs?: number;
+  latencyMs?: number;
+  costUSD?: number;
+  raw?: unknown;
+  finishReason?: string;
   error?: string;
   cached?: boolean;
 }

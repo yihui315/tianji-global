@@ -9,12 +9,32 @@ export async function saveReading(opts: {
   title: string;
   summary?: string;
   reading_data?: Record<string, unknown>;
+  sessionId?: string;
+  moduleType?: string;
+  rawPayload?: Record<string, unknown>;
+  normalizedPayload?: Record<string, unknown>;
+  confidenceScore?: number;
+  isPremium?: boolean;
 }) {
   try {
-    await fetch('/api/readings', {
+    const useUnifiedRoute = Boolean(opts.sessionId && opts.moduleType);
+    await fetch(useUnifiedRoute ? '/api/readings/result' : '/api/readings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(opts),
+      body: JSON.stringify(
+        useUnifiedRoute
+          ? {
+              sessionId: opts.sessionId,
+              moduleType: opts.moduleType,
+              title: opts.title,
+              summary: opts.summary,
+              rawPayload: opts.rawPayload ?? opts.reading_data ?? {},
+              normalizedPayload: opts.normalizedPayload,
+              confidenceScore: opts.confidenceScore,
+              isPremium: opts.isPremium,
+            }
+          : opts
+      ),
     });
   } catch {
     // Non-fatal — reading still shows on screen even if save fails

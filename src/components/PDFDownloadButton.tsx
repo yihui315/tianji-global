@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-type ServiceType = 'bazi' | 'ziwei' | 'yijing' | 'tarot' | 'fortune' | 'synastry' | 'western';
+type ServiceType = 'bazi' | 'ziwei' | 'yijing' | 'tarot' | 'fortune' | 'synastry' | 'western' | 'numerology';
 
 interface PDFDownloadButtonProps {
   serviceType: ServiceType;

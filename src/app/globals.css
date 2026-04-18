@@ -9,6 +9,11 @@
    ══════════════════════════════════════════════════════════════ */
 
 :root {
+  --font-cinzel: "Cinzel", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --font-noto-serif-sc: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --font-instrument-serif: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --font-barlow: "Barlow", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
   /*
    * Core palette — synced with src/design-system/design-tokens.ts
    * Taste Rule: 深空黑背景 #0a0a0a + 星云紫金渐变

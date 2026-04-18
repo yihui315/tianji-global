@@ -102,8 +102,8 @@ function scoreDimension(
       const rhythmDiff = featuresA.paceType !== featuresB.paceType ? 20 : 0;
       // Guarded + open = high tension
       const tension =
-        (featuresA.intimacyType === 'guarded' && featuresB.intimacyType === 'open') ||
-        (featuresA.intimacyType === 'open' && featuresB.intimacyType === 'guarded')
+        (featuresA.intimacyType === 'cautious' && featuresB.intimacyType === 'open') ||
+        (featuresA.intimacyType === 'open' && featuresB.intimacyType === 'cautious')
           ? 25
           : 0;
       // Base compatibility
@@ -138,7 +138,11 @@ function scoreDimension(
 
 // ─── Score to Label Mapping ───────────────────────────────────────────────────
 
-function scoreLabel(dimension: 'attraction' | 'communication' | 'conflict' | 'rhythm' | 'longTerm', score: number, lang = 'zh'): string {
+function scoreLabel(
+  dimension: 'attraction' | 'communication' | 'conflict' | 'rhythm' | 'longTerm',
+  score: number,
+  lang: 'zh' | 'en' = 'zh',
+): string {
   const labels: Record<string, Record<string, string>> = {
     attraction: {
       zh: score > 80 ? '非常强烈' : score > 60 ? '较强吸引' : score > 40 ? '中等吸引' : '较弱吸引',
@@ -164,8 +168,8 @@ function scoreLabel(dimension: 'attraction' | 'communication' | 'conflict' | 'rh
   return labels[dimension]?.[lang] ?? labels[dimension]?.['en'] ?? '';
 }
 
-function dimensionSummary(dimension: string, score: number, lang = 'zh'): string {
-  const summaries: Record<string, Record<string, string>> = {
+function dimensionSummary(dimension: string, score: number, lang: 'zh' | 'en' = 'zh'): string {
+  const summaries: Record<string, string> = {
     attraction_zh: score > 80 ? '你们之间存在强烈的自然吸引和情感好奇心，这种磁场往往在初次接触时就很明显。' :
                    score > 60 ? '存在明显的吸引力，双方容易被对方的特点所触动。' :
                    score > 40 ? '吸引力的建立需要更多时间，初期较为平淡。' : '吸引不是你们关系的主要驱动力。',
@@ -201,7 +205,7 @@ function dimensionSummary(dimension: string, score: number, lang = 'zh'): string
   return summaries[key] ?? summaries[`${dimension}_en`] ?? '';
 }
 
-function dimensionStrengths(dimension: string, score: number, lang = 'zh'): string[] {
+function dimensionStrengths(dimension: string, score: number, lang: 'zh' | 'en' = 'zh'): string[] {
   const strengths: Record<string, { zh: string[]; en: string[] }> = {
     attraction: {
       zh: ['快速建立情感连接', '磁场相互吸引', '容易产生共同话题'],
@@ -229,7 +233,7 @@ function dimensionStrengths(dimension: string, score: number, lang = 'zh'): stri
   return arr.slice(0, 1);
 }
 
-function dimensionRisks(dimension: string, score: number, lang = 'zh'): string[] {
+function dimensionRisks(dimension: string, score: number, lang: 'zh' | 'en' = 'zh'): string[] {
   const risks: Record<string, { zh: string[]; en: string[] }> = {
     attraction: {
       zh: score > 80 ? ['容易过度理想化', '忽视现实差异'] : ['吸引力建立慢', '初期动力不足'],
@@ -257,7 +261,7 @@ function dimensionRisks(dimension: string, score: number, lang = 'zh'): string[]
   return arr.slice(0, 1);
 }
 
-function dimensionAdvice(dimension: string, score: number, lang = 'zh'): string[] {
+function dimensionAdvice(dimension: string, score: number, lang: 'zh' | 'en' = 'zh'): string[] {
   const advice: Record<string, { zh: string[]; en: string[] }> = {
     attraction: {
       zh: ['放慢期待建立的速度', '主动看到对方的完整性而非理想化'],
@@ -289,7 +293,7 @@ function dimensionAdvice(dimension: string, score: number, lang = 'zh'): string[
 function generateTopPattern(
   dimensions: RelationshipDimensions,
   relationType: RelationshipType,
-  lang = 'zh',
+  lang: 'zh' | 'en' = 'zh',
 ): string {
   const patterns: Record<RelationshipType, Array<{ condition: (d: RelationshipDimensions) => boolean; zh: string; en: string; enContrast?: string }>> = {
     romantic: [
@@ -367,11 +371,95 @@ function generateTopPattern(
 
 // ─── Summary Generator ─────────────────────────────────────────────────────────
 
+const HERO_DIMENSION_NAMES: Record<keyof RelationshipDimensions, { zh: string; en: string }> = {
+  attraction: { zh: '吸引力', en: 'attraction' },
+  communication: { zh: '沟通', en: 'communication' },
+  conflict: { zh: '冲突修复', en: 'conflict repair' },
+  rhythm: { zh: '相处节奏', en: 'relationship rhythm' },
+  longTerm: { zh: '长期潜力', en: 'long-term potential' },
+};
+
+function getDimensionPriority(dimensions: RelationshipDimensions) {
+  const ordered = (Object.entries(dimensions) as Array<[keyof RelationshipDimensions, RelationshipDimensionScore]>)
+    .sort(([, left], [, right]) => right.score - left.score);
+
+  return {
+    strongestKey: ordered[0][0],
+    strongest: ordered[0][1],
+    weakestKey: ordered[ordered.length - 1][0],
+    weakest: ordered[ordered.length - 1][1],
+  };
+}
+
+function heroHeadline(
+  relationType: RelationshipType,
+  pattern: string,
+  overallAvg: number,
+  lang: 'zh' | 'en',
+): string {
+  const band = overallAvg > 70 ? 'strong' : overallAvg > 50 ? 'mixed' : 'fragile';
+
+  const copy = {
+    zh: {
+      romantic: {
+        strong: `${pattern}：吸引已经建立，接下来适合把节奏慢慢对齐`,
+        mixed: `${pattern}：连接感是真实的，但需要更明确的关系对齐`,
+        fragile: `${pattern}：先把期待说清，再决定这段关系要走多深`,
+      },
+      friendship: {
+        strong: `${pattern}：默契基础不错，继续表达会让关系更稳`,
+        mixed: `${pattern}：有互补感，但需要更直接地说明彼此需求`,
+        fragile: `${pattern}：先建立稳定沟通，再判断这段友情的深度`,
+      },
+      work: {
+        strong: `${pattern}：合作潜力清晰，适合进入更稳定的协作节奏`,
+        mixed: `${pattern}：合作可行，但需要先对齐边界与节奏`,
+        fragile: `${pattern}：先把责任和预期说清，合作才有机会变顺`,
+      },
+    },
+    en: {
+      romantic: {
+        strong: `${pattern}: the pull is real, and the next step is steadier alignment`,
+        mixed: `${pattern}: the connection is real, but it needs clearer alignment to deepen`,
+        fragile: `${pattern}: name expectations early before deciding how deep this bond should go`,
+      },
+      friendship: {
+        strong: `${pattern}: the bond already has ease, and clearer expression can stabilize it further`,
+        mixed: `${pattern}: there is promise here, but needs should be named more directly`,
+        fragile: `${pattern}: build a steadier communication base before asking this friendship to carry more`,
+      },
+      work: {
+        strong: `${pattern}: the partnership has real upside, and it is ready for steadier collaboration`,
+        mixed: `${pattern}: the collaboration can work, but pace and boundaries need clearer alignment`,
+        fragile: `${pattern}: define responsibilities and expectations first before asking for smoother execution`,
+      },
+    },
+  } as const;
+
+  return copy[lang][relationType][band];
+}
+
+function heroOneLiner(
+  dimensions: RelationshipDimensions,
+  lang: 'zh' | 'en',
+): string {
+  const { strongestKey, weakestKey, weakest } = getDimensionPriority(dimensions);
+  const strongestName = HERO_DIMENSION_NAMES[strongestKey][lang];
+  const weakestName = HERO_DIMENSION_NAMES[weakestKey][lang];
+  const nextStep = weakest.advice[0] ?? (lang === 'zh' ? '先把彼此期待说清楚。' : 'Name expectations clearly first.');
+
+  if (lang === 'zh') {
+    return `目前最稳的是${strongestName}，最需要照顾的是${weakestName}。下一步建议：${nextStep}`;
+  }
+
+  return `Your strongest layer is ${strongestName}, while ${weakestName} needs the most care next. Next move: ${nextStep}`;
+}
+
 function generateSummary(
   dimensions: RelationshipDimensions,
   relationType: RelationshipType,
   pattern: string,
-  lang = 'zh',
+  lang: 'zh' | 'en' = 'zh',
 ): RelationshipSummary {
   const overallAvg = Math.round(
     (dimensions.attraction.score + dimensions.communication.score +
@@ -425,8 +513,8 @@ function generateSummary(
   };
 
   return {
-    headline: headlines[relationType]?.[lang] ?? headlines[relationType]?.en ?? '',
-    oneLiner: oneLiners[relationType]?.[lang] ?? oneLiners[relationType]?.en ?? '',
+    headline: heroHeadline(relationType, pattern, overallAvg, lang),
+    oneLiner: heroOneLiner(dimensions, lang),
     keywords: [
       scoreLabel('attraction', dimensions.attraction.score, lang),
       scoreLabel('communication', dimensions.communication.score, lang),
@@ -437,7 +525,11 @@ function generateSummary(
 
 // ─── Timeline ─────────────────────────────────────────────────────────────────
 
-function generateTimeline(dimensions: RelationshipDimensions, relationType: RelationshipType, lang = 'zh'): RelationshipTimeline {
+function generateTimeline(
+  dimensions: RelationshipDimensions,
+  relationType: RelationshipType,
+  lang: 'zh' | 'en' = 'zh',
+): RelationshipTimeline {
   const phaseZh = dimensions.rhythm.score > 60
     ? '关系稳定发展期'
     : dimensions.conflict.score < 50
@@ -487,7 +579,7 @@ export function analyzeRelationship(
   personBNickname: string,
   personABirthTime?: string,
   personBBirthTime?: string,
-  lang = 'zh',
+  lang: 'zh' | 'en' = 'zh',
 ): AnalyzeResult {
   // Extract features from birth data
   const featuresA = extractCompatibilityFeatures(personABirthDate, personABirthTime);

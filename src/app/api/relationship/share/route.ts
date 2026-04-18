@@ -117,12 +117,12 @@ export async function GET(req: NextRequest) {
     }
 
     // Increment view count (fire and forget)
-    supabase
-      .from('relationship_shares')
-      .update({ view_count: (share.view_count ?? 0) + 1 })
-      .eq('id', share.id)
-      .then(() => {})
-      .catch(() => {});
+    void Promise.resolve(
+      supabase
+        .from('relationship_shares')
+        .update({ view_count: (share.view_count ?? 0) + 1 })
+        .eq('id', share.id)
+    ).catch(() => {});
 
     // Fetch the reading
     const { data: reading, error: readingError } = await supabase

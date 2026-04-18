@@ -66,7 +66,7 @@ const ELEMENT_ANALYSIS = {
   }
 };
 
-const TEN_GODS = {
+const TEN_GODS: Record<string, { desc: string; relation: string }> = {
   比肩: { desc: '独立自主，竞争合作', relation: '兄弟姐妹，朋友同事' },
   劫财: { desc: '财务竞争，异性缘分', relation: '异性兄弟姐妹，合作伙伴' },
   食神: { desc: '福气智慧，表达能力', relation: '晚辈，学生' },
@@ -84,7 +84,7 @@ const TEN_GODS = {
 export function generateBaziInterpretation(bazi: any, language: 'zh' | 'en' = 'zh'): string {
   const dayMaster = bazi.dayHeavenlyStem;
   const element = bazi.dayMasterElement;
-  const analysis = ELEMENT_ANALYSIS[element] || {};
+  const analysis = ELEMENT_ANALYSIS[element as keyof typeof ELEMENT_ANALYSIS] || {};
 
   if (language === 'zh') {
     return `
@@ -465,7 +465,7 @@ ${lang === 'zh' ? recommendation : recommendationEn}
 
 function generateCareerAdvice(bazi: any): string {
   const element = bazi.dayMasterElement;
-  const analysis = ELEMENT_ANALYSIS[element] || {};
+  const analysis = ELEMENT_ANALYSIS[element as keyof typeof ELEMENT_ANALYSIS] || {};
 
   return `
 ## 💼 事业运势分析

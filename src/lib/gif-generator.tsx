@@ -7,7 +7,6 @@
  */
 
 import { ImageResponse } from '@vercel/og';
-import type { ChartType, OutputFormat } from '@/lib/gif-generator';
 
 const PUBLIC_DIR = './public/animated';
 
@@ -23,12 +22,27 @@ function ensureDir(): void {
   }
 }
 
-export type { ChartType, OutputFormat };
+export type ChartType = 'bazi' | 'ziwei' | 'tarot' | 'synastry';
+export type OutputFormat = 'png' | 'webp' | 'gif';
 
 interface GenerationOptions {
   width?: number;
   height?: number;
   format?: OutputFormat;
+}
+
+interface BaziPillar {
+  heavenlyStem?: string;
+  earthlyBranch?: string;
+  element?: string;
+}
+
+interface BaziChartData {
+  year?: BaziPillar;
+  month?: BaziPillar;
+  day?: BaziPillar;
+  hour?: BaziPillar;
+  dayMasterElement?: string;
 }
 
 /**
@@ -63,7 +77,6 @@ export async function generateAnimatedCard(
       {
         width,
         height,
-        format: format === 'gif' ? 'png' : format,
       }
     );
 
@@ -109,7 +122,13 @@ function buildChartHtml(type: ChartType, data: Record<string, unknown>, w: numbe
 }
 
 function buildPlaceholderSvg(type: ChartType, w: number, h: number): string {
-  const title = { ziwei: '紫微斗数', tarot: '塔罗牌', bazi: '八字', synastry: '星盘合盘' }[type] || '命理图';
+  const titles: Record<ChartType, string> = {
+    bazi: '八字',
+    ziwei: '紫微斗数',
+    tarot: '塔罗牌',
+    synastry: '星盘合盘',
+  };
+  const title = titles[type];
   return `data:image/svg+xml;base64,${Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect fill="#0F172A" width="${w}" height="${h}"/><text x="${w/2}" y="${h/2}" text-anchor="middle" fill="#7C3AED" font-size="32" font-family="sans-serif">${title}</text></svg>`).toString('base64')}`;
 }
 
@@ -120,14 +139,14 @@ function buildPlaceholderHtml(type: ChartType, w: number, h: number): string {
 // ─── BaZi Chart HTML ─────────────────────────────────────────────────────────
 
 function buildBaZiHtml(data: Record<string, unknown>, w: number, h: number): string {
-  const chart = (data.chart || data) as Record<string, Record<string, string>>;
+  const chart = (data.chart || data) as BaziChartData;
   const elements: Record<string, string> = {
     '木': '#22C55E', '火': '#EF4444', '土': '#D97706', '金': '#9CA3AF', '水': '#3B82F6',
   };
   const elementEn: Record<string, string> = {
     '木': 'Wood', '火': 'Fire', '土': 'Earth', '金': 'Metal', '水': 'Water',
   };
-  const dmElement = (chart.dayMasterElement || '木') as string;
+  const dmElement = chart.dayMasterElement || '木';
   const cx = w / 2, cy = h / 2;
   const outerR = Math.min(w, h) / 2 - 40;
   const innerR = outerR * 0.35, midR = outerR * 0.65;

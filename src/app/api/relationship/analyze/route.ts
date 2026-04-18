@@ -17,12 +17,15 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
+    const personABirthDate = personA.birthDate;
+    const personBBirthDate = personB.birthDate;
+    const lang = personABirthDate < '2000-01-01' ? 'zh' : 'zh'; // Always zh for now
     const lang = body.lang ?? 'zh';
 
     // Run compatibility analysis
     const { reading, dbData } = analyzeRelationship(
-      personA.birthDate,
-      personB.birthDate,
+      personABirthDate,
+      personBBirthDate,
       relationType,
       personA.nickname,
       personB.nickname,

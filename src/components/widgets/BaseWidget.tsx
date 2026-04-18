@@ -10,7 +10,7 @@ export interface WidgetParams {
   birthDate?: string;
   birthTime?: string;
   name?: string;
-  gender?: 'male' | 'female';
+  gender?: string;
   birthdayType?: 'solar' | 'lunar';
 }
 
@@ -56,7 +56,7 @@ export default function BaseWidget({
         <ZiWeiPalaceWidget
           birthDate={params.birthDate}
           birthTime={params.birthTime ? parseInt(params.birthTime.split(':')[0]) : 2}
-          gender={params.gender}
+          gender={params.gender === 'female' ? 'female' : 'male'}
           birthdayType={params.birthdayType}
           width={width}
           height={height}

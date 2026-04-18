@@ -11,6 +11,8 @@ interface BaZiChart {
   dayMasterElement: string;
 }
 
+type BaZiPillar = BaZiChart['year'];
+
 interface BaziWheelAnimationProps {
   birthDate?: string;
   birthTime?: string;
@@ -179,10 +181,10 @@ function AnimatedPillarLabel({
 function AnimatedStemBranch({
   cx, cy, midR, angle, pillar, delay, playing,
 }: {
-  cx: number; cy: number; midR: number; angle: number; pillar: BaZiChart[keyof BaZiChart]; delay: number; playing: boolean;
+  cx: number; cy: number; midR: number; angle: number; pillar: BaZiPillar; delay: number; playing: boolean;
 }) {
   const pos = polarToCartesian(cx, cy, midR, angle);
-  const elemColor = ELEMENT_COLORS[pillar.element];
+  const elemColor = ELEMENT_COLORS[pillar.element] ?? '#A782FF';
 
   return (
     <motion.g
