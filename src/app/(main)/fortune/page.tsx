@@ -60,22 +60,12 @@ export default function FortunePage() {
   return (
     <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
       <div className="star-field" aria-hidden="true" />
-      {/* Header }
-      <header className="px-4 py-6 border-b border-white/[0.06]">
-        <h1 className="text-2xl font-serif text-white/90">
-          {isZH ? '📊 人生运势图' : '📊 Life Fortune Chart'}
-        </h1>
-        <p className="text-white/50 text-sm mt-1">
-          {isZH ? '基于八字/紫微推算人生各阶段运势' : 'Fortune cycles based on your birth chart'}
-        </p>
-      </header>
-
       <main className="max-w-6xl mx-auto px-4 py-16">
         {/* Input Form */}
         <div className="bg-gray-900/50 backdrop-blur rounded-2xl p-6 border border-gray-700 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label              className="block text-white/50 text-sm mb-1"
+              <label className="block text-white/50 text-sm mb-1">
                 {isZH ? '出生日期 *' : 'Birth Date *'}
               </label>
               <input
@@ -86,7 +76,7 @@ export default function FortunePage() {
               />
             </div>
             <div>
-              <label              className="block text-white/50 text-sm mb-1"
+              <label className="block text-white/50 text-sm mb-1">
                 {isZH ? '出生时辰' : 'Birth Time'}
               </label>
               <input
@@ -97,7 +87,7 @@ export default function FortunePage() {
               />
             </div>
             <div>
-              <label              className="block text-white/50 text-sm mb-1"
+              <label className="block text-white/50 text-sm mb-1">
                 {isZH ? '性别' : 'Gender'}
               </label>
               <select
@@ -111,7 +101,7 @@ export default function FortunePage() {
               </select>
             </div>
             <div>
-              <label              className="block text-white/50 text-sm mb-1"
+              <label className="block text-white/50 text-sm mb-1">
                 {isZH ? '语言' : 'Language'}
               </label>
               <div className="flex gap-2">
@@ -295,7 +285,6 @@ export default function FortunePage() {
           </div>
         )}
       </main>
-      </div>
     </div>
   );
 }

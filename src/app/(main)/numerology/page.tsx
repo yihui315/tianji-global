@@ -298,8 +298,7 @@ export default function NumerologyPage() {
                       <div className="text-slate-400 text-sm mb-2">{t('Lucky Numbers', '幸运数字')}</div>
                       <div className="flex gap-2 flex-wrap">
                         {reading.luckyNumbers.map((n, i) => (
-                          <span key={i} className="px-3 py-1 rounded-full bg-amber-600/20 text-amber-300 font-bold text-lg border border-amber-500/30">{
-}</span>
+                          <span key={i} className="px-3 py-1 rounded-full bg-amber-600/20 text-amber-300 font-bold text-lg border border-amber-500/30">{n}</span>
                         ))}
                       </div>
                     </div>
@@ -402,7 +401,6 @@ export default function NumerologyPage() {
         <div className="mt-12 text-center text-white/50 text-sm">
           <p>© 2024 TianJi Global · 天机全球</p>
           <p className="mt-1">{t('Pythagorean Numerology System', '毕达哥拉斯数字命理系统')}</p>
-        </div>
         </div>
       </div>
     </main>

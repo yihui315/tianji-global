@@ -311,6 +311,7 @@ export default function EmbedPage() {
         <div className="text-center text-slate-600 text-sm">
           <p>© 2024 TianJi Global · 天机全球 · Embed System v1.0</p>
         </div>
+        </div>
       </div>
     </main>
   );
