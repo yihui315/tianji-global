@@ -327,6 +327,7 @@ export default function TarotPage() {
           <p className="mt-1">78 Cards · {language === 'zh' ? '大阿卡纳与小子阿卡纳' : 'Major & Minor Arcana'}</p>
         </div>
       </div>
+      </div>
     </div>
   );
 }
