@@ -1,30 +1,18 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { Iztrolabe } from 'react-iztro';
 import ZiWeiPalaceAnimation from '@/components/animations/ZiWeiPalaceAnimation';
-import AnimatedShareButton from '@/components/AnimatedShareButton';
+import { GlassCard, MysticButton, LanguageSwitch } from '@/components/ui';
+import { ModuleHero, ScrollNarrativeSection, InsightGrid, ShareSection } from '@/components/landing';
 import { saveReading } from '@/lib/save-reading';
-import { GlassCard, MysticButton, LanguageSwitch, SectionHeader } from '@/components/ui';
 import { colors } from '@/design-system';
 
-// ─── Fade-In Motion ───────────────────────────────────────────────────────────
-function FadeInWhenVisible({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
+/* ═══════════════════════════════════════════════════════════════
+   ZiweiPage — 紫微斗数星盘 (Taste Rule redesign demo)
+   Branch: redesign-landing-pages-20260419
+   ═══════════════════════════════════════════════════════════════ */
 
 interface ZiweiAIResponse {
   aiInterpretation?: string;
@@ -38,19 +26,319 @@ interface ZiweiAIResponse {
   aiError?: string;
 }
 
-/**
- * ZiweiPage —紫微斗数星盘页面
- * Calls /api/ziwei with enhanceWithAI=true for AI interpretation.
- * Uses react-iztro Iztrolabe for visualization.
- */
-export default function ZiweiPage() {
-  const [birthday, setBirthday] = useState<string>('2000-08-16');
-  const [birthTime, setBirthTime] = useState<number>(2); // 寅时
-  const [birthdayType, setBirthdayType] = useState<'solar' | 'lunar'>('solar');
-  const [gender, setGender] = useState<'male' | 'female'>('male');
+/* ── Narrative blocks for ScrollNarrativeSection ── */
+const NARRATIVE_BLOCKS = [
+  {
+    label: '01 · 命宫',
+    heading: '星耀入命，格局已定',
+    body: '紫微斗数以命宫为核心，七十二颗星曜分布于十二宫位，每一颗星都在述说你与生俱来的特质与命运走向。',
+  },
+  {
+    label: '02 · 宫垣',
+    heading: '宫位流转，大限变迁',
+    body: '流年、大限、小限层层叠加，每十年的能量相位告诉你何时该进，何时该守，何时是命运的转折点。',
+  },
+  {
+    label: '03 · 星曜',
+    heading: '星曜解读，性格全息',
+    body: '紫微、天机、贪狼、太阳——每一颗星都有其独特光芒，与宫位结合，呈现你性格中最深处的原貌。',
+  },
+];
 
+/* ── Insight grid items derived from AI result ── */
+function buildInsightItems(aiText: string): Array<{ icon: string; label: string; value: string }> {
+  // Extract first 3 sentences as quick-scan insights
+  const sentences = aiText.split(/[。！？\n]/).filter(Boolean).slice(0, 6);
+  const icons = ['✦', '◈', '✧', '◉', '✦', '◈'];
+  return sentences.map((s, i) => ({
+    icon: icons[i % icons.length],
+    label: `洞察 ${i + 1}`,
+    value: s.trim().slice(0, 80) + (s.length > 80 ? '…' : ''),
+  }));
+}
+
+/* ── Input form (inside hero) ── */
+function ZiweiInputForm({
+  birthday, setBirthday,
+  birthTime, setBirthTime,
+  birthdayType, setBirthdayType,
+  gender, setGender,
+  onSubmit,
+  isLoading,
+}: {
+  birthday: string; setBirthday: (v: string) => void;
+  birthTime: number; setBirthTime: (v: number) => void;
+  birthdayType: 'solar' | 'lunar'; setBirthdayType: (v: 'solar' | 'lunar') => void;
+  gender: 'male' | 'female'; setGender: (v: 'male' | 'female') => void;
+  onSubmit: (e: React.FormEvent) => void;
+  isLoading: boolean;
+}) {
+  return (
+    <GlassCard level="card" className="w-full max-w-sm border border-white/[0.06] bg-black/30 backdrop-blur-md rounded-2xl">
+      <form onSubmit={onSubmit} className="p-6 space-y-4">
+        <div>
+          <label className="block text-[10px] font-serif text-white/30 mb-1.5 tracking-widest uppercase">生日类型</label>
+          <select
+            value={birthdayType}
+            onChange={e => setBirthdayType(e.target.value as 'solar' | 'lunar')}
+            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.06] focus:outline-none focus:border-purple-500/30 transition-all"
+          >
+            <option value="solar">阳历 / Solar</option>
+            <option value="lunar">农历 / Lunar</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-[10px] font-serif text-white/30 mb-1.5 tracking-widest uppercase">生日</label>
+          <input
+            type="date"
+            value={birthday}
+            onChange={e => setBirthday(e.target.value)}
+            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.06] focus:outline-none focus:border-purple-500/30 transition-all"
+          />
+        </div>
+        <div>
+          <label className="block text-[10px] font-serif text-white/30 mb-1.5 tracking-widest uppercase">出生时辰</label>
+          <select
+            value={birthTime}
+            onChange={e => setBirthTime(Number(e.target.value))}
+            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.06] focus:outline-none focus:border-purple-500/30 transition-all"
+          >
+            {[
+              '子时 (23:00-00:59)', '丑时 (01:00-02:59)', '寅时 (03:00-04:59)',
+              '卯时 (05:00-06:59)', '辰时 (07:00-08:59)', '巳时 (09:00-10:59)',
+              '午时 (11:00-12:59)', '未时 (13:00-14:59)', '申时 (15:00-16:59)',
+              '酉时 (17:00-18:59)', '戌时 (19:00-20:59)', '亥时 (21:00-22:59)',
+              '子时尾 (23:00-23:59)',
+            ].map((t, i) => <option key={i} value={i}>{t}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="block text-[10px] font-serif text-white/30 mb-1.5 tracking-widest uppercase">性别</label>
+          <select
+            value={gender}
+            onChange={e => setGender(e.target.value as 'male' | 'female')}
+            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.06] focus:outline-none focus:border-purple-500/30 transition-all"
+          >
+            <option value="male">男 / Male</option>
+            <option value="female">女 / Female</option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full mt-2 py-3 rounded-xl text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            background: 'linear-gradient(135deg, rgba(212,175,55,0.9) 0%, rgba(168,130,255,0.7) 100%)',
+            color: '#0a0a0a',
+            boxShadow: '0 4px 24px rgba(212,175,55,0.15)',
+          }}
+          onMouseEnter={e => {
+            if (!isLoading) {
+              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 32px rgba(212,175,55,0.25)';
+            }
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
+            (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 24px rgba(212,175,55,0.15)';
+          }}
+        >
+          {isLoading ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              </svg>
+              AI 解读中...
+            </span>
+          ) : '✨ 开启命盘解析'}
+        </button>
+      </form>
+    </GlassCard>
+  );
+}
+
+/* ── Loading skeleton ── */
+function LoadingSkeleton() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="max-w-3xl mx-auto px-4 pt-24 pb-12"
+    >
+      <div className="space-y-4">
+        {[240, 160, 200].map((w, i) => (
+          <div key={i} className="h-16 rounded-xl bg-white/[0.04]" style={{ width: `${w}px`, margin: '0 auto' }} />
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── AI Result block ── */
+function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
+  if (result.aiError) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-12">
+        <GlassCard level="card" className="p-8 border border-white/[0.06] bg-white/[0.015] rounded-2xl text-center">
+          <p style={{ color: '#F87171' }}>AI 解读失败: {result.aiError}</p>
+        </GlassCard>
+      </div>
+    );
+  }
+
+  const insightItems = result.aiInterpretation ? buildInsightItems(result.aiInterpretation) : [];
+
+  return (
+    <>
+      {/* Scroll Narrative (always shown after result) */}
+      <ScrollNarrativeSection
+        accentColor="#7c3aed"
+        goldColor="#D4AF37"
+        blocks={NARRATIVE_BLOCKS}
+      />
+
+      {/* Insight Grid */}
+      {insightItems.length > 0 && (
+        <InsightGrid
+          title="命盘解析"
+          subtitle="以下为 AI 深度解读要点"
+          items={insightItems}
+          accentColor="#7c3aed"
+          goldColor="#D4AF37"
+        />
+      )}
+
+      {/* Full AI interpretation */}
+      <div className="max-w-3xl mx-auto px-4 pb-16">
+        <GlassCard level="card" className="p-8 border border-white/[0.06] bg-black/20 backdrop-blur-md rounded-2xl">
+          {/* Gold top accent */}
+          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)' }} />
+
+          <div className="flex items-center gap-2 mb-5">
+            <div
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-medium"
+              style={{
+                background: 'rgba(212,175,55,0.1)',
+                border: '1px solid rgba(212,175,55,0.2)',
+                color: 'rgba(212,175,55,0.85)',
+              }}
+            >
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M5 1L6.2 3.8L9 4.2L7 6.2L7.6 9L5 7.6L2.4 9L3 6.2L1 4.2L3.8 3.8L5 1Z" fill="currentColor"/>
+              </svg>
+              AI 命盘解读
+            </div>
+          </div>
+
+          <div className="whitespace-pre-wrap leading-relaxed text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
+            {result.aiInterpretation}
+          </div>
+
+          {result.disclaimer && (
+            <p className="mt-5 pt-4 text-[11px] italic border-t border-white/[0.06]" style={{ color: 'rgba(255,255,255,0.2)' }}>
+              {result.disclaimer}
+            </p>
+          )}
+
+          {result.aiMeta && (
+            <div className="mt-4 pt-3 flex justify-between text-[10px]" style={{ color: 'rgba(255,255,255,0.18)' }}>
+              <span>{result.aiMeta.model}</span>
+              <span>{result.aiMeta.latencyMs}ms · ${result.aiMeta.costUSD?.toFixed(4)}</span>
+            </div>
+          )}
+        </GlassCard>
+      </div>
+
+      {/* Palace Chart + Iztrolabe */}
+      <div className="max-w-3xl mx-auto px-4 pb-16">
+        <GlassCard level="card" className="rounded-2xl border border-white/[0.06] bg-black/20 backdrop-blur-md overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-4 rounded-full" style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.8), rgba(168,130,255,0.8))' }} />
+              <span className="text-xs font-serif tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                紫微星盘 · Zi Wei Palace
+              </span>
+            </div>
+            <span className="text-[10px] px-2.5 py-1 rounded-full"
+              style={{ color: 'rgba(168,130,255,0.6)', background: 'rgba(168,130,255,0.08)', border: '1px solid rgba(168,130,255,0.15)' }}>
+              Animated
+            </span>
+          </div>
+
+          {/* Animated Palace */}
+          <div className="flex justify-center py-6">
+            <ZiWeiPalaceAnimation
+              birthDate={birthday}
+              birthTime={birthTime}
+              gender={gender}
+              birthdayType={birthdayType}
+              width={380}
+              height={380}
+              playing={true}
+            />
+          </div>
+        </GlassCard>
+      </div>
+
+      {/* Iztrolabe */}
+      <div className="max-w-3xl mx-auto px-4 pb-16">
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '1024px',
+            margin: '0 auto',
+            boxShadow: '0 0 25px rgba(124,58,237,0.15)',
+            borderRadius: 12,
+            overflow: 'hidden',
+            border: '1px solid rgba(255,255,255,0.06)',
+          }}
+        >
+          <Iztrolabe
+            birthday={birthday}
+            birthTime={birthTime}
+            birthdayType={birthdayType}
+            gender={gender}
+          />
+        </div>
+      </div>
+
+      {/* Share Section */}
+      <ShareSection
+        type="ziwei"
+        resultData={{ birthday, birthTime, birthdayType, gender }}
+        ogBgSrc="/assets/share/ziwei-og.jpg"
+        accentColor="#7c3aed"
+        goldColor="#D4AF37"
+      />
+    </>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Main Page
+   ═══════════════════════════════════════════════════════════════ */
+
+// Need module-level state for the form passed into the hero
+let birthday = '2000-08-16';
+let birthTime = 2;
+let birthdayType: 'solar' | 'lunar' = 'solar';
+let gender: 'male' | 'female' = 'male';
+
+export default function ZiweiPage() {
+  const [birthdayVal, setBirthdayVal] = useState<string>('2000-08-16');
+  const [birthTimeVal, setBirthTimeVal] = useState<number>(2);
+  const [birthdayTypeVal, setBirthdayTypeVal] = useState<'solar' | 'lunar'>('solar');
+  const [genderVal, setGenderVal] = useState<'male' | 'female'>('male');
   const [aiResult, setAiResult] = useState<ZiweiAIResponse | null>(null);
-  const [isLoadingAI, setIsLoadingAI] = useState<boolean>(false);
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
+
+  // Module-level refs for non-state usage
+  birthday = birthdayVal;
+  birthTime = birthTimeVal;
+  birthdayType = birthdayTypeVal;
+  gender = genderVal;
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -60,270 +348,77 @@ export default function ZiweiPage() {
 
       try {
         const params = new URLSearchParams({
-          birthday,
-          birthTime: String(birthTime),
-          birthdayType,
-          gender,
+          birthday: birthdayVal,
+          birthTime: String(birthTimeVal),
+          birthdayType: birthdayTypeVal,
+          gender: genderVal,
           enhanceWithAI: 'true',
           language: 'zh-CN',
         });
-
         const res = await fetch(`/api/ziwei?${params.toString()}`);
-
-        if (!res.ok) {
-          throw new Error(`API error: ${res.status}`);
-        }
-
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
         const data: ZiweiAIResponse = await res.json();
         setAiResult(data);
         saveReading({
           reading_type: 'ziwei',
-          title: `${birthday} ${birthdayType === 'lunar' ? '农历' : '阳历'} ${gender === 'male' ? '男' : '女'} 紫微斗数`,
+          title: `${birthdayVal} ${birthdayTypeVal === 'lunar' ? '农历' : '阳历'} ${genderVal === 'male' ? '男' : '女'} 紫微斗数`,
           summary: data.aiInterpretation?.slice(0, 120) ?? '',
           reading_data: data as unknown as Record<string, unknown>,
         });
       } catch (err) {
-        console.error('Ziwei AI fetch failed:', err);
-        setAiResult({
-          aiError: err instanceof Error ? err.message : 'Failed to get AI interpretation',
-        });
+        setAiResult({ aiError: err instanceof Error ? err.message : 'Failed to get AI interpretation' });
       } finally {
         setIsLoadingAI(false);
       }
     },
-    [birthday, birthTime, birthdayType, gender]
+    [birthdayVal, birthTimeVal, birthdayTypeVal, genderVal]
   );
 
   return (
-    <div
-      className="mystic-page text-white min-h-screen"
-      style={{ background: colors.bgPrimary }}
-    >
-      {/* Multi-layer Cosmic Background */}
-      <div className="fixed inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse at 50% 0%, ${colors.bgNebula} 0%, transparent 55%)`, zIndex: 0 }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 20% 20%, rgba(59,20,75,0.35) 0%, transparent 50%)', zIndex: 0 }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 80%, rgba(6,30,60,0.45) 0%, transparent 50%)', zIndex: 0 }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(80,40,100,0.2) 0%, transparent 40%)', zIndex: 0 }} />
-
-      {/* Fixed LanguageSwitch top-right */}
+    <div className="text-white min-h-screen" style={{ background: colors.bgPrimary }}>
+      {/* Fixed LanguageSwitch */}
       <div className="fixed top-4 right-4 z-50">
         <LanguageSwitch />
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-20 pb-12 w-full relative z-10">
-        {/* Page Header */}
-        <div className="mb-12 pt-4">
-          <SectionHeader
-            title="紫微斗数 · Zi Wei Dou Shu"
-            subtitle="以星耀配合宫位，推断命运走势"
+      {/* ── Hero Section ── */}
+      <ModuleHero
+        titleCn="紫微斗数"
+        titleEn="Zi Wei Dou Shu"
+        tagline="星耀入命，格局已定"
+        ogBgSrc="/assets/hero/hero-cosmic-interface.png"
+        accentColor="#7c3aed"
+        goldColor="#D4AF37"
+      >
+        <ZiweiInputForm
+          birthday={birthdayVal} setBirthday={setBirthdayVal}
+          birthTime={birthTimeVal} setBirthTime={setBirthTimeVal}
+          birthdayType={birthdayTypeVal} setBirthdayType={setBirthdayTypeVal}
+          gender={genderVal} setGender={setGenderVal}
+          onSubmit={handleSubmit}
+          isLoading={isLoadingAI}
+        />
+      </ModuleHero>
+
+      {/* ── Result Area ── */}
+      {isLoadingAI && <LoadingSkeleton />}
+      {aiResult && !isLoadingAI && <AIResultBlock result={aiResult} />}
+
+      {/* ── Default state: show scroll narrative before user submits ── */}
+      {!aiResult && !isLoadingAI && (
+        <>
+          <ScrollNarrativeSection
+            accentColor="#7c3aed"
+            goldColor="#D4AF37"
+            blocks={NARRATIVE_BLOCKS}
           />
-        </div>
-
-        {/* Input Form */}
-        <FadeInWhenVisible delay={0.1}>
-          <GlassCard level="card" className="p-6 sm:p-8 mb-8 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-            <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Birthday Type */}
-                <div>
-                  <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                    生日类型 / Birthday Type
-                  </label>
-                  <select
-                    value={birthdayType}
-                    onChange={(e) => setBirthdayType(e.target.value as 'solar' | 'lunar')}
-                    className="w-full rounded-xl px-3 py-3 text-sm text-white bg-white/[0.04] border border-white/[0.06] transition-all focus:outline-none focus:ring-2 focus:ring-purple-500/40"
-                  >
-                    <option value="solar">阳历 / Solar</option>
-                    <option value="lunar">农历 / Lunar</option>
-                  </select>
-                </div>
-
-                {/* Birthday */}
-                <div>
-                  <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                    生日 / Birthday
-                  </label>
-                  <input
-                    type="date"
-                    value={birthday}
-                    onChange={(e) => setBirthday(e.target.value)}
-                    className="w-full rounded-xl px-3 py-3 text-sm text-white bg-white/[0.04] border border-white/[0.06] transition-all focus:outline-none focus:ring-2 focus:ring-purple-500/40"
-                  />
-                </div>
-
-                {/* Birth Time (时辰) */}
-                <div>
-                  <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                    出生时辰 / Birth Hour
-                  </label>
-                  <select
-                    value={birthTime}
-                    onChange={(e) => setBirthTime(Number(e.target.value))}
-                    className="w-full rounded-xl px-3 py-3 text-sm text-white bg-white/[0.04] border border-white/[0.06] transition-all focus:outline-none focus:ring-2 focus:ring-purple-500/40"
-                  >
-                    <option value={0}>子时 (23:00-00:59)</option>
-                    <option value={1}>丑时 (01:00-02:59)</option>
-                    <option value={2}>寅时 (03:00-04:59)</option>
-                    <option value={3}>卯时 (05:00-06:59)</option>
-                    <option value={4}>辰时 (07:00-08:59)</option>
-                    <option value={5}>巳时 (09:00-10:59)</option>
-                    <option value={6}>午时 (11:00-12:59)</option>
-                    <option value={7}>未时 (13:00-14:59)</option>
-                    <option value={8}>申时 (15:00-16:59)</option>
-                    <option value={9}>酉时 (17:00-18:59)</option>
-                    <option value={10}>戌时 (19:00-20:59)</option>
-                    <option value={11}>亥时 (21:00-22:59)</option>
-                    <option value={12}>子时尾 (23:00-23:59)</option>
-                  </select>
-                </div>
-
-                {/* Gender */}
-                <div>
-                  <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                    性别 / Gender
-                  </label>
-                  <select
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value as 'male' | 'female')}
-                    className="w-full rounded-xl px-3 py-3 text-sm text-white bg-white/[0.04] border border-white/[0.06] transition-all focus:outline-none focus:ring-2 focus:ring-purple-500/40"
-                  >
-                    <option value="male">男 / Male</option>
-                    <option value="female">女 / Female</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <div className="mt-6 flex justify-center">
-                <MysticButton
-                  variant="solid"
-                  size="lg"
-                  type="submit"
-                  disabled={isLoadingAI}
-                >
-                  {isLoadingAI ? (
-                    <span className="flex items-center gap-2">
-                      <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                      </svg>
-                      AI 解读中...
-                    </span>
-                  ) : '✨ AI 解读'}
-                </MysticButton>
-              </div>
-            </form>
-          </GlassCard>
-        </FadeInWhenVisible>
-
-        {/* Loading State */}
-        {isLoadingAI && (
-          <FadeInWhenVisible>
-            <GlassCard level="card" className="p-8 text-center mb-8 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-              <div className="flex flex-col items-center gap-4">
-                <div className="animate-pulse">
-                  <div className="h-4 w-64 rounded mb-2 bg-white/[0.06]" />
-                  <div className="h-4 w-48 rounded mx-auto bg-white/[0.06]" />
-                </div>
-                <p className="text-white/30">正在调用 AI 分析您的紫微命盘...</p>
-              </div>
-            </GlassCard>
-          </FadeInWhenVisible>
-        )}
-
-        {/* AI Result */}
-        {aiResult && !isLoadingAI && (
-          <>
-            {aiResult.aiError ? (
-              <FadeInWhenVisible>
-                <GlassCard level="card" className="p-6 mb-8 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-                  <p style={{ color: '#F87171', textAlign: 'center' }}>
-                    AI 解读失败: {aiResult.aiError}
-                  </p>
-                </GlassCard>
-              </FadeInWhenVisible>
-            ) : (
-              <FadeInWhenVisible delay={0.1}>
-                <GlassCard level="card" className="p-6 mb-8 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-                  <h2 className="text-lg font-serif font-bold mb-4 text-center text-amber-400/80">
-                    ✨ AI 命盘解读
-                  </h2>
-                  <div className="whitespace-pre-wrap leading-relaxed text-white/60">
-                    {aiResult.aiInterpretation}
-                  </div>
-                  {aiResult.disclaimer && (
-                    <p className="mt-4 text-xs italic text-white/20">
-                      {aiResult.disclaimer}
-                    </p>
-                  )}
-                  {aiResult.aiMeta && (
-                    <div className="mt-4 pt-4 flex justify-between text-xs text-white/20 border-t border-white/[0.06]">
-                      <span>Model: {aiResult.aiMeta.model}</span>
-                      <span>Latency: {aiResult.aiMeta.latencyMs}ms | Cost: ${aiResult.aiMeta.costUSD?.toFixed(4) ?? 'N/A'}</span>
-                    </div>
-                  )}
-                </GlassCard>
-              </FadeInWhenVisible>
-            )}
-          </>
-        )}
-
-        {/* Animated ZiWei Palace Chart */}
-        {aiResult && !isLoadingAI && !aiResult.aiError && (
-          <FadeInWhenVisible delay={0.15}>
-            <div className="mb-8">
-              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
-                ✨ Animated ZiWei Palace
-              </h3>
-              <GlassCard level="card" className="p-4 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-                  <ZiWeiPalaceAnimation
-                    birthDate={birthday}
-                    birthTime={birthTime}
-                    gender={gender}
-                    birthdayType={birthdayType}
-                    width={420}
-                    height={420}
-                    playing={true}
-                  />
-                </div>
-                <div className="flex justify-center">
-                  <AnimatedShareButton
-                    type="ziwei"
-                    resultData={{ birthday, birthTime, birthdayType, gender }}
-                    format="webp"
-                    language="zh"
-                    variant="primary"
-                  />
-                </div>
-              </GlassCard>
-            </div>
-          </FadeInWhenVisible>
-        )}
-
-        {/* Astrolabe Visualization */}
-        <FadeInWhenVisible delay={0.2}>
-          <div
-            style={{
-              width: 1024,
-              maxWidth: '100%',
-              margin: '0 auto',
-              boxShadow: '0 0 25px rgba(124,58,237,0.15)',
-              borderRadius: 12,
-              overflow: 'hidden',
-              border: '1px solid rgba(255,255,255,0.06)',
-            }}
-          >
-            <Iztrolabe
-              birthday={birthday}
-              birthTime={birthTime}
-              birthdayType={birthdayType}
-              gender={gender}
-            />
+          {/* Second CTA */}
+          <div className="max-w-xl mx-auto px-6 py-20 text-center">
+            <p className="text-white/30 text-sm mb-6">填写上方表单，开启你的命盘解析</p>
+            <div className="h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(124,58,237,0.3), transparent)' }} />
           </div>
-        </FadeInWhenVisible>
-      </div>
+        </>
+      )}
     </div>
   );
 }
