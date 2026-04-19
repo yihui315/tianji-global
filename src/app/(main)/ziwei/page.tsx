@@ -75,14 +75,18 @@ function ZiweiInputForm({
   isLoading: boolean;
 }) {
   return (
-    <GlassCard level="card" className="w-full max-w-sm border border-white/[0.06] bg-black/30 backdrop-blur-md rounded-2xl">
-      <form onSubmit={onSubmit} className="p-6 space-y-4">
+    <form
+      onSubmit={onSubmit}
+      className="w-full max-w-sm p-6 rounded-2xl border border-white/[0.08] bg-black/40 backdrop-blur-xl"
+      style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)' }}
+    >
+      <div className="space-y-4">
         <div>
           <label className="block text-[10px] font-serif text-white/30 mb-1.5 tracking-widest uppercase">生日类型</label>
           <select
             value={birthdayType}
             onChange={e => setBirthdayType(e.target.value as 'solar' | 'lunar')}
-            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.06] focus:outline-none focus:border-purple-500/30 transition-all"
+            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.08] focus:outline-none focus:border-purple-500/40 transition-all"
           >
             <option value="solar">阳历 / Solar</option>
             <option value="lunar">农历 / Lunar</option>
@@ -94,7 +98,7 @@ function ZiweiInputForm({
             type="date"
             value={birthday}
             onChange={e => setBirthday(e.target.value)}
-            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.06] focus:outline-none focus:border-purple-500/30 transition-all"
+            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.08] focus:outline-none focus:border-purple-500/40 transition-all"
           />
         </div>
         <div>
@@ -102,7 +106,7 @@ function ZiweiInputForm({
           <select
             value={birthTime}
             onChange={e => setBirthTime(Number(e.target.value))}
-            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.06] focus:outline-none focus:border-purple-500/30 transition-all"
+            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.08] focus:outline-none focus:border-purple-500/40 transition-all"
           >
             {[
               '子时 (23:00-00:59)', '丑时 (01:00-02:59)', '寅时 (03:00-04:59)',
@@ -118,18 +122,20 @@ function ZiweiInputForm({
           <select
             value={gender}
             onChange={e => setGender(e.target.value as 'male' | 'female')}
-            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.06] focus:outline-none focus:border-purple-500/30 transition-all"
+            className="w-full rounded-xl px-3 py-2.5 text-sm text-white/80 bg-white/[0.04] border border-white/[0.08] focus:outline-none focus:border-purple-500/40 transition-all"
           >
             <option value="male">男 / Male</option>
             <option value="female">女 / Female</option>
           </select>
         </div>
+      </div>
+      <div className="mt-5">
         <MysticButton
           type="submit"
           variant="solid"
           size="xl"
           disabled={isLoading}
-          className="w-full mt-2"
+          className="w-full"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -141,8 +147,8 @@ function ZiweiInputForm({
             </span>
           ) : '✨ 开启命盘解析'}
         </MysticButton>
-      </form>
-    </GlassCard>
+      </div>
+    </form>
   );
 }
 
