@@ -75,12 +75,9 @@ function ZiweiInputForm({
   isLoading: boolean;
 }) {
   return (
-    <form
-      onSubmit={onSubmit}
-      className="w-full max-w-sm p-6 rounded-2xl border border-white/[0.08] bg-black/40 backdrop-blur-xl"
-      style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)' }}
-    >
-      <div className="space-y-4">
+    <div className="w-full max-w-sm rounded-2xl border border-white/[0.08]"
+      style={{ background: 'rgba(5,5,15,0.75)', boxShadow: '0 8px 48px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
+      <form onSubmit={onSubmit} className="p-6 space-y-4">
         <div>
           <label className="block text-[10px] font-serif text-white/30 mb-1.5 tracking-widest uppercase">生日类型</label>
           <select
@@ -128,27 +125,27 @@ function ZiweiInputForm({
             <option value="female">女 / Female</option>
           </select>
         </div>
-      </div>
-      <div className="mt-5">
-        <MysticButton
-          type="submit"
-          variant="solid"
-          size="xl"
-          disabled={isLoading}
-          className="w-full"
-        >
-          {isLoading ? (
-            <span className="flex items-center justify-center gap-2">
-              <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-              </svg>
-              AI 解读中...
-            </span>
-          ) : '✨ 开启命盘解析'}
-        </MysticButton>
-      </div>
-    </form>
+        <div className="pt-2">
+          <MysticButton
+            type="submit"
+            variant="solid"
+            size="xl"
+            disabled={isLoading}
+            className="w-full"
+          >
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+                AI 解读中...
+              </span>
+            ) : '✨ 开启命盘解析'}
+          </MysticButton>
+        </div>
+      </form>
+    </div>
   );
 }
 
