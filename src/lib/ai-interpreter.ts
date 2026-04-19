@@ -56,7 +56,8 @@ async function callAI(
   prompt: string,
   language: 'en' | 'zh',
   taskType: 'analysis' = 'analysis',
-  extraSystemContext?: string
+  extraSystemContext?: string,
+  preferredProvider?: 'packy'
 ): Promise<{ content: string; report: ReportResponse }> {
   const baseSystemPrompt =
     language === 'zh'
@@ -70,6 +71,7 @@ async function callAI(
   const report = await generateReport({
     prompt,
     systemPrompt,
+    preferredProvider,
     taskType,
     responseFormat: 'text',
     maxTokens: 2048,
@@ -125,7 +127,7 @@ export async function interpretBazi(
     `KNOWLEDGE BASE:\n${kbContext}\n\n` +
     `SYSTEM CONSTRAINT: ${kbConstraint}`;
 
-  const { content, report } = await callAI(userPrompt, language, 'analysis', extraSystemContext);
+  const { content, report } = await callAI(userPrompt, language, 'analysis', extraSystemContext, 'packy');
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
 
   const hallucinations = detectHallucinations(content, 'bazi');
@@ -161,7 +163,7 @@ export async function interpretZiwei(
     `KNOWLEDGE BASE:\n${kbContext}\n\n` +
     `SYSTEM CONSTRAINT: ${kbConstraint}`;
 
-  const { content, report } = await callAI(userPrompt, language, 'analysis', extraSystemContext);
+  const { content, report } = await callAI(userPrompt, language, 'analysis', extraSystemContext, 'packy');
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
 
   const hallucinations = detectHallucinations(content, 'ziwei');
@@ -194,7 +196,7 @@ export async function interpretTarot(
     `You are a Tarot reading expert.\n\n` +
     `SYSTEM CONSTRAINT: ${kbConstraint}`;
 
-  const { content, report } = await callAI(prompt, language, 'analysis', extraSystemContext);
+  const { content, report } = await callAI(prompt, language, 'analysis', extraSystemContext, 'packy');
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
 
   // Tarot uses general pattern detection (no dedicated KB)
@@ -230,7 +232,7 @@ export async function interpretYiJing(
     `KNOWLEDGE BASE:\n${kbContext}\n\n` +
     `SYSTEM CONSTRAINT: ${kbConstraint}`;
 
-  const { content, report } = await callAI(userPrompt, language, 'analysis', extraSystemContext);
+  const { content, report } = await callAI(userPrompt, language, 'analysis', extraSystemContext, 'packy');
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
 
   const hallucinations = detectHallucinations(content, 'yijing');
@@ -263,7 +265,7 @@ export async function interpretFortune(
     `You are a Chinese metaphysics fortune-telling expert.\n\n` +
     `SYSTEM CONSTRAINT: ${kbConstraint}`;
 
-  const { content, report } = await callAI(prompt, language, 'analysis', extraSystemContext);
+  const { content, report } = await callAI(prompt, language, 'analysis', extraSystemContext, 'packy');
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
 
   const hallucinations = detectHallucinations(content, 'fortune');
@@ -289,7 +291,7 @@ export async function interpretPsychology(
   hallucinations?: Hallucination[];
 }> {
   const prompt = getPsychologyPrompt(data, language);
-  const { content, report } = await callAI(prompt, language);
+  const { content, report } = await callAI(prompt, language, 'analysis', undefined, 'packy');
   const disclaimer = language === 'zh' ? DISCLAIMER_ZH : DISCLAIMER_EN;
 
   // Psychology doesn't have metaphysics hallucination risks, but we still
