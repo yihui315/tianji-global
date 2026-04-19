@@ -24,6 +24,7 @@ import { getModelEntry, MODEL_REGISTRY } from '@/types/ai';
 function getApiKey(provider: ModelProvider): string | undefined {
   switch (provider) {
     case 'openai':
+    case 'packy':
       return process.env.OPENAI_API_KEY;
     case 'anthropic':
       return process.env.ANTHROPIC_API_KEY;
@@ -42,6 +43,8 @@ function getBaseUrl(provider: ModelProvider): string {
   switch (provider) {
     case 'openai':
       return process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
+    case 'packy':
+      return process.env.PACKY_API_ENDPOINT || 'https://www.packyapi.com/v1';
     case 'anthropic':
       return process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com/v1';
     case 'grok':
@@ -58,6 +61,7 @@ function getBaseUrl(provider: ModelProvider): string {
 export function getAvailableProviders(): ModelProvider[] {
   const available: ModelProvider[] = [];
   if (process.env.OPENAI_API_KEY) available.push('openai');
+  if (process.env.OPENAI_API_KEY && process.env.PACKY_API_ENDPOINT) available.push('packy');
   if (process.env.ANTHROPIC_API_KEY) available.push('anthropic');
   if (process.env.GROK_API_KEY) available.push('grok');
   if (process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY) available.push('gemini');
@@ -397,7 +401,8 @@ export async function generateReport(
   // Get API keys from env
   const getKey = (p: ModelProvider) => {
     switch (p) {
-      case 'openai': return resolvedEnv.OPENAI_API_KEY;
+      case 'openai':
+      case 'packy': return resolvedEnv.OPENAI_API_KEY;
       case 'anthropic': return resolvedEnv.ANTHROPIC_API_KEY;
       case 'grok': return resolvedEnv.GROK_API_KEY;
       case 'gemini': return resolvedEnv.GEMINI_API_KEY || resolvedEnv.GOOGLE_API_KEY;
@@ -438,6 +443,7 @@ export async function generateReport(
             maxTokens,
           });
         case 'openai':
+        case 'packy':
           return callOpenAI(apiKey!, baseUrl, modelName, systemPrompt || '', prompt, {
             temperature,
             maxTokens,
@@ -568,7 +574,8 @@ export async function* streamGenerate(
 
   const getKey = (p: ModelProvider) => {
     switch (p) {
-      case 'openai': return resolvedEnv.OPENAI_API_KEY;
+      case 'openai':
+      case 'packy': return resolvedEnv.OPENAI_API_KEY;
       case 'anthropic': return resolvedEnv.ANTHROPIC_API_KEY;
       case 'grok': return resolvedEnv.GROK_API_KEY;
       case 'gemini': return resolvedEnv.GEMINI_API_KEY || resolvedEnv.GOOGLE_API_KEY;

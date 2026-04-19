@@ -5,7 +5,7 @@
 
 // ─── Provider & Model Types ──────────────────────────────────────────────────
 
-export type ModelProvider = 'openai' | 'anthropic' | 'grok' | 'gemini' | 'ollama' | 'minimax';
+export type ModelProvider = 'openai' | 'anthropic' | 'grok' | 'gemini' | 'ollama' | 'minimax' | 'packy';
 
 export type TaskType = 'analysis' | 'creative' | 'fast' | 'privacy';
 
@@ -162,6 +162,25 @@ export const MODEL_REGISTRY: ModelEntry[] = [
     contextLength: 1000000,
     costPer1kInput: 0.001,
     costPer1kOutput: 0.005,
+    recommendedFor: ['fast', 'analysis'],
+  },
+  // Packy (OpenAI-compatible, via www.packyapi.com)
+  {
+    id: 'packy/qwen3.6-plus',
+    provider: 'packy',
+    contextLength: 32000,
+    recommendedFor: ['analysis', 'creative'],
+  },
+  {
+    id: 'packy/qwen3.5-plus',
+    provider: 'packy',
+    contextLength: 32000,
+    recommendedFor: ['fast', 'analysis'],
+  },
+  {
+    id: 'packy/MiniMax-M2.7',
+    provider: 'packy',
+    contextLength: 100000,
     recommendedFor: ['fast', 'analysis'],
   },
 ];
