@@ -108,7 +108,7 @@ export default function ModuleHero({
     <motion.div
       ref={heroRef}
       className="relative w-full overflow-hidden"
-      style={{ height: '100svh', minHeight: '600px' }}
+      style={{ height: '100svh', minHeight: '600px', outline: '3px solid lime', outlineOffset: '-3px' }}
     >
       {/* ── Background: video → og image → deep space gradient ── */}
       {videoSrc ? (
@@ -227,6 +227,7 @@ export default function ModuleHero({
           initial={{ opacity: 0, y: 40, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.9, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          style={{ outline: '3px solid cyan', outlineOffset: '4px' }}
         >
           {children}
         </motion.div>

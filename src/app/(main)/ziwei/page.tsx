@@ -76,7 +76,7 @@ function ZiweiInputForm({
 }) {
   return (
     <div className="w-full max-w-sm rounded-2xl border border-white/[0.08]"
-      style={{ background: 'rgba(5,5,15,0.75)', boxShadow: '0 8px 48px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
+      style={{ background: 'rgba(5,5,15,0.75)', boxShadow: '0 8px 48px rgba(0,0,0,0.6)', outline: '2px solid red', outlineOffset: '2px' }}>
       <form onSubmit={onSubmit} className="p-6 space-y-4">
         <div>
           <label className="block text-[10px] font-serif text-white/30 mb-1.5 tracking-widest uppercase">生日类型</label>
