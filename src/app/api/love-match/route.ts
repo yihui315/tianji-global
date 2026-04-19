@@ -336,6 +336,7 @@ export async function POST(request: NextRequest) {
         const aiResult = await generateReport({
           prompt: aiPrompt,
           systemPrompt,
+          preferredProvider: 'packy',
           taskType: 'analysis',
           responseFormat: 'text',
           maxTokens: 2048,
