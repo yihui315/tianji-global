@@ -101,7 +101,6 @@ export default function ModuleHero({
     target: heroRef,
     offset: ['start start', 'end start'],
   });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 80]);
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
@@ -175,7 +174,7 @@ export default function ModuleHero({
 
       {/* ── Parallax content ── */}
       <motion.div
-        style={{ y, opacity, zIndex: 10 }}
+        style={{ opacity }}
         className="relative flex flex-col items-center justify-center h-full px-6 pt-20"
       >
         {/* Chinese title — gold gradient */}

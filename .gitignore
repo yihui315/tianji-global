@@ -8,3 +8,4 @@ dist/
 .env.local
 typecheck-errors.txt
 upgrade-plan.generated.json
+.env*.local
