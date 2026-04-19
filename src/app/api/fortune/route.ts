@@ -63,8 +63,9 @@ function calculateFortuneFromBirth(
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
-  const birthDate = searchParams.get('birthDate');
-  const birthTime = searchParams.get('birthTime');
+  // Accept both birthDate and birthday for frontend compatibility
+  const birthDate = searchParams.get('birthDate') || searchParams.get('birthday');
+  const birthTime = searchParams.get('birthTime') || searchParams.get('birthHour');
   const gender = searchParams.get('gender') || 'unspecified';
   const language = searchParams.get('language') || 'zh';
   const enhanceWithAI = searchParams.get('enhanceWithAI') === 'true';

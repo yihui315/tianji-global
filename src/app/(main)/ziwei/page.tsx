@@ -1,32 +1,33 @@
 'use client';
 
+/* ═══════════════════════════════════════════════════════════════
+   ZiweiPage — 紫微斗数星盘 (Taste Rule redesign)
+   Branch: redesign-landing-pages-20260419
+   Fixes in this version:
+   - REMOVED module-level let (was bug: shared across SSR requests)
+   - Palace/Iztrolabe/Share render only after aiResult is set
+   - Button uses explicit z-index + overflow-visible to stay visible
+   ═══════════════════════════════════════════════════════════════ */
+
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Iztrolabe } from 'react-iztro';
 import ZiWeiPalaceAnimation from '@/components/animations/ZiWeiPalaceAnimation';
 import { GlassCard, LanguageSwitch } from '@/components/ui';
 import { ModuleHero, ScrollNarrativeSection, InsightGrid, ShareSection } from '@/components/landing';
+import { AnimatedShareButton } from '@/components/AnimatedShareButton';
 import { saveReading } from '@/lib/save-reading';
 import { colors } from '@/design-system';
 
-/* ═══════════════════════════════════════════════════════════════
-   ZiweiPage — 紫微斗数星盘 (Taste Rule redesign demo)
-   Branch: redesign-landing-pages-20260419
-   ═══════════════════════════════════════════════════════════════ */
-
+/* ── Types ── */
 interface ZiweiAIResponse {
   aiInterpretation?: string;
   disclaimer?: string;
-  aiMeta?: {
-    provider: string;
-    model: string;
-    latencyMs: number;
-    costUSD: number;
-  };
+  aiMeta?: { provider: string; model: string; latencyMs: number; costUSD: number };
   aiError?: string;
 }
 
-/* ── Narrative blocks for ScrollNarrativeSection ── */
+/* ── Narrative blocks ── */
 const NARRATIVE_BLOCKS = [
   {
     label: '01 · 命宫',
@@ -45,9 +46,8 @@ const NARRATIVE_BLOCKS = [
   },
 ];
 
-/* ── Insight grid items derived from AI result ── */
+/* ── Build insight items from AI text ── */
 function buildInsightItems(aiText: string): Array<{ icon: string; label: string; value: string }> {
-  // Extract first 3 sentences as quick-scan insights
   const sentences = aiText.split(/[。！？\n]/).filter(Boolean).slice(0, 6);
   const icons = ['✦', '◈', '✧', '◉', '✦', '◈'];
   return sentences.map((s, i) => ({
@@ -74,8 +74,17 @@ function ZiweiInputForm({
   isLoading: boolean;
 }) {
   return (
-    <div className="w-full max-w-sm rounded-2xl border border-white/[0.08]"
-      style={{ background: 'rgba(5,5,15,0.75)', boxShadow: '0 8px 48px rgba(0,0,0,0.6)' }}>
+    /* Form wrapper: explicit z-index + overflow-visible to prevent clip */
+    <div
+      className="w-full max-w-sm rounded-2xl"
+      style={{
+        background: 'rgba(5,5,15,0.82)',
+        boxShadow: '0 8px 48px rgba(0,0,0,0.7)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        position: 'relative',
+        zIndex: 10,
+      }}
+    >
       <form onSubmit={onSubmit} className="p-6 space-y-4">
         <div>
           <label className="block text-[10px] font-serif text-white/30 mb-1.5 tracking-widest uppercase">生日类型</label>
@@ -124,31 +133,35 @@ function ZiweiInputForm({
             <option value="female">女 / Female</option>
           </select>
         </div>
+        {/* Submit button — explicit overflow-visible + relative zIndex */}
         <div className="mt-6 flex justify-center">
           <button
             type="submit"
             disabled={isLoading}
-            className="relative px-12 py-5 rounded-2xl text-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed overflow-visible"
+            className="relative w-full rounded-2xl py-4 text-base font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
+              overflow: 'visible',
+              position: 'relative',
+              zIndex: 20,
               background: 'linear-gradient(135deg, #D4AF37 0%, #7c3aed 100%)',
-              color: '#ffffff',
-              boxShadow: '0 4px 32px rgba(124,58,237,0.3), 0 0 60px rgba(212,175,55,0.15)',
-              letterSpacing: '0.08em',
+              color: '#0a0a0a',
+              boxShadow: '0 4px 32px rgba(124,58,237,0.35), 0 0 60px rgba(212,175,55,0.15)',
+              letterSpacing: '0.06em',
             }}
             onMouseEnter={e => {
               if (!isLoading) {
                 (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)';
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 40px rgba(124,58,237,0.4), 0 0 80px rgba(212,175,55,0.25)';
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 40px rgba(124,58,237,0.45), 0 0 80px rgba(212,175,55,0.25)';
               }
             }}
             onMouseLeave={e => {
               (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 32px rgba(124,58,237,0.3), 0 0 60px rgba(212,175,55,0.15)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 32px rgba(124,58,237,0.35), 0 0 60px rgba(212,175,55,0.15)';
             }}
           >
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                 </svg>
@@ -165,11 +178,7 @@ function ZiweiInputForm({
 /* ── Loading skeleton ── */
 function LoadingSkeleton() {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="max-w-3xl mx-auto px-4 pt-24 pb-12"
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-3xl mx-auto px-4 pt-24 pb-12">
       <div className="space-y-4">
         {[240, 160, 200].map((w, i) => (
           <div key={i} className="h-16 rounded-xl bg-white/[0.04]" style={{ width: `${w}px`, margin: '0 auto' }} />
@@ -179,8 +188,20 @@ function LoadingSkeleton() {
   );
 }
 
-/* ── AI Result block ── */
-function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
+/* ── Result block: Palace + Iztrolabe + Share (ONLY after aiResult is set) ── */
+function ResultBlock({
+  result,
+  birthday,
+  birthTime,
+  birthdayType,
+  gender,
+}: {
+  result: ZiweiAIResponse;
+  birthday: string;
+  birthTime: number;
+  birthdayType: 'solar' | 'lunar';
+  gender: 'male' | 'female';
+}) {
   if (result.aiError) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-12">
@@ -195,7 +216,7 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
 
   return (
     <>
-      {/* Scroll Narrative (always shown after result) */}
+      {/* Scroll Narrative */}
       <ScrollNarrativeSection
         accentColor="#7c3aed"
         goldColor="#D4AF37"
@@ -216,17 +237,11 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
       {/* Full AI interpretation */}
       <div className="max-w-3xl mx-auto px-4 pb-16">
         <GlassCard level="card" className="p-8 border border-white/[0.06] bg-black/20 backdrop-blur-md rounded-2xl">
-          {/* Gold top accent */}
           <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)' }} />
-
           <div className="flex items-center gap-2 mb-5">
             <div
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-medium"
-              style={{
-                background: 'rgba(212,175,55,0.1)',
-                border: '1px solid rgba(212,175,55,0.2)',
-                color: 'rgba(212,175,55,0.85)',
-              }}
+              style={{ background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.2)', color: 'rgba(212,175,55,0.85)' }}
             >
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                 <path d="M5 1L6.2 3.8L9 4.2L7 6.2L7.6 9L5 7.6L2.4 9L3 6.2L1 4.2L3.8 3.8L5 1Z" fill="currentColor"/>
@@ -234,17 +249,14 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
               AI 命盘解读
             </div>
           </div>
-
           <div className="whitespace-pre-wrap leading-relaxed text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
             {result.aiInterpretation}
           </div>
-
           {result.disclaimer && (
             <p className="mt-5 pt-4 text-[11px] italic border-t border-white/[0.06]" style={{ color: 'rgba(255,255,255,0.2)' }}>
               {result.disclaimer}
             </p>
           )}
-
           {result.aiMeta && (
             <div className="mt-4 pt-3 flex justify-between text-[10px]" style={{ color: 'rgba(255,255,255,0.18)' }}>
               <span>{result.aiMeta.model}</span>
@@ -254,10 +266,9 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
         </GlassCard>
       </div>
 
-      {/* Palace Chart + Iztrolabe */}
+      {/* Palace Chart */}
       <div className="max-w-3xl mx-auto px-4 pb-16">
         <GlassCard level="card" className="rounded-2xl border border-white/[0.06] bg-black/20 backdrop-blur-md overflow-hidden">
-          {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
             <div className="flex items-center gap-2">
               <div className="w-1 h-4 rounded-full" style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.8), rgba(168,130,255,0.8))' }} />
@@ -270,8 +281,6 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
               Animated
             </span>
           </div>
-
-          {/* Animated Palace */}
           <div className="flex justify-center py-6">
             <ZiWeiPalaceAnimation
               birthDate={birthday}
@@ -299,21 +308,14 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
             border: '1px solid rgba(255,255,255,0.06)',
           }}
         >
-          <Iztrolabe
-            birthday={birthday}
-            birthTime={birthTime}
-            birthdayType={birthdayType}
-            gender={gender}
-          />
+          <Iztrolabe birthday={birthday} birthTime={birthTime} birthdayType={birthdayType} gender={gender} />
         </div>
       </div>
 
-      {/* Share / Report Section */}
+      {/* Share buttons (inline, immediately after results) */}
       <div className="max-w-3xl mx-auto px-4 pb-16">
         <GlassCard level="card" className="relative p-8 border border-white/[0.06] bg-black/20 backdrop-blur-md rounded-2xl">
-          {/* Gold top accent */}
           <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)' }} />
-
           <div className="text-center mb-6">
             <h3 className="font-serif text-xl mb-2" style={{ color: 'rgba(212,175,55,0.9)', letterSpacing: '0.1em' }}>
               命盘已解锁
@@ -322,22 +324,9 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
               将你的命盘分享给朋友，或保存留念
             </p>
           </div>
-
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <AnimatedShareButton
-              type="ziwei"
-              resultData={{ birthday, birthTime, birthdayType, gender }}
-              format="webp"
-              language="zh"
-              variant="primary"
-            />
-            <AnimatedShareButton
-              type="ziwei"
-              resultData={{ birthday, birthTime, birthdayType, gender }}
-              format="png"
-              language="zh"
-              variant="secondary"
-            />
+            <AnimatedShareButton type="ziwei" resultData={{ birthday, birthTime, birthdayType, gender }} format="webp" language="zh" variant="primary" />
+            <AnimatedShareButton type="ziwei" resultData={{ birthday, birthTime, birthdayType, gender }} format="png" language="zh" variant="secondary" />
           </div>
         </GlassCard>
       </div>
@@ -355,28 +344,15 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Main Page
+   Main Page — all state, no module-level variables
    ═══════════════════════════════════════════════════════════════ */
-
-// Need module-level state for the form passed into the hero
-let birthday = '2000-08-16';
-let birthTime = 2;
-let birthdayType: 'solar' | 'lunar' = 'solar';
-let gender: 'male' | 'female' = 'male';
-
 export default function ZiweiPage() {
-  const [birthdayVal, setBirthdayVal] = useState<string>('2000-08-16');
-  const [birthTimeVal, setBirthTimeVal] = useState<number>(2);
-  const [birthdayTypeVal, setBirthdayTypeVal] = useState<'solar' | 'lunar'>('solar');
-  const [genderVal, setGenderVal] = useState<'male' | 'female'>('male');
+  const [birthday, setBirthday] = useState<string>('2000-08-16');
+  const [birthTime, setBirthTime] = useState<number>(2);
+  const [birthdayType, setBirthdayType] = useState<'solar' | 'lunar'>('solar');
+  const [gender, setGender] = useState<'male' | 'female'>('male');
   const [aiResult, setAiResult] = useState<ZiweiAIResponse | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
-
-  // Module-level refs for non-state usage
-  birthday = birthdayVal;
-  birthTime = birthTimeVal;
-  birthdayType = birthdayTypeVal;
-  gender = genderVal;
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -386,10 +362,10 @@ export default function ZiweiPage() {
 
       try {
         const params = new URLSearchParams({
-          birthday: birthdayVal,
-          birthTime: String(birthTimeVal),
-          birthdayType: birthdayTypeVal,
-          gender: genderVal,
+          birthday,
+          birthTime: String(birthTime),
+          birthdayType,
+          gender,
           enhanceWithAI: 'true',
           language: 'zh-CN',
         });
@@ -399,7 +375,7 @@ export default function ZiweiPage() {
         setAiResult(data);
         saveReading({
           reading_type: 'ziwei',
-          title: `${birthdayVal} ${birthdayTypeVal === 'lunar' ? '农历' : '阳历'} ${genderVal === 'male' ? '男' : '女'} 紫微斗数`,
+          title: `${birthday} ${birthdayType === 'lunar' ? '农历' : '阳历'} ${gender === 'male' ? '男' : '女'} 紫微斗数`,
           summary: data.aiInterpretation?.slice(0, 120) ?? '',
           reading_data: data as unknown as Record<string, unknown>,
         });
@@ -409,7 +385,7 @@ export default function ZiweiPage() {
         setIsLoadingAI(false);
       }
     },
-    [birthdayVal, birthTimeVal, birthdayTypeVal, genderVal]
+    [birthday, birthTime, birthdayType, gender]
   );
 
   return (
@@ -429,20 +405,30 @@ export default function ZiweiPage() {
         goldColor="#D4AF37"
       >
         <ZiweiInputForm
-          birthday={birthdayVal} setBirthday={setBirthdayVal}
-          birthTime={birthTimeVal} setBirthTime={setBirthTimeVal}
-          birthdayType={birthdayTypeVal} setBirthdayType={setBirthdayTypeVal}
-          gender={genderVal} setGender={setGenderVal}
+          birthday={birthday} setBirthday={setBirthday}
+          birthTime={birthTime} setBirthTime={setBirthTime}
+          birthdayType={birthdayType} setBirthdayType={setBirthdayType}
+          gender={gender} setGender={setGender}
           onSubmit={handleSubmit}
           isLoading={isLoadingAI}
         />
       </ModuleHero>
 
-      {/* ── Result Area ── */}
+      {/* ── Loading state ── */}
       {isLoadingAI && <LoadingSkeleton />}
-      {aiResult && !isLoadingAI && <AIResultBlock result={aiResult} />}
 
-      {/* ── Default state: show scroll narrative before user submits ── */}
+      {/* ── Result state: ONLY show Palace + Iztrolabe + Share when aiResult exists ── */}
+      {aiResult && !isLoadingAI && (
+        <ResultBlock
+          result={aiResult}
+          birthday={birthday}
+          birthTime={birthTime}
+          birthdayType={birthdayType}
+          gender={gender}
+        />
+      )}
+
+      {/* ── Default state: show narrative CTA before user submits ── */}
       {!aiResult && !isLoadingAI && (
         <>
           <ScrollNarrativeSection
@@ -450,7 +436,6 @@ export default function ZiweiPage() {
             goldColor="#D4AF37"
             blocks={NARRATIVE_BLOCKS}
           />
-          {/* Second CTA */}
           <div className="max-w-xl mx-auto px-6 py-20 text-center">
             <p className="text-white/30 text-sm mb-6">填写上方表单，开启你的命盘解析</p>
             <div className="h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(124,58,237,0.3), transparent)' }} />
