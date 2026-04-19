@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Iztrolabe } from 'react-iztro';
 import ZiWeiPalaceAnimation from '@/components/animations/ZiWeiPalaceAnimation';
+import AnimatedShareButton from '@/components/AnimatedShareButton';
 import { GlassCard, MysticButton, LanguageSwitch } from '@/components/ui';
 import { ModuleHero, ScrollNarrativeSection, InsightGrid, ShareSection } from '@/components/landing';
 import { saveReading } from '@/lib/save-reading';
@@ -123,36 +124,23 @@ function ZiweiInputForm({
             <option value="female">女 / Female</option>
           </select>
         </div>
-        <button
+        <MysticButton
           type="submit"
+          variant="solid"
+          size="xl"
           disabled={isLoading}
-          className="w-full mt-2 py-3 rounded-xl text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{
-            background: 'linear-gradient(135deg, rgba(212,175,55,0.9) 0%, rgba(168,130,255,0.7) 100%)',
-            color: '#0a0a0a',
-            boxShadow: '0 4px 24px rgba(212,175,55,0.15)',
-          }}
-          onMouseEnter={e => {
-            if (!isLoading) {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)';
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 32px rgba(212,175,55,0.25)';
-            }
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
-            (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 24px rgba(212,175,55,0.15)';
-          }}
+          className="w-full mt-2"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
-              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
               </svg>
               AI 解读中...
             </span>
           ) : '✨ 开启命盘解析'}
-        </button>
+        </MysticButton>
       </form>
     </GlassCard>
   );
@@ -274,8 +262,8 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
               birthTime={birthTime}
               gender={gender}
               birthdayType={birthdayType}
-              width={380}
-              height={380}
+              width={480}
+              height={480}
               playing={true}
             />
           </div>
@@ -283,11 +271,11 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
       </div>
 
       {/* Iztrolabe */}
-      <div className="max-w-3xl mx-auto px-4 pb-16">
+      <div className="max-w-5xl mx-auto px-4 pb-16">
         <div
           style={{
             width: '100%',
-            maxWidth: '1024px',
+            maxWidth: '1100px',
             margin: '0 auto',
             boxShadow: '0 0 25px rgba(124,58,237,0.15)',
             borderRadius: 12,
@@ -302,6 +290,40 @@ function AIResultBlock({ result }: { result: ZiweiAIResponse }) {
             gender={gender}
           />
         </div>
+      </div>
+
+      {/* Share / Report Section */}
+      <div className="max-w-3xl mx-auto px-4 pb-16">
+        <GlassCard level="card" className="relative p-8 border border-white/[0.06] bg-black/20 backdrop-blur-md rounded-2xl">
+          {/* Gold top accent */}
+          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)' }} />
+
+          <div className="text-center mb-6">
+            <h3 className="font-serif text-xl mb-2" style={{ color: 'rgba(212,175,55,0.9)', letterSpacing: '0.1em' }}>
+              命盘已解锁
+            </h3>
+            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.35)', letterSpacing: '0.06em' }}>
+              将你的命盘分享给朋友，或保存留念
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <AnimatedShareButton
+              type="ziwei"
+              resultData={{ birthday, birthTime, birthdayType, gender }}
+              format="webp"
+              language="zh"
+              variant="primary"
+            />
+            <AnimatedShareButton
+              type="ziwei"
+              resultData={{ birthday, birthTime, birthdayType, gender }}
+              format="png"
+              language="zh"
+              variant="secondary"
+            />
+          </div>
+        </GlassCard>
       </div>
 
       {/* Share Section */}
