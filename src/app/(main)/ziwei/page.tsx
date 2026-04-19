@@ -15,7 +15,7 @@ import { Iztrolabe } from 'react-iztro';
 import ZiWeiPalaceAnimation from '@/components/animations/ZiWeiPalaceAnimation';
 import { GlassCard, LanguageSwitch } from '@/components/ui';
 import { ModuleHero, ScrollNarrativeSection, InsightGrid, ShareSection } from '@/components/landing';
-import { AnimatedShareButton } from '@/components/AnimatedShareButton';
+import AnimatedShareButton from '@/components/AnimatedShareButton';
 import { saveReading } from '@/lib/save-reading';
 import { colors } from '@/design-system';
 
