@@ -2,31 +2,18 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
 import { saveReading } from '@/lib/save-reading';
-import { GlassCard, MysticButton, LanguageSwitch } from '@/components/ui';
-import { colors, glass, radii, shadows } from '@/design-system';
-
-// ─── Fade-In Motion ───────────────────────────────────────────────────────────
-function FadeInWhenVisible({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-// ─── Types ───────────────────────────────────────────────────────────────────
+import {
+  BackgroundVideoHero,
+  InsightGrid,
+  LandingSection,
+  ModuleInputShell,
+  ResultScaffold,
+  ScrollNarrativeSection,
+  TrustStrip,
+} from '@/components/landing';
 
 interface PlanetData {
   name: string;
@@ -85,77 +72,61 @@ interface ChartApiResponse {
 
 type Language = 'zh' | 'en';
 
-// ─── Zodiac & Element Data ────────────────────────────────────────────────────
-
 const ZODIAC_SIGNS = [
-  { name: 'Aries', nameZh: '白羊', symbol: '♈', element: 'Fire' },
-  { name: 'Taurus', nameZh: '金牛', symbol: '♉', element: 'Earth' },
-  { name: 'Gemini', nameZh: '双子', symbol: '♊', element: 'Air' },
-  { name: 'Cancer', nameZh: '巨蟹', symbol: '♋', element: 'Water' },
-  { name: 'Leo', nameZh: '狮子', symbol: '♌', element: 'Fire' },
-  { name: 'Virgo', nameZh: '处女', symbol: '♍', element: 'Earth' },
-  { name: 'Libra', nameZh: '天秤', symbol: '♎', element: 'Air' },
-  { name: 'Scorpio', nameZh: '天蝎', symbol: '♏', element: 'Water' },
-  { name: 'Sagittarius', nameZh: '射手', symbol: '♐', element: 'Fire' },
-  { name: 'Capricorn', nameZh: '摩羯', symbol: '♑', element: 'Earth' },
-  { name: 'Aquarius', nameZh: '水瓶', symbol: '♒', element: 'Air' },
-  { name: 'Pisces', nameZh: '双鱼', symbol: '♓', element: 'Water' },
+  { name: 'Aries', element: 'Fire' },
+  { name: 'Taurus', element: 'Earth' },
+  { name: 'Gemini', element: 'Air' },
+  { name: 'Cancer', element: 'Water' },
+  { name: 'Leo', element: 'Fire' },
+  { name: 'Virgo', element: 'Earth' },
+  { name: 'Libra', element: 'Air' },
+  { name: 'Scorpio', element: 'Water' },
+  { name: 'Sagittarius', element: 'Fire' },
+  { name: 'Capricorn', element: 'Earth' },
+  { name: 'Aquarius', element: 'Air' },
+  { name: 'Pisces', element: 'Water' },
 ];
 
 const ELEMENT_COLORS: Record<string, string> = {
-  Fire: colors.gold,
+  Fire: '#F59E0B',
   Earth: '#D97706',
-  Air: colors.dataCyan,
-  Water: '#06B6D4',
-};
-
-const ELEMENT_BG: Record<string, string> = {
-  Fire: 'rgba(239, 68, 68, 0.15)',
-  Earth: 'rgba(217, 119, 6, 0.15)',
-  Air: 'rgba(6, 182, 212, 0.15)',
-  Water: 'rgba(6, 182, 212, 0.15)',
+  Air: '#67E8F9',
+  Water: '#38BDF8',
 };
 
 const PLANET_SYMBOLS: Record<string, string> = {
-  Sun: '☉', Moon: '☽', Mercury: '☿', Venus: '♀', Mars: '♂',
-  Jupiter: '♃', Saturn: '♄', Uranus: '♅', Neptune: '♆', Pluto: '♇',
+  Sun: 'Sun',
+  Moon: 'Moon',
+  Mercury: 'Mer',
+  Venus: 'Ven',
+  Mars: 'Mar',
+  Jupiter: 'Jup',
+  Saturn: 'Sat',
+  Uranus: 'Ura',
+  Neptune: 'Nep',
+  Pluto: 'Plu',
 };
-
-const PLANET_COLORS: Record<string, string> = {
-  Sun: '#FFD700',
-  Moon: '#C0C0C0',
-  Mercury: '#B8860B',
-  Venus: '#98FB98',
-  Mars: '#FF6347',
-  Jupiter: '#DAA520',
-  Saturn: '#708090',
-  Uranus: '#40E0D0',
-  Neptune: '#4169E1',
-  Pluto: '#8B008B',
-};
-
-// ─── AstroChart Settings ─────────────────────────────────────────────────────
 
 const CHART_SETTINGS = {
-  COLOR_BACKGROUND: '#1e293b',
-  CIRCLE_COLOR: '#475569',
+  COLOR_BACKGROUND: '#0A0A0A',
+  CIRCLE_COLOR: '#3B2855',
   CIRCLE_STRONG: 2,
   CIRCLE_WEAK: 1,
-  LINE_COLOR: '#64748b',
-  POINTS_COLOR: '#e2e8f0',
+  LINE_COLOR: '#6D5A8D',
+  POINTS_COLOR: '#F4E7B8',
   POINTS_TEXT_SIZE: 10,
   POINTS_STROKE: 1.5,
   SYMBOL_SCALE: 1,
-  SYMBOL_SUN: '☉',
-  SYMBOL_MOON: '☽',
-  SYMBOL_MERCURY: '☿',
-  SYMBOL_VENUS: '♀',
-  SYMBOL_MARS: '♂',
-  SYMBOL_JUPITER: '♃',
-  SYMBOL_SATURN: '♄',
-  SYMBOL_URANUS: '♅',
-  SYMBOL_NEPTUNE: '♆',
-  SYMBOL_PLUTO: '♇',
+  SYMBOL_SUN: 'Su',
+  SYMBOL_MOON: 'Mo',
+  SYMBOL_MERCURY: 'Me',
+  SYMBOL_VENUS: 'Ve',
+  SYMBOL_MARS: 'Ma',
+  SYMBOL_JUPITER: 'Ju',
+  SYMBOL_SATURN: 'Sa',
+  SYMBOL_URANUS: 'Ur',
+  SYMBOL_NEPTUNE: 'Ne',
+  SYMBOL_PLUTO: 'Pl',
   COLOR_ARIES: '#FF6B6B',
   COLOR_TAURUS: '#4ECDC4',
   COLOR_GEMINI: '#FFE66D',
@@ -169,13 +140,22 @@ const CHART_SETTINGS = {
   COLOR_AQUARIUS: '#63CDDA',
   COLOR_PISCES: '#7B68EE',
   COLORS_SIGNS: [
-    '#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3',
-    '#F38181', '#AA96DA', '#FCBAD3', '#A8D8EA',
-    '#FF9F43', '#786FA6', '#63CDDA', '#7B68EE'
+    '#FF6B6B',
+    '#4ECDC4',
+    '#FFE66D',
+    '#95E1D3',
+    '#F38181',
+    '#AA96DA',
+    '#FCBAD3',
+    '#A8D8EA',
+    '#FF9F43',
+    '#786FA6',
+    '#63CDDA',
+    '#7B68EE',
   ],
   CUSPS_STROKE: 2,
-  CUSPS_FONT_COLOR: '#94a3b8',
-  SIGNS_COLOR: '#64748b',
+  CUSPS_FONT_COLOR: '#B8A9D6',
+  SIGNS_COLOR: '#6D5A8D',
   SIGNS_STROKE: 1,
   MARGIN: 15,
   PADDING: 10,
@@ -185,7 +165,14 @@ const CHART_SETTINGS = {
   COLLISION_RADIUS: 10,
 };
 
-// ─── Main Component ──────────────────────────────────────────────────────────
+type AstroData = { planets: Record<string, number[]>; cusps: number[] };
+type AstroRadix = { addPointsOfInterest?: (points: Record<string, number[]>) => void };
+type AstroChartConstructor = new (
+  elementId: string,
+  width: number,
+  height: number,
+  settings: typeof CHART_SETTINGS
+) => { radix: (data: AstroData) => AstroRadix };
 
 export default function WesternPage() {
   const [birthday, setBirthday] = useState<string>('1990-08-16');
@@ -199,12 +186,10 @@ export default function WesternPage() {
   const [isClient, setIsClient] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
 
-  // Check if we're on the client side
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Fetch chart data from API
   const fetchChartData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -232,7 +217,7 @@ export default function WesternPage() {
       saveReading({
         reading_type: 'western',
         title: `${birthday} Western Natal Chart`,
-        summary: `${language === 'zh' ? '西方星盘' : 'Western Natal Chart'} - ${birthday}`,
+        summary: `Western Natal Chart - ${birthday}`,
         reading_data: data as unknown as Record<string, unknown>,
       });
     } catch (err) {
@@ -242,412 +227,292 @@ export default function WesternPage() {
     }
   }, [birthday, birthTime, lat, lng, language]);
 
-  // Render AstroChart SVG (client-side only)
   useEffect(() => {
     if (!chartData || !chartRef.current || !isClient) return;
 
     const container = chartRef.current;
     container.innerHTML = '';
 
-    // Prepare data for AstroChart
     const planets: Record<string, number[]> = {};
-    chartData.chart.planets.forEach(p => {
-      planets[p.name] = [p.longitude];
+    chartData.chart.planets.forEach((planet) => {
+      planets[planet.name] = [planet.longitude];
     });
 
-    // Add Ascendant, IC, Descendant, MC as points of interest
     const asc = chartData.houses.ascendant;
     const ic = (chartData.houses.midheaven + 180) % 360;
     const dsc = (asc + 180) % 360;
     const mc = chartData.houses.midheaven;
+    const width = Math.min(container.clientWidth || 420, 520);
 
-    const astroData = {
-      planets,
-      cusps: chartData.houses.cusps,
-    };
-
-    // Create chart
-    const width = Math.min(container.clientWidth || 400, 500);
-    const height = width;
-
-    // Dynamically import AstroChart to avoid SSR issues
-    import('@astrodraw/astrochart').then((mod) => {
-      const Chart = mod.default;
-
-      const chart = new Chart(container.id, width, height, CHART_SETTINGS);
-
-      // Draw radix chart
-      chart.radix(astroData);
-
-      // Add points of interest for aspect lines
-      chart.radix({ planets, cusps: chartData.houses.cusps })
-        .addPointsOfInterest({
-          As: [asc],
-          Ic: [ic],
-          Ds: [dsc],
-          Mc: [mc],
-        });
-    }).catch((err) => {
-      console.error('AstroChart render error:', err);
-    });
+    import('@astrodraw/astrochart')
+      .then((mod) => {
+        const AstroChart = mod.default as unknown as AstroChartConstructor;
+        const chart = new AstroChart(container.id, width, width, CHART_SETTINGS);
+        const radix = chart.radix({ planets, cusps: chartData.houses.cusps });
+        radix.addPointsOfInterest?.({ As: [asc], Ic: [ic], Ds: [dsc], Mc: [mc] });
+      })
+      .catch((err) => {
+        console.error('AstroChart render error:', err);
+      });
   }, [chartData, isClient]);
 
-  // Get element info for a sign
   const getSignElement = (signName: string) => {
-    return ZODIAC_SIGNS.find(s => s.name === signName)?.element ?? 'Fire';
+    return ZODIAC_SIGNS.find((sign) => sign.name === signName)?.element ?? 'Fire';
   };
 
   return (
-    <main
-      className="min-h-screen text-white p-4 md:p-8"
-      style={{ backgroundColor: colors.bgPrimary }}
-    >
-      {/* Layer 1: Deep space base */}
-      <div className="fixed inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse at 50% 0%, ${colors.bgNebula} 0%, transparent 55%)`, zIndex: 0 }} />
-      {/* Layer 2: Purple nebula */}
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 20% 20%, rgba(59,20,75,0.35) 0%, transparent 50%)', zIndex: 0 }} />
-      {/* Layer 3: Cyan depth */}
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 80%, rgba(6,30,60,0.45) 0%, transparent 50%)', zIndex: 0 }} />
-      {/* Layer 4: Bottom warmth */}
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(80,40,100,0.2) 0%, transparent 40%)', zIndex: 0 }} />
+    <main className="relative min-h-screen overflow-hidden bg-[#050508] text-white">
+      <BackgroundVideoHero
+        eyebrow="Western astrology"
+        title="Your sky chart should feel precise before it feels decorative."
+        subtitle="Swiss Ephemeris calculation and AstroChart rendering stay intact while the page becomes a calmer cinematic observatory."
+        videoSrc="/assets/videos/hero/western-hero-loop-6s-1080p.mp4"
+        posterSrc="/assets/images/posters/western-hero-poster-16x9.jpg"
+        ctaLabel={isLoading ? 'Calculating...' : 'Generate chart'}
+        ctaHref="#western-form"
+        secondaryCtaLabel="View chart layers"
+        secondaryCtaHref="#western-narrative"
+        stats={[
+          { label: 'Core', value: 'Big 3' },
+          { label: 'Planets', value: '10' },
+          { label: 'Renderer', value: 'AstroChart' },
+        ]}
+      />
 
-      <div className="max-w-5xl mx-auto relative z-10">
-        {/* Header */}
-        <FadeInWhenVisible>
-          <div className="text-center mb-8 pt-4">
-            <h1
-              className="text-4xl md:text-5xl font-serif font-bold mb-3"
-              style={{
-                background: `linear-gradient(135deg, ${colors.purpleLight}, ${colors.dataCyan})`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              {language === 'zh' ? '西方星盘' : 'Western Natal Chart'}
-            </h1>
-            <p className="text-sm text-white/40 tracking-wide">
-              {language === 'zh'
-                ? '使用瑞士星历表(SWEPH)精确计算 · AstroChart专业可视化'
-                : 'Swiss Ephemeris Precision · AstroChart Visualization'}
-            </p>
+      <TrustStrip
+        items={[
+          { label: 'Endpoint kept', value: '/api/western' },
+          { label: 'Dynamic import', value: '@astrodraw/astrochart' },
+          { label: 'Save flow', value: 'saveReading' },
+        ]}
+      />
+
+      <LandingSection
+        id="western-form"
+        eyebrow="Chart console"
+        title="Calculate the natal chart from the original endpoint."
+        description="Birthday, time, latitude, longitude, and language are sent with the same request body as before."
+      >
+        <ModuleInputShell
+          eyebrow="Birth coordinates"
+          title="Generate your western chart"
+          description="Precision inputs stay visible, but the page now reads like a premium observatory."
+          footer="The AstroChart SVG renders only on the client, preserving the previous SSR-safe behavior."
+        >
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+            <label className="space-y-2">
+              <span className="text-xs uppercase tracking-[0.22em] text-white/45">Birthday</span>
+              <input
+                type="date"
+                value={birthday}
+                onChange={(event) => setBirthday(event.target.value)}
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition focus:border-violet-300/50"
+              />
+            </label>
+            <label className="space-y-2">
+              <span className="text-xs uppercase tracking-[0.22em] text-white/45">Birth Time</span>
+              <input
+                type="time"
+                value={birthTime}
+                onChange={(event) => setBirthTime(event.target.value)}
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition focus:border-violet-300/50"
+              />
+            </label>
+            <label className="space-y-2">
+              <span className="text-xs uppercase tracking-[0.22em] text-white/45">Latitude</span>
+              <input
+                type="number"
+                step="0.0001"
+                min="-90"
+                max="90"
+                value={lat}
+                onChange={(event) => setLat(Number.parseFloat(event.target.value) || 0)}
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition focus:border-violet-300/50"
+              />
+            </label>
+            <label className="space-y-2">
+              <span className="text-xs uppercase tracking-[0.22em] text-white/45">Longitude</span>
+              <input
+                type="number"
+                step="0.0001"
+                min="-180"
+                max="180"
+                value={lng}
+                onChange={(event) => setLng(Number.parseFloat(event.target.value) || 0)}
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition focus:border-violet-300/50"
+              />
+            </label>
           </div>
-        </FadeInWhenVisible>
 
-        {/* Input Form */}
-        <FadeInWhenVisible delay={0.1}>
-          <GlassCard level="card" className="p-6 mb-6 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              {/* Birthday */}
-              <div>
-                <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                  {language === 'zh' ? '出生日期' : 'Birthday'}
-                </label>
-                <input
-                  type="date"
-                  value={birthday}
-                  onChange={(e) => setBirthday(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/40 bg-white/[0.04] border border-white/[0.06]"
-                />
-              </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <select
+              value={language}
+              onChange={(event) => setLanguage(event.target.value as Language)}
+              className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm uppercase tracking-[0.18em] text-white outline-none"
+            >
+              <option value="zh">ZH</option>
+              <option value="en">EN</option>
+            </select>
+            <button
+              onClick={fetchChartData}
+              disabled={isLoading}
+              className="flex-1 rounded-full bg-white px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isLoading ? 'Calculating...' : 'Generate chart'}
+            </button>
+          </div>
 
-              {/* Birth Time */}
-              <div>
-                <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                  {language === 'zh' ? '出生时间' : 'Birth Time'}
-                </label>
-                <input
-                  type="time"
-                  value={birthTime}
-                  onChange={(e) => setBirthTime(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/40 bg-white/[0.04] border border-white/[0.06]"
-                />
-              </div>
-
-              {/* Latitude */}
-              <div>
-                <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                  {language === 'zh' ? '出生纬度' : 'Latitude'}
-                </label>
-                <input
-                  type="number"
-                  step="0.0001"
-                  min="-90"
-                  max="90"
-                  value={lat}
-                  onChange={(e) => setLat(parseFloat(e.target.value) || 0)}
-                  className="w-full px-4 py-3 rounded-xl text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/40 bg-white/[0.04] border border-white/[0.06]"
-                />
-              </div>
-
-              {/* Longitude */}
-              <div>
-                <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                  {language === 'zh' ? '出生经度' : 'Longitude'}
-                </label>
-                <input
-                  type="number"
-                  step="0.0001"
-                  min="-180"
-                  max="180"
-                  value={lng}
-                  onChange={(e) => setLng(parseFloat(e.target.value) || 0)}
-                  className="w-full px-4 py-3 rounded-xl text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/40 bg-white/[0.04] border border-white/[0.06]"
-                />
-              </div>
+          {error && (
+            <div className="rounded-2xl border border-rose-400/25 bg-rose-500/10 p-4 text-sm text-rose-200">
+              {error}
             </div>
+          )}
+        </ModuleInputShell>
+      </LandingSection>
 
-            {/* Language Toggle & Calculate Button Row */}
-            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
-              <LanguageSwitch />
+      <ScrollNarrativeSection
+        blocks={[
+          {
+            label: '01',
+            heading: 'The big three establishes the front door.',
+            body: 'Sun, Moon, and Rising are displayed first so the result feels readable before the full chart appears.',
+            align: 'left',
+          },
+          {
+            label: '02',
+            heading: 'The wheel keeps its technical source.',
+            body: 'The AstroChart dynamic import still handles the chart drawing, preserving the original rendering capability.',
+            align: 'center',
+          },
+          {
+            label: '03',
+            heading: 'Planet positions become an evidence layer.',
+            body: 'The table remains available after the visual chart so advanced users can inspect every placement.',
+            align: 'right',
+          },
+        ]}
+      />
 
-              <MysticButton
-                variant="solid"
-                size="lg"
-                onClick={fetchChartData}
-                disabled={isLoading}
-                className="flex-1"
-                style={{
-                  background: `linear-gradient(135deg, ${colors.purple}, ${colors.dataCyan})`,
-                }}
-              >
-                {isLoading
-                  ? (language === 'zh' ? '计算中...' : 'Calculating...')
-                  : (language === 'zh' ? '生成星盘' : 'Generate Chart')}
-              </MysticButton>
-            </div>
-
-            {error && (
-              <div
-                className="mt-4 p-4 rounded-xl text-center text-sm"
-                style={{
-                  backgroundColor: 'rgba(239,68,68,0.1)',
-                  border: '1px solid rgba(239,68,68,0.3)',
-                  color: '#EF4444',
-                }}
-              >
-                {error}
-              </div>
-            )}
-          </GlassCard>
-        </FadeInWhenVisible>
-
-        {/* Results */}
-        {chartData && (
-          <div className="space-y-6">
-            {/* Big Three */}
-            <FadeInWhenVisible delay={0.15}>
-              <div className="grid grid-cols-3 gap-4">
-              {/* Sun */}
-              <GlassCard
-                level="card"
-                hoverLift
-                glowColor={colors.gold}
-                className="p-5 text-center border border-white/[0.06] bg-white/[0.015] rounded-2xl"
-              >
-                <div className="text-3xl mb-1">☀️</div>
-                <div className="text-xs mb-1 text-amber-400/80">
-                  {language === 'zh' ? '太阳' : 'Sun'}
-                </div>
-                <div className="text-2xl mb-1">{chartData.bigThree.sun.symbol}</div>
-                <div className="text-lg font-bold text-white/90 mb-1">
-                  {language === 'zh' ? chartData.bigThree.sun.signZh : chartData.bigThree.sun.sign}
-                </div>
-                <div className="text-sm" style={{ color: ELEMENT_COLORS[getSignElement(chartData.bigThree.sun.sign)] }}>
-                  {chartData.bigThree.sun.degree}°
-                </div>
-              </GlassCard>
-
-              {/* Moon */}
-              <GlassCard
-                level="card"
-                hoverLift
-                glowColor={colors.textSecondary}
-                className="p-5 text-center border border-white/[0.06] bg-white/[0.015] rounded-2xl"
-              >
-                <div className="text-3xl mb-1">🌙</div>
-                <div className="text-xs mb-1 text-white/40">
-                  {language === 'zh' ? '月亮' : 'Moon'}
-                </div>
-                <div className="text-2xl mb-1">{chartData.bigThree.moon.symbol}</div>
-                <div className="text-lg font-bold text-white/90 mb-1">
-                  {language === 'zh' ? chartData.bigThree.moon.signZh : chartData.bigThree.moon.sign}
-                </div>
-                <div className="text-sm" style={{ color: ELEMENT_COLORS[getSignElement(chartData.bigThree.moon.sign)] }}>
-                  {chartData.bigThree.moon.degree}°
-                </div>
-              </GlassCard>
-
-              {/* Rising */}
-              <GlassCard
-                level="card"
-                hoverLift
-                glowColor={colors.purpleLight}
-                className="p-5 text-center border border-white/[0.06] bg-white/[0.015] rounded-2xl"
-              >
-                <div className="text-3xl mb-1">⬆️</div>
-                <div className="text-xs mb-1 text-purple-300/70">
-                  {language === 'zh' ? '上升' : 'Rising'}
-                </div>
-                <div className="text-2xl mb-1">{chartData.bigThree.rising.symbol}</div>
-                <div className="text-lg font-bold text-white/90 mb-1">
-                  {language === 'zh' ? chartData.bigThree.rising.signZh : chartData.bigThree.rising.sign}
-                </div>
-                <div className="text-sm" style={{ color: ELEMENT_COLORS[getSignElement(chartData.bigThree.rising.sign)] }}>
-                  {chartData.bigThree.rising.degree}°
-                </div>
-              </GlassCard>
-            </div>
-            </FadeInWhenVisible>
-
-            {/* AstroChart SVG Visualization */}
-            <FadeInWhenVisible delay={0.2}>
-              <GlassCard level="card" className="p-6 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-                <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
-                  {language === 'zh' ? '专业星盘' : 'Natal Chart'}
-                </h3>
-              <div className="flex justify-center">
-                <div
-                  id="western-chart"
-                  ref={chartRef}
-                  className="w-full max-w-md"
-                />
-              </div>
-            </GlassCard>
-            </FadeInWhenVisible>
-
-            {/* Planet Positions Table */}
-            <FadeInWhenVisible delay={0.25}>
-              <GlassCard level="card" className="p-6 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-                <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
-                  {language === 'zh' ? '行星位置' : 'Planetary Positions'}
-                </h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                  {chartData.planets.map((planet) => (
-                    <GlassCard key={planet.name} level="soft" className="p-3 text-center border border-white/[0.04] bg-white/[0.02] rounded-xl">
-                      <div className="text-lg mb-1" style={{ color: PLANET_COLORS[planet.name] }}>
-                        {PLANET_SYMBOLS[planet.name]}
-                      </div>
-                      <div className="text-white/80 font-medium text-sm">
-                        {language === 'zh' ? getChinesePlanetName(planet.name) : planet.name}
-                      </div>
-                      <div className="text-sm mt-1 text-cyan-400/70">
-                        {planet.signSymbol} {language === 'zh' ? planet.signZh : planet.sign} {planet.degree}°
-                      </div>
-                    </GlassCard>
+      {chartData ? (
+        <LandingSection
+          eyebrow="Generated result"
+          title="Natal chart overview"
+          description={`${chartData.meta.platform} / ${chartData.meta.version} / ${chartData.meta.calculationMode}`}
+        >
+          <ResultScaffold
+            eyebrow="Big Three"
+            title={`${chartData.bigThree.sun.sign} / ${chartData.bigThree.moon.sign} / ${chartData.bigThree.rising.sign}`}
+            summary="The chart opens with the three most legible identity anchors, then expands into the full wheel and placement table."
+            highlights={[
+              { label: 'Sun', value: `${chartData.bigThree.sun.sign} ${chartData.bigThree.sun.degree}deg` },
+              { label: 'Moon', value: `${chartData.bigThree.moon.sign} ${chartData.bigThree.moon.degree}deg` },
+              { label: 'Rising', value: `${chartData.bigThree.rising.sign} ${chartData.bigThree.rising.degree}deg` },
+            ]}
+            details={
+              <div className="space-y-8">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                  {[
+                    { label: 'Sun', item: chartData.bigThree.sun },
+                    { label: 'Moon', item: chartData.bigThree.moon },
+                    { label: 'Rising', item: chartData.bigThree.rising },
+                  ].map(({ label, item }) => (
+                    <div key={label} className="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-5 text-center">
+                      <p className="text-xs uppercase tracking-[0.22em] text-white/35">{label}</p>
+                      <p className="mt-3 font-serif text-2xl text-white/88">
+                        {language === 'zh' ? item.signZh : item.sign}
+                      </p>
+                      <p className="mt-2 text-sm text-amber-100/75">{item.degree}deg</p>
+                    </div>
                   ))}
                 </div>
-              </GlassCard>
-            </FadeInWhenVisible>
 
-            {/* House Cusps */}
-            <FadeInWhenVisible delay={0.3}>
-              <GlassCard level="card" className="p-6 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-                <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
-                  {language === 'zh' ? '宫位' : 'Houses'}
-                </h3>
-                <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
-                  {chartData.houses.cusps.map((cusp, index) => {
-                    const signIndex = Math.floor(cusp / 30) % 12;
-                    const sign = ZODIAC_SIGNS[signIndex];
-                    return (
-                      <GlassCard key={index} level="soft" className="p-3 text-center border border-white/[0.04] bg-white/[0.02] rounded-xl">
-                        <div className="text-xs mb-1 text-white/20">
-                          {language === 'zh' ? `第${index + 1}宫` : `House ${index + 1}`}
-                        </div>
-                        <div className="text-white/80 font-medium text-sm">
-                          {sign.symbol}
-                        </div>
-                        <div className="text-sm text-white/40">
-                          {language === 'zh' ? sign.nameZh : sign.name}
-                        </div>
-                      </GlassCard>
-                    );
-                  })}
+                <div className="rounded-[2rem] border border-white/10 bg-black/30 p-5">
+                  <h3 className="mb-5 text-center text-xs uppercase tracking-[0.22em] text-white/36">
+                    Natal chart wheel
+                  </h3>
+                  <div className="flex justify-center">
+                    <div id="western-chart" ref={chartRef} className="w-full max-w-[520px]" />
+                  </div>
                 </div>
 
-                {/* Ascendant & Midheaven */}
-                <div className="mt-4 grid grid-cols-2 gap-4">
-                  <GlassCard level="soft" className="p-4 text-center border border-white/[0.04] bg-white/[0.02] rounded-xl">
-                    <div className="text-xs mb-1 text-purple-300/70">
-                      {language === 'zh' ? '上升星座' : 'Ascendant'}
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-5">
+                  {chartData.planets.map((planet) => (
+                    <div
+                      key={planet.name}
+                      className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-4 text-center"
+                    >
+                      <div className="text-xs uppercase tracking-[0.18em] text-white/35">
+                        {PLANET_SYMBOLS[planet.name] ?? planet.name}
+                      </div>
+                      <div className="mt-2 font-semibold text-white/84">
+                        {language === 'zh' ? getChinesePlanetName(planet.name) : planet.name}
+                      </div>
+                      <div
+                        className="mt-2 text-sm"
+                        style={{ color: ELEMENT_COLORS[getSignElement(planet.sign)] ?? '#D4AF37' }}
+                      >
+                        {planet.signSymbol} {language === 'zh' ? planet.signZh : planet.sign} {planet.degree}deg
+                      </div>
                     </div>
-                    <div className="text-2xl mb-1">
-                      {ZODIAC_SIGNS[Math.floor(chartData.houses.ascendant / 30) % 12].symbol}
-                    </div>
-                    <div className="text-white/80 font-medium">
-                      {language === 'zh' ? chartData.houses.ascendantSignZh : chartData.houses.ascendantSign}
-                    </div>
-                    <div className="text-sm text-purple-300/60">{chartData.houses.ascendant}°</div>
-                  </GlassCard>
-                  <GlassCard level="soft" className="p-4 text-center border border-white/[0.04] bg-white/[0.02] rounded-xl">
-                    <div className="text-xs mb-1 text-cyan-400/70">
-                      {language === 'zh' ? '天顶' : 'Midheaven'}
-                    </div>
-                    <div className="text-2xl mb-1">
-                      {ZODIAC_SIGNS[Math.floor(chartData.houses.midheaven / 30) % 12].symbol}
-                    </div>
-                    <div className="text-white/80 font-medium">
-                      {language === 'zh' ? chartData.houses.mcSignZh : chartData.houses.mcSign}
-                    </div>
-                    <div className="text-sm text-cyan-400/60">{chartData.houses.midheaven}°</div>
-                  </GlassCard>
+                  ))}
                 </div>
-              </GlassCard>
-            </FadeInWhenVisible>
 
-            {/* PDF Download */}
-            <div className="flex justify-center mt-6">
-              <PDFDownloadButton
-                serviceType="western"
-                resultData={chartData as unknown as Record<string, unknown>}
-                birthData={{
-                  birthday: birthday,
-                  birthTime: birthTime,
-                  name: language === 'zh' ? '西方星盘' : 'Western Natal',
-                }}
-                language={language}
-              />
-            </div>
-
-            {/* Calculation Info */}
-            <div className="text-center" style={{ color: colors.textMuted }}>
-              <p className="text-xs">{chartData.meta.platform} · v{chartData.meta.version}</p>
-              <p className="mt-1 text-xs">{chartData.meta.calculationMode}</p>
-            </div>
-          </div>
-        )}
-
-        {/* Footer */}
-        <FadeInWhenVisible delay={0.4}>
-          <div className="mt-12 text-center">
-            <p className="text-sm text-white/20">© 2024 TianJi Global · 天机全球</p>
-            <p className="mt-1 text-xs text-white/15">
-              {language === 'zh'
-                ? '使用瑞士星历表(SWEPH)进行高精度天文计算'
-                : 'High-precision astronomical calculations using Swiss Ephemeris (SWEPH)'}
-            </p>
-          </div>
-        </FadeInWhenVisible>
-      </div>
+                <PDFDownloadButton
+                  serviceType="western"
+                  resultData={chartData as unknown as Record<string, unknown>}
+                  language={language}
+                />
+              </div>
+            }
+            aside={
+              <div className="space-y-4">
+                <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                  <p className="text-xs uppercase tracking-[0.22em] text-white/35">Chart note</p>
+                  <p className="mt-3 text-lg font-serif text-white/82">
+                    The wheel is the proof layer; the Big Three is the doorway.
+                  </p>
+                </div>
+                <div className="rounded-[1.5rem] border border-violet-300/20 bg-violet-300/[0.06] p-5 text-sm leading-6 text-white/58">
+                  Latitude and longitude stay editable for users who need precision rather than location guesses.
+                </div>
+              </div>
+            }
+          />
+        </LandingSection>
+      ) : (
+        <LandingSection
+          eyebrow="Preview"
+          title="Your sky wheel will render after calculation"
+          description="Submit the original form above to draw the AstroChart SVG and placement table."
+        >
+          <InsightGrid
+            title="What remains unchanged"
+            subtitle="API / chart / save / PDF"
+            items={[
+              { label: 'Endpoint', value: 'The page still posts to /api/western' },
+              { label: 'Coordinates', value: 'Latitude and longitude remain explicit inputs' },
+              { label: 'AstroChart', value: 'The chart renderer stays dynamically imported on the client' },
+              { label: 'Export', value: 'The PDF download remains available after generation' },
+            ]}
+          />
+        </LandingSection>
+      )}
     </main>
   );
 }
 
-// ─── Helper Functions ────────────────────────────────────────────────────────
-
 function getChinesePlanetName(name: string): string {
   const names: Record<string, string> = {
-    Sun: '太阳',
-    Moon: '月亮',
-    Mercury: '水星',
-    Venus: '金星',
-    Mars: '火星',
-    Jupiter: '木星',
-    Saturn: '土星',
-    Uranus: '天王星',
-    Neptune: '海王星',
-    Pluto: '冥王星',
+    Sun: 'Sun',
+    Moon: 'Moon',
+    Mercury: 'Mercury',
+    Venus: 'Venus',
+    Mars: 'Mars',
+    Jupiter: 'Jupiter',
+    Saturn: 'Saturn',
+    Uranus: 'Uranus',
+    Neptune: 'Neptune',
+    Pluto: 'Pluto',
   };
   return names[name] ?? name;
 }

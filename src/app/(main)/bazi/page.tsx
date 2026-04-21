@@ -1,33 +1,26 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import SharePanel from '@/components/SharePanel';
-import PDFDownloadButton from '@/components/PDFDownloadButton';
-import { saveReading } from '@/lib/save-reading';
-import BaziWheelAnimation from '@/components/animations/BaziWheelAnimation';
+import { useCallback, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
-import { GlassCard, MysticButton, LanguageSwitch, SectionHeader } from '@/components/ui';
-import { colors } from '@/design-system';
+import BaziWheelAnimation from '@/components/animations/BaziWheelAnimation';
 import BaZiChat from '@/components/chat/BaZiChat';
+import PDFDownloadButton from '@/components/PDFDownloadButton';
+import SharePanel from '@/components/SharePanel';
 import FortuneWheel from '@/components/widgets/FortuneWheel';
-
-// ─── Fade-In Motion ───────────────────────────────────────────────────────────
-function FadeInWhenVisible({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
+import {
+  BackgroundVideoHero,
+  InsightGrid,
+  LandingSection,
+  ModuleInputShell,
+  ResultScaffold,
+  ScrollNarrativeSection,
+  ShareSection,
+  TrustStrip,
+} from '@/components/landing';
+import { GlassCard, LanguageSwitch } from '@/components/ui';
+import { colors } from '@/design-system';
+import { saveReading } from '@/lib/save-reading';
 
 type Language = 'zh' | 'en';
 type Gender = 'male' | 'female';
@@ -58,100 +51,641 @@ interface BaZiResponse {
   gender?: Gender;
 }
 
-const HEAVENLY_STEMS = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
-const EARTHLY_BRANCHES = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
-const ELEMENTS = ['木', '木', '火', '火', '土', '土', '金', '金', '水', '水'];
-const ELEMENT_COLORS: Record<string, string> = {
-  '木': 'text-green-500',
-  '火': 'text-red-500',
-  '土': 'text-yellow-600',
-  '金': 'text-gray-400',
-  '水': 'text-blue-500',
-};
-
 const TIME_PERIODS = [
-  { value: 0, label: '子时 (23:00-00:59)', labelEn: 'Zi (23:00-00:59)' },
-  { value: 1, label: '丑时 (01:00-02:59)', labelEn: 'Chou (01:00-02:59)' },
-  { value: 2, label: '寅时 (03:00-04:59)', labelEn: 'Yin (03:00-04:59)' },
-  { value: 3, label: '卯时 (05:00-06:59)', labelEn: 'Mao (05:00-06:59)' },
-  { value: 4, label: '辰时 (07:00-08:59)', labelEn: 'Chen (07:00-08:59)' },
-  { value: 5, label: '巳时 (09:00-10:59)', labelEn: 'Si (09:00-10:59)' },
-  { value: 6, label: '午时 (11:00-12:59)', labelEn: 'Wu (11:00-12:59)' },
-  { value: 7, label: '未时 (13:00-14:59)', labelEn: 'Wei (13:00-14:59)' },
-  { value: 8, label: '申时 (15:00-16:59)', labelEn: 'Shen (15:00-16:59)' },
-  { value: 9, label: '酉时 (17:00-18:59)', labelEn: 'You (17:00-18:59)' },
-  { value: 10, label: '戌时 (19:00-20:59)', labelEn: 'Xu (19:00-20:59)' },
-  { value: 11, label: '亥时 (21:00-22:59)', labelEn: 'Hai (21:00-22:59)' },
+  { value: 0, label: 'Zi (23:00-00:59)' },
+  { value: 1, label: 'Chou (01:00-02:59)' },
+  { value: 2, label: 'Yin (03:00-04:59)' },
+  { value: 3, label: 'Mao (05:00-06:59)' },
+  { value: 4, label: 'Chen (07:00-08:59)' },
+  { value: 5, label: 'Si (09:00-10:59)' },
+  { value: 6, label: 'Wu (11:00-12:59)' },
+  { value: 7, label: 'Wei (13:00-14:59)' },
+  { value: 8, label: 'Shen (15:00-16:59)' },
+  { value: 9, label: 'You (17:00-18:59)' },
+  { value: 10, label: 'Xu (19:00-20:59)' },
+  { value: 11, label: 'Hai (21:00-22:59)' },
 ];
 
-const ELEMENT_LABELS: Record<string, Record<string, string>> = {
-  'zh': { '木': '木', '火': '火', '土': '土', '金': '金', '水': '水' },
-  'en': { '木': 'Wood', '火': 'Fire', '土': 'Earth', '金': 'Metal', '水': 'Water' },
+const ELEMENT_COLORS: Record<string, string> = {
+  Wood: 'text-emerald-300',
+  Fire: 'text-rose-300',
+  Earth: 'text-amber-300',
+  Metal: 'text-slate-200',
+  Water: 'text-cyan-300',
 };
 
-function yearStemIndex(year: number): number {
-  return ((year - 4) % 10 + 10) % 10;
-}
+const ELEMENT_BAR_COLORS: Record<string, string> = {
+  Wood: '#34d399',
+  Fire: '#fb7185',
+  Earth: '#fbbf24',
+  Metal: '#cbd5e1',
+  Water: '#22d3ee',
+};
 
-function yearBranchIndex(year: number): number {
-  return ((year - 4) % 12 + 12) % 12;
-}
+const ELEMENT_LABELS: Record<Language, Record<string, string>> = {
+  zh: {
+    Wood: 'Wood',
+    Fire: 'Fire',
+    Earth: 'Earth',
+    Metal: 'Metal',
+    Water: 'Water',
+  },
+  en: {
+    Wood: 'Wood',
+    Fire: 'Fire',
+    Earth: 'Earth',
+    Metal: 'Metal',
+    Water: 'Water',
+  },
+};
 
-function hourBranchIndex(hour: number): number {
-  return Math.floor(((hour + 1) % 24) / 2);
-}
+const PILLAR_LABELS: Record<Language, Record<'year' | 'month' | 'day' | 'hour', string>> = {
+  zh: {
+    year: 'Year Pillar',
+    month: 'Month Pillar',
+    day: 'Day Pillar',
+    hour: 'Hour Pillar',
+  },
+  en: {
+    year: 'Year Pillar',
+    month: 'Month Pillar',
+    day: 'Day Pillar',
+    hour: 'Hour Pillar',
+  },
+};
 
-function julianDayNumber(y: number, m: number, d: number): number {
-  const a = Math.floor((14 - m) / 12);
-  const yr = y + 4800 - a;
-  const mo = m + 12 * a - 3;
-  return d + Math.floor((153 * mo + 2) / 5) + 365 * yr +
-    Math.floor(yr / 4) - Math.floor(yr / 100) + Math.floor(yr / 400) - 32045;
-}
+const NARRATIVE_BLOCKS = [
+  {
+    label: '01 Four pillars',
+    heading: 'The chart opens as a structural map, not a vague horoscope.',
+    body: 'Ba Zi starts with four pillars, elemental balance, and the day master. The redesign keeps the same calculation flow but presents it with more hierarchy, more negative space, and stronger narrative pacing.',
+  },
+  {
+    label: '02 Element rhythm',
+    heading: 'Five-element balance becomes instantly readable.',
+    body: 'Instead of burying the elemental signal inside dense cards, the new layout stages it as a luxury dashboard: overview first, then strengths, then the deeper AI reading and conversation layer.',
+  },
+  {
+    label: '03 Guided depth',
+    heading: 'From chart to action, the reading unfolds in layers.',
+    body: 'Career, love, wealth, and health stay in the same product flow. What changes here is the visual shell around them, so the module feels premium without breaking the existing Ba Zi engine.',
+  },
+];
 
-function buildPillar(stemIdx: number, branchIdx: number) {
-  return {
-    heavenlyStem: HEAVENLY_STEMS[stemIdx % 10],
-    earthlyBranch: EARTHLY_BRANCHES[branchIdx % 12],
-    element: ELEMENTS[stemIdx % 10],
-  };
-}
-
-function calculateBaZi(year: number, month: number, day: number, hour: number): BaZiChart {
-  const yearStem = yearStemIndex(year);
-  const yearBranch = yearBranchIndex(year);
-
-  const monthStem = ((yearStem % 5) * 2 + (month - 1)) % 10;
-  const monthBranch = (month + 1) % 12;
-
-  const jdn = julianDayNumber(year, month, day);
-  const dayStem = ((jdn - 11) % 10 + 10) % 10;
-  const dayBranch = ((jdn - 11) % 12 + 12) % 12;
-
-  const hourBranch = hourBranchIndex(hour);
-  const hourStem = ((dayStem % 5) * 2 + hourBranch) % 10;
-
-  return {
-    year: buildPillar(yearStem, yearBranch),
-    month: buildPillar(monthStem, monthBranch),
-    day: buildPillar(dayStem, dayBranch),
-    hour: buildPillar(hourStem, hourBranch),
-    dayMasterElement: ELEMENTS[dayStem % 10],
-  };
-}
+const TRUST_ITEMS = [
+  { label: 'Four-pillar chart', description: 'Same /api/bazi request and response shape' },
+  { label: 'AI deep reading', description: 'Existing interpretation and meta stay intact' },
+  { label: 'Chat + chart tools', description: 'BaZiChat, FortuneWheel, PDF, and share remain available' },
+  { label: 'Save-ready', description: 'Still writes to the same reading history flow' },
+];
 
 function countElements(chart: BaZiChart): Record<string, number> {
-  const counts: Record<string, number> = { '木': 0, '火': 0, '土': 0, '金': 0, '水': 0 };
-  counts[chart.year.element]++;
-  counts[chart.month.element]++;
-  counts[chart.day.element]++;
-  counts[chart.hour.element]++;
+  const counts: Record<string, number> = {
+    Wood: 0,
+    Fire: 0,
+    Earth: 0,
+    Metal: 0,
+    Water: 0,
+  };
+
+  counts[chart.year.element] = (counts[chart.year.element] ?? 0) + 1;
+  counts[chart.month.element] = (counts[chart.month.element] ?? 0) + 1;
+  counts[chart.day.element] = (counts[chart.day.element] ?? 0) + 1;
+  counts[chart.hour.element] = (counts[chart.hour.element] ?? 0) + 1;
+
   return counts;
 }
 
+function extractLead(result: BaZiResponse, language: Language) {
+  const source = result.aiInterpretation || result.interpretation || '';
+  const firstSentence = source
+    .split(/[.!?\n。！？]/)
+    .map((sentence) => sentence.trim())
+    .find(Boolean);
+
+  if (firstSentence) {
+    return firstSentence;
+  }
+
+  return language === 'zh'
+    ? 'Your Ba Zi chart is now arranged into a clear elemental structure.'
+    : 'Your Ba Zi chart is now arranged into a clear elemental structure.';
+}
+
+function buildInsightItems(result: BaZiResponse, language: Language) {
+  const sentences = (result.aiInterpretation || result.interpretation || '')
+    .split(/[.!?\n。！？]/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean)
+    .slice(0, 6);
+
+  const icons = ['✦', '✧', '◌', '✺', '✦', '✧'];
+
+  if (!sentences.length) {
+    return [
+      {
+        icon: '✦',
+        label: language === 'zh' ? 'Core signal' : 'Core signal',
+        value: result.interpretation,
+      },
+    ];
+  }
+
+  return sentences.map((sentence, index) => ({
+    icon: icons[index % icons.length],
+    label: `${language === 'zh' ? 'Insight' : 'Insight'} ${index + 1}`,
+    value: sentence.length > 110 ? `${sentence.slice(0, 110)}...` : sentence,
+  }));
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="mx-auto max-w-6xl px-6 py-20 sm:px-8">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]"
+      >
+        <div className="space-y-4 rounded-[2rem] border border-white/[0.06] bg-white/[0.02] p-8">
+          <div className="h-4 w-28 rounded-full bg-white/[0.06]" />
+          <div className="h-12 w-3/4 rounded-2xl bg-white/[0.05]" />
+          <div className="h-5 w-full rounded-full bg-white/[0.04]" />
+          <div className="h-5 w-5/6 rounded-full bg-white/[0.04]" />
+        </div>
+        <div className="space-y-3 rounded-[2rem] border border-white/[0.06] bg-white/[0.02] p-8">
+          {[0, 1, 2, 3].map((index) => (
+            <div key={index} className="h-14 rounded-2xl bg-white/[0.04]" />
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function BaZiInputForm({
+  birthday,
+  birthTime,
+  gender,
+  language,
+  onBirthdayChange,
+  onBirthTimeChange,
+  onGenderChange,
+  onLanguageChange,
+  onSubmit,
+  onAiSubmit,
+  loading,
+  loadingAI,
+}: {
+  birthday: string;
+  birthTime: number;
+  gender: Gender;
+  language: Language;
+  onBirthdayChange: (value: string) => void;
+  onBirthTimeChange: (value: number) => void;
+  onGenderChange: (value: Gender) => void;
+  onLanguageChange: (value: Language) => void;
+  onSubmit: () => void;
+  onAiSubmit: () => void;
+  loading: boolean;
+  loadingAI: boolean;
+}) {
+  return (
+    <div className="space-y-5">
+      <div>
+        <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+          Birth date
+        </label>
+        <input
+          type="date"
+          value={birthday}
+          onChange={(event) => onBirthdayChange(event.target.value)}
+          className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-white/80 transition-all focus:border-purple-500/40 focus:outline-none"
+        />
+      </div>
+
+      <div>
+        <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+          Birth hour
+        </label>
+        <select
+          value={birthTime}
+          onChange={(event) => onBirthTimeChange(Number(event.target.value))}
+          className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-white/80 transition-all focus:border-purple-500/40 focus:outline-none"
+        >
+          {TIME_PERIODS.map((period) => (
+            <option key={period.value} value={period.value}>
+              {period.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+            Gender
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {(['male', 'female'] as const).map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => onGenderChange(value)}
+                className={`rounded-xl border px-3 py-2.5 text-sm transition-all ${
+                  gender === value
+                    ? 'border-amber-400/50 bg-amber-400/12 text-amber-100'
+                    : 'border-white/[0.08] bg-white/[0.03] text-white/60 hover:border-white/[0.16] hover:text-white/82'
+                }`}
+              >
+                {value === 'male' ? 'Male' : 'Female'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+            Output language
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {(['zh', 'en'] as const).map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => onLanguageChange(value)}
+                className={`rounded-xl border px-3 py-2.5 text-sm transition-all ${
+                  language === value
+                    ? 'border-violet-400/45 bg-violet-400/12 text-violet-100'
+                    : 'border-white/[0.08] bg-white/[0.03] text-white/60 hover:border-white/[0.16] hover:text-white/82'
+                }`}
+              >
+                {value === 'zh' ? 'Chinese' : 'English'}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-3 pt-2 sm:grid-cols-2">
+        <button
+          type="button"
+          onClick={onSubmit}
+          disabled={loading}
+          className="rounded-2xl border border-white/[0.08] bg-white/[0.03] px-4 py-3.5 text-sm font-semibold uppercase tracking-[0.2em] text-white/78 transition-all hover:border-white/[0.18] hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {loading && !loadingAI ? 'Calculating...' : 'Chart only'}
+        </button>
+        <button
+          type="button"
+          onClick={onAiSubmit}
+          disabled={loading}
+          className="rounded-2xl px-4 py-3.5 text-sm font-semibold uppercase tracking-[0.2em] text-[#0a0a0a] transition-all disabled:cursor-not-allowed disabled:opacity-50"
+          style={{
+            background: 'linear-gradient(135deg, #D4AF37 0%, #7c3aed 100%)',
+            boxShadow:
+              '0 4px 32px rgba(124,58,237,0.35), 0 0 60px rgba(212,175,55,0.15)',
+          }}
+        >
+          {loadingAI ? 'AI reading...' : 'AI deep read'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ResultBlock({
+  result,
+  birthday,
+  birthTime,
+  gender,
+  language,
+  elementCounts,
+}: {
+  result: BaZiResponse;
+  birthday: string;
+  birthTime: number;
+  gender: Gender;
+  language: Language;
+  elementCounts: Record<string, number>;
+}) {
+  const pillarLabels = PILLAR_LABELS[language];
+  const elementLabels = ELEMENT_LABELS[language];
+  const lead = extractLead(result, language);
+  const insightItems = buildInsightItems(result, language);
+  const selectedTimePeriod = TIME_PERIODS[birthTime] ?? TIME_PERIODS[2];
+  const shareData = {
+    chart: result.chart,
+    birthday,
+    birthTime: selectedTimePeriod.label,
+    language,
+  };
+
+  const radarData = {
+    career: 72,
+    love: 68,
+    wealth: 65,
+    health: 78,
+    date: birthday,
+  };
+
+  return (
+    <>
+      <ScrollNarrativeSection
+        accentColor="#7c3aed"
+        goldColor="#D4AF37"
+        blocks={NARRATIVE_BLOCKS}
+      />
+
+      <ResultScaffold
+        eyebrow="Ba Zi result"
+        title="The chart is now staged like a premium reading room."
+        subtitle="The same data contract remains intact. This redesign only changes how the pillars, elements, interpretation, and share tools are layered for readability."
+        overview={
+          <div className="space-y-6">
+            <div>
+              <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                Overview
+              </div>
+              <p className="mt-3 max-w-3xl font-serif text-2xl text-white/90 sm:text-3xl">
+                {lead}
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-4">
+              {(
+                [
+                  ['year', result.chart.year],
+                  ['month', result.chart.month],
+                  ['day', result.chart.day],
+                  ['hour', result.chart.hour],
+                ] as const
+              ).map(([key, pillar]) => (
+                <div
+                  key={key}
+                  className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 text-center"
+                >
+                  <div className="text-[10px] uppercase tracking-[0.24em] text-white/35">
+                    {pillarLabels[key]}
+                  </div>
+                  <div className="mt-4 text-3xl font-semibold text-white/90">
+                    {pillar.heavenlyStem}
+                  </div>
+                  <div className="mt-1 text-2xl text-amber-200/85">{pillar.earthlyBranch}</div>
+                  <div
+                    className={`mt-3 text-xs uppercase tracking-[0.2em] ${
+                      ELEMENT_COLORS[pillar.element] ?? 'text-white/65'
+                    }`}
+                  >
+                    {elementLabels[pillar.element] ?? pillar.element}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+        highlights={
+          <div className="space-y-4">
+            <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+              Element balance
+            </div>
+            <div className="space-y-3">
+              {Object.entries(elementCounts).map(([element, count]) => {
+                const width = `${(count / 4) * 100}%`;
+                return (
+                  <div key={element} className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className={ELEMENT_COLORS[element] ?? 'text-white/70'}>
+                        {elementLabels[element] ?? element}
+                      </span>
+                      <span className="text-white/45">{count}/4</span>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-white/[0.05]">
+                      <div
+                        className="h-full rounded-full transition-all duration-700"
+                        style={{
+                          width,
+                          background: ELEMENT_BAR_COLORS[element] ?? '#a78bfa',
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        }
+        details={
+          <div className="space-y-5">
+            <div>
+              <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                Interpretation
+              </div>
+              <p className="mt-3 text-sm leading-7 text-white/68 sm:text-base">
+                {result.interpretation}
+              </p>
+            </div>
+
+            {result.aiInterpretation && (
+              <div className="border-t border-white/[0.06] pt-5">
+                <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                  AI deep reading
+                </div>
+                <div className="mt-3 whitespace-pre-wrap text-sm leading-7 text-white/72 sm:text-base">
+                  {result.aiInterpretation}
+                </div>
+              </div>
+            )}
+
+            {result.disclaimer && (
+              <p className="border-t border-white/[0.06] pt-4 text-[11px] italic text-white/28">
+                {result.disclaimer}
+              </p>
+            )}
+          </div>
+        }
+        aside={
+          <div className="space-y-5">
+            <div>
+              <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                Day master
+              </div>
+              <div className="mt-4 text-4xl font-serif text-amber-200/90">
+                {result.chart.day.heavenlyStem}
+              </div>
+              <div
+                className={`mt-2 text-sm uppercase tracking-[0.24em] ${
+                  ELEMENT_COLORS[result.chart.dayMasterElement] ?? 'text-white/70'
+                }`}
+              >
+                {elementLabels[result.chart.dayMasterElement] ?? result.chart.dayMasterElement}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
+              <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                Reading stack
+              </div>
+              <div className="mt-3 space-y-2 text-sm text-white/62">
+                <p>Four-pillar layout</p>
+                <p>Five-element balance</p>
+                <p>Fortune radar + animated wheel</p>
+                <p>Chat, PDF, save, and share tools</p>
+              </div>
+            </div>
+
+            {result.aiMeta && (
+              <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
+                <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                  AI meta
+                </div>
+                <div className="mt-3 space-y-2 text-sm text-white/60">
+                  <p>Provider: {result.aiMeta.provider}</p>
+                  <p>Model: {result.aiMeta.model}</p>
+                  <p>Latency: {result.aiMeta.latencyMs} ms</p>
+                </div>
+              </div>
+            )}
+          </div>
+        }
+      />
+
+      <InsightGrid
+        title="Key insight layers"
+        subtitle="A distilled reading surface generated from the same interpretation payload."
+        items={insightItems}
+        accentColor="#7c3aed"
+        goldColor="#D4AF37"
+      />
+
+      <LandingSection
+        eyebrow="Fortune radar"
+        title="Four-dimensional signals stay inside the same flow."
+        subtitle="Career, love, wealth, and health remain exactly where users expect them. The redesign upgrades the presentation, not the product contract."
+      >
+        <GlassCard
+          level="card"
+          className="mx-auto max-w-4xl rounded-[1.75rem] border border-white/[0.06] bg-black/20 p-6 sm:p-8"
+        >
+          <FortuneWheel data={radarData} language={language} />
+        </GlassCard>
+      </LandingSection>
+
+      <LandingSection
+        eyebrow="Animated chart"
+        title="The wheel becomes a cinematic centerpiece, not a side utility."
+        subtitle="The existing animation and export flow remain intact, now staged inside a richer luxury shell."
+      >
+        <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+          <GlassCard
+            level="card"
+            className="rounded-[1.75rem] border border-white/[0.06] bg-black/20 p-6 sm:p-8"
+          >
+            <div className="flex justify-center">
+              <BaziWheelAnimation
+                birthDate={birthday}
+                birthTime={`${String((birthTime * 2 + 23) % 24).padStart(2, '0')}:00`}
+                width={420}
+                height={420}
+                playing
+              />
+            </div>
+          </GlassCard>
+
+          <GlassCard
+            level="strong"
+            className="rounded-[1.75rem] border border-white/[0.08] bg-black/25 p-6 sm:p-8"
+          >
+            <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+              Export stack
+            </div>
+            <p className="mt-4 text-sm leading-7 text-white/62">
+              The animated share card, PDF export, and history save flow are unchanged. This section only gives them stronger pacing and a cleaner hierarchy.
+            </p>
+            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+              <AnimatedShareButton
+                type="bazi"
+                resultData={shareData}
+                format="webp"
+                language={language}
+                variant="primary"
+              />
+              <AnimatedShareButton
+                type="bazi"
+                resultData={shareData}
+                format="png"
+                language={language}
+                variant="secondary"
+              />
+              <PDFDownloadButton
+                serviceType="bazi"
+                resultData={result as unknown as Record<string, unknown>}
+                birthData={{
+                  birthday,
+                  birthTime: selectedTimePeriod.label,
+                  gender,
+                }}
+                language={language}
+                className="justify-center rounded-xl"
+              />
+            </div>
+          </GlassCard>
+        </div>
+      </LandingSection>
+
+      <LandingSection
+        eyebrow="Multi-turn guidance"
+        title="The Ba Zi chat remains intact, now framed as a premium continuation."
+        subtitle="No endpoint changes, no auth changes, no request shape changes. It is the same chat tool inside a more intentional reading room."
+      >
+        <GlassCard
+          level="card"
+          className="rounded-[1.75rem] border border-white/[0.06] bg-black/20 p-4 sm:p-6"
+        >
+          <BaZiChat
+            birthDate={birthday}
+            birthTime={`${String((birthTime * 2 + 23) % 24).padStart(2, '0')}:00`}
+            gender={gender}
+            language={language}
+            baziChart={{
+              dayHeavenlyStem: result.chart.day.heavenlyStem,
+              dayMasterElement: result.chart.dayMasterElement,
+              year: result.chart.year.heavenlyStem,
+              month: result.chart.month.heavenlyStem,
+              day: result.chart.day.heavenlyStem,
+              hour: result.chart.hour.heavenlyStem,
+            }}
+          />
+        </GlassCard>
+      </LandingSection>
+
+      <LandingSection
+        eyebrow="Share panel"
+        title="Legacy share tools remain available."
+        subtitle="The QR and social share overlay is preserved exactly as before, so no external share behavior changes."
+      >
+        <div className="mx-auto max-w-3xl">
+          <SharePanel
+            serviceType="bazi"
+            resultId={birthday.replace(/-/g, '')}
+            shareUrl={`https://tianji.global/bazi?birthday=${birthday}`}
+          />
+        </div>
+      </LandingSection>
+
+      <ShareSection
+        type="bazi"
+        resultData={shareData}
+              ogBgSrc="/assets/images/og/bazi-og-bg-1200x630.jpg"
+        accentColor="#7c3aed"
+        goldColor="#D4AF37"
+      />
+    </>
+  );
+}
+
 export default function BaZiPage() {
-  const [birthday, setBirthday] = useState<string>('2000-08-16');
-  const [birthTime, setBirthTime] = useState<number>(2);
+  const [birthday, setBirthday] = useState('2000-08-16');
+  const [birthTime, setBirthTime] = useState(2);
   const [gender, setGender] = useState<Gender>('male');
   const [language, setLanguage] = useState<Language>('zh');
   const [result, setResult] = useState<BaZiResponse | null>(null);
@@ -160,441 +694,185 @@ export default function BaZiPage() {
   const [loadingAI, setLoadingAI] = useState(false);
   const [error, setError] = useState('');
 
-  const handleCalculate = useCallback(async (withAI: boolean) => {
-    setLoading(true);
-    setError('');
-    setResult(null);
+  const selectedTimePeriod = useMemo(
+    () => TIME_PERIODS[birthTime] ?? TIME_PERIODS[2],
+    [birthTime]
+  );
 
-    try {
-      const [year, month, day] = birthday.split('-').map(Number);
-      const hour = birthTime * 2 + 23;
+  const handleCalculate = useCallback(
+    async (withAI: boolean) => {
+      setLoading(true);
+      setError('');
+      setResult(null);
 
-      const res = await fetch('/api/bazi', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          birthday,
-          birthTime: `${String(hour % 24).padStart(2, '0')}:00`,
-          gender,
-          language,
-          enhanceWithAI: withAI,
-        }),
-      });
+      try {
+        const hour = birthTime * 2 + 23;
 
-      const json: BaZiResponse = await res.json();
-      if (!res.ok) throw new Error(json.aiError || json.interpretation || 'Calculation failed');
+        const response = await fetch('/api/bazi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            birthday,
+            birthTime: `${String(hour % 24).padStart(2, '0')}:00`,
+            gender,
+            language,
+            enhanceWithAI: withAI,
+          }),
+        });
 
-      setResult(json);
-      saveReading({
-        reading_type: 'bazi',
-        title: `${json.birthDate} ${json.gender === 'male' ? '男' : '女'} 八字命理`,
-        summary: json.interpretation?.slice(0, 120) ?? '',
-        reading_data: json as unknown as Record<string, unknown>,
-      });
-      setElementCounts(countElements(json.chart));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-      setLoadingAI(false);
-    }
-  }, [birthday, birthTime, gender, language]);
+        const json: BaZiResponse = await response.json();
+        if (!response.ok) {
+          throw new Error(json.aiError || json.interpretation || 'Calculation failed');
+        }
 
-  const pillarLabels = {
-    year: language === 'zh' ? '年柱' : 'Year',
-    month: language === 'zh' ? '月柱' : 'Month',
-    day: language === 'zh' ? '日柱' : 'Day',
-    hour: language === 'zh' ? '时柱' : 'Hour',
-  };
+        setResult(json);
+        setElementCounts(countElements(json.chart));
+        saveReading({
+          reading_type: 'bazi',
+          title: `${json.birthDate ?? birthday} ${json.gender === 'female' ? 'Female' : 'Male'} Ba Zi Reading`,
+          summary: json.interpretation?.slice(0, 120) ?? '',
+          reading_data: json as unknown as Record<string, unknown>,
+        });
+      } catch (value) {
+        setError(value instanceof Error ? value.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+        setLoadingAI(false);
+      }
+    },
+    [birthday, birthTime, gender, language]
+  );
 
   return (
-    <div className="mystic-page text-white min-h-screen" style={{ background: colors.bgPrimary }}>
-      {/* Multi-layer Cosmic Background */}
-      <div className="fixed inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse at 50% 0%, ${colors.bgNebula} 0%, transparent 55%)`, zIndex: 0 }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 20% 20%, rgba(59,20,75,0.35) 0%, transparent 50%)', zIndex: 0 }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 80%, rgba(6,30,60,0.45) 0%, transparent 50%)', zIndex: 0 }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(80,40,100,0.2) 0%, transparent 40%)', zIndex: 0 }} />
-
-      <div className="fixed top-4 right-4 z-50"><LanguageSwitch /></div>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-20 pb-12 w-full">
-        <SectionHeader
-          title={language === 'zh' ? '八字命理' : 'Ba Zi'}
-          subtitle={language === 'zh' ? '四柱命理 · Four Pillars of Destiny' : '四柱命理 · Four Pillars of Destiny'}
-          badge="📊"
-        />
-
-        {/* Input Form */}
-        <FadeInWhenVisible delay={0.1}>
-        <GlassCard level="card" className="p-6 mb-6 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            {/* Birthday */}
-            <div>
-              <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                {language === 'zh' ? '出生日期 / Birthday' : '出生日期 / Birthday'}
-              </label>
-              <input
-                type="date"
-                value={birthday}
-                onChange={(e) => setBirthday(e.target.value)}
-                className="w-full rounded-xl px-3 py-3 text-sm text-white bg-white/[0.04] border border-white/[0.06] transition-all focus:outline-none focus:ring-2 focus:ring-purple-500/40"
-              />
-            </div>
-
-            {/* Birth Time */}
-            <div>
-              <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                {language === 'zh' ? '出生时辰 / Birth Hour' : '出生时辰 / Birth Hour'}
-              </label>
-              <select
-                value={birthTime}
-                onChange={(e) => setBirthTime(Number(e.target.value))}
-                className="w-full rounded-xl px-3 py-3 text-sm text-white bg-white/[0.04] border border-white/[0.06] transition-all focus:outline-none focus:ring-2 focus:ring-purple-500/40"
-              >
-                {TIME_PERIODS.map((period) => (
-                  <option key={period.value} value={period.value}>
-                    {language === 'zh' ? period.label : period.labelEn}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Gender */}
-            <div>
-              <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                {language === 'zh' ? '性别 / Gender' : '性别 / Gender'}
-              </label>
-              <div className="flex gap-4">
-                <button
-                  onClick={() => setGender('male')}
-                  className={`flex-1 py-3 rounded-lg border-2 transition-all ${
-                    gender === 'male'
-                      ? 'border-amber-500 bg-amber-500/20'
-                      : 'border-slate-600 bg-slate-700/50 hover:border-slate-500'
-                  }`}
-                >
-                  {language === 'zh' ? '男 / Male' : '男 / Male'}
-                </button>
-                <button
-                  onClick={() => setGender('female')}
-                  className={`flex-1 py-3 rounded-lg border-2 transition-all ${
-                    gender === 'female'
-                      ? 'border-amber-500 bg-amber-500/20'
-                      : 'border-slate-600 bg-slate-700/50 hover:border-slate-500'
-                  }`}
-                >
-                  {language === 'zh' ? '女 / Female' : '女 / Female'}
-                </button>
-              </div>
-            </div>
-
-            {/* Language */}
-            <div>
-              <label className="block text-xs font-serif text-white/40 mb-2 tracking-widest uppercase">
-                {language === 'zh' ? '显示语言 / Language' : '显示语言 / Language'}
-              </label>
-              <div className="flex gap-4">
-                <button
-                  onClick={() => setLanguage('zh')}
-                  className={`flex-1 py-3 rounded-lg border-2 transition-all ${
-                    language === 'zh'
-                      ? 'border-amber-500 bg-amber-500/20'
-                      : 'border-slate-600 bg-slate-700/50 hover:border-slate-500'
-                  }`}
-                >
-                  中文
-                </button>
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`flex-1 py-3 rounded-lg border-2 transition-all ${
-                    language === 'en'
-                      ? 'border-amber-500 bg-amber-500/20'
-                      : 'border-slate-600 bg-slate-700/50 hover:border-slate-500'
-                  }`}
-                >
-                  English
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Calculate Button */}
-          <div className="flex gap-4">
-            <MysticButton
-              variant="outline"
-              size="lg"
-              className="flex-1"
-              onClick={() => handleCalculate(false)}
-              disabled={loading}
-            >
-              {loading && !loadingAI ? (language === 'zh' ? '计算中...' : 'Calculating...') : (language === 'zh' ? '分析八字' : 'Calculate Ba Zi')}
-            </MysticButton>
-            <MysticButton
-              variant="solid"
-              size="lg"
-              className="flex-1"
-              onClick={() => { setLoadingAI(true); handleCalculate(true); }}
-              disabled={loading}
-            >
-              {loadingAI ? (language === 'zh' ? 'AI解读中...' : 'AI Interpreting...') : (language === 'zh' ? '✨ AI 深度解读' : '✨ AI Deep Interpretation')}
-            </MysticButton>
-          </div>
-        </GlassCard>
-        </FadeInWhenVisible>
-
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-900/30 border border-red-500/50 rounded-lg p-4 mb-6 text-red-200">
-            {error}
-          </div>
-        )}
-
-        {/* Results */}
-        {result && (
-          <div className="space-y-6">
-            {/* Four Pillars Chart */}
-            <FadeInWhenVisible delay={0.1}>
-            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
-              <h2 className="text-lg font-serif font-bold mb-6 text-center text-amber-400/80">
-                {language === 'zh' ? '四柱八字' : 'Four Pillars Chart'}
-              </h2>
-
-              {/* Pillar Headers */}
-              <div className="grid grid-cols-4 gap-2 mb-4 text-center">
-                {(['year', 'month', 'day', 'hour'] as const).map((p) => (
-                  <div key={p} className="text-amber-400 font-semibold text-sm">
-                    {pillarLabels[p]}
-                  </div>
-                ))}
-              </div>
-
-              {/* Heavenly Stems */}
-              <div className="grid grid-cols-4 gap-2 mb-2">
-                {[result.chart.year, result.chart.month, result.chart.day, result.chart.hour].map((pillar, i) => (
-                  <div key={i} className="text-center bg-slate-700/30 rounded-lg py-3">
-                    <span className="text-3xl font-bold text-amber-400">{pillar.heavenlyStem}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Earthly Branches */}
-              <div className="grid grid-cols-4 gap-2 mb-4">
-                {[result.chart.year, result.chart.month, result.chart.day, result.chart.hour].map((pillar, i) => (
-                  <div key={i} className="text-center bg-slate-700/30 rounded-lg py-3">
-                    <span className="text-3xl font-bold text-orange-400">{pillar.earthlyBranch}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Elements Row */}
-              <div className="grid grid-cols-4 gap-2">
-                {[result.chart.year, result.chart.month, result.chart.day, result.chart.hour].map((pillar, i) => (
-                  <div key={i} className="text-center bg-slate-700/30 rounded-lg py-2">
-                    <span className={`text-lg font-semibold ${ELEMENT_COLORS[pillar.element]}`}>
-                      {ELEMENT_LABELS[language][pillar.element]}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            </FadeInWhenVisible>
-
-            {/* Day Master */}
-            <FadeInWhenVisible delay={0.15}>
-            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
-              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
-                {language === 'zh' ? '日主 (Day Master)' : '日主 (Day Master)'}
-              </h3>
-              <div className="text-center">
-                <span className="text-5xl font-bold text-amber-400 mr-4">{result.chart.day.heavenlyStem}</span>
-                <span className={`text-3xl font-bold ${ELEMENT_COLORS[result.chart.dayMasterElement]}`}>
-                  {ELEMENT_LABELS[language][result.chart.dayMasterElement]}
-                </span>
-              </div>
-              <p className="text-white/60 text-center mt-4">
-                {language === 'zh'
-                  ? `${result.chart.day.heavenlyStem}日主，属于${ELEMENT_LABELS['zh'][result.chart.dayMasterElement]}行`
-                  : `Day Master ${result.chart.day.heavenlyStem}, ${ELEMENT_LABELS['en'][result.chart.dayMasterElement]} element`}
-              </p>
-            </div>
-            </FadeInWhenVisible>
-
-            {/* Five Elements Distribution */}
-            {elementCounts && (
-              <FadeInWhenVisible delay={0.2}>
-              <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
-                <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-6 text-center">
-                  {language === 'zh' ? '五行分布' : 'Five Elements Distribution'}
-                </h3>
-                <div className="space-y-3">
-                  {(['木', '火', '土', '金', '水'] as const).map((element) => {
-                    const count = elementCounts[element];
-                    const maxCount = 4;
-                    const percentage = (count / maxCount) * 100;
-                    return (
-                      <div key={element} className="flex items-center gap-4">
-                        <span className={`text-xl font-bold w-8 ${ELEMENT_COLORS[element]}`}>
-                          {ELEMENT_LABELS[language][element]}
-                        </span>
-                        <div className="flex-1 bg-slate-700/50 rounded-full h-6 overflow-hidden">
-                          <div
-                            className={`h-full rounded-full transition-all duration-500 ${
-                              element === '木' ? 'bg-green-500' :
-                              element === '火' ? 'bg-red-500' :
-                              element === '土' ? 'bg-yellow-600' :
-                              element === '金' ? 'bg-gray-400' :
-                              'bg-blue-500'
-                            }`}
-                            style={{ width: `${percentage}%` }}
-                          />
-                        </div>
-                        <span className="text-white/60 w-8 text-right">{count}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              </FadeInWhenVisible>
-            )}
-
-            {/* Interpretation */}
-            <FadeInWhenVisible delay={0.25}>
-            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
-              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
-                {language === 'zh' ? '命理简析' : 'Brief Interpretation'}
-              </h3>
-              <p className="text-white/60 text-center leading-relaxed">
-                {language === 'zh'
-                  ? `您的日主为${result.chart.day.heavenlyStem}，属${ELEMENT_LABELS['zh'][result.chart.dayMasterElement]}行。${result.chart.year.heavenlyStem}年、${result.chart.month.heavenlyStem}月、${result.chart.day.heavenlyStem}日、${result.chart.hour.heavenlyStem}时，构成了独特的八字命盘。`
-                  : `Your Day Master is ${result.chart.day.heavenlyStem}, belonging to the ${ELEMENT_LABELS['en'][result.chart.dayMasterElement]} element. The combination of ${result.chart.year.heavenlyStem} (Year), ${result.chart.month.heavenlyStem} (Month), ${result.chart.day.heavenlyStem} (Day), and ${result.chart.hour.heavenlyStem} (Hour) creates your unique Ba Zi chart.`}
-              </p>
-            </div>
-            </FadeInWhenVisible>
-
-            {/* AI Interpretation */}
-            {result.aiInterpretation && (
-              <FadeInWhenVisible delay={0.3}>
-              <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
-                <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
-                  {language === 'zh' ? '✨ AI 深度解读' : '✨ AI Deep Interpretation'}
-                </h3>
-                <p className="text-white/60 text-center leading-relaxed whitespace-pre-wrap">
-                  {result.aiInterpretation}
-                </p>
-                {result.disclaimer && (
-                  <p className="text-white/20 text-xs mt-4 italic">
-                    {result.disclaimer}
-                  </p>
-                )}
-                {result.aiMeta && (
-                  <p className="text-white/15 text-xs mt-2">
-                    {result.aiMeta.provider} · {result.aiMeta.model} · {result.aiMeta.latencyMs}ms
-                  </p>
-                )}
-              </div>
-              </FadeInWhenVisible>
-            )}
-
-            {result.aiError && (
-              <div className="bg-red-900/30 border border-red-500/50 rounded-lg p-4 text-red-200 text-sm">
-                {language === 'zh' ? 'AI 解读失败' : 'AI Interpretation Failed'}: {result.aiError}
-              </div>
-            )}
-
-            {/* Fortune Wheel - 四维图 */}
-            <FadeInWhenVisible delay={0.32}>
-            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
-              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
-                {language === 'zh' ? '✨ 四维运势图' : '✨ Fortune Radar'}
-              </h3>
-              <FortuneWheel
-                data={{
-                  career: 72,
-                  love: 68,
-                  wealth: 65,
-                  health: 78,
-                  date: birthday
-                }}
-                language={language}
-              />
-            </div>
-            </FadeInWhenVisible>
-
-            {/* BaZiChat - 多轮对话 */}
-            <FadeInWhenVisible delay={0.34}>
-            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
-              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
-                {language === 'zh' ? '🔮 AI 多轮对话占卜' : '🔮 AI Multi-Turn Chat'}
-              </h3>
-              <BaZiChat
-                birthDate={birthday}
-                birthTime={TIME_PERIODS[birthTime]?.labelEn?.split(' ')[0]
-                  ? `${String(birthTime * 2 + 23).padStart(2, '0')}:00`
-                  : '02:00'}
-                gender={gender}
-                language={language}
-                baziChart={result ? {
-                  dayHeavenlyStem: result.chart.day.heavenlyStem,
-                  dayMasterElement: result.chart.dayMasterElement,
-                  year: result.chart.year.heavenlyStem,
-                  month: result.chart.month.heavenlyStem,
-                  day: result.chart.day.heavenlyStem,
-                  hour: result.chart.hour.heavenlyStem
-                } : undefined}
-              />
-            </div>
-            </FadeInWhenVisible>
-
-            {/* Share Panel */}
-            <SharePanel
-              serviceType="bazi"
-              resultId={birthday.replace(/-/g, '')}
-              shareUrl={`https://tianji.global/bazi?birthday=${birthday}`}
-            />
-
-            {/* Animated BaZi Wheel */}
-            <FadeInWhenVisible delay={0.35}>
-            <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/[0.06]">
-              <h3 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4 text-center">
-                ✨ Animated BaZi Wheel
-              </h3>
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
-                <BaziWheelAnimation
-                  birthDate={birthday}
-                  birthTime={TIME_PERIODS[birthTime]?.labelEn?.split(' ')[0]
-                    ? `${String(birthTime * 2 + 23).padStart(2, '0')}:00`
-                    : '02:00'}
-                  width={420}
-                  height={420}
-                  playing={true}
-                />
-              </div>
-              <div className="flex justify-center">
-                <AnimatedShareButton
-                  type="bazi"
-                  resultData={{ chart: result?.chart, birthday, birthTime: TIME_PERIODS[birthTime]?.label || '' }}
-                  format="webp"
-                  language={language}
-                  variant="secondary"
-                />
-              </div>
-            </div>
-            </FadeInWhenVisible>
-
-            {/* PDF Download */}
-            <PDFDownloadButton
-              serviceType="bazi"
-              resultData={result as unknown as Record<string, unknown>}
-              birthData={{ birthday, birthTime: TIME_PERIODS[birthTime]?.label || '', gender }}
-              language={language}
-            />
-          </div>
-        )}
-
-        {/* Footer */}
-        <div className="mt-12 text-center text-slate-500 text-sm">
-          <p>© 2024 TianJi Global · 天机全球</p>
-        </div>
+    <div className="min-h-screen text-white" style={{ background: colors.bgPrimary }}>
+      <div className="fixed right-4 top-4 z-50">
+        <LanguageSwitch />
       </div>
+
+      <BackgroundVideoHero
+        eyebrow="Four pillars of destiny"
+        title={
+          <>
+            Ba Zi
+            <br />
+            <span className="text-white/78">Decode structure before interpretation.</span>
+          </>
+        }
+        subtitle="Four pillars · five elements · AI reading"
+        description="The form, endpoint, save flow, chat tool, PDF export, and share stack stay exactly the same. This redesign only upgrades the visual shell around the Ba Zi experience."
+        videoSrc="/assets/videos/hero/bazi-hero-loop-6s-1080p.mp4"
+        posterSrc="/assets/images/posters/bazi-hero-poster-16x9.jpg"
+        imageSrc="/assets/images/hero/bazi-hero-master-16x9.jpg"
+        meta={<TrustStrip items={TRUST_ITEMS} className="w-full max-w-3xl" />}
+      >
+        <ModuleInputShell
+          eyebrow="Fast entry"
+          title="Read your pillars in one pass"
+          description="Keep the original /api/bazi submission and the same field set. The redesign only improves rhythm, readability, and motion."
+          footer="After submit, the page still reveals the chart, AI interpretation, chat, share, and PDF actions."
+        >
+          <BaZiInputForm
+            birthday={birthday}
+            birthTime={birthTime}
+            gender={gender}
+            language={language}
+            onBirthdayChange={setBirthday}
+            onBirthTimeChange={setBirthTime}
+            onGenderChange={setGender}
+            onLanguageChange={setLanguage}
+            onSubmit={() => handleCalculate(false)}
+            onAiSubmit={() => {
+              setLoadingAI(true);
+              void handleCalculate(true);
+            }}
+            loading={loading}
+            loadingAI={loadingAI}
+          />
+        </ModuleInputShell>
+      </BackgroundVideoHero>
+
+      {error && (
+        <div className="mx-auto max-w-4xl px-6 py-8 sm:px-8">
+          <GlassCard
+            level="card"
+            className="rounded-[1.5rem] border border-rose-500/30 bg-rose-500/10 p-4 text-rose-100"
+          >
+            {error}
+          </GlassCard>
+        </div>
+      )}
+
+      {loading && <LoadingSkeleton />}
+
+      {result && elementCounts && !loading && (
+        <ResultBlock
+          result={result}
+          birthday={birthday}
+          birthTime={birthTime}
+          gender={gender}
+          language={language}
+          elementCounts={elementCounts}
+        />
+      )}
+
+      {!result && !loading && (
+        <>
+          <ScrollNarrativeSection
+            accentColor="#7c3aed"
+            goldColor="#D4AF37"
+            blocks={NARRATIVE_BLOCKS}
+          />
+
+          <LandingSection
+            eyebrow="Before the reading"
+            title="A luxury Ba Zi page should clarify what unfolds after submit."
+            subtitle="Before any result appears, the page should communicate that the system will reveal structure, elemental balance, a deep AI interpretation, and follow-up tools without changing the underlying product flow."
+          >
+            <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+              <GlassCard
+                level="card"
+                className="rounded-[1.75rem] border border-white/[0.06] bg-white/[0.02] p-6 sm:p-8"
+              >
+                <div className="mb-4 text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                  What opens after submit
+                </div>
+                <div className="space-y-3 text-sm leading-7 text-white/65">
+                  <p>Four pillars and element map</p>
+                  <p>AI deep interpretation and disclaimer/meta</p>
+                  <p>Fortune radar and animated export surface</p>
+                  <p>Chat, save history, PDF, and share flow</p>
+                </div>
+              </GlassCard>
+
+              <GlassCard
+                level="strong"
+                className="rounded-[1.75rem] border border-white/[0.08] bg-black/25 p-6 sm:p-8"
+              >
+                <div className="mb-4 text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                  Ready state
+                </div>
+                <p className="mb-6 text-sm leading-7 text-white/60">
+                  Nothing in the backend flow changes here. When users submit the form above, they still hit the same endpoint with the same payload and receive the same result structure.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="rounded-2xl border border-white/[0.08] bg-white/[0.03] px-5 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white/78 transition-all hover:border-white/[0.18] hover:bg-white/[0.06]"
+                >
+                  Return to the form
+                </button>
+              </GlassCard>
+            </div>
+          </LandingSection>
+        </>
+      )}
+
+      {!loading && (
+        <div className="pb-12 text-center text-sm text-white/30">
+          <p>TianJi Global · Ba Zi module redesign template</p>
+          <p className="mt-1">Current time slot: {selectedTimePeriod.label}</p>
+        </div>
+      )}
     </div>
   );
 }

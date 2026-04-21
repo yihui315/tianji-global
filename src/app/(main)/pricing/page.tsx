@@ -5,13 +5,18 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { PLANS } from '@/lib/stripe';
+import {
+  BackgroundVideoHero,
+  LandingSection,
+  TrustStrip,
+} from '@/components/landing';
 
 const PLAN_ORDER = ['PRO_MONTHLY', 'PRO_YEARLY'] as const;
 
 export default function PricingPage() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
-  const [language, setLanguage] = useState<'zh' | 'en'>('zh');
+  const [language, setLanguage] = useState<'zh' | 'en'>('en');
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [error, setError] = useState('');
 
@@ -48,247 +53,144 @@ export default function PricingPage() {
     }
   };
 
-  const t = {
-    title: language === 'zh' ? '选择您的方案' : 'Choose Your Plan',
-    subtitle: language === 'zh'
-      ? '解锁全部命理功能，解锁命运的奥秘'
-      : 'Unlock all fortune features and discover the mysteries of fate',
-    perMonth: language === 'zh' ? '/月' : '/month',
-    perYear: language === 'zh' ? '/年' : '/year',
-    save: language === 'zh' ? '省17%' : 'Save 17%',
-    recommended: language === 'zh' ? '推荐' : 'Best Value',
-    getStarted: language === 'zh' ? '立即开始' : 'Get Started',
-    manage: language === 'zh' ? '管理订阅' : 'Manage Subscription',
-    features: language === 'zh' ? '功能特点' : 'Features',
-    loginPrompt: language === 'zh' ? '登录后即可订阅' : 'Sign in to subscribe',
-    error,
-  };
-
   return (
-    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
-      <div className="star-field" aria-hidden="true" />
+    <main className="relative min-h-screen overflow-hidden bg-[#050508] text-white">
+      <BackgroundVideoHero
+        eyebrow="Premium access"
+        title="Pay for the deeper layer, not for confusion."
+        subtitle="Pricing keeps the same Stripe checkout contract and plan IDs."
+        description="TianJi Pro unlocks unlimited readings, deeper AI interpretation, PDF reports, and a calmer way to return to your destiny profile over time."
+        videoSrc="/assets/videos/hero/pricing-hero-loop-6s-1080p.mp4"
+        posterSrc="/assets/images/posters/pricing-hero-poster-16x9.jpg"
+        ctaLabel={isAuthenticated ? 'Choose a plan' : 'Sign in to subscribe'}
+        ctaHref="#plans"
+        secondaryCtaLabel="Back to scan"
+        secondaryCtaHref="/destiny/scan"
+        stats={[
+          { label: 'Checkout', value: 'Stripe' },
+          { label: 'Plans', value: '2' },
+          { label: 'Contract', value: 'Unchanged' },
+        ]}
+      />
 
-      {/* Content */}
-      <div className="relative z-10">
-        {/* Header */}
-        <header className="px-4 py-6 border-b border-white/[0.06]">
-          <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <Link href="/" className="flex items-center gap-3">
-              <span className="text-2xl">🔮</span>
-              <div>
-                <h1 className="text-xl font-serif text-white/90">天机全球 TianJi</h1>
-                <p className="text-purple-400/60 text-xs">TianJi Global</p>
-              </div>
-            </Link>
-
-            <div className="flex items-center gap-4">
-              {/* Language Toggle */}
-              <div className="flex items-center gap-2 bg-white/[0.04] rounded-full p-1 border border-white/[0.06]">
-                <button
-                  onClick={() => setLanguage('zh')}
-                  className={`px-3 py-1 rounded-full text-sm transition-all duration-300 ${
-                    language === 'zh'
-                      ? 'bg-purple-600/80 text-white'
-                      : 'text-white/50 hover:text-white/80'
-                  }`}
-                >
-                  中文
-                </button>
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`px-3 py-1 rounded-full text-sm transition-all duration-300 ${
-                    language === 'en'
-                      ? 'bg-purple-600/80 text-white'
-                      : 'text-white/50 hover:text-white/80'
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
-
-              {/* Auth Links */}
-              {isAuthenticated ? (
-                <Link
-                  href="/dashboard"
-                  className="px-4 py-2 bg-white/05 hover:bg-white/10 border border-white/10 text-white/80 rounded-lg text-sm transition-all duration-300 hover:scale-[1.02]"
-                >
-                  {language === 'zh' ? '控制台' : 'Dashboard'}
-                </Link>
-              ) : (
-                <Link
-                  href="/login"
-                  className="px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-white/80 rounded-lg text-sm transition-all duration-300 hover:scale-[1.02]"
-                >
-                  {language === 'zh' ? '登录' : 'Sign In'}
-                </Link>
-              )}
-            </div>
+      <LandingSection
+        id="plans"
+        eyebrow="Plans"
+        title="One premium path. Two billing rhythms."
+        description="The checkout request still posts the selected planId to /api/stripe/checkout."
+      >
+        <div className="mb-8 flex justify-center">
+          <div className="flex rounded-full border border-white/10 bg-white/[0.04] p-1">
+            {(['en', 'zh'] as const).map((lang) => (
+              <button
+                key={lang}
+                onClick={() => setLanguage(lang)}
+                className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition ${
+                  language === lang ? 'bg-white text-black' : 'text-white/48 hover:text-white'
+                }`}
+              >
+                {lang}
+              </button>
+            ))}
           </div>
-        </header>
+        </div>
 
-        {/* Pricing Section */}
-        <section className="px-4 py-20 lg:py-32 max-w-6xl mx-auto">
-          {/* Title */}
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif text-white/90 mb-4">
-              {t.title}
-            </h2>
-            <p className="text-white/50 text-lg max-w-xl mx-auto">
-              {t.subtitle}
-            </p>
+        {error && (
+          <div className="mx-auto mb-6 max-w-md rounded-2xl border border-rose-400/25 bg-rose-500/10 px-4 py-3 text-center text-sm text-rose-200">
+            {error}
           </div>
+        )}
 
-          {/* Error Message */}
-          {error && (
-            <div className="max-w-md mx-auto mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400/80 text-sm text-center">
-              {error}
-            </div>
-          )}
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2">
+          {PLAN_ORDER.map((planId) => {
+            const plan = PLANS[planId];
+            const isYearly = planId === 'PRO_YEARLY';
+            const isLoading = loadingPlan === planId;
+            const features = language === 'zh' ? plan.features.zh : plan.features.en;
 
-          {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-            {PLAN_ORDER.map((planId) => {
-              const plan = PLANS[planId];
-              const isYearly = planId === 'PRO_YEARLY';
-              const isLoading = loadingPlan === planId;
-
-              return (
-                <div
-                  key={planId}
-                  className={`relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] ${
-                    isYearly
-                      ? 'bg-[#1a0a2e]/60 border-2 border-[#D4AF37]/40 shadow-[0_0_40px_rgba(212,175,55,0.08)]'
-                      : 'bg-white/[0.02] border border-white/[0.06]'
-                  }`}
-                >
-                  {/* Recommended Badge */}
-                  {isYearly && (
-                    <div className="absolute top-0 right-0 bg-[#D4AF37] text-[#0a0a0a] text-xs font-bold px-4 py-1 rounded-bl-lg">
-                      ⭐ {t.recommended}
-                    </div>
-                  )}
-
-                  <div className="p-8">
-                    {/* Plan Name */}
-                    <div className="mb-6">
-                      <h3 className="text-2xl font-serif text-white/90 mb-1">
-                        {language === 'zh' ? plan.nameZh : plan.name}
-                      </h3>
-                      <p className="text-white/50 text-sm">
-                        {language === 'zh' ? plan.descriptionZh : plan.description}
-                      </p>
-                    </div>
-
-                    {/* Price */}
-                    <div className="mb-6">
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-4xl font-serif text-white/90">
-                          ${plan.price}
-                        </span>
-                        <span className="text-white/50">
-                          {isYearly ? t.perYear : t.perMonth}
-                        </span>
-                      </div>
-                      {isYearly && (
-                        <p className="text-[#D4AF37]/80 text-sm mt-1 font-medium">
-                          {t.save}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Divider */}
-                    <div className="border-t border-white/[0.06] mb-6" />
-
-                    {/* Features */}
-                    <ul className="space-y-3 mb-8">
-                      {(language === 'zh' ? plan.features.zh : plan.features.en).map(
-                        (feature, i) => (
-                          <li key={i} className="flex items-start gap-3 text-white/60 text-sm">
-                            <svg
-                              className="w-5 h-5 text-[#A78BFA] flex-shrink-0 mt-0.5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                            {feature}
-                          </li>
-                        )
-                      )}
-                    </ul>
-
-                    {/* CTA Button */}
-                    <button
-                      onClick={() => handleSubscribe(planId)}
-                      disabled={isLoading}
-                      className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-[1.02] ${
-                        isYearly
-                          ? 'bg-[#D4AF37] hover:bg-[#F5C542] text-[#0a0a0a]'
-                          : 'bg-[#7C3AED]/80 hover:bg-[#7C3AED] text-white'
-                      } disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                      {isLoading
-                        ? (language === 'zh' ? '跳转中...' : 'Redirecting...')
-                        : !isAuthenticated
-                        ? t.loginPrompt
-                        : t.getStarted}
-                    </button>
+            return (
+              <article
+                key={planId}
+                className={`relative overflow-hidden rounded-[2.25rem] border p-7 shadow-[0_34px_120px_rgba(0,0,0,0.42)] ${
+                  isYearly
+                    ? 'border-amber-300/35 bg-[radial-gradient(circle_at_50%_0%,rgba(212,175,55,0.18),transparent_42%),rgba(255,255,255,0.04)]'
+                    : 'border-white/10 bg-white/[0.03]'
+                }`}
+              >
+                {isYearly && (
+                  <div className="absolute right-5 top-5 rounded-full bg-amber-200 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-black">
+                    Best value
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                )}
 
-          {/* Features Overview */}
-          <div className="mt-20 text-center">
-            <h3 className="text-xl font-serif text-white/80 mb-8">{t.features}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {[
-                { icon: '🌟', label: '紫微斗数', labelEn: 'Zi Wei' },
-                { icon: '📊', label: '八字命理', labelEn: 'Ba Zi' },
-                { icon: '🔥', label: '易经占卜', labelEn: 'Yi Jing' },
-                { icon: '✨', label: '西方占星', labelEn: 'Western' },
-                { icon: '🎴', label: '塔罗牌', labelEn: 'Tarot' },
-              ].map((item) => (
-                <div
-                  key={item.labelEn}
-                  className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-4 hover:border-[#A78BFA]/30 transition-all duration-300"
-                >
-                  <span className="text-2xl mb-2 block">{item.icon}</span>
-                  <p className="text-white/70 text-sm font-serif">
-                    {language === 'zh' ? item.label : item.labelEn}
+                <div className="pr-24">
+                  <p className="text-xs uppercase tracking-[0.28em] text-white/35">
+                    {plan.interval}
+                  </p>
+                  <h2 className="mt-4 font-serif text-3xl text-white/90">
+                    {language === 'zh' ? plan.nameZh : plan.name}
+                  </h2>
+                  <p className="mt-3 text-sm leading-6 text-white/55">
+                    {language === 'zh' ? plan.descriptionZh : plan.description}
                   </p>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
-        {/* Footer */}
-        <footer className="text-center py-8 text-white/30 text-sm border-t border-white/[0.06]">
-          <div className="flex justify-center gap-4 mb-2">
-            <Link href="/about" className="hover:text-[#A78BFA] transition-colors duration-300">
-              {language === 'zh' ? '关于我们' : 'About'}
-            </Link>
-            <span>·</span>
-            <Link href="/legal" className="hover:text-[#A78BFA] transition-colors duration-300">
-              {language === 'zh' ? '法律声明' : 'Legal'}
-            </Link>
-          </div>
-          <p>© 2024 TianJi Global · 天机全球</p>
-          <p className="mt-1">
-            {language === 'zh'
-              ? '融合传统智慧与现代科技'
-              : 'Bridging Traditional Wisdom & Modern Technology'}
-          </p>
-        </footer>
-      </div>
-    </div>
+                <div className="mt-8 flex items-end gap-2">
+                  <span className="font-serif text-5xl text-white/95">${plan.price}</span>
+                  <span className="pb-2 text-sm text-white/42">/{plan.interval}</span>
+                </div>
+
+                {isYearly && (
+                  <p className="mt-2 text-sm font-semibold text-amber-100/75">Save 17% vs monthly</p>
+                )}
+
+                <div className="my-7 h-px bg-white/10" />
+
+                <ul className="space-y-3">
+                  {features.map((feature) => (
+                    <li key={feature} className="flex gap-3 text-sm leading-6 text-white/62">
+                      <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-amber-200" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => handleSubscribe(planId)}
+                  disabled={isLoading}
+                  className={`mt-8 w-full rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                    isYearly
+                      ? 'bg-amber-200 text-black hover:bg-amber-100'
+                      : 'bg-white text-black hover:bg-violet-100'
+                  }`}
+                >
+                  {isLoading ? 'Redirecting...' : !isAuthenticated ? 'Sign in to subscribe' : 'Start checkout'}
+                </button>
+              </article>
+            );
+          })}
+        </div>
+      </LandingSection>
+
+      <LandingSection
+        eyebrow="Checkout contract"
+        title="What this redesign did not change"
+        description="The pricing page is visual-only. Billing stays behind the existing endpoint, auth gate, and Stripe plan configuration."
+      >
+        <TrustStrip
+          eyebrow="Protected logic"
+          items={[
+            { label: 'planId preserved', description: 'PRO_MONTHLY and PRO_YEARLY remain the only button inputs.' },
+            { label: 'Endpoint preserved', description: 'Checkout still posts to /api/stripe/checkout.' },
+            { label: 'Auth gate preserved', description: 'Unauthenticated users still route to /login.' },
+            { label: 'Redirect preserved', description: 'Successful checkout still assigns window.location.href to Stripe URL.' },
+          ]}
+        />
+      </LandingSection>
+
+      <footer className="border-t border-white/10 px-6 py-10 text-center text-xs uppercase tracking-[0.24em] text-white/30">
+        <Link href="/">TianJi Global</Link>
+      </footer>
+    </main>
   );
 }

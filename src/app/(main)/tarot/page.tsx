@@ -1,32 +1,22 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useCallback, useState } from 'react';
 import SharePanel from '@/components/SharePanel';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
 import { saveReading } from '@/lib/save-reading';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
 import TarotCardAnimation from '@/components/animations/TarotCardAnimation';
-import { spreadLayouts, type TarotCard, type SpreadLayout, type DrawnCard } from '@/lib/tarot';
-import { GlassCard, MysticButton, LanguageSwitch, SectionHeader } from '@/components/ui';
-import { colors } from '@/design-system';
-
-// ─── Fade-In Motion ───────────────────────────────────────────────────────────
-function FadeInWhenVisible({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
+import { spreadLayouts, type DrawnCard, type SpreadLayout } from '@/lib/tarot';
+import {
+  BackgroundVideoHero,
+  InsightGrid,
+  LandingSection,
+  ModuleInputShell,
+  ResultScaffold,
+  ScrollNarrativeSection,
+  ShareSection,
+  TrustStrip,
+} from '@/components/landing';
 
 type SpreadType = 'single' | 'three-card' | 'celtic-cross';
 type Language = 'en' | 'zh';
@@ -49,6 +39,12 @@ interface TarotReadingResponse {
   aiMeta?: AiMeta;
   aiError?: string;
 }
+
+const spreadOptions = [
+  { id: 'single', name: 'Single Card', description: 'A fast signal for one decision.' },
+  { id: 'three-card', name: 'Three Card', description: 'Past, present, and emerging direction.' },
+  { id: 'celtic-cross', name: 'Celtic Cross', description: 'A full ten-card situation map.' },
+] as const;
 
 export default function TarotPage() {
   const [spreadType, setSpreadType] = useState<SpreadType>('three-card');
@@ -86,12 +82,12 @@ export default function TarotPage() {
       setReading(data);
       saveReading({
         reading_type: 'tarot',
-        title: `${language === 'zh' ? '塔罗' : 'Tarot'} — ${data.spread.name}`,
+        title: `Tarot - ${data.spread.name}`,
         summary: data.aiInterpretation?.slice(0, 120) ?? '',
         reading_data: data as unknown as Record<string, unknown>,
       });
     } catch {
-      setError(language === 'zh' ? '抽卡失败，请重试' : 'Failed to draw cards. Please try again.');
+      setError(language === 'zh' ? 'Failed to draw cards. Please try again.' : 'Failed to draw cards. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -102,237 +98,268 @@ export default function TarotPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
-      <div className="star-field" aria-hidden="true" />
-      <div className="text-white relative z-10">
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 20% 20%, rgba(59,20,75,0.35) 0%, transparent 50%)', zIndex: 0 }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 80% 80%, rgba(6,30,60,0.45) 0%, transparent 50%)', zIndex: 0 }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(80,40,100,0.2) 0%, transparent 40%)', zIndex: 0 }} />
+    <main className="relative min-h-screen overflow-hidden bg-[#050508] text-white">
+      <BackgroundVideoHero
+        eyebrow="Tarot oracle"
+        title="A card spread should feel like a door opening."
+        subtitle="Choose the spread, ask the question, and let the existing Tarot engine return the same cards through a calmer cinematic surface."
+        videoSrc="/assets/videos/hero/tarot-hero-loop-6s-1080p.mp4"
+        posterSrc="/assets/images/posters/tarot-hero-poster-16x9.jpg"
+        ctaLabel={isLoading ? 'Drawing...' : 'Draw your cards'}
+        ctaHref="#tarot-form"
+        secondaryCtaLabel="See the ritual"
+        secondaryCtaHref="#tarot-narrative"
+        stats={[
+          { label: 'Deck', value: '78' },
+          { label: 'Spreads', value: '3' },
+          { label: 'AI layer', value: 'On' },
+        ]}
+      />
 
-      <div className="fixed top-4 right-4 z-50"><LanguageSwitch /></div>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-12 w-full">
-        <SectionHeader
-          title="Tarot Reading"
-          subtitle="塔罗牌占卜 · TianJi Global"
-          badge="🃏"
-        />
+      <TrustStrip
+        items={[
+          { label: 'Endpoint kept', value: '/api/tarot' },
+          { label: 'State kept', value: 'spread + cards' },
+          { label: 'Output kept', value: 'PDF + share' },
+        ]}
+      />
 
-        {/* Spread Selection */}
-        <FadeInWhenVisible delay={0.1}>
-        <GlassCard level="card" className="p-6 mb-6 border border-white/[0.06] bg-white/[0.015] rounded-2xl">
-          <h2 className="text-sm font-serif text-white/40 tracking-widest uppercase mb-4">
-            {language === 'zh' ? '选择牌阵' : 'Choose Your Spread'}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            {([
-              { id: 'single', name: 'Single Card', nameChinese: '单牌抽' },
-              { id: 'three-card', name: 'Three Card', nameChinese: '三牌抽' },
-              { id: 'celtic-cross', name: 'Celtic Cross', nameChinese: '凯尔特十字' },
-            ] as const).map((spread) => (
+      <LandingSection
+        id="tarot-form"
+        eyebrow="Reading console"
+        title="Select the spread before the first card moves."
+        description="The visual shell is new. The spread selection, question input, card draw state, save flow, share flow, and PDF output are preserved."
+      >
+        <ModuleInputShell
+          eyebrow="Card ritual"
+          title="Ask with precision"
+          description={currentSpread?.description ?? 'Select a spread and draw from the existing Tarot engine.'}
+          footer="Click any returned card to expand its interpretation."
+        >
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            {spreadOptions.map((spread) => (
               <button
                 key={spread.id}
                 onClick={() => setSpreadType(spread.id)}
-                className={`p-4 rounded-lg border-2 transition-all ${
+                className={`rounded-[1.5rem] border p-4 text-left transition ${
                   spreadType === spread.id
-                    ? 'border-purple-500 bg-purple-600/30'
-                    : 'border-slate-600 bg-slate-700/50 hover:border-purple-400'
+                    ? 'border-amber-300/45 bg-amber-300/[0.08] text-amber-100'
+                    : 'border-white/10 bg-white/[0.03] text-white/62 hover:border-violet-300/35'
                 }`}
               >
-                <div className="font-semibold">{spread.name}</div>
-                <div className="text-sm text-purple-300">{spread.nameChinese}</div>
+                <span className="block text-xs uppercase tracking-[0.22em] text-white/35">{spread.id}</span>
+                <span className="mt-2 block font-serif text-lg text-white/86">{spread.name}</span>
+                <span className="mt-2 block text-sm leading-6 text-white/48">{spread.description}</span>
               </button>
             ))}
           </div>
 
-          {/* Spread Description */}
           {currentSpread && (
-            <div className="bg-slate-700/30 rounded-lg p-4 mb-6">
-              <p className="text-slate-300">
-                {language === 'zh' ? currentSpread.descriptionChinese : currentSpread.description}
-              </p>
+            <div className="rounded-[1.5rem] border border-white/10 bg-black/25 p-4 text-sm leading-6 text-white/58">
+              {language === 'zh' ? currentSpread.descriptionChinese : currentSpread.description}
             </div>
           )}
 
-          {/* Question Input */}
-          <div className="mb-6">
-            <label className="block text-purple-300 mb-2">
-              {language === 'zh' ? '你的问题（可选）' : 'Your Question (optional)'}
-            </label>
+          <label className="space-y-2">
+            <span className="text-xs uppercase tracking-[0.22em] text-white/45">Question optional</span>
             <textarea
               value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              placeholder={language === 'zh' ? '输入你想问的问题...' : 'Enter your question...'}
-              className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:outline-none resize-none"
-              rows={2}
+              onChange={(event) => setQuestion(event.target.value)}
+              placeholder="What do you need the cards to clarify?"
+              className="min-h-24 w-full resize-none rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-violet-300/50"
             />
-          </div>
+          </label>
 
-          {/* Language Toggle */}
-          <div className="flex items-center gap-4 mb-6">
-            <span className="text-purple-300">
-              {language === 'zh' ? '语言' : 'Language'}:
-            </span>
-            <button
-              onClick={() => setLanguage('en')}
-              className={`px-4 py-2 rounded-lg ${
-                language === 'en' ? 'bg-purple-600' : 'bg-slate-700 hover:bg-slate-600'
-              }`}
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <select
+              value={language}
+              onChange={(event) => setLanguage(event.target.value as Language)}
+              className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm uppercase tracking-[0.18em] text-white outline-none"
             >
-              English
-            </button>
+              <option value="en">EN</option>
+              <option value="zh">ZH</option>
+            </select>
             <button
-              onClick={() => setLanguage('zh')}
-              className={`px-4 py-2 rounded-lg ${
-                language === 'zh' ? 'bg-purple-600' : 'bg-slate-700 hover:bg-slate-600'
-              }`}
+              onClick={drawCards}
+              disabled={isLoading}
+              className="flex-1 rounded-full bg-white px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              中文
+              {isLoading ? 'Drawing cards...' : 'Draw your cards'}
             </button>
           </div>
 
-          {/* Draw Button */}
-          <MysticButton
-            variant="solid"
-            size="lg"
-            className="w-full"
-            onClick={drawCards}
-            disabled={isLoading}
-          >
-            {isLoading
-              ? (language === 'zh' ? '正在抽牌...' : 'Drawing cards...')
-              : (language === 'zh' ? '抽取你的牌' : 'Draw Your Cards')}
-          </MysticButton>
-        </GlassCard>
-        </FadeInWhenVisible>
-
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-900/50 border border-red-500 rounded-lg p-4 mb-6 text-red-200">
-            {error}
-          </div>
-        )}
-
-        {/* Reading Results */}
-        {reading && (
-          <div className="space-y-6">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-purple-300">
-                {language === 'zh' ? '你的塔罗牌解读' : 'Your Tarot Reading'}
-              </h2>
-              {question && (
-                <p className="text-slate-400 mt-2">
-                  {language === 'zh' ? '问题: ' : 'Question: '}{question}
-                </p>
-              )}
+          {error && (
+            <div className="rounded-2xl border border-rose-400/25 bg-rose-500/10 p-4 text-sm text-rose-200">
+              {error}
             </div>
+          )}
+        </ModuleInputShell>
+      </LandingSection>
 
-            {/* Celtic Cross Special Layout */}
-            {spreadType === 'celtic-cross' ? (
-              <CelticCrossLayout reading={reading} language={language} showCard={showCard} onCardClick={handleCardClick} />
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {reading.drawnCards.map((drawnCard, index) => (
-                  <CardDisplay
-                    key={index}
-                    drawnCard={drawnCard}
+      <ScrollNarrativeSection
+        blocks={[
+          {
+            label: '01',
+            heading: 'A question narrows the field.',
+            body: 'The page creates a quieter entry point so the user can ask one clear thing before the cards appear.',
+            align: 'left',
+          },
+          {
+            label: '02',
+            heading: 'The spread becomes a structure.',
+            body: 'Single, three-card, and Celtic Cross readings keep their original spread behavior while feeling more premium.',
+            align: 'center',
+          },
+          {
+            label: '03',
+            heading: 'The reveal stays shareable.',
+            body: 'The result resolves into cards, AI interpretation, share controls, and a PDF path without changing the flow.',
+            align: 'right',
+          },
+        ]}
+      />
+
+      {reading ? (
+        <LandingSection
+          eyebrow="Generated result"
+          title={reading.spread.name}
+          description={question ? `Question: ${question}` : 'The spread has been drawn from the original Tarot endpoint.'}
+        >
+          <ResultScaffold
+            eyebrow="Tarot result"
+            title={reading.spread.name}
+            summary={reading.aiInterpretation ?? 'Open each card to read the position-level interpretation.'}
+            highlights={[
+              { label: 'Cards', value: String(reading.totalCards) },
+              { label: 'Spread', value: reading.spread.name },
+              { label: 'AI status', value: reading.aiInterpretation ? 'Generated' : reading.aiError ? 'Unavailable' : 'Pending' },
+            ]}
+            details={
+              <div className="space-y-8">
+                {spreadType === 'celtic-cross' ? (
+                  <CelticCrossLayout
+                    reading={reading}
                     language={language}
-                    isExpanded={showCard === index}
-                    onClick={() => handleCardClick(index)}
+                    showCard={showCard}
+                    onCardClick={handleCardClick}
                   />
-                ))}
-              </div>
-            )}
-
-            {/* AI Interpretation */}
-            {reading.aiInterpretation && (
-              <div className="rounded-xl p-6 border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
-                    AI
+                ) : (
+                  <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+                    {reading.drawnCards.map((drawnCard, index) => (
+                      <CardDisplay
+                        key={`${drawnCard.card.name}-${index}`}
+                        drawnCard={drawnCard}
+                        language={language}
+                        isExpanded={showCard === index}
+                        onClick={() => handleCardClick(index)}
+                      />
+                    ))}
                   </div>
-                  <h3 className="text-xl font-bold text-purple-300">
-                    {language === 'zh' ? 'AI 智能解读' : 'AI Interpretation'}
+                )}
+
+                {reading.aiInterpretation && (
+                  <div className="rounded-[1.5rem] border border-violet-300/20 bg-violet-300/[0.06] p-5">
+                    <h3 className="mb-3 text-xs uppercase tracking-[0.22em] text-violet-100/70">
+                      AI interpretation
+                    </h3>
+                    <p className="whitespace-pre-wrap text-sm leading-7 text-white/72">{reading.aiInterpretation}</p>
+                    {reading.disclaimer && <p className="mt-4 text-xs text-white/36">{reading.disclaimer}</p>}
+                    {reading.aiMeta && (
+                      <p className="mt-3 text-xs text-white/28">
+                        {reading.aiMeta.provider} / {reading.aiMeta.model} / {reading.aiMeta.latencyMs}ms
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {reading.aiError && (
+                  <div className="rounded-2xl border border-rose-400/25 bg-rose-500/10 p-4 text-sm text-rose-200">
+                    AI Interpretation Failed: {reading.aiError}
+                  </div>
+                )}
+
+                <SharePanel
+                  serviceType="tarot"
+                  resultId={`${reading.spread.name}-${Date.now()}`}
+                  shareUrl={`https://tianji.global/tarot?spread=${reading.spread.name}`}
+                />
+
+                <div className="rounded-[2rem] border border-white/10 bg-black/30 p-5">
+                  <h3 className="mb-4 text-center text-xs uppercase tracking-[0.22em] text-white/36">
+                    Animated card sequence
                   </h3>
+                  <div className="flex justify-center">
+                    <TarotCardAnimation
+                      drawnCards={reading.drawnCards}
+                      spread={reading.spread}
+                      language={language}
+                      spreadType={spreadType}
+                      playing
+                      width={spreadType === 'celtic-cross' ? 700 : 600}
+                      height={400}
+                    />
+                  </div>
+                  <div className="mt-5 flex justify-center">
+                    <AnimatedShareButton
+                      type="tarot"
+                      resultData={reading as unknown as Record<string, unknown>}
+                      format="webp"
+                      language={language}
+                      variant="secondary"
+                    />
+                  </div>
                 </div>
-                <div className="prose prose-invert prose-purple max-w-none">
-                  <p className="text-slate-200 leading-relaxed whitespace-pre-wrap">
-                    {reading.aiInterpretation}
-                  </p>
-                </div>
-                {reading.disclaimer && (
-                  <p className="text-slate-500 text-xs mt-4 italic">
-                    {reading.disclaimer}
-                  </p>
-                )}
-                {reading.aiMeta && (
-                  <p className="text-slate-600 text-xs mt-2">
-                    {reading.aiMeta.provider} · {reading.aiMeta.model} · {reading.aiMeta.latencyMs}ms
-                  </p>
-                )}
-              </div>
-            )}
 
-            {reading.aiError && (
-              <div className="bg-red-900/30 border border-red-500/50 rounded-lg p-4 text-red-300 text-sm">
-                {language === 'zh' ? 'AI 解读失败' : 'AI Interpretation Failed'}: {reading.aiError}
-              </div>
-            )}
-
-            {/* Share Panel */}
-            <SharePanel
-              serviceType="tarot"
-              resultId={`${reading.spread.name}-${Date.now()}`}
-              shareUrl={`https://tianji.global/tarot?spread=${reading.spread.name}`}
-            />
-
-            {/* Animated Tarot Card Display */}
-            <div className="bg-slate-800/30 rounded-xl p-6 border border-slate-700/50">
-              <h3 className="text-lg font-bold text-purple-300 mb-4 text-center">
-                ✨ Animated Tarot Cards
-              </h3>
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
-                <TarotCardAnimation
-                  drawnCards={reading.drawnCards}
-                  spread={reading.spread}
-                  language={language}
-                  spreadType={spreadType}
-                  playing={true}
-                  width={spreadType === 'celtic-cross' ? 700 : 600}
-                  height={400}
-                />
-              </div>
-              <div className="flex justify-center">
-                <AnimatedShareButton
-                  type="tarot"
+                <PDFDownloadButton
+                  serviceType="tarot"
                   resultData={reading as unknown as Record<string, unknown>}
-                  format="webp"
                   language={language}
-                  variant="secondary"
                 />
               </div>
-            </div>
+            }
+            aside={
+              <div className="space-y-4">
+                <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                  <p className="text-xs uppercase tracking-[0.22em] text-white/35">Share line</p>
+                  <p className="mt-3 text-lg font-serif text-white/82">
+                    The card you resist is often the card doing the most work.
+                  </p>
+                </div>
+                <div className="rounded-[1.5rem] border border-amber-300/20 bg-amber-300/[0.06] p-5 text-sm leading-6 text-white/58">
+                  Tap each card to reveal the position-level reading before exporting or sharing.
+                </div>
+              </div>
+            }
+          />
 
-            {/* PDF Download */}
-            <PDFDownloadButton
-              serviceType="tarot"
-              resultData={reading as unknown as Record<string, unknown>}
-              language={language}
-            />
-          </div>
-        )}
-
-        {/* Card Back Decoration */}
-        <div className="mt-12 text-center text-slate-500 text-sm">
-          <p>© 2024 TianJi Global · 天机全球</p>
-          <p className="mt-1">78 Cards · {language === 'zh' ? '大阿卡纳与小子阿卡纳' : 'Major & Minor Arcana'}</p>
-        </div>
-      </div>
-      </div>
-    </div>
+          <ShareSection
+            type="tarot"
+            resultData={reading as unknown as Record<string, unknown>}
+            ogBgSrc="/assets/images/og/tarot-og-bg-1200x630.jpg"
+          />
+        </LandingSection>
+      ) : (
+        <LandingSection
+          eyebrow="Preview"
+          title="The cards are waiting below the surface."
+          description="Draw a spread above to reveal the original Tarot result through the redesigned reading shell."
+        >
+          <InsightGrid
+            title="What stays intact"
+            subtitle="Spread state / drawCards / share / PDF"
+            items={[
+              { label: 'Spread selection', value: 'Single, three-card, and Celtic Cross remain available' },
+              { label: 'Question input', value: 'The optional question still travels with the request' },
+              { label: 'Card reveal', value: 'Expanded card interpretations remain interactive' },
+              { label: 'Export', value: 'Share panel, animated share, and PDF download are preserved' },
+            ]}
+          />
+        </LandingSection>
+      )}
+    </main>
   );
 }
 
-// Card Display Component
 function CardDisplay({
   drawnCard,
   language,
@@ -347,70 +374,57 @@ function CardDisplay({
   const { card, isReversed, position, positionName, positionNameChinese, interpretation } = drawnCard;
 
   return (
-    <div
+    <button
       onClick={onClick}
-      className={`cursor-pointer transition-all duration-300 ${
-        isExpanded ? 'scale-105' : 'hover:scale-102'
-      }`}
+      className={`group text-left transition duration-300 ${isExpanded ? 'scale-[1.02]' : 'hover:-translate-y-1'}`}
     >
-      <div className="rounded-xl p-4 border border-white/[0.06] bg-white/[0.02] shadow-xl">
-        {/* Position Label */}
-        <div className="text-center mb-3">
-          <span className="text-purple-400 text-sm">
-            {language === 'zh' ? `位置 ${position}` : `Position ${position}`}
-          </span>
-          <h3 className="font-bold text-lg">
+      <div className="h-full rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-4 shadow-[0_20px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+        <div className="mb-3 text-center">
+          <span className="text-xs uppercase tracking-[0.18em] text-violet-200/60">Position {position}</span>
+          <h3 className="mt-1 font-serif text-lg text-white/86">
             {language === 'zh' ? positionNameChinese : positionName}
           </h3>
         </div>
 
-        {/* Card Visual */}
         <div
-          className={`relative aspect-[2/3] rounded-lg mb-3 flex items-center justify-center overflow-hidden ${
+          className={`relative mb-4 flex aspect-[2/3] items-center justify-center overflow-hidden rounded-[1.25rem] border border-white/10 ${
             isReversed ? 'rotate-180' : ''
           }`}
           style={{
             background: isReversed
-              ? 'linear-gradient(135deg, #7c2d12 0%, #991b1b 100%)'
-              : 'linear-gradient(135deg, #581c87 0%, #7c3aed 100%)',
+              ? 'linear-gradient(135deg, rgba(120,40,40,0.92), rgba(30,10,20,0.98))'
+              : 'linear-gradient(135deg, rgba(76,29,149,0.92), rgba(10,10,10,0.98))',
           }}
         >
-          <div className="text-center p-4">
-            <div className="text-3xl mb-2">{getCardSymbol(card.arcana, card.suit)}</div>
-            <div className="font-bold text-sm">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(212,175,55,0.22),transparent_45%)]" />
+          <div className="relative px-4 text-center">
+            <div className="mb-3 text-4xl font-serif text-amber-100">{getCardSymbol(card.arcana, card.suit)}</div>
+            <div className="text-sm font-semibold text-white/88">
               {language === 'zh' ? card.nameChinese : card.name}
             </div>
             {card.arcana === 'minor' && (
-              <div className="text-xs opacity-75">
+              <div className="mt-1 text-xs uppercase tracking-[0.14em] text-white/42">
                 {language === 'zh' ? card.suitChinese : card.suit}
               </div>
             )}
           </div>
           {isReversed && (
-            <div className="absolute top-2 right-2 bg-yellow-500 text-black text-xs px-2 py-1 rounded">
-              {language === 'zh' ? '逆位' : 'Reversed'}
+            <div className="absolute right-3 top-3 rounded-full bg-amber-200 px-2 py-1 text-[10px] font-semibold uppercase text-black">
+              Reversed
             </div>
           )}
         </div>
 
-        {/* Interpretation (shown when expanded) */}
-        {isExpanded && (
-          <div className="mt-3 pt-3 border-t border-slate-600">
-            <p className="text-slate-300 text-sm leading-relaxed">{interpretation}</p>
-          </div>
-        )}
-
-        {!isExpanded && (
-          <p className="text-slate-400 text-xs text-center mt-2">
-            {language === 'zh' ? '点击查看解读' : 'Click to reveal interpretation'}
-          </p>
+        {isExpanded ? (
+          <p className="border-t border-white/10 pt-3 text-sm leading-6 text-white/62">{interpretation}</p>
+        ) : (
+          <p className="text-center text-xs uppercase tracking-[0.16em] text-white/32">Tap to reveal</p>
         )}
       </div>
-    </div>
+    </button>
   );
 }
 
-// Celtic Cross Layout Component
 function CelticCrossLayout({
   reading,
   language,
@@ -422,74 +436,33 @@ function CelticCrossLayout({
   showCard: number | null;
   onCardClick: (index: number) => void;
 }) {
-  const positions = [
-    { grid: 'col-span-2 row-span-2', layout: 'flex justify-center items-center' },
-    { grid: 'col-span-2', layout: 'flex justify-center' },
-    { grid: 'col-span-2 row-span-2', layout: 'flex justify-center items-center' },
-    { grid: '', layout: 'flex justify-center items-center' },
-    { grid: '', layout: 'flex justify-center items-center' },
-    { grid: '', layout: 'flex justify-center items-center' },
-    { grid: '', layout: 'flex justify-center items-center' },
-    { grid: 'col-span-2', layout: 'flex justify-center' },
-    { grid: 'col-span-2', layout: 'flex justify-center' },
-    { grid: 'col-span-4', layout: 'flex justify-center' },
-  ];
-
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       {reading.drawnCards.map((drawnCard, index) => (
-        <div key={index} className={positions[index].grid}>
-          <div
-            onClick={() => onCardClick(index)}
-            className={`cursor-pointer transition-all ${showCard === index ? 'scale-110' : 'hover:scale-105'}`}
-          >
-            <div className="rounded-xl p-3 border border-white/[0.06] bg-white/[0.02] shadow-xl h-full">
-              <div className="text-center mb-2">
-                <span className="text-purple-400 text-xs">
-                  {language === 'zh' ? `位${index + 1}` : `#${index + 1}`}
-                </span>
-                <h4 className="font-semibold text-sm">
-                  {language === 'zh' ? drawnCard.positionNameChinese : drawnCard.positionName}
-                </h4>
-              </div>
-              <div
-                className={`aspect-[2/3] rounded-lg flex items-center justify-center mb-2 ${
-                  drawnCard.isReversed ? 'rotate-180' : ''
-                }`}
-                style={{
-                  background: drawnCard.isReversed
-                    ? 'linear-gradient(135deg, #7c2d12 0%, #991b1b 100%)'
-                    : 'linear-gradient(135deg, #581c87 0%, #7c3aed 100%)',
-                }}
-              >
-                <div className="text-center p-2">
-                  <div className="text-2xl">{getCardSymbol(drawnCard.card.arcana, drawnCard.card.suit)}</div>
-                  <div className="font-bold text-xs">
-                    {language === 'zh' ? drawnCard.card.nameChinese : drawnCard.card.name}
-                  </div>
-                </div>
-              </div>
-              {showCard === index && (
-                <div className="mt-2 pt-2 border-t border-slate-600">
-                  <p className="text-slate-300 text-xs leading-relaxed">{drawnCard.interpretation}</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        <CardDisplay
+          key={`${drawnCard.card.name}-${index}`}
+          drawnCard={drawnCard}
+          language={language}
+          isExpanded={showCard === index}
+          onClick={() => onCardClick(index)}
+        />
       ))}
     </div>
   );
 }
 
-// Helper to get card symbol
 function getCardSymbol(arcana: string, suit?: string): string {
-  if (arcana === 'major') return '★';
+  if (arcana === 'major') return 'MA';
   switch (suit) {
-    case 'Wands': return '🔥';
-    case 'Cups': return '💧';
-    case 'Swords': return '⚔️';
-    case 'Pentacles': return '💰';
-    default: return '?';
+    case 'Wands':
+      return 'W';
+    case 'Cups':
+      return 'C';
+    case 'Swords':
+      return 'S';
+    case 'Pentacles':
+      return 'P';
+    default:
+      return '?';
   }
 }
