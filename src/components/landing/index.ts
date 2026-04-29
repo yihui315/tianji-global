@@ -23,3 +23,6 @@ export { default as ModuleHero } from './ModuleHero';
 export { default as ScrollNarrativeSection } from './ScrollNarrativeSection';
 export { default as InsightGrid } from './InsightGrid';
 export { default as ShareSection } from './ShareSection';
+
+export { default as PageChrome } from './PageChrome';
+export type { PageChromeProps } from './PageChrome';
