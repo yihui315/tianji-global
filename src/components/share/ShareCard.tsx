@@ -260,11 +260,14 @@ export default function ShareCard({
     }
   };
 
-  // Generate preview
+  // Generate preview when any visible card input changes.
+  // generateCardImage closes over the same state already listed in deps, so
+  // adding it here would be redundant and would require useCallback wrapping.
   useEffect(() => {
     if (previewMode && canvasRef.current) {
       generateCardImage();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewMode, title, subtitle, score, element, style, language]);
 
   return (

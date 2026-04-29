@@ -7,6 +7,8 @@ import { saveReading } from '@/lib/save-reading';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
 import TarotCardAnimation from '@/components/animations/TarotCardAnimation';
 import { spreadLayouts, type DrawnCard, type SpreadLayout } from '@/lib/tarot';
+import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { moduleLandingCopy } from '@/lib/language-routing';
 import {
   BackgroundVideoHero,
   InsightGrid,
@@ -17,6 +19,7 @@ import {
   ShareSection,
   TrustStrip,
 } from '@/components/landing';
+import { GlassCard } from '@/components/ui';
 
 type SpreadType = 'single' | 'three-card' | 'celtic-cross';
 type Language = 'en' | 'zh';
@@ -49,11 +52,12 @@ const spreadOptions = [
 export default function TarotPage() {
   const [spreadType, setSpreadType] = useState<SpreadType>('three-card');
   const [question, setQuestion] = useState('');
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useSyncedLanguage();
   const [reading, setReading] = useState<TarotReadingResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showCard, setShowCard] = useState<number | null>(null);
+  const copy = moduleLandingCopy.tarot[language];
 
   const currentSpread = spreadLayouts.find((_, index) => {
     if (spreadType === 'single') return index === 0;
@@ -100,41 +104,39 @@ export default function TarotPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050508] text-white">
       <BackgroundVideoHero
-        eyebrow="Tarot oracle"
-        title="A card spread should feel like a door opening."
-        subtitle="Choose the spread, ask the question, and let the existing Tarot engine return the same cards through a calmer cinematic surface."
+        eyebrow={copy.hero.eyebrow}
+        title={copy.hero.title}
+        subtitle={copy.hero.subtitle}
+        description={copy.hero.description}
         videoSrc="/assets/videos/hero/tarot-hero-loop-6s-1080p.mp4"
         posterSrc="/assets/images/posters/tarot-hero-poster-16x9.jpg"
-        ctaLabel={isLoading ? 'Drawing...' : 'Draw your cards'}
+        imageSrc="/assets/images/hero/tarot-hero-master-16x9.jpg"
+        ctaLabel={isLoading ? (language === 'zh' ? '抽牌中' : 'Drawing...') : copy.primaryCta}
         ctaHref="#tarot-form"
-        secondaryCtaLabel="See the ritual"
+        secondaryCtaLabel={copy.secondaryCta}
         secondaryCtaHref="#tarot-narrative"
         stats={[
-          { label: 'Deck', value: '78' },
-          { label: 'Spreads', value: '3' },
-          { label: 'AI layer', value: 'On' },
+          { label: language === 'zh' ? '牌组' : 'Deck', value: '78' },
+          { label: language === 'zh' ? '牌阵' : 'Spreads', value: '3' },
+          { label: language === 'zh' ? 'AI 层' : 'AI layer', value: language === 'zh' ? '开启' : 'On' },
         ]}
       />
 
       <TrustStrip
-        items={[
-          { label: 'Endpoint kept', value: '/api/tarot' },
-          { label: 'State kept', value: 'spread + cards' },
-          { label: 'Output kept', value: 'PDF + share' },
-        ]}
+        items={[...copy.trustItems]}
       />
 
       <LandingSection
         id="tarot-form"
-        eyebrow="Reading console"
-        title="Select the spread before the first card moves."
-        description="The visual shell is new. The spread selection, question input, card draw state, save flow, share flow, and PDF output are preserved."
+        eyebrow={copy.form.eyebrow}
+        title={copy.form.title}
+        description={copy.form.description}
       >
         <ModuleInputShell
-          eyebrow="Card ritual"
-          title="Ask with precision"
-          description={currentSpread?.description ?? 'Select a spread and draw from the existing Tarot engine.'}
-          footer="Click any returned card to expand its interpretation."
+          eyebrow={copy.form.eyebrow}
+          title={language === 'zh' ? '清楚提问' : 'Ask with precision'}
+          description={currentSpread?.description ?? 'Pick a spread and draw your cards.'}
+          footer={language === 'zh' ? '点击返回的卡牌即可展开解读。' : 'Click any returned card to expand its interpretation.'}
         >
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             {spreadOptions.map((spread) => (
@@ -149,7 +151,9 @@ export default function TarotPage() {
               >
                 <span className="block text-xs uppercase tracking-[0.22em] text-white/35">{spread.id}</span>
                 <span className="mt-2 block font-serif text-lg text-white/86">{spread.name}</span>
-                <span className="mt-2 block text-sm leading-6 text-white/48">{spread.description}</span>
+                <span className="mt-2 block text-sm leading-6 text-white/48">
+                  {language === 'zh' ? spread.description : spread.description}
+                </span>
               </button>
             ))}
           </div>
@@ -161,11 +165,13 @@ export default function TarotPage() {
           )}
 
           <label className="space-y-2">
-            <span className="text-xs uppercase tracking-[0.22em] text-white/45">Question optional</span>
+            <span className="text-xs uppercase tracking-[0.22em] text-white/45">
+              {language === 'zh' ? '问题（可选）' : 'Question optional'}
+            </span>
             <textarea
               value={question}
               onChange={(event) => setQuestion(event.target.value)}
-              placeholder="What do you need the cards to clarify?"
+              placeholder={language === 'zh' ? '你想让牌面澄清什么？' : 'What do you need the cards to clarify?'}
               className="min-h-24 w-full resize-none rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-violet-300/50"
             />
           </label>
@@ -184,7 +190,7 @@ export default function TarotPage() {
               disabled={isLoading}
               className="flex-1 rounded-full bg-white px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isLoading ? 'Drawing cards...' : 'Draw your cards'}
+              {isLoading ? (language === 'zh' ? '正在抽牌' : 'Drawing cards...') : copy.primaryCta}
             </button>
           </div>
 
@@ -201,19 +207,19 @@ export default function TarotPage() {
           {
             label: '01',
             heading: 'A question narrows the field.',
-            body: 'The page creates a quieter entry point so the user can ask one clear thing before the cards appear.',
+            body: 'Take a moment first — ask one clear thing, then let the deck respond. Sharper questions lead to sharper readings.',
             align: 'left',
           },
           {
             label: '02',
             heading: 'The spread becomes a structure.',
-            body: 'Single, three-card, and Celtic Cross readings keep their original spread behavior while feeling more premium.',
+            body: 'Single card for a quick check, three-card for past-present-future, Celtic Cross for the deeper map. Each position carries its own meaning.',
             align: 'center',
           },
           {
             label: '03',
             heading: 'The reveal stays shareable.',
-            body: 'The result resolves into cards, AI interpretation, share controls, and a PDF path without changing the flow.',
+            body: 'When you are ready, your reading becomes a card you can share, an animated story, or a PDF you can keep.',
             align: 'right',
           },
         ]}
@@ -223,7 +229,7 @@ export default function TarotPage() {
         <LandingSection
           eyebrow="Generated result"
           title={reading.spread.name}
-          description={question ? `Question: ${question}` : 'The spread has been drawn from the original Tarot endpoint.'}
+          description={question ? `Question: ${question}` : 'Your spread is laid out — open each card for its position-level meaning.'}
         >
           <ResultScaffold
             eyebrow="Tarot result"
@@ -339,22 +345,131 @@ export default function TarotPage() {
           />
         </LandingSection>
       ) : (
-        <LandingSection
-          eyebrow="Preview"
-          title="The cards are waiting below the surface."
-          description="Draw a spread above to reveal the original Tarot result through the redesigned reading shell."
-        >
-          <InsightGrid
-            title="What stays intact"
-            subtitle="Spread state / drawCards / share / PDF"
-            items={[
-              { label: 'Spread selection', value: 'Single, three-card, and Celtic Cross remain available' },
-              { label: 'Question input', value: 'The optional question still travels with the request' },
-              { label: 'Card reveal', value: 'Expanded card interpretations remain interactive' },
-              { label: 'Export', value: 'Share panel, animated share, and PDF download are preserved' },
-            ]}
-          />
-        </LandingSection>
+        <>
+          <LandingSection
+            eyebrow={language === 'zh' ? '抽牌之前' : 'Before you draw'}
+            title={
+              language === 'zh'
+                ? '你怎么问，牌就怎么照见你。'
+                : 'The cards reflect the question you bring to them.'
+            }
+            subtitle={
+              language === 'zh'
+                ? '塔罗最擅长照见情绪、关系与处境，而不是替你预测「会不会发生」。先把心里的问题写得清楚，再把牌翻开。'
+                : 'Tarot mirrors emotions, relationships, and situations — it doesn’t forecast whether something will happen. Write the question that is actually on your mind, then turn the cards.'
+            }
+          >
+            <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
+              <GlassCard
+                level="card"
+                className="rounded-[1.75rem] border border-white/[0.06] bg-white/[0.02] p-6 sm:p-8"
+              >
+                <div className="mb-5 text-[0.68rem] uppercase tracking-[0.28em] text-[rgba(212,175,119,0.62)]">
+                  {language === 'zh' ? '三个原则' : 'Three principles'}
+                </div>
+                <ol className="space-y-5 text-sm leading-7 text-white/70">
+                  <li className="flex gap-4">
+                    <span className="mt-0.5 inline-flex h-7 w-7 flex-none items-center justify-center rounded-full border border-[rgba(212,175,119,0.32)] text-[0.7rem] font-semibold tracking-[0.18em] text-[rgba(212,175,119,0.85)]">
+                      01
+                    </span>
+                    <div>
+                      <div className="mb-1 font-medium text-white/90">
+                        {language === 'zh' ? '一次只问一件事' : 'Ask one thing at a time'}
+                      </div>
+                      <p className="text-white/55">
+                        {language === 'zh'
+                          ? '一次牌阵聚焦一个主题，几张牌之间的关系才会清晰。'
+                          : 'One theme per spread — the conversation between the cards only becomes clear when the question is singular.'}
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex gap-4">
+                    <span className="mt-0.5 inline-flex h-7 w-7 flex-none items-center justify-center rounded-full border border-[rgba(212,175,119,0.32)] text-[0.7rem] font-semibold tracking-[0.18em] text-[rgba(212,175,119,0.85)]">
+                      02
+                    </span>
+                    <div>
+                      <div className="mb-1 font-medium text-white/90">
+                        {language === 'zh' ? '问内在,不问命运' : 'Ask the inside, not the outcome'}
+                      </div>
+                      <p className="text-white/55">
+                        {language === 'zh'
+                          ? '与其问「他会不会回来」，不如问「我现在真正在意的是什么」。'
+                          : 'Instead of "will they come back", ask "what am I really holding on to right now".'}
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex gap-4">
+                    <span className="mt-0.5 inline-flex h-7 w-7 flex-none items-center justify-center rounded-full border border-[rgba(212,175,119,0.32)] text-[0.7rem] font-semibold tracking-[0.18em] text-[rgba(212,175,119,0.85)]">
+                      03
+                    </span>
+                    <div>
+                      <div className="mb-1 font-medium text-white/90">
+                        {language === 'zh' ? '把场景说具体' : 'Anchor in a concrete situation'}
+                      </div>
+                      <p className="text-white/55">
+                        {language === 'zh'
+                          ? '说出关系对象、时间段、当下的感受，牌面才能落到你这件事上。'
+                          : 'Name the person, the timeframe, and what you are currently feeling — the cards land more precisely on something specific.'}
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </GlassCard>
+
+              <GlassCard
+                level="strong"
+                className="rounded-[1.75rem] border border-white/[0.08] bg-black/25 p-6 sm:p-8"
+              >
+                <div className="mb-5 text-[0.68rem] uppercase tracking-[0.28em] text-[rgba(212,175,119,0.62)]">
+                  {language === 'zh' ? '可借鉴的提问' : 'Questions worth drawing'}
+                </div>
+                <div className="space-y-4 text-sm leading-7 text-white/72">
+                  <div className="rounded-2xl border border-white/[0.06] bg-white/[0.025] px-5 py-4">
+                    {language === 'zh'
+                      ? '“在这段关系里，我此刻最需要看见自己的什么部分？”'
+                      : '“In this relationship, what part of myself most needs to be seen right now?”'}
+                  </div>
+                  <div className="rounded-2xl border border-white/[0.06] bg-white/[0.025] px-5 py-4">
+                    {language === 'zh'
+                      ? '“面对眼下这个决定，我还没说出口的犹豫是什么？”'
+                      : '“About this decision, what hesitation am I still holding back?”'}
+                  </div>
+                  <div className="rounded-2xl border border-white/[0.06] bg-white/[0.025] px-5 py-4">
+                    {language === 'zh'
+                      ? '“接下来一个月,我可以怎样回应这个处境会更轻盈?”'
+                      : '“Over the next month, how can I respond to this situation with more ease?”'}
+                  </div>
+                </div>
+
+                <div className="mt-6 rounded-2xl border border-[rgba(212,175,119,0.18)] bg-[rgba(212,175,119,0.04)] px-5 py-4 text-xs leading-6 text-white/55">
+                  <span className="mr-2 font-semibold uppercase tracking-[0.2em] text-[rgba(212,175,119,0.78)]">
+                    {language === 'zh' ? '尽量避免' : 'Avoid'}
+                  </span>
+                  {language === 'zh'
+                    ? '“他会不会回来？”——是非题让牌面没有空间展开。换成「这段关系现在还在教我什么」。'
+                    : '“Will they come back?” — yes/no questions leave the cards no room. Try "what is this relationship still teaching me" instead.'}
+                </div>
+              </GlassCard>
+            </div>
+          </LandingSection>
+
+          <LandingSection
+            eyebrow="Preview"
+            title="The cards are waiting below the surface."
+            description="Draw a spread above and the deck will open into its full reading."
+          >
+            <InsightGrid
+              title="Inside every reading"
+              subtitle="Spread · cards · interpretation · share"
+              items={[
+                { label: 'Spread choice', value: 'Single card, three-card, or Celtic Cross' },
+                { label: 'Your question', value: 'Asked once, carried through the whole reading' },
+                { label: 'Card reveal', value: 'Tap any card to open its position-level meaning' },
+                { label: 'Save it', value: 'Share card, animated story, or full PDF export' },
+              ]}
+            />
+          </LandingSection>
+        </>
       )}
     </main>
   );

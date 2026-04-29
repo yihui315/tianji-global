@@ -1,16 +1,24 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
+import Image from 'next/image';
 import { useRef } from 'react';
+import SmartTitle from '@/components/SmartTitle';
 import { colors, landingTokens, scrollReveal, typography, variants } from '@/design-system';
 
 function cx(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(' ');
 }
 
+function hasCjkText(value: React.ReactNode) {
+  return typeof value === 'string' && /[\u3400-\u9fff]/.test(value);
+}
+
 export interface BackgroundVideoHeroProps {
   eyebrow?: string;
   title: React.ReactNode;
+  titleClassName?: string;
+  titleStyle?: React.CSSProperties;
   subtitle?: React.ReactNode;
   description?: React.ReactNode;
   videoSrc?: string;
@@ -32,6 +40,8 @@ export interface BackgroundVideoHeroProps {
 export default function BackgroundVideoHero({
   eyebrow,
   title,
+  titleClassName,
+  titleStyle,
   subtitle,
   description,
   videoSrc,
@@ -58,6 +68,22 @@ export default function BackgroundVideoHero({
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
   const mediaScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
   const isCentered = align === 'center';
+  const titleUsesCjk = hasCjkText(title);
+  const subtitleUsesCjk = hasCjkText(subtitle);
+  const ctaUsesCjk = hasCjkText(ctaLabel);
+  const secondaryCtaUsesCjk = hasCjkText(secondaryCtaLabel);
+  const heroTitleStyle = {
+    ...typography.hero,
+    color: colors.textPrimary,
+    fontSize: titleUsesCjk ? 'clamp(3.25rem, 6.4vw, 5.05rem)' : typography.hero.fontSize,
+    lineHeight: titleUsesCjk ? 0.98 : typography.hero.lineHeight,
+    fontStyle: titleUsesCjk ? ('normal' as const) : typography.hero.fontStyle,
+    letterSpacing: titleUsesCjk ? '-0.075em' : '-0.04em',
+    textShadow: titleUsesCjk
+      ? '0 24px 90px rgba(0,0,0,0.65), 0 0 34px rgba(212,175,55,0.12)'
+      : '0 0 40px rgba(124,58,237,0.22)',
+    ...titleStyle,
+  };
 
   return (
     <section
@@ -70,11 +96,13 @@ export default function BackgroundVideoHero({
     >
       <motion.div className="absolute inset-0" style={{ scale: mediaScale }}>
         {posterSrc || imageSrc ? (
-          <img
-            src={posterSrc || imageSrc}
+          <Image
+            src={(posterSrc || imageSrc) as string}
             alt=""
             aria-hidden="true"
-            fetchPriority="high"
+            priority
+            fill
+            sizes="100vw"
             className="absolute inset-0 h-full w-full object-cover"
           />
         ) : null}
@@ -152,23 +180,35 @@ export default function BackgroundVideoHero({
               </motion.span>
             )}
 
-            <motion.h1
-              initial={false}
-              className="max-w-4xl text-balance"
-              style={{
-                ...typography.hero,
-                color: colors.textPrimary,
-                letterSpacing: '-0.04em',
-                textShadow: '0 0 40px rgba(124,58,237,0.22)',
-              }}
-            >
-              {title}
-            </motion.h1>
+            {typeof title === 'string' ? (
+              <motion.div initial={false} className="w-full">
+                <SmartTitle
+                  as="h1"
+                  text={title}
+                  priority="hero"
+                  maxLines={2}
+                  align={align}
+                  className={titleClassName}
+                  style={heroTitleStyle}
+                />
+              </motion.div>
+            ) : (
+              <motion.h1
+                initial={false}
+                className={cx('max-w-4xl text-balance', titleClassName)}
+                style={heroTitleStyle}
+              >
+                {title}
+              </motion.h1>
+            )}
 
             {subtitle && (
               <motion.div
                 initial={false}
-                className="text-sm uppercase tracking-[0.35em]"
+                className={cx(
+                  'text-sm',
+                  subtitleUsesCjk ? 'tracking-[0.08em]' : 'uppercase tracking-[0.35em]'
+                )}
                 style={{ color: colors.textTertiary }}
               >
                 {subtitle}
@@ -197,7 +237,10 @@ export default function BackgroundVideoHero({
                 {ctaLabel && (
                   <a
                     href={ctaHref}
-                    className="rounded-full bg-white px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-amber-100"
+                    className={cx(
+                      'rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-amber-100',
+                      ctaUsesCjk ? 'tracking-[0.08em]' : 'uppercase tracking-[0.18em]'
+                    )}
                   >
                     {ctaLabel}
                   </a>
@@ -205,7 +248,10 @@ export default function BackgroundVideoHero({
                 {secondaryCtaLabel && (
                   <a
                     href={secondaryCtaHref}
-                    className="rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-white/80 transition hover:border-amber-200/40 hover:text-white"
+                    className={cx(
+                      'rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white/80 transition hover:border-amber-200/40 hover:text-white',
+                      secondaryCtaUsesCjk ? 'tracking-[0.08em]' : 'uppercase tracking-[0.18em]'
+                    )}
                   >
                     {secondaryCtaLabel}
                   </a>
@@ -224,7 +270,14 @@ export default function BackgroundVideoHero({
                         className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 backdrop-blur-xl"
                       >
                         <div className="text-lg font-serif text-white/90">{stat.value}</div>
-                        <div className="mt-1 text-[0.65rem] uppercase tracking-[0.18em] text-white/35">
+                        <div
+                          className={cx(
+                            'mt-1 text-[0.65rem] text-white/35',
+                            hasCjkText(stat.label)
+                              ? 'tracking-[0.06em]'
+                              : 'uppercase tracking-[0.18em]'
+                          )}
+                        >
                           {stat.label}
                         </div>
                       </div>

@@ -4,7 +4,10 @@ export const dynamic = 'force-dynamic';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
+import SharePanel from '@/components/SharePanel';
 import { saveReading } from '@/lib/save-reading';
+import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { moduleLandingCopy } from '@/lib/language-routing';
 import {
   BackgroundVideoHero,
   InsightGrid,
@@ -12,6 +15,7 @@ import {
   ModuleInputShell,
   ResultScaffold,
   ScrollNarrativeSection,
+  ShareSection,
   TrustStrip,
 } from '@/components/landing';
 
@@ -179,12 +183,13 @@ export default function WesternPage() {
   const [birthTime, setBirthTime] = useState<string>('12:00');
   const [lat, setLat] = useState<number>(35.6762);
   const [lng, setLng] = useState<number>(139.6503);
-  const [language, setLanguage] = useState<Language>('zh');
+  const [language, setLanguage] = useSyncedLanguage();
   const [chartData, setChartData] = useState<ChartApiResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
+  const copy = moduleLandingCopy.western[language];
 
   useEffect(() => {
     setIsClient(true);
@@ -263,45 +268,43 @@ export default function WesternPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050508] text-white">
       <BackgroundVideoHero
-        eyebrow="Western astrology"
-        title="Your sky chart should feel precise before it feels decorative."
-        subtitle="Swiss Ephemeris calculation and AstroChart rendering stay intact while the page becomes a calmer cinematic observatory."
+        eyebrow={copy.hero.eyebrow}
+        title={copy.hero.title}
+        subtitle={copy.hero.subtitle}
+        description={copy.hero.description}
         videoSrc="/assets/videos/hero/western-hero-loop-6s-1080p.mp4"
         posterSrc="/assets/images/posters/western-hero-poster-16x9.jpg"
-        ctaLabel={isLoading ? 'Calculating...' : 'Generate chart'}
+        imageSrc="/assets/images/hero/western-hero-master-16x9.jpg"
+        ctaLabel={isLoading ? (language === 'zh' ? '计算中' : 'Calculating...') : copy.primaryCta}
         ctaHref="#western-form"
-        secondaryCtaLabel="View chart layers"
+        secondaryCtaLabel={copy.secondaryCta}
         secondaryCtaHref="#western-narrative"
         stats={[
-          { label: 'Core', value: 'Big 3' },
-          { label: 'Planets', value: '10' },
-          { label: 'Renderer', value: 'AstroChart' },
+          { label: language === 'zh' ? '核心' : 'Core', value: 'Big 3' },
+          { label: language === 'zh' ? '行星' : 'Planets', value: '10' },
+          { label: language === 'zh' ? '渲染' : 'Renderer', value: 'AstroChart' },
         ]}
       />
 
       <TrustStrip
-        items={[
-          { label: 'Endpoint kept', value: '/api/western' },
-          { label: 'Dynamic import', value: '@astrodraw/astrochart' },
-          { label: 'Save flow', value: 'saveReading' },
-        ]}
+        items={[...copy.trustItems]}
       />
 
       <LandingSection
         id="western-form"
-        eyebrow="Chart console"
-        title="Calculate the natal chart from the original endpoint."
-        description="Birthday, time, latitude, longitude, and language are sent with the same request body as before."
+        eyebrow={copy.form.eyebrow}
+        title={copy.form.title}
+        description={copy.form.description}
       >
         <ModuleInputShell
-          eyebrow="Birth coordinates"
-          title="Generate your western chart"
-          description="Precision inputs stay visible, but the page now reads like a premium observatory."
-          footer="The AstroChart SVG renders only on the client, preserving the previous SSR-safe behavior."
+          eyebrow={copy.form.eyebrow}
+          title={language === 'zh' ? '生成你的西方星盘' : 'Generate your western chart'}
+          description={copy.form.description}
+          footer={language === 'zh' ? 'AstroChart SVG 仍然只在客户端渲染，保留之前 SSR 安全的行为。' : 'The AstroChart SVG renders only on the client, preserving the previous SSR-safe behavior.'}
         >
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
             <label className="space-y-2">
-              <span className="text-xs uppercase tracking-[0.22em] text-white/45">Birthday</span>
+              <span className="text-xs uppercase tracking-[0.22em] text-white/45">{language === 'zh' ? '生日' : 'Birthday'}</span>
               <input
                 type="date"
                 value={birthday}
@@ -310,7 +313,7 @@ export default function WesternPage() {
               />
             </label>
             <label className="space-y-2">
-              <span className="text-xs uppercase tracking-[0.22em] text-white/45">Birth Time</span>
+              <span className="text-xs uppercase tracking-[0.22em] text-white/45">{language === 'zh' ? '出生时间' : 'Birth Time'}</span>
               <input
                 type="time"
                 value={birthTime}
@@ -319,7 +322,7 @@ export default function WesternPage() {
               />
             </label>
             <label className="space-y-2">
-              <span className="text-xs uppercase tracking-[0.22em] text-white/45">Latitude</span>
+              <span className="text-xs uppercase tracking-[0.22em] text-white/45">{language === 'zh' ? '纬度' : 'Latitude'}</span>
               <input
                 type="number"
                 step="0.0001"
@@ -331,7 +334,7 @@ export default function WesternPage() {
               />
             </label>
             <label className="space-y-2">
-              <span className="text-xs uppercase tracking-[0.22em] text-white/45">Longitude</span>
+              <span className="text-xs uppercase tracking-[0.22em] text-white/45">{language === 'zh' ? '经度' : 'Longitude'}</span>
               <input
                 type="number"
                 step="0.0001"
@@ -358,7 +361,7 @@ export default function WesternPage() {
               disabled={isLoading}
               className="flex-1 rounded-full bg-white px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isLoading ? 'Calculating...' : 'Generate chart'}
+              {isLoading ? (language === 'zh' ? '计算中' : 'Calculating...') : copy.primaryCta}
             </button>
           </div>
 
@@ -394,12 +397,13 @@ export default function WesternPage() {
       />
 
       {chartData ? (
-        <LandingSection
-          eyebrow="Generated result"
-          title="Natal chart overview"
-          description={`${chartData.meta.platform} / ${chartData.meta.version} / ${chartData.meta.calculationMode}`}
-        >
-          <ResultScaffold
+        <>
+          <LandingSection
+            eyebrow="Generated result"
+            title="Natal chart overview"
+            description={`${chartData.meta.platform} / ${chartData.meta.version} / ${chartData.meta.calculationMode}`}
+          >
+            <ResultScaffold
             eyebrow="Big Three"
             title={`${chartData.bigThree.sun.sign} / ${chartData.bigThree.moon.sign} / ${chartData.bigThree.rising.sign}`}
             summary="The chart opens with the three most legible identity anchors, then expands into the full wheel and placement table."
@@ -477,22 +481,37 @@ export default function WesternPage() {
                 </div>
               </div>
             }
-          />
-        </LandingSection>
+            />
+          </LandingSection>
+
+          <ShareSection
+            ogBgSrc="/assets/images/og/western-og-bg-1200x630.jpg"
+            title="Share the chart without exposing birth data."
+            subtitle="Share the chart as a public card pointing back to TianJi, or keep it private — the PDF export stays on your device until you decide what to do with it."
+          >
+            <div className="mx-auto max-w-md">
+              <SharePanel
+                serviceType="western"
+                resultId="western-chart"
+                shareUrl="https://tianji.global/western"
+              />
+            </div>
+          </ShareSection>
+        </>
       ) : (
         <LandingSection
           eyebrow="Preview"
           title="Your sky wheel will render after calculation"
-          description="Submit the original form above to draw the AstroChart SVG and placement table."
+          description="Fill in your birth date, time, and place above — the chart wheel and placement table will appear here."
         >
           <InsightGrid
-            title="What remains unchanged"
-            subtitle="API / chart / save / PDF"
+            title="Inside every reading"
+            subtitle="Chart · houses · aspects · export"
             items={[
-              { label: 'Endpoint', value: 'The page still posts to /api/western' },
-              { label: 'Coordinates', value: 'Latitude and longitude remain explicit inputs' },
-              { label: 'AstroChart', value: 'The chart renderer stays dynamically imported on the client' },
-              { label: 'Export', value: 'The PDF download remains available after generation' },
+              { label: 'Birth data', value: 'Date, time, and place — entered explicitly, never guessed' },
+              { label: 'Chart wheel', value: 'A live SVG sky wheel with planets, houses, and aspects' },
+              { label: 'Placements', value: 'Sun, Moon, rising, and a clear table of all bodies' },
+              { label: 'Take it home', value: 'Export the full chart as a high-quality PDF' },
             ]}
           />
         </LandingSection>

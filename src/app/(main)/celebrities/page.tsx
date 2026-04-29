@@ -223,8 +223,9 @@ export default function CelebritiesPage() {
           </div>
           <div className="flex flex-wrap gap-3">
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-indigo-200 font-medium">Birth Date</label>
+              <label htmlFor="twin-birth-date" className="text-xs text-indigo-200 font-medium">Birth Date</label>
               <input
+                id="twin-birth-date"
                 type="date"
                 value={twinBirthDate}
                 onChange={e => setTwinBirthDate(e.target.value)}
@@ -232,8 +233,9 @@ export default function CelebritiesPage() {
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-indigo-200 font-medium">Birth Time</label>
+              <label htmlFor="twin-birth-time" className="text-xs text-indigo-200 font-medium">Birth Time</label>
               <input
+                id="twin-birth-time"
                 type="time"
                 value={twinBirthTime}
                 onChange={e => setTwinBirthTime(e.target.value)}

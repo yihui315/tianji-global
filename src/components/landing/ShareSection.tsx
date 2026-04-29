@@ -8,11 +8,14 @@ import AnimatedShareButton from '@/components/AnimatedShareButton';
 type ShareCardType = 'ziwei' | 'bazi' | 'tarot' | 'synastry';
 
 interface ShareSectionProps {
-  type: ShareCardType;
-  resultData: Record<string, unknown>;
+  type?: ShareCardType;
+  resultData?: Record<string, unknown>;
   ogBgSrc?: string;
   accentColor?: string;
   goldColor?: string;
+  title?: React.ReactNode;
+  subtitle?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function ShareSection({
@@ -21,6 +24,9 @@ export default function ShareSection({
   ogBgSrc,
   accentColor = '#7c3aed',
   goldColor = '#D4AF37',
+  title = 'Your reading is share-ready.',
+  subtitle = 'Export a quiet, premium card for memory, reflection, or a private share.',
+  children,
 }: ShareSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-60px' });
@@ -80,35 +86,48 @@ export default function ShareSection({
               filter: `drop-shadow(0 0 20px ${goldColor}33)`,
             }}
           >
-            Your reading is share-ready.
+            {title}
           </h2>
           <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em' }}>
-            Export a quiet, premium card for memory, reflection, or a private share.
+            {subtitle}
           </p>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.25 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
-        >
-          <AnimatedShareButton
-            type={type}
-            resultData={resultData}
-            format="webp"
-            language="zh"
-            variant="primary"
-          />
+        {type && resultData && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+          >
+            <AnimatedShareButton
+              type={type}
+              resultData={resultData}
+              format="webp"
+              language="zh"
+              variant="primary"
+            />
 
-          <AnimatedShareButton
-            type={type}
-            resultData={resultData}
-            format="png"
-            language="zh"
-            variant="secondary"
-          />
-        </motion.div>
+            <AnimatedShareButton
+              type={type}
+              resultData={resultData}
+              format="png"
+              language="zh"
+              variant="secondary"
+            />
+          </motion.div>
+        )}
+
+        {children && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="mb-8"
+          >
+            {children}
+          </motion.div>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

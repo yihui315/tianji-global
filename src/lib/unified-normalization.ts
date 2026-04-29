@@ -1,7 +1,15 @@
 import type { ModuleType, NormalizedPayload } from '@/types/module-result';
 import { normalizeModulePayload } from '@/lib/normalizers';
 
-export const CORE_UNIFIED_MODULES: ModuleType[] = ['bazi', 'ziwei', 'fortune', 'relationship'];
+export const CORE_UNIFIED_MODULES: ModuleType[] = [
+  'bazi',
+  'ziwei',
+  'fortune',
+  'relationship',
+  'western',
+  'tarot',
+  'yijing',
+];
 
 export function buildDefaultNormalizedPayload(
   title?: string,

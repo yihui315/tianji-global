@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import SmartTitle from '@/components/SmartTitle';
 import { colors, scrollReveal, typography, variants, landingTokens } from '@/design-system';
 
 function cx(...values: Array<string | false | null | undefined>) {
@@ -79,7 +80,20 @@ export default function LandingSection({
                 />
               </div>
             )}
-            {title && (
+            {typeof title === 'string' ? (
+              <SmartTitle
+                as="h2"
+                text={title}
+                priority="section"
+                maxLines={3}
+                align={align}
+                className={titleClassName}
+                style={{
+                  ...typography.sectionTitle,
+                  color: colors.textPrimary,
+                }}
+              />
+            ) : title ? (
               <h2
                 className={cx('max-w-4xl text-balance', titleClassName)}
                 style={{
@@ -89,7 +103,7 @@ export default function LandingSection({
               >
                 {title}
               </h2>
-            )}
+            ) : null}
             {(subtitle || description) && (
               <div
                 className={cx(

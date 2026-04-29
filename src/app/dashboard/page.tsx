@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -249,7 +250,14 @@ export default function DashboardPage() {
               className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm transition hover:bg-white/10"
             >
               {session.user.image ? (
-                <img src={session.user.image} alt="Profile avatar" className="h-7 w-7 rounded-full" />
+                <Image
+                  src={session.user.image}
+                  alt="Profile avatar"
+                  width={28}
+                  height={28}
+                  unoptimized
+                  className="h-7 w-7 rounded-full"
+                />
               ) : (
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-purple-600 text-xs font-semibold">
                   {(session.user.name ?? '?').slice(0, 1)}

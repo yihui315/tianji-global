@@ -1,6 +1,15 @@
 import type { Metadata } from 'next';
+import { Noto_Sans_SC } from 'next/font/google';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
+
+const tianjiSans = Noto_Sans_SC({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-tianji-sans',
+  fallback: ['Segoe UI', 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+});
 
 export const metadata: Metadata = {
   title: 'TianJi Global | Premium AI Destiny Platform',
@@ -11,12 +20,19 @@ export const metadata: Metadata = {
     description: 'A premium AI destiny platform for timing, relationship insight, and shareable readings.',
     type: 'website',
     locale: 'en_US',
+    alternateLocale: ['zh_CN'],
+    siteName: 'TianJi Global',
     images: ['/api/og?title=TianJi+Global&subtitle=Premium+AI+Destiny+Platform'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'TianJi Global | Premium AI Destiny Platform',
     description: 'A premium AI destiny platform for timing, relationship insight, and shareable readings.',
+  },
+  icons: {
+    icon: [{ url: '/assets/favicon.svg', type: 'image/svg+xml' }],
+    shortcut: '/assets/favicon.svg',
+    apple: '/assets/favicon.svg',
   },
 };
 
@@ -31,7 +47,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-[#050508] text-white antialiased">
+      <body className={`${tianjiSans.variable} min-h-screen bg-[#050508] text-white antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>

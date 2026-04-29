@@ -1,8 +1,40 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import SharePanel from '@/components/SharePanel';
+/**
+ * Numerology — TianJi Global
+ *
+ * Rewritten under the tianji-cinematic design skill (.claude/skills/tianji-cinematic/SKILL.md).
+ * Recipe: §7.1 reading-input page.
+ *
+ * What changed vs. the previous version:
+ *   - Removed Tailwind candy palette (amber/pink/cyan/orange/etc.) — now gold + purple + black only.
+ *   - Removed ad-hoc blob blurs — chrome is one <PageChrome /> component.
+ *   - Removed `bg-clip-text` rainbow titles — Instrument Serif italic via SmartTitle.
+ *   - Removed tab navigation in favor of sequential <LandingSection>s (§4.3 "one idea per beat").
+ *   - Replaced raw <div className="bg-white/[0.02]"> cards with <GlassCard>.
+ *   - All copy, hero, and trust strip wired through `moduleLandingCopy.numerology`.
+ *
+ * API and data contracts unchanged — POST /api/numerology with { name, birthdate, language }.
+ */
+
+import { useCallback, useMemo, useState } from 'react';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
+import SharePanel from '@/components/SharePanel';
+import {
+  BackgroundVideoHero,
+  InsightGrid,
+  LandingSection,
+  ModuleInputShell,
+  PageChrome,
+  ResultScaffold,
+  ScrollNarrativeSection,
+  TrustStrip,
+} from '@/components/landing';
+import { GlassCard, LanguageSwitch } from '@/components/ui';
+import { colors } from '@/design-system';
+import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { moduleLandingCopy } from '@/lib/language-routing';
+import { saveReading } from '@/lib/save-reading';
 
 type Language = 'en' | 'zh';
 
@@ -64,18 +96,92 @@ interface NumerologyReading {
   meta: { platform: string; version: string; method: string };
 }
 
+const NARRATIVE_BLOCKS = [
+  {
+    label: '01 Letters as numbers',
+    heading: 'Every letter carries a value.',
+    body: 'Pythagorean numerology assigns a number 1–9 to each letter of the Latin alphabet. Your full name and birth date together compress into a small set of repeating signals.',
+  },
+  {
+    label: '02 The three core numbers',
+    heading: 'Life path, destiny, soul urge — read together.',
+    body: 'Life path comes from the birth date. Destiny from the full name. Soul urge from the vowels alone. Each one says something different about how you move, what you build, and what you quietly want.',
+  },
+  {
+    label: '03 The supporting cast',
+    heading: 'Personality, planet, lucky numbers, and days.',
+    body: 'Around the three core numbers sit a personality digit, a maturity digit, a ruling planet, and a small set of lucky tokens. They are accent details — not the headline — but they are how the reading lands.',
+  },
+];
+
+// ──────────────────────────────────────────────
+// Number display — cinematic version
+// ──────────────────────────────────────────────
+// Instead of the rainbow gradient ring, the master numbers (11/22/33) get a
+// gold ring and the rest a soft purple ring. Same data, calmer surface.
+function NumberDisk({
+  value,
+  size = 'lg',
+}: {
+  value: number;
+  size?: 'sm' | 'lg';
+}) {
+  const isMaster = value === 11 || value === 22 || value === 33;
+  const dimension = size === 'lg' ? 132 : 76;
+  const fontSize = size === 'lg' ? '3.25rem' : '1.85rem';
+  return (
+    <div
+      className="relative flex items-center justify-center font-serif italic"
+      style={{
+        width: dimension,
+        height: dimension,
+        borderRadius: '9999px',
+        border: `1px solid ${isMaster ? 'rgba(245, 197, 66, 0.5)' : 'rgba(167,139,250,0.35)'}`,
+        background:
+          'radial-gradient(circle at 30% 30%, rgba(167,139,250,0.18), rgba(10,10,10,0.85) 70%)',
+        boxShadow: isMaster
+          ? '0 0 36px rgba(245, 197, 66, 0.18)'
+          : '0 0 28px rgba(167,139,250,0.18)',
+        color: isMaster ? colors.goldLight : colors.textPrimary,
+        fontSize,
+        lineHeight: 1,
+      }}
+    >
+      {value}
+      {isMaster && (
+        <span
+          aria-hidden="true"
+          className="absolute -right-1 -top-1 text-xs"
+          style={{ color: colors.goldLight }}
+        >
+          ★
+        </span>
+      )}
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────
+// Page
+// ──────────────────────────────────────────────
 export default function NumerologyPage() {
+  const [language, setLanguage] = useSyncedLanguage('en');
   const [name, setName] = useState('');
   const [birthdate, setBirthdate] = useState('');
-  const [language, setLanguage] = useState<Language>('en');
   const [reading, setReading] = useState<NumerologyReading | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'lifePath' | 'destiny' | 'soulUrge' | 'overview'>('overview');
+
+  const copy = moduleLandingCopy.numerology[language];
+
+  const t = useCallback(
+    (en: string, zh: string) => (language === 'zh' ? zh : en),
+    [language]
+  );
 
   const calculate = useCallback(async () => {
     if (!name.trim() || !birthdate.trim()) {
-      setError(language === 'zh' ? '请输入姓名和出生日期' : 'Please enter your name and birthdate');
+      setError(t('Please enter your name and birth date.', '请输入姓名与出生日期'));
       return;
     }
 
@@ -87,322 +193,479 @@ export default function NumerologyPage() {
       const response = await fetch('/api/numerology', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim(), birthdate: birthdate.trim(), language }),
+        body: JSON.stringify({
+          name: name.trim(),
+          birthdate: birthdate.trim(),
+          language,
+        }),
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Calculation failed');
+        const data = await response.json().catch(() => ({}));
+        throw new Error(
+          data?.error || t('Calculation failed.', '计算失败 请重试')
+        );
       }
 
       const data: NumerologyReading = await response.json();
       setReading(data);
+
+      saveReading({
+        reading_type: 'numerology',
+        title: `${data.name} · ${data.birthdate} numerology`,
+        summary:
+          (language === 'zh'
+            ? data.lifePath.descriptionChinese
+            : data.lifePath.description
+          )?.slice(0, 120) ?? '',
+        reading_data: data as unknown as Record<string, unknown>,
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : (language === 'zh' ? '计算失败，请重试' : 'Calculation failed. Please try again.'));
+      setError(
+        err instanceof Error
+          ? err.message
+          : t('Calculation failed.', '计算失败 请重试')
+      );
     } finally {
       setIsLoading(false);
     }
-  }, [name, birthdate, language]);
+  }, [name, birthdate, language, t]);
 
-  const getNumberColor = (num: number): string => {
-    const colors: Record<number, string> = {
-      1: 'from-amber-500 to-orange-600', 2: 'from-blue-400 to-blue-600',
-      3: 'from-pink-400 to-pink-600', 4: 'from-emerald-500 to-emerald-700',
-      5: 'from-cyan-400 to-cyan-600', 6: 'from-violet-400 to-violet-600',
-      7: 'from-indigo-400 to-indigo-600', 8: 'from-red-500 to-red-700',
-      9: 'from-yellow-500 to-orange-500', 11: 'from-silver-400 to-silver-600',
-      22: 'from-gray-500 to-gray-700', 33: 'from-purple-500 to-purple-700',
-    };
-    return colors[num] || 'from-gray-400 to-gray-600';
-  };
-
-  const NumberDisplay = ({ number, size = 'large' }: { number: number; size?: 'small' | 'large' }) => {
-    const sizeClass = size === 'large' ? 'text-7xl' : 'text-3xl';
-    const isMaster = [11, 22, 33].includes(number);
-    return (
-      <div className={`bg-gradient-to-br ${getNumberColor(number)} rounded-2xl ${sizeClass} font-black text-white flex items-center justify-center shadow-xl ${isMaster ? 'ring-4 ring-yellow-400' : ''}`}
-        style={{ width: size === 'large' ? 140 : 80, height: size === 'large' ? 140 : 80 }}>
-        {number}
-        {isMaster && <span className="absolute -top-2 -right-2 text-yellow-400 text-xl">★</span>}
-      </div>
-    );
-  };
-
-  const t = (en: string, zh: string) => language === 'zh' ? zh : en;
+  const insightItems = useMemo(() => {
+    if (!reading) return [];
+    return [
+      {
+        icon: '✦',
+        label: t('Personality', '人格数字'),
+        value: String(reading.personalityNumber),
+      },
+      {
+        icon: '✧',
+        label: t('Maturity', '成熟数字'),
+        value: String(reading.maturityNumber),
+      },
+      {
+        icon: '◌',
+        label: t('Ruling planet', '守护行星'),
+        value: t(reading.rulingPlanet, reading.rulingPlanetChinese),
+      },
+      {
+        icon: '✺',
+        label: t('Element', '五行'),
+        value: t(reading.element, reading.elementChinese),
+      },
+    ];
+  }, [reading, t]);
 
   return (
-    <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden text-white p-4">
-      <div className="star-field" aria-hidden="true" />
-      <div className="relative z-10">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-amber-600/15 rounded-full blur-[128px] animate-pulse" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-600/15 rounded-full blur-[128px] animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600/10 rounded-full blur-[150px]" />
+    <main className="relative min-h-screen overflow-x-hidden text-white">
+      <PageChrome disableSpotlight />
+
+      <div className="fixed right-4 top-4 z-50">
+        <LanguageSwitch />
       </div>
 
-      <div className="relative max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-amber-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Name Numerology
-          </h1>
-          <p className="text-purple-300/80 text-lg">姓名数字命理 · TianJi Global</p>
-        </div>
-
-        {/* Input Form - Glass Card */}
-        <div className="rounded-xl p-6 mb-6 backdrop-blur-xl border border-white/[0.06] shadow-[0_0_40px_rgba(245,158,11,0.05)] bg-white/[0.02]">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <BackgroundVideoHero
+        eyebrow={copy.hero.eyebrow}
+        title={copy.hero.title}
+        subtitle={copy.hero.subtitle}
+        description={copy.hero.description}
+        posterSrc="/assets/images/posters/home-hero-poster-16x9.jpg"
+        imageSrc="/assets/images/posters/home-hero-poster-16x9.jpg"
+        meta={<TrustStrip items={[...copy.trustItems]} className="w-full max-w-3xl" />}
+      >
+        <ModuleInputShell
+          eyebrow={copy.form.eyebrow}
+          title={copy.form.title}
+          description={copy.form.description}
+          footer={copy.form.footer}
+        >
+          <div className="space-y-5">
             <div>
-              <label className="block text-purple-300 mb-2 font-medium">
-                {t('Full Name', '姓名')}
+              <label
+                htmlFor="num-full-name"
+                className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35"
+              >
+                {t('Full name', '姓名')}
               </label>
               <input
+                id="num-full-name"
                 type="text"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 placeholder={t('Enter your full name', '输入你的全名')}
-                className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:outline-none"
+                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-white/85 placeholder-white/30 transition-all focus:border-purple-500/40 focus:outline-none"
               />
             </div>
+
             <div>
-              <label className="block text-purple-300 mb-2 font-medium">
-                {t('Birthdate', '出生日期')}
+              <label
+                htmlFor="num-birthdate"
+                className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35"
+              >
+                {t('Birth date', '出生日期')}
               </label>
               <input
-                type="text"
+                id="num-birthdate"
+                type="date"
                 value={birthdate}
-                onChange={e => setBirthdate(e.target.value)}
-                placeholder={t('YYYY-MM-DD', 'YYYY-MM-DD')}
-                className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:border-purple-500 focus:outline-none"
+                onChange={(e) => setBirthdate(e.target.value)}
+                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-white/85 transition-all focus:border-purple-500/40 focus:outline-none"
               />
-              <p className="text-slate-500 text-xs mt-1">{t('e.g. 1990-05-15', '例如 1990-05-15')}</p>
+              <p className="mt-1 text-[11px] text-white/35">
+                {t('Format: YYYY-MM-DD', '格式：YYYY-MM-DD')}
+              </p>
             </div>
-          </div>
 
-          {/* Language Toggle */}
-          <div className="flex items-center gap-4 mb-4">
-            <span className="text-purple-300">{t('Language', '语言')}:</span>
             <button
-              onClick={() => setLanguage('en')}
-              className={`px-4 py-2 rounded-lg transition-all backdrop-blur-sm ${language === 'en' ? 'bg-purple-500/30 border border-purple-400/50' : 'bg-slate-800/50 hover:bg-slate-700/50'}`}
+              type="button"
+              onClick={calculate}
+              disabled={isLoading}
+              className="w-full rounded-2xl border border-white/[0.14] bg-white/[0.06] px-5 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-white/90 transition-all hover:border-white/30 hover:bg-white/[0.1] disabled:cursor-not-allowed disabled:opacity-50"
+              style={{
+                boxShadow: '0 0 36px rgba(245, 197, 66, 0.16)',
+              }}
             >
-              English
-            </button>
-            <button
-              onClick={() => setLanguage('zh')}
-              className={`px-4 py-2 rounded-lg transition-all backdrop-blur-sm ${language === 'zh' ? 'bg-purple-500/30 border border-purple-400/50' : 'bg-slate-800/50 hover:bg-slate-700/50'}`}
-            >
-              中文
+              {isLoading
+                ? t('Calculating…', '计算中…')
+                : copy.primaryCta}
             </button>
           </div>
+        </ModuleInputShell>
+      </BackgroundVideoHero>
 
-          <button
-            onClick={calculate}
-            disabled={isLoading}
-            className="w-full py-4 rounded-lg bg-gradient-to-r from-amber-600/80 via-purple-600/80 to-pink-600/80 hover:from-amber-500/90 hover:via-purple-500/90 hover:to-pink-500/90 font-bold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-xl border border-amber-400/30 shadow-[0_0_30px_rgba(245,158,11,0.2)]"
+      {/* Error banner */}
+      {error && (
+        <div className="mx-auto max-w-4xl px-6 py-8 sm:px-8">
+          <GlassCard
+            level="card"
+            className="rounded-[1.5rem] border border-rose-500/30 bg-rose-500/10 p-4 text-rose-100"
           >
-            {isLoading ? (t('Calculating...', '计算中...')) : (t('Calculate My Numbers', '计算我的命理数字'))}
-          </button>
-        </div>
-
-        {/* Error */}
-        {error && (
-          <div className="bg-red-950/40 border border-red-500/30 rounded-lg p-4 mb-6 text-red-200 backdrop-blur-xl">
             {error}
-          </div>
-        )}
-
-        {/* Results */}
-        {reading && (
-          <div className="space-y-6">
-            {/* Core Numbers Banner - Glass Card */}
-            <div className="bg-gradient-to-r from-amber-950/50 via-slate-900/90 to-pink-950/50 rounded-2xl p-6 border border-amber-500/20 backdrop-blur-xl shadow-[0_0_50px_rgba(245,158,11,0.1)]">
-              <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-amber-400 to-pink-400 bg-clip-text text-transparent">
-                {t('Your Core Numbers', '你的核心数字')}
-              </h2>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="flex flex-col items-center">
-                  <NumberDisplay number={reading.lifePath.number} />
-                  <div className="mt-3 text-center">
-                    <div className="text-purple-300 text-sm">{t('Life Path', '生命道路')}</div>
-                    <div className="font-bold">{t(reading.lifePath.title, reading.lifePath.titleChinese)}</div>
-                  </div>
-                </div>
-                <div className="flex flex-col items-center">
-                  <NumberDisplay number={reading.destiny.number} />
-                  <div className="mt-3 text-center">
-                    <div className="text-purple-300 text-sm">{t('Destiny', '命运')}</div>
-                    <div className="font-bold">{t(reading.destiny.title, reading.destiny.titleChinese)}</div>
-                  </div>
-                </div>
-                <div className="flex flex-col items-center">
-                  <NumberDisplay number={reading.soulUrge.number} />
-                  <div className="mt-3 text-center">
-                    <div className="text-purple-300 text-sm">{t('Soul Urge', '心灵渴望')}</div>
-                    <div className="font-bold">{t(reading.soulUrge.title, reading.soulUrge.titleChinese)}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Tab Navigation */}
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              {(['overview', 'lifePath', 'destiny', 'soulUrge'] as const).map(tab => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2 rounded-lg whitespace-nowrap transition-all backdrop-blur-sm ${activeTab === tab ? 'bg-purple-500/30 border border-purple-400/50' : 'bg-slate-800/50 hover:bg-slate-700/50'}`}
-                >
-                  {tab === 'overview' ? t('Overview', '总览') :
-                    tab === 'lifePath' ? t('Life Path', '生命道路') :
-                    tab === 'destiny' ? t('Destiny', '命运') :
-                    t('Soul Urge', '心灵渴望')}
-                </button>
-              ))}
-            </div>
-
-            {/* Overview Tab */}
-            {activeTab === 'overview' && (
-              <div className="space-y-4">
-                <div className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]">
-                  <h3 className="text-lg font-bold text-amber-400 mb-3">{t('Life Path Number', '生命道路数字')}</h3>
-                  <p className="text-slate-300 leading-relaxed">{t(reading.lifePath.description, reading.lifePath.descriptionChinese)}</p>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {(language === 'zh' ? reading.lifePath.traitsChinese : reading.lifePath.traits).map((trait, i) => (
-                      <span key={i} className="px-3 py-1 rounded-full bg-amber-600/20 text-amber-300 text-sm border border-amber-500/30">{trait}</span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="rounded-xl p-4 border border-white/[0.06] text-center backdrop-blur-xl bg-white/[0.02]">
-                    <div className="text-slate-400 text-sm mb-1">{t('Personality', '人格数字')}</div>
-                    <div className="text-3xl font-black text-cyan-400">{reading.personalityNumber}</div>
-                  </div>
-                  <div className="rounded-xl p-4 border border-white/[0.06] text-center backdrop-blur-xl bg-white/[0.02]">
-                    <div className="text-slate-400 text-sm mb-1">{t('Maturity', '成熟数字')}</div>
-                    <div className="text-3xl font-black text-green-400">{reading.maturityNumber}</div>
-                  </div>
-                  <div className="rounded-xl p-4 border border-white/[0.06] text-center backdrop-blur-xl bg-white/[0.02]">
-                    <div className="text-slate-400 text-sm mb-1">{t('Planet', '守护行星')}</div>
-                    <div className="text-lg font-bold text-pink-400">{t(reading.rulingPlanet, reading.rulingPlanetChinese)}</div>
-                  </div>
-                  <div className="rounded-xl p-4 border border-white/[0.06] text-center backdrop-blur-xl bg-white/[0.02]">
-                    <div className="text-slate-400 text-sm mb-1">{t('Element', '五行元素')}</div>
-                    <div className="text-lg font-bold text-orange-400">{t(reading.element, reading.elementChinese)}</div>
-                  </div>
-                </div>
-
-                <div className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]">
-                  <h3 className="text-lg font-bold text-amber-400 mb-3">{t('Lucky Numbers & Days', '幸运数字与日期')}</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <div className="text-slate-400 text-sm mb-2">{t('Lucky Numbers', '幸运数字')}</div>
-                      <div className="flex gap-2 flex-wrap">
-                        {reading.luckyNumbers.map((n, i) => (
-                          <span key={i} className="px-3 py-1 rounded-full bg-amber-600/20 text-amber-300 font-bold text-lg border border-amber-500/30">{n}</span>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-slate-400 text-sm mb-2">{t('Lucky Days', '幸运日')}</div>
-                      <div className="flex gap-2 flex-wrap">
-                        {(language === 'zh' ? reading.luckyDaysChinese : reading.luckyDays).map((d, i) => (
-                          <span key={i} className="px-3 py-1 rounded-full bg-purple-600/20 text-purple-300 text-sm border border-purple-500/30">{d}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]">
-                  <h3 className="text-lg font-bold text-amber-400 mb-3">{t('Compatibility', '数字兼容性')}</h3>
-                  <div className="flex gap-2 flex-wrap">
-                    {(language === 'zh' ? reading.compatibilityChinese : reading.compatibility).map((c, i) => (
-                      <span key={i} className="px-3 py-1 rounded-full bg-green-600/20 text-green-300 text-sm border border-green-500/30">{c}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Life Path Tab */}
-            {activeTab === 'lifePath' && (
-              <div className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]">
-                <div className="flex items-center gap-6 mb-6">
-                  <NumberDisplay number={reading.lifePath.number} />
-                  <div>
-                    <div className="text-purple-300 text-sm">{t('Life Path Number', '生命道路数字')}</div>
-                    <h3 className="text-2xl font-bold">{t(reading.lifePath.title, reading.lifePath.titleChinese)}</h3>
-                    {reading.lifePath.isMaster && <span className="text-yellow-400 text-sm">★ {t('Master Number', '大师数字')}</span>}
-                  </div>
-                </div>
-                <p className="text-slate-300 leading-relaxed mb-4">{t(reading.lifePath.description, reading.lifePath.descriptionChinese)}</p>
-                <div className="flex flex-wrap gap-2">
-                  {(language === 'zh' ? reading.lifePath.traitsChinese : reading.lifePath.traits).map((trait, i) => (
-                    <span key={i} className="px-3 py-1 rounded-full bg-amber-600/20 text-amber-300 text-sm border border-amber-500/30">{trait}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Destiny Tab */}
-            {activeTab === 'destiny' && (
-              <div className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]">
-                <div className="flex items-center gap-6 mb-6">
-                  <NumberDisplay number={reading.destiny.number} />
-                  <div>
-                    <div className="text-purple-300 text-sm">{t('Destiny Number', '命运数字')}</div>
-                    <h3 className="text-2xl font-bold">{t(reading.destiny.title, reading.destiny.titleChinese)}</h3>
-                    {reading.destiny.isMaster && <span className="text-yellow-400 text-sm">★ {t('Master Number', '大师数字')}</span>}
-                  </div>
-                </div>
-                <p className="text-slate-300 leading-relaxed mb-4">{t(reading.destiny.description, reading.destiny.descriptionChinese)}</p>
-                <div className="bg-slate-800/50 rounded-lg p-4 text-sm backdrop-blur-sm">
-                  <div className="text-slate-400">{t('Full Name Value', '姓名总值')}: <span className="text-white font-mono">{reading.destiny.nameValue}</span></div>
-                  <div className="text-slate-400 mt-1">{t('Expression Number', '表现数字')}: <span className="text-white font-mono">{reading.destiny.expressionNumber}</span> → <span className="text-amber-400 font-bold">{reading.destiny.expressionNumberReduced}</span></div>
-                </div>
-              </div>
-            )}
-
-            {/* Soul Urge Tab */}
-            {activeTab === 'soulUrge' && (
-              <div className="rounded-xl p-6 border border-white/[0.06] backdrop-blur-xl bg-white/[0.02]">
-                <div className="flex items-center gap-6 mb-6">
-                  <NumberDisplay number={reading.soulUrge.number} />
-                  <div>
-                    <div className="text-purple-300 text-sm">{t('Soul Urge Number', '心灵渴望数字')}</div>
-                    <h3 className="text-2xl font-bold">{t(reading.soulUrge.title, reading.soulUrge.titleChinese)}</h3>
-                    {reading.soulUrge.isMaster && <span className="text-yellow-400 text-sm">★ {t('Master Number', '大师数字')}</span>}
-                  </div>
-                </div>
-                <p className="text-slate-300 leading-relaxed mb-4">{t(reading.soulUrge.description, reading.soulUrge.descriptionChinese)}</p>
-                <div className="bg-slate-800/50 rounded-lg p-4 text-sm backdrop-blur-sm">
-                  <div className="text-slate-400">{t('Vowels Found', '检测到的元音')}: <span className="text-white font-mono">{reading.soulUrge.vowels.join(', ')}</span></div>
-                  <div className="text-slate-400 mt-1">{t('Vowel Value', '元音总值')}: <span className="text-white font-mono">{reading.soulUrge.vowelValue}</span> → <span className="text-amber-400 font-bold">{reading.soulUrge.number}</span></div>
-                </div>
-              </div>
-            )}
-            {/* Share Panel */}
-            <SharePanel
-              serviceType="numerology"
-              resultId={`numerology-${name}-${Date.now()}`}
-              shareUrl={`https://tianji.global/numerology?name=${encodeURIComponent(name)}`}
-            />
-
-            {/* PDF Download */}
-            <PDFDownloadButton
-              serviceType="numerology"
-              resultData={reading as unknown as Record<string, unknown>}
-              language={language}
-            />
-          </div>
-        )}
-
-        {/* Footer */}
-        <div className="mt-12 text-center text-white/50 text-sm">
-          <p>© 2024 TianJi Global · 天机全球</p>
-          <p className="mt-1">{t('Pythagorean Numerology System', '毕达哥拉斯数字命理系统')}</p>
+          </GlassCard>
         </div>
+      )}
+
+      {/* Pre-result narrative — shown until the user submits */}
+      {!reading && !isLoading && (
+        <ScrollNarrativeSection
+          accentColor="#7c3aed"
+          goldColor="#D4AF37"
+          blocks={NARRATIVE_BLOCKS}
+        />
+      )}
+
+      {/* Result */}
+      {reading && (
+        <>
+          <ResultScaffold
+            eyebrow={t('YOUR NUMEROLOGY', '你的数字命理')}
+            title={t('Your three core numbers are ready.', '你的三个核心数字已经就绪。')}
+            subtitle={t(
+              'Life path, destiny, soul urge. The calmest entry point first — then the supporting cast below.',
+              '生命数 命运数 灵魂数 三个核心数字 先看主线 再展开周边细节。'
+            )}
+            overview={
+              <div className="space-y-7">
+                <div>
+                  <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                    {t('Three core numbers', '三个核心数字')}
+                  </div>
+                  <p className="mt-3 max-w-3xl font-serif text-2xl text-white/90 sm:text-3xl">
+                    {t(
+                      reading.lifePath.description,
+                      reading.lifePath.descriptionChinese
+                    )}
+                  </p>
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-3">
+                  {[
+                    {
+                      key: 'lifePath',
+                      label: t('Life path', '生命数'),
+                      result: reading.lifePath,
+                    },
+                    {
+                      key: 'destiny',
+                      label: t('Destiny', '命运数'),
+                      result: reading.destiny,
+                    },
+                    {
+                      key: 'soulUrge',
+                      label: t('Soul urge', '灵魂数'),
+                      result: reading.soulUrge,
+                    },
+                  ].map((item) => {
+                    const r = item.result;
+                    return (
+                      <div
+                        key={item.key}
+                        className="flex flex-col items-center rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 text-center"
+                      >
+                        <NumberDisk value={r.number} />
+                        <div className="mt-4 text-[10px] uppercase tracking-[0.24em] text-white/40">
+                          {item.label}
+                        </div>
+                        <div className="mt-1 font-serif text-base text-white/85">
+                          {t(r.title, r.titleChinese)}
+                        </div>
+                        {r.isMaster && (
+                          <div
+                            className="mt-2 text-[10px] uppercase tracking-[0.2em]"
+                            style={{ color: colors.goldLight }}
+                          >
+                            ★ {t('Master number', '大师数字')}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            }
+            highlights={
+              <div className="space-y-5">
+                <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                  {t('Lucky tokens', '幸运指标')}
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-2">
+                  <div>
+                    <div className="text-xs uppercase tracking-[0.2em] text-white/40">
+                      {t('Lucky numbers', '幸运数字')}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {reading.luckyNumbers.map((n) => (
+                        <span
+                          key={n}
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] font-serif text-sm text-white/85"
+                        >
+                          {n}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-xs uppercase tracking-[0.2em] text-white/40">
+                      {t('Lucky days', '幸运日')}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {(language === 'zh'
+                        ? reading.luckyDaysChinese
+                        : reading.luckyDays
+                      ).map((d) => (
+                        <span
+                          key={d}
+                          className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs text-white/75"
+                        >
+                          {d}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-white/[0.06] pt-5">
+                  <div className="text-xs uppercase tracking-[0.2em] text-white/40">
+                    {t('Compatibility', '兼容性')}
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {(language === 'zh'
+                      ? reading.compatibilityChinese
+                      : reading.compatibility
+                    ).map((c) => (
+                      <span
+                        key={c}
+                        className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs text-white/75"
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            }
+            details={
+              <div className="space-y-6">
+                <div>
+                  <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                    {t('Life path', '生命数')}
+                  </div>
+                  <p className="mt-3 text-sm leading-7 text-white/72 sm:text-base">
+                    {t(reading.lifePath.description, reading.lifePath.descriptionChinese)}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {(language === 'zh'
+                      ? reading.lifePath.traitsChinese
+                      : reading.lifePath.traits
+                    ).map((trait) => (
+                      <span
+                        key={trait}
+                        className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-xs text-white/75"
+                      >
+                        {trait}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-t border-white/[0.06] pt-5">
+                  <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                    {t('Destiny', '命运数')}
+                  </div>
+                  <p className="mt-3 text-sm leading-7 text-white/72 sm:text-base">
+                    {t(reading.destiny.description, reading.destiny.descriptionChinese)}
+                  </p>
+                  <p className="mt-3 text-xs text-white/40">
+                    {t('Full name value', '姓名总值')}: {reading.destiny.nameValue} ·{' '}
+                    {t('Expression', '表现数')}: {reading.destiny.expressionNumber}
+                    {typeof reading.destiny.expressionNumberReduced === 'number'
+                      ? ` → ${reading.destiny.expressionNumberReduced}`
+                      : null}
+                  </p>
+                </div>
+
+                <div className="border-t border-white/[0.06] pt-5">
+                  <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                    {t('Soul urge', '灵魂数')}
+                  </div>
+                  <p className="mt-3 text-sm leading-7 text-white/72 sm:text-base">
+                    {t(reading.soulUrge.description, reading.soulUrge.descriptionChinese)}
+                  </p>
+                  <p className="mt-3 text-xs text-white/40">
+                    {t('Vowels found', '检测到的元音')}:{' '}
+                    {reading.soulUrge.vowels.join(', ')} ·{' '}
+                    {t('Vowel value', '元音总值')}: {reading.soulUrge.vowelValue}
+                  </p>
+                </div>
+              </div>
+            }
+            aside={
+              <div className="space-y-5">
+                <div>
+                  <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                    {t('Identity panel', '身份面板')}
+                  </div>
+                  <div
+                    className="mt-4 font-serif text-2xl"
+                    style={{ color: colors.textPrimary }}
+                  >
+                    {reading.name}
+                  </div>
+                  <div className="mt-1 text-xs text-white/45">{reading.birthdate}</div>
+                </div>
+
+                <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
+                  <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                    {t('Around the core', '核心之外')}
+                  </div>
+                  <div className="mt-3 space-y-2 text-sm text-white/65">
+                    <p>
+                      {t('Personality', '人格数字')}:{' '}
+                      <span className="text-white/85">
+                        {reading.personalityNumber}
+                      </span>
+                    </p>
+                    <p>
+                      {t('Maturity', '成熟数字')}:{' '}
+                      <span className="text-white/85">
+                        {reading.maturityNumber}
+                      </span>
+                    </p>
+                    <p>
+                      {t('Ruling planet', '守护行星')}:{' '}
+                      <span className="text-white/85">
+                        {t(reading.rulingPlanet, reading.rulingPlanetChinese)}
+                      </span>
+                    </p>
+                    <p>
+                      {t('Element', '五行')}:{' '}
+                      <span className="text-white/85">
+                        {t(reading.element, reading.elementChinese)}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            }
+          />
+
+          <InsightGrid
+            title={t('The supporting cast', '核心之外的细节')}
+            subtitle={t(
+              'Personality, maturity, planet, and element — read at a glance.',
+              '人格数字 成熟数字 守护行星 与五行 一眼看清。'
+            )}
+            items={insightItems}
+            accentColor="#7c3aed"
+            goldColor="#D4AF37"
+          />
+
+          <LandingSection
+            eyebrow={t('Share & save', '分享与保存')}
+            title={t(
+              'Keep this reading, or send it to someone who would understand.',
+              '把这次解读保存下来 或送给真正会读它的人。'
+            )}
+            subtitle={t(
+              'Saved to your reading history automatically. Export or share when you want to.',
+              '已自动保存到你的解读历史 需要时再导出或分享。'
+            )}
+          >
+            <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+              <GlassCard
+                level="card"
+                className="rounded-[1.75rem] border border-white/[0.06] bg-black/20 p-6 sm:p-8"
+              >
+                <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                  {t('Share panel', '分享面板')}
+                </div>
+                <p className="mt-3 text-sm leading-7 text-white/60">
+                  {t(
+                    'QR code, social links, copy-to-clipboard. Send a TianJi reading the way you would send a chapter.',
+                    '二维码 社交链接 一键复制 把这次解读像送一章书一样递出去。'
+                  )}
+                </p>
+                <div className="mt-5">
+                  <SharePanel
+                    serviceType="numerology"
+                    resultId={`numerology-${reading.name}-${reading.birthdate}`}
+                    shareUrl={`https://tianji.global/numerology?name=${encodeURIComponent(reading.name)}`}
+                  />
+                </div>
+              </GlassCard>
+
+              <GlassCard
+                level="strong"
+                className="rounded-[1.75rem] border border-white/[0.08] bg-black/30 p-6 sm:p-8"
+              >
+                <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                  {t('PDF export', 'PDF 导出')}
+                </div>
+                <p className="mt-3 text-sm leading-7 text-white/60">
+                  {t(
+                    'A static, type-set PDF — for inboxes, journals, and anyone who reads slowly.',
+                    '一份静态的 排版整齐的 PDF —— 给收件箱 给日记本 给读得慢的人。'
+                  )}
+                </p>
+                <div className="mt-5">
+                  <PDFDownloadButton
+                    serviceType="numerology"
+                    resultData={reading as unknown as Record<string, unknown>}
+                    language={language}
+                  />
+                </div>
+              </GlassCard>
+            </div>
+          </LandingSection>
+        </>
+      )}
+
+      {/* Footer beat — present whether or not a reading is up */}
+      <div className="px-6 pb-16 pt-8 text-center text-xs uppercase tracking-[0.28em] text-white/30">
+        {t('TianJi · Pythagorean numerology', 'TianJi · 毕达哥拉斯数字命理')}
       </div>
     </main>
   );

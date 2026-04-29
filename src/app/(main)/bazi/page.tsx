@@ -20,6 +20,8 @@ import {
 } from '@/components/landing';
 import { GlassCard, LanguageSwitch } from '@/components/ui';
 import { colors } from '@/design-system';
+import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { moduleLandingCopy } from '@/lib/language-routing';
 import { saveReading } from '@/lib/save-reading';
 
 type Language = 'zh' | 'en';
@@ -117,18 +119,18 @@ const PILLAR_LABELS: Record<Language, Record<'year' | 'month' | 'day' | 'hour', 
 const NARRATIVE_BLOCKS = [
   {
     label: '01 Four pillars',
-    heading: 'The chart opens as a structural map, not a vague horoscope.',
-    body: 'Ba Zi starts with four pillars, elemental balance, and the day master. The redesign keeps the same calculation flow but presents it with more hierarchy, more negative space, and stronger narrative pacing.',
+    heading: 'Your chart, mapped pillar by pillar.',
+    body: 'Ba Zi reads your birth moment as four pillars — year, month, day, and hour. Each carries a heavenly stem, an earthly branch, and an elemental signature that together sketch the shape of your life force.',
   },
   {
     label: '02 Element rhythm',
-    heading: 'Five-element balance becomes instantly readable.',
-    body: 'Instead of burying the elemental signal inside dense cards, the new layout stages it as a luxury dashboard: overview first, then strengths, then the deeper AI reading and conversation layer.',
+    heading: 'See how your five elements balance at a glance.',
+    body: 'Wood, fire, earth, metal, and water each carry a count and a tension. We surface what is strongest and what is missing first, so you can feel where your energy gathers — and where it thins — before reading any deeper.',
   },
   {
     label: '03 Guided depth',
-    heading: 'From chart to action, the reading unfolds in layers.',
-    body: 'Career, love, wealth, and health stay in the same product flow. What changes here is the visual shell around them, so the module feels premium without breaking the existing Ba Zi engine.',
+    heading: 'From chart to guidance, layer by layer.',
+    body: 'Career, love, wealth, and health each get their own reading. The chart leads, the AI elaborates, and the chat lets you ask follow-up questions — all anchored to the same birth moment.',
   },
 ];
 
@@ -168,7 +170,7 @@ function extractLead(result: BaZiResponse, language: Language) {
   }
 
   return language === 'zh'
-    ? 'Your Ba Zi chart is now arranged into a clear elemental structure.'
+    ? '你的八字命盘已经按照五行结构清晰展开。'
     : 'Your Ba Zi chart is now arranged into a clear elemental structure.';
 }
 
@@ -252,10 +254,11 @@ function BaZiInputForm({
   return (
     <div className="space-y-5">
       <div>
-        <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+        <label htmlFor="birth-date" className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
           Birth date
         </label>
         <input
+          id="birth-date"
           type="date"
           value={birthday}
           onChange={(event) => onBirthdayChange(event.target.value)}
@@ -264,10 +267,11 @@ function BaZiInputForm({
       </div>
 
       <div>
-        <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+        <label htmlFor="birth-hour" className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
           Birth hour
         </label>
         <select
+          id="birth-hour"
           value={birthTime}
           onChange={(event) => onBirthTimeChange(Number(event.target.value))}
           className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-white/80 transition-all focus:border-purple-500/40 focus:outline-none"
@@ -375,8 +379,6 @@ function ResultBlock({
   const selectedTimePeriod = TIME_PERIODS[birthTime] ?? TIME_PERIODS[2];
   const shareData = {
     chart: result.chart,
-    birthday,
-    birthTime: selectedTimePeriod.label,
     language,
   };
 
@@ -398,8 +400,8 @@ function ResultBlock({
 
       <ResultScaffold
         eyebrow="Ba Zi result"
-        title="The chart is now staged like a premium reading room."
-        subtitle="The same data contract remains intact. This redesign only changes how the pillars, elements, interpretation, and share tools are layered for readability."
+        title="Your Ba Zi reading is ready."
+        subtitle="Pillars first, then the element balance, then the deeper interpretation. Return to any layer you like with the share, save, or PDF tools below."
         overview={
           <div className="space-y-6">
             <div>
@@ -551,7 +553,7 @@ function ResultBlock({
 
       <InsightGrid
         title="Key insight layers"
-        subtitle="A distilled reading surface generated from the same interpretation payload."
+        subtitle="The clearest sentences from your reading, surfaced for quick scanning."
         items={insightItems}
         accentColor="#7c3aed"
         goldColor="#D4AF37"
@@ -559,8 +561,8 @@ function ResultBlock({
 
       <LandingSection
         eyebrow="Fortune radar"
-        title="Four-dimensional signals stay inside the same flow."
-        subtitle="Career, love, wealth, and health remain exactly where users expect them. The redesign upgrades the presentation, not the product contract."
+        title="Career, love, wealth, and health — read together."
+        subtitle="Each axis pulls from your chart and the AI reading. Hover or tap any point to see what is driving the score."
       >
         <GlassCard
           level="card"
@@ -572,8 +574,8 @@ function ResultBlock({
 
       <LandingSection
         eyebrow="Animated chart"
-        title="The wheel becomes a cinematic centerpiece, not a side utility."
-        subtitle="The existing animation and export flow remain intact, now staged inside a richer luxury shell."
+        title="Watch your chart come alive."
+        subtitle="The animation traces the same pillars and elements as your reading above — useful for sharing, and for sitting with the result a little longer."
       >
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <GlassCard
@@ -599,7 +601,7 @@ function ResultBlock({
               Export stack
             </div>
             <p className="mt-4 text-sm leading-7 text-white/62">
-              The animated share card, PDF export, and history save flow are unchanged. This section only gives them stronger pacing and a cleaner hierarchy.
+              Save your reading as a PDF, share an animated card, or download a still image — everything is rendered straight from your chart, so nothing gets lost in translation.
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
               <AnimatedShareButton
@@ -634,8 +636,8 @@ function ResultBlock({
 
       <LandingSection
         eyebrow="Multi-turn guidance"
-        title="The Ba Zi chat remains intact, now framed as a premium continuation."
-        subtitle="No endpoint changes, no auth changes, no request shape changes. It is the same chat tool inside a more intentional reading room."
+        title="Keep asking. The chat already knows your chart."
+        subtitle="Follow up on a single pillar, an element, or a life area. Your chart stays loaded, so every answer lands in your context — not a generic horoscope."
       >
         <GlassCard
           level="card"
@@ -660,14 +662,14 @@ function ResultBlock({
 
       <LandingSection
         eyebrow="Share panel"
-        title="Legacy share tools remain available."
-        subtitle="The QR and social share overlay is preserved exactly as before, so no external share behavior changes."
+        title="Or use the classic share panel."
+        subtitle="QR code, social links, copy-to-clipboard — the familiar way to send a TianJi reading to a friend."
       >
         <div className="mx-auto max-w-3xl">
           <SharePanel
             serviceType="bazi"
-            resultId={birthday.replace(/-/g, '')}
-            shareUrl={`https://tianji.global/bazi?birthday=${birthday}`}
+            resultId="bazi-reading"
+            shareUrl="https://tianji.global/bazi"
           />
         </div>
       </LandingSection>
@@ -687,12 +689,13 @@ export default function BaZiPage() {
   const [birthday, setBirthday] = useState('2000-08-16');
   const [birthTime, setBirthTime] = useState(2);
   const [gender, setGender] = useState<Gender>('male');
-  const [language, setLanguage] = useState<Language>('zh');
+  const [language, setLanguage] = useSyncedLanguage();
   const [result, setResult] = useState<BaZiResponse | null>(null);
   const [elementCounts, setElementCounts] = useState<Record<string, number> | null>(null);
   const [loading, setLoading] = useState(false);
   const [loadingAI, setLoadingAI] = useState(false);
   const [error, setError] = useState('');
+  const copy = moduleLandingCopy.bazi[language];
 
   const selectedTimePeriod = useMemo(
     () => TIME_PERIODS[birthTime] ?? TIME_PERIODS[2],
@@ -750,26 +753,20 @@ export default function BaZiPage() {
       </div>
 
       <BackgroundVideoHero
-        eyebrow="Four pillars of destiny"
-        title={
-          <>
-            Ba Zi
-            <br />
-            <span className="text-white/78">Decode structure before interpretation.</span>
-          </>
-        }
-        subtitle="Four pillars · five elements · AI reading"
-        description="The form, endpoint, save flow, chat tool, PDF export, and share stack stay exactly the same. This redesign only upgrades the visual shell around the Ba Zi experience."
+        eyebrow={copy.hero.eyebrow}
+        title={copy.hero.title}
+        subtitle={copy.hero.subtitle}
+        description={copy.hero.description}
         videoSrc="/assets/videos/hero/bazi-hero-loop-6s-1080p.mp4"
         posterSrc="/assets/images/posters/bazi-hero-poster-16x9.jpg"
         imageSrc="/assets/images/hero/bazi-hero-master-16x9.jpg"
-        meta={<TrustStrip items={TRUST_ITEMS} className="w-full max-w-3xl" />}
+        meta={<TrustStrip items={[...copy.trustItems]} className="w-full max-w-3xl" />}
       >
         <ModuleInputShell
-          eyebrow="Fast entry"
-          title="Read your pillars in one pass"
-          description="Keep the original /api/bazi submission and the same field set. The redesign only improves rhythm, readability, and motion."
-          footer="After submit, the page still reveals the chart, AI interpretation, chat, share, and PDF actions."
+          eyebrow={copy.form.eyebrow}
+          title={copy.form.title}
+          description={copy.form.description}
+          footer={copy.form.footer}
         >
           <BaZiInputForm
             birthday={birthday}
@@ -825,8 +822,8 @@ export default function BaZiPage() {
 
           <LandingSection
             eyebrow="Before the reading"
-            title="A luxury Ba Zi page should clarify what unfolds after submit."
-            subtitle="Before any result appears, the page should communicate that the system will reveal structure, elemental balance, a deep AI interpretation, and follow-up tools without changing the underlying product flow."
+            title="Here's what unfolds after you submit."
+            subtitle="Once we have your birth date, hour, and gender, the page reveals four pillars, your element balance, an AI deep reading, and the tools to save or share — in that order."
           >
             <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
               <GlassCard
@@ -852,7 +849,7 @@ export default function BaZiPage() {
                   Ready state
                 </div>
                 <p className="mb-6 text-sm leading-7 text-white/60">
-                  Nothing in the backend flow changes here. When users submit the form above, they still hit the same endpoint with the same payload and receive the same result structure.
+                  Your reading is calculated with the same Swiss-grade precision behind every TianJi chart. Submit when you are ready, and the result will load in place — no redirects, no waiting room.
                 </p>
                 <button
                   type="button"
@@ -869,7 +866,7 @@ export default function BaZiPage() {
 
       {!loading && (
         <div className="pb-12 text-center text-sm text-white/30">
-          <p>TianJi Global · Ba Zi module redesign template</p>
+          <p>TianJi Global · Ba Zi reading</p>
           <p className="mt-1">Current time slot: {selectedTimePeriod.label}</p>
         </div>
       )}

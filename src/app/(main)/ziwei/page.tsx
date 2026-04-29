@@ -29,26 +29,26 @@ interface ZiweiAIResponse {
 const NARRATIVE_BLOCKS = [
   {
     label: '01 命宫',
-    heading: '星曜入命，格局初定',
+    heading: '星曜入命格局初定',
     body: '紫微斗数以命宫为核心，十二宫位铺开一张人生结构图。主星落位、辅星相拱，会共同勾勒你的气质、节奏与命运重心。',
   },
   {
     label: '02 大限',
-    heading: '宫垣流转，运势起伏',
+    heading: '宫垣流转运势起伏',
     body: '大限、流年、小限层层推进，告诉你何时适合主动推进，何时需要守住边界，也指出真正值得你把握的转折窗口。',
   },
   {
     label: '03 星曜',
-    heading: '主星落位，性格成形',
+    heading: '主星落位性格成形',
     body: '紫微、天机、贪狼、太阳等主星并非抽象符号，而是你在关系、事业与选择中反复显露的底层驱动力。',
   },
 ];
 
 const HERO_TRUST_ITEMS = [
   { label: '12 宫结构', description: '命宫、事业、关系与财富同屏展开' },
-  { label: 'AI 深度解读', description: '保留原有 /api/ziwei 结果结构' },
-  { label: '动态图盘', description: '紫微宫位动画与 Iztrolabe 联动展示' },
-  { label: '可分享输出', description: '沿用现有保存与分享入口' },
+  { label: 'AI 深度解读', description: '依据你的命盘结构生成的对话式解读' },
+  { label: '动态图盘', description: '紫微宫位动画与完整星盘联动展示' },
+  { label: '可分享输出', description: '可保存到历史 · 可生成分享卡片' },
 ];
 
 function buildInsightItems(aiText: string): Array<{ icon: string; label: string; value: string }> {
@@ -104,10 +104,11 @@ function ZiweiInputForm({
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
-        <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+        <label htmlFor="zw-birthday-type" className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
           生日类型
         </label>
         <select
+          id="zw-birthday-type"
           value={birthdayType}
           onChange={(event) => setBirthdayType(event.target.value as 'solar' | 'lunar')}
           className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-white/80 transition-all focus:border-purple-500/40 focus:outline-none"
@@ -118,10 +119,11 @@ function ZiweiInputForm({
       </div>
 
       <div>
-        <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+        <label htmlFor="zw-birthday" className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
           生日
         </label>
         <input
+          id="zw-birthday"
           type="date"
           value={birthday}
           onChange={(event) => setBirthday(event.target.value)}
@@ -130,10 +132,11 @@ function ZiweiInputForm({
       </div>
 
       <div>
-        <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+        <label htmlFor="zw-birth-time" className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
           出生时辰
         </label>
         <select
+          id="zw-birth-time"
           value={birthTime}
           onChange={(event) => setBirthTime(Number(event.target.value))}
           className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-white/80 transition-all focus:border-purple-500/40 focus:outline-none"
@@ -161,10 +164,11 @@ function ZiweiInputForm({
       </div>
 
       <div>
-        <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+        <label htmlFor="zw-gender" className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
           性别
         </label>
         <select
+          id="zw-gender"
           value={gender}
           onChange={(event) => setGender(event.target.value as 'male' | 'female')}
           className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-white/80 transition-all focus:border-purple-500/40 focus:outline-none"
@@ -262,7 +266,11 @@ function ResultBlock({
   const aiInterpretation = result.aiInterpretation ?? '';
   const insightItems = buildInsightItems(aiInterpretation);
   const lead = extractLead(aiInterpretation);
-  const resultData = { birthday, birthTime, birthdayType, gender };
+  const resultData = {
+    summary: lead,
+    insights: insightItems.slice(0, 3).map((item) => item.value),
+    moduleType: 'ziwei',
+  };
 
   return (
     <>
@@ -274,8 +282,8 @@ function ResultBlock({
 
       <ResultScaffold
         eyebrow="AI destiny result"
-        title="The imperial chart is now readable."
-        subtitle="保留原有紫微数据与解读逻辑，只升级结果区的结构、层次与阅读节奏。"
+        title="你的紫微命盘已经成形"
+        subtitle="先看摘要，再看高亮宫位，最后展开完整 AI 解读。每一层都从同一份命盘生出，可以随时回到任意一层。"
         overview={
           <div className="space-y-4">
             <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
@@ -357,7 +365,7 @@ function ResultBlock({
       {insightItems.length > 0 && (
         <InsightGrid
           title="命盘洞察"
-          subtitle="从原始 AI 结果中抽取出的高亮信息层"
+          subtitle="从这份解读里抽出的最有用句子，方便快速对照"
           items={insightItems}
           accentColor="#7c3aed"
           goldColor="#D4AF37"
@@ -366,8 +374,8 @@ function ResultBlock({
 
       <LandingSection
         eyebrow="Visual structure"
-        title="Palace motion reveals the chart architecture."
-        subtitle="保留原有紫微宫位动画逻辑，只升级外层容器、标题节奏与视觉质感。"
+        title="十二宫位的流动，让命盘自己说话"
+        subtitle="动画从命宫起手，依次点亮主星与辅星——是阅读节奏，也是值得停下来的一段画面。"
       >
         <TrustStrip items={HERO_TRUST_ITEMS} className="mb-8" />
         <GlassCard
@@ -414,8 +422,8 @@ function ResultBlock({
 
       <LandingSection
         eyebrow="Chart canvas"
-        title="Inspect the complete astrolabe without leaving the page."
-        subtitle="Iztrolabe 与上方解读、保存、分享链路保持原样，只把容器升级为更适合高端落地页的展示方式。"
+        title="完整星盘就在这里，无需再跳页"
+        subtitle="点击任一宫位，可以查看主星、副星与四化飞动的细节——专业版排盘的全部能力直接展开。"
       >
         <div
           className="mx-auto overflow-hidden rounded-[1.5rem] border border-white/[0.06]"
@@ -435,8 +443,8 @@ function ResultBlock({
 
       <LandingSection
         eyebrow="Share-ready"
-        title="Keep the original share flow, wrapped in a clearer luxury surface."
-        subtitle="这里继续沿用现有 AnimatedShareButton 与 OG share 背景，只升级版式和节奏。"
+        title="留作纪念，或者发给那个该看的人"
+        subtitle="一键生成动效卡或静态图——命盘里最值得记住的那句话，会自动出现在画面上。"
       >
         <GlassCard
           level="card"
@@ -547,15 +555,9 @@ export default function ZiweiPage() {
 
       <BackgroundVideoHero
         eyebrow="Imperial destiny atlas"
-        title={
-          <>
-            紫微斗数
-            <br />
-            <span className="text-white/78">帝星落宫，命盘初显</span>
-          </>
-        }
+        title="紫微斗数：帝星落宫，命盘初显"
         subtitle="Zi Wei Dou Shu"
-        description="输入你的生日、时辰与历法类型，立即展开一张结构化的紫微命盘。你会保留原有 TianJi 的 AI 解读、图盘可视化、保存与分享链路，只是阅读体验被升级为更沉浸、更高级的落地页样式。"
+        description="输入生日、时辰与历法，立刻展开一张结构化的紫微命盘——你会同时看到十二宫位、主星落点、AI 深度解读，以及可保存、可分享的命盘卡片。"
         videoSrc="/assets/videos/hero/ziwei-hero-loop-6s-1080p.mp4"
         posterSrc="/assets/images/posters/ziwei-hero-poster-16x9.jpg"
         imageSrc="/assets/images/hero/ziwei-hero-master-16x9.jpg"
@@ -563,9 +565,9 @@ export default function ZiweiPage() {
       >
         <ModuleInputShell
           eyebrow="Fast input"
-          title="Cast your chart in seconds"
-          description="表单字段、查询参数与 `/api/ziwei` 请求保持不变。这里升级的是视觉壳层、留白节奏与表单可读性。"
-          footer="命盘生成后，仍会进入原有 AI 解读、保存记录与分享流程。"
+          title="数秒之内，命盘开盘"
+          description="提供生日、时辰、历法与性别即可——后续的解读、动画、保存与分享都围绕这一份命盘展开。"
+          footer="命盘出现后，AI 解读、历史记录与分享卡片都在同一条流程里。"
         >
           <ZiweiInputForm
             birthday={birthday}
@@ -604,8 +606,8 @@ export default function ZiweiPage() {
 
           <LandingSection
             eyebrow="Before you cast"
-            title="A premium reading page should promise structure before mystery."
-            subtitle="在真正提交命盘之前，先告诉用户这套系统将给出什么：宫位结构、时间节奏、主星性格，以及一份可以保存与分享的 AI 解读。"
+            title="在你下单生日之前——这一页能给你什么"
+            subtitle="十二宫位的结构图、大限与流年的节奏、主星落位的性格画像，以及一份可以保存、可以分享的 AI 解读。"
           >
             <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
               <GlassCard
@@ -631,7 +633,7 @@ export default function ZiweiPage() {
                   Ready when you are
                 </div>
                 <p className="mb-6 text-sm leading-7 text-white/60">
-                  这一步不新增任何业务路径。你点击上方表单后，仍会走当前的 API、保存与分享链路，只是命盘第一页更像一个真正可转化的高端产品入口。
+                  填好上方表单，命盘会原地展开——不会跳页，不会等待室。AI 解读、动画与分享卡片都会在同一屏里依次到位。
                 </p>
                 <MysticButton
                   type="button"

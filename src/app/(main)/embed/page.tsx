@@ -183,10 +183,11 @@ export default function EmbedPage() {
           <h2 className="text-xl font-bold text-purple-300 mb-4">Customize Parameters</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-amber-300 text-sm font-medium mb-1.5">
+              <label htmlFor="embed-birth-date" className="block text-amber-300 text-sm font-medium mb-1.5">
                 Birth Date
               </label>
               <input
+                id="embed-birth-date"
                 type="date"
                 value={customParams.birthDate}
                 onChange={(e) => setCustomParams((p) => ({ ...p, birthDate: e.target.value }))}
@@ -194,10 +195,11 @@ export default function EmbedPage() {
               />
             </div>
             <div>
-              <label className="block text-amber-300 text-sm font-medium mb-1.5">
+              <label htmlFor="embed-birth-time" className="block text-amber-300 text-sm font-medium mb-1.5">
                 Birth Time
               </label>
               <input
+                id="embed-birth-time"
                 type="time"
                 value={customParams.birthTime}
                 onChange={(e) => setCustomParams((p) => ({ ...p, birthTime: e.target.value }))}
@@ -205,10 +207,11 @@ export default function EmbedPage() {
               />
             </div>
             <div>
-              <label className="block text-amber-300 text-sm font-medium mb-1.5">
+              <label htmlFor="embed-name" className="block text-amber-300 text-sm font-medium mb-1.5">
                 Name / Label
               </label>
               <input
+                id="embed-name"
                 type="text"
                 value={customParams.name}
                 onChange={(e) => setCustomParams((p) => ({ ...p, name: e.target.value }))}
@@ -217,10 +220,11 @@ export default function EmbedPage() {
               />
             </div>
             <div>
-              <label className="block text-amber-300 text-sm font-medium mb-1.5">
+              <label htmlFor="embed-gender" className="block text-amber-300 text-sm font-medium mb-1.5">
                 Gender
               </label>
               <select
+                id="embed-gender"
                 value={customParams.gender}
                 onChange={(e) => setCustomParams((p) => ({ ...p, gender: e.target.value }))}
                 className="w-full px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 text-white text-sm focus:border-purple-500 focus:outline-none"

@@ -11,12 +11,15 @@ import {
   ModuleInputShell,
   ResultScaffold,
   ScrollNarrativeSection,
+  ShareSection,
   TrustStrip,
 } from '@/components/landing';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
 import SharePanel from '@/components/SharePanel';
 import { GlassCard, LanguageSwitch } from '@/components/ui';
 import { colors } from '@/design-system';
+import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { moduleLandingCopy } from '@/lib/language-routing';
 import { saveReading } from '@/lib/save-reading';
 
 type Language = 'zh' | 'en';
@@ -131,25 +134,25 @@ const NARRATIVE_BLOCKS = [
   {
     label: '01 Oracle field',
     heading: 'The question enters the field before the answer appears.',
-    body: 'Yi Jing is strongest when the page creates ritual, clarity, and pause. The redesign keeps the same cast and search logic, but stages them inside a more deliberate mystical frame.',
+    body: 'Yi Jing is strongest when the page makes space for ritual, clarity, and pause. We keep the cast and the search side by side, but frame them as a deliberate, quiet act.',
   },
   {
     label: '02 Hexagram reveal',
     heading: 'A hexagram should unfold like a signal, not a dump of text.',
-    body: 'The result layer now moves from symbol to judgement to interpretation, so the reading feels guided and premium while preserving the exact payload already returned by the oracle API.',
+    body: 'Your reading moves from symbol to judgement to interpretation in three measured beats — guided, premium, and faithful to the classical text behind every line.',
   },
   {
     label: '03 Reference atlas',
-    heading: 'Search mode remains intact as a direct route into the sixty-four hexagrams.',
-    body: 'Manual lookup still works the same way. The redesign simply turns it into a cleaner atlas-like experience that supports both study and instant reading.',
+    heading: 'Search mode is a direct route into the sixty-four hexagrams.',
+    body: 'When you already know the hexagram you are studying, the atlas opens it cleanly — calm enough for daily practice, fast enough for an instant reading.',
   },
 ];
 
 const TRUST_ITEMS = [
-  { label: 'Cast + search modes', description: 'Both input paths are preserved as-is' },
-  { label: 'AI interpretation', description: 'Still sourced from the same /api/yijing response' },
-  { label: 'Legacy share flow', description: 'QR, social share, and PDF export remain intact' },
-  { label: 'No contract change', description: 'Same route path, same request shape, same save flow' },
+  { label: 'Cast + search', description: 'Both ways of asking the oracle are kept side by side' },
+  { label: 'AI interpretation', description: 'Grounded in your hexagram, your lines, your question' },
+  { label: 'Share + save', description: 'QR, social card, and PDF export work end-to-end' },
+  { label: 'Classical first', description: 'The traditional text leads; AI only writes the commentary' },
 ];
 
 function buildInsightItems(
@@ -282,10 +285,11 @@ function YiJingInputPanel({
           </div>
 
           <div>
-            <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+            <label htmlFor="yij-question" className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
               Question
             </label>
             <input
+              id="yij-question"
               type="text"
               value={question}
               onChange={(event) => onQuestionChange(event.target.value)}
@@ -295,10 +299,11 @@ function YiJingInputPanel({
           </div>
 
           <div>
-            <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+            <label htmlFor="yij-gender" className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
               Gender
             </label>
             <select
+              id="yij-gender"
               value={gender}
               onChange={(event) => onGenderChange(event.target.value)}
               className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-white/80 transition-all focus:border-purple-500/40 focus:outline-none"
@@ -326,10 +331,11 @@ function YiJingInputPanel({
       ) : (
         <div className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
+            <label htmlFor="yij-hexagram-num" className="mb-1.5 block text-[10px] uppercase tracking-[0.28em] text-white/35">
               Hexagram number
             </label>
             <input
+              id="yij-hexagram-num"
               type="number"
               min="1"
               max="64"
@@ -473,7 +479,7 @@ function YiJingResultBlock({
                 Oracle focus
               </div>
               <div className="mt-3 text-sm leading-7 text-white/60">
-                The redesign keeps the ritual compact: symbol first, judgement second, interpretation third.
+                The reading stays compact: symbol first, judgement second, interpretation third.
               </div>
             </div>
           </div>
@@ -483,7 +489,7 @@ function YiJingResultBlock({
       {insightItems.length > 0 && (
         <InsightGrid
           title="Signal layers"
-          subtitle="A distilled insight layer built from the same Yi Jing response payload."
+          subtitle="A distilled view of what your hexagram is actually saying — direction, change, and the question behind the question."
           items={insightItems}
           accentColor="#7c3aed"
           goldColor="#D4AF37"
@@ -494,7 +500,7 @@ function YiJingResultBlock({
         <LandingSection
           eyebrow="Six lines"
           title="Line movement remains readable inside the same interpretation flow."
-          subtitle="The line states and their changing status are preserved; the redesign only reframes them as a cleaner ritual panel."
+          subtitle="Each line — broken or solid, fixed or changing — is laid out as a single ritual panel, the way the classics intended."
         >
           <div className="space-y-3">
             {[...castResult.lines].reverse().map((line, index) => (
@@ -524,10 +530,10 @@ function YiJingResultBlock({
         </LandingSection>
       )}
 
-      <LandingSection
-        eyebrow="Share and export"
-        title="Legacy sharing remains intact."
-        subtitle="The QR and social share overlay, plus the PDF export route, keep their original behavior."
+      <ShareSection
+        ogBgSrc="/assets/images/og/yijing-og-bg-1200x630.jpg"
+        title="Save the moment, share the question."
+        subtitle="Generate a QR card or social-ready image, or export the full reading as a PDF you can come back to."
       >
         <div className="mx-auto grid max-w-4xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <GlassCard
@@ -546,10 +552,10 @@ function YiJingResultBlock({
             className="rounded-[1.75rem] border border-white/[0.08] bg-black/25 p-6 sm:p-8"
           >
             <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
-              Export surface
+              Take it with you
             </div>
             <p className="mt-4 text-sm leading-7 text-white/62">
-              PDF export still uses the existing report route. No route or payload changes were introduced in this redesign pass.
+              Export the full reading as a clean PDF — hexagram, judgement, lines, and interpretation in one document you can revisit later.
             </p>
             <div className="mt-6">
               <PDFDownloadButton
@@ -561,14 +567,14 @@ function YiJingResultBlock({
             </div>
           </GlassCard>
         </div>
-      </LandingSection>
+      </ShareSection>
     </>
   );
 }
 
 export default function YiJingPage() {
   const [mode, setMode] = useState<'cast' | 'search'>('cast');
-  const [language, setLanguage] = useState<Language>('zh');
+  const [language, setLanguage] = useSyncedLanguage();
   const [searchNumber, setSearchNumber] = useState<string>('');
   const [question, setQuestion] = useState<string>('');
   const [gender, setGender] = useState<string>('');
@@ -577,6 +583,7 @@ export default function YiJingPage() {
   const [searchError, setSearchError] = useState<string | null>(null);
   const [isCasting, setIsCasting] = useState(false);
   const [coinAnimating, setCoinAnimating] = useState(false);
+  const copy = moduleLandingCopy.yijing[language];
 
   const displayedHexagram = useMemo(
     () => (mode === 'cast' ? castResult?.hexagram : searchResult),
@@ -642,26 +649,20 @@ export default function YiJingPage() {
       </div>
 
       <BackgroundVideoHero
-        eyebrow="I Ching oracle"
-        title={
-          <>
-            Yi Jing
-            <br />
-            <span className="text-white/78">Cast a question or step directly into the hexagram atlas.</span>
-          </>
-        }
-        subtitle="Coin cast · search mode · AI oracle"
-        description="This redesign preserves the existing cast/search flow, the same AI route, the same save path, and the same share/export tools. Only the visual narrative has been upgraded."
+        eyebrow={copy.hero.eyebrow}
+        title={copy.hero.title}
+        subtitle={copy.hero.subtitle}
+        description={copy.hero.description}
         videoSrc="/assets/videos/hero/yijing-hero-loop-6s-1080p.mp4"
         posterSrc="/assets/images/posters/yijing-hero-poster-16x9.jpg"
         imageSrc="/assets/images/hero/yijing-hero-master-16x9.jpg"
-        meta={<TrustStrip items={TRUST_ITEMS} className="w-full max-w-3xl" />}
+        meta={<TrustStrip items={[...copy.trustItems]} className="w-full max-w-3xl" />}
       >
         <ModuleInputShell
-          eyebrow="Oracle entry"
-          title="Choose ritual or lookup"
-          description="The coin cast and direct lookup modes both remain intact. The redesign simply gives them a more deliberate, high-end frame."
-          footer="After submit, the same result data still flows into interpretation, reading history, QR/social share, and PDF export."
+          eyebrow={copy.form.eyebrow}
+          title={copy.form.title}
+          description={copy.form.description}
+          footer={copy.form.footer}
         >
           <YiJingInputPanel
             mode={mode}
@@ -700,6 +701,113 @@ export default function YiJingPage() {
 
       {!displayedHexagram && !isCasting && (
         <>
+          <LandingSection
+            eyebrow={language === 'zh' ? '提问之前' : 'Before you ask'}
+            title={
+              language === 'zh'
+                ? '好问题决定能从卦象里看到什么。'
+                : 'The shape of your question decides what the hexagram can reveal.'
+            }
+            subtitle={
+              language === 'zh'
+                ? '《易经》最擅长回应「该如何取舍」的判断题，而不是「会不会发生」的预言。先把问题写清楚，再投币。'
+                : 'The I Ching answers questions about choice and timing — not whether something will happen. Refine your question first, then cast.'
+            }
+          >
+            <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
+              <GlassCard
+                level="card"
+                className="rounded-[1.75rem] border border-white/[0.06] bg-white/[0.02] p-6 sm:p-8"
+              >
+                <div className="mb-5 text-[0.68rem] uppercase tracking-[0.28em] text-[rgba(212,175,119,0.62)]">
+                  {language === 'zh' ? '三个原则' : 'Three principles'}
+                </div>
+                <ol className="space-y-5 text-sm leading-7 text-white/70">
+                  <li className="flex gap-4">
+                    <span className="mt-0.5 inline-flex h-7 w-7 flex-none items-center justify-center rounded-full border border-[rgba(212,175,119,0.32)] text-[0.7rem] font-semibold tracking-[0.18em] text-[rgba(212,175,119,0.85)]">
+                      01
+                    </span>
+                    <div>
+                      <div className="mb-1 font-medium text-white/90">
+                        {language === 'zh' ? '一次只问一件事' : 'Ask one thing at a time'}
+                      </div>
+                      <p className="text-white/55">
+                        {language === 'zh'
+                          ? '把多个问题拆开，一卦回应一个判断，象数才会清晰。'
+                          : 'One question per cast keeps the lines and judgement readable.'}
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex gap-4">
+                    <span className="mt-0.5 inline-flex h-7 w-7 flex-none items-center justify-center rounded-full border border-[rgba(212,175,119,0.32)] text-[0.7rem] font-semibold tracking-[0.18em] text-[rgba(212,175,119,0.85)]">
+                      02
+                    </span>
+                    <div>
+                      <div className="mb-1 font-medium text-white/90">
+                        {language === 'zh' ? '问判断，不问命运' : 'Ask for judgement, not destiny'}
+                      </div>
+                      <p className="text-white/55">
+                        {language === 'zh'
+                          ? '与其问「会不会成」，不如问「现在该往哪个方向走、要注意什么」。'
+                          : 'Instead of "will it happen", ask "which direction is wiser now, and what should I watch for".'}
+                      </p>
+                    </div>
+                  </li>
+                  <li className="flex gap-4">
+                    <span className="mt-0.5 inline-flex h-7 w-7 flex-none items-center justify-center rounded-full border border-[rgba(212,175,119,0.32)] text-[0.7rem] font-semibold tracking-[0.18em] text-[rgba(212,175,119,0.85)]">
+                      03
+                    </span>
+                    <div>
+                      <div className="mb-1 font-medium text-white/90">
+                        {language === 'zh' ? '把场景说具体' : 'Anchor in a concrete situation'}
+                      </div>
+                      <p className="text-white/55">
+                        {language === 'zh'
+                          ? '说出时间、当事人、可选项，卦辞才能落到你这件事上。'
+                          : 'Name the timeframe, the people, and the options — so the judgement can land on your situation.'}
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </GlassCard>
+
+              <GlassCard
+                level="strong"
+                className="rounded-[1.75rem] border border-white/[0.08] bg-black/25 p-6 sm:p-8"
+              >
+                <div className="mb-5 text-[0.68rem] uppercase tracking-[0.28em] text-[rgba(212,175,119,0.62)]">
+                  {language === 'zh' ? '可借鉴的提问' : 'Questions worth casting'}
+                </div>
+                <div className="space-y-4 text-sm leading-7 text-white/72">
+                  <div className="rounded-2xl border border-white/[0.06] bg-white/[0.025] px-5 py-4">
+                    {language === 'zh'
+                      ? '“接下来三个月，我在 A 方案与 B 方案之间应该如何取舍？”'
+                      : '“Over the next three months, should I lean toward plan A or plan B?”'}
+                  </div>
+                  <div className="rounded-2xl border border-white/[0.06] bg-white/[0.025] px-5 py-4">
+                    {language === 'zh'
+                      ? '“这次合作启动之后，我最该提防的关键点是什么？”'
+                      : '“Once this partnership begins, what should I watch most carefully?”'}
+                  </div>
+                  <div className="rounded-2xl border border-white/[0.06] bg-white/[0.025] px-5 py-4">
+                    {language === 'zh'
+                      ? '“眼下的局面，主动推进与按兵不动，哪一种更稳妥？”'
+                      : '“In the current situation, is it wiser to act now or hold steady?”'}
+                  </div>
+                </div>
+
+                <div className="mt-6 rounded-2xl border border-[rgba(212,175,119,0.18)] bg-[rgba(212,175,119,0.04)] px-5 py-4 text-xs leading-6 text-white/55">
+                  <span className="mr-2 font-semibold uppercase tracking-[0.2em] text-[rgba(212,175,119,0.78)]">
+                    {language === 'zh' ? '尽量避免' : 'Avoid'}
+                  </span>
+                  {language === 'zh'
+                    ? '“我会发财吗？”——没有时间、没有场景、也没有可选项，卦象无法回答。'
+                    : '“Will I get rich?” — no timeframe, no situation, no options, so the hexagram has nothing to weigh.'}
+                </div>
+              </GlassCard>
+            </div>
+          </LandingSection>
+
           <ScrollNarrativeSection
             accentColor="#7c3aed"
             goldColor="#D4AF37"
@@ -717,13 +825,13 @@ export default function YiJingPage() {
                 className="rounded-[1.75rem] border border-white/[0.06] bg-white/[0.02] p-6 sm:p-8"
               >
                 <div className="mb-4 text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
-                  What remains the same
+                  Inside every reading
                 </div>
                 <div className="space-y-3 text-sm leading-7 text-white/65">
-                  <p>Coin casting and direct hexagram lookup</p>
-                  <p>AI interpretation from the same API route</p>
-                  <p>History save, share panel, and PDF export</p>
-                  <p>Existing route path and request contract</p>
+                  <p>Coin casting or direct hexagram lookup</p>
+                  <p>AI interpretation grounded in your specific lines</p>
+                  <p>History save, share card, and PDF export</p>
+                  <p>Bilingual judgement and commentary (zh / en)</p>
                 </div>
               </GlassCard>
 
@@ -732,10 +840,10 @@ export default function YiJingPage() {
                 className="rounded-[1.75rem] border border-white/[0.08] bg-black/25 p-6 sm:p-8"
               >
                 <div className="mb-4 text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
-                  How the redesign helps
+                  Why pacing matters
                 </div>
                 <p className="mb-6 text-sm leading-7 text-white/60">
-                  The improvement here is pacing: the page now behaves like a premium oracle entry, not a utility panel with mystical content attached later.
+                  The page is built to feel like a premium oracle, not a utility — the question lands first, the symbol unfolds next, and the words come last.
                 </p>
                 <button
                   type="button"
@@ -754,7 +862,7 @@ export default function YiJingPage() {
         <LandingSection
           eyebrow="Reference atlas"
           title="All sixty-four hexagrams remain one click away."
-          subtitle="Search mode still behaves like a compact atlas. The redesign only makes the grid calmer and more legible."
+          subtitle="When you already know the hexagram, jump straight to it. The atlas keeps the grid calm and the type legible."
         >
           <GlassCard
             level="card"
@@ -785,7 +893,7 @@ export default function YiJingPage() {
       )}
 
       <div className="pb-12 text-center text-sm text-white/30">
-        <p>TianJi Global · Yi Jing oracle redesign template</p>
+        <p>TianJi Global · I Ching oracle</p>
       </div>
     </div>
   );
