@@ -4,430 +4,207 @@ import { NextRequest, NextResponse } from 'next/server';
 export const runtime = 'edge';
 
 interface CardRequest {
-  serviceType: string;
-  resultData: Record<string, unknown>;
-  cardFormat: 'wechat' | 'twitter' | 'instagram';
+  serviceType?: string;
+  resultData?: Record<string, unknown>;
+  cardFormat?: 'wechat' | 'twitter' | 'instagram';
 }
 
 const SERVICE_COLORS: Record<string, { primary: string; secondary: string; bg: string }> = {
-  bazi: { primary: '#F59E0B', secondary: '#EF4444', bg: '#1C1917' },
-  tarot: { primary: '#EC4899', secondary: '#F59E0B', bg: '#0F172A' },
-  yijing: { primary: '#10B981', secondary: '#F59E0B', bg: '#064E3B' },
-  ziwei: { primary: '#8B5CF6', secondary: '#F59E0B', bg: '#0F0F23' },
-  western: { primary: '#3B82F6', secondary: '#F59E0B', bg: '#0C1A2E' },
-  tianji: { primary: '#7C3AED', secondary: '#F59E0B', bg: '#0F0F23' },
+  bazi: { primary: '#D4AF37', secondary: '#EF4444', bg: '#120B05' },
+  tarot: { primary: '#D8B4FE', secondary: '#D4AF37', bg: '#090813' },
+  yijing: { primary: '#A7F3D0', secondary: '#D4AF37', bg: '#06130D' },
+  ziwei: { primary: '#A78BFA', secondary: '#D4AF37', bg: '#080816' },
+  western: { primary: '#93C5FD', secondary: '#D4AF37', bg: '#06101F' },
+  fortune: { primary: '#FDE68A', secondary: '#A78BFA', bg: '#090711' },
+  relationship: { primary: '#F0ABFC', secondary: '#D4AF37', bg: '#130714' },
+  tianji: { primary: '#A78BFA', secondary: '#D4AF37', bg: '#080816' },
 };
 
 const SERVICE_NAMES: Record<string, { zh: string; en: string }> = {
-  bazi: { zh: '八字命理', en: 'Ba Zi Fortune' },
-  tarot: { zh: '塔罗牌占卜', en: 'Tarot Reading' },
+  bazi: { zh: '八字命理', en: 'BaZi Destiny' },
+  tarot: { zh: '塔罗牌阵', en: 'Tarot Reading' },
   yijing: { zh: '易经占卜', en: 'Yi Jing Oracle' },
   ziwei: { zh: '紫微斗数', en: 'Zi Wei Destiny' },
   western: { zh: '西方占星', en: 'Western Astrology' },
+  fortune: { zh: '人生曲线', en: 'Fortune Timeline' },
+  relationship: { zh: '关系合盘', en: 'Relationship Pattern' },
   tianji: { zh: '天机全球', en: 'TianJi Global' },
 };
 
+function pickString(value: unknown) {
+  return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+}
+
 function getSummary(resultData: Record<string, unknown>, serviceType: string): string {
+  if (pickString(resultData.headline)) return pickString(resultData.headline) as string;
+  if (pickString(resultData.summary)) return pickString(resultData.summary) as string;
+
   switch (serviceType) {
     case 'bazi': {
       const chart = resultData.chart as Record<string, Record<string, string>> | undefined;
       if (chart?.day) {
-        return `日主 ${chart.day.heavenlyStem || ''} · ${chart.dayMasterElement || ''}行`;
+        const stem = chart.day.heavenlyStem || 'Day Master';
+        const element = chart.dayMasterElement || 'Elemental pattern';
+        return `日主 ${stem} • ${element}`;
       }
-      return '八字命理分析';
+      return '八字结构已生成';
     }
     case 'tarot': {
-      const cards = resultData.drawnCards as Array<{ card: { name?: string; nameChinese?: string } }> | undefined;
-      if (cards && cards.length > 0) {
-        return cards.map(c => c.card.nameChinese || c.card.name || '').join(' · ');
+      const cards = resultData.drawnCards as Array<{ card?: { name?: string; nameChinese?: string } }> | undefined;
+      if (cards?.length) {
+        return cards.map((item) => item.card?.nameChinese || item.card?.name).filter(Boolean).join(' • ');
       }
-      return '塔罗牌解读';
+      return '塔罗牌阵已展开';
     }
     case 'yijing': {
-      const hex = resultData.hexagram as { name?: string; pinyin?: string } | undefined;
-      if (hex) {
-        return `${hex.name}卦 · ${hex.pinyin || ''}`;
+      const hexagram = resultData.hexagram as { name?: string; pinyin?: string } | undefined;
+      if (hexagram?.name) {
+        return `${hexagram.name} 卦 • ${hexagram.pinyin || 'Yi Jing'}`;
       }
-      return '易经卦象解读';
+      return '易经卦象已生成';
     }
     default:
-      return 'AI Fortune Reading';
+      return 'AI destiny reading generated';
   }
 }
 
-function renderWeChatCard(serviceType: string, resultData: Record<string, unknown>, c: { primary: string; secondary: string; bg: string }, nameInfo: { zh: string; en: string }, summary: string) {
-  return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: `linear-gradient(135deg, ${c.bg} 0%, #1a1a2e 100%)`,
-        fontFamily: 'system-ui, sans-serif',
-      }}
-    >
-      {/* Stars decoration */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: 'flex',
-          flexWrap: 'wrap',
-          opacity: 0.2,
-        }}
-      >
-        {Array.from({ length: 20 }).map((_, i) => (
-          <div
-            key={i}
-            style={{
-              width: 3,
-              height: 3,
-              borderRadius: '50%',
-              background: '#fff',
-              position: 'absolute',
-              left: `${(i * 37) % 100}%`,
-              top: `${(i * 23) % 100}%`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Service name */}
-      <div
-        style={{
-          fontSize: 56,
-          fontWeight: 900,
-          color: c.primary,
-          letterSpacing: '-0.03em',
-          marginBottom: 12,
-          textShadow: `0 0 40px ${c.primary}40`,
-        }}
-      >
-        {nameInfo.zh}
-      </div>
-
-      {/* English name */}
-      <div
-        style={{
-          fontSize: 24,
-          color: '#94A3B8',
-          fontWeight: 400,
-          marginBottom: 32,
-        }}
-      >
-        {nameInfo.en}
-      </div>
-
-      {/* Summary badge */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 12,
-          padding: '14px 28px',
-          background: `${c.primary}20`,
-          border: `1px solid ${c.primary}50`,
-          borderRadius: 999,
-          marginBottom: 40,
-        }}
-      >
-        <div
-          style={{
-            width: 10,
-            height: 10,
-            borderRadius: '50%',
-            background: c.primary,
-          }}
-        />
-        <span style={{ color: '#E2E8F0', fontSize: 20, fontWeight: 500 }}>
-          {summary}
-        </span>
-      </div>
-
-      {/* Decorative line */}
-      <div
-        style={{
-          width: 100,
-          height: 3,
-          background: `linear-gradient(90deg, ${c.primary}, ${c.secondary})`,
-          borderRadius: 2,
-          marginBottom: 32,
-        }}
-      />
-
-      {/* Footer */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 36,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          color: '#64748B',
-          fontSize: 16,
-        }}
-      >
-        <span>tianji.global</span>
-        <span style={{ color: c.primary }}>·</span>
-        <span>Powered by AI</span>
-      </div>
-    </div>
-  );
+function sizeFor(format: CardRequest['cardFormat']) {
+  if (format === 'instagram') return { width: 1080, height: 1920 };
+  if (format === 'twitter') return { width: 1200, height: 628 };
+  return { width: 1200, height: 630 };
 }
 
-function renderTwitterCard(serviceType: string, resultData: Record<string, unknown>, c: { primary: string; secondary: string; bg: string }, nameInfo: { zh: string; en: string }, summary: string) {
+function renderCard(
+  c: { primary: string; secondary: string; bg: string },
+  nameInfo: { zh: string; en: string },
+  summary: string,
+  format: CardRequest['cardFormat']
+) {
+  const isTall = format === 'instagram';
+  const headlineSize = isTall ? 84 : 58;
+  const summarySize = isTall ? 30 : 22;
+
   return (
     <div
       style={{
         width: '100%',
         height: '100%',
+        position: 'relative',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: `linear-gradient(135deg, ${c.bg} 0%, #1a1a2e 100%)`,
+        overflow: 'hidden',
+        background: `radial-gradient(circle at 50% 12%, ${c.primary}33 0%, transparent 36%), linear-gradient(135deg, ${c.bg} 0%, #050508 100%)`,
+        color: '#F8FAFC',
         fontFamily: 'system-ui, sans-serif',
+        padding: isTall ? '96px 72px' : '64px',
       }}
     >
-      {/* Stars */}
       <div
         style={{
           position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
+          inset: 0,
           display: 'flex',
-          flexWrap: 'wrap',
-          opacity: 0.2,
+          background:
+            'radial-gradient(circle at 18% 22%, rgba(255,255,255,0.16), transparent 18%), radial-gradient(circle at 82% 78%, rgba(212,175,55,0.14), transparent 24%)',
+          opacity: 0.9,
         }}
-      >
-        {Array.from({ length: 20 }).map((_, i) => (
-          <div
-            key={i}
-            style={{
-              width: 3,
-              height: 3,
-              borderRadius: '50%',
-              background: '#fff',
-              position: 'absolute',
-              left: `${(i * 37) % 100}%`,
-              top: `${(i * 23) % 100}%`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Service name */}
+      />
       <div
         style={{
-          fontSize: 60,
-          fontWeight: 900,
-          color: c.primary,
-          letterSpacing: '-0.03em',
-          marginBottom: 12,
-          textShadow: `0 0 40px ${c.primary}40`,
+          position: 'absolute',
+          width: isTall ? 680 : 520,
+          height: isTall ? 680 : 520,
+          border: `2px solid ${c.primary}55`,
+          borderRadius: '50%',
+          boxShadow: `0 0 90px ${c.primary}26, inset 0 0 60px rgba(255,255,255,0.06)`,
         }}
-      >
-        {nameInfo.zh}
-      </div>
-
+      />
       <div
         style={{
-          fontSize: 26,
-          color: '#94A3B8',
-          fontWeight: 400,
-          marginBottom: 36,
-        }}
-      >
-        {nameInfo.en}
-      </div>
-
-      {/* Summary */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 12,
-          padding: '14px 28px',
-          background: `${c.primary}20`,
-          border: `1px solid ${c.primary}50`,
-          borderRadius: 999,
-          marginBottom: 44,
-        }}
-      >
-        <div
-          style={{
-            width: 10,
-            height: 10,
-            borderRadius: '50%',
-            background: c.primary,
-          }}
-        />
-        <span style={{ color: '#E2E8F0', fontSize: 22, fontWeight: 500 }}>
-          {summary}
-        </span>
-      </div>
-
-      {/* Decorative line */}
-      <div
-        style={{
-          width: 100,
-          height: 3,
-          background: `linear-gradient(90deg, ${c.primary}, ${c.secondary})`,
-          borderRadius: 2,
-          marginBottom: 36,
+          position: 'absolute',
+          width: isTall ? 500 : 390,
+          height: isTall ? 500 : 390,
+          border: `1px solid ${c.secondary}55`,
+          borderRadius: '50%',
+          transform: 'rotate(-18deg)',
         }}
       />
 
-      {/* Footer */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 36,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          color: '#64748B',
-          fontSize: 16,
-        }}
-      >
-        <span>tianji.global</span>
-        <span style={{ color: c.primary }}>·</span>
-        <span>Powered by AI</span>
-      </div>
-    </div>
-  );
-}
-
-function renderInstagramCard(serviceType: string, resultData: Record<string, unknown>, c: { primary: string; secondary: string; bg: string }, nameInfo: { zh: string; en: string }, summary: string) {
-  return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: `linear-gradient(180deg, ${c.bg} 0%, #1a1a2e 60%, #0a0a15 100%)`,
-        fontFamily: 'system-ui, sans-serif',
-        padding: '80px 60px',
-      }}
-    >
-      {/* Stars */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: 'flex',
-          flexWrap: 'wrap',
-          opacity: 0.2,
-        }}
-      >
-        {Array.from({ length: 30 }).map((_, i) => (
-          <div
-            key={i}
-            style={{
-              width: 3,
-              height: 3,
-              borderRadius: '50%',
-              background: '#fff',
-              position: 'absolute',
-              left: `${(i * 37) % 100}%`,
-              top: `${(i * 23) % 100}%`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Service name */}
-      <div
-        style={{
-          fontSize: 80,
-          fontWeight: 900,
-          color: c.primary,
-          letterSpacing: '-0.03em',
-          marginBottom: 16,
-          textShadow: `0 0 60px ${c.primary}50`,
-          textAlign: 'center',
-        }}
-      >
-        {nameInfo.zh}
-      </div>
-
-      <div
-        style={{
-          fontSize: 32,
-          color: '#94A3B8',
-          fontWeight: 400,
-          marginBottom: 60,
-        }}
-      >
-        {nameInfo.en}
-      </div>
-
-      {/* Summary badge */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 16,
-          padding: '20px 40px',
-          background: `${c.primary}20`,
-          border: `1px solid ${c.primary}50`,
-          borderRadius: 999,
-          marginBottom: 60,
-        }}
-      >
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1 }}>
         <div
           style={{
-            width: 14,
-            height: 14,
-            borderRadius: '50%',
-            background: c.primary,
+            padding: '10px 22px',
+            borderRadius: 999,
+            border: '1px solid rgba(255,255,255,0.18)',
+            background: 'rgba(255,255,255,0.06)',
+            color: 'rgba(255,255,255,0.72)',
+            fontSize: isTall ? 22 : 14,
+            letterSpacing: '0.28em',
+            textTransform: 'uppercase',
           }}
-        />
-        <span style={{ color: '#E2E8F0', fontSize: 28, fontWeight: 500 }}>
+        >
+          TianJi Global
+        </div>
+
+        <div
+          style={{
+            marginTop: isTall ? 56 : 34,
+            fontSize: headlineSize,
+            fontWeight: 800,
+            letterSpacing: '-0.04em',
+            color: c.primary,
+            textShadow: `0 0 50px ${c.primary}55`,
+            textAlign: 'center',
+          }}
+        >
+          {nameInfo.zh}
+        </div>
+
+        <div
+          style={{
+            marginTop: 12,
+            fontSize: isTall ? 32 : 24,
+            color: 'rgba(255,255,255,0.72)',
+          }}
+        >
+          {nameInfo.en}
+        </div>
+
+        <div
+          style={{
+            marginTop: isTall ? 58 : 36,
+            maxWidth: isTall ? 820 : 880,
+            padding: isTall ? '26px 42px' : '18px 34px',
+            borderRadius: 999,
+            border: `1px solid ${c.primary}66`,
+            background: 'rgba(5,5,8,0.58)',
+            color: '#FFFFFF',
+            fontSize: summarySize,
+            fontWeight: 600,
+            textAlign: 'center',
+            lineHeight: 1.35,
+          }}
+        >
           {summary}
-        </span>
+        </div>
       </div>
 
-      {/* Decorative line */}
-      <div
-        style={{
-          width: 120,
-          height: 4,
-          background: `linear-gradient(90deg, ${c.primary}, ${c.secondary})`,
-          borderRadius: 2,
-          marginBottom: 60,
-        }}
-      />
-
-      {/* Footer */}
       <div
         style={{
           position: 'absolute',
-          bottom: 80,
+          bottom: isTall ? 82 : 36,
           display: 'flex',
           alignItems: 'center',
           gap: 12,
-          color: '#64748B',
-          fontSize: 22,
+          color: 'rgba(255,255,255,0.48)',
+          fontSize: isTall ? 22 : 16,
         }}
       >
         <span>tianji.global</span>
-        <span style={{ color: c.primary }}>·</span>
-        <span>Powered by AI</span>
+        <span style={{ color: c.secondary }}>•</span>
+        <span>AI destiny reading</span>
       </div>
     </div>
   );
@@ -435,46 +212,40 @@ function renderInstagramCard(serviceType: string, resultData: Record<string, unk
 
 export async function POST(req: NextRequest) {
   try {
-    const body: CardRequest = await req.json();
-    const { serviceType, resultData, cardFormat } = body;
+    const body = (await req.json()) as CardRequest;
+    const serviceType = body.serviceType || 'tianji';
+    const resultData = body.resultData || {};
+    const cardFormat = body.cardFormat || 'wechat';
 
-    const c = SERVICE_COLORS[serviceType] || SERVICE_COLORS.tianji;
+    const colors = SERVICE_COLORS[serviceType] || SERVICE_COLORS.tianji;
     const nameInfo = SERVICE_NAMES[serviceType] || SERVICE_NAMES.tianji;
     const summary = getSummary(resultData, serviceType);
+    const { width, height } = sizeFor(cardFormat);
 
-    let width = 1200;
-    let height = 630;
-
-    if (cardFormat === 'instagram') {
-      width = 1080;
-      height = 1920;
-    } else if (cardFormat === 'twitter') {
-      width = 1200;
-      height = 628;
-    }
-
-    const element = cardFormat === 'instagram'
-      ? renderInstagramCard(serviceType, resultData, c, nameInfo, summary)
-      : cardFormat === 'twitter'
-        ? renderTwitterCard(serviceType, resultData, c, nameInfo, summary)
-        : renderWeChatCard(serviceType, resultData, c, nameInfo, summary);
-
-    const imageResponse = new ImageResponse(element, {
+    return new ImageResponse(renderCard(colors, nameInfo, summary, cardFormat), {
       width,
       height,
-    });
-
-    // Return the image as PNG
-    const buffer = await imageResponse.blob();
-    const base64 = await buffer.arrayBuffer().then(buf => Buffer.from(buf).toString('base64'));
-
-    return new NextResponse(`data:image/png;base64,${base64}`, {
-      headers: {
-        'Content-Type': 'text/plain',
-      },
     });
   } catch (err) {
     console.error('Share card error:', err);
     return NextResponse.json({ error: 'Failed to generate share card' }, { status: 500 });
   }
+}
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const serviceType = searchParams.get('type') || 'tianji';
+  const title = searchParams.get('title') || 'TianJi Global';
+  const nameInfo = SERVICE_NAMES[serviceType] || SERVICE_NAMES.tianji;
+
+  return NextResponse.json({
+    success: true,
+    og: {
+      title: `${title} | TianJi Global`,
+      description: `${nameInfo.en} share card generated by TianJi Global`,
+      image: `/api/share/card?type=${encodeURIComponent(serviceType)}&title=${encodeURIComponent(title)}`,
+      width: 1200,
+      height: 630,
+    },
+  });
 }

@@ -2,6 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+.tj-smart-title {
+  display: block;
+  max-width: min(100%, var(--tj-title-max-ch, 22ch));
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  line-break: strict;
+  hyphens: none;
+  font-family: var(--font-instrument-serif), var(--font-barlow);
+  font-synthesis-weight: none;
+  font-synthesis-style: none;
+}
+
+.tj-smart-title-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tj-smart-title-zh,
+.tj-smart-title-mixed {
+  letter-spacing: 0.015em;
+}
+
+.tj-smart-title-en {
+  letter-spacing: -0.025em;
+}
+
+.tj-smart-title-line {
+  display: block;
+  white-space: nowrap;
+}
+
+.tj-smart-title-token-latin {
+  font-family: inherit;
+  letter-spacing: -0.015em;
+}
+
+@media (max-width: 640px) {
+  .tj-smart-title {
+    max-width: min(100%, calc(var(--tj-title-max-ch, 22ch) * 0.86));
+  }
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ══════════════════════════════════════════════════════════════
@@ -9,10 +52,12 @@
    ══════════════════════════════════════════════════════════════ */
 
 :root {
-  --font-cinzel: "Cinzel", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-  --font-noto-serif-sc: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
-  --font-instrument-serif: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-  --font-barlow: "Barlow", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-tianji-sans: "Segoe UI", "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  --font-tianji-display: var(--font-tianji-sans);
+  --font-tianji-body: var(--font-tianji-sans);
+  --font-cinzel: var(--font-tianji-display);
+  --font-instrument-serif: var(--font-tianji-display);
+  --font-barlow: var(--font-tianji-body);
 
   /*
    * Core palette — synced with src/design-system/design-tokens.ts
@@ -39,6 +84,17 @@
   --wobble-intensity: 0.6;
   --particle-density: 25;
   --breathing-speed: 0.0003;
+}
+
+html,
+body {
+  font-family: var(--font-barlow);
+  overflow-x: hidden;
+}
+
+:lang(zh),
+[data-lang="zh"] {
+  font-family: inherit;
 }
 
 /* ── Global resets for mystic pages ── */
@@ -669,4 +725,101 @@
   border-top-color: #d4af37;
   border-radius: 50%;
   animation: heroSpin 1s linear infinite;
+}
+
+/* Landing redesign surface helpers */
+.tj-luxury-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(212,175,55,0.16), transparent 28%),
+    radial-gradient(circle at 80% 10%, rgba(167,139,250,0.14), transparent 30%),
+    linear-gradient(120deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: auto, auto, 26px 26px;
+}
+
+.tj-video-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(124,58,237,0.16), transparent 44%),
+    linear-gradient(180deg, rgba(5,5,8,0.18), rgba(5,5,8,0.9));
+}
+
+.tj-home-hero img,
+.tj-home-hero video {
+  object-position: 68% center;
+  filter: brightness(0.72) saturate(0.9) contrast(1.08);
+}
+
+.tj-home-hero .tj-smart-title {
+  max-width: min(100%, 10.8ch);
+}
+
+.tj-home-hero .tj-smart-title-zh {
+  font-family: var(--font-tianji-display);
+  letter-spacing: -0.075em;
+}
+
+.tj-home-hero a[href*="destiny/scan"] {
+  box-shadow:
+    0 18px 60px rgba(0, 0, 0, 0.42),
+    0 0 36px rgba(245, 197, 66, 0.16);
+}
+
+@media (max-width: 640px) {
+  .tj-home-hero img,
+  .tj-home-hero video {
+    object-position: 58% center;
+    filter: brightness(0.62) saturate(0.9) contrast(1.08);
+  }
+
+  .tj-home-hero .tj-smart-title {
+    max-width: min(100%, 9.2ch);
+  }
+}
+
+/* ─── Global focus-visible default ─────────────────────────────────────────
+ * Keyboard users need a clear, brand-consistent focus indicator on the
+ * dark cosmic backdrop. Mouse users still see no ring (because
+ * :focus-visible only triggers for keyboard / a11y tools).
+ *
+ * Components that opt in to their own focus styling should add
+ * `tj-focus-managed` to suppress this default.
+ */
+:where(a, button, [role='button'], input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid rgba(212, 175, 119, 0.85);
+  outline-offset: 3px;
+  border-radius: 6px;
+  transition: outline-color 120ms ease-out;
+}
+
+.tj-focus-managed:focus-visible {
+  outline: none;
+}
+
+/* Skip link — visible only when focused via Tab */
+.tj-skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.85);
+  color: rgba(212, 175, 119, 0.95);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transform: translateY(-200%);
+  transition: transform 160ms ease-out;
+}
+.tj-skip-link:focus,
+.tj-skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid rgba(212, 175, 119, 0.95);
+  outline-offset: 3px;
 }

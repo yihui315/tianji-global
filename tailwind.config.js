@@ -14,6 +14,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['var(--font-instrument-serif)', 'serif'],
+        sans: ['var(--font-barlow)', 'sans-serif'],
+      },
       colors: {
         tianji: {
           /* Brand accents — synced from design-tokens.ts */

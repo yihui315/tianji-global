@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { LanguageProvider } from '@/hooks/useLanguage';
+import { JsonLd, SITE } from '@/components/seo/JsonLd';
 
 /**
  * Premium Homepage Metadata — TianJi Global
@@ -50,6 +51,44 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${SITE.url}#organization`,
+  name: SITE.name,
+  alternateName: SITE.altName,
+  url: SITE.url,
+  logo: SITE.logo,
+  description: SITE.description,
+  sameAs: SITE.sameAs,
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      email: SITE.contactEmail,
+      contactType: 'customer support',
+      availableLanguage: ['zh', 'en'],
+    },
+    {
+      '@type': 'ContactPoint',
+      email: SITE.privacyEmail,
+      contactType: 'privacy',
+      availableLanguage: ['zh', 'en'],
+    },
+  ],
+};
+
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${SITE.url}#website`,
+  url: SITE.url,
+  name: SITE.name,
+  alternateName: SITE.altName,
+  description: SITE.description,
+  inLanguage: ['zh', 'en'],
+  publisher: { '@id': `${SITE.url}#organization` },
+};
+
 export default function MainLayout({
   children,
 }: {
@@ -57,7 +96,12 @@ export default function MainLayout({
 }) {
   return (
     <div className="bg-[#0a0a0a] overflow-x-hidden min-h-screen">
+      <a href="#main-content" className="tj-skip-link">
+        Skip to main content · 跳至主内容
+      </a>
       <div className="star-field" aria-hidden="true" />
+      <JsonLd data={organizationLd} />
+      <JsonLd data={websiteLd} />
       <LanguageProvider>{children}</LanguageProvider>
     </div>
   );

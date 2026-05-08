@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Image from 'next/image';
 import { colors, variants, scrollReveal } from '@/design-system';
 import { sectionHeadings, ctaLabels, disclaimers } from '@/design-system/content-tokens';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -49,10 +50,12 @@ export function FinalCTA({
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {/* MiniMax AI-generated cosmic interface background */}
-        <img
+        <Image
           src="/assets/hero/hero-cosmic-interface.png"
           alt=""
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-40"
           aria-hidden="true"
         />
         <div

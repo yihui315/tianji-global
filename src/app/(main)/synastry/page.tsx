@@ -1,12 +1,45 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import PDFDownloadButton from '@/components/PDFDownloadButton';
-import AnimatedShareButton from '@/components/AnimatedShareButton';
+/**
+ * Synastry — TianJi Global
+ *
+ * Rewritten under the tianji-cinematic design skill (.claude/skills/tianji-cinematic/SKILL.md).
+ * Recipe: §7.1 reading-input page (two-chart input variant, single-result + chart wheel).
+ *
+ * What changed vs. the previous version:
+ *   - Removed Tailwind violet/purple/pink rainbow gradient title — Instrument Serif italic via BackgroundVideoHero.
+ *   - Removed `bg-clip-text text-transparent` — title now lives in BackgroundVideoHero.
+ *   - Replaced rainbow ASPECT_COLORS map (gold/green/red/blue/pink) with a 2-bucket palette:
+ *       supportive aspects → goldLight  ·  challenging aspects → riskRed (chart-data exception only).
+ *   - Replaced blue-vs-red Person A / Person B color pair with goldLight (outer) and purpleLight (inner).
+ *   - Replaced the homemade ShareButton with SharePanel.
+ *   - All copy, hero, trust strip wired through `moduleLandingCopy.synastry`.
+ *   - Cards: every panel wrapped in <GlassCard>.
+ *   - Added saveReading() on success.
+ *
+ * API contract preserved — POST /api/synastry with
+ *   { person1, person2, enhanceWithAI, language, type: 'overlay' | 'composite' | 'davison' }.
+ */
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+import { useState, useCallback, useEffect, useRef } from 'react';
+import SharePanel from '@/components/SharePanel';
+import PDFDownloadButton from '@/components/PDFDownloadButton';
+import {
+  BackgroundVideoHero,
+  LandingSection,
+  ModuleInputShell,
+  PageChrome,
+  ResultScaffold,
+  ScrollNarrativeSection,
+  TrustStrip,
+} from '@/components/landing';
+import { GlassCard, LanguageSwitch } from '@/components/ui';
+import { colors } from '@/design-system';
+import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { moduleLandingCopy } from '@/lib/language-routing';
+import { saveReading } from '@/lib/save-reading';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 type SynastryType = 'overlay' | 'composite' | 'davison';
 
@@ -74,39 +107,59 @@ interface SynastryResponse {
   disclaimer?: string;
 }
 
-// ─── Zodiac Data (same as engine) ─────────────────────────────────────────
+// ─── Tokens ───────────────────────────────────────────────────────────────────
+
+// Aspect bucketing — supportive aspects share one accent, challenging share another.
+// This honors SKILL.md §1.1 palette law (functional reds only inside data charts/result deltas).
+const SUPPORTIVE_ASPECTS = new Set<string>(['Conjunction', 'Sextile', 'Trine']);
+
+function aspectColor(type: string): string {
+  return SUPPORTIVE_ASPECTS.has(type) ? colors.goldLight : colors.riskRed;
+}
+
+// Person A → outer ring (gold) · Person B → inner ring (purple)
+const PERSON_A_TONE = colors.goldLight;
+const PERSON_B_TONE = colors.purpleLight;
 
 const ZODIAC_SIGNS = [
-  { name: 'Aries',     nameZh: '白羊', symbol: '♈' },
-  { name: 'Taurus',    nameZh: '金牛', symbol: '♉' },
-  { name: 'Gemini',    nameZh: '双子', symbol: '♊' },
-  { name: 'Cancer',    nameZh: '巨蟹', symbol: '♋' },
-  { name: 'Leo',       nameZh: '狮子', symbol: '♌' },
-  { name: 'Virgo',     nameZh: '处女', symbol: '♍' },
-  { name: 'Libra',     nameZh: '天秤', symbol: '♎' },
-  { name: 'Scorpio',   nameZh: '天蝎', symbol: '♏' },
-  { name: 'Sagittarius',nameZh: '射手', symbol: '♐' },
-  { name: 'Capricorn', nameZh: '摩羯', symbol: '♑' },
-  { name: 'Aquarius',  nameZh: '水瓶', symbol: '♒' },
-  { name: 'Pisces',    nameZh: '双鱼', symbol: '♓' },
+  { name: 'Aries',       nameZh: '白羊', symbol: '♈' },
+  { name: 'Taurus',      nameZh: '金牛', symbol: '♉' },
+  { name: 'Gemini',      nameZh: '双子', symbol: '♊' },
+  { name: 'Cancer',      nameZh: '巨蟹', symbol: '♋' },
+  { name: 'Leo',         nameZh: '狮子', symbol: '♌' },
+  { name: 'Virgo',       nameZh: '处女', symbol: '♍' },
+  { name: 'Libra',       nameZh: '天秤', symbol: '♎' },
+  { name: 'Scorpio',     nameZh: '天蝎', symbol: '♏' },
+  { name: 'Sagittarius', nameZh: '射手', symbol: '♐' },
+  { name: 'Capricorn',   nameZh: '摩羯', symbol: '♑' },
+  { name: 'Aquarius',    nameZh: '水瓶', symbol: '♒' },
+  { name: 'Pisces',      nameZh: '双鱼', symbol: '♓' },
 ];
-
-const ASPECT_COLORS: Record<string, string> = {
-  Conjunction:  '#FFD700',
-  Sextile:      '#4CAF50',
-  Square:       '#F44336',
-  Trine:        '#2196F3',
-  Opposition:   '#E91E63',
-};
 
 const PLANET_SYMBOLS: Record<string, string> = {
   Sun: '☉', Moon: '☽', Mercury: '☿', Venus: '♀', Mars: '♂',
   Jupiter: '♃', Saturn: '♄', Uranus: '♅', Neptune: '♆', Pluto: '♇',
 };
 
-// ─── Animated Score Circle ───────────────────────────────────────────────────
+const ASPECT_LABELS_EN: Record<string, string> = {
+  Conjunction: 'Conjunction',
+  Sextile: 'Sextile',
+  Square: 'Square',
+  Trine: 'Trine',
+  Opposition: 'Opposition',
+};
 
-function ScoreCircle({ score }: { score: number }) {
+const ASPECT_LABELS_ZH: Record<string, string> = {
+  Conjunction: '合相',
+  Sextile: '六分相',
+  Square: '四分相',
+  Trine: '三分相',
+  Opposition: '对分相',
+};
+
+// ─── Score Dial — single-tone ring (chart-data exception) ────────────────────
+
+function ScoreDial({ score, language }: { score: number; language: 'zh' | 'en' }) {
   const [animated, setAnimated] = useState(0);
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
@@ -117,35 +170,58 @@ function ScoreCircle({ score }: { score: number }) {
     return () => clearTimeout(timer);
   }, [score]);
 
-  const color = score >= 70 ? '#22c55e' : score >= 50 ? '#f59e0b' : '#ef4444';
+  const ringColor =
+    score >= 70 ? colors.gold :
+    score >= 50 ? colors.purpleLight :
+    score >= 30 ? colors.goldLight :
+    colors.riskRed;
+
+  const label =
+    score >= 70 ? (language === 'zh' ? '高度和谐' : 'Highly harmonious') :
+    score >= 50 ? (language === 'zh' ? '中等和谐' : 'Moderately harmonious') :
+    (language === 'zh' ? '需要努力' : 'Requires effort');
 
   return (
-    <div className="relative w-44 h-44 mx-auto">
-      <svg className="w-full h-full transform -rotate-90" viewBox="0 0 160 160">
-        <circle cx="80" cy="80" r={radius} stroke="#334155" strokeWidth="12" fill="none" />
-        <circle
-          cx="80" cy="80" r={radius}
-          stroke={color} strokeWidth="12" fill="none"
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          className="transition-all duration-1000 ease-out"
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-4xl font-serif text-white/90">{animated}</span>
-        <span className="text-sm text-slate-400">/ 100</span>
+    <div className="flex flex-col items-center">
+      <div className="relative h-44 w-44">
+        <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r={radius} stroke="rgba(255,255,255,0.08)" strokeWidth="10" fill="none" />
+          <circle
+            cx="80" cy="80" r={radius}
+            stroke={ringColor} strokeWidth="10" fill="none"
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+            strokeLinecap="round"
+            className="transition-all duration-1000 ease-out"
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="font-serif text-5xl text-white/90">{animated}</span>
+          <span className="text-[10px] uppercase tracking-[0.28em] text-white/40">/ 100</span>
+        </div>
       </div>
+      <p
+        className="mt-4 font-serif text-lg italic"
+        style={{ color: ringColor }}
+      >
+        {label}
+      </p>
     </div>
   );
 }
 
-// ─── SVG Synastry Wheel ──────────────────────────────────────────────────────
+// ─── Synastry Wheel — repainted in palette ────────────────────────────────────
 
-function SynastryWheel({ chart1, chart2, aspects }: {
+function SynastryWheel({
+  chart1,
+  chart2,
+  aspects,
+  language,
+}: {
   chart1: ChartData;
   chart2: ChartData;
   aspects: Aspect[];
+  language: 'zh' | 'en';
 }) {
   const size = 480;
   const cx = size / 2;
@@ -160,40 +236,45 @@ function SynastryWheel({ chart1, chart2, aspects }: {
     return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
   }
 
-  const planetMap1 = new Map(chart1.planets.map(p => [p.name, p]));
-  const planetMap2 = new Map(chart2.planets.map(p => [p.name, p]));
+  const planetMap1 = new Map(chart1.planets.map((p) => [p.name, p]));
+  const planetMap2 = new Map(chart2.planets.map((p) => [p.name, p]));
 
-  // Aspect lines: planet1 (outer) to planet2 (inner)
-  const aspectLines: Array<{ x1: number; y1: number; x2: number; y2: number; color: string; strength: number }> = [];
+  const aspectLines: Array<{
+    x1: number; y1: number; x2: number; y2: number;
+    color: string; strength: number;
+  }> = [];
   for (const asp of aspects.slice(0, 20)) {
     const p1 = planetMap1.get(asp.planet1);
     const p2 = planetMap2.get(asp.planet2);
     if (!p1 || !p2) continue;
     const c1 = coordFor(outerR, p1.longitude);
     const c2 = coordFor(innerR, p2.longitude);
-    aspectLines.push({ x1: c1.x, y1: c1.y, x2: c2.x, y2: c2.y, color: ASPECT_COLORS[asp.type] ?? '#888', strength: asp.strength });
+    aspectLines.push({
+      x1: c1.x, y1: c1.y, x2: c2.x, y2: c2.y,
+      color: aspectColor(asp.type), strength: asp.strength,
+    });
   }
 
   return (
-    <svg viewBox={`0 0 ${size} ${size}`} className="w-full max-w-lg mx-auto">
+    <svg viewBox={`0 0 ${size} ${size}`} className="mx-auto w-full max-w-lg">
       {/* Outer ring (Person A) */}
-      <circle cx={cx} cy={cy} r={outerR} fill="none" stroke="#3b82f6" strokeWidth="2" opacity="0.4" />
+      <circle cx={cx} cy={cy} r={outerR} fill="none" stroke={PERSON_A_TONE} strokeWidth="1.5" opacity="0.45" />
       {/* Inner ring (Person B) */}
-      <circle cx={cx} cy={cy} r={innerR} fill="none" stroke="#ef4444" strokeWidth="2" opacity="0.4" />
+      <circle cx={cx} cy={cy} r={innerR} fill="none" stroke={PERSON_B_TONE} strokeWidth="1.5" opacity="0.45" />
       {/* Sign ring */}
-      <circle cx={cx} cy={cy} r={signR} fill="none" stroke="#475569" strokeWidth="1" strokeDasharray="4 4" opacity="0.5" />
+      <circle cx={cx} cy={cy} r={signR} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" strokeDasharray="3 5" opacity="0.5" />
 
       {/* Zodiac signs around outer ring */}
       {ZODIAC_SIGNS.map((sign, i) => {
         const angle = i * 30;
         const outer = coordFor(outerR + 14, angle);
-        const signName = sign.nameZh ?? sign.name;
+        const signName = language === 'zh' ? sign.nameZh : sign.name.slice(0, 3);
         return (
           <g key={sign.name}>
             <text
               x={outer.x} y={outer.y}
               textAnchor="middle" dominantBaseline="middle"
-              fontSize="14" fill="#94a3b8"
+              fontSize="14" fill="rgba(255,255,255,0.6)"
               transform={`rotate(${angle}, ${outer.x}, ${outer.y})`}
             >
               {sign.symbol}
@@ -201,7 +282,7 @@ function SynastryWheel({ chart1, chart2, aspects }: {
             <text
               x={outer.x} y={outer.y + 14}
               textAnchor="middle" dominantBaseline="middle"
-              fontSize="8" fill="#64748b"
+              fontSize="8" fill="rgba(255,255,255,0.35)"
               transform={`rotate(${angle}, ${outer.x}, ${outer.y + 14})`}
             >
               {signName}
@@ -217,20 +298,20 @@ function SynastryWheel({ chart1, chart2, aspects }: {
           x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2}
           stroke={line.color}
           strokeWidth={1 + (line.strength / 100) * 2}
-          strokeOpacity={0.4 + (line.strength / 100) * 0.5}
+          strokeOpacity={0.35 + (line.strength / 100) * 0.45}
         />
       ))}
 
-      {/* Person A planets (outer ring) */}
-      {chart1.planets.map(p => {
+      {/* Person A planets (outer ring, gold) */}
+      {chart1.planets.map((p) => {
         const pos = coordFor(outerR, p.longitude);
         return (
           <g key={`p1-${p.name}`}>
-            <circle cx={pos.x} cy={pos.y} r={planetDotR + 1} fill="#3b82f6" />
-            <circle cx={pos.x} cy={pos.y} r={planetDotR} fill="#60a5fa" />
+            <circle cx={pos.x} cy={pos.y} r={planetDotR + 1} fill={PERSON_A_TONE} opacity="0.95" />
+            <circle cx={pos.x} cy={pos.y} r={planetDotR} fill={colors.gold} />
             <text
               x={pos.x + 8} y={pos.y - 4}
-              fontSize="10" fill="#93c5fd" fontWeight="bold"
+              fontSize="11" fill={PERSON_A_TONE} fontWeight="bold"
             >
               {PLANET_SYMBOLS[p.name] ?? p.name[0]}
             </text>
@@ -239,16 +320,16 @@ function SynastryWheel({ chart1, chart2, aspects }: {
         );
       })}
 
-      {/* Person B planets (inner ring) */}
-      {chart2.planets.map(p => {
+      {/* Person B planets (inner ring, purple) */}
+      {chart2.planets.map((p) => {
         const pos = coordFor(innerR, p.longitude);
         return (
           <g key={`p2-${p.name}`}>
-            <circle cx={pos.x} cy={pos.y} r={planetDotR + 1} fill="#ef4444" />
-            <circle cx={pos.x} cy={pos.y} r={planetDotR} fill="#f87171" />
+            <circle cx={pos.x} cy={pos.y} r={planetDotR + 1} fill={PERSON_B_TONE} opacity="0.95" />
+            <circle cx={pos.x} cy={pos.y} r={planetDotR} fill={colors.purple} />
             <text
               x={pos.x - 8} y={pos.y - 4}
-              fontSize="10" fill="#fca5a5" fontWeight="bold"
+              fontSize="11" fill={PERSON_B_TONE} fontWeight="bold"
               textAnchor="end"
             >
               {PLANET_SYMBOLS[p.name] ?? p.name[0]}
@@ -259,217 +340,249 @@ function SynastryWheel({ chart1, chart2, aspects }: {
       })}
 
       {/* Center label */}
-      <circle cx={cx} cy={cy} r="28" fill="#1e293b" stroke="#334155" strokeWidth="2" />
-      <text x={cx} y={cy - 6} textAnchor="middle" fontSize="9" fill="#64748b">SYN-ASTRY</text>
-      <text x={cx} y={cy + 8} textAnchor="middle" fontSize="11" fill="#e2e8f0" fontWeight="bold">天机合盘</text>
-
-      {/* Legend */}
-      <g transform={`translate(20, ${size - 30})`}>
-        {Object.entries(ASPECT_COLORS).map(([type, color], i) => (
-          <g key={type} transform={`translate(${i * 80}, 0)`}>
-            <line x1="0" y1="0" x2="16" y2="0" stroke={color} strokeWidth="2" />
-            <text x="20" y="4" fontSize="9" fill="#94a3b8">{type}</text>
-          </g>
-        ))}
-      </g>
+      <circle cx={cx} cy={cy} r="30" fill="rgba(10,10,10,0.85)" stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
+      <text x={cx} y={cy - 4} textAnchor="middle" fontSize="9" fill="rgba(255,255,255,0.4)">
+        SYNASTRY
+      </text>
+      <text x={cx} y={cy + 10} textAnchor="middle" fontSize="11" fill={PERSON_A_TONE} fontStyle="italic">
+        天机合盘
+      </text>
     </svg>
   );
 }
 
-// ─── Aspect List (Animated) ───────────────────────────────────────────────────
+// ─── Aspect Row List ──────────────────────────────────────────────────────────
 
-function AspectList({ aspects }: { aspects: Aspect[] }) {
-  const topAspects = aspects.slice(0, 15);
+function AspectList({ aspects, language }: { aspects: Aspect[]; language: 'zh' | 'en' }) {
+  const top = aspects.slice(0, 15);
+  const aspectLabels = language === 'zh' ? ASPECT_LABELS_ZH : ASPECT_LABELS_EN;
+  if (top.length === 0) {
+    return (
+      <p className="py-6 text-center text-sm text-white/40">
+        {language === 'zh' ? '没有显著相位。' : 'No major aspects found.'}
+      </p>
+    );
+  }
   return (
-    <div className="space-y-2 max-h-64 overflow-y-auto">
-      {topAspects.length === 0 ? (
-        <p className="text-slate-500 text-sm text-center py-4">No major aspects found.</p>
-      ) : (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            visible: { transition: { staggerChildren: 0.08 } },
-          }}
-          style={{ display: 'contents' }}
-        >
-          {topAspects.map((asp, i) => (
-            <motion.div
-              key={i}
-              variants={{
-                hidden: { opacity: 0, x: -20, scale: 0.9 },
-                visible: {
-                  opacity: 1,
-                  x: 0,
-                  scale: 1,
-                  transition: { duration: 0.4, type: 'spring', stiffness: 180, damping: 20 },
-                },
-              }}
-              className="flex items-center gap-3 p-2 rounded-lg bg-slate-800/50"
-              whileHover={{ scale: 1.02, backgroundColor: 'rgba(124,58,237,0.1)' }}
+    <div className="max-h-72 space-y-1.5 overflow-y-auto pr-1">
+      {top.map((asp, i) => {
+        const c = aspectColor(asp.type);
+        return (
+          <div
+            key={i}
+            className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2"
+          >
+            <span
+              className="block h-2 w-2 shrink-0 rounded-full"
+              style={{ backgroundColor: c }}
+            />
+            <span className="text-sm" style={{ color: PERSON_A_TONE }}>
+              {PLANET_SYMBOLS[asp.planet1] ?? asp.planet1}
+            </span>
+            <span
+              className="rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-[0.18em]"
+              style={{ borderColor: `${c}66`, color: c }}
             >
-              <motion.div
-                className="w-2 h-2 rounded-full flex-shrink-0"
-                style={{ backgroundColor: ASPECT_COLORS[asp.type] ?? '#888' }}
-                animate={{ scale: [1, 1.3, 1], opacity: [0.8, 1, 0.8] }}
-                transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}
-              />
-              <span className="text-sm text-slate-300">
-                <span className="text-blue-400 font-medium">{asp.planet1}</span>
-                <span className="text-slate-500 mx-1">{asp.type}</span>
-                <span className="text-red-400 font-medium">{asp.planet2}</span>
-              </span>
-              <span className="text-xs text-slate-500 ml-auto">
-                {asp.strength}% · orb {asp.orb}°
-              </span>
-            </motion.div>
-          ))}
-        </motion.div>
-      )}
+              {aspectLabels[asp.type] ?? asp.type}
+            </span>
+            <span className="text-sm" style={{ color: PERSON_B_TONE }}>
+              {PLANET_SYMBOLS[asp.planet2] ?? asp.planet2}
+            </span>
+            <span className="ml-auto text-[11px] text-white/40">
+              {asp.strength}% · orb {asp.orb}°
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }
 
-// ─── Share Button ────────────────────────────────────────────────────────────
+// ─── Person Form (inside GlassCard) ───────────────────────────────────────────
 
-function ShareButton({ data }: { data: SynastryResponse }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleShare = async () => {
-    const summary = {
-      score: data.overallScore,
-      person1Sun: data.person1Chart.planets.find(p => p.name === 'Sun')?.signSymbol,
-      person2Sun: data.person2Chart.planets.find(p => p.name === 'Sun')?.signSymbol,
-      aspectCount: data.aspects.length,
-    };
-
-    const text = `星盘合盘 | Synastry on TianJi Global\n` +
-      `Person A ☉${summary.person1Sun} + Person B ☉${summary.person2Sun}\n` +
-      `Compatibility Score: ${summary.score}/100\n` +
-      `${summary.aspectCount} major aspects found\n` +
-      `https://tianji.global/synastry`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: 'Synastry Report', text });
-      } catch {}
-    } else {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  return (
-    <button
-      onClick={handleShare}
-      className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg text-sm transition-colors"
-    >
-      {copied ? (
-        <>
-          <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-          Copied!
-        </>
-      ) : (
-        <>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-          </svg>
-          Share Report
-        </>
-      )}
-    </button>
-  );
+interface PersonFormData {
+  birthDate: string;
+  birthTime: string;
+  lat: string;
+  lng: string;
 }
 
-// ─── Person Form ─────────────────────────────────────────────────────────────
-
-interface PersonFormProps {
+function PersonForm({
+  label,
+  tone,
+  toneLabel,
+  data,
+  onChange,
+  language,
+  formId,
+}: {
   label: string;
-  colorClass: string;
-  data: { birthDate: string; birthTime: string; lat: string; lng: string };
-  onChange: (d: Partial<typeof defaultData>) => void;
+  tone: string;
+  toneLabel: string;
+  data: PersonFormData;
+  onChange: (d: Partial<PersonFormData>) => void;
   language: 'zh' | 'en';
-}
-
-const defaultData = { birthDate: '2000-01-01', birthTime: '12:00', lat: '35.6762', lng: '139.6503' };
-
-function PersonForm({ label, colorClass, data: d, onChange, language }: PersonFormProps) {
+  formId: string;
+}) {
   return (
-    <div className="space-y-4">
-      <h3 className={`text-lg font-bold ${colorClass}`}>{label}</h3>
-
-      <div>
-        <label className="block text-slate-400 text-sm mb-1">
-          {language === 'zh' ? '出生日期' : 'Birth Date'}
-        </label>
-        <input
-          type="date"
-          value={d.birthDate}
-          onChange={e => onChange({ birthDate: e.target.value })}
-          className="w-full px-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white text-sm focus:border-blue-500 focus:outline-none"
+    <GlassCard
+      level="card"
+      className="rounded-[1.5rem] border border-white/[0.06] bg-black/20 p-5"
+    >
+      <div className="mb-4 flex items-center gap-2">
+        <span
+          className="block h-2.5 w-2.5 rounded-full"
+          style={{ backgroundColor: tone, boxShadow: `0 0 14px ${tone}aa` }}
         />
+        <span className="font-serif text-base italic" style={{ color: tone }}>
+          {label}
+        </span>
+        <span className="ml-auto text-[10px] uppercase tracking-[0.22em] text-white/35">
+          {toneLabel}
+        </span>
       </div>
 
-      <div>
-        <label className="block text-slate-400 text-sm mb-1">
-          {language === 'zh' ? '出生时间' : 'Birth Time'}
-        </label>
-        <input
-          type="time"
-          value={d.birthTime}
-          onChange={e => onChange({ birthTime: e.target.value })}
-          className="w-full px-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white text-sm focus:border-blue-500 focus:outline-none"
-        />
-      </div>
+      <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label
+              htmlFor={`${formId}-birth-date`}
+              className="mb-1 block text-[10px] uppercase tracking-[0.22em] text-white/35"
+            >
+              {language === 'zh' ? '出生日期' : 'Birth date'}
+            </label>
+            <input
+              id={`${formId}-birth-date`}
+              type="date"
+              value={data.birthDate}
+              onChange={(e) => onChange({ birthDate: e.target.value })}
+              className="w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white/85 transition-all focus:border-purple-500/40 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor={`${formId}-birth-time`}
+              className="mb-1 block text-[10px] uppercase tracking-[0.22em] text-white/35"
+            >
+              {language === 'zh' ? '出生时间' : 'Birth time'}
+            </label>
+            <input
+              id={`${formId}-birth-time`}
+              type="time"
+              value={data.birthTime}
+              onChange={(e) => onChange({ birthTime: e.target.value })}
+              className="w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white/85 transition-all focus:border-purple-500/40 focus:outline-none"
+            />
+          </div>
+        </div>
 
-      <div>
-        <label className="block text-slate-400 text-sm mb-1">
-          {language === 'zh' ? '出生纬度' : 'Latitude'}
-        </label>
-        <input
-          type="number"
-          step="0.0001"
-          min="-90" max="90"
-          value={d.lat}
-          onChange={e => onChange({ lat: e.target.value })}
-          placeholder="35.6762"
-          className="w-full px-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white text-sm focus:border-blue-500 focus:outline-none"
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label
+              htmlFor={`${formId}-latitude`}
+              className="mb-1 block text-[10px] uppercase tracking-[0.22em] text-white/35"
+            >
+              {language === 'zh' ? '纬度' : 'Latitude'}
+            </label>
+            <input
+              id={`${formId}-latitude`}
+              type="number"
+              step="0.0001"
+              min="-90"
+              max="90"
+              value={data.lat}
+              onChange={(e) => onChange({ lat: e.target.value })}
+              placeholder="35.6762"
+              className="w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-xs text-white/85 transition-all focus:border-purple-500/40 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor={`${formId}-longitude`}
+              className="mb-1 block text-[10px] uppercase tracking-[0.22em] text-white/35"
+            >
+              {language === 'zh' ? '经度' : 'Longitude'}
+            </label>
+            <input
+              id={`${formId}-longitude`}
+              type="number"
+              step="0.0001"
+              min="-180"
+              max="180"
+              value={data.lng}
+              onChange={(e) => onChange({ lng: e.target.value })}
+              placeholder="139.6503"
+              className="w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-xs text-white/85 transition-all focus:border-purple-500/40 focus:outline-none"
+            />
+          </div>
+        </div>
       </div>
-
-      <div>
-        <label className="block text-slate-400 text-sm mb-1">
-          {language === 'zh' ? '出生经度' : 'Longitude'}
-        </label>
-        <input
-          type="number"
-          step="0.0001"
-          min="-180" max="180"
-          value={d.lng}
-          onChange={e => onChange({ lng: e.target.value })}
-          placeholder="139.6503"
-          className="w-full px-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white text-sm focus:border-blue-500 focus:outline-none"
-        />
-      </div>
-    </div>
+    </GlassCard>
   );
 }
 
-// ─── Main Page ───────────────────────────────────────────────────────────────
+// ─── Narrative blocks (pre-result scroll story) ──────────────────────────────
+
+const NARRATIVE_BLOCKS_EN = [
+  {
+    label: '01',
+    heading: 'Two charts, side by side.',
+    body: 'We compute both natal charts in the Swiss Ephemeris, then overlay them so Person A becomes the outer wheel and Person B the inner. The geometry is the geometry — no decoration.',
+  },
+  {
+    label: '02',
+    heading: 'Aspects, bucketed honestly.',
+    body: 'Conjunctions, trines, and sextiles are the supportive bucket. Squares and oppositions are the challenging bucket. We do not paint a rainbow over relationships that have real friction.',
+  },
+  {
+    label: '03',
+    heading: 'A composite chart you can read together.',
+    body: 'Composite mode computes the midpoints of every pair of planets and treats the result as its own chart — the relationship as a third entity, with its own houses, planets, and themes.',
+  },
+];
+
+const NARRATIVE_BLOCKS_ZH = [
+  {
+    label: '01',
+    heading: '两张星盘 同时摊开。',
+    body: '我们用 Swiss Ephemeris 同时算出两张本命星盘 把人物 A 作外圈 人物 B 作内圈叠在一起 几何就是几何 不做美化。',
+  },
+  {
+    label: '02',
+    heading: '相位 诚实地分两栏。',
+    body: '合相 三分相 六分相归到“支持”那一栏 四分相 对分相归到“挑战”那一栏 我们不会用彩虹去掩盖真正存在的张力。',
+  },
+  {
+    label: '03',
+    heading: '一张你们可以共同阅读的复合盘。',
+    body: '复合盘把两人每颗行星的中间点算出来 然后当作一张独立的星盘来读 这段关系就是一个独立的存在 有自己的宫位 行星 和主题。',
+  },
+];
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
+
+const DEFAULT_PERSON_A: PersonFormData = { birthDate: '2000-08-16', birthTime: '12:00', lat: '35.6762', lng: '139.6503' };
+const DEFAULT_PERSON_B: PersonFormData = { birthDate: '1998-05-22', birthTime: '14:30', lat: '40.7128', lng: '-74.0060' };
 
 export default function SynastryPage() {
-  const [language, setLanguage] = useState<'zh' | 'en'>('zh');
+  const [language, setLanguage] = useSyncedLanguage('en');
   const [synastryType, setSynastryType] = useState<SynastryType>('overlay');
-  const [person1Data, setPerson1Data] = useState({ birthDate: '2000-08-16', birthTime: '12:00', lat: '35.6762', lng: '139.6503' });
-  const [person2Data, setPerson2Data] = useState({ birthDate: '1998-05-22', birthTime: '14:30', lat: '40.7128', lng: '-74.0060' });
+  const [person1Data, setPerson1Data] = useState<PersonFormData>(DEFAULT_PERSON_A);
+  const [person2Data, setPerson2Data] = useState<PersonFormData>(DEFAULT_PERSON_B);
   const [enhanceWithAI, setEnhanceWithAI] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
   const [result, setResult] = useState<SynastryResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+
+  void setLanguage;
+
+  const copy = moduleLandingCopy.synastry[language];
+
+  const t = useCallback(
+    (en: string, zh: string) => (language === 'zh' ? zh : en),
+    [language]
+  );
 
   const handleCalculate = useCallback(async () => {
     setIsCalculating(true);
@@ -506,334 +619,452 @@ export default function SynastryPage() {
 
       const data: SynastryResponse = await res.json();
       setResult(data);
-      setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+      setTimeout(
+        () => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+        100
+      );
+
+      saveReading({
+        reading_type: 'synastry',
+        title: `Synastry · ${synastryType} · ${data.overallScore}/100`,
+        summary: `${person1Data.birthDate} & ${person2Data.birthDate} · ${data.aspects.length} aspects · score ${data.overallScore}`,
+        reading_data: data as unknown as Record<string, unknown>,
+      });
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Calculation failed');
+      setError(e instanceof Error ? e.message : t('Calculation failed', '计算出错'));
     } finally {
       setIsCalculating(false);
     }
-  }, [person1Data, person2Data, enhanceWithAI, language]);
+  }, [person1Data, person2Data, enhanceWithAI, language, synastryType, t]);
 
-  const scoreLabel = result
-    ? result.overallScore >= 70
-      ? (language === 'zh' ? '高度和谐' : 'Highly Harmonious')
-      : result.overallScore >= 50
-      ? (language === 'zh' ? '中等和谐' : 'Moderately Harmonious')
-      : (language === 'zh' ? '需要努力' : 'Requires Effort')
-    : '';
+  const aspectsForList =
+    !result?.meta || result.meta.type === 'overlay' ? result?.aspects ?? [] : [];
 
-  const scoreLabelColor = result
-    ? result.overallScore >= 70 ? 'text-green-400' : result.overallScore >= 50 ? 'text-amber-400' : 'text-red-400'
-    : '';
+  return (
+    <main className="relative min-h-screen overflow-x-hidden text-white">
+      <PageChrome disableSpotlight />
 
-return (
-    <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
-      <div className="star-field" aria-hidden="true" />
-      <div className="relative z-10">
-      {/* Glassmorphic Header */}
-      <header className="relative p-6 border-b border-violet-500/20 bg-black/20 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="text-slate-400 hover:text-white transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                {language === 'zh' ? '星盘合盘' : 'Synastry'}
-              </h1>
-              <p className="text-slate-500 text-sm">Western Astrology · {language === 'zh' ? '西方占星合盘' : 'Relationship Compatibility'}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setLanguage('zh')}
-              className={`px-3 py-1 rounded-full text-sm transition-all backdrop-blur-sm ${language === 'zh' ? 'bg-violet-500/30 text-white border border-violet-400/50' : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 border border-transparent'}`}
-            >
-              中文
-            </button>
-            <button
-              onClick={() => setLanguage('en')}
-              className={`px-3 py-1 rounded-full text-sm transition-all backdrop-blur-sm ${language === 'en' ? 'bg-violet-500/30 text-white border border-violet-400/50' : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 border border-transparent'}`}
-            >
-              EN
-            </button>
-          </div>
-        </div>
-      </header>
+      <div className="fixed right-4 top-4 z-50">
+        <LanguageSwitch />
+      </div>
 
-      <div className="relative max-w-6xl mx-auto px-6 py-8 space-y-8">
-        {/* Input Forms - Glass Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Person A */}
-          <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6 shadow-[0_0_40px_rgba(124,58,237,0.05)] bg-white/[0.02]">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-3 h-3 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
-              <span className="text-blue-400 font-medium">
-                {language === 'zh' ? '人物A' : 'Person A'}
-              </span>
-              <span className="text-slate-500 text-xs ml-auto">Outer wheel · 蓝色</span>
-            </div>
-            <PersonForm
-              label={language === 'zh' ? '人物A 资料' : 'Person A'}
-              colorClass="text-blue-400"
-              data={person1Data}
-              onChange={d => setPerson1Data(prev => ({ ...prev, ...d }))}
-              language={language}
-            />
-          </div>
-
-          {/* Person B */}
-          <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6 shadow-[0_0_40px_rgba(244,63,94,0.05)] bg-white/[0.02]">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-3 h-3 rounded-full bg-red-400 shadow-[0_0_10px_rgba(244,63,94,0.5)]" />
-              <span className="text-red-400 font-medium">
-                {language === 'zh' ? '人物B' : 'Person B'}
-              </span>
-              <span className="text-slate-500 text-xs ml-auto">Inner wheel · 红色</span>
-            </div>
-            <PersonForm
-              label={language === 'zh' ? '人物B 资料' : 'Person B'}
-              colorClass="text-red-400"
-              data={person2Data}
-              onChange={d => setPerson2Data(prev => ({ ...prev, ...d }))}
-              language={language}
-            />
-          </div>
-        </div>
-
-        {/* Options - Glass Panel */}
-        <div className="space-y-3 p-4 bg-black/30 backdrop-blur-xl rounded-xl border border-violet-500/20">
-          {/* Synastry Type Tabs */}
-          <div>
-            <label className="block text-slate-400 text-xs mb-2">
-              {language === 'zh' ? '分析模式' : 'Analysis Mode'}
-            </label>
-            <div className="flex gap-2">
-              {(['overlay', 'composite', 'davison'] as SynastryType[]).map(t => (
-                <button
-                  key={t}
-                  onClick={() => setSynastryType(t)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all backdrop-blur-sm ${
-                    synastryType === t
-                      ? t === 'overlay' ? 'bg-blue-500/30 text-blue-300 border border-blue-400/50'
-                      : t === 'composite' ? 'bg-violet-500/30 text-violet-300 border border-violet-400/50'
-                      : 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/50'
-                      : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 border border-transparent'
-                  }`}
-                >
-                  {t === 'overlay' ? (language === 'zh' ? '叠盘' : 'Overlay') :
-                   t === 'composite' ? (language === 'zh' ? '复合盘' : 'Composite') :
-                   (language === 'zh' ? '戴维森盘' : 'Davison')}
-                </button>
-              ))}
-            </div>
-            <p className="text-slate-500 text-xs mt-1">
-              {synastryType === 'overlay' ? (language === 'zh' ? '两人星盘叠加对比，分析行星相位' : 'Overlay both charts, analyze planetary aspects between them') :
-               synastryType === 'composite' ? (language === 'zh' ? '计算两人星盘中点，形成第三张共同星盘' : 'Compute midpoints of both charts to form a combined relationship chart') :
-               (language === 'zh' ? '时间加权中点盘，更精确反映关系本质' : 'Time-weighted midpoint chart, more accurately reflects relationship essence')}
-            </p>
-          </div>
-
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={enhanceWithAI}
-              onChange={e => setEnhanceWithAI(e.target.checked)}
-              className="w-4 h-4 rounded border-violet-500/50 bg-violet-950/50 text-violet-400 focus:ring-violet-500 focus:ring-offset-0"
-            />
-            <span className="text-slate-300 text-sm">
-              {language === 'zh' ? '✨ AI 增强解读' : '✨ AI Enhanced Interpretation'}
-            </span>
-          </label>
-        </div>
-
-        {/* Calculate Button - Glassmorphic Gradient */}
-        <button
-          onClick={handleCalculate}
-          disabled={isCalculating}
-          className="w-full py-4 rounded-xl bg-gradient-to-r from-violet-600/80 via-purple-600/80 to-pink-600/80 hover:from-violet-500/90 hover:via-purple-500/90 hover:to-pink-500/90 font-bold text-lg text-white transition-all disabled:opacity-50 hover:scale-[1.02] backdrop-blur-xl border border-violet-400/30 shadow-[0_0_30px_rgba(124,58,237,0.3)]"
+      <BackgroundVideoHero
+        eyebrow={copy.hero.eyebrow}
+        title={copy.hero.title}
+        subtitle={copy.hero.subtitle}
+        description={copy.hero.description}
+        posterSrc="/assets/images/posters/western-hero-poster-16x9.jpg"
+        imageSrc="/assets/images/posters/western-hero-poster-16x9.jpg"
+        meta={<TrustStrip items={[...copy.trustItems]} className="w-full max-w-3xl" />}
+      >
+        <ModuleInputShell
+          eyebrow={copy.form.eyebrow}
+          title={copy.form.title}
+          description={copy.form.description}
+          footer={copy.form.footer}
         >
-          {isCalculating
-            ? (language === 'zh' ? '计算中...' : 'Calculating...')
-            : (language === 'zh' ? '💫 开始合盘分析' : '💫 Calculate Synastry')}
-        </button>
+          <div className="space-y-5">
+            {/* Two person forms */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <PersonForm
+                label={t('Person A', '人物 A')}
+                tone={PERSON_A_TONE}
+                toneLabel={t('Outer wheel · Gold', '外圈 · 金')}
+                data={person1Data}
+                onChange={(d) => setPerson1Data((prev) => ({ ...prev, ...d }))}
+                language={language}
+                formId="person-a"
+              />
+              <PersonForm
+                label={t('Person B', '人物 B')}
+                tone={PERSON_B_TONE}
+                toneLabel={t('Inner wheel · Purple', '内圈 · 紫')}
+                data={person2Data}
+                onChange={(d) => setPerson2Data((prev) => ({ ...prev, ...d }))}
+                language={language}
+                formId="person-b"
+              />
+            </div>
 
-        {error && (
-          <div className="p-4 bg-red-950/40 border border-red-500/30 rounded-xl text-red-400 text-sm backdrop-blur-xl">
-            Error: {error}
-          </div>
-        )}
-
-        {/* Results */}
-        {result && (
-          <div ref={resultRef} className="space-y-6">
-            {/* Score + Wheel */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Score - Glass Card */}
-              <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6 flex flex-col items-center shadow-[0_0_50px_rgba(124,58,237,0.05)] bg-white/[0.02]">
-                <h2 className="text-lg font-bold text-slate-200 mb-4">
-                  {language === 'zh' ? '综合评分' : 'Overall Score'}
-                </h2>
-                <ScoreCircle score={result.overallScore} />
-                <p className={`mt-4 text-xl font-bold ${scoreLabelColor}`}>{scoreLabel}</p>
-                <p className="text-slate-500 text-sm mt-1">
-                  {result.aspects.length} {language === 'zh' ? '个主要相位' : 'major aspects'}
+            {/* Mode + AI toggle inside one GlassCard */}
+            <GlassCard
+              level="soft"
+              className="space-y-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4"
+            >
+              <div>
+                <div className="mb-2 text-[10px] uppercase tracking-[0.28em] text-white/40">
+                  {t('Analysis mode', '分析模式')}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {(['overlay', 'composite', 'davison'] as SynastryType[]).map((tp) => {
+                    const active = synastryType === tp;
+                    return (
+                      <button
+                        key={tp}
+                        type="button"
+                        onClick={() => setSynastryType(tp)}
+                        className="rounded-full border px-4 py-1.5 text-xs uppercase tracking-[0.22em] transition-all"
+                        style={{
+                          borderColor: active ? `${colors.goldLight}88` : 'rgba(255,255,255,0.12)',
+                          backgroundColor: active ? 'rgba(245,197,66,0.06)' : 'rgba(255,255,255,0.02)',
+                          color: active ? colors.goldLight : 'rgba(255,255,255,0.6)',
+                        }}
+                      >
+                        {tp === 'overlay' ? t('Overlay', '叠盘')
+                          : tp === 'composite' ? t('Composite', '复合盘')
+                          : t('Davison', '戴维森')}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="mt-2 text-xs leading-6 text-white/50">
+                  {synastryType === 'overlay'
+                    ? t('Overlay both charts and read the aspects between them.', '把两张星盘叠在一起 读出彼此之间的相位。')
+                    : synastryType === 'composite'
+                    ? t('Compute midpoints of both charts to form a combined relationship chart.', '通过两人星盘的中间点 形成一张共同的关系盘。')
+                    : t('Time-weighted midpoint chart that more precisely reflects the relationship core.', '时间加权的中点盘 更精确地反映关系本质。')}
                 </p>
-                <div className="mt-6 w-full">
-                  <ShareButton data={result} />
-                </div>
               </div>
 
-              {/* Wheel - Glass Card */}
-              <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 shadow-[0_0_40px_rgba(124,58,237,0.05)] bg-white/[0.02]">
-                <SynastryWheel
-                  chart1={result.person1Chart}
-                  chart2={result.person2Chart}
-                  aspects={result.aspects}
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={enhanceWithAI}
+                  onChange={(e) => setEnhanceWithAI(e.target.checked)}
+                  className="h-4 w-4 rounded border-white/20 bg-white/5"
                 />
-              </div>
-            </div>
+                <span className="text-xs text-white/70">
+                  {t('Add AI deep interpretation', '叠加 AI 深度解读')}
+                </span>
+              </label>
+            </GlassCard>
 
-            {/* Planet Tables - Glass Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                { label: language === 'zh' ? '人物A 行星位置' : 'Person A Planetary Positions', chart: result.person1Chart, color: 'blue' },
-                { label: language === 'zh' ? '人物B 行星位置' : 'Person B Planetary Positions', chart: result.person2Chart, color: 'red' },
-              ].map(({ label, chart, color }) => (
-                <div key={label} className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 bg-white/[0.02]">
-                  <h3 className={`text-${color}-400 font-bold mb-3`}>{label}</h3>
-                  <div className="space-y-1">
-                    {chart.planets.map(p => (
-                      <div key={p.name} className="flex items-center justify-between py-1 border-b border-slate-700/30 last:border-0">
-                        <span className="text-slate-300 text-sm w-20">{p.name}</span>
-                        <span className="text-slate-400 text-sm">{p.signSymbol} {p.signName} {p.degree.toFixed(1)}°</span>
-                        <span className="text-slate-600 text-xs w-16 text-right">{p.longitude.toFixed(1)}°</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-3 pt-2 border-t border-slate-700/30 text-xs text-slate-500">
-                    ASC: {chart.houses.ascendant.toFixed(1)}° · MC: {chart.houses.midheaven.toFixed(1)}°
-                  </div>
-                </div>
-              ))}
-            </div>
+            <button
+              type="button"
+              onClick={handleCalculate}
+              disabled={isCalculating}
+              className="w-full rounded-2xl border border-white/[0.14] bg-white/[0.06] px-5 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-white/90 transition-all hover:border-white/30 hover:bg-white/[0.1] disabled:cursor-not-allowed disabled:opacity-50"
+              style={{ boxShadow: '0 0 36px rgba(245, 197, 66, 0.16)' }}
+            >
+              {isCalculating
+                ? t('Calculating…', '计算中…')
+                : copy.primaryCta}
+            </button>
+          </div>
+        </ModuleInputShell>
+      </BackgroundVideoHero>
 
-            {/* Aspects — only for overlay synastry */}
-            {(!result.meta || result.meta.type === 'overlay') && result.aspects && (
-              <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 shadow-[0_0_40px_rgba(124,58,237,0.05)] bg-white/[0.02]">
-                <h3 className="text-violet-400 font-bold mb-3">
-                  {language === 'zh' ? '相位列表' : 'Aspect List'}
-                </h3>
-                <AspectList aspects={result.aspects} />
-              </div>
+      {/* Error banner */}
+      {error && (
+        <div className="mx-auto max-w-4xl px-6 py-8 sm:px-8">
+          <GlassCard
+            level="card"
+            className="rounded-[1.5rem] border border-rose-500/30 bg-rose-500/10 p-4 text-rose-100"
+          >
+            {error}
+          </GlassCard>
+        </div>
+      )}
+
+      {/* Pre-result narrative */}
+      {!result && !isCalculating && !error && (
+        <ScrollNarrativeSection
+          accentColor="#7c3aed"
+          goldColor="#D4AF37"
+          blocks={language === 'zh' ? NARRATIVE_BLOCKS_ZH : NARRATIVE_BLOCKS_EN}
+        />
+      )}
+
+      {/* Result */}
+      {result && (
+        <div ref={resultRef}>
+          <ResultScaffold
+            eyebrow={t('SYNASTRY READING', '合盘解读')}
+            title={t(
+              'How these two charts read together.',
+              '两张星盘 共同读出来的样子。'
             )}
+            subtitle={t(
+              `Mode · ${synastryType.toUpperCase()}  ·  ${result.aspects.length} major aspects`,
+              `模式 · ${synastryType.toUpperCase()}  ·  ${result.aspects.length} 个主要相位`
+            )}
+            overview={
+              <div className="grid gap-5 lg:grid-cols-2">
+                <GlassCard
+                  level="card"
+                  className="flex flex-col items-center justify-center rounded-[1.5rem] border border-white/[0.06] bg-black/25 p-6"
+                >
+                  <div className="text-[10px] uppercase tracking-[0.28em] text-white/40">
+                    {t('Compatibility score', '综合评分')}
+                  </div>
+                  <div className="mt-4">
+                    <ScoreDial score={result.overallScore} language={language} />
+                  </div>
+                  <p className="mt-4 text-xs text-white/45">
+                    {result.aspects.length} {t('major aspects', '个主要相位')}
+                  </p>
+                </GlassCard>
 
-            {/* Midpoint Structures — for composite and davison */}
-            {(result.compositeChart || result.davisonChart) && (
-              (() => {
-                const chartData = result.compositeChart ?? result.davisonChart;
-                const chartType = result.meta?.type ?? 'composite';
-                return (
-                  <>
-                    {/* Composite/Davison Planet Table */}
-                    <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 bg-white/[0.02]">
-                      <h3 className="text-violet-400 font-bold mb-3">
-                        {chartType === 'davison'
-                          ? (language === 'zh' ? '戴维森盘行星位置' : 'Davison Chart Planetary Positions')
-                          : (language === 'zh' ? '复合盘行星位置' : 'Composite Chart Planetary Positions')}
-                      </h3>
+                <GlassCard
+                  level="card"
+                  className="rounded-[1.5rem] border border-white/[0.06] bg-black/25 p-5"
+                >
+                  <div className="text-[10px] uppercase tracking-[0.28em] text-white/40">
+                    {t('Synastry wheel', '合盘星图')}
+                  </div>
+                  <div className="mt-4">
+                    <SynastryWheel
+                      chart1={result.person1Chart}
+                      chart2={result.person2Chart}
+                      aspects={result.aspects}
+                      language={language}
+                    />
+                  </div>
+                  <div className="mt-4 flex items-center justify-center gap-6 text-[11px] text-white/55">
+                    <span className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: PERSON_A_TONE }} />
+                      {t('Person A · outer', '人物 A · 外圈')}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: PERSON_B_TONE }} />
+                      {t('Person B · inner', '人物 B · 内圈')}
+                    </span>
+                  </div>
+                </GlassCard>
+              </div>
+            }
+            highlights={
+              <div className="space-y-5">
+                <div className="grid gap-5 md:grid-cols-2">
+                  {[
+                    { label: t('Person A planets', '人物 A 行星位置'), chart: result.person1Chart, tone: PERSON_A_TONE },
+                    { label: t('Person B planets', '人物 B 行星位置'), chart: result.person2Chart, tone: PERSON_B_TONE },
+                  ].map((pane) => (
+                    <GlassCard
+                      key={pane.label}
+                      level="soft"
+                      className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4"
+                    >
+                      <div
+                        className="mb-3 font-serif text-sm italic"
+                        style={{ color: pane.tone }}
+                      >
+                        {pane.label}
+                      </div>
                       <div className="space-y-1">
-                        {chartData?.planets.map(p => (
-                          <div key={p.name} className="flex items-center justify-between py-1 border-b border-slate-700/30 last:border-0">
-                            <span className="text-slate-300 text-sm w-20">{p.name}</span>
-                            <span className="text-slate-400 text-sm">{p.signSymbol} {p.signName} {p.degree.toFixed(1)}°</span>
-                            <span className="text-slate-600 text-xs w-16 text-right">{p.longitude.toFixed(1)}°</span>
+                        {pane.chart.planets.map((p) => (
+                          <div
+                            key={p.name}
+                            className="flex items-center justify-between border-b border-white/[0.05] py-1 last:border-0"
+                          >
+                            <span className="w-20 text-sm text-white/75">{p.name}</span>
+                            <span className="text-sm text-white/55">
+                              {p.signSymbol} {p.signName} {p.degree.toFixed(1)}°
+                            </span>
+                            <span className="w-16 text-right text-[10px] text-white/30">
+                              {p.longitude.toFixed(1)}°
+                            </span>
                           </div>
                         ))}
                       </div>
-                      <div className="mt-3 pt-2 border-t border-slate-700/30 text-xs text-slate-500">
-                        ASC: {chartData?.houses.ascendant.toFixed(1)}° · MC: {chartData?.houses.midheaven.toFixed(1)}°
+                      <div className="mt-3 border-t border-white/[0.05] pt-2 text-[11px] text-white/40">
+                        ASC: {pane.chart.houses.ascendant.toFixed(1)}° · MC:{' '}
+                        {pane.chart.houses.midheaven.toFixed(1)}°
                       </div>
-                    </div>
+                    </GlassCard>
+                  ))}
+                </div>
 
-                    {/* Midpoint Structures */}
-                    {chartData?.midpointStructures && chartData.midpointStructures.length > 0 && (
-                      <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-4 bg-white/[0.02]">
-                        <h3 className="text-amber-400 font-bold mb-3">
-                          {language === 'zh' ? '中间点结构' : 'Midpoint Structures'}
-                        </h3>
-                        <div className="space-y-2 max-h-64 overflow-y-auto">
-                          {chartData.midpointStructures.map((ms, i) => (
-                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-slate-800/50">
-                              <div className={`w-2 h-2 rounded-full ${
-                                ms.sensitivity === 'high' ? 'bg-red-500' :
-                                ms.sensitivity === 'medium' ? 'bg-amber-500' : 'bg-green-500'
-                              }`} />
-                              <span className="text-sm text-slate-300">
-                                <span className="text-blue-400">{ms.planet1}</span>
-                                <span className="text-slate-500 mx-1">Midpoint</span>
-                                <span className="text-red-400">{ms.planet2}</span>
+                {/* Overlay aspects list */}
+                {aspectsForList.length > 0 && (
+                  <GlassCard
+                    level="soft"
+                    className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4"
+                  >
+                    <div className="mb-3 text-[0.68rem] uppercase tracking-[0.28em] text-white/40">
+                      {t('Aspect list', '相位列表')}
+                    </div>
+                    <AspectList aspects={aspectsForList} language={language} />
+                  </GlassCard>
+                )}
+
+                {/* Composite / Davison */}
+                {(result.compositeChart || result.davisonChart) && (() => {
+                  const chartData = result.compositeChart ?? result.davisonChart;
+                  const chartType = result.meta?.type ?? 'composite';
+                  if (!chartData) return null;
+                  return (
+                    <div className="space-y-4">
+                      <GlassCard
+                        level="soft"
+                        className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4"
+                      >
+                        <div
+                          className="mb-3 font-serif text-sm italic"
+                          style={{ color: colors.goldLight }}
+                        >
+                          {chartType === 'davison'
+                            ? t('Davison chart planets', '戴维森盘行星')
+                            : t('Composite chart planets', '复合盘行星')}
+                        </div>
+                        <div className="space-y-1">
+                          {chartData.planets.map((p) => (
+                            <div
+                              key={p.name}
+                              className="flex items-center justify-between border-b border-white/[0.05] py-1 last:border-0"
+                            >
+                              <span className="w-20 text-sm text-white/75">{p.name}</span>
+                              <span className="text-sm text-white/55">
+                                {p.signSymbol} {p.signName} {p.degree.toFixed(1)}°
                               </span>
-                              <span className="text-xs text-slate-500 ml-auto">
-                                {ms.structureType} · {ms.thirdPlanet} @ {ms.aspectToThird}°
+                              <span className="w-16 text-right text-[10px] text-white/30">
+                                {p.longitude.toFixed(1)}°
                               </span>
                             </div>
                           ))}
                         </div>
-                      </div>
-                    )}
-                  </>
-                );
-              })()
-            )}
+                        <div className="mt-3 border-t border-white/[0.05] pt-2 text-[11px] text-white/40">
+                          ASC: {chartData.houses.ascendant.toFixed(1)}° · MC:{' '}
+                          {chartData.houses.midheaven.toFixed(1)}°
+                        </div>
+                      </GlassCard>
 
-            {/* PDF Download */}
-            <PDFDownloadButton
-              serviceType="synastry"
-              resultData={result as unknown as Record<string, unknown>}
-              birthData={{
-                name: `${language === 'zh' ? '合盘' : 'Synastry'}`,
-                birthday: `${person1Data.birthDate} & ${person2Data.birthDate}`,
-              }}
-              language={language}
-            />
-
-            {/* Animated Share */}
-            <AnimatedShareButton
-              type="synastry"
-              resultData={{
-                overallScore: result.overallScore,
-                person1: person1Data,
-                person2: person2Data,
-                aspects: result.aspects.map(a => ({ ...a })),
-              }}
-              format="webp"
-              language={language}
-              variant="secondary"
-            />
-
-            {/* AI Interpretation - Glowing Glass */}
-            {result.aiInterpretation && (
-              <div className="backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6 shadow-[0_0_60px_rgba(124,58,237,0.1)] bg-white/[0.02]">
-                <h3 className="text-violet-300 font-bold mb-4 text-lg">
-                  ✨ {language === 'zh' ? 'AI 深度解读' : 'AI Deep Interpretation'}
-                </h3>
-                <div className="text-slate-300 leading-relaxed whitespace-pre-wrap text-sm">
-                  {result.aiInterpretation}
-                </div>
-                {result.disclaimer && (
-                  <p className="mt-4 text-xs text-white/40 italic border-t border-white/[0.06] pt-3">
-                    {result.disclaimer}
-                  </p>
-                )}
+                      {chartData.midpointStructures && chartData.midpointStructures.length > 0 && (
+                        <GlassCard
+                          level="soft"
+                          className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4"
+                        >
+                          <div
+                            className="mb-3 font-serif text-sm italic"
+                            style={{ color: colors.purpleLight }}
+                          >
+                            {t('Midpoint structures', '中间点结构')}
+                          </div>
+                          <div className="max-h-64 space-y-2 overflow-y-auto pr-1">
+                            {chartData.midpointStructures.map((ms, i) => {
+                              const sensColor =
+                                ms.sensitivity === 'high'
+                                  ? colors.gold
+                                  : ms.sensitivity === 'medium'
+                                  ? colors.goldLight
+                                  : colors.purpleLight;
+                              return (
+                                <div
+                                  key={i}
+                                  className="flex items-center gap-3 rounded-lg border border-white/[0.05] bg-white/[0.02] p-2"
+                                >
+                                  <span
+                                    className="h-2 w-2 shrink-0 rounded-full"
+                                    style={{ backgroundColor: sensColor }}
+                                  />
+                                  <span className="text-sm" style={{ color: PERSON_A_TONE }}>
+                                    {ms.planet1}
+                                  </span>
+                                  <span className="text-xs text-white/40">·</span>
+                                  <span className="text-sm" style={{ color: PERSON_B_TONE }}>
+                                    {ms.planet2}
+                                  </span>
+                                  <span className="ml-auto text-[11px] text-white/40">
+                                    {ms.structureType} · {ms.thirdPlanet} @{' '}
+                                    {ms.aspectToThird.toFixed(1)}°
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </GlassCard>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
+            }
+            details={
+              result.aiInterpretation ? (
+                <GlassCard
+                  level="card"
+                  className="rounded-[1.5rem] border border-white/[0.06] bg-black/25 p-6"
+                >
+                  <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/40">
+                    {t('AI deep interpretation', 'AI 深度解读')}
+                  </div>
+                  <div className="mt-4 whitespace-pre-wrap text-sm leading-7 text-white/72">
+                    {result.aiInterpretation}
+                  </div>
+                  {result.disclaimer && (
+                    <p className="mt-4 border-t border-white/[0.06] pt-3 text-[11px] italic text-white/35">
+                      {result.disclaimer}
+                    </p>
+                  )}
+                </GlassCard>
+              ) : null
+            }
+            aside={null}
+          />
+
+          <LandingSection
+            eyebrow={t('Save · Share', '保存 · 分享')}
+            title={t(
+              'Take this reading with you.',
+              '把这次解读 带走。'
             )}
-          </div>
-        )}
+            subtitle={t(
+              'Saved to your reading history automatically. Export a PDF or share a summary.',
+              '已自动保存到你的解读历史。导出 PDF 或分享要点。'
+            )}
+          >
+            <div className="mx-auto max-w-2xl space-y-4">
+              <GlassCard
+                level="card"
+                className="rounded-[1.75rem] border border-white/[0.06] bg-black/20 p-6 sm:p-8"
+              >
+                <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                  {t('Share panel', '分享面板')}
+                </div>
+                <p className="mt-3 text-sm leading-7 text-white/60">
+                  {t(
+                    'Share a clean summary of this synastry — score, mode, aspect count.',
+                    '分享一份简洁摘要 — 综合分 模式 主要相位数。'
+                  )}
+                </p>
+                <div className="mt-5">
+                  <SharePanel
+                    serviceType="synastry"
+                    resultId={`${person1Data.birthDate}_${person2Data.birthDate}_${synastryType}`}
+                    shareUrl="https://tianji.global/synastry"
+                  />
+                </div>
+              </GlassCard>
+
+              <GlassCard
+                level="card"
+                className="rounded-[1.75rem] border border-white/[0.06] bg-black/20 p-6 sm:p-8"
+              >
+                <div className="text-[0.68rem] uppercase tracking-[0.28em] text-white/35">
+                  {t('PDF export', 'PDF 导出')}
+                </div>
+                <p className="mt-3 text-sm leading-7 text-white/60">
+                  {t(
+                    'Generate a printable report with the wheel, planet tables, and AI interpretation.',
+                    '生成一份包含合盘星图 行星表格 AI 解读的 PDF 报告。'
+                  )}
+                </p>
+                <div className="mt-5">
+                  <PDFDownloadButton
+                    serviceType="synastry"
+                    resultData={result as unknown as Record<string, unknown>}
+                    birthData={{
+                      name: t('Synastry', '合盘'),
+                      birthday: `${person1Data.birthDate} & ${person2Data.birthDate}`,
+                    }}
+                    language={language}
+                  />
+                </div>
+              </GlassCard>
+            </div>
+          </LandingSection>
         </div>
-      </div>
+      )}
     </main>
   );
 }

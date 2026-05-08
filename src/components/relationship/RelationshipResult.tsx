@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { ChartNoAxesCombined, Copy, Lock, Share2, Sparkles } from 'lucide-react';
+
 import { GlassCard } from '@/components/ui/GlassCard';
-import { MysticButton } from '@/components/ui/MysticButton';
-import { RelationshipRadar } from './RelationshipRadar';
 import { DimensionCard } from './RelationshipDimensionCard';
+import { RelationshipRadar } from './RelationshipRadar';
 import type { RelationshipReading } from '@/types/relationship';
 import type { Language } from '@/types/reading';
 
@@ -15,12 +16,52 @@ interface RelationshipResultProps {
 
 const DIMENSION_KEYS = ['attraction', 'communication', 'conflict', 'rhythm', 'longTerm'] as const;
 
+const resultCopy = {
+  zh: {
+    eyebrow: '关系合盘报告',
+    score: '综合匹配',
+    radar: '关系雷达',
+    dimensions: '五维详情',
+    currentPhase: '当前阶段',
+    next30Days: '未来 30 天',
+    copyLink: '复制安全分享链接',
+    copied: '链接已复制',
+    share: '分享关系摘要',
+    shareFailed: '分享生成失败，请稍后再试。',
+    privacy: '分享内容默认不包含出生日期、出生时辰、出生地点或时区。',
+  },
+  en: {
+    eyebrow: 'Relationship Analysis',
+    score: 'Overall score',
+    radar: 'Relationship radar',
+    dimensions: 'Five dimensions',
+    currentPhase: 'Current phase',
+    next30Days: 'Next 30 days',
+    copyLink: 'Copy safe share link',
+    copied: 'Link copied',
+    share: 'Share relationship summary',
+    shareFailed: 'Share link failed. Please try again.',
+    privacy: 'Shared content excludes birth date, birth time, birth location, and timezone by default.',
+  },
+} as const;
+
+function scoreColor(score: number) {
+  if (score >= 70) return '#34D399';
+  if (score >= 50) return '#F5B35D';
+  return '#FF8F83';
+}
+
 export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultProps) {
   const [activeTab, setActiveTab] = useState<'radar' | 'dimensions'>('radar');
   const [shareUrlCopied, setShareUrlCopied] = useState(false);
   const [shareLoading, setShareLoading] = useState(false);
+  const [shareError, setShareError] = useState<string | null>(null);
+  const copy = resultCopy[lang] ?? resultCopy.zh;
 
   const handleCopyLink = async () => {
+    setShareLoading(true);
+    setShareError(null);
+
     try {
       const res = await fetch('/api/relationship/share', {
         method: 'POST',
@@ -31,80 +72,74 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
         }),
       });
       const json = await res.json();
+
       if (json.success && json.data?.shareUrl) {
         await navigator.clipboard.writeText(json.data.shareUrl);
         setShareUrlCopied(true);
         setTimeout(() => setShareUrlCopied(false), 3000);
+      } else {
+        setShareError(copy.shareFailed);
       }
-    } catch (e) {
-      console.error('Share failed', e);
+    } catch {
+      setShareError(copy.shareFailed);
+    } finally {
+      setShareLoading(false);
     }
   };
 
-  const scoreColor = (score: number) =>
-    score >= 70 ? '#34D399' : score >= 50 ? '#F59E0B' : '#F87171';
-
   return (
-    <div className="space-y-8">
-      {/* Hero Summary */}
-      <GlassCard level="card" className="p-8 text-center relative overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-5"
-          style={{
-            background: 'radial-gradient(ellipse at center, #A78BFA, transparent 70%)',
-          }}
-        />
+    <div className="space-y-7">
+      <GlassCard level="card" className="overflow-hidden p-7 text-center">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,124,130,0.14),transparent_44%)]" />
         <div className="relative z-10">
-          <div className="text-xs tracking-widest uppercase mb-2" style={{ color: 'rgba(251,191,36,0.6)' }}>
-            {lang === 'zh' ? '关系分析报告' : 'Relationship Analysis'}
-          </div>
-          <h1 className="text-2xl font-serif font-bold mb-2 text-white">
+          <p className="mb-3 text-xs uppercase tracking-[0.28em] text-[#d8b77b]/70">{copy.eyebrow}</p>
+          <h1 className="text-3xl font-semibold tracking-[0.04em] text-[#ffe3b4]">
             {reading.personA.nickname} & {reading.personB.nickname}
           </h1>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <span className="text-2xl font-bold" style={{ color: scoreColor(reading.overallScore) }}>
+          <div className="mx-auto mt-5 inline-flex items-center gap-3 rounded-full border border-[#d8b77b]/24 bg-black/24 px-5 py-3">
+            <span className="text-3xl font-bold" style={{ color: scoreColor(reading.overallScore) }}>
               {reading.overallScore}
             </span>
-            <span className="text-sm" style={{ color: 'rgba(226,232,240,0.5)' }}>
-              {lang === 'zh' ? '综合匹配分' : 'Overall Score'}
-            </span>
+            <span className="text-sm text-[#f4d7a3]/60">{copy.score}</span>
           </div>
-          <h2 className="text-lg font-serif mb-2" style={{ color: 'rgba(226,232,240,0.9)' }}>
-            {reading.summary.headline}
-          </h2>
-          <p className="text-sm leading-relaxed" style={{ color: 'rgba(226,232,240,0.65)' }}>
-            {reading.summary.oneLiner}
-          </p>
-          <div className="flex flex-wrap justify-center gap-2 mt-4">
-            {reading.summary.keywords.map(k => (
-              <span key={k} className="text-xs px-2 py-1 rounded-full"
-                style={{ background: 'rgba(167,139,250,0.1)', border: '1px solid rgba(167,139,250,0.2)', color: '#A78BFA' }}>
-                {k}
+          <h2 className="mx-auto mt-5 max-w-2xl text-xl font-semibold text-[#ffe3b4]">{reading.summary.headline}</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[#f4d7a3]/70">{reading.summary.oneLiner}</p>
+          <div className="mt-5 flex flex-wrap justify-center gap-2">
+            {reading.summary.keywords.map((keyword) => (
+              <span
+                key={keyword}
+                className="rounded-full border border-[#d8b77b]/24 bg-[#d8b77b]/8 px-3 py-1 text-xs text-[#f4d7a3]/72"
+              >
+                {keyword}
               </span>
             ))}
           </div>
         </div>
       </GlassCard>
 
-      {/* Radar / Dimensions Toggle */}
-      <div className="flex gap-2">
-        {(['radar', 'dimensions'] as const).map(tab => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className="flex-1 py-2 rounded-lg text-sm font-medium transition-all"
-            style={{
-              background: activeTab === tab ? 'rgba(167,139,250,0.15)' : 'rgba(255,255,255,0.03)',
-              border: `1px solid ${activeTab === tab ? 'rgba(167,139,250,0.3)' : 'rgba(255,255,255,0.06)'}`,
-              color: activeTab === tab ? '#A78BFA' : 'rgba(226,232,240,0.5)',
-            }}
-          >
-            {tab === 'radar'
-              ? (lang === 'zh' ? '📊 关系雷达图' : '📊 Relationship Radar')
-              : (lang === 'zh' ? '📋 五维详情' : '📋 Five Dimensions')}
-          </button>
-        ))}
+      <div className="grid grid-cols-2 rounded-full border border-[#d8b77b]/32 bg-black/26 p-1">
+        <button
+          type="button"
+          onClick={() => setActiveTab('radar')}
+          aria-pressed={activeTab === 'radar'}
+          className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full text-sm font-semibold transition ${
+            activeTab === 'radar' ? 'bg-[#ff6c73]/28 text-[#fff7e6]' : 'text-[#f4d7a3]/58 hover:text-[#ffe3b4]'
+          }`}
+        >
+          <ChartNoAxesCombined className="h-4 w-4" aria-hidden />
+          {copy.radar}
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('dimensions')}
+          aria-pressed={activeTab === 'dimensions'}
+          className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full text-sm font-semibold transition ${
+            activeTab === 'dimensions' ? 'bg-[#ff6c73]/28 text-[#fff7e6]' : 'text-[#f4d7a3]/58 hover:text-[#ffe3b4]'
+          }`}
+        >
+          <Sparkles className="h-4 w-4" aria-hidden />
+          {copy.dimensions}
+        </button>
       </div>
 
       {activeTab === 'radar' ? (
@@ -117,8 +152,8 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
           />
         </GlassCard>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {DIMENSION_KEYS.map(key => (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {DIMENSION_KEYS.map((key) => (
             <DimensionCard
               key={key}
               dimensionKey={key}
@@ -131,70 +166,51 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
         </div>
       )}
 
-      {/* Timeline */}
       {reading.timeline && (
         <GlassCard level="card" className="p-6">
-          <div className="text-center mb-4">
-            <h3 className="text-xs tracking-widest uppercase" style={{ color: 'rgba(251,191,36,0.6)' }}>
-              {lang === 'zh' ? '📅 阶段提醒' : '📅 Phase Reminder'}
-            </h3>
-          </div>
-          <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <span className="text-lg">🌙</span>
-              <div>
-                <div className="text-xs font-medium mb-1" style={{ color: 'rgba(251,191,36,0.7)' }}>
-                  {lang === 'zh' ? '当前阶段' : 'Current Phase'}
-                </div>
-                <p className="text-sm" style={{ color: 'rgba(226,232,240,0.8)' }}>
-                  {reading.timeline.currentPhase}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-lg">📆</span>
-              <div>
-                <div className="text-xs font-medium mb-1" style={{ color: 'rgba(251,191,36,0.7)' }}>
-                  {lang === 'zh' ? '未来30天' : 'Next 30 Days'}
-                </div>
-                <p className="text-sm" style={{ color: 'rgba(226,232,240,0.8)' }}>
-                  {reading.timeline.next30Days}
-                </p>
-              </div>
-            </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <article className="rounded-xl border border-[#d8b77b]/18 bg-black/22 p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#d8b77b]/66">{copy.currentPhase}</p>
+              <p className="mt-2 text-sm leading-7 text-[#f4d7a3]/76">{reading.timeline.currentPhase}</p>
+            </article>
+            <article className="rounded-xl border border-[#d8b77b]/18 bg-black/22 p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#d8b77b]/66">{copy.next30Days}</p>
+              <p className="mt-2 text-sm leading-7 text-[#f4d7a3]/76">{reading.timeline.next30Days}</p>
+            </article>
           </div>
         </GlassCard>
       )}
 
-      {/* Share */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      {shareError && (
+        <div className="rounded-xl border border-[#ff7f80]/30 bg-[#ff5264]/10 p-4 text-center text-sm text-[#ffb4a3]">
+          {shareError}
+        </div>
+      )}
+
+      <div className="grid gap-3 sm:grid-cols-2">
         <button
+          type="button"
           onClick={handleCopyLink}
           disabled={shareLoading}
-          className="flex-1 py-3 rounded-xl text-sm font-medium transition-all"
-          style={{
-            background: shareUrlCopied ? 'rgba(52,211,153,0.15)' : 'rgba(255,255,255,0.04)',
-            border: `1px solid ${shareUrlCopied ? 'rgba(52,211,153,0.3)' : 'rgba(255,255,255,0.08)'}`,
-            color: shareUrlCopied ? '#34D399' : '#E2E8F0',
-          }}
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#d8b77b]/24 bg-black/24 px-5 text-sm font-semibold text-[#f4d7a3]/76 transition hover:border-[#ffe3b4]/44 hover:text-[#ffe3b4] disabled:opacity-55"
         >
-          {shareUrlCopied
-            ? (lang === 'zh' ? '✓ 链接已复制' : '✓ Link copied')
-            : (lang === 'zh' ? '🔗 复制分享链接' : '🔗 Copy share link')}
+          <Copy className="h-4 w-4" aria-hidden />
+          {shareUrlCopied ? copy.copied : copy.copyLink}
         </button>
-        <MysticButton
+        <button
+          type="button"
           onClick={handleCopyLink}
-          className="flex-1"
+          disabled={shareLoading}
+          className="relationship-form-submit inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#ffb49e]/60 px-5 text-sm font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55"
         >
-          {lang === 'zh' ? '↗ 分享关系图' : '↗ Share Relationship'}
-        </MysticButton>
+          <Share2 className="h-4 w-4" aria-hidden />
+          {copy.share}
+        </button>
       </div>
 
-      {/* Privacy note */}
-      <p className="text-center text-xs" style={{ color: 'rgba(226,232,240,0.25)' }}>
-        {lang === 'zh'
-          ? '🔒 分享内容默认不包含出生日期和地点，仅显示昵称'
-          : '🔒 Shared content does not include birth dates or locations by default'}
+      <p className="mx-auto flex max-w-3xl items-start justify-center gap-2 text-center text-xs leading-6 text-[#f4d7a3]/42">
+        <Lock className="mt-1 h-3.5 w-3.5 shrink-0 text-[#d8b77b]/68" aria-hidden />
+        <span>{copy.privacy}</span>
       </p>
     </div>
   );

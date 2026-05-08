@@ -5,12 +5,17 @@ import { motion, useInView } from 'framer-motion';
 import { GlassCard } from '@/components/ui';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
 
+type ShareCardType = 'ziwei' | 'bazi' | 'tarot' | 'synastry';
+
 interface ShareSectionProps {
-  type: 'ziwei' | 'bazi' | 'yijing' | 'tarot' | 'western' | 'fortune';
-  resultData: Record<string, unknown>;
+  type?: ShareCardType;
+  resultData?: Record<string, unknown>;
   ogBgSrc?: string;
   accentColor?: string;
   goldColor?: string;
+  title?: React.ReactNode;
+  subtitle?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function ShareSection({
@@ -19,6 +24,9 @@ export default function ShareSection({
   ogBgSrc,
   accentColor = '#7c3aed',
   goldColor = '#D4AF37',
+  title = 'Your reading is share-ready.',
+  subtitle = 'Export a quiet, premium card for memory, reflection, or a private share.',
+  children,
 }: ShareSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-60px' });
@@ -33,7 +41,6 @@ export default function ShareSection({
           : 'linear-gradient(180deg, #0a0a0a 0%, #1a0a3a 50%, #0a0a0a 100%)',
       }}
     >
-      {/* Dark overlay when using OG bg */}
       {ogBgSrc && (
         <div
           className="absolute inset-0 pointer-events-none"
@@ -41,16 +48,12 @@ export default function ShareSection({
         />
       )}
 
-      {/* Top gradient fade */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `linear-gradient(to bottom, ${accentColor}0D 0%, transparent 30%)`,
-        }}
+        style={{ background: `linear-gradient(to bottom, ${accentColor}0D 0%, transparent 30%)` }}
       />
 
       <div className="max-w-2xl mx-auto px-6 sm:px-8 relative text-center">
-        {/* Decorative top line */}
         <motion.div
           initial={{ opacity: 0, scaleX: 0 }}
           animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
@@ -66,7 +69,6 @@ export default function ShareSection({
           />
         </motion.div>
 
-        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -84,52 +86,62 @@ export default function ShareSection({
               filter: `drop-shadow(0 0 20px ${goldColor}33)`,
             }}
           >
-            命盘已解锁
+            {title}
           </h2>
           <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em' }}>
-            将你的命盘分享给朋友，或保存留念
+            {subtitle}
           </p>
         </motion.div>
 
-        {/* Share buttons */}
+        {type && resultData && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+          >
+            <AnimatedShareButton
+              type={type}
+              resultData={resultData}
+              format="webp"
+              language="zh"
+              variant="primary"
+            />
+
+            <AnimatedShareButton
+              type={type}
+              resultData={resultData}
+              format="png"
+              language="zh"
+              variant="secondary"
+            />
+          </motion.div>
+        )}
+
+        {children && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="mb-8"
+          >
+            {children}
+          </motion.div>
+        )}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.25 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+          transition={{ duration: 0.7, delay: 0.4 }}
         >
-          {/* Primary share */}
-          <AnimatedShareButton
-            type={type}
-            resultData={resultData}
-            format="webp"
-            language="zh"
-            variant="primary"
-          />
-
-          {/* Secondary share */}
-          <AnimatedShareButton
-            type={type}
-            resultData={resultData}
-            format="png"
-            language="zh"
-            variant="secondary"
-          />
-        </motion.div>
-
-        {/* Decorative bottom line */}
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
-          transition={{ duration: 1, delay: 0.4 }}
-        >
-          <div
-            className="h-px mx-auto"
-            style={{
-              background: `linear-gradient(to right, transparent, ${accentColor}44, transparent)`,
-              maxWidth: '160px',
-            }}
-          />
+          <GlassCard
+            level="soft"
+            className="p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] inline-block"
+          >
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.35)', letterSpacing: '0.08em' }}>
+              The visual background stays text-free. The share title is rendered in code.
+            </p>
+          </GlassCard>
         </motion.div>
       </div>
     </section>

@@ -2,6 +2,9 @@ import type { ModuleType, NormalizedPayload } from '@/types/module-result';
 import { baziNormalizer } from './bazi';
 import { fortuneNormalizer } from './fortune';
 import { relationshipNormalizer } from './relationship';
+import { tarotNormalizer } from './tarot';
+import { westernNormalizer } from './western';
+import { yijingNormalizer } from './yijing';
 import { ziweiNormalizer } from './ziwei';
 import type { ModuleNormalizationOptions, ModuleNormalizer } from './types';
 
@@ -10,6 +13,9 @@ const normalizers = new Map<ModuleType, ModuleNormalizer>([
   [ziweiNormalizer.moduleType, ziweiNormalizer],
   [fortuneNormalizer.moduleType, fortuneNormalizer],
   [relationshipNormalizer.moduleType, relationshipNormalizer],
+  [westernNormalizer.moduleType, westernNormalizer],
+  [tarotNormalizer.moduleType, tarotNormalizer],
+  [yijingNormalizer.moduleType, yijingNormalizer],
 ]);
 
 export function normalizeModulePayload(
@@ -41,5 +47,13 @@ export function normalizeModulePayload(
   return normalizer.normalize(raw, options);
 }
 
-export { baziNormalizer, fortuneNormalizer, relationshipNormalizer, ziweiNormalizer };
+export {
+  baziNormalizer,
+  fortuneNormalizer,
+  relationshipNormalizer,
+  tarotNormalizer,
+  westernNormalizer,
+  yijingNormalizer,
+  ziweiNormalizer,
+};
 export type { ModuleNormalizationOptions, ModuleNormalizer } from './types';

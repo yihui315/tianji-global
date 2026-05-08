@@ -244,6 +244,11 @@ const ZodiacChart: React.FC<ZodiacChartProps> = memo((props) => {
     });
 
     return planetElements;
+    // renderPlanetSymbol closes over the same values listed below, so the
+    // memo correctly recomputes whenever any of them change. Adding the
+    // function itself would require wrapping it in useCallback with an
+    // identical dep set — needless indirection.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [center, planetRing, planetGroups, colors.text, showPlanetDegrees, onPlanetClick, language]);
 
   // ============================================

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 
 const SkySphere = dynamic(() => import('@/components/sky/SkySphere'), { ssr: false })
 
@@ -35,8 +36,9 @@ function DateTimeInputs({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs text-slate-400">Date & Time</label>
+      <label htmlFor="sc-datetime" className="text-xs text-slate-400">Date & Time</label>
       <input
+        id="sc-datetime"
         type="datetime-local"
         value={formatDate(date)}
         onChange={(e) => setDate(new Date(e.target.value))}
@@ -59,9 +61,10 @@ function LocationInputs({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs text-slate-400">Location (Lat, Lng)</label>
+      <label htmlFor="sc-latitude" className="text-xs text-slate-400">Location (Lat, Lng)</label>
       <div className="flex gap-2">
         <input
+          id="sc-latitude"
           type="number"
           step="0.0001"
           min="-90"
@@ -72,6 +75,7 @@ function LocationInputs({
           className="w-28 bg-slate-800 border border-slate-600 text-white text-sm rounded px-3 py-2 focus:outline-none focus:border-indigo-500"
         />
         <input
+          id="sc-longitude"
           type="number"
           step="0.0001"
           min="-180"
@@ -143,7 +147,10 @@ export default function SkyChartPage() {
   }, [])
 
   useEffect(() => {
+    // Intentional initial fetch using the default Tokyo coordinates;
+    // subsequent fetches are triggered by the View Sky / Real-time / preset buttons.
     fetchSkyData(date, lat, lng)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleViewSky = () => {
@@ -268,7 +275,14 @@ export default function SkyChartPage() {
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/80">
           <div className="bg-slate-900 rounded-xl p-6 max-w-lg w-full mx-4 border border-slate-700">
             <h3 className="text-white text-lg font-bold mb-4">📸 Sky Screenshot</h3>
-            <img src={imageUrl} alt="Sky chart" className="w-full rounded-lg mb-4" />
+            <Image
+              src={imageUrl}
+              alt="Sky chart"
+              width={1024}
+              height={1024}
+              unoptimized
+              className="w-full h-auto rounded-lg mb-4"
+            />
             <div className="flex gap-3">
               <a
                 href={imageUrl}

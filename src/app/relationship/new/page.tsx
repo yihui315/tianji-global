@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import RelationshipNewClient from './client';
 
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function RelationshipNewPage() {
-  return <RelationshipNewClient />;
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#03040a]" />}>
+      <RelationshipNewClient />
+    </Suspense>
+  );
 }
