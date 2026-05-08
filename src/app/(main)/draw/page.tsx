@@ -277,13 +277,13 @@ export default function DrawPage() {
           body: JSON.stringify({ question: question.trim(), language: lang }),
         });
         const json = await res.json();
-        if (!res.ok || !json.success) {
+        if (!res.ok || !json.id || !json.preview || !json.price || !Array.isArray(json.previewDraw)) {
           throw new Error(json.error || 'Unable to draw cards');
         }
         const state: PreviewState = {
           id: json.id,
           preview: json.preview,
-          language: json.language,
+          language: lang,
           price: json.price,
           previewDraw: json.previewDraw,
         };
