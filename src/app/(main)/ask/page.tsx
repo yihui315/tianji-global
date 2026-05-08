@@ -156,13 +156,13 @@ export default function AskPage() {
           body: JSON.stringify({ question: question.trim(), language }),
         });
         const json = await res.json();
-        if (!res.ok || !json.success) {
+        if (!res.ok || !json.id || !json.preview || !json.price) {
           throw new Error(json.error || 'Unable to generate preview');
         }
         const state: PreviewState = {
           id: json.id,
           preview: json.preview,
-          language: json.language,
+          language,
           price: json.price,
         };
         setPreview(state);
