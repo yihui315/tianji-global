@@ -321,12 +321,13 @@ async function callOllama(
 ): Promise<AIResponse> {
   const start = Date.now();
   const { temperature = 0.7, maxTokens = 4096 } = options;
+  const resolvedModel = await resolveOllamaModel(baseUrl, model);
 
   const response = await fetch(`${baseUrl}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model,
+      model: resolvedModel,
       messages: [
         ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
         { role: 'user', content: userPrompt },
@@ -350,10 +351,55 @@ async function callOllama(
   return {
     content: data.message?.content || '',
     raw: data,
-    model: `ollama/${model}`,
+    model: `ollama/${resolvedModel}`,
     provider: 'ollama',
     latencyMs: (data.total_duration || Date.now() - start) / 1_000_000,
   };
+}
+
+async function resolveOllamaModel(baseUrl: string, requestedModel: string): Promise<string> {
+  const candidates = [
+    process.env.OLLAMA_MODEL,
+    process.env.DEFAULT_OLLAMA_MODEL,
+    requestedModel,
+    'gemma4:latest',
+    'gpt-oss:20b',
+    'qwen3-coder:30b',
+    'gemma4:31b',
+    'qwen-distill:latest',
+    'deepseek-r1:32b',
+    'qwen2.5',
+    'llama3.3',
+  ].filter((candidate): candidate is string => Boolean(candidate));
+
+  try {
+    const response = await fetch(`${baseUrl}/api/tags`, { method: 'GET' });
+    if (!response.ok) {
+      return requestedModel;
+    }
+
+    const data = (await response.json()) as {
+      models?: Array<{ name?: string }>;
+    };
+    const installed = new Set(
+      (data.models ?? [])
+        .map((entry) => entry.name)
+        .filter((name): name is string => Boolean(name))
+    );
+
+    for (const candidate of candidates) {
+      if (installed.has(candidate)) {
+        return candidate;
+      }
+      if (!candidate.includes(':') && installed.has(`${candidate}:latest`)) {
+        return `${candidate}:latest`;
+      }
+    }
+  } catch {
+    return requestedModel;
+  }
+
+  return requestedModel;
 }
 
 // ─── Retry Logic ───────────────────────────────────────────────────────────────

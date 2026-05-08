@@ -8,14 +8,26 @@ type LandingCopy = {
     description: string;
   };
   primaryCta: string;
-  secondaryCta: string;
+  secondaryCta?: string;
   form: {
     eyebrow: string;
     title: string;
     description: string;
     footer?: string;
+    placeholder?: string;
+    loading?: string;
   };
   trustItems: Array<{ label: string; value?: string; description?: string }>;
+  preview?: {
+    eyebrow: string;
+    paywallNote: string;
+    assurance: string;
+    unlockCta: string;
+    unlocking: string;
+  };
+  unlocked?: {
+    eyebrow: string;
+  };
 };
 
 export const moduleLandingCopy = {
@@ -563,6 +575,152 @@ export const moduleLandingCopy = {
       ],
     },
   },
+  draw: {
+    en: {
+      hero: {
+        eyebrow: 'THREE CARDS · YESTERDAY · TODAY · TOMORROW',
+        title: 'Three cards. One arc. No subscription.',
+        subtitle: 'Pay-per-draw · AI tarot · For self-reflection',
+        description:
+          'Draw three cards for the same day-arc — what is still echoing from yesterday, what today is asking of you, and the shape forming for tomorrow. We read all three together as one continuous reading, not three separate cards.',
+      },
+      primaryCta: 'Draw three cards',
+      secondaryCta: 'See how it works',
+      form: {
+        eyebrow: 'Your question (optional)',
+        title: 'Sit with one thing · Then turn the cards',
+        description:
+          'You can leave the question blank for an open daily-arc reading, or name the situation that brought you here for a more directed read.',
+        footer: 'You will see the cards face-down with a free preview before choosing whether to unlock the full reading.',
+        placeholder: 'e.g. I am not sure if I should keep pushing on this project this week.',
+        loading: 'Drawing your cards…',
+      },
+      trustItems: [
+        { label: 'No subscription', description: 'One-time payment. No recurring charge.' },
+        { label: 'Free preview', description: 'See the start of the reading before you pay.' },
+        { label: 'Self-reflection only', description: 'Not medical, legal, or financial advice.' },
+      ],
+      preview: {
+        eyebrow: 'YOUR PREVIEW',
+        paywallNote:
+          'The full reading turns the three cards face-up and continues with a personal reflection prompt. Unlock once for {price} — no subscription.',
+        assurance: 'Secure checkout via Stripe · One-time payment · Refundable for 24h.',
+        unlockCta: 'Unlock full reading · {price}',
+        unlocking: 'Opening checkout…',
+      },
+      unlocked: {
+        eyebrow: 'YOUR FULL READING',
+      },
+    },
+    zh: {
+      hero: {
+        eyebrow: '三张牌 · 昨天 · 今天 · 明天',
+        title: '三张牌 一段弧线 不订阅',
+        subtitle: '按次付费 · AI 塔罗 · 仅用于自我反思',
+        description:
+          '为同一天的弧线抽三张牌 —— 还在回响的昨天 此刻在向你提出请求的今天 与正在成形的明天 三张牌当作一段连续的解读 而不是三张分开的牌',
+      },
+      primaryCta: '抽三张牌',
+      secondaryCta: '看看它是怎么工作的',
+      form: {
+        eyebrow: '你的问题（可选）',
+        title: '安静地想一件事 然后翻牌',
+        description: '可以留白让我们做一份开放的日常弧线 也可以写下让你来到这里的具体处境 解读会更聚焦',
+        footer: '付费之前 你会先看到背面的三张牌与一段免费预览',
+        placeholder: '比如 我不确定这周还要不要继续推这个项目',
+        loading: '正在为你抽牌…',
+      },
+      trustItems: [
+        { label: '不订阅', description: '一次付费 不会自动续费' },
+        { label: '免费预览', description: '付费之前先看一段开头' },
+        { label: '仅用于反思', description: '不构成医疗 法律 财务建议' },
+      ],
+      preview: {
+        eyebrow: '你的预览',
+        paywallNote: '完整解读会把三张牌正面翻开 并附一个可执行的反思问题 单次解锁 {price} 不订阅',
+        assurance: '通过 Stripe 安全结账 · 一次付费 · 24 小时内可退款',
+        unlockCta: '解锁完整解读 · {price}',
+        unlocking: '正在打开结账…',
+      },
+      unlocked: {
+        eyebrow: '你的完整解读',
+      },
+    },
+  },
+  ask: {
+    en: {
+      hero: {
+        eyebrow: 'ASK THE ORACLE · ONE QUESTION',
+        title: 'One question. One real answer. No subscription.',
+        subtitle: 'Pay-per-question · AI divination · For self-reflection',
+        description:
+          'Ask one question that matters. We send it through a divination guide that blends classical wisdom with modern psychology, then return a thoughtful answer in three short paragraphs and a reflection prompt to take with you.',
+      },
+      primaryCta: 'Ask the Oracle',
+      secondaryCta: 'Read how it works',
+      form: {
+        eyebrow: 'Your question',
+        title: 'Type one question · Receive one answer',
+        description:
+          'Be specific. Ask about a real situation, not a yes/no. The clearer the question, the more grounded the reading.',
+        footer: 'You will see a free preview before choosing whether to unlock the full answer.',
+        placeholder: 'e.g. I am torn between two job offers. What should I weigh that I am not seeing yet?',
+        loading: 'Consulting the oracle…',
+      },
+      trustItems: [
+        { label: 'No subscription', description: 'One-time payment. No recurring charge.' },
+        { label: 'Free preview', description: 'See the start of your answer before you pay.' },
+        { label: 'Self-reflection only', description: 'Not medical, legal, or financial advice.' },
+      ],
+      preview: {
+        eyebrow: 'YOUR PREVIEW',
+        paywallNote:
+          'The full answer continues with the deeper reading and a personal reflection prompt. Unlock once for {price} — no subscription.',
+        assurance: 'Secure checkout via Stripe · One-time payment · Refundable for 24h.',
+        unlockCta: 'Unlock full answer · {price}',
+        unlocking: 'Opening checkout…',
+      },
+      unlocked: {
+        eyebrow: 'YOUR FULL ANSWER',
+      },
+    },
+    zh: {
+      hero: {
+        eyebrow: '问天机 · 单题问答',
+        title: '一个问题 一个真诚回答 不订阅',
+        subtitle: '按次付费 · AI 占卜 · 仅用于自我反思',
+        description:
+          '问一个真正困扰你的问题 我们用一位融合古典智慧与现代心理学的占卜引路者来回答你 给你三段简洁的解读 和一个可以带走的反思问题',
+      },
+      primaryCta: '向天机提问',
+      secondaryCta: '看看它是怎么工作的',
+      form: {
+        eyebrow: '你的问题',
+        title: '写一个问题 拿一份解读',
+        description:
+          '尽量写具体一点 不要问是非题 问题越清晰 解读越有根据',
+        footer: '付费之前 你会先看到一段免费的预览',
+        placeholder: '比如 我在两份工作之间纠结 有没有什么我没看见的关键点',
+        loading: '正在请教天机…',
+      },
+      trustItems: [
+        { label: '不订阅', description: '一次付费 不会自动续费' },
+        { label: '免费预览', description: '付费之前先看一段开头' },
+        { label: '仅用于反思', description: '不构成医疗 法律 财务建议' },
+      ],
+      preview: {
+        eyebrow: '你的预览',
+        paywallNote:
+          '后续会延展为更深的解读 并附一个可执行的反思问题 单次解锁 {price} 不订阅',
+        assurance: '通过 Stripe 安全结账 · 一次付费 · 24 小时内可退款',
+        unlockCta: '解锁完整回答 · {price}',
+        unlocking: '正在打开结账…',
+      },
+      unlocked: {
+        eyebrow: '你的完整回答',
+      },
+    },
+  },
 } satisfies Record<
   | 'bazi'
   | 'yijing'
@@ -575,7 +733,9 @@ export const moduleLandingCopy = {
   | 'synastry'
   | 'solarReturn'
   | 'transit'
-  | 'pricing',
+  | 'pricing'
+  | 'ask'
+  | 'draw',
   Record<AppLanguage, LandingCopy>
 >;
 
