@@ -56,7 +56,7 @@ export default function DashboardProfilePage() {
 
       try {
         const [profilesResponse, destinyResponse, readingsResponse] = await Promise.all([
-          fetch('/api/profiles'),
+          fetch('/api/user-profiles'),
           fetch(`/api/destiny/profile/${params.profileId}`),
           fetch('/api/readings'),
         ]);

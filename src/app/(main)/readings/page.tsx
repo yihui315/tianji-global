@@ -52,7 +52,7 @@ export default function ReadingsPage() {
 
       try {
         const [profilesResponse, readingsResponse, accountResponse] = await Promise.all([
-          fetch('/api/profiles'),
+          fetch('/api/user-profiles'),
           fetch('/api/readings'),
           fetch('/api/profile'),
         ]);

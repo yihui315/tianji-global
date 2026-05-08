@@ -94,7 +94,7 @@ export default function DashboardPage() {
       try {
         const [profileResponse, profilesResponse, entitlementResponse, readingsResponse] = await Promise.all([
           fetch('/api/profile'),
-          fetch('/api/profiles'),
+          fetch('/api/user-profiles'),
           fetch('/api/entitlements'),
           fetch('/api/readings'),
         ]);
