@@ -100,7 +100,7 @@ export default function ProfilePage() {
       try {
         const [accountResponse, profilesResponse, entitlementResponse] = await Promise.all([
           fetch('/api/profile'),
-          fetch('/api/profiles'),
+          fetch('/api/user-profiles'),
           fetch('/api/entitlements'),
         ]);
 
@@ -193,7 +193,7 @@ export default function ProfilePage() {
     setSaving('profile');
     setNotice(null);
     try {
-      const response = await fetch(`/api/profiles/${selectedProfileId}`, {
+      const response = await fetch(`/api/user-profiles/${selectedProfileId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -232,7 +232,7 @@ export default function ProfilePage() {
     setSaving('create');
     setNotice(null);
     try {
-      const response = await fetch('/api/profiles', {
+      const response = await fetch('/api/user-profiles', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -267,11 +267,7 @@ export default function ProfilePage() {
   async function makePrimary(profileId: string) {
     setNotice(null);
     try {
-      const response = await fetch(`/api/profiles/${profileId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isPrimary: true }),
-      });
+      const response = await fetch(`/api/user-profiles/${profileId}/set-primary`, { method: 'POST' });
 
       const payload = await parseJson<{ success: boolean; data: UserProfile }>(response);
       if (!payload?.data) {
@@ -296,7 +292,7 @@ export default function ProfilePage() {
     setDeletingProfileId(profileId);
     setNotice(null);
     try {
-      const response = await fetch(`/api/profiles/${profileId}`, { method: 'DELETE' });
+      const response = await fetch(`/api/user-profiles/${profileId}`, { method: 'DELETE' });
       if (!response.ok) {
         setNotice('Failed to delete destiny profile.');
         return;

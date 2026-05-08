@@ -70,7 +70,7 @@ export default function ReadingDetailPage() {
       try {
         const [readingResponse, profilesResponse, accountResponse] = await Promise.all([
           fetch(`/api/readings/${params.id}`),
-          fetch('/api/profiles'),
+          fetch('/api/user-profiles'),
           fetch('/api/profile'),
         ]);
 
