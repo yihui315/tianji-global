@@ -14,6 +14,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
 import type { SubscriptionMetadata } from '@/lib/stripe';
+import {
+  markPayPerUseOrderPaidFromSession,
+  recordStripeWebhookEvent,
+} from '@/lib/pay-per-use-orders';
 import Stripe from 'stripe';
 import { Pool } from 'pg';
 
@@ -186,6 +190,19 @@ async function handleCheckoutSessionCompleted(
   pool: Pool,
   session: Stripe.Checkout.Session
 ): Promise<void> {
+  if (session.metadata?.flow === 'pay-per-use') {
+    const order = await markPayPerUseOrderPaidFromSession(pool, session);
+    if (!order) {
+      console.warn('[Webhook] pay-per-use checkout completed without a matching order', {
+        sessionId: session.id,
+      });
+      return;
+    }
+
+    console.log(`[Webhook] pay-per-use order paid: ${order.id}`);
+    return;
+  }
+
   const stripeCustomerId = session.customer as string;
   const userId = session.metadata?.userId;
 
@@ -446,6 +463,11 @@ export async function POST(req: NextRequest) {
   const pool = getPool();
 
   try {
+    const isNewEvent = await recordStripeWebhookEvent(pool, event);
+    if (!isNewEvent) {
+      return NextResponse.json({ received: true, duplicate: true });
+    }
+
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
