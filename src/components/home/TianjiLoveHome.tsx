@@ -339,6 +339,8 @@ export default function TianjiLoveHome() {
   const { lang, setLang } = useLanguage();
   const [activeLang, setActiveLang] = useState<AppLanguage>('zh');
   const [mode, setMode] = useState<'solo' | 'relationship'>('solo');
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const copy = loveCopy[activeLang];
 
   useEffect(() => {
@@ -357,9 +359,47 @@ export default function TianjiLoveHome() {
     }
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    router.push(href(mode === 'solo' ? '/ask' : '/relationship/new'));
+    setFormError(null);
+
+    if (mode === 'relationship') {
+      router.push(href('/relationship/new?source=love-reading-couple'));
+      return;
+    }
+
+    const formData = new FormData(event.currentTarget);
+    const payload = {
+      mode,
+      language: activeLang,
+      birth: {
+        year: String(formData.get('year') ?? ''),
+        month: String(formData.get('month') ?? ''),
+        day: String(formData.get('day') ?? ''),
+        time: String(formData.get('time') ?? ''),
+      },
+    };
+
+    setSubmitting(true);
+    try {
+      const response = await fetch('/api/love-reading/session', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const json = await response.json();
+
+      if (!response.ok || typeof json.resultUrl !== 'string') {
+        setFormError(json.error ?? 'Unable to create your love reading.');
+        return;
+      }
+
+      router.push(json.resultUrl);
+    } catch {
+      setFormError('Unable to create your love reading.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const yearOptions = useMemo(() => YEARS, []);
@@ -419,7 +459,15 @@ export default function TianjiLoveHome() {
       </section>
 
       <section id="orbit" className="tianji-love-form-section relative z-10 mx-auto w-full max-w-6xl px-5 sm:px-8">
-        <BirthChartForm copy={copy} mode={mode} setMode={setMode} onSubmit={handleSubmit} yearOptions={yearOptions} />
+        <BirthChartForm
+          copy={copy}
+          mode={mode}
+          setMode={setMode}
+          onSubmit={handleSubmit}
+          yearOptions={yearOptions}
+          submitting={submitting}
+          error={formError}
+        />
       </section>
 
       <section className="tianji-love-insight-section relative z-10 mx-auto grid w-full max-w-7xl gap-5 px-5 py-7 sm:px-8 md:grid-cols-3">
@@ -505,12 +553,16 @@ function BirthChartForm({
   setMode,
   onSubmit,
   yearOptions,
+  submitting,
+  error,
 }: {
   copy: LoveCopy;
   mode: 'solo' | 'relationship';
   setMode: (mode: 'solo' | 'relationship') => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   yearOptions: string[];
+  submitting: boolean;
+  error: string | null;
 }) {
   const selects = {
     ...copy.form.selects,
@@ -531,21 +583,27 @@ function BirthChartForm({
         <span className="tianji-love-ornament-line h-px w-12 scale-x-[-1]" />
       </div>
       <div className="tianji-love-select-grid grid gap-4 lg:grid-cols-4">
-        <BirthSelect select={selects.year} />
-        <BirthSelect select={selects.month} />
-        <BirthSelect select={selects.day} />
-        <BirthSelect select={selects.time} />
+        <BirthSelect name="year" select={selects.year} />
+        <BirthSelect name="month" select={selects.month} />
+        <BirthSelect name="day" select={selects.day} />
+        <BirthSelect name="time" select={selects.time} />
       </div>
       <div className="tianji-love-mode-toggle mx-auto mt-7 grid max-w-xl grid-cols-2 rounded-full border border-[#d8b77b]/55 bg-black/30 p-1">
         <ModeButton active={mode === 'solo'} icon={User} label={copy.form.solo} onClick={() => setMode('solo')} />
         <ModeButton active={mode === 'relationship'} icon={Users} label={copy.form.relationship} onClick={() => setMode('relationship')} />
       </div>
+      {error ? (
+        <p className="mx-auto mt-5 max-w-xl rounded-md border border-[#ffb49e]/28 bg-[#4d151d]/40 px-4 py-3 text-center text-sm text-[#ffd7c9]">
+          {error}
+        </p>
+      ) : null}
       <div className="tianji-love-submit-row mt-7 flex flex-col items-center gap-3">
         <button
           type="submit"
+          disabled={submitting}
           className="tianji-love-primary inline-flex min-h-16 w-full max-w-xl items-center justify-center rounded-lg border border-[#ffb49e]/60 px-7 text-lg font-semibold text-[#fff7e6] sm:text-xl"
         >
-          {copy.form.cta}
+          {submitting ? 'Creating...' : copy.form.cta}
           <Sparkles className="ml-3 h-5 w-5" aria-hidden />
         </button>
         <p className="tianji-love-form-helper text-center text-sm text-[#d8b77b]/78">{copy.form.helper}</p>
@@ -581,12 +639,14 @@ function ModeButton({
   );
 }
 
-function BirthSelect({ select }: { select: SelectCopy }) {
+function BirthSelect({ name, select }: { name: string; select: SelectCopy }) {
   return (
     <label className="block">
       <span className="mb-2 block text-sm font-semibold text-[#f4d7a3]/84">{select.label}</span>
       <span className="relative block">
         <select
+          name={name}
+          required
           className="h-14 w-full appearance-none rounded-lg border border-[#d8b77b]/40 bg-black/35 px-4 pr-11 text-base text-[#ffe3b4] outline-none transition focus:border-[#ffe3b4] focus:ring-2 focus:ring-[#d8b77b]/30"
           defaultValue=""
         >
