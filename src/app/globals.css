@@ -52,6 +52,7 @@
    ══════════════════════════════════════════════════════════════ */
 
 :root {
+  --font-tianji-sans: "Segoe UI", "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
   --font-tianji-display: var(--font-tianji-sans);
   --font-tianji-body: var(--font-tianji-sans);
   --font-cinzel: var(--font-tianji-display);

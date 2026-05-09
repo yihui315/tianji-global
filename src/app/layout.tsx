@@ -1,15 +1,6 @@
 import type { Metadata } from 'next';
-import { Noto_Sans_SC } from 'next/font/google';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
-
-const tianjiSans = Noto_Sans_SC({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-  variable: '--font-tianji-sans',
-  fallback: ['Segoe UI', 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
-});
 
 export const metadata: Metadata = {
   title: 'TianJi Global | Premium AI Destiny Platform',
@@ -47,7 +38,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${tianjiSans.variable} min-h-screen bg-[#050508] text-white antialiased`}>
+      <body className="min-h-screen bg-[#050508] text-white antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

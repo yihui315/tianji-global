@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Zap } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -273,7 +274,7 @@ export default function DeepSpaceHero() {
           transition={{ duration: 0.8, delay: 1.0 }}
           className="flex flex-col sm:flex-row gap-4 items-center"
         >
-          <a
+          <Link
             href="/western"
             className="group relative flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-medium overflow-hidden transition-all duration-300"
             style={{
@@ -288,9 +289,9 @@ export default function DeepSpaceHero() {
             />
             <span className="relative z-10">{primaryCta}</span>
             <ArrowRight size={14} className="relative z-10 transition-transform duration-200 group-hover:translate-x-0.5" />
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/pricing"
             className="group flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium transition-all duration-300"
             style={{
@@ -301,7 +302,7 @@ export default function DeepSpaceHero() {
           >
             <Zap size={12} style={{ color: 'rgba(168,130,255,0.7)' }} />
             <span>{secondaryCta}</span>
-          </a>
+          </Link>
         </motion.div>
 
         <motion.p

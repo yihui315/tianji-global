@@ -8,6 +8,7 @@ create table if not exists analytics_events (
   event        text not null,
   experiment_id text not null,
   variant      text,
+  module_type  text,
   relation_type text,
   share_mode   text,
   dimension    text,
@@ -25,6 +26,12 @@ create index if not exists analytics_events_event_idx
 
 create index if not exists analytics_events_variant_idx
   on analytics_events (variant);
+
+alter table analytics_events
+  add column if not exists module_type text;
+
+create index if not exists analytics_events_module_type_idx
+  on analytics_events (module_type);
 
 create index if not exists analytics_events_created_at_idx
   on analytics_events (created_at desc);
