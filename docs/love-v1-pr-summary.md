@@ -60,10 +60,9 @@ See `docs/love-v1-integration-qa.md`.
 - Stripe sandbox needs final manual payment and webhook verification.
 - Email provider needs staging environment verification.
 - Supabase migrations need staging application before end-to-end paid unlock QA.
-- Preview QA needs a Vercel Preview URL.
+- Staging QA needs a self-hosted preview URL or a temporary server route.
 - Legacy Pro subscription routes remain outside the Love V1 checkout path and need product-scope confirmation.
 
 ## Rollback
 
 Revert this PR as one unit and redeploy the previous known-good production branch. Re-run `npm run release:check` and smoke test `/en`, `/zh-CN`, pricing, privacy, terms, and existing core reading pages.
-

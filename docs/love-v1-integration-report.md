@@ -88,7 +88,7 @@ Issue found and fixed:
 
 Environment notes:
 
-- Local dev logs `MissingSecret` when `NEXTAUTH_SECRET` is not configured. This is expected for the no-env local simulation, but Preview must define it.
+- Local dev logs `MissingSecret` when `NEXTAUTH_SECRET` is not configured. This is expected for the no-env local simulation, but staging must define it.
 - Checkout logs a missing `STRIPE_SECRET_KEY` error when Stripe env is absent; the API response stays user-safe and does not expose secrets.
 
 ## 中文模拟运行摘要
@@ -112,21 +112,21 @@ Environment notes:
 - 修复：将 love-reading session 和 report job 的无数据库 fallback store 挂到 `globalThis`，避免 Next dev/runtime 模块实例不一致时丢失本地模拟数据。
 - 结果：修复后本地 session -> result -> teaser/paywall 链路通过。
 
-仍需 Preview 验证：
+仍需 staging 验证：
 
 - Stripe test mode 真实 Checkout。
 - Stripe webhook 签名校验、重复事件幂等、无效签名拒绝。
 - Supabase staging migrations。
 - Resend 报告找回邮件。
-- Vercel Preview 上的移动端和 reduced motion 手工 QA。
+- Self-hosted staging 上的移动端和 reduced motion 手工 QA。
 
 ## Remaining Risks
 
-- Stripe sandbox payment, webhook delivery, duplicate webhook replay, and invalid-signature handling still need manual verification against a Preview URL.
+- Stripe sandbox payment, webhook delivery, duplicate webhook replay, and invalid-signature handling still need manual verification against a staging URL.
 - Resend/report recovery email still needs staging verification with provider env configured.
 - Supabase migrations must be applied in staging before paid unlock/report jobs can be verified end to end.
 - The legacy Pro subscription pricing route and `/api/stripe/checkout` still exist outside the Love V1 checkout path; confirm product scope before launch.
-- Preview QA was not run because no Vercel Preview URL was provided.
+- Staging QA was not run because no self-hosted staging URL was available.
 - Report copy is deterministic scaffold content and still needs product/copy review before public launch.
 
 ## Manual QA Checklist

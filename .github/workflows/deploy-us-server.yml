@@ -1,0 +1,82 @@
+name: Deploy US Server
+
+on:
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  deploy:
+    name: Deploy main to US server
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Validate deployment secrets
+        env:
+          US_SERVER_HOST: ${{ secrets.US_SERVER_HOST }}
+          US_SERVER_USER: ${{ secrets.US_SERVER_USER }}
+          US_SERVER_SSH_KEY: ${{ secrets.US_SERVER_SSH_KEY }}
+          US_SERVER_APP_DIR: ${{ secrets.US_SERVER_APP_DIR }}
+          US_SERVER_PM2_APP: ${{ secrets.US_SERVER_PM2_APP }}
+        run: |
+          test -n "$US_SERVER_HOST"
+          test -n "$US_SERVER_USER"
+          test -n "$US_SERVER_SSH_KEY"
+          test -n "$US_SERVER_APP_DIR"
+          test -n "$US_SERVER_PM2_APP"
+
+      - name: Install SSH key
+        env:
+          US_SERVER_SSH_KEY: ${{ secrets.US_SERVER_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$US_SERVER_SSH_KEY" > ~/.ssh/tianji_us_server
+          chmod 600 ~/.ssh/tianji_us_server
+
+      - name: Trust server host key
+        env:
+          US_SERVER_HOST: ${{ secrets.US_SERVER_HOST }}
+          US_SERVER_PORT: ${{ secrets.US_SERVER_PORT }}
+        run: |
+          PORT="${US_SERVER_PORT:-22}"
+          ssh-keyscan -p "$PORT" "$US_SERVER_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy main branch
+        env:
+          US_SERVER_HOST: ${{ secrets.US_SERVER_HOST }}
+          US_SERVER_USER: ${{ secrets.US_SERVER_USER }}
+          US_SERVER_PORT: ${{ secrets.US_SERVER_PORT }}
+          US_SERVER_APP_DIR: ${{ secrets.US_SERVER_APP_DIR }}
+          US_SERVER_PM2_APP: ${{ secrets.US_SERVER_PM2_APP }}
+        run: |
+          PORT="${US_SERVER_PORT:-22}"
+          ssh -i ~/.ssh/tianji_us_server -p "$PORT" "$US_SERVER_USER@$US_SERVER_HOST" \
+            "APP_DIR='$US_SERVER_APP_DIR' PM2_APP='$US_SERVER_PM2_APP' bash -s" <<'REMOTE'
+          set -euo pipefail
+          cd "$APP_DIR"
+          git fetch origin main
+          git checkout main
+          git pull --ff-only origin main
+          npm ci --legacy-peer-deps
+          npm run release:check
+          pm2 restart "$PM2_APP" --update-env || PORT=3000 NODE_ENV=production pm2 start npm --name "$PM2_APP" -- start
+          pm2 save
+          REMOTE
+
+      - name: Smoke production
+        env:
+          US_SERVER_HOST: ${{ secrets.US_SERVER_HOST }}
+          US_SERVER_USER: ${{ secrets.US_SERVER_USER }}
+          US_SERVER_PORT: ${{ secrets.US_SERVER_PORT }}
+          US_SERVER_APP_DIR: ${{ secrets.US_SERVER_APP_DIR }}
+          SMOKE_BASE_URL: ${{ vars.SMOKE_BASE_URL }}
+        run: |
+          PORT="${US_SERVER_PORT:-22}"
+          ssh -i ~/.ssh/tianji_us_server -p "$PORT" "$US_SERVER_USER@$US_SERVER_HOST" \
+            "APP_DIR='$US_SERVER_APP_DIR' SMOKE_BASE_URL='${SMOKE_BASE_URL:-https://tianji.love}' bash -s" <<'REMOTE'
+          set -euo pipefail
+          cd "$APP_DIR"
+          SMOKE_BASE_URL="$SMOKE_BASE_URL" npm run smoke:production
+          REMOTE

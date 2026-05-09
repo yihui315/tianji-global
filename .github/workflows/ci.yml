@@ -29,18 +29,3 @@ jobs:
 
       - name: Release gate
         run: npm run release:check
-
-  deploy-vercel:
-    name: Deploy to Vercel
-    needs: build-and-test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Deploy to Vercel
-        run: |
-          npm install -g vercel
-          vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }}

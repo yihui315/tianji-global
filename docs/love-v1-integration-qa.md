@@ -1,6 +1,6 @@
 # Love V1 Integration QA Checklist
 
-Use this checklist against the Vercel Preview URL before approving the `codex/integration-love-v1` branch. Do not use production credentials or real payment cards during QA.
+Use this checklist against the staging or self-hosted preview URL before approving the `codex/integration-love-v1` branch. Do not use production credentials or real payment cards during QA.
 
 ## Environment Gate
 
@@ -49,4 +49,3 @@ Use this checklist against the Vercel Preview URL before approving the `codex/in
 3. Run `npm run release:check` on the rollback commit.
 4. Smoke test `/en`, `/zh-CN`, pricing, privacy, and terms pages.
 5. Confirm payment webhooks are still pointed at the intended environment before resuming launch traffic.
-
