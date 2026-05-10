@@ -8,12 +8,26 @@
 import { interpretFortune, interpretTarot } from '@/lib/ai-interpreter';
 import { calculateBaZi } from '@/lib/bazi';
 import { pool } from '@/lib/db';
+import type { DailyFortuneReport } from '@/types/daily-fortune';
 
 const TELEGRAM_API = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`;
+
+function isDailyFortuneFeatureEnabled(): boolean {
+  return process.env.DAILY_FORTUNE_ENABLED === 'true';
+}
+
+function normalizeTelegramLanguage(value: unknown): 'zh' | 'en' {
+  return value === 'en' ? 'en' : 'zh';
+}
+
+function todayTelegramIsoDate(): string {
+  return new Date().toISOString().slice(0, 10);
+}
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
 export interface TelegramUser {
+  user_id?: string | null;
   telegram_chat_id: string;
   birth_date: string | null;
   birth_time: string | null;
@@ -116,14 +130,64 @@ export async function sendMessage(
  * Retrieve a telegram user by chatId.
  */
 export async function getTelegramUser(chatId: string): Promise<TelegramUser | null> {
-  const { rows } = await pool.query<TelegramUser>(
-    'SELECT telegram_chat_id, birth_date, birth_time, language, subscribed, gender FROM telegram_users WHERE telegram_chat_id = $1',
-    [chatId]
-  );
-  return rows[0] ?? null;
+  try {
+    const { rows } = await pool.query<TelegramUser>(
+      'SELECT user_id, telegram_chat_id, birth_date, birth_time, language, subscribed, gender FROM telegram_users WHERE telegram_chat_id = $1',
+      [chatId]
+    );
+    return rows[0] ?? null;
+  } catch {
+    const { rows } = await pool.query<TelegramUser>(
+      'SELECT telegram_chat_id, birth_date, birth_time, language, subscribed, gender FROM telegram_users WHERE telegram_chat_id = $1',
+      [chatId]
+    );
+    return rows[0] ?? null;
+  }
 }
 
 // ─── Fortune helpers ─────────────────────────────────────────────────────────
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatDailyFortuneTelegramMessage(report: DailyFortuneReport, lang: 'zh' | 'en'): string {
+  const scoreLine = lang === 'en'
+    ? `Overall ${report.scores.overall} | Love ${report.scores.love} | Career ${report.scores.career} | Wealth ${report.scores.wealth} | Energy ${report.scores.health}`
+    : `总分 ${report.scores.overall} | 情感 ${report.scores.love} | 事业 ${report.scores.career} | 财富 ${report.scores.wealth} | 状态 ${report.scores.health}`;
+  const remedyLines = report.remedies.slice(0, 2).map((remedy, index) => {
+    const title = escapeHtml(remedy.title);
+    const body = escapeHtml(remedy.body);
+    return `${index + 1}. <b>${title}</b>\n${body}`;
+  });
+  const shortDisclaimer = lang === 'en'
+    ? 'For entertainment and self-reflection only, not professional advice.'
+    : '仅供娱乐与自我观察，不构成专业建议。';
+
+  return [
+    lang === 'en' ? '<b>Daily Fortune</b>' : '<b>今日运势</b>',
+    escapeHtml(report.date),
+    '',
+    `<b>${escapeHtml(report.headline)}</b>`,
+    escapeHtml(scoreLine),
+    escapeHtml(report.summary),
+    '',
+    ...remedyLines,
+    '',
+    escapeHtml(shortDisclaimer),
+  ].filter(Boolean).join('\n');
+}
+
+function formatTelegramBindPrompt(lang: 'zh' | 'en'): string {
+  return lang === 'en'
+    ? 'Daily Fortune needs a linked TianJi profile first. Please bind your birth profile in TianJi, then use /daily again.'
+    : '今日运势需要先绑定 TianJi 个人资料。请先完成出生资料绑定，再使用 /daily。';
+}
 
 /**
  * Fetch today's fortune for the user and send it as a Telegram message.
@@ -133,7 +197,82 @@ export async function sendDailyFortune(
   chatId: string,
   user?: TelegramUser | null
 ): Promise<void> {
-  const lang = (user?.language as 'zh' | 'en') ?? 'zh';
+  const lang = normalizeTelegramLanguage(user?.language);
+
+  if (isDailyFortuneFeatureEnabled()) {
+    const telegramUser = user ?? await getTelegramUser(chatId);
+    const linkedUserId = telegramUser?.user_id;
+
+    if (!linkedUserId) {
+      await sendMessage(chatId, escapeHtml(formatTelegramBindPrompt(lang)), 'HTML');
+      return;
+    }
+
+    const [{ getSupabaseAdmin }, { getOrCreateDailyFortuneReport }, { recordPushDeliveryLog }] =
+      await Promise.all([
+        import('@/lib/supabase'),
+        import('@/lib/daily-fortune/service'),
+        import('@/lib/daily-fortune/repository'),
+      ]);
+    const supabase = getSupabaseAdmin();
+    const reportResult = await getOrCreateDailyFortuneReport({
+      supabase,
+      userId: linkedUserId,
+      date: todayTelegramIsoDate(),
+      systemType: 'bazi',
+      language: lang,
+    });
+
+    if (!reportResult.success) {
+      await recordPushDeliveryLog({
+        supabase,
+        input: {
+          userId: linkedUserId,
+          channel: 'telegram',
+          target: chatId,
+          status: 'failed',
+          errorMessage: reportResult.error.message,
+        },
+      });
+      await sendMessage(
+        chatId,
+        lang === 'en'
+          ? 'Daily Fortune is temporarily unavailable. Please try again later.'
+          : '今日运势暂时不可用，请稍后再试。',
+        'HTML'
+      );
+      return;
+    }
+
+    try {
+      await sendMessage(chatId, formatDailyFortuneTelegramMessage(reportResult.data, lang), 'HTML');
+      await recordPushDeliveryLog({
+        supabase,
+        input: {
+          reportId: reportResult.data.id,
+          userId: linkedUserId,
+          channel: 'telegram',
+          target: chatId,
+          status: 'sent',
+          sentAt: new Date().toISOString(),
+        },
+      });
+    } catch (error) {
+      await recordPushDeliveryLog({
+        supabase,
+        input: {
+          reportId: reportResult.data.id,
+          userId: linkedUserId,
+          channel: 'telegram',
+          target: chatId,
+          status: 'failed',
+          errorMessage: error instanceof Error ? error.message : 'Telegram send failed.',
+        },
+      });
+      throw error;
+    }
+    return;
+  }
 
   // Personalised path: has birth date
   if (user?.birth_date && user.birth_date.match(/^\d{4}-\d{2}-\d{2}$/)) {

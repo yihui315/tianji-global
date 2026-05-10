@@ -17,7 +17,8 @@
     "audit:copy": "tsx scripts/audit-copy.ts",
     "audit:share": "tsx scripts/audit-share.ts",
     "audit:upgrade": "tsx scripts/audit-upgrade.ts",
-    "audit:release-gate": "npm run audit:routes && npm run audit:copy && npm run audit:share && npm run audit:upgrade",
+    "audit:daily-fortune": "tsx scripts/audit-daily-fortune.ts",
+    "audit:release-gate": "npm run audit:routes && npm run audit:copy && npm run audit:share && npm run audit:upgrade && npm run audit:daily-fortune",
     "upgrade:plan": "node scripts/generate-upgrade-plan.ts"
   },
   "keywords": [

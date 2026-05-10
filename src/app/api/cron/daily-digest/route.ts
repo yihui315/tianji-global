@@ -15,6 +15,15 @@ import { Resend } from 'resend';
 import { DailyDigestEmail } from '@/components/emails/DailyDigestEmail';
 import { shuffleDeck, drawCards } from '@/lib/tarot';
 import yijing from '@/lib/yijing';
+import { getSupabaseAdmin } from '@/lib/supabase';
+import {
+  getOrCreateDailyFortuneReport,
+  isDailyFortuneDispatchEnabled,
+  normalizeDailyFortuneLanguage,
+  todayIsoDate,
+} from '@/lib/daily-fortune/service';
+import { recordPushDeliveryLog } from '@/lib/daily-fortune/repository';
+import type { DailyFortuneReport } from '@/types/daily-fortune';
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -281,9 +290,12 @@ export async function GET(request: NextRequest) {
   const resend = new Resend(RESEND_API_KEY);
 
   try {
+    const useDailyFortuneReport = isDailyFortuneDispatchEnabled();
+    const supabaseAdmin = useDailyFortuneReport ? getSupabaseAdmin() : null;
+
     // 1. Fetch all users with enabled daily subscriptions
     const usersResult = await pool.query(
-      `SELECT DISTINCT u.id, u.email, u.name, u.image
+      `SELECT DISTINCT u.id, u.email, u.name, u.image, u.language
        FROM users u
        INNER JOIN user_subscriptions us ON us.user_id = u.id
        WHERE us.enabled = true AND us.frequency = 'daily'`,
@@ -322,10 +334,39 @@ export async function GET(request: NextRequest) {
               `SELECT language FROM readings WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1`,
               [user.id],
             );
-            const language: 'zh' | 'en' = (langResult.rows[0]?.language as 'zh' | 'en') || 'zh';
+            const language = normalizeDailyFortuneLanguage(user.language ?? langResult.rows[0]?.language);
+            let dailyFortuneReport: DailyFortuneReport | undefined;
+
+            if (useDailyFortuneReport && supabaseAdmin) {
+              const reportResult = await getOrCreateDailyFortuneReport({
+                supabase: supabaseAdmin,
+                userId: user.id,
+                date: todayIsoDate(),
+                systemType: 'bazi',
+                language,
+              });
+
+              if (!reportResult.success) {
+                await recordPushDeliveryLog({
+                  supabase: supabaseAdmin,
+                  input: {
+                    userId: user.id,
+                    channel: 'email',
+                    target: user.email,
+                    status: 'failed',
+                    errorMessage: reportResult.error.message,
+                  },
+                });
+                errorCount++;
+                return;
+              }
+
+              dailyFortuneReport = reportResult.data;
+            }
 
             const sections: DigestSection[] = [];
 
+            if (!dailyFortuneReport) {
             for (const sub of subsResult.rows) {
               const { service_type: serviceType } = sub;
 
@@ -354,17 +395,19 @@ export async function GET(request: NextRequest) {
                 });
               }
             }
+            }
 
-            if (sections.length === 0) return;
+            if (!dailyFortuneReport && sections.length === 0) return;
 
             const unsubscribeUrl = `${APP_URL}/api/unsubscribe?token=${user.id}`;
-            const digestUrl = `${APP_URL}/dashboard`;
+            const digestUrl = dailyFortuneReport ? `${APP_URL}/daily-fortune` : `${APP_URL}/dashboard`;
 
             const emailHtml = await DailyDigestEmail({
               userName: user.name || user.email?.split('@')[0] || (language === 'zh' ? '您' : 'you'),
               digestUrl,
               unsubscribeUrl,
               sections,
+              dailyFortuneReport,
               language,
             });
 
@@ -374,7 +417,7 @@ export async function GET(request: NextRequest) {
               ? `✨ ${dateStr} 每日运势已更新`
               : `✨ Your ${dateStr} Daily Fortune Is Ready`;
 
-            const { error } = await resend.emails.send({
+            const { data: resendData, error } = await resend.emails.send({
               from: FROM_EMAIL,
               to: user.email,
               subject,
@@ -382,6 +425,19 @@ export async function GET(request: NextRequest) {
             });
 
             if (error) {
+              if (dailyFortuneReport?.id && supabaseAdmin) {
+                await recordPushDeliveryLog({
+                  supabase: supabaseAdmin,
+                  input: {
+                    reportId: dailyFortuneReport.id,
+                    userId: user.id,
+                    channel: 'email',
+                    target: user.email,
+                    status: 'failed',
+                    errorMessage: String(error.message ?? 'Email provider failed.'),
+                  },
+                });
+              }
               console.error(`[digest] Failed to send to ${user.email}:`, error);
               errorCount++;
               return;
@@ -396,6 +452,27 @@ export async function GET(request: NextRequest) {
                 ),
               ),
             );
+
+            if (dailyFortuneReport?.id && supabaseAdmin) {
+              await Promise.allSettled([
+                pool.query(
+                  `INSERT INTO email_digests (user_id, service_type, email_type) VALUES ($1, $2, 'daily_digest')`,
+                  [user.id, 'daily_fortune'],
+                ),
+                recordPushDeliveryLog({
+                  supabase: supabaseAdmin,
+                  input: {
+                    reportId: dailyFortuneReport.id,
+                    userId: user.id,
+                    channel: 'email',
+                    target: user.email,
+                    status: 'sent',
+                    providerMessageId: resendData?.id,
+                    sentAt: new Date().toISOString(),
+                  },
+                }),
+              ]);
+            }
 
             successCount++;
             console.log(`[digest] Sent daily digest to ${user.email}`);

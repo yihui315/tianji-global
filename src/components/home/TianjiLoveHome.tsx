@@ -201,13 +201,21 @@ function HeroLoveSection({
             Tianji Love
           </span>
         </Link>
-        <a
-          href="#birth-chart-form"
-          className="inline-flex h-10 items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 text-sm font-semibold text-white shadow-lg shadow-black/20 backdrop-blur transition hover:border-rose-200/60 hover:bg-white/16 focus:outline-none focus:ring-2 focus:ring-rose-200/70"
-        >
-          Start free
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-        </a>
+        <nav className="flex items-center gap-2" aria-label="Primary">
+          <Link
+            href="/daily-fortune"
+            className="hidden h-10 items-center rounded-full border border-white/15 bg-white/8 px-4 text-sm font-semibold text-white/78 shadow-lg shadow-black/20 backdrop-blur transition hover:border-amber-200/50 hover:text-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-200/70 sm:inline-flex"
+          >
+            Daily Fortune
+          </Link>
+          <a
+            href="#birth-chart-form"
+            className="inline-flex h-10 items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 text-sm font-semibold text-white shadow-lg shadow-black/20 backdrop-blur transition hover:border-rose-200/60 hover:bg-white/16 focus:outline-none focus:ring-2 focus:ring-rose-200/70"
+          >
+            Start free
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </a>
+        </nav>
       </header>
 
       <div className="mx-auto grid max-w-7xl gap-8 py-10 sm:gap-10 sm:py-20 lg:grid-cols-[minmax(0,1.02fr)_minmax(380px,0.78fr)] lg:items-center lg:py-24">
