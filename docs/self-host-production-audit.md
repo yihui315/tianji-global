@@ -57,8 +57,27 @@ Observed from this workstation on 2026-05-10:
 - TCP port 80 is reachable.
 - TCP port 443 is reachable.
 - HTTP with `Host: tianji.love` returns `301` to `https://tianji.love/`.
-- HTTPS curl from this Windows workstation fails during TLS setup with a Schannel credential error, so TLS must be rechecked from another client and on the server.
+- `curl -I https://tianji.love/` returns `200`.
+- `curl -I https://www.tianji.love/` returns `200`.
+- The HTTPS response includes `Server: nginx/1.24.0 (Ubuntu)` and `X-Powered-By: Next.js`, so the public Nginx-to-Next.js path is responding externally.
+- The TLS certificate subject is `CN=tianji.love`, issuer is Let's Encrypt `E7`, protocol is TLS 1.2, and the observed certificate validity window is 2026-05-02 to 2026-07-31.
 - SSH key login as `deploy` is not available from this workstation.
+
+Current smoke status:
+
+| Route | Observed status |
+| --- | --- |
+| `/` | `200` |
+| `/en` | `404` |
+| `/zh-CN` | `404` |
+| `/en/pricing` | `404` |
+| `/en/love-reading/result/demo` | `404` |
+| `/legal/privacy` | `200` |
+| `/legal/terms` | `200` |
+| `/pricing` | `200` |
+| `/relationship/new` | `200` |
+
+The `404` responses on the Love V1 localized routes indicate that production is serving an older app build or a branch that does not yet include the PR #46 localized Love V1 routes. Treat this as `NO-GO` for Love V1 paid launch until the intended release commit is deployed and the smoke checklist passes.
 
 ## Server Internal Checks
 
