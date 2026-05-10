@@ -234,8 +234,33 @@ drop policy if exists "Users can manage own fortune feedback" on public.fortune_
 create policy "Users can manage own fortune feedback"
   on public.fortune_feedback
   for all
-  using (auth.uid() = user_id)
-  with check (auth.uid() = user_id);
+  using (
+    auth.uid() = user_id
+    and exists (
+      select 1
+      from public.daily_fortune_reports r
+      where r.id = public.fortune_feedback.report_id
+        and r.user_id = auth.uid()
+    )
+  )
+  with check (
+    auth.uid() = user_id
+    and exists (
+      select 1
+      from public.daily_fortune_reports r
+      where r.id = public.fortune_feedback.report_id
+        and r.user_id = auth.uid()
+    )
+    and (
+      public.fortune_feedback.action_id is null
+      or exists (
+        select 1
+        from public.fortune_remedy_actions a
+        where a.id = public.fortune_feedback.action_id
+          and a.report_id = public.fortune_feedback.report_id
+      )
+    )
+  );
 
 drop policy if exists "Service role can manage fortune feedback" on public.fortune_feedback;
 create policy "Service role can manage fortune feedback"
