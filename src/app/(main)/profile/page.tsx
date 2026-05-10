@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -380,7 +381,14 @@ export default function ProfilePage() {
             </p>
             <div className="mt-5 flex items-center gap-4">
               {session.user.image ? (
-                <img src={session.user.image} alt="Profile avatar" className="h-16 w-16 rounded-full border border-white/15" />
+                <Image
+                  src={session.user.image}
+                  alt="Profile avatar"
+                  width={64}
+                  height={64}
+                  unoptimized
+                  className="h-16 w-16 rounded-full border border-white/15"
+                />
               ) : (
                 <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/15 bg-purple-700 text-xl font-semibold">
                   {(session.user.name ?? '?').slice(0, 1)}

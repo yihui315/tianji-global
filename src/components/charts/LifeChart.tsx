@@ -3,8 +3,10 @@
 import { useEffect, useRef } from 'react';
 import {
   Chart,
+  BarController,
   CategoryScale,
   LinearScale,
+  LineController,
   BarElement,
   LineElement,
   PointElement,
@@ -15,6 +17,8 @@ import {
 } from 'chart.js';
 
 Chart.register(
+  BarController,
+  LineController,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -41,23 +45,38 @@ export interface FortunePoint {
 interface LifeChartProps {
   data: FortunePoint[];
   language?: 'zh' | 'en';
+  className?: string;
 }
 
 const PHASE_NAMES_ZH: Record<number, string> = {
-  0: '童年', 10: '少年', 20: '青年', 30: '而立',
-  40: '不惑', 50: '知命', 60: '耳顺', 70: '花甲',
-  80: '古稀', 90: '耄耋',
+  0: 'Age 0',
+  10: 'Age 10',
+  20: 'Age 20',
+  30: 'Age 30',
+  40: 'Age 40',
+  50: 'Age 50',
+  60: 'Age 60',
+  70: 'Age 70',
+  80: 'Age 80',
+  90: 'Age 90',
 };
 
 const PHASE_NAMES_EN: Record<number, string> = {
-  0: 'Childhood', 10: 'Youth', 20: 'Young Adult', 30: 'Establishing',
-  40: 'Clarifying', 50: 'Wisdom', 60: 'Harmony', 70: 'Retirement',
-  80: 'Longevity', 90: 'Elder',
+  0: 'Childhood',
+  10: 'Youth',
+  20: 'Young Adult',
+  30: 'Establishing',
+  40: 'Clarifying',
+  50: 'Wisdom',
+  60: 'Harmony',
+  70: 'Retirement',
+  80: 'Longevity',
+  90: 'Elder',
 };
 
-const TREND_ICONS = { up: '↑', down: '↓', stable: '→' };
+const TREND_LABELS = { up: 'up', down: 'down', stable: 'flat' };
 
-export default function LifeChart({ data, language = 'zh' }: LifeChartProps) {
+export default function LifeChart({ data, language = 'zh', className = '' }: LifeChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
 
@@ -65,22 +84,27 @@ export default function LifeChart({ data, language = 'zh' }: LifeChartProps) {
     if (!canvasRef.current) return;
 
     const isZH = language === 'zh';
-    const labels = data.map(d =>
-      `${isZH ? PHASE_NAMES_ZH[d.ageStart] : PHASE_NAMES_EN[d.ageStart]} (${d.ageStart}-${d.ageEnd})`
-    );
+    const labels = data.map((point) => {
+      const phase = isZH ? PHASE_NAMES_ZH[point.ageStart] : PHASE_NAMES_EN[point.ageStart];
+      return `${phase ?? point.phaseEn} (${point.ageStart}-${point.ageEnd})`;
+    });
 
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return;
 
-    // Destroy existing chart
     if (chartRef.current) {
       chartRef.current.destroy();
     }
 
-    // Create gradient for bars
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(124, 58, 237, 0.8)');
-    gradient.addColorStop(1, 'rgba(124, 58, 237, 0.2)');
+    const barGradient = ctx.createLinearGradient(0, 0, 0, 420);
+    barGradient.addColorStop(0, 'rgba(167, 139, 250, 0.84)');
+    barGradient.addColorStop(0.55, 'rgba(124, 58, 237, 0.34)');
+    barGradient.addColorStop(1, 'rgba(10, 10, 10, 0.02)');
+
+    const lineGradient = ctx.createLinearGradient(0, 0, 560, 0);
+    lineGradient.addColorStop(0, '#D4AF37');
+    lineGradient.addColorStop(0.5, '#F5D76E');
+    lineGradient.addColorStop(1, '#A78BFA');
 
     chartRef.current = new Chart(ctx, {
       type: 'bar',
@@ -89,22 +113,24 @@ export default function LifeChart({ data, language = 'zh' }: LifeChartProps) {
         datasets: [
           {
             type: 'bar',
-            label: isZH ? '综合运势' : 'Overall Fortune',
-            data: data.map(d => d.overall),
-            backgroundColor: gradient,
-            borderColor: '#7C3AED',
+            label: 'Overall Fortune',
+            data: data.map((point) => point.overall),
+            backgroundColor: barGradient,
+            borderColor: 'rgba(167,139,250,0.72)',
             borderWidth: 1,
-            borderRadius: 6,
+            borderRadius: 12,
             yAxisID: 'y',
           },
           {
             type: 'line',
-            label: isZH ? '运势趋势' : 'Fortune Trend',
-            data: data.map(d => d.overall),
-            borderColor: '#F59E0B',
+            label: 'Fortune Trend',
+            data: data.map((point) => point.overall),
+            borderColor: lineGradient,
             borderWidth: 3,
-            tension: 0.4,
-            pointBackgroundColor: '#F59E0B',
+            tension: 0.42,
+            pointBackgroundColor: '#D4AF37',
+            pointBorderColor: 'rgba(255,255,255,0.65)',
+            pointBorderWidth: 1,
             pointRadius: 5,
             pointHoverRadius: 8,
             fill: false,
@@ -122,29 +148,30 @@ export default function LifeChart({ data, language = 'zh' }: LifeChartProps) {
         plugins: {
           legend: {
             labels: {
-              color: '#E2E8F0',
+              color: 'rgba(255,255,255,0.74)',
               font: { size: 13 },
             },
           },
           tooltip: {
-            backgroundColor: '#1F2937',
-            titleColor: '#F59E0B',
-            bodyColor: '#E2E8F0',
-            borderColor: '#374151',
+            backgroundColor: 'rgba(10,10,10,0.92)',
+            titleColor: '#D4AF37',
+            bodyColor: 'rgba(255,255,255,0.82)',
+            borderColor: 'rgba(212,175,55,0.24)',
             borderWidth: 1,
             padding: 12,
             callbacks: {
-              label: (ctx) => {
-                const idx = ctx.dataIndex;
-                const d = data[idx];
-                const trend = idx > 0 ? d.overall - data[idx - 1].overall : 0;
-                const trendIcon = trend > 5 ? TREND_ICONS.up : trend < -5 ? TREND_ICONS.down : TREND_ICONS.stable;
+              label: (context) => {
+                const index = context.dataIndex;
+                const point = data[index];
+                const trend = index > 0 ? point.overall - data[index - 1].overall : 0;
+                const trendLabel =
+                  trend > 5 ? TREND_LABELS.up : trend < -5 ? TREND_LABELS.down : TREND_LABELS.stable;
                 return [
-                  `${isZH ? '综合运势' : 'Overall'}: ${d.overall} ${trendIcon}`,
-                  `${isZH ? '事业' : 'Career'}: ${d.career}`,
-                  `${isZH ? '财富' : 'Wealth'}: ${d.wealth}`,
-                  `${isZH ? '感情' : 'Love'}: ${d.love}`,
-                  `${isZH ? '健康' : 'Health'}: ${d.health}`,
+                  `Overall: ${point.overall} (${trendLabel})`,
+                  `Career: ${point.career}`,
+                  `Wealth: ${point.wealth}`,
+                  `Love: ${point.love}`,
+                  `Health: ${point.health}`,
                 ];
               },
             },
@@ -152,28 +179,28 @@ export default function LifeChart({ data, language = 'zh' }: LifeChartProps) {
         },
         scales: {
           x: {
-            ticks: { color: '#94A3B8', font: { size: 11 } },
-            grid: { color: '#374151' },
+            ticks: { color: 'rgba(255,255,255,0.42)', font: { size: 11 } },
+            grid: { color: 'rgba(255,255,255,0.06)' },
           },
           y: {
             min: 0,
             max: 100,
-            ticks: { color: '#94A3B8', stepSize: 20 },
-            grid: { color: '#374151' },
+            ticks: { color: 'rgba(255,255,255,0.42)', stepSize: 20 },
+            grid: { color: 'rgba(255,255,255,0.07)' },
           },
         },
       },
     });
 
     return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
-      }
+      chartRef.current?.destroy();
     };
   }, [data, language]);
 
   return (
-    <div className="w-full h-80 bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+    <div
+      className={`w-full h-80 rounded-[2rem] border border-white/10 bg-black/35 p-4 shadow-[0_30px_90px_rgba(0,0,0,0.4)] backdrop-blur-xl ${className}`}
+    >
       <canvas ref={canvasRef} />
     </div>
   );

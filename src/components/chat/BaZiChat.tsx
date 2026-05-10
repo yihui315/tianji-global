@@ -132,7 +132,7 @@ export default function BaZiChat({ birthDate, birthTime, gender, language = 'zh'
       };
       setMessages([welcome]);
     }
-  }, [baziChart, language]);
+  }, [baziChart, language, messages.length]);
 
   return (
     <div className="bazi-chat">

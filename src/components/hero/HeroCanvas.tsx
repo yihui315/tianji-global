@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { ArrowUpRight, Play } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -241,12 +242,12 @@ export default function HeroCanvas() {
 
         {/* CTA Buttons */}
         <div className="hero-cta">
-          <a href="/birth-data" className="btn-glass btn-glass-solid">
+          <Link href="/birth-data" className="btn-glass btn-glass-solid">
             {lang === 'zh' ? '开始探索' : 'Get Started'} <ArrowUpRight size={16} strokeWidth={2} />
-          </a>
-          <a href="/dashboard" className="btn-glass btn-glass-outline">
+          </Link>
+          <Link href="/dashboard" className="btn-glass btn-glass-outline">
             {lang === 'zh' ? '观看演示' : 'Watch Demo'} <Play size={14} strokeWidth={2} />
-          </a>
+          </Link>
         </div>
       </div>
 

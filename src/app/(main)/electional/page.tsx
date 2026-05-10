@@ -94,8 +94,9 @@ export default function ElectionalPage() {
           <h2 style={{ fontSize: '1rem', color: '#94A3B8', marginBottom: '1rem' }}>DATE RANGE (MAX 90 DAYS)</h2>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             <div style={{ flex: 1, minWidth: '150px' }}>
-              <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>START DATE</label>
+              <label htmlFor="e-start-date" style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>START DATE</label>
               <input
+                id="e-start-date"
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
@@ -103,8 +104,9 @@ export default function ElectionalPage() {
               />
             </div>
             <div style={{ flex: 1, minWidth: '150px' }}>
-              <label style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>END DATE</label>
+              <label htmlFor="e-end-date" style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', marginBottom: '0.25rem' }}>END DATE</label>
               <input
+                id="e-end-date"
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}

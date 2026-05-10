@@ -32,6 +32,12 @@ export function asStringArray(value: unknown): string[] | undefined {
   return items.length > 0 ? items.map((item) => item.trim()) : undefined;
 }
 
+export function asRecordArray(value: unknown): Record<string, unknown>[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is Record<string, unknown> => typeof item === 'object' && item !== null && !Array.isArray(item))
+    : [];
+}
+
 export function unique(items: Array<string | undefined>): string[] {
   return Array.from(new Set(items.filter((item): item is string => Boolean(item && item.length > 0))));
 }

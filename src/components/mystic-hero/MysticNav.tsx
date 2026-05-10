@@ -100,7 +100,7 @@ export default function MysticNav() {
             ✕
           </button>
           {NAV_ITEMS.map(item => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className="text-3xl font-serif text-white/80 hover:text-amber-300 transition-colors"
@@ -108,13 +108,13 @@ export default function MysticNav() {
             >
               {item.label}
               <span className="block text-sm text-white/30 font-sans">{item.labelEn}</span>
-            </a>
+            </Link>
           ))}
-          <a href="/login">
+          <Link href="/login" onClick={() => setMobileOpen(false)}>
             <button className="mt-4 px-8 py-3 bg-gradient-to-r from-amber-400 to-purple-600 text-black rounded-full font-medium">
               登入天机
             </button>
-          </a>
+          </Link>
         </div>
       )}
     </>

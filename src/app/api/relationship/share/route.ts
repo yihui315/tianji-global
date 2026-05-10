@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
 import type { ApiResponse, RelationshipShareSettings } from '@/types/relationship';
 import { randomSlug } from '@/lib/utils';
+import { sanitizeRelationshipSharePayload } from '@/lib/trust-copy-guard';
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,12 +23,12 @@ export async function POST(req: NextRequest) {
 
     const settings: RelationshipShareSettings = {
       includeNames: shareSettings?.includeNames ?? true,
-      includeBirthData: shareSettings?.includeBirthData ?? false,
+      includeBirthData: false,
       shareMode: shareSettings?.shareMode ?? 'summary',
     };
 
     const slug = randomSlug(12);
-    let shareUrl = `https://tianji.global/relationship/share/${slug}`;
+    const shareUrl = `https://tianji.global/relationship/share/${slug}`;
 
     if (isSupabaseConfigured()) {
       try {
@@ -46,14 +47,14 @@ export async function POST(req: NextRequest) {
           }, { status: 404 });
         }
 
-        const { data, error: shareError } = await supabase
+        const { error: shareError } = await supabase
           .from('relationship_shares')
           .insert({
             relationship_reading_id: readingId,
             public_slug: slug,
             share_mode: settings.shareMode,
             include_names: settings.includeNames,
-            include_birth_data: settings.includeBirthData,
+            include_birth_data: false,
           })
           .select()
           .single();
@@ -138,9 +139,11 @@ export async function GET(req: NextRequest) {
       }, { status: 404 });
     }
 
-    return NextResponse.json<ApiResponse<{ share: typeof share; reading: typeof reading }>>({
+    const safePayload = sanitizeRelationshipSharePayload(share, reading);
+
+    return NextResponse.json<ApiResponse<typeof safePayload>>({
       success: true,
-      data: { share, reading },
+      data: safePayload,
     });
   } catch (err) {
     console.error('[relationship/share GET]', err);

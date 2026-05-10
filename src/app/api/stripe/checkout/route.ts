@@ -6,8 +6,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe, PLANS, buildSubscriptionMetadata } from '@/lib/stripe';
 import { auth } from '@/lib/auth';
+import { requirePayPerUseEnabled } from '@/lib/pay-per-use';
 
 export async function POST(req: NextRequest) {
+  const payPerUseGate = requirePayPerUseEnabled();
+  if (payPerUseGate) return payPerUseGate;
+
   try {
     const session = await auth();
     const user = session?.user;

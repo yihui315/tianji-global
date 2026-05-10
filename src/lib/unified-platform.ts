@@ -243,8 +243,7 @@ export function getFeaturesForPlan(plan: PlanType): EntitlementFeatures {
 
 function coerceFeatureOverrides(value: unknown): Partial<EntitlementFeatures> {
   const record = asRecord(value);
-
-  return {
+  const overrides: Partial<Record<keyof EntitlementFeatures, boolean | undefined>> = {
     unifiedProfile: asBoolean(record.unifiedProfile),
     deepRelationship: asBoolean(record.deepRelationship),
     longTimeline: asBoolean(record.longTimeline),
@@ -253,6 +252,10 @@ function coerceFeatureOverrides(value: unknown): Partial<EntitlementFeatures> {
     multiProfile: asBoolean(record.multiProfile),
     advisorMode: asBoolean(record.advisorMode),
   };
+
+  return Object.fromEntries(
+    Object.entries(overrides).filter(([, feature]) => feature !== undefined)
+  ) as Partial<EntitlementFeatures>;
 }
 
 export function mapEntitlementRow(value: unknown, fallbackTier?: unknown, fallbackUserId?: string): Entitlement {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getPool } from '@/lib/db';
 import { trafficSourceSchema, trafficStrategySchema } from '@/lib/traffic-evolution';
+import { sanitizeAnalyticsPayload } from '@/lib/trust-copy-guard';
 
 const analyticsEventSchema = z.object({
   event: z.string().min(1).max(80),
@@ -18,12 +19,12 @@ export async function POST(request: NextRequest) {
     const body = analyticsEventSchema.parse(await request.json());
     const pool = getPool();
 
-    const payload = {
+    const payload = sanitizeAnalyticsPayload({
       ...body.payload,
       trafficSource: body.trafficSource ?? null,
       strategy: body.strategy ?? null,
       path: request.nextUrl.pathname,
-    };
+    });
 
     await pool.query(
       `
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
       `,
       [
         body.event,
-        body.experimentId ?? null,
+        body.experimentId ?? 'love-v1',
         body.variant ?? null,
         body.moduleType ?? null,
         JSON.stringify(payload),

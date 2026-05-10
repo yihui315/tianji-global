@@ -7,7 +7,7 @@
  * 展示运势在不同维度间的流动
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface FlowNode {
@@ -46,20 +46,34 @@ export default function FortuneFlow({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [particles, setParticles] = useState<Array<{ x: number; y: number; progress: number; from: string; to: string }>>([]);
 
-  // Default nodes for demo
-  const defaultNodes: FlowNode[] = nodes.length > 0 ? nodes : [
-    { id: 'career', label: '事业', labelEn: 'Career', value: 85, x: 100, y: 200, color: '#F59E0B' },
-    { id: 'love', label: '感情', labelEn: 'Love', value: 72, x: 300, y: 100, color: '#EC4899' },
-    { id: 'wealth', label: '财富', labelEn: 'Wealth', value: 68, x: 500, y: 200, color: '#10B981' },
-    { id: 'health', label: '健康', labelEn: 'Health', value: 90, x: 400, y: 300, color: '#6366F1' }
-  ];
+  // Default nodes for demo — memoized so the dependency arrays of the
+  // particle effects below stay stable when the parent passes empty
+  // nodes/edges (which would otherwise create a new array each render).
+  const defaultNodes: FlowNode[] = useMemo(
+    () =>
+      nodes.length > 0
+        ? nodes
+        : [
+            { id: 'career', label: '事业', labelEn: 'Career', value: 85, x: 100, y: 200, color: '#F59E0B' },
+            { id: 'love', label: '感情', labelEn: 'Love', value: 72, x: 300, y: 100, color: '#EC4899' },
+            { id: 'wealth', label: '财富', labelEn: 'Wealth', value: 68, x: 500, y: 200, color: '#10B981' },
+            { id: 'health', label: '健康', labelEn: 'Health', value: 90, x: 400, y: 300, color: '#6366F1' }
+          ],
+    [nodes]
+  );
 
-  const defaultEdges: FlowEdge[] = edges.length > 0 ? edges : [
-    { from: 'career', to: 'wealth', value: 30 },
-    { from: 'love', to: 'career', value: 20 },
-    { from: 'health', to: 'career', value: 15 },
-    { from: 'wealth', to: 'love', value: 25 }
-  ];
+  const defaultEdges: FlowEdge[] = useMemo(
+    () =>
+      edges.length > 0
+        ? edges
+        : [
+            { from: 'career', to: 'wealth', value: 30 },
+            { from: 'love', to: 'career', value: 20 },
+            { from: 'health', to: 'career', value: 15 },
+            { from: 'wealth', to: 'love', value: 25 }
+          ],
+    [edges]
+  );
 
   // Generate particles along edges
   useEffect(() => {

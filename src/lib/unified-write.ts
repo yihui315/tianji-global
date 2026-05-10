@@ -27,6 +27,35 @@ interface PersistUnifiedModuleResultInput {
   writeLegacyReading?: boolean;
 }
 
+const DEFAULT_LEGACY_PROFILE_BIRTH_DATE = '1970-01-01';
+
+function findStringField(value: unknown, keys: string[], depth = 0): string | undefined {
+  if (depth > 4 || typeof value !== 'object' || value === null) {
+    return undefined;
+  }
+
+  const record = value as Record<string, unknown>;
+  for (const key of keys) {
+    const entry = record[key];
+    if (typeof entry === 'string' && entry.trim().length > 0) {
+      return entry.trim();
+    }
+  }
+
+  for (const entry of Object.values(record)) {
+    const found = findStringField(entry, keys, depth + 1);
+    if (found) {
+      return found;
+    }
+  }
+
+  return undefined;
+}
+
+function normalizeLegacyLanguage(value: string | undefined): 'en' | 'zh' {
+  return value === 'zh' || value === 'zh-CN' || value === 'zh-Hans' ? 'zh' : 'en';
+}
+
 export async function recomputeDestinyProfile(userId: string, profileId: string, supabase: SupabaseClient) {
   const { data: rows } = await supabase
     .from('module_results')
@@ -109,6 +138,48 @@ export async function ensurePrimaryProfileFromScan(context: PlatformContext, inp
 
   if (error || !data?.id) {
     throw error ?? new Error('Unable to create primary profile for destiny scan.');
+  }
+
+  return data.id as string;
+}
+
+export async function ensurePrimaryProfileFromLegacyReading(
+  context: PlatformContext,
+  readingData?: Record<string, unknown>
+): Promise<string> {
+  const primaryId = await getPrimaryProfileId(context);
+  if (primaryId) {
+    return primaryId;
+  }
+
+  const birthDate =
+    findStringField(readingData, ['birthDate', 'birthday', 'birth_date', 'dateOfBirth']) ??
+    DEFAULT_LEGACY_PROFILE_BIRTH_DATE;
+  const birthTime = findStringField(readingData, ['birthTime', 'birth_time', 'time']);
+  const birthLocation = findStringField(readingData, ['birthLocation', 'birth_location', 'location', 'place']);
+  const timezone = findStringField(readingData, ['timezone', 'timeZone']);
+  const language = normalizeLegacyLanguage(findStringField(readingData, ['language', 'locale']));
+  const gender = findStringField(readingData, ['gender', 'sex']);
+
+  const { data, error } = await context.supabase
+    .from('user_profiles')
+    .insert({
+      user_id: context.user.id,
+      profile_type: 'self',
+      display_name: 'Primary profile',
+      birth_date: birthDate,
+      birth_time: birthTime ?? null,
+      birth_location: birthLocation ?? null,
+      timezone: timezone ?? null,
+      language,
+      gender: gender ?? null,
+      is_primary: true,
+    })
+    .select('id')
+    .single();
+
+  if (error || !data?.id) {
+    throw error ?? new Error('Unable to create primary profile for legacy reading.');
   }
 
   return data.id as string;
@@ -219,10 +290,7 @@ export async function persistLegacyReadingCompat(input: {
   }
 
   const moduleType = input.readingType as ModuleType;
-  const profileId = await getPrimaryProfileId(input.context);
-  if (!profileId) {
-    return null;
-  }
+  const profileId = await ensurePrimaryProfileFromLegacyReading(input.context, input.readingData);
 
   return persistUnifiedModuleResult({
     context: input.context,

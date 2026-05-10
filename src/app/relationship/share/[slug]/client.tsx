@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { RelationshipRadar } from '@/components/relationship/RelationshipRadar';
 import type { RelationshipReading } from '@/types/relationship';
@@ -71,9 +72,9 @@ export default function SharePageClient() {
           <p className="text-sm" style={{ color: 'rgba(226,232,240,0.5)' }}>
             This relationship share link may have expired or does not exist.
           </p>
-          <a href="/relationship/new" className="mt-4 inline-block text-sm" style={{ color: '#A78BFA' }}>
+          <Link href="/relationship/new" className="mt-4 inline-block text-sm" style={{ color: '#A78BFA' }}>
             Create your own →
-          </a>
+          </Link>
         </GlassCard>
       </div>
     );
@@ -150,7 +151,7 @@ export default function SharePageClient() {
           <p className="text-sm mb-4" style={{ color: 'rgba(226,232,240,0.6)' }}>
             {personANickname} & {personBNickname} 在 TianJi Global 生成了关系分析
           </p>
-          <a
+          <Link
             href="/relationship/new"
             className="inline-block px-6 py-3 rounded-xl text-sm font-medium transition-all"
             style={{
@@ -160,7 +161,7 @@ export default function SharePageClient() {
             }}
           >
             🔮 创建你的关系分析
-          </a>
+          </Link>
         </GlassCard>
 
         {/* Privacy note */}

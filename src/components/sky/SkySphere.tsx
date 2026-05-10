@@ -360,6 +360,9 @@ export default function SkySphere({ skyData, date, onShare }: SkySphereProps) {
 
   useEffect(() => {
     if (!containerRef.current) return
+    // Capture the container node so the cleanup function uses the same node
+    // it attached to, even if the ref later changes.
+    const container = containerRef.current
 
     // Scene setup
     const scene = new THREE.Scene()
@@ -379,9 +382,9 @@ export default function SkySphere({ skyData, date, onShare }: SkySphereProps) {
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
-    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
+    renderer.setSize(container.clientWidth, container.clientHeight)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    containerRef.current.appendChild(renderer.domElement)
+    container.appendChild(renderer.domElement)
     rendererRef.current = renderer
 
     // Controls
@@ -536,10 +539,14 @@ export default function SkySphere({ skyData, date, onShare }: SkySphereProps) {
       window.removeEventListener('resize', handleResize)
       controls.dispose()
       renderer.dispose()
-      if (containerRef.current && renderer.domElement) {
-        containerRef.current.removeChild(renderer.domElement)
+      if (container && renderer.domElement && renderer.domElement.parentNode === container) {
+        container.removeChild(renderer.domElement)
       }
     }
+    // skyData seeds the initial scene only — subsequent updates are handled by
+    // the dedicated effect below. Re-running this effect would tear down the
+    // entire WebGL context on every data change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateCelestialBodies])
 
   // Update celestial bodies when skyData changes

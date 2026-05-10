@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
 import { useLanguage } from '@/hooks/useLanguage';
 import { pricingPlans } from '@/design-system/content-tokens';
@@ -190,7 +191,7 @@ function PricingCard({ planKey, delay = 0 }: PricingCardProps) {
 
           <div className="mt-8">
             {planKey === 'free' ? (
-              <a
+              <Link
                 href="/western"
                 className="block w-full text-center py-3.5 rounded-xl text-sm font-medium transition-all duration-200"
                 style={{
@@ -200,7 +201,7 @@ function PricingCard({ planKey, delay = 0 }: PricingCardProps) {
                 }}
               >
                 {ctaLabel}
-              </a>
+              </Link>
             ) : (
               <button
                 onClick={handleCTAClick}

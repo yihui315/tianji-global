@@ -48,3 +48,6 @@ export {
   testimonials,
   trustPillars,
 } from './content-tokens';
+
+export { landingTokens } from './landing-tokens';
+export type { LandingTokens } from './landing-tokens';

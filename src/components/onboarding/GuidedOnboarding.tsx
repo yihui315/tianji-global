@@ -306,10 +306,11 @@ export default function GuidedOnboarding({ onComplete, onSkip, language = 'zh' }
             <div className="form-grid">
               {/* 生日 */}
               <div className="form-group">
-                <label className="form-label">
+                <label htmlFor="go-birthday" className="form-label">
                   {language === 'zh' ? '出生日期' : 'Birthday'}
                 </label>
                 <input
+                  id="go-birthday"
                   type="date"
                   value={data.birthday}
                   onChange={(e) => updateData({ birthday: e.target.value })}
@@ -319,10 +320,10 @@ export default function GuidedOnboarding({ onComplete, onSkip, language = 'zh' }
 
               {/* 性别 */}
               <div className="form-group">
-                <label className="form-label">
+                <label htmlFor="go-gender" className="form-label">
                   {language === 'zh' ? '性别' : 'Gender'}
                 </label>
-                <div className="gender-buttons">
+                <div className="gender-buttons" id="go-gender">
                   <button
                     className={`gender-btn ${data.gender === 'male' ? 'selected' : ''}`}
                     onClick={() => updateData({ gender: 'male' })}
@@ -341,10 +342,11 @@ export default function GuidedOnboarding({ onComplete, onSkip, language = 'zh' }
               {/* 时辰 (仅八字需要) */}
               {data.fortuneType === 'bazi' && (
                 <div className="form-group">
-                  <label className="form-label">
+                  <label htmlFor="go-birth-time" className="form-label">
                     {language === 'zh' ? '出生时辰（精确到时辰段）' : 'Birth Hour'}
                   </label>
                   <select
+                    id="go-birth-time"
                     value={data.birthTime}
                     onChange={(e) => updateData({ birthTime: e.target.value })}
                     className="form-input"
@@ -389,10 +391,11 @@ export default function GuidedOnboarding({ onComplete, onSkip, language = 'zh' }
 
             {/* 昵称 */}
             <div className="form-group">
-              <label className="form-label">
+              <label htmlFor="go-name" className="form-label">
                 {language === 'zh' ? '您希望怎么称呼您？（选填）' : 'How should we call you? (optional)'}
               </label>
               <input
+                id="go-name"
                 type="text"
                 value={data.name}
                 onChange={(e) => updateData({ name: e.target.value })}

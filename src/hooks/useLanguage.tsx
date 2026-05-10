@@ -17,8 +17,9 @@ import {
   pricingPlans,
   testimonials as testimonialTokens,
 } from '@/design-system/content-tokens';
+import { resolveAppLanguage, type AppLanguage } from '@/lib/language-routing';
 
-type Lang = 'zh' | 'en';
+type Lang = AppLanguage;
 
 interface LanguageContextValue {
   lang: Lang;
@@ -305,18 +306,26 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
 const allTranslations = buildTranslations();
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('tianji-lang');
-      if (stored === 'zh' || stored === 'en') return stored;
-      return navigator.language.startsWith('zh') ? 'zh' : 'en';
-    }
-    return 'en';
-  });
+  const [lang, setLangState] = useState<Lang>('en');
+  const [hasHydrated, setHasHydrated] = useState(false);
 
   useEffect(() => {
+    const stored = localStorage.getItem('tianji-lang');
+    const queryLang = new URLSearchParams(window.location.search).get('lang');
+    const preferred = resolveAppLanguage({
+      queryLang,
+      storedLang: stored,
+      navigatorLanguage: navigator.language,
+    });
+
+    setLangState(preferred);
+    setHasHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasHydrated) return;
     localStorage.setItem('tianji-lang', lang);
-  }, [lang]);
+  }, [hasHydrated, lang]);
 
   const setLang = useCallback((l: Lang) => setLangState(l), []);
 

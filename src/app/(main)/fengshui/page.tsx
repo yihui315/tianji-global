@@ -136,7 +136,9 @@ export default function FengShuiPage() {
   };
 
   useEffect(() => {
+    // Intentional one-time fetch on mount; subsequent runs are user-triggered via the form.
     fetchFengShui();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleShare = async () => {

@@ -156,4 +156,112 @@ describe('normalizeModulePayload', () => {
     expect(payload.advice?.advice).toContain('name expectations early');
     expect(payload.risk?.risks).toContain('timing friction');
   });
+
+  it('normalizes tarot readings into advice, timeline, and risk sections', () => {
+    const payload = normalizeModulePayload(
+      'tarot',
+      {
+        spread: {
+          name: 'Three Card',
+          description: 'Past, Present, and Future',
+        },
+        question: 'What should I understand about this relationship?',
+        drawnCards: [
+          {
+            positionName: 'Past',
+            card: { name: 'The Lovers', suit: 'Major Arcana' },
+            isReversed: false,
+            interpretation: 'A meaningful bond shaped the current situation.',
+          },
+          {
+            positionName: 'Present',
+            card: { name: 'Two of Cups', suit: 'Cups' },
+            isReversed: true,
+            interpretation: 'The connection needs clearer emotional exchange.',
+          },
+        ],
+        aiInterpretation: 'The reading points to a relationship pattern that needs honest pacing.',
+      },
+      {
+        title: 'Tarot Relationship Reading',
+        summary: 'Relationship clarity',
+      }
+    );
+
+    expect(payload.summary.headline).toBe('Tarot Relationship Reading');
+    expect(payload.summary.keywords).toContain('The Lovers');
+    expect(payload.advice?.summary).toContain('honest pacing');
+    expect(payload.relationship?.summary).toContain('relationship pattern');
+    expect(payload.risk?.risks).toContain('Two of Cups reversed');
+    expect(payload.timeline?.phases?.[0]).toMatchObject({
+      label: 'Past',
+      description: 'A meaningful bond shaped the current situation.',
+    });
+  });
+
+  it('normalizes yijing readings into timing, advice, and risk sections', () => {
+    const payload = normalizeModulePayload(
+      'yijing',
+      {
+        hexagram: {
+          number: 32,
+          name: '恒',
+          english: 'Duration',
+          judgementEn: 'Perseverance furthers.',
+          imageEn: 'Thunder and wind: the image of duration.',
+        },
+        lines: [
+          {
+            position: 1,
+            isChanging: true,
+            meaningEn: 'Changing too quickly creates instability.',
+          },
+        ],
+        hasChangingLines: true,
+        question: 'Should I keep building this project?',
+        aiInterpretation: 'The oracle favors steady continuation, but warns against forcing the timing.',
+      },
+      {
+        title: 'Yi Jing Oracle',
+        summary: 'Duration asks for steadiness',
+      }
+    );
+
+    expect(payload.summary.headline).toBe('Yi Jing Oracle');
+    expect(payload.timing?.headline).toContain('Duration');
+    expect(payload.advice?.summary).toContain('steady continuation');
+    expect(payload.risk?.risks).toContain('Changing too quickly creates instability.');
+    expect(payload.timeline?.currentPhase).toBe('Hexagram 32');
+  });
+
+  it('normalizes western readings into identity, relationship, and career sections', () => {
+    const payload = normalizeModulePayload(
+      'western',
+      {
+        bigThree: {
+          sun: { sign: 'Leo', degree: 12 },
+          moon: { sign: 'Scorpio', degree: 4 },
+          rising: { sign: 'Libra', degree: 18 },
+        },
+        planets: [
+          { name: 'Venus', sign: 'Virgo', degree: 8 },
+          { name: 'Mars', sign: 'Cancer', degree: 22 },
+        ],
+        houses: {
+          ascendantSign: 'Libra',
+          mcSign: 'Cancer',
+        },
+      },
+      {
+        title: 'Western Natal Chart',
+        summary: 'Leo Sun, Scorpio Moon, Libra Rising',
+      }
+    );
+
+    expect(payload.summary.headline).toBe('Western Natal Chart');
+    expect(payload.identity?.headline).toContain('Leo Sun');
+    expect(payload.relationship?.summary).toContain('Venus in Virgo');
+    expect(payload.career?.summary).toContain('Cancer');
+    expect(payload.structure?.bigThree).toBeDefined();
+  });
 });

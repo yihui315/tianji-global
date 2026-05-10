@@ -1,0 +1,165 @@
+{
+  "responsibility": {
+    "codex": [
+      "generate text-free source images",
+      "save hero masters, posters, OG backgrounds, share stills, and thumbnails under public/assets",
+      "maintain Seedance 2.0 prompt files and target filenames"
+    ],
+    "user": [
+      "upload source images to Seedance 2.0",
+      "render hero loops and card previews",
+      "replace MP4 files at the exact target paths"
+    ]
+  },
+  "promptFile": "public/assets/video-prompts/seedance-2-home-and-modules.md",
+  "visualStandard": {
+    "style": "cinematic wonder, ancient cosmic machine awakening, premium black-violet-gold restraint",
+    "colors": {
+      "black": "#050508",
+      "violetShadow": "#2a0a3a",
+      "antiqueGold": "#D4AF37",
+      "cyanRim": "#67E8F9"
+    },
+    "negatives": [
+      "no text",
+      "no typography",
+      "no letters",
+      "no Chinese characters",
+      "no logo",
+      "no watermark",
+      "no UI",
+      "no humans",
+      "no hands",
+      "no cluttered rings",
+      "no tangled lines",
+      "no cheap neon"
+    ]
+  },
+  "heroSections": [
+    {
+      "key": "home",
+      "sourceImage": "public/assets/images/hero/home-hero-master-16x9.jpg",
+      "localSourceImage": "D:/BrainSystem/💼 工作专项/ai占卜/tianji-global/public/assets/images/hero/home-hero-master-16x9.jpg",
+      "poster": "public/assets/images/posters/home-hero-poster-16x9.jpg",
+      "og": "public/assets/images/og/home-og-bg-1200x630.jpg",
+      "heroVideo": "public/assets/videos/hero/home-hero-loop-6s-1080p.mp4",
+      "promptSection": "Home Hero"
+    },
+    {
+      "key": "pricing",
+      "sourceImage": "public/assets/images/hero/pricing-hero-master-16x9.jpg",
+      "localSourceImage": "D:/BrainSystem/💼 工作专项/ai占卜/tianji-global/public/assets/images/hero/pricing-hero-master-16x9.jpg",
+      "poster": "public/assets/images/posters/pricing-hero-poster-16x9.jpg",
+      "og": "public/assets/images/og/pricing-og-bg-1200x630.jpg",
+      "heroVideo": "public/assets/videos/hero/pricing-hero-loop-6s-1080p.mp4",
+      "promptSection": "Pricing Hero"
+    },
+    {
+      "key": "ziwei",
+      "sourceImage": "public/assets/images/hero/ziwei-hero-master-16x9.jpg",
+      "localSourceImage": "D:/BrainSystem/💼 工作专项/ai占卜/tianji-global/public/assets/images/hero/ziwei-hero-master-16x9.jpg",
+      "poster": "public/assets/images/posters/ziwei-hero-poster-16x9.jpg",
+      "og": "public/assets/images/og/ziwei-og-bg-1200x630.jpg",
+      "heroVideo": "public/assets/videos/hero/ziwei-hero-loop-6s-1080p.mp4",
+      "cardVideo": "public/assets/videos/cards/ziwei-card-preview-3s-768p.mp4",
+      "promptSection": "Zi Wei Hero"
+    },
+    {
+      "key": "bazi",
+      "sourceImage": "public/assets/images/hero/bazi-hero-master-16x9.jpg",
+      "localSourceImage": "D:/BrainSystem/💼 工作专项/ai占卜/tianji-global/public/assets/images/hero/bazi-hero-master-16x9.jpg",
+      "poster": "public/assets/images/posters/bazi-hero-poster-16x9.jpg",
+      "og": "public/assets/images/og/bazi-og-bg-1200x630.jpg",
+      "heroVideo": "public/assets/videos/hero/bazi-hero-loop-6s-1080p.mp4",
+      "cardVideo": "public/assets/videos/cards/bazi-card-preview-3s-768p.mp4",
+      "promptSection": "BaZi Hero"
+    },
+    {
+      "key": "yijing",
+      "sourceImage": "public/assets/images/hero/yijing-hero-master-16x9.jpg",
+      "localSourceImage": "D:/BrainSystem/💼 工作专项/ai占卜/tianji-global/public/assets/images/hero/yijing-hero-master-16x9.jpg",
+      "poster": "public/assets/images/posters/yijing-hero-poster-16x9.jpg",
+      "og": "public/assets/images/og/yijing-og-bg-1200x630.jpg",
+      "heroVideo": "public/assets/videos/hero/yijing-hero-loop-6s-1080p.mp4",
+      "cardVideo": "public/assets/videos/cards/yijing-card-preview-3s-768p.mp4",
+      "promptSection": "Yi Jing Hero"
+    },
+    {
+      "key": "tarot",
+      "sourceImage": "public/assets/images/hero/tarot-hero-master-16x9.jpg",
+      "localSourceImage": "D:/BrainSystem/💼 工作专项/ai占卜/tianji-global/public/assets/images/hero/tarot-hero-master-16x9.jpg",
+      "poster": "public/assets/images/posters/tarot-hero-poster-16x9.jpg",
+      "og": "public/assets/images/og/tarot-og-bg-1200x630.jpg",
+      "heroVideo": "public/assets/videos/hero/tarot-hero-loop-6s-1080p.mp4",
+      "cardVideo": "public/assets/videos/cards/tarot-card-preview-3s-768p.mp4",
+      "promptSection": "Tarot Hero"
+    },
+    {
+      "key": "western",
+      "sourceImage": "public/assets/images/hero/western-hero-master-16x9.jpg",
+      "localSourceImage": "D:/BrainSystem/💼 工作专项/ai占卜/tianji-global/public/assets/images/hero/western-hero-master-16x9.jpg",
+      "poster": "public/assets/images/posters/western-hero-poster-16x9.jpg",
+      "og": "public/assets/images/og/western-og-bg-1200x630.jpg",
+      "heroVideo": "public/assets/videos/hero/western-hero-loop-6s-1080p.mp4",
+      "cardVideo": "public/assets/videos/cards/western-card-preview-3s-768p.mp4",
+      "promptSection": "Western Hero"
+    },
+    {
+      "key": "fortune",
+      "sourceImage": "public/assets/images/hero/fortune-hero-master-16x9.jpg",
+      "localSourceImage": "D:/BrainSystem/💼 工作专项/ai占卜/tianji-global/public/assets/images/hero/fortune-hero-master-16x9.jpg",
+      "poster": "public/assets/images/posters/fortune-hero-poster-16x9.jpg",
+      "og": "public/assets/images/og/fortune-og-bg-1200x630.jpg",
+      "heroVideo": "public/assets/videos/hero/fortune-hero-loop-6s-1080p.mp4",
+      "cardVideo": "public/assets/videos/cards/fortune-card-preview-3s-768p.mp4",
+      "promptSection": "Fortune Hero"
+    },
+    {
+      "key": "relationship",
+      "sourceImage": "public/assets/images/hero/relationship-hero-master-16x9.jpg",
+      "localSourceImage": "D:/BrainSystem/💼 工作专项/ai占卜/tianji-global/public/assets/images/hero/relationship-hero-master-16x9.jpg",
+      "poster": "public/assets/images/posters/relationship-hero-poster-16x9.jpg",
+      "og": "public/assets/images/og/relationship-og-bg-1200x630.jpg",
+      "heroVideo": "public/assets/videos/hero/relationship-hero-loop-6s-1080p.mp4",
+      "cardVideo": "public/assets/videos/cards/relationship-card-preview-3s-768p.mp4",
+      "promptSection": "Relationship Hero and Share Motion",
+      "status": "image_ready_video_pending"
+    }
+  ],
+  "shareSources": [
+    "public/assets/share/share-ai-card.png",
+    "public/assets/share/share-fortune-chart.png",
+    "public/assets/share/share-relationship-card.png",
+    "public/assets/share/ziwei-og.jpg"
+  ],
+  "serviceThumbnails": [
+    "public/assets/services/ziwei.jpg",
+    "public/assets/services/bazi.jpg",
+    "public/assets/services/yijing.jpg",
+    "public/assets/services/tarot.jpg",
+    "public/assets/services/western.jpg",
+    "public/assets/services/fortune.jpg",
+    "public/assets/services/relationship.jpg",
+    "public/assets/services/synastry.jpg",
+    "public/assets/services/numerology.jpg",
+    "public/assets/services/solar-return.jpg",
+    "public/assets/services/transit.jpg",
+    "public/assets/services/fengshui.jpg",
+    "public/assets/services/electional.jpg",
+    "public/assets/services/horary.jpg"
+  ],
+  "iconSources": [
+    "public/assets/icons/icon-ziwei.png",
+    "public/assets/icons/icon-bazi.png",
+    "public/assets/icons/icon-yijing.png",
+    "public/assets/icons/icon-western.png",
+    "public/assets/icons/icon-synastry.png",
+    "public/assets/icons/icon-tarot.png",
+    "public/assets/icons/icon-ai.png",
+    "public/assets/icons/icon-solar.png",
+    "public/assets/icons/icon-transit.png",
+    "public/assets/icons/icon-fengshui.png",
+    "public/assets/icons/icon-electional.png",
+    "public/assets/icons/icon-trust.png"
+  ]
+}
