@@ -8,6 +8,7 @@ import {
 } from '@/lib/billing';
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
 import { sendReportReadyEmailForCheckoutSession } from '@/lib/love-report-email';
+import { isPayPerUseEnabled } from '@/lib/pay-per-use';
 import { ensureReportJobForSession, runReportJob } from '@/lib/report-jobs';
 import { getStripe } from '@/lib/stripe';
 
@@ -97,6 +98,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('[stripe/webhook] signature verification failed', error);
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
+  }
+
+  if (!isPayPerUseEnabled()) {
+    return NextResponse.json({ received: true, skipped: 'pay_per_use_disabled' });
   }
 
   const isNewEvent = await recordStripeEvent(event);

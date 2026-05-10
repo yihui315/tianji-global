@@ -25,6 +25,8 @@ grep -E '^ENABLE_PAY_PER_USE=' .env.production
 
 Pass criteria: the value is exactly `ENABLE_PAY_PER_USE=false` or the variable is absent and the application default keeps paid unlock disabled.
 
+In PR #46, the default-off application guard is implemented in `src/lib/pay-per-use.ts` and is applied to `/api/checkout`, `/api/stripe/checkout`, `/api/destiny/unlock`, and paid Stripe webhook processing.
+
 ## External Network Checks
 
 Run these from a workstation outside the production server.

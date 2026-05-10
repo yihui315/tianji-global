@@ -35,6 +35,23 @@ describe('Stripe checkout billing contract', () => {
     expect(checkout).not.toContain('CHECKOUT_SESSION_ID');
   });
 
+  it('keeps paid checkout and unlock routes disabled unless pay-per-use is explicitly enabled', () => {
+    const payPerUse = read('src/lib/pay-per-use.ts');
+    const guardedRoutes = [
+      'src/app/api/checkout/route.ts',
+      'src/app/api/stripe/checkout/route.ts',
+      'src/app/api/destiny/unlock/route.ts',
+    ];
+
+    expect(payPerUse).toContain('ENABLE_PAY_PER_USE');
+    expect(payPerUse).toContain("process.env.ENABLE_PAY_PER_USE === 'true'");
+    expect(payPerUse).toContain('requirePayPerUseEnabled');
+
+    for (const route of guardedRoutes) {
+      expect(read(route)).toContain('requirePayPerUseEnabled');
+    }
+  });
+
   it('verifies webhook signatures, handles paid checkout completion, and records idempotency', () => {
     const webhook = read('src/app/api/stripe/webhook/route.ts');
 
@@ -50,6 +67,8 @@ describe('Stripe checkout billing contract', () => {
     expect(webhook).not.toContain("case 'invoice.paid'");
     expect(webhook).not.toContain("case 'invoice.payment_failed'");
     expect(webhook).not.toContain("case 'customer.subscription.updated'");
+    expect(webhook).toContain('isPayPerUseEnabled');
+    expect(webhook).toContain('pay_per_use_disabled');
   });
 
   it('adds one-time billing tables and an entitlement checker', () => {

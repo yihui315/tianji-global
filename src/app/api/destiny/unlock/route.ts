@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { buildDestinyScan, decodeDestinyScanId } from '@/lib/destiny-scan';
+import { requirePayPerUseEnabled } from '@/lib/pay-per-use';
 import { getStripe } from '@/lib/stripe';
 
 const DESTINY_UNLOCK_PRICE = 990;
 
 export async function GET(request: NextRequest) {
+  const payPerUseGate = requirePayPerUseEnabled();
+  if (payPerUseGate) return payPerUseGate;
+
   const id = request.nextUrl.searchParams.get('id');
   const sessionId = request.nextUrl.searchParams.get('session_id');
 
