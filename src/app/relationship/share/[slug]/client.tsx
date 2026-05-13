@@ -2,9 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Eye, HeartHandshake, Lock, Sparkles } from 'lucide-react';
+
 import { RelationshipRadar } from '@/components/relationship/RelationshipRadar';
 import type { RelationshipReading } from '@/types/relationship';
+import {
+  TianjiLoveButton,
+  TianjiLoveFooter,
+  TianjiLoveHeader,
+  TianjiLovePanel,
+  TianjiLoveShell,
+  TianjiLoveTrustCard,
+} from '@/components/tianji-love';
 
 interface ShareData {
   share: {
@@ -26,6 +35,18 @@ interface ShareData {
   };
 }
 
+const relationLabel: Record<string, string> = {
+  romantic: 'Romantic relationship',
+  friendship: 'Friendship',
+  business: 'Working partnership',
+};
+
+function scoreTone(score: number) {
+  if (score >= 70) return 'text-[#ffe3b4]';
+  if (score >= 50) return 'text-[#d8b77b]';
+  return 'text-[#ff9c8b]';
+}
+
 export default function SharePageClient() {
   const params = useParams();
   const slug = params.slug as string;
@@ -37,8 +58,8 @@ export default function SharePageClient() {
     if (!slug) return;
 
     fetch(`/api/relationship/share?slug=${slug}`)
-      .then(r => r.json())
-      .then(json => {
+      .then((response) => response.json())
+      .then((json) => {
         if (json.success && json.data) {
           setData(json.data);
         } else {
@@ -51,39 +72,39 @@ export default function SharePageClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center"
-        style={{ background: 'linear-gradient(135deg, #0a0a1a 0%, #1a1040 50%, #0a0a1a 100%)' }}>
-        <div className="text-center">
-          <div className="text-4xl mb-4 animate-pulse">💫</div>
-          <p className="text-sm" style={{ color: 'rgba(226,232,240,0.4)' }}>Loading...</p>
+      <TianjiLoveShell className="tianji-love-share-loading" ariaLabel="Loading shared relationship report">
+        <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-5 text-center">
+          <Sparkles className="mb-4 h-9 w-9 animate-pulse text-[#d8b77b]" aria-hidden />
+          <p className="text-sm tracking-[0.24em] text-[#f4d7a3]/58">LOADING RELATIONSHIP SHARE</p>
         </div>
-      </div>
+      </TianjiLoveShell>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="min-h-screen flex items-center justify-center"
-        style={{ background: 'linear-gradient(135deg, #0a0a1a 0%, #1a1040 50%, #0a0a1a 100%)' }}>
-        <GlassCard level="card" className="p-8 text-center max-w-md mx-4">
-          <div className="text-3xl mb-3">🔍</div>
-          <h1 className="text-lg font-serif font-bold mb-2 text-white">Share not found</h1>
-          <p className="text-sm" style={{ color: 'rgba(226,232,240,0.5)' }}>
-            This relationship share link may have expired or does not exist.
-          </p>
-          <a href="/relationship/new" className="mt-4 inline-block text-sm" style={{ color: '#A78BFA' }}>
-            Create your own →
-          </a>
-        </GlassCard>
-      </div>
+      <TianjiLoveShell className="tianji-love-share-error" ariaLabel="Shared relationship not found">
+        <div className="relative z-10 flex min-h-screen items-center justify-center px-5">
+          <TianjiLovePanel className="max-w-md p-8 text-center">
+            <Sparkles className="mx-auto mb-4 h-8 w-8 text-[#d8b77b]" aria-hidden />
+            <h1 className="font-serif text-2xl text-[#ffe3b4]">Share not found</h1>
+            <p className="mt-3 text-sm leading-7 text-[#f4d7a3]/66">
+              This relationship share link may have expired or does not exist.
+            </p>
+            <TianjiLoveButton href="/relationship/new" className="mt-6">
+              Create your own
+            </TianjiLoveButton>
+          </TianjiLovePanel>
+        </div>
+      </TianjiLoveShell>
     );
   }
 
   const { share, reading } = data;
   const personANickname = reading.person_a_nickname ?? 'Person A';
   const personBNickname = reading.person_b_nickname ?? 'Person B';
+  const relationType = relationLabel[reading.relation_type] ?? 'Relationship';
 
-  // Build a minimal Reading object for the components
   const readingResult: RelationshipReading = {
     id: reading.id,
     relationType: reading.relation_type as RelationshipReading['relationType'],
@@ -97,77 +118,90 @@ export default function SharePageClient() {
     createdAt: '',
   };
 
-  const scoreColor = (score: number) =>
-    score >= 70 ? '#34D399' : score >= 50 ? '#F59E0B' : '#F87171';
-
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0a0a1a 0%, #1a1040 50%, #0a0a1a 100%)' }}>
-      <div className="max-w-3xl mx-auto px-4 py-10">
+    <TianjiLoveShell className="tianji-love-relationship-share-page" ariaLabel="Tianji Love shared relationship report">
+      <TianjiLoveHeader
+        homeHref="/"
+        navItems={[
+          { label: 'Compatibility', href: '/relationship/new', mobile: true },
+          { label: 'Love Reading', href: '/ask' },
+          { label: 'Timing', href: '/draw' },
+          { label: 'Pricing', href: '/pricing', mobile: true },
+          { label: 'Privacy', href: '/legal/privacy' },
+        ]}
+        cta={{ label: 'Create Yours', href: '/relationship/new' }}
+      />
 
-        {/* Shared badge */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full"
-            style={{ background: 'rgba(167,139,250,0.1)', border: '1px solid rgba(167,139,250,0.2)', color: '#A78BFA' }}>
-            💕 {personANickname} & {personBNickname} {reading.relation_type === 'romantic' ? '浪漫关系' : reading.relation_type === 'friendship' ? '友谊' : '工作搭档'}
-          </div>
-        </div>
+      <main className="relative z-10 mx-auto w-full max-w-5xl px-5 py-12 sm:px-8">
+        <section className="text-center">
+          <p className="text-xs uppercase tracking-[0.32em] text-[#d8b77b]/66">Tianji Love / Shared Compatibility</p>
+          <h1 className="mx-auto mt-4 max-w-3xl font-serif text-4xl font-semibold leading-tight text-[#ffe3b4] sm:text-5xl">
+            {personANickname} & {personBNickname}
+          </h1>
+          <p className="mt-4 text-sm text-[#f4d7a3]/60">{relationType}</p>
+        </section>
 
-        {/* Summary card */}
-        <GlassCard level="card" className="p-8 text-center mb-6">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <span className="text-3xl font-bold" style={{ color: scoreColor(reading.score_overall) }}>
+        <TianjiLovePanel className="mt-8 p-6 text-center sm:p-8">
+          <div className="inline-flex items-end justify-center gap-3">
+            <span className={`font-serif text-6xl font-semibold ${scoreTone(reading.score_overall)}`}>
               {reading.score_overall}
             </span>
-            <span className="text-sm" style={{ color: 'rgba(226,232,240,0.4)' }}>综合匹配</span>
+            <span className="pb-3 text-xs uppercase tracking-[0.22em] text-[#f4d7a3]/48">overall match</span>
           </div>
-          <h1 className="text-xl font-serif font-bold mb-2 text-white">
-            {reading.summary.headline}
-          </h1>
-          <p className="text-sm leading-relaxed" style={{ color: 'rgba(226,232,240,0.65)' }}>
-            {reading.summary.oneLiner}
-          </p>
-        </GlassCard>
+          <h2 className="mx-auto mt-5 max-w-2xl font-serif text-2xl text-[#ffe3b4]">{reading.summary.headline}</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#f4d7a3]/70">{reading.summary.oneLiner}</p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3 text-xs text-[#f4d7a3]/50">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#b57248]/28 bg-black/20 px-3 py-1">
+              <Eye className="h-3.5 w-3.5 text-[#d8b77b]" aria-hidden />
+              {share.view_count} views
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#b57248]/28 bg-black/20 px-3 py-1">
+              <Lock className="h-3.5 w-3.5 text-[#d8b77b]" aria-hidden />
+              Birth data hidden by default
+            </span>
+          </div>
+        </TianjiLovePanel>
 
-        {/* Radar */}
-        {share.share_mode !== 'insight_card' && (
-          <GlassCard level="card" className="p-6 mb-6">
-            <div className="text-center mb-4">
-              <span className="text-xs tracking-widest uppercase" style={{ color: 'rgba(251,191,36,0.5)' }}>
-                五维关系图
-              </span>
+        {share.share_mode !== 'insight_card' ? (
+          <TianjiLovePanel className="mt-6 p-6">
+            <div className="mb-4 text-center">
+              <span className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/56">Relationship radar</span>
             </div>
             <RelationshipRadar
-              dimensions={reading.dimensions}
+              dimensions={readingResult.dimensions}
               personANickname={personANickname}
               personBNickname={personBNickname}
-              lang="zh"
+              lang="en"
             />
-          </GlassCard>
-        )}
+          </TianjiLovePanel>
+        ) : null}
 
-        {/* CTA */}
-        <GlassCard level="card" className="p-6 text-center">
-          <p className="text-sm mb-4" style={{ color: 'rgba(226,232,240,0.6)' }}>
-            {personANickname} & {personBNickname} 在 TianJi Global 生成了关系分析
+        <section className="mt-6 grid gap-4 md:grid-cols-3">
+          <TianjiLoveTrustCard icon={Lock} title="Privacy First" body="This public view excludes birth date, birth time, birth location, and time zone." />
+          <TianjiLoveTrustCard icon={HeartHandshake} title="Relationship Context" body="Shared reports keep the emotional pattern visible without exposing private inputs." />
+          <TianjiLoveTrustCard icon={Sparkles} title="Create Your Reading" body="Start with a private compatibility flow before choosing what to share." />
+        </section>
+
+        <TianjiLovePanel className="mt-6 p-6 text-center">
+          <p className="mx-auto max-w-2xl text-sm leading-7 text-[#f4d7a3]/66">
+            {personANickname} & {personBNickname} generated this compatibility insight with Tianji Love.
           </p>
-          <a
-            href="/relationship/new"
-            className="inline-block px-6 py-3 rounded-xl text-sm font-medium transition-all"
-            style={{
-              background: 'linear-gradient(135deg, rgba(167,139,250,0.2), rgba(244,114,182,0.2))',
-              border: '1px solid rgba(167,139,250,0.3)',
-              color: '#E2E8F0',
-            }}
-          >
-            🔮 创建你的关系分析
-          </a>
-        </GlassCard>
+          <TianjiLoveButton href="/relationship/new" className="mt-5">
+            Create Your Compatibility Report
+          </TianjiLoveButton>
+        </TianjiLovePanel>
+      </main>
 
-        {/* Privacy note */}
-        <p className="text-center text-xs mt-4" style={{ color: 'rgba(226,232,240,0.2)' }}>
-          分享视图 · 不包含精确出生信息 · TianJi Global
-        </p>
-      </div>
-    </div>
+      <TianjiLoveFooter
+        homeHref="/"
+        disclaimer="Shared compatibility reports are for reflection and relationship communication. Birth date, birth time, birth location, and time zone are hidden by default."
+        links={[
+          { label: 'Compatibility', href: '/relationship/new' },
+          { label: 'Love Reading', href: '/ask' },
+          { label: 'Timing', href: '/draw' },
+          { label: 'Privacy', href: '/legal/privacy' },
+        ]}
+      />
+    </TianjiLoveShell>
   );
 }

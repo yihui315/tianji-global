@@ -24,17 +24,20 @@ const sizeClasses: Record<MysticButtonSize, string> = {
 
 const variantStyles: Record<MysticButtonVariant, React.CSSProperties> = {
   solid: {
-    background: colors.textPrimary,
-    color: '#000',
-    boxShadow: '0 0 30px rgba(255,255,255,0.15)',
+    background:
+      'radial-gradient(circle at 82% 32%, rgba(255,235,204,0.48), transparent 9%), linear-gradient(180deg, rgba(255,132,126,0.92), rgba(167,58,65,0.88) 50%, rgba(104,32,41,0.94))',
+    color: '#fff7e6',
+    border: '1px solid rgba(255,180,158,0.6)',
+    boxShadow:
+      '0 0 24px rgba(255,92,99,0.3), 0 8px 26px rgba(255,92,99,0.13), inset 0 1px 0 rgba(255,236,207,0.32)',
   },
   outline: {
-    background: 'rgba(255,255,255,0.02)',
-    color: colors.textSecondary,
+    background: 'rgba(0,0,0,0.24)',
+    color: colors.goldLight,
     backdropFilter: 'blur(20px)',
     WebkitBackdropFilter: 'blur(20px)',
     boxShadow: shadows.softGlass,
-    border: `1px solid ${colors.borderStrong}`,
+    border: '1px solid rgba(181,114,72,0.58)',
   },
   ghost: {
     background: 'transparent',
@@ -63,11 +66,11 @@ export const MysticButton = forwardRef<HTMLButtonElement, MysticButtonProps>(
     },
     ref
   ) {
-    const baseClass = `inline-flex items-center justify-center gap-2 font-medium rounded-full transition-all duration-200 cursor-pointer ${sizeClasses[size]} ${className}`;
+    const baseClass = `inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all duration-200 cursor-pointer ${sizeClasses[size]} ${className}`;
 
     const mergedStyle: React.CSSProperties = {
       ...variantStyles[variant],
-      borderRadius: radii.button,
+      borderRadius: '0.5rem',
       fontFamily: 'var(--font-barlow), sans-serif',
       letterSpacing: '0.05em',
       ...style,

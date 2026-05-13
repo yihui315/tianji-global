@@ -52,6 +52,7 @@
    ══════════════════════════════════════════════════════════════ */
 
 :root {
+  --font-tianji-sans: "Segoe UI", "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
   --font-tianji-display: var(--font-tianji-sans);
   --font-tianji-body: var(--font-tianji-sans);
   --font-cinzel: var(--font-tianji-display);
@@ -821,4 +822,102 @@ body {
   transform: translateY(0);
   outline: 2px solid rgba(212, 175, 119, 0.95);
   outline-offset: 3px;
+}
+
+/* Tianji Love legacy surface bridge
+   Gives older P1/P2 pages the same dark romance shell while their JSX is migrated. */
+.tj-love-app-surface,
+.tj-love-legacy-surface {
+  color: #f7e8c8;
+  background:
+    radial-gradient(circle at 70% 0%, rgba(167, 45, 62, 0.24), transparent 32%),
+    radial-gradient(circle at 18% 12%, rgba(216, 183, 123, 0.1), transparent 34%),
+    linear-gradient(180deg, #050812 0%, #03040a 58%, #070914 100%) !important;
+}
+
+.tj-love-app-surface .star-field,
+.tj-love-legacy-surface .star-field {
+  opacity: 0.62;
+  filter: sepia(0.45) hue-rotate(330deg) saturate(0.75);
+}
+
+.tj-love-app-surface .bg-gradient-to-br,
+.tj-love-app-surface .bg-gradient-to-r,
+.tj-love-app-surface [class*="bg-[radial-gradient"],
+.tj-love-legacy-surface .bg-gradient-to-br,
+.tj-love-legacy-surface .bg-gradient-to-r,
+.tj-love-legacy-surface [class*="bg-[radial-gradient"] {
+  background:
+    radial-gradient(circle at 70% 0%, rgba(167, 45, 62, 0.18), transparent 34%),
+    linear-gradient(160deg, rgba(3, 4, 10, 0.96), rgba(7, 11, 22, 0.94)) !important;
+}
+
+.tj-love-app-surface [class*="bg-white/"],
+.tj-love-app-surface [class*="bg-slate-"],
+.tj-love-app-surface [class*="bg-purple-"],
+.tj-love-app-surface [class*="bg-indigo-"],
+.tj-love-app-surface [class*="bg-amber-"],
+.tj-love-legacy-surface [class*="bg-white/"],
+.tj-love-legacy-surface [class*="bg-slate-"],
+.tj-love-legacy-surface [class*="bg-purple-"],
+.tj-love-legacy-surface [class*="bg-indigo-"],
+.tj-love-legacy-surface [class*="bg-amber-"] {
+  background-color: rgba(7, 11, 22, 0.68) !important;
+}
+
+.tj-love-app-surface [class*="border-white/"],
+.tj-love-app-surface [class*="border-purple-"],
+.tj-love-app-surface [class*="border-slate-"],
+.tj-love-app-surface [class*="border-amber-"],
+.tj-love-legacy-surface [class*="border-white/"],
+.tj-love-legacy-surface [class*="border-purple-"],
+.tj-love-legacy-surface [class*="border-slate-"],
+.tj-love-legacy-surface [class*="border-amber-"] {
+  border-color: rgba(181, 114, 72, 0.34) !important;
+}
+
+.tj-love-app-surface [class*="text-purple-"],
+.tj-love-app-surface [class*="text-slate-"],
+.tj-love-app-surface [class*="text-amber-"],
+.tj-love-legacy-surface [class*="text-purple-"],
+.tj-love-legacy-surface [class*="text-slate-"],
+.tj-love-legacy-surface [class*="text-amber-"] {
+  color: rgba(244, 215, 163, 0.74) !important;
+}
+
+.tj-love-app-surface h1,
+.tj-love-app-surface h2,
+.tj-love-app-surface h3,
+.tj-love-legacy-surface h1,
+.tj-love-legacy-surface h2,
+.tj-love-legacy-surface h3 {
+  color: #ffe3b4;
+  letter-spacing: 0;
+}
+
+.tj-love-app-surface button,
+.tj-love-app-surface a,
+.tj-love-legacy-surface button,
+.tj-love-legacy-surface a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.tj-love-app-surface button[class*="bg-purple"],
+.tj-love-app-surface a[class*="bg-purple"],
+.tj-love-app-surface button[class*="from-purple"],
+.tj-love-app-surface a[class*="from-purple"],
+.tj-love-legacy-surface button[class*="bg-purple"],
+.tj-love-legacy-surface a[class*="bg-purple"],
+.tj-love-legacy-surface button[class*="from-purple"],
+.tj-love-legacy-surface a[class*="from-purple"] {
+  color: #fff7e6 !important;
+  border-color: rgba(255, 180, 158, 0.6) !important;
+  background:
+    radial-gradient(circle at 82% 32%, rgba(255, 235, 204, 0.48), transparent 9%),
+    linear-gradient(180deg, rgba(255, 132, 126, 0.92), rgba(167, 58, 65, 0.88) 50%, rgba(104, 32, 41, 0.94)) !important;
+  box-shadow:
+    0 0 24px rgba(255, 92, 99, 0.3),
+    0 8px 26px rgba(255, 92, 99, 0.13),
+    inset 0 1px 0 rgba(255, 236, 207, 0.32) !important;
 }

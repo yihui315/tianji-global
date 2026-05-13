@@ -1,102 +1,118 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { ArrowLeft, HeartHandshake, Lock, Sparkles, XCircle } from 'lucide-react';
+
+import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { withLanguageParam } from '@/lib/language-routing';
+import {
+  TianjiLoveButton,
+  TianjiLoveFooter,
+  TianjiLoveHeader,
+  TianjiLovePanel,
+  TianjiLoveShell,
+  TianjiLoveTrustCard,
+} from '@/components/tianji-love';
+
+const copy = {
+  en: {
+    nav: {
+      compatibility: 'Compatibility',
+      loveReading: 'Love Reading',
+      timing: 'Timing',
+      pricing: 'Pricing',
+      privacy: 'Privacy',
+    },
+    eyebrow: 'Tianji Love / Checkout',
+    title: 'No charge was made.',
+    body:
+      'You are back on the free path. The first signal is still available whenever you want to continue with love, timing, or compatibility.',
+    primary: 'View Plans',
+    secondary: 'Back to Home',
+    trust: [
+      { icon: Lock, title: 'Still private', body: 'Cancelling checkout does not publish or share your questions.' },
+      { icon: HeartHandshake, title: 'Free path remains', body: 'You can keep using the preview and compatibility flow before upgrading.' },
+      { icon: Sparkles, title: 'Upgrade later', body: 'Return to pricing only when a reading earns deeper attention.' },
+    ],
+    footer:
+      'Tianji Love keeps the free path useful and the paid path optional. Readings are for reflection, not certainty or crisis advice.',
+  },
+  zh: {
+    nav: {
+      compatibility: '关系合盘',
+      loveReading: '爱情解读',
+      timing: '时机',
+      pricing: '会员权益',
+      privacy: '隐私',
+    },
+    eyebrow: 'Tianji Love / 结账',
+    title: '本次没有产生扣款。',
+    body: '你已经回到免费路径。想继续时，爱情解读、时机窗口和关系合盘的第一段信号仍然可以使用。',
+    primary: '重新查看方案',
+    secondary: '返回首页',
+    trust: [
+      { icon: Lock, title: '仍然私密', body: '取消结账不会公开或分享你的问题。' },
+      { icon: HeartHandshake, title: '免费路径保留', body: '升级前仍可以使用预览和关系合盘流程。' },
+      { icon: Sparkles, title: '之后再升级', body: '只有当一次解读值得深入时，再回到价格页。' },
+    ],
+    footer: 'Tianji Love 保持免费路径可用，也让付费路径保持可选。解读用于反思，不承诺确定性或危机建议。',
+  },
+} as const;
 
 export default function CancelPage() {
-  const [language, setLanguage] = useState<'zh' | 'en'>('zh');
+  const [language] = useSyncedLanguage('en');
+  const t = copy[language];
+  const href = (path: string) => withLanguageParam(path, language);
 
   return (
-    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
-      <div className="star-field" aria-hidden="true" />
+    <TianjiLoveShell className="tianji-love-checkout-cancel" ariaLabel="Tianji Love checkout cancelled page">
+      <TianjiLoveHeader
+        homeHref={href('/')}
+        navItems={[
+          { label: t.nav.compatibility, href: href('/relationship/new') },
+          { label: t.nav.loveReading, href: href('/ask') },
+          { label: t.nav.timing, href: href('/draw') },
+          { label: t.nav.pricing, href: href('/pricing'), mobile: true },
+          { label: t.nav.privacy, href: href('/legal/privacy') },
+        ]}
+        cta={{ label: t.nav.pricing, href: href('/pricing') }}
+      />
 
-      {/* Content */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-6">
-        <div className="text-center max-w-lg mx-auto">
-          {/* Cancel Icon */}
-          <div className="mb-8 inline-flex items-center justify-center w-24 h-24 rounded-full bg-slate-500/20 shadow-xl">
-            <svg
-              className="w-12 h-12 text-slate-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-92px)] w-full max-w-5xl items-center px-5 py-14 sm:px-8">
+        <TianjiLovePanel className="w-full p-7 text-center sm:p-10">
+          <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-[radial-gradient(circle,rgba(244,215,163,0.12),rgba(181,114,72,0.08)_48%,transparent_76%)]">
+            <XCircle className="h-10 w-10 text-[#d8b77b]" aria-hidden />
+          </div>
+          <p className="text-xs uppercase tracking-[0.32em] text-[#d8b77b]/66">{t.eyebrow}</p>
+          <h1 className="mx-auto mt-4 max-w-3xl font-serif text-4xl font-semibold leading-tight text-[#ffe3b4] sm:text-5xl">{t.title}</h1>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#f4d7a3]/72">{t.body}</p>
+
+          <div className="mt-9 grid gap-4 md:grid-cols-3">
+            {t.trust.map((item) => (
+              <TianjiLoveTrustCard key={item.title} icon={item.icon} title={item.title} body={item.body} />
+            ))}
           </div>
 
-          {/* Title */}
-          <h1 className="text-4xl font-bold text-white mb-4">
-            {language === 'zh' ? '订阅已取消' : 'Subscription Cancelled'}
-          </h1>
-
-          {/* Message */}
-          <p className="text-slate-400 text-lg mb-8">
-            {language === 'zh'
-              ? '您的订阅已取消，不会收取任何费用'
-              : 'Your subscription was cancelled. No charges were made.'}
-          </p>
-
-          {/* Info Box */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-8 text-left">
-            <h3 className="text-white font-semibold mb-3">
-              {language === 'zh' ? '您仍然可以：' : 'You still can:'}
-            </h3>
-            <ul className="space-y-2">
-              {[
-                language === 'zh' ? '免费体验基础功能' : 'Try basic features for free',
-                language === 'zh' ? '随时返回订阅' : 'Subscribe anytime later',
-                language === 'zh' ? '探索其他命理工具' : 'Explore other fortune tools',
-              ].map((item, i) => (
-                <li key={i} className="flex items-center gap-2 text-slate-300 text-sm">
-                  <span className="text-slate-500">•</span> {item}
-                </li>
-              ))}
-            </ul>
+          <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
+            <TianjiLoveButton href={href('/pricing')}>{t.primary}</TianjiLoveButton>
+            <TianjiLoveButton href={href('/')} variant="secondary">
+              <ArrowLeft className="mr-3 h-4 w-4" aria-hidden />
+              {t.secondary}
+            </TianjiLoveButton>
           </div>
+        </TianjiLovePanel>
+      </section>
 
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/pricing"
-              className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-semibold transition"
-            >
-              {language === 'zh' ? '重新选择方案' : 'View Plans'}
-            </Link>
-            <Link
-              href="/"
-              className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg font-semibold transition"
-            >
-              {language === 'zh' ? '返回首页' : 'Back to Home'}
-            </Link>
-          </div>
-
-          {/* Language Toggle */}
-          <div className="mt-8 flex justify-center gap-2 bg-white/10 rounded-full p-1 inline-flex">
-            <button
-              onClick={() => setLanguage('zh')}
-              className={`px-4 py-1 rounded-full text-sm transition-all ${
-                language === 'zh' ? 'bg-purple-600 text-white' : 'text-slate-300'
-              }`}
-            >
-              中文
-            </button>
-            <button
-              onClick={() => setLanguage('en')}
-              className={`px-4 py-1 rounded-full text-sm transition-all ${
-                language === 'en' ? 'bg-purple-600 text-white' : 'text-slate-300'
-              }`}
-            >
-              EN
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+      <TianjiLoveFooter
+        homeHref={href('/')}
+        disclaimer={t.footer}
+        links={[
+          { label: t.nav.compatibility, href: href('/relationship/new') },
+          { label: t.nav.loveReading, href: href('/ask') },
+          { label: t.nav.timing, href: href('/draw') },
+          { label: t.nav.pricing, href: href('/pricing') },
+          { label: t.nav.privacy, href: href('/legal/privacy') },
+        ]}
+      />
+    </TianjiLoveShell>
   );
 }

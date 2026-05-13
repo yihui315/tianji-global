@@ -6,6 +6,7 @@
  */
 
 import { auth } from '@/lib/auth';
+import { buildDashboardRedirectUrl, buildLoginRedirectUrl } from '@/lib/auth-origin';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -19,7 +20,8 @@ export default auth((req: NextRequest & { auth: unknown }) => {
   // Allow auth pages if already logged in → redirect to dashboard
   if (AUTH_PATHS.some(p => pathname.startsWith(p))) {
     if (isAuthenticated) {
-      return NextResponse.redirect(new URL('/dashboard', req.url));
+      const dashboardUrl = buildDashboardRedirectUrl(req);
+      return NextResponse.redirect(dashboardUrl);
     }
     return NextResponse.next();
   }
@@ -27,8 +29,7 @@ export default auth((req: NextRequest & { auth: unknown }) => {
   // Protect dashboard and other authenticated routes
   if (PROTECTED_PATHS.some(p => pathname.startsWith(p))) {
     if (!isAuthenticated) {
-      const loginUrl = new URL('/login', req.url);
-      loginUrl.searchParams.set('callbackUrl', pathname);
+      const loginUrl = buildLoginRedirectUrl(req, pathname);
       return NextResponse.redirect(loginUrl);
     }
   }
