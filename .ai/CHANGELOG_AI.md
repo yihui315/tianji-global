@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-16 - TianJi Love latest server redeploy check
+
+- Task ID: 20260516-tianji-love-latest-server-redeploy-check
+- Files changed: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Continued the deploy/upgrade request by comparing the server source against the latest GitHub candidate. The latest deploy candidate remains `origin/redesign-home-landing-20260420` at `4113adcaf49851a0a3bbc256b308e0076cfceb57`, and the server was already on that commit, so no rebuild or PM2 restart was required.
+- Commands run: local `git fetch --all --prune`; local branch/PR status checks; remote root SSH source/runtime checks; remote explicit refspec fetch for `redesign-home-landing-20260420` and `main`; root `nginx -t`; remote `SMOKE_BASE_URL=https://tianji.love npm run smoke:production`; remote PM2 list; public `curl` homepage checks.
+- Results: Server HEAD is `4113adcaf49851a0a3bbc256b308e0076cfceb57` on `deploy/tianji-love-20260515`. Root `nginx -t` passed. PM2 `tianji-global` remains online under `deploy`. Production smoke passed: `/en`, `/zh-CN/pricing`, `/en/love-reading/result/demo`, and the safe `403` paid-unlock-disabled checkout response. Public `https://tianji.love/` returned 200 and contains the current Tianji Love homepage signals.
+- Risks: No database migrations were applied. Paid smoke was not run. Vercel preview status on PR #48 remains canceled/failing, but the self-hosted production path is verified.
+- Next step: Keep using the self-hosted server path for production, or merge PR #48 after deciding how to handle the irrelevant/canceled Vercel check.
+
 ### 2026-05-15 - TianJi Love direct server deploy to 186.244.244.81
 
 - Task ID: 20260515-tianji-love-direct-server-deploy-18624424481
