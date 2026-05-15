@@ -18,6 +18,7 @@ import type {
   TaskType,
 } from '@/types/ai';
 import { getModelEntry, MODEL_REGISTRY } from '@/types/ai';
+import type { ModelEntry } from '@/types/ai';
 
 // ─── Environment Config ────────────────────────────────────────────────────────
 
@@ -163,6 +164,28 @@ function selectBestModel(taskType: TaskType, preferredProvider?: ModelProvider):
   return fallback?.id || 'anthropic/claude-3-5-sonnet-latest';
 }
 
+function inputCostPer1M(entry: ModelEntry): number {
+  return entry.inputCostPer1M ?? (entry.costPer1kInput ?? 0) * 1000;
+}
+
+function outputCostPer1M(entry: ModelEntry): number {
+  return entry.outputCostPer1M ?? (entry.costPer1kOutput ?? 0) * 1000;
+}
+
+function calculateModelCostUSD(
+  modelId: string,
+  inputTokens: number,
+  outputTokens: number
+): number | undefined {
+  const entry = getModelEntry(modelId);
+  if (!entry) return undefined;
+
+  return (
+    (inputTokens / 1_000_000) * inputCostPer1M(entry) +
+    (outputTokens / 1_000_000) * outputCostPer1M(entry)
+  );
+}
+
 // ─── Provider Implementations ──────────────────────────────────────────────────
 
 async function callAnthropic(
@@ -224,21 +247,20 @@ async function callAnthropic(
   };
 
   const text = data.content?.[0]?.text || '';
-  const modelEntry = getModelEntry(`anthropic/${model}`);
+  const inputTokens = data.usage?.input_tokens || 0;
+  const outputTokens = data.usage?.output_tokens || 0;
+  const modelId = `anthropic/${model}`;
 
   return {
     content: text,
     raw: data,
-    model: `anthropic/${model}`,
+    model: modelId,
     provider: 'anthropic',
     tokensUsed: {
-      input: data.usage?.input_tokens || 0,
-      output: data.usage?.output_tokens || 0,
+      input: inputTokens,
+      output: outputTokens,
     },
-    costUSD: modelEntry
-      ? ((data.usage?.input_tokens || 0) / 1_000_000) * (modelEntry.inputCostPer1M ?? 0) +
-        ((data.usage?.output_tokens || 0) / 1_000_000) * (modelEntry.outputCostPer1M ?? 0)
-      : undefined,
+    costUSD: calculateModelCostUSD(modelId, inputTokens, outputTokens),
     latencyMs: Date.now() - start,
     finishReason: data.stop_reason,
   };
@@ -250,7 +272,8 @@ async function callOpenAI(
   model: string,
   systemPrompt: string,
   userPrompt: string,
-  options: { temperature?: number; maxTokens?: number; stream?: boolean }
+  options: { temperature?: number; maxTokens?: number; stream?: boolean },
+  provider: Extract<ModelProvider, 'openai' | 'packy' | 'grok'> = 'openai'
 ): Promise<AIResponse> {
   const start = Date.now();
   const { temperature = 0.7, maxTokens = 4096 } = options;
@@ -279,21 +302,20 @@ async function callOpenAI(
   };
 
   const text = data.choices?.[0]?.message?.content || '';
-  const modelEntry = getModelEntry(`openai/${model}`);
+  const inputTokens = data.usage?.prompt_tokens || 0;
+  const outputTokens = data.usage?.completion_tokens || 0;
+  const modelId = `${provider}/${model}`;
 
   return {
     content: text,
     raw: data,
-    model: `openai/${model}`,
-    provider: 'openai',
+    model: modelId,
+    provider,
     tokensUsed: {
-      input: data.usage?.prompt_tokens || 0,
-      output: data.usage?.completion_tokens || 0,
+      input: inputTokens,
+      output: outputTokens,
     },
-    costUSD: modelEntry
-      ? ((data.usage?.prompt_tokens || 0) / 1_000_000) * (modelEntry.inputCostPer1M ?? 0) +
-        ((data.usage?.completion_tokens || 0) / 1_000_000) * (modelEntry.outputCostPer1M ?? 0)
-      : undefined,
+    costUSD: calculateModelCostUSD(modelId, inputTokens, outputTokens),
     latencyMs: Date.now() - start,
   };
 }
@@ -307,7 +329,7 @@ async function callGrok(
   options: { temperature?: number; maxTokens?: number }
 ): Promise<AIResponse> {
   // Grok uses OpenAI-compatible API
-  return callOpenAI(apiKey, baseUrl, model, systemPrompt, userPrompt, options);
+  return callOpenAI(apiKey, baseUrl, model, systemPrompt, userPrompt, options, 'grok');
 }
 
 async function callGemini(
@@ -352,21 +374,20 @@ async function callGemini(
   };
 
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  const modelEntry = getModelEntry(`gemini/${model}`);
+  const inputTokens = data.usageMetadata?.promptTokenCount || 0;
+  const outputTokens = data.usageMetadata?.candidatesTokenCount || 0;
+  const modelId = `gemini/${model}`;
 
   return {
     content: text,
     raw: data,
-    model: `gemini/${model}`,
+    model: modelId,
     provider: 'gemini',
     tokensUsed: {
-      input: data.usageMetadata?.promptTokenCount || 0,
-      output: data.usageMetadata?.candidatesTokenCount || 0,
+      input: inputTokens,
+      output: outputTokens,
     },
-    costUSD: modelEntry
-      ? ((data.usageMetadata?.promptTokenCount || 0) / 1_000_000) * (modelEntry.inputCostPer1M ?? 0) +
-        ((data.usageMetadata?.candidatesTokenCount || 0) / 1_000_000) * (modelEntry.outputCostPer1M ?? 0)
-      : undefined,
+    costUSD: calculateModelCostUSD(modelId, inputTokens, outputTokens),
     latencyMs: Date.now() - start,
     finishReason: data.candidates?.[0]?.finishReason,
   };
@@ -553,7 +574,7 @@ export async function generateReport(
           return callOpenAI(apiKey!, baseUrl, modelName, systemPrompt || '', prompt, {
             temperature,
             maxTokens,
-          });
+          }, providerPrefix);
         case 'grok':
           return callGrok(apiKey!, baseUrl, modelName, systemPrompt || '', prompt, {
             temperature,
@@ -613,6 +634,8 @@ export async function generateReport(
               return callAnthropic(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens });
             case 'openai':
               return callOpenAI(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens });
+            case 'packy':
+              return callOpenAI(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens }, 'packy');
             case 'grok':
               return callGrok(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens });
             case 'gemini':
@@ -651,13 +674,7 @@ export function estimateCost(
   inputTokens: number,
   outputTokens: number
 ): number {
-  const entry = getModelEntry(modelId);
-  if (!entry) return 0;
-
-  return (
-    (inputTokens / 1_000_000) * (entry.inputCostPer1M ?? 0) +
-    (outputTokens / 1_000_000) * (entry.outputCostPer1M ?? 0)
-  );
+  return calculateModelCostUSD(modelId, inputTokens, outputTokens) ?? 0;
 }
 
 export function formatCost(costUSD: number): string {

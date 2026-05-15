@@ -52,7 +52,16 @@ if (!fs.existsSync(relationshipShareRoute)) {
 }
 
 const shareRouteSource = fs.readFileSync(relationshipShareRoute, 'utf8');
-if (!/includeBirthData:\s*shareSettings\?\.includeBirthData\s*\?\?\s*false/.test(shareRouteSource)) {
+const hasSafeCamelDefault =
+  /includeBirthData:\s*(?:shareSettings\?\.includeBirthData\s*\?\?\s*)?false/.test(
+    shareRouteSource
+  );
+const hasUnsafeCamelDefault = /includeBirthData:\s*shareSettings\?\.includeBirthData(?!\s*\?\?\s*false)/.test(
+  shareRouteSource
+);
+const hasSafeSnakeInsert = /include_birth_data:\s*false/.test(shareRouteSource);
+
+if (!hasSafeCamelDefault || hasUnsafeCamelDefault || !hasSafeSnakeInsert) {
   console.error('Relationship share API must default includeBirthData to false.');
   process.exit(1);
 }

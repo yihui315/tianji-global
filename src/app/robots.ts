@@ -22,6 +22,7 @@ export default function robots(): MetadataRoute.Robots {
           '/reading/',
           '/readings/',
           '/report/',
+          '/*/love-reading/result/',
           '/widget/',
           '/embed/preview',
         ],

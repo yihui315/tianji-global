@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-15 - TianJi Love PR main sync and release validation
+
+- Task ID: 20260515-tianji-love-pr-main-sync-release-validation
+- Files changed: merged `origin/main` into `redesign-home-landing-20260420`, resolved TianJi Love homepage, localized sitemap/i18n, Stripe webhook, CI, docs, scripts, Love V1 route/API/test conflicts, and updated `.ai/CHANGELOG_AI.md` plus `.ai/REVIEW_PACKET.md`.
+- Summary: Synchronized the latest local TianJi Love candidate branch with `origin/main` so PR #48 can move past merge conflicts. Preserved the local TianJi Love visual/homepage candidate while keeping the hardened Love V1 backend/payment/server-deploy updates from `main` where they were safer. Fixed homepage funnel/session and localized sitemap contracts after the merge.
+- Commands run: `git merge origin/main --no-edit`; targeted conflict resolution with explicit checkout/apply edits; `npm run test -- --run src/__tests__/landing-design-contract.test.ts`; `npm run release:check`.
+- Results: All merge conflicts are resolved locally. Focused landing contract passed 15/15. Full `npm run release:check` passed: typecheck, lint, 52 test files / 493 tests, production build, route audit, copy audit, share audit, and upgrade audit.
+- Risks: This updates the GitHub branch/PR candidate, not production by itself. Live website update still depends on merging PR #48 to `main` and the approved deploy automation completing. Paid smoke remains No-Go unless separately approved with a safe staging/live decision.
+- Next step: Commit the merge, push `redesign-home-landing-20260420`, then verify PR #48 mergeability and checks.
+
 ### 2026-05-15 - TianJi Love latest candidate commit prep
 
 - Task ID: 20260515-tianji-love-latest-candidate-commit

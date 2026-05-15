@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
 import { useLanguage } from '@/hooks/useLanguage';
 
@@ -355,14 +356,14 @@ export default function ModuleGrid() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="flex justify-center mt-14"
         >
-          <a
+          <Link
             href="/western"
             className="flex items-center gap-2 text-sm transition-colors duration-200"
             style={{ color: 'rgba(245,158,11,0.5)' }}
           >
             <span>{lang === 'zh' ? '探索全部工具' : 'Explore all tools'}</span>
             <span className="text-base">→</span>
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

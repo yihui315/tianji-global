@@ -160,7 +160,11 @@ const loveCopy = {
     ],
     features: [
       { title: 'Deep Analysis', body: 'Astrology + psychology for real clarity.', iconAsset: ICONS.deepScroll },
-      { title: 'Emotional Compatibility', body: 'Understand how you connect on a deeper level.', iconAsset: ICONS.emotionalRings },
+      {
+        title: 'Emotional Compatibility',
+        body: 'Understand how you connect on a deeper level.',
+        iconAsset: ICONS.emotionalRings,
+      },
       { title: 'Privacy First', body: 'Your data is protected and never shared.', iconAsset: ICONS.privateLock },
       { title: 'Actionable Guidance', body: 'Insights you can use to make better choices.', iconAsset: ICONS.clarityCompass },
     ],
@@ -184,7 +188,7 @@ const loveCopy = {
         },
         {
           name: 'Sophie',
-          tag: 'Timing insight',
+          tag: 'timing insight',
           quote: 'The timing was incredibly accurate. I met someone new right when it said I would.',
           avatar: '/assets/images/avatars/tianji-love-sophie.png',
           tone: 'avatar-b',
@@ -395,8 +399,41 @@ export default function TianjiLoveHome() {
     }
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const year = String(formData.get('birthYear') || '');
+    const month = String(formData.get('birthMonth') || '').padStart(2, '0');
+    const day = String(formData.get('birthDay') || '').padStart(2, '0');
+    const birthTime = String(formData.get('birthTime') || '');
+    const birthDate = year && month && day ? `${year}-${month}-${day}` : '';
+
+    if (!birthDate) {
+      router.push(href(mode === 'solo' ? '/ask' : '/relationship/new'));
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/love-reading/session', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          locale: activeLang === 'zh' ? 'zh-CN' : 'en',
+          readingMode: mode === 'relationship' ? 'compatibility' : 'solo',
+          birthDate,
+          birthTime,
+        }),
+      });
+      const payload = await response.json();
+      if (response.ok && payload?.data?.redirectUrl) {
+        router.push(payload.data.redirectUrl);
+        return;
+      }
+    } catch (error) {
+      console.warn('[TianjiLoveHome] session creation failed, using fallback route', error);
+    }
+
     router.push(href(mode === 'solo' ? '/ask' : '/relationship/new'));
   };
 
@@ -550,11 +587,12 @@ function BirthChartForm({
       </div>
 
       <div className="tianji-love-select-grid grid gap-5 md:grid-cols-4">
-        <BirthSelect select={selects.year} />
-        <BirthSelect select={selects.month} />
-        <BirthSelect select={selects.day} />
-        <BirthSelect select={selects.time} />
+        <BirthSelect name="birthYear" select={selects.year} />
+        <BirthSelect name="birthMonth" select={selects.month} />
+        <BirthSelect name="birthDay" select={selects.day} />
+        <BirthSelect name="birthTime" select={selects.time} />
       </div>
+      <input type="hidden" name="birthDate" aria-hidden="true" />
 
       <div className="tianji-love-segment mx-auto mt-8 grid max-w-3xl grid-cols-2 overflow-hidden rounded-full border border-[#b57248]/54 bg-black/34 p-1">
         <button type="button" onClick={() => setMode('solo')} className={cx('inline-flex min-h-14 items-center justify-center gap-3 rounded-full font-serif text-xl font-semibold transition', mode === 'solo' ? 'bg-[#983b48]/72 text-[#fff7e6] shadow-[0_0_22px_rgba(255,92,99,0.28)]' : 'text-[#f4d7a3]/78 hover:text-[#ffe3b4]')}>
@@ -576,12 +614,12 @@ function BirthChartForm({
   );
 }
 
-function BirthSelect({ select }: { select: SelectCopy }) {
+function BirthSelect({ name, select }: { name: string; select: SelectCopy }) {
   return (
     <label className="block">
       <span className="mb-3 block font-serif text-xl font-semibold text-[#f4d7a3]/90">{select.label}</span>
       <span className="relative block">
-        <select className="tianji-love-select h-16 w-full appearance-none rounded-lg border border-[#b57248]/44 bg-black/35 px-5 pr-12 font-serif text-xl text-[#f7efe4]/92 outline-none transition focus:border-[#ffe3b4] focus:ring-2 focus:ring-[#d8b77b]/30" defaultValue="">
+        <select name={name} className="tianji-love-select h-16 w-full appearance-none rounded-lg border border-[#b57248]/44 bg-black/35 px-5 pr-12 font-serif text-xl text-[#f7efe4]/92 outline-none transition focus:border-[#ffe3b4] focus:ring-2 focus:ring-[#d8b77b]/30" defaultValue="">
           <option value="" disabled>
             {select.placeholder}
           </option>

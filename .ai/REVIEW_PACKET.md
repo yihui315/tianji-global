@@ -2,34 +2,26 @@
 
 ## Background
 
-The user requested the latest TianJi Love version be committed and the website updated. The working tree contained a broad mix of application changes, generated screenshots, logs, deployment archives, external skill references, and local environment/build artifacts.
+The user requested the latest local TianJi Love website page updates be committed, pushed to GitHub, and used to update the website. The latest safe candidate was already pushed to `redesign-home-landing-20260420` and opened as PR #48, but the PR was conflicting with `origin/main`.
 
-The safe commit scope was narrowed to application/runtime source, tests, public TianJi Love assets, scripts, project-local skills, masked `.ai` evidence docs, public `.env.example`, CI, and package script updates.
+This packet records the follow-up merge synchronization and validation needed before the branch can be merged/deployed through the approved path.
 
 ## Task Goal
 
-Publish the latest safe TianJi Love candidate to GitHub and identify the production update path without committing secrets or generated deployment artifacts.
+Synchronize the latest TianJi Love candidate with `origin/main`, keep the local homepage/visual updates, retain safer Love V1 backend/payment/deploy updates from `main`, validate the result, and prepare the branch for a GitHub push.
 
 ## Files Changed
 
-Staged for commit:
+Current intended commit scope includes:
 
-- TianJi Love app and route source under `src/`
-- Focused tests under `src/__tests__/`
-- Public TianJi Love media under `public/assets/images/`
-- `scripts/audit-release-gate.ts`
-- `scripts/smoke-ask-draw-auth.mjs`
-- `.env.example`
-- `.github/workflows/ci.yml`
-- `package.json`
-- `tailwind.config.js`
-- Project-local `.agents/skills/*`
-- Project-local `.codex/prompts/*`
-- Project-local `.ai` masked server/env evidence docs
+- PR/main merge updates across `src/`, `scripts/`, docs, CI, package scripts, and Supabase migration source files
+- TianJi Love homepage contract fixes in `src/components/home/TianjiLoveHome.tsx`
+- Localized sitemap/i18n route support in `src/app/sitemap.ts` and `src/lib/i18n.ts`
+- Hardened Love V1 API, checkout, report job, privacy, trust, and test files from `origin/main`
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md`
 
-Explicitly not staged:
+Explicitly not intended for staging:
 
 - `.env.local`
 - deployment tarballs
@@ -37,62 +29,71 @@ Explicitly not staged:
 - logs
 - `.next`, `coverage`, `node_modules`
 - `tsconfig.tsbuildinfo`
-- external `.claude/skills` reference bundle
-- untracked ops notes
+- untracked external `.claude/skills` reference bundle
+- untracked `ops/` notes
 
 ## Core Judgment
 
 ```text
-Commit readiness: Go
-GitHub push: Go after commit
-Production deploy: Blocked unless main/approved deploy path is used
-Paid smoke: No-Go
+Branch merge readiness: Go
+GitHub push: Go after merge commit
+Production deploy: Conditional; requires PR #48 merge to main and approved deploy automation
+Paid smoke: No-Go unless separately approved
 ```
 
-The code candidate validates locally. The production update path is separate from the commit because repo automation deploys `main`, while the current working branch is `redesign-home-landing-20260420`.
+The local branch is now validated against `origin/main`. This does not by itself update production; it prepares the GitHub branch/PR for the approved website update path.
+
+## Merge Resolution Notes
+
+- Kept the local TianJi Love homepage and visual system candidate for page/component/style conflicts.
+- Kept `origin/main`'s hardened `src/app/api/stripe/webhook/route.ts` implementation.
+- Manually reconciled `package.json`, `.github/workflows/ci.yml`, `src/app/robots.ts`, `src/app/sitemap.ts`, `src/lib/i18n.ts`, and `src/components/home/TianjiLoveHome.tsx`.
+- Fixed the homepage funnel to create `/api/love-reading/session` when birth date data is present, with the existing `/ask` or `/relationship/new` fallback preserved.
+- Fixed localized sitemap route coverage for `/ask`, `/draw`, `/relationship/new`, and `/about`.
+- Normalized `TianjiLoveHome.tsx` line endings to LF for the fragile source-slice landing contract test.
 
 ## Validation
 
 | Check | Result |
 | --- | --- |
-| Staged unsafe path check | Pass; no env-local, archive, log, build cache, coverage, node_modules, or tsbuildinfo files staged |
-| Staged secret-shape scan | Pass with expected `.env.example` placeholder-only match |
-| `git diff --cached --check` | Pass |
+| Unmerged path check | Pass; no unmerged paths before validation |
+| `npm run test -- --run src/__tests__/landing-design-contract.test.ts` | Pass; 15 tests |
 | `npm run release:check` | Pass |
 | Typecheck | Pass |
-| Lint | Pass |
-| Tests | Pass, 46 files / 473 tests |
-| Build | Pass |
+| Lint | Pass; no ESLint warnings/errors |
+| Tests | Pass; 52 files / 493 tests |
+| Build | Pass; 106 static pages generated |
 | Route/copy/share/upgrade audits | Pass |
 
 ## Commands Run
 
 - `git status --short --branch`
-- `git diff --stat`
-- `git diff --cached --stat`
+- `git merge origin/main --no-edit`
+- `git diff --name-only --diff-filter=U`
 - `git diff --cached --check`
-- `git diff --cached -G ... --name-only`
+- `git ls-files --eol src/components/home/TianjiLoveHome.tsx`
+- `npm run test -- --run src/__tests__/landing-design-contract.test.ts`
 - `npm run release:check`
-- `gh workflow view 'Deploy US Server' --yaml`
-- `gh workflow view 'CI/CD' --yaml`
 
 ## Result
 
-The staged candidate is validated and ready to commit/push. The live website cannot be truthfully marked updated from this branch alone unless one of these happens:
+The branch is ready to commit as a merge sync and push back to GitHub. After the push, PR #48 should be rechecked for mergeability and CI/deploy status.
 
-1. Merge the branch to `main`, allowing the documented production automation to run.
-2. Run an approved deploy workflow that deploys this exact commit/ref.
-3. Restore the direct server deploy permission path and deploy this commit there.
+The live website can only be marked updated after one of these completes:
+
+1. PR #48 is merged to `main` and the configured production deployment succeeds.
+2. An approved deploy workflow deploys this exact commit/ref.
+3. A separately approved direct server deployment path is restored and used.
 
 ## Risks
 
-- Current branch is not `main`.
-- Manual `Deploy US Server` workflow deploys `main` and includes a `npm run smoke:production` step; local package scripts do not currently show that script in this working tree.
-- Previous direct server deploy was blocked by SSH/permission ownership.
-- Supabase migrations are committed as source files only; applying them to any hosted database remains a separate approval gate.
+- `tsconfig.tsbuildinfo` changed as a local build artifact and should remain unstaged.
+- Untracked screenshots, tarballs, `.claude/skills`, and `ops/` artifacts remain local only.
+- Supabase migration source files are part of the candidate; applying migrations to any hosted database remains a separate approval gate.
+- Paid smoke remains outside this task.
 
 ## Suggested Commit Message
 
 ```text
-feat: publish latest tianji love candidate
+merge: sync tianji love candidate with main
 ```

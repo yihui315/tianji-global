@@ -46,7 +46,7 @@ TianJi Global is the world's premier AI-powered fortune and destiny analysis pla
 | Auth | NextAuth v5 (Google OAuth + Credentials) |
 | Database | Supabase (PostgreSQL + Auth + Realtime) |
 | Payments | Stripe (Checkout + Webhooks + Billing Portal) |
-| Deployment | Vercel (recommended) |
+| Deployment | Self-hosted US server (Nginx + PM2) |
 
 ---
 
@@ -208,21 +208,17 @@ Returns 10 life phases (童年→耄耋) with career/wealth/love/health scores a
 
 ## Deployment
 
-### Vercel (Recommended)
+Production is deployed on a self-hosted US server with Nginx and PM2.
 
 ```bash
-npm i -g vercel
-vercel
+npm ci --legacy-peer-deps
+npm run release:check
+PORT=3000 NODE_ENV=production pm2 start npm --name tianji-global -- start
 ```
 
-Set environment variables in Vercel dashboard.
-
-### Docker
-
-```bash
-docker build -t tianji-global .
-docker run -p 3000:3000 --env-file .env tianji-global
-```
+See [`docs/US_SERVER_DEPLOY.md`](docs/US_SERVER_DEPLOY.md) for the current
+server runbook, required environment variable names, smoke checks, and GitHub
+Actions deployment setup.
 
 ---
 
