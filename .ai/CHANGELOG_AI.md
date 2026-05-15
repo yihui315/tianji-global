@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-15 - TianJi Love direct server deploy to 186.244.244.81
+
+- Task ID: 20260515-tianji-love-direct-server-deploy-18624424481
+- Files changed: `scripts/smoke-production.mjs`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Deployed the latest validated TianJi Love candidate to the self-hosted server at `186.244.244.81` using the existing `/opt/tianji-global` checkout and `deploy` user's PM2 process. The server now runs commit `93e294077fb3ad80e2a604e82a233f7afffbe30c` from local branch `deploy/tianji-love-20260515`.
+- Commands run: root SSH read-only runtime/source checks; remote `git fetch origin redesign-home-landing-20260420 main`; remote `git checkout -B deploy/tianji-love-20260515 93e294077fb3ad80e2a604e82a233f7afffbe30c`; remote `npm ci --legacy-peer-deps`; remote `npm run release:check`; remote `pm2 restart tianji-global --update-env`; remote `pm2 save`; root `nginx -t`; local/public `curl` checks; local `SMOKE_BASE_URL=https://tianji.love npm run smoke:production`.
+- Results: Remote release check passed: typecheck, lint, 52 test files / 493 tests, production build, route audit, copy audit, share audit, and upgrade audit. PM2 `tianji-global` is online under `deploy`. Root `nginx -t` passed. `https://tianji.love/` and `https://tianji.love/relationship/new` returned HTTP 200 from the public workstation. Homepage HTML contains the new Tianji Love signals. Production smoke passed after accepting the current safe `403` paid-unlock-disabled response for `/api/checkout`.
+- Risks: Supabase migrations were not applied to a hosted database. Paid checkout remains disabled by `ENABLE_PAY_PER_USE` and paid smoke was not run. Server source has untracked `.env.production` and backup env files by design; raw secret values were not read or printed. The deploy used a root-provided password for SSH access and should be replaced with key-based deploy access.
+- Next step: Optionally merge PR #48 when Vercel's canceled check is handled or no longer required; configure SSH key-based deployment for repeatable releases.
+
 ### 2026-05-15 - TianJi Love PR main sync and release validation
 
 - Task ID: 20260515-tianji-love-pr-main-sync-release-validation

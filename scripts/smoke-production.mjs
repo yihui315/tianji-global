@@ -24,10 +24,10 @@ const checks = [
     expectedStatus: 200,
   },
   {
-    name: 'Checkout rejects invalid payload',
+    name: 'Checkout rejects invalid payload or disabled paid unlock',
     method: 'POST',
     path: '/api/checkout',
-    expectedStatus: 400,
+    expectedStatus: [400, 403],
     body: { productId: 'invalid-smoke-product' },
   },
 ];
@@ -48,7 +48,10 @@ for (const check of checks) {
       signal: controller.signal,
     });
 
-    const ok = response.status === check.expectedStatus;
+    const expectedStatuses = Array.isArray(check.expectedStatus)
+      ? check.expectedStatus
+      : [check.expectedStatus];
+    const ok = expectedStatuses.includes(response.status);
     console.log(
       `${ok ? 'PASS' : 'FAIL'} ${check.name}: ${response.status} ${url}`,
     );
