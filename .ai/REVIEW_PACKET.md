@@ -2,41 +2,46 @@
 
 ## Background
 
-The user requested a safe TianJi Love adaptation of selected ideas from `msitarzewski/agency-agents` into project-local Codex skills.
+The target project is TianJi Love. The user requested masked staging env remediation evidence using the TianJi skills committed in `4551488`.
 
-This was a documentation and workflow integration only. It did not install `agency-agents`, did not add runtime dependencies, did not modify app source, did not deploy, did not run paid smoke, did not call Stripe live APIs, and did not read or print secrets.
+This task was evidence/docs-only. It did not deploy, run paid smoke, call Stripe live APIs, modify production configuration, rotate credentials, read real env files, or print secrets.
 
 ## Task Goal
 
-Create a small TianJi-specific agent skill layer under `.agents/skills/` and record the integration plan and adaptation review under `.ai/`.
+Produce evidence that lets a reviewer decide whether staging deploy, non-paid smoke, and paid smoke can proceed later.
+
+Required output files:
+
+- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_PLAN_20260515.md`
+- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_EVIDENCE_20260515.md`
+- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_REVIEW_20260515.md`
+- `.ai/CHANGELOG_AI.md`
+- `.ai/REVIEW_PACKET.md`
 
 ## Files Changed
 
-- `.ai/AGENCY_AGENTS_INTEGRATION_PLAN_20260515.md`
-- `.ai/AGENCY_AGENTS_TIANJI_ADAPTATION_REVIEW_20260515.md`
-- `.agents/skills/tianji-launch-director/SKILL.md`
-- `.agents/skills/tianji-env-remediation-sre/SKILL.md`
-- `.agents/skills/tianji-nextjs-engineer/SKILL.md`
-- `.agents/skills/tianji-product-ux-reviewer/SKILL.md`
-- `.agents/skills/tianji-revenue-safety-reviewer/SKILL.md`
-- `.agents/skills/tianji-evidence-qa/SKILL.md`
+- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_PLAN_20260515.md`
+- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_EVIDENCE_20260515.md`
+- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_REVIEW_20260515.md`
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md`
 
 ## Related Evidence Links
 
+- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_PLAN_20260515.md`
+- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_EVIDENCE_20260515.md`
+- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_REVIEW_20260515.md`
 - `.ai/AGENCY_AGENTS_INTEGRATION_PLAN_20260515.md`
 - `.ai/AGENCY_AGENTS_TIANJI_ADAPTATION_REVIEW_20260515.md`
+
+## Skills Used
+
 - `.agents/skills/tianji-launch-director/SKILL.md`
 - `.agents/skills/tianji-env-remediation-sre/SKILL.md`
-- `.agents/skills/tianji-nextjs-engineer/SKILL.md`
-- `.agents/skills/tianji-product-ux-reviewer/SKILL.md`
 - `.agents/skills/tianji-revenue-safety-reviewer/SKILL.md`
 - `.agents/skills/tianji-evidence-qa/SKILL.md`
 
 ## Core Judgment
-
-The adaptation is safe as a local workflow layer only.
 
 ```text
 Launch: No-Go
@@ -45,35 +50,46 @@ Paid smoke: No-Go
 Next safe milestone: masked staging env remediation
 ```
 
+The next milestone is still evidence collection, not deploy.
+
 ## Gate Matrix Summary
 
 | Gate | Verdict | Reason |
 | --- | --- | --- |
-| Runtime dependency change | Go | No app dependency was added. |
-| App source mutation | Go | No app source file was changed. |
-| Secret hygiene | Go | Targeted scan passed for the new docs, six skills, review packet, and changelog entry. |
-| Launch approval | No-Go | Skills do not approve launch. |
-| Deploy approval | No-Go | Staging env readiness remains unproven. |
-| Paid smoke approval | No-Go | Stripe/test-mode/webhook/price evidence remains gated. |
-| Next safe milestone | Go | Continue masked staging env remediation evidence work only. |
+| Git/source baseline | Conditional Go | Local source is inspectable at `4551488`, but the branch is ahead and the worktree is dirty. |
+| Runtime readiness | No-Go | Local Node/npm are present; server Node/PM2/Nginx runtime evidence is missing. |
+| Auth origin | Conditional Go | Forwarded-host redirect source exists; hosted provider callback evidence is missing. |
+| Stripe staging safety | No-Go | Test/live classification, webhook endpoint, callback origin, and DB staging evidence are unknown. |
+| Supabase staging readiness | No-Go | Staging separation and service-role classification are missing. |
+| Resend/email readiness | No-Go | Provider evidence is missing and sender env naming is inconsistent. |
+| AI provider readiness | No-Go | Hosted provider/model evidence is missing. |
+| DESTINY_SCAN_SECRET | No-Go | Dedicated staging secret presence is unproven. |
+| Non-paid smoke eligibility | Blocked | Deploy/source/server/env readiness is not proven. |
+| Paid smoke eligibility | No-Go | Stripe and webhook safety evidence are missing. |
+| Secret hygiene | Go | Targeted scan passed for the new/updated `.ai` docs. |
 
 ## Commands Run
 
-- Read `AGENTS.md`, `.ai/PROJECT_CONTEXT.md`, `.ai/DECISIONS.md`, `.ai/TASKS.md`, and `.ai/MODEL_ROUTING.md`.
-- Read relevant skill guidance for `skill-creator`, `ai-divination-dev`, and `using-superpowers`.
-- Opened `https://github.com/msitarzewski/agency-agents` to verify repository structure and README claims.
-- Ran read-only status checks for the workspace and `tianji-global`.
-- Created project-local docs and skills.
-- Ran `quick_validate.py` against all six new TianJi skills; all returned `Skill is valid!`.
-- Ran targeted secret-pattern scans over new docs, six skills, review packet, and changelog entry.
+- Loaded the four TianJi skills from `.agents/skills`.
+- Read workspace and repository instructions.
+- Ran local read-only source/runtime baseline commands: `pwd`, `git status`, branch, commit, remote, latest log, `node -v`, and `npm -v`.
+- Inspected `package.json`, `next.config.js`, env key names, route existence, Stripe routes, webhook route, Supabase helper, Auth helper, middleware, Resend route, AI orchestrator, Ask preview, Draw preview, Relationship analysis, Destiny Scan, Destiny unlock, migrations, and metadata files.
+- Created the plan, evidence, and review reports.
+- Ran targeted secret-pattern scan over the new/updated `.ai` docs; no hits remained.
 
 ## Safety Notes
 
-- This task intentionally adapted concepts, not files, scripts, or runtime dependencies.
-- Full `agency-agents` import remains intentionally rejected.
-- Conversion/install scripts remain intentionally unused.
-- Growth and marketing agents remain deferred until safety gates improve.
+- No real `.env` or `.env.local` was read.
+- No raw provider keys, webhook secrets, JWTs, private keys, database credentials, or SSH keys were printed.
+- No remote server, PM2, Nginx, Stripe, Supabase, Resend, Auth provider, or AI provider state was changed.
+- The current worktree's pre-existing dirty files were preserved.
 
 ## Required Next Action
 
-Run masked staging env remediation evidence review only after the required secret-safe inputs and explicit approval phrase are available. Do not deploy and do not run paid smoke.
+Collect explicit-approval masked staging server/env inventory, then rerun this readiness review. Do not deploy and do not run paid smoke.
+
+## Suggested Commit Message
+
+```text
+docs(ai): add tianji staging env remediation evidence
+```
