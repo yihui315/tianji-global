@@ -2,6 +2,26 @@
 
 ## Entries
 
+### 2026-05-15 - TianJi Love deploy permission blocker
+
+- Task ID: 20260515-tianji-love-deploy-permission-blocker
+- Files changed: `.ai/TIANJI_LOVE_DIRECT_SERVER_DEPLOY_EVIDENCE_20260515.md`, `.ai/TIANJI_LOVE_DIRECT_SERVER_DEPLOY_REVIEW_20260515.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Recorded the direct server deploy blocker. Local clean RC validation had already passed and current public non-paid routes were reachable, but actual deployment could not proceed because the approved SSH identity can only access `tianji-prod`, which cannot write `/var/www/tianji-global`, cannot sudo, and cannot restart the public app process.
+- Commands run: Git for Windows SSH probe for `deploy@186.244.244.81`; Git for Windows SSH probe for `root@186.244.244.81`; Git for Windows SSH read-only probe for `tianji-prod@186.244.244.81` checking user, hostname, `/var/www/tianji-global` ownership, and passwordless sudo availability; targeted secret-pattern scan over the direct deploy evidence/review docs and review packet.
+- Results: `deploy` SSH failed with `Permission denied (publickey,password)`. `root` SSH failed with `Permission denied (publickey,password)`. `tianji-prod` SSH still works for read-only checks only; `/var/www/tianji-global`, `current`, `releases`, and `shared` remain `root:root`; `tianji-prod` has no passwordless sudo. No `git fetch/pull`, `npm install`, `npm run build`, PM2 restart, `pm2 save`, `nginx -t`, Nginx reload, env write, paid smoke, Stripe live API call, or secret output was performed.
+- Risks: Actual new-version deployment remains No-Go until deploy/root SSH is restored or a tightly scoped deployment sudo path is granted. Current live route health from the earlier check is not post-deploy evidence.
+- Next step: Restore `deploy` user SSH with the current public key and make `/var/www/tianji-global` deploy-owned, or grant a very narrow `tianji-prod` sudo path to execute deployment as `deploy`.
+
+### 2026-05-15 - TianJi Love masked server env inventory
+
+- Task ID: 20260515-tianji-love-masked-server-env-inventory
+- Files changed: `.ai/TIANJI_LOVE_MASKED_SERVER_ENV_INVENTORY_20260515.md`, `.ai/TIANJI_LOVE_MASKED_SERVER_ENV_REVIEW_20260515.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Collected approved read-only masked server/env inventory through Git for Windows SSH. Runtime and Nginx are reachable, but source and env gates remain blocked.
+- Commands run: Local git baseline; Git for Windows SSH runtime status; source directory/symlink checks; Nginx route grep with port masked; PM2 list; process visibility with secret-like args masked; package/build file presence checks; masked env key presence classifier; masked Stripe test/live pattern classifier.
+- Results: SSH/server access is Go. Server runtime is Conditional Go. Server source is No-Go because current points to old release `20260502-155434` and no Git worktree is visible. Masked env readiness is No-Go because Stripe keys appear live-shaped, Stripe Pro price IDs are missing, Supabase keys are missing, Resend/email keys are missing, hosted AI provider keys are missing, and `DESTINY_SCAN_SECRET` is missing. Paid smoke remains No-Go. Non-paid deploy eligibility remains No-Go.
+- Risks: `pm2 list` spawned an empty `tianji-prod` PM2 daemon; no cleanup was run because this task was read-only. App process cwd/source is unreadable from `tianji-prod`; visible Next processes run under `deploy` and `root`.
+- Next step: Remediate staging env to test/safe classifications and select/prove a clean RC source candidate, then rerun masked server/env inventory. Do not deploy and do not run paid smoke.
+
 ### 2026-05-15 - TianJi Love masked staging env remediation evidence
 
 - Task ID: 20260515-tianji-love-masked-staging-env-remediation

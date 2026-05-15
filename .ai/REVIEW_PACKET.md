@@ -2,44 +2,25 @@
 
 ## Background
 
-The target project is TianJi Love. The user requested masked staging env remediation evidence using the TianJi skills committed in `4551488`.
+The target project is TianJi Love. The user explicitly approved direct server deployment, but the previous direct deploy stopped before mutation because the available SSH identity did not have deploy permissions.
 
-This task was evidence/docs-only. It did not deploy, run paid smoke, call Stripe live APIs, modify production configuration, rotate credentials, read real env files, or print secrets.
+Follow-up recheck confirmed the blocker remains: `deploy` and `root` SSH still reject the current key, while `tianji-prod` can only perform read-only checks and cannot write `/var/www/tianji-global` or sudo.
 
 ## Task Goal
 
-Produce evidence that lets a reviewer decide whether staging deploy, non-paid smoke, and paid smoke can proceed later.
-
-Required output files:
-
-- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_PLAN_20260515.md`
-- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_EVIDENCE_20260515.md`
-- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_REVIEW_20260515.md`
-- `.ai/CHANGELOG_AI.md`
-- `.ai/REVIEW_PACKET.md`
+Record the server deploy permission blocker truthfully and preserve the correct gate state before any future redeploy attempt.
 
 ## Files Changed
 
-- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_PLAN_20260515.md`
-- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_EVIDENCE_20260515.md`
-- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_REVIEW_20260515.md`
+- `.ai/TIANJI_LOVE_DIRECT_SERVER_DEPLOY_EVIDENCE_20260515.md`
+- `.ai/TIANJI_LOVE_DIRECT_SERVER_DEPLOY_REVIEW_20260515.md`
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md`
 
 ## Related Evidence Links
 
-- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_PLAN_20260515.md`
-- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_EVIDENCE_20260515.md`
-- `.ai/TIANJI_LOVE_STAGING_ENV_REMEDIATION_REVIEW_20260515.md`
-- `.ai/AGENCY_AGENTS_INTEGRATION_PLAN_20260515.md`
-- `.ai/AGENCY_AGENTS_TIANJI_ADAPTATION_REVIEW_20260515.md`
-
-## Skills Used
-
-- `.agents/skills/tianji-launch-director/SKILL.md`
-- `.agents/skills/tianji-env-remediation-sre/SKILL.md`
-- `.agents/skills/tianji-revenue-safety-reviewer/SKILL.md`
-- `.agents/skills/tianji-evidence-qa/SKILL.md`
+- `.ai/TIANJI_LOVE_DIRECT_SERVER_DEPLOY_EVIDENCE_20260515.md`
+- `.ai/TIANJI_LOVE_DIRECT_SERVER_DEPLOY_REVIEW_20260515.md`
 
 ## Core Judgment
 
@@ -47,49 +28,45 @@ Required output files:
 Launch: No-Go
 Deploy: No-Go
 Paid smoke: No-Go
-Next safe milestone: masked staging env remediation
+Next safe milestone: restore deploy user SSH and /var/www/tianji-global write permission
 ```
 
-The next milestone is still evidence collection, not deploy.
+This is not a code/build blocker. It is a server deployment permission blocker.
 
 ## Gate Matrix Summary
 
 | Gate | Verdict | Reason |
 | --- | --- | --- |
-| Git/source baseline | Conditional Go | Local source is inspectable at `4551488`, but the branch is ahead and the worktree is dirty. |
-| Runtime readiness | No-Go | Local Node/npm are present; server Node/PM2/Nginx runtime evidence is missing. |
-| Auth origin | Conditional Go | Forwarded-host redirect source exists; hosted provider callback evidence is missing. |
-| Stripe staging safety | No-Go | Test/live classification, webhook endpoint, callback origin, and DB staging evidence are unknown. |
-| Supabase staging readiness | No-Go | Staging separation and service-role classification are missing. |
-| Resend/email readiness | No-Go | Provider evidence is missing and sender env naming is inconsistent. |
-| AI provider readiness | No-Go | Hosted provider/model evidence is missing. |
-| DESTINY_SCAN_SECRET | No-Go | Dedicated staging secret presence is unproven. |
-| Non-paid smoke eligibility | Blocked | Deploy/source/server/env readiness is not proven. |
-| Paid smoke eligibility | No-Go | Stripe and webhook safety evidence are missing. |
-| Secret hygiene | Go | Targeted scan passed for the new/updated `.ai` docs. |
+| Local clean RC | Go | Prior local clean RC build/lint/test evidence passed. |
+| Current public non-paid access | Go | Prior current-site checks showed non-paid routes reachable and protected routes redirect same-origin. |
+| `deploy` SSH | No-Go | Current key returns `Permission denied (publickey,password)`. |
+| `root` SSH | No-Go | Current key returns `Permission denied (publickey,password)`. |
+| `tianji-prod` deployability | No-Go | User can log in, but app path is `root:root` and passwordless sudo is unavailable. |
+| Actual new-version deploy | No-Go | No release files were written, no symlink changed, no process restarted. |
+| Paid smoke | No-Go | Explicitly forbidden and still unsafe. |
+| Secret hygiene | Go | Targeted scan over updated direct deploy docs and review packet had no hits. |
 
 ## Commands Run
 
-- Loaded the four TianJi skills from `.agents/skills`.
-- Read workspace and repository instructions.
-- Ran local read-only source/runtime baseline commands: `pwd`, `git status`, branch, commit, remote, latest log, `node -v`, and `npm -v`.
-- Inspected `package.json`, `next.config.js`, env key names, route existence, Stripe routes, webhook route, Supabase helper, Auth helper, middleware, Resend route, AI orchestrator, Ask preview, Draw preview, Relationship analysis, Destiny Scan, Destiny unlock, migrations, and metadata files.
-- Created the plan, evidence, and review reports.
-- Ran targeted secret-pattern scan over the new/updated `.ai` docs; no hits remained.
+- Git for Windows SSH probe for `deploy@186.244.244.81`
+- Git for Windows SSH probe for `root@186.244.244.81`
+- Git for Windows SSH read-only probe for `tianji-prod@186.244.244.81`
+- Checked `/var/www/tianji-global`, `current`, `releases`, and `shared` ownership
+- Checked `sudo -n` availability for `tianji-prod`
+- Ran targeted secret-pattern scan over updated direct deploy docs and review packet
 
-## Safety Notes
+## Result
 
-- No real `.env` or `.env.local` was read.
-- No raw provider keys, webhook secrets, JWTs, private keys, database credentials, or SSH keys were printed.
-- No remote server, PM2, Nginx, Stripe, Supabase, Resend, Auth provider, or AI provider state was changed.
-- The current worktree's pre-existing dirty files were preserved.
+No deployment was performed after the access recheck.
+
+No `git fetch/pull`, `npm install`, `npm run build`, PM2 restart, `pm2 save`, `nginx -t`, Nginx reload, env write, paid smoke, Stripe live API call, or secret output was performed.
 
 ## Required Next Action
 
-Collect explicit-approval masked staging server/env inventory, then rerun this readiness review. Do not deploy and do not run paid smoke.
+Restore `deploy` user SSH with the current public key and make `/var/www/tianji-global` deploy-owned, or grant a tightly scoped `tianji-prod` sudo path to deploy as `deploy`.
 
 ## Suggested Commit Message
 
 ```text
-docs(ai): add tianji staging env remediation evidence
+ops(staging): record tianji deploy permission blocker
 ```
