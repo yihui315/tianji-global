@@ -3,17 +3,25 @@
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { formatDateTime, getModuleMeta, type HistoryItem } from '@/lib/unified-frontend';
+import { useEffect, useState, type ReactNode } from 'react';
+import { ArrowLeft, Clock, Lock, Sparkles } from 'lucide-react';
+import { formatDateTime, getModuleMeta, type LegacyReadingSummary } from '@/lib/unified-frontend';
+import { withLanguageParam } from '@/lib/language-routing';
 import type { ModuleResult, UnifiedSection } from '@/types/module-result';
 import type { UserProfile } from '@/types/user-profile';
+import {
+  getTianjiLoveFooterNav,
+  getTianjiLovePrimaryCta,
+  getTianjiLovePrimaryNav,
+  TianjiLoveButton,
+  TianjiLoveFooter,
+  TianjiLoveHeader,
+  TianjiLovePanel,
+  TianjiLoveSectionTitle,
+  TianjiLoveShell,
+} from '@/components/tianji-love';
 
-interface LegacyReadingDetail {
-  id: string;
-  reading_type: string;
-  title: string;
-  summary: string;
-  created_at: string;
+interface LegacyReadingDetail extends LegacyReadingSummary {
   reading_data?: Record<string, unknown>;
 }
 
@@ -40,6 +48,59 @@ async function parseJson<T>(response: Response): Promise<T | null> {
   return (await response.json()) as T;
 }
 
+const copy = {
+  en: {
+    nav: {
+      compatibility: 'Compatibility',
+      loveReading: 'Love Reading',
+      timing: 'Timing',
+      pricing: 'Pricing',
+      history: 'History',
+    },
+    loading: 'Loading reading detail...',
+    notFound: 'Reading not found',
+    removed: 'This record may have been removed.',
+    back: 'Back to history',
+    eyebrow: 'Private reading detail',
+    openProfile: 'Open linked destiny profile',
+    keywords: 'Signals',
+    timeline: 'Timeline',
+    legacyTitle: 'Legacy reading detail',
+    legacyBody:
+      'This record came from the legacy readings interface. It stays available while the unified report model continues to absorb older results.',
+    awaiting: 'Awaiting more signals',
+    awaitingBody: 'This layer is waiting for more module results.',
+    strengths: 'Strengths',
+    advice: 'Advice',
+    privacy:
+      'This is private account content. Public share pages still hide birth date, time, location, and timezone by default.',
+  },
+  zh: {
+    nav: {
+      compatibility: '关系合盘',
+      loveReading: '爱情解读',
+      timing: '时机',
+      pricing: '会员权益',
+      history: '历史',
+    },
+    loading: '正在加载解读详情...',
+    notFound: '未找到解读结果',
+    removed: '这条记录可能已被删除。',
+    back: '返回历史页',
+    eyebrow: '私人解读详情',
+    openProfile: '打开对应命理档案',
+    keywords: '信号',
+    timeline: '时间线',
+    legacyTitle: '旧版解读详情',
+    legacyBody: '这条记录来自旧 readings 接口。在统一报告模型继续吸收旧结果时，它仍然可用。',
+    awaiting: '等待更多信号',
+    awaitingBody: '这一层正在等待更多模块结果。',
+    strengths: '优势',
+    advice: '建议',
+    privacy: '这是私人账号内容。公开分享页默认仍隐藏出生日期、时间、地点和时区。',
+  },
+} as const;
+
 export default function ReadingDetailPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -49,6 +110,10 @@ export default function ReadingDetailPage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState<string | null>(null);
+
+  const t = copy[language];
+  const href = (path: string) => withLanguageParam(path, language);
+  const toggleLanguage = () => setLanguage(language === 'zh' ? 'en' : 'zh');
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -83,8 +148,9 @@ export default function ReadingDetailPage() {
         }
 
         const nextReading = readingPayload?.data ?? null;
+        const nextLanguage = accountPayload?.language ?? 'en';
         setReading(nextReading);
-        setLanguage(accountPayload?.language ?? 'en');
+        setLanguage(nextLanguage);
 
         if (isUnifiedResult(nextReading)) {
           const ownerProfile = (profilesPayload?.data ?? []).find((item) => item.id === nextReading.profileId) ?? null;
@@ -94,12 +160,12 @@ export default function ReadingDetailPage() {
         }
 
         if (!nextReading) {
-          setNotice('Reading not found.');
+          setNotice(copy[nextLanguage].notFound);
         }
       } catch (error) {
         if (active) {
           console.error('[reading] detail load failed', error);
-          setNotice('Failed to load reading detail.');
+          setNotice(copy[language].notFound);
         }
       } finally {
         if (active) {
@@ -113,27 +179,27 @@ export default function ReadingDetailPage() {
     return () => {
       active = false;
     };
-  }, [params?.id, session?.user, status]);
+  }, [language, params?.id, session?.user, status]);
 
   if (status !== 'authenticated' || !session?.user || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-950 via-slate-950 to-indigo-950">
-        <div className="text-white text-lg">{language === 'zh' ? '正在加载结果详情...' : 'Loading reading detail...'}</div>
-      </div>
+      <TianjiLoveShell className="tianji-love-reading-loading">
+        <div className="relative z-10 flex min-h-screen items-center justify-center text-[#ffe3b4]">{t.loading}</div>
+      </TianjiLoveShell>
     );
   }
 
   if (!reading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-950 to-indigo-950 px-6 py-20 text-white">
-        <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
-          <h1 className="text-2xl font-semibold">{language === 'zh' ? '未找到解读结果' : 'Reading not found'}</h1>
-          <p className="mt-3 text-sm text-slate-300">{notice ?? (language === 'zh' ? '这条记录可能已被删除。' : 'This record may have been removed.')}</p>
-          <Link href="/readings" className="mt-5 inline-flex rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm transition hover:bg-white/10">
-            {language === 'zh' ? '返回历史页' : 'Back to history'}
-          </Link>
-        </div>
-      </div>
+      <ReadingShell language={language} toggleLanguage={toggleLanguage}>
+        <section className="relative z-10 mx-auto flex min-h-[calc(100vh-92px)] w-full max-w-3xl items-center px-5 py-16 sm:px-8">
+          <TianjiLovePanel className="w-full p-8 text-center">
+            <h1 className="font-serif text-3xl text-[#ffe3b4]">{t.notFound}</h1>
+            <p className="mt-3 text-sm leading-7 text-[#f4d7a3]/66">{notice ?? t.removed}</p>
+            <TianjiLoveButton href={href('/readings')} className="mt-6">{t.back}</TianjiLoveButton>
+          </TianjiLovePanel>
+        </section>
+      </ReadingShell>
     );
   }
 
@@ -141,6 +207,9 @@ export default function ReadingDetailPage() {
   const moduleType = unified ? reading.moduleType : reading.reading_type;
   const meta = getModuleMeta(moduleType);
   const createdAt = unified ? reading.createdAt : reading.created_at;
+  const summary = unified
+    ? reading.summary ?? reading.normalizedPayload.summary.oneLiner ?? reading.normalizedPayload.summary.headline
+    : reading.summary;
   const sections: Array<{ key: string; section?: UnifiedSection }> = unified
     ? [
         { key: 'identity', section: reading.normalizedPayload.identity },
@@ -154,167 +223,169 @@ export default function ReadingDetailPage() {
     : [];
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(124,58,237,0.2),_transparent_35%),linear-gradient(135deg,_#14091f,_#09090f_55%,_#0f172a)] text-white">
-      <header className="border-b border-white/10 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-6">
-          <div className="flex items-center gap-4">
-            <Link href="/readings" className="text-sm text-purple-300 transition hover:text-purple-200">
-              ← {language === 'zh' ? '返回历史页' : 'Back to history'}
-            </Link>
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-purple-300/80">
-                {language === 'zh' ? '结果详情' : 'Reading detail'}
-              </p>
-              <h1 className="mt-2 text-3xl font-semibold">{reading.title}</h1>
-            </div>
-          </div>
+    <ReadingShell language={language} toggleLanguage={toggleLanguage}>
+      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-6 px-5 py-10 sm:px-8">
+        <Link href={href('/readings')} className="inline-flex w-fit items-center gap-2 text-sm text-[#d8b77b] transition hover:text-[#ffe3b4]">
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          {t.back}
+        </Link>
 
-          <div className="flex gap-1 rounded-full border border-white/10 bg-white/5 p-1 text-sm">
-            <button
-              onClick={() => setLanguage('zh')}
-              className={`rounded-full px-3 py-1 transition ${language === 'zh' ? 'bg-purple-600 text-white' : 'text-slate-300'}`}
-            >
-              中文
-            </button>
-            <button
-              onClick={() => setLanguage('en')}
-              className={`rounded-full px-3 py-1 transition ${language === 'en' ? 'bg-purple-600 text-white' : 'text-slate-300'}`}
-            >
-              EN
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto flex max-w-5xl flex-col gap-6 px-6 py-8">
         {notice ? (
-          <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">
+          <div className="rounded-lg border border-[#ff9c8b]/34 bg-[#ff6c73]/10 px-5 py-4 text-sm text-[#ffd0c9]">
             {notice}
           </div>
         ) : null}
 
-        <section className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <TianjiLovePanel className="p-6">
+          <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
             <div className="flex items-start gap-4">
-              <div className={`flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br ${meta.gradient} text-3xl`}>
+              <div className={`grid h-16 w-16 shrink-0 place-items-center rounded-lg bg-gradient-to-br ${meta.gradient} text-xl font-semibold text-[#ffe3b4]`}>
                 {meta.emoji}
               </div>
               <div>
-                <p className="text-sm text-slate-300">{language === 'zh' ? meta.labelZh : meta.label}</p>
-                <p className="mt-2 text-sm text-slate-300">
-                  {formatDateTime(createdAt, language)}
-                  {profile ? ` · ${profile.displayName ?? profile.nickname ?? profile.birthDate}` : ''}
+                <p className="text-xs uppercase tracking-[0.32em] text-[#d8b77b]/62">{t.eyebrow}</p>
+                <h1 className="mt-2 font-serif text-4xl font-semibold leading-tight text-[#ffe3b4]">{reading.title}</h1>
+                <p className="mt-3 text-sm text-[#f4d7a3]/58">
+                  {language === 'zh' ? meta.labelZh : meta.label} / {formatDateTime(createdAt, language)}
+                  {profile ? ` / ${profile.displayName ?? profile.nickname ?? profile.birthDate}` : ''}
                 </p>
-                <p className="mt-4 max-w-3xl text-base text-slate-200">
-                  {unified
-                    ? reading.summary ?? reading.normalizedPayload.summary.oneLiner ?? reading.normalizedPayload.summary.headline
-                    : reading.summary}
-                </p>
+                <p className="mt-5 max-w-3xl text-base leading-8 text-[#fff4dd]/82">{summary}</p>
               </div>
             </div>
 
             {unified && profile ? (
-              <Link
-                href={`/dashboard/profile/${reading.profileId}`}
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm transition hover:bg-white/10"
-              >
-                {language === 'zh' ? '打开对应命理档案' : 'Open linked destiny profile'}
+              <Link href={`/dashboard/profile/${reading.profileId}`} className="rounded-lg border border-[#b57248]/36 bg-[#070b16]/64 px-4 py-2 text-sm text-[#ffe3b4] transition hover:border-[#ffe3b4]/50">
+                {t.openProfile}
               </Link>
             ) : null}
           </div>
 
           {unified && reading.normalizedPayload.summary.keywords?.length ? (
-            <div className="mt-5 flex flex-wrap gap-2">
-              {reading.normalizedPayload.summary.keywords.map((keyword) => (
-                <span key={keyword} className="rounded-full bg-white/10 px-3 py-1 text-xs text-slate-200">
-                  {keyword}
-                </span>
-              ))}
+            <div className="mt-6">
+              <p className="mb-3 text-xs uppercase tracking-[0.24em] text-[#d8b77b]/58">{t.keywords}</p>
+              <div className="flex flex-wrap gap-2">
+                {reading.normalizedPayload.summary.keywords.map((keyword) => (
+                  <span key={keyword} className="rounded-full border border-[#d8b77b]/24 bg-[#d8b77b]/10 px-3 py-1 text-xs text-[#ffe3b4]">
+                    {keyword}
+                  </span>
+                ))}
+              </div>
             </div>
           ) : null}
-        </section>
+        </TianjiLovePanel>
 
         {unified ? (
           <>
             <section className="grid gap-4 md:grid-cols-2">
               {sections.filter((item) => hasSectionContent(item.section)).map((item) => (
-                <div key={item.key} className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-400">{item.key}</p>
-                  <h2 className="mt-2 text-xl font-semibold">
-                    {item.section?.headline ?? (language === 'zh' ? '待补全' : 'Awaiting more signals')}
-                  </h2>
-                  <p className="mt-3 text-sm text-slate-300">
-                    {item.section?.summary ?? (language === 'zh' ? '这一层正在等待更多模块结果。' : 'This layer is waiting for more module results.')}
-                  </p>
-
-                  {item.section?.strengths?.length ? (
-                    <div className="mt-4">
-                      <p className="text-xs uppercase tracking-[0.24em] text-emerald-300/80">
-                        {language === 'zh' ? '优势' : 'Strengths'}
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {item.section.strengths.slice(0, 4).map((entry) => (
-                          <span key={entry} className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs text-emerald-200">
-                            {entry}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null}
-
-                  {item.section?.advice?.length ? (
-                    <div className="mt-4">
-                      <p className="text-xs uppercase tracking-[0.24em] text-amber-300/80">
-                        {language === 'zh' ? '建议' : 'Advice'}
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {item.section.advice.slice(0, 4).map((entry) => (
-                          <span key={entry} className="rounded-full bg-amber-500/10 px-3 py-1 text-xs text-amber-200">
-                            {entry}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
+                <SectionCard key={item.key} label={item.key} section={item.section} language={language} />
               ))}
             </section>
 
             {reading.normalizedPayload.timeline?.phases?.length ? (
-              <section className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
-                  {language === 'zh' ? '时间线' : 'Timeline'}
-                </p>
+              <TianjiLovePanel className="p-6">
+                <Clock className="mb-3 h-5 w-5 text-[#d8b77b]" aria-hidden />
+                <h2 className="font-serif text-2xl text-[#ffe3b4]">{t.timeline}</h2>
                 <div className="mt-5 space-y-3">
                   {reading.normalizedPayload.timeline.phases.map((phase) => (
-                    <div key={`${phase.range}-${phase.label}`} className="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
+                    <div key={`${phase.range}-${phase.label}`} className="rounded-lg border border-[#b57248]/24 bg-[#070b16]/56 p-4">
                       <div className="flex flex-wrap items-center gap-3">
-                        <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-slate-200">{phase.range}</span>
-                        <h3 className="text-base font-semibold">{phase.label}</h3>
+                        <span className="rounded-full border border-[#d8b77b]/24 bg-[#d8b77b]/10 px-3 py-1 text-xs text-[#ffe3b4]">{phase.range}</span>
+                        <h3 className="text-base font-semibold text-[#ffe3b4]">{phase.label}</h3>
                       </div>
-                      <p className="mt-2 text-sm text-slate-300">{phase.description}</p>
+                      <p className="mt-2 text-sm leading-6 text-[#f4d7a3]/66">{phase.description}</p>
                     </div>
                   ))}
                 </div>
-              </section>
+              </TianjiLovePanel>
             ) : null}
           </>
         ) : (
-          <section className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
-              {language === 'zh' ? '兼容层详情' : 'Compatibility detail'}
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold">
-              {language === 'zh' ? '这条记录来自旧 readings 接口' : 'This record came from the legacy readings interface'}
-            </h2>
-            <p className="mt-3 text-sm text-slate-300">
-              {language === 'zh'
-                ? '你现在看到的是兼容层输出。后续重新写入 unified result 后，这里会展示更结构化的 identity / relationship / timing 分层结果。'
-                : 'You are seeing the compatibility output. Once this flow writes back into the unified result model, this page will show structured identity / relationship / timing layers instead.'}
-            </p>
-          </section>
+          <TianjiLovePanel className="p-6">
+            <h2 className="font-serif text-2xl text-[#ffe3b4]">{t.legacyTitle}</h2>
+            <p className="mt-3 text-sm leading-7 text-[#f4d7a3]/66">{t.legacyBody}</p>
+          </TianjiLovePanel>
         )}
+
+        <TianjiLovePanel className="p-5">
+          <Lock className="mb-3 h-5 w-5 text-[#d8b77b]" aria-hidden />
+          <p className="text-sm leading-7 text-[#f4d7a3]/70">{t.privacy}</p>
+        </TianjiLovePanel>
       </main>
+    </ReadingShell>
+  );
+}
+
+function ReadingShell({
+  children,
+  language,
+  toggleLanguage,
+}: {
+  children: ReactNode;
+  language: 'en' | 'zh';
+  toggleLanguage: () => void;
+}) {
+  const t = copy[language];
+  const href = (path: string) => withLanguageParam(path, language);
+
+  return (
+    <TianjiLoveShell className="tianji-love-reading-detail-page" ariaLabel="Tianji Love reading detail">
+      <TianjiLoveHeader
+        homeHref={href('/')}
+        navItems={getTianjiLovePrimaryNav(language, href)}
+        cta={getTianjiLovePrimaryCta(language, href)}
+        languageLabel={language === 'zh' ? 'EN' : '中文'}
+        onLanguageToggle={toggleLanguage}
+      />
+      {children}
+      <TianjiLoveFooter
+        homeHref={href('/')}
+        disclaimer={t.privacy}
+        links={getTianjiLoveFooterNav(language, href)}
+      />
+    </TianjiLoveShell>
+  );
+}
+
+function SectionCard({
+  label,
+  section,
+  language,
+}: {
+  label: string;
+  section?: UnifiedSection;
+  language: 'en' | 'zh';
+}) {
+  const t = copy[language];
+
+  return (
+    <TianjiLovePanel as="article" className="p-6">
+      <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/58">{label}</p>
+      <h2 className="mt-2 font-serif text-2xl text-[#ffe3b4]">{section?.headline ?? t.awaiting}</h2>
+      <p className="mt-3 text-sm leading-7 text-[#f4d7a3]/66">{section?.summary ?? t.awaitingBody}</p>
+
+      {section?.strengths?.length ? (
+        <ChipGroup title={t.strengths} items={section.strengths.slice(0, 4)} />
+      ) : null}
+
+      {section?.advice?.length ? (
+        <ChipGroup title={t.advice} items={section.advice.slice(0, 4)} />
+      ) : null}
+    </TianjiLovePanel>
+  );
+}
+
+function ChipGroup({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="mt-4">
+      <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">{title}</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {items.map((entry) => (
+          <span key={entry} className="rounded-full border border-[#d8b77b]/22 bg-[#d8b77b]/10 px-3 py-1 text-xs text-[#ffe3b4]">
+            {entry}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

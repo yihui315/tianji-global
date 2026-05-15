@@ -45,7 +45,7 @@ function publicAssetExists(assetPath: string) {
   return fs.existsSync(path.join(repoRoot, 'public', assetPath.replace(/^\//, '')));
 }
 
-describe('premium landing redesign contract', () => {
+describe('Tianji Love landing redesign contract', () => {
   it('keeps the redesign override active for visual-only work', () => {
     const override = read('src/app/(main)/AGENTS.override.md');
 
@@ -59,6 +59,7 @@ describe('premium landing redesign contract', () => {
   it('keeps all referenced /assets media files present', () => {
     const checkedFiles = [
       'src/app/(main)/page.tsx',
+      'src/components/home/TianjiLoveHome.tsx',
       'src/app/(main)/pricing/page.tsx',
       ...moduleContracts.map(({ slug }) => `src/app/(main)/${slug}/page.tsx`),
     ];
@@ -75,6 +76,88 @@ describe('premium landing redesign contract', () => {
     });
 
     expect(missing).toEqual([]);
+  });
+
+  it('matches the supplied Tianji Love reference homepage contract', () => {
+    const home = read('src/components/home/TianjiLoveHome.tsx');
+
+    for (const signal of [
+      'tianji-love-couple-red-thread-16x9.png',
+      'tianji-love-moon-pavilion-16x9.png',
+      'tianji-love-logo-mark.png',
+      'tianji-love-compass-mark.png',
+      'tianji-love-icon-private-lock.png',
+      'tianji-love-icon-personalized.png',
+      'tianji-love-icon-clarity-compass.png',
+      'tianji-love-icon-karmic-orbit.png',
+      'tianji-love-icon-relationship-rings.png',
+      'tianji-love-icon-future-hourglass.png',
+      'tianji-love-divider-long.png',
+      'tianji-love-emma.png',
+      'tianji-love-sophie.png',
+      'tianji-love-olivia.png',
+      'Love Reading',
+      'Ask',
+      'Draw',
+      'How It Works',
+      'Pricing',
+      'Get Started',
+      'COSMIC INSIGHTS. REAL-LOVE GUIDANCE.',
+      'Love is the one force that',
+      'bends fate.',
+      'Start Relationship Reading',
+      'Ask One Question',
+      'Draw Three Cards',
+      'About Tianji Love',
+      'Private & Secure',
+      'Personalized Insights',
+      'Designed for Clarity',
+      'Align Your Birth Chart',
+      'Birth Year',
+      'Select year',
+      'Solo Reading',
+      'Couple Reading',
+      'Reveal My First Love Insight',
+      'Karmic Patterns',
+      'Relationship Dynamics',
+      'Future Timing',
+      'Deep Analysis',
+      'Emotional Compatibility',
+      'Privacy First',
+      'Actionable Guidance',
+      'Enter Your Details',
+      'We Map the Pattern',
+      'Receive Clear Guidance',
+      'People Found Clarity at Turning Points',
+      'Emma',
+      'Sophie',
+      'Olivia',
+      'tianji-love-testimonial-avatar',
+      'Your next chapter may already be written in the stars.',
+      'Tianji Love first-viewport reference',
+      'love-hero-reference-grid',
+      'love-hero-art-couple',
+      'love-birth-chart-panel',
+      'love-final-pavilion-cta',
+    ]) {
+      expect(home).toContain(signal);
+    }
+
+    expect(home).not.toContain('Replace these tone samples with verified beta feedback before launch.');
+    expect(publicAssetExists('/assets/images/hero/tianji-love-couple-red-thread-16x9.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/hero/tianji-love-moon-pavilion-16x9.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/brand/tianji-love-logo-mark.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/brand/tianji-love-compass-mark.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/icons/tianji-love-icon-private-lock.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/icons/tianji-love-icon-personalized.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/icons/tianji-love-icon-clarity-compass.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/icons/tianji-love-icon-karmic-orbit.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/icons/tianji-love-icon-relationship-rings.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/icons/tianji-love-icon-future-hourglass.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/decor/tianji-love-divider-long.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/avatars/tianji-love-emma.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/avatars/tianji-love-sophie.png')).toBe(true);
+    expect(publicAssetExists('/assets/images/avatars/tianji-love-olivia.png')).toBe(true);
   });
 
   it('applies the module landing template without changing core endpoints', () => {
@@ -104,73 +187,206 @@ describe('premium landing redesign contract', () => {
     }
   });
 
-  it('keeps the homepage funnel and pricing checkout contract visible', () => {
-    const home = read('src/app/(main)/page.tsx');
+  it('keeps legacy module landing primitives on the Tianji Love visual bridge', () => {
+    const files = [
+      'src/components/landing/BackgroundVideoHero.tsx',
+      'src/components/landing/ModuleInputShell.tsx',
+      'src/components/landing/ScrollNarrativeSection.tsx',
+      'src/components/landing/ResultScaffold.tsx',
+      'src/components/landing/ShareSection.tsx',
+    ];
+    const source = files.map(read).join('\n');
+
+    for (const signal of [
+      '#03040a',
+      '#050812',
+      '#070b16',
+      '#b57248',
+      '#ff5c63',
+      '#ff7c82',
+      '#ffe3b4',
+      'rounded-lg',
+      'rounded-xl',
+      'ReactNode',
+    ]) {
+      expect(source).toContain(signal);
+    }
+
+    expect(source).toContain("color.toLowerCase() === '#7c3aed'");
+    expect(source).not.toContain('rounded-full bg-white');
+    expect(source).not.toContain('border-white/10');
+    expect(source).not.toContain('text-white/35');
+    expect(source).not.toContain('#1a0a3a');
+    expect(source).not.toContain("letterSpacing: '0.1em'");
+    expect(source).not.toMatch(/鈥|鈫|馃|锟|閳|娴|瑙ｈ|闅愮|鏃舵|浼氬|璺宠|姝ｅ|杩斿|缁熶|鍛界|濉旂/);
+  });
+
+  it('replaces / with the Tianji Love conversion homepage without changing pricing checkout', () => {
+    const page = read('src/app/(main)/page.tsx');
+    const home = read('src/components/home/TianjiLoveHome.tsx');
     const pricing = read('src/app/(main)/pricing/page.tsx');
 
-    expect(home).toContain('BackgroundVideoHero');
-    expect(home).toContain('useLanguage');
-    expect(home).toContain("setLang(lang === 'zh' ? 'en' : 'zh')");
-    expect(home).toContain('中文 EN');
-    expect(home).toContain('Switch language English Chinese');
-    expect(home).toContain('z-[999]');
-    expect(home).toContain('homeCopy');
-    expect(home).toContain('开始命运扫描');
-    expect(home).toContain('看清此刻\\n再定去向');
-    expect(home).toContain('三个关键判断');
-    expect(home).toContain('六种读取方式 一条命运主线');
-    expect(home).toContain('时机会先替你证明');
-    expect(home).toContain('神秘感可以保留 判断必须清楚');
-    expect(home).toContain('先看到关键结果 再决定要不要更深');
-    expect(home).toContain('把最重要的问题先说清');
-    expect(home).not.toContain('A luxury AI destiny platform for people who want timing, not noise.');
-    expect(home).toContain("ctaHref={languageHref('/destiny/scan')}");
-    expect(home).toContain('id="modules"');
-    expect(home).toContain('LifeChart');
-    expect(home).toContain('copy.trust.items.map');
-    expect(home).toContain('FAQ');
-    expect(home).toContain('/assets/videos/hero/home-hero-loop-6s-1080p.mp4');
-    expect(home).toContain('/assets/images/hero/home-hero-master-16x9.jpg');
+    expect(page).toContain("import TianjiLoveHome from '@/components/home/TianjiLoveHome'");
+    expect(page).toContain('return <TianjiLoveHome />');
 
-    expect(pricing).toContain("import { PLANS } from '@/lib/stripe'");
-    expect(pricing).toContain("router.push(withLanguageParam('/login', language))");
+    expect(home).toContain('Tianji Love');
+    expect(home).toContain('tianji.love');
+    expect(home).toContain('天机爱');
+    expect(home).toContain('宇宙洞察，真实的爱之指引。');
+    expect(home).toContain('爱是唯一能让命运转弯的力量。');
+    expect(home).toContain('开始关系解读');
+    expect(home).toContain('问一个问题');
+    expect(home).toContain('抽三张牌');
+    expect(home).not.toContain('澶╂満');
+    expect(home).not.toContain('涓栭棿');
+    expect(home).not.toContain('鐖');
+    expect(home).not.toContain('鍏崇郴');
+    expect(home).toContain('Love is the one force that');
+    expect(home).toContain('bends fate.');
+    expect(home).toContain('/relationship/new');
+    expect(home).toContain('/ask');
+    expect(home).toContain('/draw');
+    expect(home).toContain('/pricing');
+    expect(home).toContain('withLanguageParam');
+
+    expect(pricing).toContain("import { PLANS, type PlanId } from '@/lib/stripe'");
+    expect(pricing).toContain("router.push(href('/login'))");
     expect(pricing).toContain("fetch('/api/stripe/checkout'");
     expect(pricing).toContain('JSON.stringify({ planId })');
-    expect(pricing).toContain('/assets/videos/hero/pricing-hero-loop-6s-1080p.mp4');
-    expect(pricing).toContain('/assets/images/hero/pricing-hero-master-16x9.jpg');
   });
 
-  it('keeps the new homepage copy aligned to the provided Chinese structure', () => {
-    const home = read('src/app/(main)/page.tsx');
-    expect(home).toContain('这次视觉升级会改变解读结果吗');
-    expect(home).toContain('如果我是第一次使用 应该从哪里开始');
-    expect(home).toContain('分享结果是安全的吗');
-    expect(home).toContain('为什么首页还保留六个系统入口');
-    expect(home).toContain('不是先听一套玄学解释');
-    expect(home).toContain('把这一阶段最值得做的一步直接交给你');
+  it('keeps the homepage nav and hero prioritized around Tianji Love-only paths', () => {
+    const home = read('src/components/home/TianjiLoveHome.tsx');
+    const englishCopy = home.slice(home.indexOf('  en: {'), home.indexOf('  zh: {'));
+    const englishNav = englishCopy.slice(englishCopy.indexOf('nav: ['), englishCopy.indexOf('],\n    hero'));
+
+    for (const signal of [
+      "{ label: 'Love Reading', href: '/relationship/new' }",
+      "{ label: 'Ask', href: '/ask' }",
+      "{ label: 'Draw', href: '/draw' }",
+      "{ label: 'Pricing', href: '/pricing' }",
+      "{ label: 'About', href: '/about' }",
+      "{ label: 'Login', href: '/login' }",
+    ]) {
+      expect(englishNav).toContain(signal);
+    }
+
+    for (const retiredMainPath of [
+      'Compatibility',
+      'Timing',
+      'How It Works',
+      '/bazi',
+      '/ziwei',
+      '/yijing',
+      '/tarot',
+      '/western',
+      '/fortune',
+      '/destiny/scan',
+      '/love-match',
+      '/celebrity-match',
+    ]) {
+      expect(englishNav).not.toContain(retiredMainPath);
+    }
+
+    const primaryCta = home.indexOf("<Link href={href('/relationship/new')} className=\"tianji-love-primary inline-flex");
+    const askCta = home.indexOf("<Link href={href('/ask')} className=\"inline-flex min-h-14");
+    const drawCta = home.indexOf("<Link href={href('/draw')} className=\"inline-flex min-h-14");
+    const aboutCta = home.indexOf("<Link href={href('/about')} className=\"inline-flex min-h-14");
+
+    expect(primaryCta).toBeGreaterThanOrEqual(0);
+    expect(askCta).toBeGreaterThan(primaryCta);
+    expect(drawCta).toBeGreaterThan(askCta);
+    expect(aboutCta).toBeGreaterThan(drawCta);
+    expect(home).toContain('Start Relationship Reading');
+    expect(home).toContain('Ask One Question');
+    expect(home).toContain('Draw Three Cards');
+    expect(home).toContain('About Tianji Love');
   });
 
-  it('uses SmartTitle to keep major homepage titles balanced', () => {
-    const home = read('src/app/(main)/page.tsx');
+  it('keeps the core route and copy contract for English, Chinese, and pricing', () => {
+    const home = read('src/components/home/TianjiLoveHome.tsx');
+    const pricing = read('src/app/(main)/pricing/page.tsx');
+    const englishCopy = home.slice(home.indexOf('  en: {'), home.indexOf('  zh: {'));
+    const chineseCopy = home.slice(home.indexOf('  zh: {'), home.indexOf('} satisfies Record<AppLanguage, LoveCopy>'));
 
-    expect(home).toContain('title={copy.hero.title}');
-    expect(home).toContain('text={copy.hero.panelTitle}');
-    expect(home).toContain('text={module.title}');
-    expect(home).toContain('text={copy.lifeChart.cardTitle}');
-    expect(home).toContain('text={item.label}');
-    expect(home).toContain('text={copy.premium.cardTitle}');
-    expect(home).toContain('text={item.question}');
+    for (const route of ['/relationship/new', '/ask', '/draw', '/about', '/pricing', '/login']) {
+      expect(home).toContain(route);
+    }
+
+    expect(englishCopy).toContain('AI relationship reading');
+    expect(englishCopy).toContain('compatibility');
+    expect(englishCopy).toContain('love timing');
+    expect(englishCopy).not.toMatch(/[\u4e00-\u9fff]/);
+    expect(chineseCopy).toContain('天机爱');
+    expect(chineseCopy).toContain('开始关系解读');
+    expect(chineseCopy).toContain('问一个问题');
+    expect(chineseCopy).toContain('抽三张牌');
+    expect(pricing).toContain('Paid plans unlock depth and history, not guaranteed predictions.');
   });
 
-  it('keeps homepage module card titles inside the card with restrained typography', () => {
-    const home = read('src/app/(main)/page.tsx');
+  it('keeps the Tianji Love form as a front-end funnel into existing routes', () => {
+    const home = read('src/components/home/TianjiLoveHome.tsx');
 
-    expect(home).toContain('text={module.title}');
-    expect(home).toContain('maxLines={2}');
-    expect(home).toContain("max-w-[8.5ch]");
-    expect(home).toContain("font-sans");
-    expect(home).toContain("tracking-[-0.05em]");
-    expect(home).toContain("min-h-[396px]");
+    for (const signal of [
+      'Birth Year',
+      'Month',
+      'Day',
+      'Time',
+      'Solo Reading',
+      'Couple Reading',
+      "mode === 'solo' ? '/ask' : '/relationship/new'",
+      "router.push(href(mode === 'solo' ? '/ask' : '/relationship/new'))",
+      'withLanguageParam',
+    ]) {
+      expect(home).toContain(signal);
+    }
+  });
+
+  it('keeps homepage language bootstrap one-shot to avoid render loops', () => {
+    const home = read('src/components/home/TianjiLoveHome.tsx');
+    const languageBootstrapEffect = home.match(
+      /useEffect\(\(\) => \{[\s\S]*?resolveInitialLanguage\(\)[\s\S]*?\}, \[lang, setLang\]\);/
+    )?.[0] ?? '';
+
+    expect(home).toContain('initialLanguageSyncedRef');
+    expect(languageBootstrapEffect).toContain('if (initialLanguageSyncedRef.current) return;');
+    expect(languageBootstrapEffect).toContain('initialLanguageSyncedRef.current = true;');
+    expect(languageBootstrapEffect).toContain('setActiveLang((currentLang)');
+  });
+
+  it('keeps the visual system aligned to the supplied Tianji Love image', () => {
+    const home = read('src/components/home/TianjiLoveHome.tsx');
+
+    for (const signal of [
+      'tianji-love-couple-red-thread-16x9.png',
+      'tianji-love-moon-pavilion-16x9.png',
+      'tianji-love-red-thread',
+      'tianji-love-orbit',
+      'tianji-love-glyph',
+      'TianjiLoveIcon',
+      'tianji-love-hero-visual',
+      'tianji-love-birth-form',
+      'tianji-love-select-grid',
+      'tianji-love-nav-links',
+      'min-width: 900px',
+      'prefers-reduced-motion',
+      'Karmic Patterns',
+      'Relationship Dynamics',
+      'Future Timing',
+      'HowItWorks',
+      'LoveTestimonials',
+      'FinalCta',
+    ]) {
+      expect(home).toContain(signal);
+    }
+  });
+
+  it('keeps new homepage Chinese readable and free of known mojibake markers', () => {
+    const home = read('src/components/home/TianjiLoveHome.tsx');
+
+    expect(home).toContain('在这里，我们以星轨、关系与时机');
+    expect(home).toContain('所有解读都用于自我理解与关系沟通');
+    expect(home).not.toMatch(/娑搢|閸弢|锟|澶╂満|鍏崇郴/);
   });
 
   it('prevents SmartTitle planned Chinese lines from wrapping into orphan characters', () => {
@@ -186,9 +402,8 @@ describe('premium landing redesign contract', () => {
     const globals = read('src/app/globals.css');
     const tailwind = read('tailwind.config.js');
 
-    expect(layout).toContain("import { Noto_Sans_SC } from 'next/font/google'");
-    expect(layout).toContain("variable: '--font-tianji-sans'");
-    expect(layout).toContain('${tianjiSans.variable}');
+    expect(layout).not.toContain('next/font/google');
+    expect(globals).toContain('--font-tianji-sans: "Segoe UI"');
     expect(globals).toContain('--font-tianji-display');
     expect(globals).toContain('--font-tianji-body');
     expect(globals).toContain('--font-tianji-display: var(--font-tianji-sans)');
@@ -198,7 +413,7 @@ describe('premium landing redesign contract', () => {
     expect(globals).not.toContain('--font-noto-serif-sc');
     expect(globals).not.toMatch(/font-family:\s*[^;]*(Songti SC|STSong|SimSun)/);
 
-    expect(tailwind).toContain("fontFamily");
+    expect(tailwind).toContain('fontFamily');
     expect(tailwind).toContain("serif: ['var(--font-instrument-serif)', 'serif']");
     expect(tailwind).toContain("sans: ['var(--font-barlow)', 'sans-serif']");
   });

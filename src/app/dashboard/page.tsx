@@ -4,7 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import { Crown, History, Lock, LogOut, Settings, Sparkles, UserRound } from 'lucide-react';
 import {
   buildHistoryItems,
   formatDateTime,
@@ -21,6 +22,18 @@ import type { Entitlement } from '@/types/entitlement';
 import type { ModuleResult } from '@/types/module-result';
 import type { DestinyProfile } from '@/types/unified-profile';
 import type { UserProfile } from '@/types/user-profile';
+import {
+  getTianjiLoveFooterNav,
+  getTianjiLovePrimaryCta,
+  getTianjiLovePrimaryNav,
+  TianjiLoveButton,
+  TianjiLoveFooter,
+  TianjiLoveHeader,
+  TianjiLovePanel,
+  TianjiLoveSectionTitle,
+  TianjiLoveShell,
+  TianjiLoveTrustCard,
+} from '@/components/tianji-love';
 
 const FREE_ENTITLEMENT: Entitlement = {
   id: 'free',
@@ -45,10 +58,10 @@ const FREE_DESTINY_META: DestinyResponseMeta = {
 };
 
 const QUICK_ACTIONS = [
-  { href: '/bazi', moduleType: 'bazi' },
-  { href: '/ziwei', moduleType: 'ziwei' },
-  { href: '/fortune', moduleType: 'fortune' },
-  { href: '/relationship/new', moduleType: 'relationship' },
+  { href: '/ask', moduleType: 'relationship', labelEn: 'Love Reading', labelZh: '爱情解读' },
+  { href: '/relationship/new', moduleType: 'relationship', labelEn: 'Compatibility', labelZh: '关系合盘' },
+  { href: '/draw', moduleType: 'fortune', labelEn: 'Timing', labelZh: '时机' },
+  { href: '/pricing', moduleType: 'western', labelEn: 'Pricing', labelZh: '会员权益' },
 ] as const;
 
 async function parseJson<T>(response: Response): Promise<T | null> {
@@ -58,6 +71,94 @@ async function parseJson<T>(response: Response): Promise<T | null> {
 
   return (await response.json()) as T;
 }
+
+const copy = {
+  en: {
+    nav: {
+      compatibility: 'Compatibility',
+      loveReading: 'Love Reading',
+      timing: 'Timing',
+      pricing: 'Pricing',
+      history: 'History',
+    },
+    loading: 'Loading your Tianji Love dashboard...',
+    eyebrow: 'Private dashboard',
+    welcome: (name: string) => `Welcome back, ${name}`,
+    subtitle: 'Your love readings, timing windows, compatibility reports, and account settings now live in one calm surface.',
+    plan: 'Current plan',
+    upgrade: 'View upgrade paths',
+    portal: 'Manage subscription',
+    redirecting: 'Redirecting...',
+    profileSettings: 'Profile settings',
+    signOut: 'Sign out',
+    dashboardError: 'A dashboard request failed:',
+    fallback:
+      'The unified private profile layer needs Supabase tables. Legacy history still works, but full aggregation appears after the database is connected.',
+    primaryProfile: 'Primary private profile',
+    noProfile: 'No primary profile yet. Add your birth details first so private history and reports can connect.',
+    createProfile: 'Create profile',
+    openProfile: 'Open full profile',
+    timingWindow: 'Current timing window',
+    waitingTiming: 'Waiting for the next relationship signal',
+    timingBody: 'Complete a love reading, timing question, or compatibility report to build this layer.',
+    latest: 'Latest update',
+    noHistory: 'No history yet. Start with one of the core Tianji Love paths.',
+    core: 'Core entry points',
+    build: 'Keep building your private relationship practice',
+    allHistory: 'View all history',
+    snapshot: 'Private profile snapshot',
+    snapshotTitle: 'Cross-report summary',
+    noSnapshot:
+      'No unified snapshot is ready yet. Once at least one unified module result lands, the private profile layers will appear here.',
+    locked: 'Premium layers still locked',
+    lockedBody: 'Upgrade to unlock deeper relationship, timing, action, and history layers when they are implemented for your account.',
+    recent: 'Recent history',
+    records: (count: number) => `${count} records`,
+    privacy:
+      'Dashboard content is private account content. Public share pages still hide birth date, time, location, and timezone by default.',
+  },
+  zh: {
+    nav: {
+      compatibility: '关系合盘',
+      loveReading: '爱情解读',
+      timing: '时机',
+      pricing: '会员权益',
+      history: '历史',
+    },
+    loading: '正在加载 Tianji Love 控制台...',
+    eyebrow: '私人控制台',
+    welcome: (name: string) => `${name}，欢迎回来`,
+    subtitle: '你的爱情解读、时机窗口、关系合盘和账号设置，现在集中在同一个安静的页面里。',
+    plan: '当前方案',
+    upgrade: '查看升级路径',
+    portal: '管理订阅',
+    redirecting: '正在跳转...',
+    profileSettings: '档案设置',
+    signOut: '退出登录',
+    dashboardError: '控制台请求失败：',
+    fallback: '统一私人档案层依赖 Supabase 表。旧历史仍可使用，完整聚合会在数据库连接后显示。',
+    primaryProfile: '主私人档案',
+    noProfile: '还没有主档案。先补充出生资料，私人历史和报告才能关联起来。',
+    createProfile: '创建档案',
+    openProfile: '打开完整档案',
+    timingWindow: '当前时机窗口',
+    waitingTiming: '等待下一段关系信号',
+    timingBody: '完成爱情解读、时机问题或关系合盘后，这一层会逐步建立。',
+    latest: '最新更新',
+    noHistory: '还没有历史记录。先从 Tianji Love 核心路径开始。',
+    core: '核心入口',
+    build: '继续建立你的私人关系练习',
+    allHistory: '查看全部历史',
+    snapshot: '私人档案快照',
+    snapshotTitle: '跨报告摘要',
+    noSnapshot: '还没有统一快照。至少完成一条统一模块结果后，私人档案层会显示在这里。',
+    locked: '仍锁定的高级层',
+    lockedBody: '当账号支持后，升级可解锁更深的关系、时机、行动和历史层。',
+    recent: '最近历史',
+    records: (count: number) => `${count} 条记录`,
+    privacy: '控制台内容是私人账号内容。公开分享页默认仍隐藏出生日期、时间、地点和时区。',
+  },
+} as const;
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -73,6 +174,14 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
   const [unifiedReady, setUnifiedReady] = useState(true);
+
+  const t = copy[language];
+  const primaryProfile = getPrimaryProfile(profiles);
+  const visibleCards = destiny ? getVisibleSectionCards(destiny).slice(0, 4) : [];
+  const latestHistory = history[0] ?? null;
+  const planBadge = getPlanBadge(entitlement.plan);
+  const welcomeName = primaryProfile?.displayName ?? session?.user?.name ?? profile?.name ?? 'Seeker';
+  const toggleLanguage = () => setLanguage(language === 'zh' ? 'en' : 'zh');
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -115,20 +224,13 @@ export default function DashboardPage() {
           nextProfiles
         );
 
-        const primaryProfile = getPrimaryProfile(nextProfiles);
+        const primary = getPrimaryProfile(nextProfiles);
         let nextDestiny: Partial<DestinyProfile> | null = null;
-        let nextMeta: DestinyResponseMeta = {
-          ...FREE_DESTINY_META,
-          plan: nextEntitlement.plan,
-        };
-        let unifiedAvailable = true;
+        let nextMeta: DestinyResponseMeta = { ...FREE_DESTINY_META, plan: nextEntitlement.plan };
+        let unifiedAvailable = profilesResponse.status !== 503 && entitlementResponse.status !== 503;
 
-        if (profilesResponse.status === 503 || entitlementResponse.status === 503) {
-          unifiedAvailable = false;
-        }
-
-        if (primaryProfile) {
-          const destinyResponse = await fetch(`/api/destiny/profile/${primaryProfile.id}`);
+        if (primary) {
+          const destinyResponse = await fetch(`/api/destiny/profile/${primary.id}`);
           if (destinyResponse.ok) {
             const destinyPayload = (await destinyResponse.json()) as {
               success: boolean;
@@ -152,7 +254,7 @@ export default function DashboardPage() {
         setHistory(nextHistory);
         setDestiny(nextDestiny);
         setDestinyMeta(nextMeta);
-        setLanguage(primaryProfile?.language ?? profilePayload?.language ?? 'en');
+        setLanguage(primary?.language ?? profilePayload?.language ?? 'en');
         setUnifiedReady(unifiedAvailable);
       } catch (loadError) {
         if (!active) {
@@ -174,12 +276,6 @@ export default function DashboardPage() {
       active = false;
     };
   }, [session?.user, status]);
-
-  const primaryProfile = getPrimaryProfile(profiles);
-  const visibleCards = destiny ? getVisibleSectionCards(destiny).slice(0, 4) : [];
-  const latestHistory = history[0] ?? null;
-  const planBadge = getPlanBadge(entitlement.plan);
-  const welcomeName = primaryProfile?.displayName ?? session?.user?.name ?? profile?.name ?? 'Seeker';
 
   async function handlePortal() {
     setPortalLoading(true);
@@ -205,293 +301,178 @@ export default function DashboardPage() {
 
   if (status !== 'authenticated' || !session?.user || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-950 via-slate-950 to-indigo-950">
-        <div className="text-white text-lg">{language === 'zh' ? '正在加载命理总控台...' : 'Loading your destiny cockpit...'}</div>
-      </div>
+      <TianjiLoveShell className="tianji-love-dashboard-loading">
+        <div className="relative z-10 flex min-h-screen items-center justify-center text-[#ffe3b4]">{t.loading}</div>
+      </TianjiLoveShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(124,58,237,0.22),_transparent_35%),linear-gradient(135deg,_#13091d,_#09090f_52%,_#0f172a)] text-white">
-      <header className="border-b border-white/10 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-6">
+    <TianjiLoveShell className="tianji-love-dashboard-page" ariaLabel="Tianji Love private dashboard">
+      <TianjiLoveHeader
+        homeHref="/"
+        navItems={getTianjiLovePrimaryNav(language)}
+        cta={getTianjiLovePrimaryCta(language)}
+        languageLabel={language === 'zh' ? 'EN' : '中文'}
+        onLanguageToggle={toggleLanguage}
+      />
+
+      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-7 px-5 py-10 sm:px-8">
+        <section className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-purple-300/80">
-              {language === 'zh' ? '命理总控台' : 'Destiny Command Center'}
-            </p>
-            <h1 className="mt-2 text-3xl font-semibold">
-              {language === 'zh' ? `${welcomeName}，欢迎回来` : `Welcome back, ${welcomeName}`}
+            <p className="mb-5 text-xs uppercase tracking-[0.32em] text-[#d8b77b]/70">{t.eyebrow}</p>
+            <h1 className="max-w-4xl font-serif text-4xl font-semibold leading-tight text-[#ffe3b4] sm:text-5xl">
+              {t.welcome(welcomeName)}
             </h1>
-            <p className="mt-1 text-sm text-slate-300">
-              {language === 'zh'
-                ? '统一查看你的核心画像、当前时间窗口和最近模块更新。'
-                : 'See your unified profile, current timing window, and latest module updates in one place.'}
-            </p>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-[#f5d8aa]/78">{t.subtitle}</p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="flex gap-1 rounded-full border border-white/10 bg-white/5 p-1 text-sm">
+          <TianjiLovePanel className="p-5">
+            <div className="flex items-center gap-3">
+              {session.user.image ? (
+                <Image src={session.user.image} alt="Profile avatar" width={48} height={48} unoptimized className="h-12 w-12 rounded-lg object-cover" />
+              ) : (
+                <div className="grid h-12 w-12 place-items-center rounded-lg border border-[#b57248]/32 bg-[#070b16]/70 text-lg font-semibold text-[#ffe3b4]">
+                  {(session.user.name ?? '?').slice(0, 1)}
+                </div>
+              )}
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-[#ffe3b4]">{session.user.name ?? accountName(profile)}</p>
+                <p className="truncate text-xs text-[#f4d7a3]/52">{session.user.email ?? profile?.email}</p>
+              </div>
+            </div>
+            <div className="mt-5 grid gap-3">
+              <Link href="/profile" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#b57248]/32 bg-[#070b16]/62 px-4 text-sm text-[#ffe3b4] transition hover:border-[#ffe3b4]/50">
+                <Settings className="h-4 w-4" aria-hidden />
+                {t.profileSettings}
+              </Link>
               <button
-                onClick={() => setLanguage('zh')}
-                className={`rounded-full px-3 py-1 transition ${language === 'zh' ? 'bg-purple-600 text-white' : 'text-slate-300'}`}
+                type="button"
+                onClick={() => signOut({ callbackUrl: '/' })}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#b57248]/32 bg-[#070b16]/62 px-4 text-sm text-[#ffe3b4] transition hover:border-[#ffe3b4]/50"
               >
-                中文
-              </button>
-              <button
-                onClick={() => setLanguage('en')}
-                className={`rounded-full px-3 py-1 transition ${language === 'en' ? 'bg-purple-600 text-white' : 'text-slate-300'}`}
-              >
-                EN
+                <LogOut className="h-4 w-4" aria-hidden />
+                {t.signOut}
               </button>
             </div>
+          </TianjiLovePanel>
+        </section>
 
-            <Link
-              href="/profile"
-              className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm transition hover:bg-white/10"
-            >
-              {session.user.image ? (
-                <Image
-                  src={session.user.image}
-                  alt="Profile avatar"
-                  width={28}
-                  height={28}
-                  unoptimized
-                  className="h-7 w-7 rounded-full"
-                />
-              ) : (
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-purple-600 text-xs font-semibold">
-                  {(session.user.name ?? '?').slice(0, 1)}
-                </span>
-              )}
-              <span>{language === 'zh' ? '档案设置' : 'Profile settings'}</span>
-            </Link>
-
-            <button
-              onClick={() => signOut({ callbackUrl: '/' })}
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm transition hover:bg-white/10"
-            >
-              {language === 'zh' ? '退出登录' : 'Sign out'}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-8">
         {error ? (
-          <div className="rounded-2xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
-            {language === 'zh' ? '当前有一项数据加载失败：' : 'A dashboard request failed: '}
-            {error}
+          <div className="rounded-lg border border-[#ff9c8b]/34 bg-[#ff6c73]/10 px-5 py-4 text-sm text-[#ffd0c9]">
+            {t.dashboardError} {error}
           </div>
         ) : null}
 
         {!unifiedReady ? (
-          <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 px-5 py-4 text-sm text-amber-100">
-            {language === 'zh'
-              ? '统一命理档案依赖 Supabase 表。当前仍可查看旧历史，但完整档案、权限和聚合画像要在数据库连接后才会出现。'
-              : 'The unified destiny layer needs Supabase tables. Legacy history still works, but full profiles, entitlements, and aggregation appear after the database is connected.'}
+          <div className="rounded-lg border border-[#d8b77b]/32 bg-[#d8b77b]/10 px-5 py-4 text-sm leading-6 text-[#ffe3b4]">
+            {t.fallback}
           </div>
         ) : null}
 
-        <section className="rounded-3xl border border-purple-400/20 bg-gradient-to-r from-purple-900/35 to-amber-800/20 p-6">
+        <TianjiLovePanel className="p-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <div className="inline-flex rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.24em] text-purple-200">
-                {language === 'zh' ? planBadge.labelZh : planBadge.label}
+              <div className="inline-flex rounded-full border border-[#d8b77b]/28 bg-[#d8b77b]/10 px-3 py-1 text-xs uppercase tracking-[0.24em] text-[#ffe3b4]">
+                {t.plan}: {language === 'zh' ? planBadge.labelZh : planBadge.label}
               </div>
-              <h2 className="mt-3 text-2xl font-semibold">
-                {language === 'zh'
-                  ? '你的命理总控台已经接入统一权限层'
-                  : 'Your cockpit is now powered by unified entitlements'}
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm text-slate-200">
-                {language === 'zh'
-                  ? `当前计划：${planBadge.labelZh}。统一画像${entitlement.features.unifiedProfile ? '已开启' : '仍锁定'}，最近模块结果会自动汇总到你的核心档案。`
-                  : `Current plan: ${planBadge.label}. Unified profile is ${entitlement.features.unifiedProfile ? 'enabled' : 'still locked'}, and recent module results roll into your core destiny profile.`}
-              </p>
+              <h2 className="mt-4 font-serif text-3xl text-[#ffe3b4]">{language === 'zh' ? '你的私人关系中枢已连接' : 'Your private relationship hub is connected'}</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-[#f4d7a3]/68">{t.privacy}</p>
             </div>
-
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/pricing"
-                className="rounded-xl bg-gradient-to-r from-purple-600 to-amber-500 px-5 py-3 text-center text-sm font-semibold text-white transition hover:opacity-90"
-              >
-                {language === 'zh' ? '查看升级路径' : 'View upgrade paths'}
-              </Link>
+              <TianjiLoveButton href="/pricing">{t.upgrade}</TianjiLoveButton>
               <button
+                type="button"
                 onClick={handlePortal}
                 disabled={portalLoading}
-                className="rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm transition hover:bg-white/10 disabled:opacity-60"
+                className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#b57248]/58 bg-black/24 px-6 text-base font-semibold text-[#f7ddb2] transition hover:border-[#ffe1a6] disabled:opacity-60"
               >
-                {portalLoading
-                  ? language === 'zh' ? '正在跳转...' : 'Redirecting...'
-                  : language === 'zh' ? '管理订阅' : 'Manage subscription'}
+                {portalLoading ? t.redirecting : t.portal}
               </button>
             </div>
           </div>
-        </section>
+        </TianjiLovePanel>
 
-        <section className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
-              {language === 'zh' ? '我的核心画像' : 'My core profile'}
-            </p>
+        <section className="grid gap-5 md:grid-cols-3">
+          <TianjiLovePanel className="p-5">
+            <UserRound className="mb-3 h-5 w-5 text-[#d8b77b]" aria-hidden />
+            <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">{t.primaryProfile}</p>
             {primaryProfile ? (
               <>
-                <h3 className="mt-3 text-xl font-semibold">
-                  {primaryProfile.displayName ?? primaryProfile.nickname ?? (language === 'zh' ? '主档案' : 'Primary profile')}
-                </h3>
-                <p className="mt-2 text-sm text-slate-300">
+                <h2 className="mt-3 font-serif text-2xl text-[#ffe3b4]">{primaryProfile.displayName ?? primaryProfile.nickname ?? primaryProfile.birthDate}</h2>
+                <p className="mt-2 text-sm leading-6 text-[#f4d7a3]/58">
                   {primaryProfile.birthDate}
-                  {primaryProfile.birthTime ? ` · ${primaryProfile.birthTime}` : ''}
-                  {primaryProfile.birthLocation ? ` · ${primaryProfile.birthLocation}` : ''}
+                  {primaryProfile.birthTime ? ` / ${primaryProfile.birthTime}` : ''}
+                  {primaryProfile.birthLocation ? ` / ${primaryProfile.birthLocation}` : ''}
                 </p>
-                <div className="mt-4 flex items-center gap-3 text-sm text-slate-300">
-                  <span className="rounded-full bg-white/10 px-2 py-1">
-                    {primaryProfile.profileType === 'self'
-                      ? language === 'zh' ? '本人' : 'Self'
-                      : language === 'zh' ? '他人' : 'Other'}
-                  </span>
-                  <span>{primaryProfile.timezone ?? profile?.timezone ?? 'UTC'}</span>
-                </div>
-                <Link
-                  href={`/dashboard/profile/${primaryProfile.id}`}
-                  className="mt-5 inline-flex text-sm font-medium text-purple-300 transition hover:text-purple-200"
-                >
-                  {language === 'zh' ? '打开完整档案 →' : 'Open full profile →'}
+                <Link href={`/dashboard/profile/${primaryProfile.id}`} className="mt-5 inline-flex text-sm font-medium text-[#d8b77b] transition hover:text-[#ffe3b4]">
+                  {t.openProfile}
                 </Link>
               </>
             ) : (
               <>
-                <p className="mt-3 text-sm text-slate-300">
-                  {language === 'zh'
-                    ? '还没有主档案。先补全出生资料，统一画像才能开始聚合。'
-                    : 'No primary profile yet. Add your birth details first so aggregation can begin.'}
-                </p>
-                <Link
-                  href="/profile"
-                  className="mt-5 inline-flex rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm transition hover:bg-white/10"
-                >
-                  {language === 'zh' ? '创建主档案' : 'Create primary profile'}
-                </Link>
+                <p className="mt-3 text-sm leading-7 text-[#f4d7a3]/64">{t.noProfile}</p>
+                <TianjiLoveButton href="/profile" variant="secondary" className="mt-5">{t.createProfile}</TianjiLoveButton>
               </>
             )}
-          </div>
+          </TianjiLovePanel>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
-              {language === 'zh' ? '当前时间窗口' : 'Current timing window'}
+          <TianjiLovePanel className="p-5">
+            <Sparkles className="mb-3 h-5 w-5 text-[#d8b77b]" aria-hidden />
+            <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">{t.timingWindow}</p>
+            <h2 className="mt-3 font-serif text-2xl text-[#ffe3b4]">{destiny?.timingProfile?.headline ?? t.waitingTiming}</h2>
+            <p className="mt-2 text-sm leading-7 text-[#f4d7a3]/64">
+              {destiny?.timingProfile?.summary ?? destiny?.timingProfile?.currentWindow ?? t.timingBody}
             </p>
-            <h3 className="mt-3 text-xl font-semibold">
-              {destiny?.timingProfile?.headline ??
-                (language === 'zh' ? '等待新的聚合结果' : 'Waiting for the next aggregated signal')}
-            </h3>
-            <p className="mt-2 text-sm text-slate-300">
-              {destiny?.timingProfile?.summary ??
-                destiny?.timingProfile?.currentWindow ??
-                (language === 'zh'
-                  ? '完成 BaZi、Zi Wei、Fortune 或 Relationship 后，这里会自动显示你的时间窗口。'
-                  : 'After you complete BaZi, Zi Wei, Fortune, or Relationship, your timing window will appear here automatically.')}
-            </p>
-            {destiny?.timingProfile?.bestPeriods?.length ? (
-              <div className="mt-4 flex flex-wrap gap-2">
-                {destiny.timingProfile.bestPeriods.slice(0, 3).map((period) => (
-                  <span key={period} className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs text-emerald-200">
-                    {period}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-          </div>
+          </TianjiLovePanel>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
-              {language === 'zh' ? '最近一次模块更新' : 'Latest module update'}
-            </p>
+          <TianjiLovePanel className="p-5">
+            <History className="mb-3 h-5 w-5 text-[#d8b77b]" aria-hidden />
+            <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">{t.latest}</p>
             {latestHistory ? (
               <>
-                <div className="mt-3 flex items-start gap-3">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${getModuleMeta(latestHistory.moduleType).gradient}`}>
-                    {getModuleMeta(latestHistory.moduleType).emoji}
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="truncate text-lg font-semibold">{latestHistory.title}</h3>
-                    <p className="mt-1 text-sm text-slate-300">
-                      {latestHistory.profileName ??
-                        (language === 'zh' ? '默认档案' : 'Default profile')}
-                    </p>
-                    <p className="mt-2 text-xs text-slate-400">
-                      {formatDateTime(latestHistory.createdAt, language)}
-                    </p>
-                  </div>
-                </div>
-                <p className="mt-4 line-clamp-3 text-sm text-slate-300">{latestHistory.summary}</p>
+                <h2 className="mt-3 line-clamp-2 font-serif text-2xl text-[#ffe3b4]">{latestHistory.title}</h2>
+                <p className="mt-2 line-clamp-3 text-sm leading-7 text-[#f4d7a3]/64">{latestHistory.summary}</p>
+                <p className="mt-3 text-xs text-[#f4d7a3]/45">{formatDateTime(latestHistory.createdAt, language)}</p>
               </>
             ) : (
-              <p className="mt-3 text-sm text-slate-300">
-                {language === 'zh'
-                  ? '还没有历史记录。先从四个核心模块里做一次解读。'
-                  : 'No history yet. Start with one of the four core modules.'}
-              </p>
+              <p className="mt-3 text-sm leading-7 text-[#f4d7a3]/64">{t.noHistory}</p>
             )}
-          </div>
+          </TianjiLovePanel>
         </section>
 
         <section>
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
-                {language === 'zh' ? '四个核心入口' : 'Core entry points'}
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold">
-                {language === 'zh' ? '继续补全你的 Destiny Profile' : 'Keep building your destiny profile'}
-              </h2>
+              <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">{t.core}</p>
+              <h2 className="mt-2 font-serif text-3xl text-[#ffe3b4]">{t.build}</h2>
             </div>
-            <Link href="/readings" className="text-sm text-purple-300 transition hover:text-purple-200">
-              {language === 'zh' ? '查看全部历史 →' : 'View all history →'}
-            </Link>
+            <Link href="/readings" className="text-sm text-[#d8b77b] transition hover:text-[#ffe3b4]">{t.allHistory}</Link>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {QUICK_ACTIONS.map((action) => {
               const meta = getModuleMeta(action.moduleType);
               return (
-                <Link
-                  key={action.href}
-                  href={action.href}
-                  className={`rounded-2xl bg-gradient-to-br ${meta.gradient} p-5 transition hover:-translate-y-0.5 hover:opacity-95`}
-                >
-                  <div className="text-3xl">{meta.emoji}</div>
-                  <h3 className="mt-4 text-lg font-semibold">
-                    {language === 'zh' ? meta.labelZh : meta.label}
-                  </h3>
-                  <p className="mt-2 text-sm text-white/80">
-                    {action.moduleType === 'fortune'
-                      ? language === 'zh' ? '补强 timing 层与当前阶段判断。' : 'Strengthen timing signals and current-phase judgment.'
-                      : action.moduleType === 'relationship'
-                        ? language === 'zh' ? '补强 relationship 层与分享转化面。' : 'Strengthen the relationship layer and share surfaces.'
-                        : language === 'zh'
-                          ? '为统一画像增加新的基础模块信号。'
-                          : 'Add a new foundational signal to the unified profile.'}
-                  </p>
+                <Link key={action.href} href={action.href} className={`rounded-lg border border-[#b57248]/32 bg-gradient-to-br ${meta.gradient} p-5 transition hover:-translate-y-0.5 hover:border-[#ffe3b4]/48`}>
+                  <div className="text-lg font-semibold text-[#ffe3b4]">{meta.emoji}</div>
+                  <h3 className="mt-4 text-lg font-semibold text-[#ffe3b4]">{language === 'zh' ? action.labelZh : action.labelEn}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#fff4dd]/72">{language === 'zh' ? '进入同一套 Tianji Love 视觉与转化路径。' : 'Continue inside the same Tianji Love visual and conversion path.'}</p>
                 </Link>
               );
             })}
           </div>
         </section>
 
-        <section className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+        <TianjiLovePanel className="p-6">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
-                {language === 'zh' ? '命理画像摘要' : 'Destiny profile snapshot'}
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold">
-                {language === 'zh' ? '核心画像与跨模块摘要' : 'Core profile and cross-module summary'}
-              </h2>
+              <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">{t.snapshot}</p>
+              <h2 className="mt-2 font-serif text-3xl text-[#ffe3b4]">{t.snapshotTitle}</h2>
             </div>
             {destiny?.confidenceScore ? (
-              <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-200">
-                {language === 'zh' ? '聚合置信度' : 'Confidence'}: {Math.round(destiny.confidenceScore)}%
+              <span className="rounded-full border border-[#d8b77b]/28 bg-[#d8b77b]/10 px-3 py-1 text-sm text-[#ffe3b4]">
+                {Math.round(destiny.confidenceScore)}%
               </span>
             ) : null}
           </div>
@@ -499,121 +480,91 @@ export default function DashboardPage() {
           {visibleCards.length > 0 ? (
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               {visibleCards.map((card) => (
-                <div key={card.key} className="rounded-2xl border border-white/10 bg-slate-950/40 p-5">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">{card.key}</p>
-                  <h3 className="mt-3 text-lg font-semibold">{card.title ?? (language === 'zh' ? '等待补全' : 'Waiting for more signals')}</h3>
-                  <p className="mt-2 text-sm text-slate-300">
-                    {card.summary ?? (language === 'zh' ? '完成更多模块后，这一层会自动补齐。' : 'This layer fills in automatically after more module results arrive.')}
-                  </p>
+                <div key={card.key} className="rounded-lg border border-[#b57248]/24 bg-[#070b16]/56 p-5">
+                  <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/50">{card.key}</p>
+                  <h3 className="mt-2 text-lg font-semibold text-[#ffe3b4]">{card.title ?? (language === 'zh' ? '等待更多信号' : 'Waiting for more signals')}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#f4d7a3]/64">{card.summary ?? t.noSnapshot}</p>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="mt-6 rounded-2xl border border-dashed border-white/15 bg-slate-950/30 p-6 text-sm text-slate-300">
-              {language === 'zh'
-                ? '还没有可展示的统一画像摘要。完成至少一个统一模块结果后，这里会自动汇总 identity / timing / relationship 等层。'
-                : 'No unified snapshot is ready yet. Once at least one unified module result lands, identity, timing, relationship, and other layers will show up here automatically.'}
-            </div>
+            <p className="mt-6 rounded-lg border border-dashed border-[#b57248]/34 bg-[#070b16]/42 p-5 text-sm leading-7 text-[#f4d7a3]/64">{t.noSnapshot}</p>
           )}
-
-          {destiny?.sourceModules?.length ? (
-            <div className="mt-5 flex flex-wrap gap-2">
-              {destiny.sourceModules.map((moduleType) => (
-                <span key={moduleType} className="rounded-full bg-white/10 px-3 py-1 text-xs text-slate-200">
-                  {language === 'zh' ? getModuleMeta(moduleType).labelZh : getModuleMeta(moduleType).label}
-                </span>
-              ))}
-            </div>
-          ) : null}
-        </section>
+        </TianjiLovePanel>
 
         {destinyMeta.lockedSections.length > 0 ? (
-          <section className="rounded-3xl border border-amber-400/20 bg-amber-500/5 p-6">
-            <p className="text-xs uppercase tracking-[0.24em] text-amber-300/80">
-              {language === 'zh' ? '锁定区' : 'Locked zone'}
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold">
-              {language === 'zh' ? '还未解锁的高级层' : 'Premium layers still locked'}
-            </h2>
+          <TianjiLovePanel className="p-6">
+            <Crown className="mb-3 h-6 w-6 text-[#d8b77b]" aria-hidden />
+            <h2 className="font-serif text-3xl text-[#ffe3b4]">{t.locked}</h2>
+            <p className="mt-3 text-sm leading-7 text-[#f4d7a3]/66">{t.lockedBody}</p>
             <div className="mt-5 flex flex-wrap gap-2">
               {destinyMeta.lockedSections.map((section) => (
-                <span key={section} className="rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs text-amber-100">
+                <span key={section} className="rounded-full border border-[#d8b77b]/24 bg-[#d8b77b]/10 px-3 py-1 text-xs text-[#ffe3b4]">
                   {section}
                 </span>
               ))}
             </div>
-            <p className="mt-4 text-sm text-slate-300">
-              {language === 'zh'
-                ? '升级后可查看更深的 relationship / career / wealth / action 层，并在总控台里直接看到完整聚合解释。'
-                : 'Upgrade to unlock deeper relationship, career, wealth, and action layers directly inside the cockpit.'}
-            </p>
-          </section>
+          </TianjiLovePanel>
         ) : null}
 
-        <section className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
-                {language === 'zh' ? '最近历史记录' : 'Recent history'}
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold">
-                {language === 'zh' ? '模块结果与兼容历史' : 'Module results and compatibility history'}
-              </h2>
-            </div>
-            <span className="text-sm text-slate-400">
-              {history.length} {language === 'zh' ? '条记录' : 'records'}
-            </span>
-          </div>
-
+        <section>
+          <TianjiLoveSectionTitle title={t.recent} className="mb-8" />
+          <div className="mb-4 text-sm text-[#f4d7a3]/52">{t.records(history.length)}</div>
           {history.length > 0 ? (
-            <div className="mt-6 space-y-3">
-              {history.slice(0, 6).map((item) => {
-                const meta = getModuleMeta(item.moduleType);
-                return (
-                  <Link
-                    key={item.id}
-                    href={`/reading/${item.id}`}
-                    className="group flex items-start gap-4 rounded-2xl border border-white/10 bg-slate-950/40 p-4 transition hover:border-purple-300/30 hover:bg-slate-950/60"
-                  >
-                    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${meta.gradient}`}>
-                      {meta.emoji}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="truncate text-base font-semibold group-hover:text-purple-200">{item.title}</h3>
-                        {item.kind === 'unified' ? (
-                          <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] text-emerald-200">
-                            unified
-                          </span>
-                        ) : null}
-                        {item.isPremium ? (
-                          <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] text-amber-200">
-                            premium
-                          </span>
-                        ) : null}
-                      </div>
-                      <p className="mt-2 line-clamp-2 text-sm text-slate-300">{item.summary}</p>
-                      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-400">
-                        <span>{language === 'zh' ? meta.labelZh : meta.label}</span>
-                        <span>{formatDateTime(item.createdAt, language)}</span>
-                        {item.profileName ? <span>{item.profileName}</span> : null}
-                        {typeof item.confidenceScore === 'number' ? <span>{Math.round(item.confidenceScore)}%</span> : null}
-                      </div>
-                    </div>
-                    <span className="text-slate-500 transition group-hover:text-white">→</span>
-                  </Link>
-                );
-              })}
+            <div className="space-y-3">
+              {history.slice(0, 6).map((item) => (
+                <HistoryRow key={item.id} item={item} language={language} />
+              ))}
             </div>
           ) : (
-            <div className="mt-6 rounded-2xl border border-dashed border-white/15 bg-slate-950/30 p-6 text-sm text-slate-300">
-              {language === 'zh'
-                ? '这里会显示旧 readings 兼容历史和新的 unified module results。完成第一条结果后，总控台会自动更新。'
-                : 'Legacy readings and new unified module results will appear here together. The cockpit updates automatically after your first result.'}
-            </div>
+            <TianjiLovePanel className="p-6 text-sm leading-7 text-[#f4d7a3]/64">{t.noHistory}</TianjiLovePanel>
           )}
         </section>
+
+        <TianjiLoveTrustCard icon={Lock} title={language === 'zh' ? '隐私默认值保持不变' : 'Privacy defaults remain'} body={t.privacy} />
       </main>
-    </div>
+
+      <TianjiLoveFooter
+        homeHref="/"
+        disclaimer={t.privacy}
+        links={getTianjiLoveFooterNav(language)}
+      />
+    </TianjiLoveShell>
+  );
+}
+
+function accountName(profile: ProfileApiResponse | null) {
+  return profile?.name ?? profile?.email ?? 'User';
+}
+
+function HistoryRow({ item, language }: { item: HistoryItem; language: 'en' | 'zh' }) {
+  const meta = getModuleMeta(item.moduleType);
+  return (
+    <Link href={`/reading/${item.id}`} className="flex items-start gap-4 rounded-lg border border-[#b57248]/28 bg-[#070b16]/56 p-4 transition hover:border-[#ffe3b4]/48">
+      <div className={`grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-gradient-to-br ${meta.gradient} text-[#ffe3b4]`}>
+        {meta.emoji}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <h3 className="truncate text-base font-semibold text-[#ffe3b4]">{item.title}</h3>
+          {item.kind === 'unified' ? <Badge>unified</Badge> : null}
+          {item.isPremium ? <Badge>premium</Badge> : null}
+        </div>
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#f4d7a3]/64">{item.summary}</p>
+        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-[#f4d7a3]/45">
+          <span>{language === 'zh' ? meta.labelZh : meta.label}</span>
+          <span>{formatDateTime(item.createdAt, language)}</span>
+          {item.profileName ? <span>{item.profileName}</span> : null}
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function Badge({ children }: { children: ReactNode }) {
+  return (
+    <span className="rounded-full border border-[#d8b77b]/24 bg-[#d8b77b]/10 px-2 py-0.5 text-[11px] text-[#ffe3b4]">
+      {children}
+    </span>
   );
 }

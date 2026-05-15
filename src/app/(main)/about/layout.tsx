@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { JsonLd, SITE, buildBreadcrumb } from '@/components/seo/JsonLd';
 
-const TITLE = 'About TianJi | 关于天机 — Premium AI Divination, Without the Anxiety Sales';
+const TITLE = 'About Tianji Love | Relationship Patterns, Timing, Privacy';
 const DESCRIPTION =
-  'TianJi is a divination service for people who want a practice, not a one-time curiosity. Read our four commitments, how we handle your data, and how to delete it in 14 days.';
-const OG_URL = '/api/og?title=About+TianJi&subtitle=No+outcome+sales+%C2%B7+No+anxiety+sales&module=tianji';
+  'How Tianji Love approaches relationship patterns, romantic timing, privacy, and AI-assisted clarity without guaranteed predictions.';
+const OG_URL = '/api/og?title=About+Tianji+Love&subtitle=Patterns+%C2%B7+Timing+%C2%B7+Privacy&module=tianji';
 const PAGE_URL = `${SITE.url}/about`;
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: PAGE_URL,
     type: 'website',
-    images: [{ url: OG_URL, width: 1200, height: 630, alt: 'About TianJi Global' }],
+    images: [{ url: OG_URL, width: 1200, height: 630, alt: 'About Tianji Love' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -27,8 +27,8 @@ export const metadata: Metadata = {
 };
 
 const breadcrumbLd = buildBreadcrumb([
-  { name: 'TianJi · 首页', path: '/' },
-  { name: 'About · 关于', path: '/about' },
+  { name: 'Tianji Love Home', path: '/' },
+  { name: 'About', path: '/about' },
 ]);
 
 const aboutPageLd = {
@@ -36,7 +36,7 @@ const aboutPageLd = {
   '@type': 'AboutPage',
   '@id': `${PAGE_URL}#aboutpage`,
   url: PAGE_URL,
-  name: 'About TianJi',
+  name: 'About Tianji Love',
   description: DESCRIPTION,
   inLanguage: ['zh', 'en'],
   isPartOf: { '@id': `${SITE.url}#website` },

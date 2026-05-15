@@ -2,71 +2,97 @@
 
 ## Background
 
-The target project is TianJi Love. The user explicitly approved direct server deployment, but the previous direct deploy stopped before mutation because the available SSH identity did not have deploy permissions.
+The user requested the latest TianJi Love version be committed and the website updated. The working tree contained a broad mix of application changes, generated screenshots, logs, deployment archives, external skill references, and local environment/build artifacts.
 
-Follow-up recheck confirmed the blocker remains: `deploy` and `root` SSH still reject the current key, while `tianji-prod` can only perform read-only checks and cannot write `/var/www/tianji-global` or sudo.
+The safe commit scope was narrowed to application/runtime source, tests, public TianJi Love assets, scripts, project-local skills, masked `.ai` evidence docs, public `.env.example`, CI, and package script updates.
 
 ## Task Goal
 
-Record the server deploy permission blocker truthfully and preserve the correct gate state before any future redeploy attempt.
+Publish the latest safe TianJi Love candidate to GitHub and identify the production update path without committing secrets or generated deployment artifacts.
 
 ## Files Changed
 
-- `.ai/TIANJI_LOVE_DIRECT_SERVER_DEPLOY_EVIDENCE_20260515.md`
-- `.ai/TIANJI_LOVE_DIRECT_SERVER_DEPLOY_REVIEW_20260515.md`
+Staged for commit:
+
+- TianJi Love app and route source under `src/`
+- Focused tests under `src/__tests__/`
+- Public TianJi Love media under `public/assets/images/`
+- `scripts/audit-release-gate.ts`
+- `scripts/smoke-ask-draw-auth.mjs`
+- `.env.example`
+- `.github/workflows/ci.yml`
+- `package.json`
+- `tailwind.config.js`
+- Project-local `.agents/skills/*`
+- Project-local `.codex/prompts/*`
+- Project-local `.ai` masked server/env evidence docs
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md`
 
-## Related Evidence Links
+Explicitly not staged:
 
-- `.ai/TIANJI_LOVE_DIRECT_SERVER_DEPLOY_EVIDENCE_20260515.md`
-- `.ai/TIANJI_LOVE_DIRECT_SERVER_DEPLOY_REVIEW_20260515.md`
+- `.env.local`
+- deployment tarballs
+- screenshots and browser QA image artifacts
+- logs
+- `.next`, `coverage`, `node_modules`
+- `tsconfig.tsbuildinfo`
+- external `.claude/skills` reference bundle
+- untracked ops notes
 
 ## Core Judgment
 
 ```text
-Launch: No-Go
-Deploy: No-Go
+Commit readiness: Go
+GitHub push: Go after commit
+Production deploy: Blocked unless main/approved deploy path is used
 Paid smoke: No-Go
-Next safe milestone: restore deploy user SSH and /var/www/tianji-global write permission
 ```
 
-This is not a code/build blocker. It is a server deployment permission blocker.
+The code candidate validates locally. The production update path is separate from the commit because repo automation deploys `main`, while the current working branch is `redesign-home-landing-20260420`.
 
-## Gate Matrix Summary
+## Validation
 
-| Gate | Verdict | Reason |
-| --- | --- | --- |
-| Local clean RC | Go | Prior local clean RC build/lint/test evidence passed. |
-| Current public non-paid access | Go | Prior current-site checks showed non-paid routes reachable and protected routes redirect same-origin. |
-| `deploy` SSH | No-Go | Current key returns `Permission denied (publickey,password)`. |
-| `root` SSH | No-Go | Current key returns `Permission denied (publickey,password)`. |
-| `tianji-prod` deployability | No-Go | User can log in, but app path is `root:root` and passwordless sudo is unavailable. |
-| Actual new-version deploy | No-Go | No release files were written, no symlink changed, no process restarted. |
-| Paid smoke | No-Go | Explicitly forbidden and still unsafe. |
-| Secret hygiene | Go | Targeted scan over updated direct deploy docs and review packet had no hits. |
+| Check | Result |
+| --- | --- |
+| Staged unsafe path check | Pass; no env-local, archive, log, build cache, coverage, node_modules, or tsbuildinfo files staged |
+| Staged secret-shape scan | Pass with expected `.env.example` placeholder-only match |
+| `git diff --cached --check` | Pass |
+| `npm run release:check` | Pass |
+| Typecheck | Pass |
+| Lint | Pass |
+| Tests | Pass, 46 files / 473 tests |
+| Build | Pass |
+| Route/copy/share/upgrade audits | Pass |
 
 ## Commands Run
 
-- Git for Windows SSH probe for `deploy@186.244.244.81`
-- Git for Windows SSH probe for `root@186.244.244.81`
-- Git for Windows SSH read-only probe for `tianji-prod@186.244.244.81`
-- Checked `/var/www/tianji-global`, `current`, `releases`, and `shared` ownership
-- Checked `sudo -n` availability for `tianji-prod`
-- Ran targeted secret-pattern scan over updated direct deploy docs and review packet
+- `git status --short --branch`
+- `git diff --stat`
+- `git diff --cached --stat`
+- `git diff --cached --check`
+- `git diff --cached -G ... --name-only`
+- `npm run release:check`
+- `gh workflow view 'Deploy US Server' --yaml`
+- `gh workflow view 'CI/CD' --yaml`
 
 ## Result
 
-No deployment was performed after the access recheck.
+The staged candidate is validated and ready to commit/push. The live website cannot be truthfully marked updated from this branch alone unless one of these happens:
 
-No `git fetch/pull`, `npm install`, `npm run build`, PM2 restart, `pm2 save`, `nginx -t`, Nginx reload, env write, paid smoke, Stripe live API call, or secret output was performed.
+1. Merge the branch to `main`, allowing the documented production automation to run.
+2. Run an approved deploy workflow that deploys this exact commit/ref.
+3. Restore the direct server deploy permission path and deploy this commit there.
 
-## Required Next Action
+## Risks
 
-Restore `deploy` user SSH with the current public key and make `/var/www/tianji-global` deploy-owned, or grant a tightly scoped `tianji-prod` sudo path to deploy as `deploy`.
+- Current branch is not `main`.
+- Manual `Deploy US Server` workflow deploys `main` and includes a `npm run smoke:production` step; local package scripts do not currently show that script in this working tree.
+- Previous direct server deploy was blocked by SSH/permission ownership.
+- Supabase migrations are committed as source files only; applying them to any hosted database remains a separate approval gate.
 
 ## Suggested Commit Message
 
 ```text
-ops(staging): record tianji deploy permission blocker
+feat: publish latest tianji love candidate
 ```

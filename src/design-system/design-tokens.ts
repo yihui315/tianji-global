@@ -13,19 +13,19 @@
 // ────────────────────────────────────────────
 export const colors = {
   /** Core backgrounds — Taste Rule: deep space black + nebula */
-  bgPrimary: '#0a0a0a',
-  bgNebula: 'rgba(42, 10, 58, 0.5)',
-  bgSurface: 'rgba(255, 255, 255, 0.02)',
+  bgPrimary: '#03040a',
+  bgNebula: 'rgba(167, 45, 62, 0.18)',
+  bgSurface: 'rgba(6, 11, 22, 0.74)',
 
   /** Brand accents — Taste Rule: Gold #D4AF37 / #F5C542, Purple #7C3AED / #A78BFA */
-  gold: '#D4AF37',
-  goldLight: '#F5C542',
-  goldDim: 'rgba(212, 175, 55, 0.15)',
+  gold: '#D8B77B',
+  goldLight: '#FFE3B4',
+  goldDim: 'rgba(216, 183, 123, 0.16)',
 
-  purple: '#7C3AED',
-  purpleLight: '#A78BFA',
-  purpleDark: '#5B21B6',
-  purpleDim: 'rgba(124, 58, 237, 0.15)',
+  purple: '#B57248',
+  purpleLight: '#FF9C8B',
+  purpleDark: '#71352E',
+  purpleDim: 'rgba(181, 114, 72, 0.16)',
 
   /** Functional palette */
   dataCyan: '#06B6D4',
@@ -36,19 +36,19 @@ export const colors = {
   successGreenDim: 'rgba(16, 185, 129, 0.15)',
 
   /** Glow */
-  glowPurple: 'rgba(168, 130, 255, 0.3)',
-  glowGold: 'rgba(245, 158, 11, 0.4)',
+  glowPurple: 'rgba(255, 124, 130, 0.28)',
+  glowGold: 'rgba(216, 183, 123, 0.34)',
 
   /** Text hierarchy (on dark backgrounds) */
-  textPrimary: '#FFFFFF',
-  textSecondary: 'rgba(255, 255, 255, 0.7)',
-  textTertiary: 'rgba(255, 255, 255, 0.4)',
-  textMuted: 'rgba(255, 255, 255, 0.25)',
+  textPrimary: '#FFF4DD',
+  textSecondary: 'rgba(244, 215, 163, 0.74)',
+  textTertiary: 'rgba(216, 183, 123, 0.52)',
+  textMuted: 'rgba(244, 215, 163, 0.28)',
 
   /** Borders */
-  borderSubtle: 'rgba(255, 255, 255, 0.06)',
-  borderMedium: 'rgba(255, 255, 255, 0.12)',
-  borderStrong: 'rgba(255, 255, 255, 0.2)',
+  borderSubtle: 'rgba(181, 114, 72, 0.26)',
+  borderMedium: 'rgba(181, 114, 72, 0.42)',
+  borderStrong: 'rgba(216, 183, 123, 0.54)',
 } as const;
 
 // ────────────────────────────────────────────
@@ -58,8 +58,8 @@ export const typography = {
   hero: {
     fontSize: 'clamp(2.5rem, 7vw, 5.5rem)',
     fontWeight: 400,
-    lineHeight: 0.9,
-    letterSpacing: '-2px',
+    lineHeight: 0.96,
+    letterSpacing: '0',
     fontFamily: 'var(--font-instrument-serif), serif',
     fontStyle: 'italic' as const,
   },
@@ -67,7 +67,7 @@ export const typography = {
     fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
     fontWeight: 400,
     lineHeight: 1.1,
-    letterSpacing: '-1px',
+    letterSpacing: '0',
     fontFamily: 'var(--font-instrument-serif), serif',
     fontStyle: 'normal' as const,
   },
@@ -136,9 +136,9 @@ export const spacing = {
 // 4. Border Radius Tokens
 // ────────────────────────────────────────────
 export const radii = {
-  heroGlass: '2rem',
-  card: '1rem',
-  cardLg: '1.5rem',
+  heroGlass: '0.875rem',
+  card: '0.75rem',
+  cardLg: '0.875rem',
   badge: '9999px',
   input: '0.5rem',
   tooltip: '0.375rem',
@@ -150,16 +150,16 @@ export const radii = {
 // ────────────────────────────────────────────
 export const shadows = {
   softGlass:
-    'inset 0 1px 1px rgba(255, 255, 255, 0.1)',
+    'inset 0 0 0 1px rgba(255, 217, 157, 0.025), 0 20px 60px rgba(0, 0, 0, 0.24)',
   strongGlass:
-    '4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+    'inset 0 0 0 1px rgba(255, 217, 157, 0.035), 0 28px 80px rgba(0, 0, 0, 0.34)',
   glow: (color: string = colors.glowPurple) =>
     `0 0 40px ${color}`,
   glowStrong: (color: string = colors.glowPurple) =>
     `0 0 60px ${color}, 0 0 120px ${color}`,
-  focusRing: `0 0 0 2px ${colors.purple}, 0 0 0 4px rgba(124, 58, 237, 0.3)`,
+  focusRing: `0 0 0 2px ${colors.purpleLight}, 0 0 0 4px rgba(255, 124, 130, 0.22)`,
   cardHover:
-    '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+    '0 16px 46px rgba(0, 0, 0, 0.34), 0 0 24px rgba(181, 114, 72, 0.08)',
 } as const;
 
 // ────────────────────────────────────────────
@@ -167,19 +167,19 @@ export const shadows = {
 // ────────────────────────────────────────────
 export const glass = {
   soft: {
-    background: 'rgba(255, 255, 255, 0.01)',
+    background: 'rgba(6, 11, 22, 0.54)',
     backdropFilter: 'blur(4px)',
-    border: 'none',
+    border: `1px solid ${colors.borderSubtle}`,
     boxShadow: shadows.softGlass,
   },
   strong: {
-    background: 'rgba(255, 255, 255, 0.02)',
+    background: 'rgba(6, 11, 22, 0.78)',
     backdropFilter: 'blur(50px)',
-    border: 'none',
+    border: `1px solid ${colors.borderMedium}`,
     boxShadow: shadows.strongGlass,
   },
   card: {
-    background: 'rgba(255, 255, 255, 0.03)',
+    background: 'rgba(7, 11, 22, 0.68)',
     backdropFilter: 'blur(12px)',
     border: `1px solid ${colors.borderSubtle}`,
     boxShadow: shadows.softGlass,

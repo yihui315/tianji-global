@@ -1,8 +1,18 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Mail, ShieldCheck, Sparkles } from 'lucide-react';
+
+import {
+  TianjiLoveButton,
+  TianjiLoveFooter,
+  TianjiLoveHeader,
+  TianjiLovePanel,
+  TianjiLoveShell,
+  TianjiLoveTrustCard,
+} from '@/components/tianji-love';
 
 function LoginForm() {
   const router = useRouter();
@@ -13,7 +23,6 @@ function LoginForm() {
   const [magicSent, setMagicSent] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
 
-  // Check if redirected back from magic link (verify step)
   useEffect(() => {
     if (searchParams.get('verify')) {
       setIsVerifying(true);
@@ -23,8 +32,8 @@ function LoginForm() {
     }
   }, [searchParams, router]);
 
-  const handleMagicLink = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleMagicLink = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (!email.trim()) return;
     setIsLoading(true);
     setError('');
@@ -52,133 +61,138 @@ function LoginForm() {
     signIn('google', { callbackUrl: '/dashboard' });
   };
 
-  // Verification in progress
   if (isVerifying) {
     return (
-      <div className="min-h-screen flex items-center justify-center"
-        style={{ background: 'linear-gradient(135deg, #0a0a1a 0%, #1a1040 50%, #0a0a1a 100%)' }}>
-        <div className="text-center">
-          <div className="text-4xl mb-4 animate-pulse">🔮</div>
-          <h2 className="text-xl font-serif font-bold text-white mb-2">Verifying your link...</h2>
-          <p className="text-sm" style={{ color: 'rgba(226,232,240,0.5)' }}>Signing you in automatically</p>
+      <TianjiLoveShell className="tianji-love-login-verify">
+        <div className="relative z-10 flex min-h-screen items-center justify-center px-5 text-center">
+          <TianjiLovePanel className="w-full max-w-md p-8">
+            <Sparkles className="mx-auto mb-4 h-10 w-10 text-[#d8b77b]" aria-hidden />
+            <h1 className="font-serif text-3xl text-[#ffe3b4]">Verifying your link...</h1>
+            <p className="mt-3 text-sm text-[#f4d7a3]/66">Signing you in automatically.</p>
+          </TianjiLovePanel>
         </div>
-      </div>
+      </TianjiLoveShell>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center"
-      style={{ background: 'linear-gradient(135deg, #0a0a1a 0%, #1a1040 50%, #0a0a1a 100%)' }}>
+    <TianjiLoveShell className="tianji-love-login-page" ariaLabel="Tianji Love login page">
+      <TianjiLoveHeader
+        homeHref="/"
+        navItems={[
+          { label: 'Love Reading', href: '/relationship/new' },
+          { label: 'Ask', href: '/ask' },
+          { label: 'Draw', href: '/draw' },
+          { label: 'Pricing', href: '/pricing', mobile: true },
+          { label: 'About', href: '/about' },
+          { label: 'Login', href: '/login', mobile: true },
+        ]}
+        cta={{ label: 'Start Relationship Reading', href: '/relationship/new' }}
+      />
 
-      {/* Background stars */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 60 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full animate-pulse"
-            style={{
-              width: `${Math.random() * 2 + 1}px`,
-              height: `${Math.random() * 2 + 1}px`,
-              background: 'rgba(255,255,255,0.4)',
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${Math.random() * 3 + 2}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="relative z-10 w-full max-w-md mx-4">
-        <div className="text-center mb-10">
-          <div className="text-5xl mb-3">🔮</div>
-          <h1 className="text-3xl font-serif font-bold text-white mb-2">
-            天机全球 TianJi
+      <section className="relative z-10 mx-auto grid min-h-[calc(100vh-92px)] w-full max-w-6xl items-center gap-8 px-5 py-14 sm:px-8 lg:grid-cols-[0.95fr_1.05fr]">
+        <div>
+          <p className="mb-5 text-xs uppercase tracking-[0.32em] text-[#d8b77b]/70">Tianji Love / Sign in</p>
+          <h1 className="max-w-3xl font-serif text-[2.6rem] font-semibold leading-[1.08] text-[#ffe3b4] sm:text-[4rem]">
+            Return to your private love readings.
           </h1>
-          <p className="text-sm" style={{ color: 'rgba(226,232,240,0.5)' }}>
-            Sign in to access your astrological readings
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#f5d8aa]/78">
+            Sign in to access saved readings, compatibility history, profile settings, and checkout returns without changing the existing auth flow.
           </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <TianjiLoveTrustCard icon={ShieldCheck} title="Private account" body="Your history and profiles stay inside protected account surfaces." />
+            <TianjiLoveTrustCard icon={Mail} title="Magic link ready" body="Email sign-in remains wired for environments with verified mail settings." />
+          </div>
         </div>
 
-        <div className="p-8 rounded-2xl"
-          style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            backdropFilter: 'blur(20px)',
-          }}>
-
-          {/* Magic Link success state */}
+        <TianjiLovePanel className="p-7 sm:p-9">
           {magicSent ? (
-            <div className="text-center py-4">
-              <div className="text-4xl mb-4">✉️</div>
-              <h2 className="text-lg font-serif font-bold text-white mb-2">Check your inbox</h2>
-              <p className="text-sm mb-6" style={{ color: 'rgba(226,232,240,0.65)' }}>
-                We sent a magic sign-in link to<br />
-                <strong style={{ color: '#A78BFA' }}>{email}</strong>
+            <div className="text-center">
+              <Mail className="mx-auto mb-4 h-10 w-10 text-[#d8b77b]" aria-hidden />
+              <h2 className="font-serif text-3xl text-[#ffe3b4]">Check your inbox</h2>
+              <p className="mt-3 text-sm leading-7 text-[#f4d7a3]/66">
+                We sent a magic sign-in link to <span className="text-[#ffe3b4]">{email}</span>.
               </p>
-              <p className="text-xs" style={{ color: 'rgba(226,232,240,0.35)' }}>
-                The link expires in 1 hour. Check your spam folder if you do not see it.
-              </p>
+              <p className="mt-3 text-xs text-[#f4d7a3]/42">The link expires in 1 hour. Check spam if you do not see it.</p>
               <button
-                onClick={() => { setMagicSent(false); setEmail(''); }}
-                className="mt-4 text-xs underline"
-                style={{ color: 'rgba(226,232,240,0.4)' }}
+                type="button"
+                onClick={() => {
+                  setMagicSent(false);
+                  setEmail('');
+                }}
+                className="mt-5 text-sm text-[#d8b77b] underline-offset-4 hover:underline"
               >
-                ← Use a different email
+                Use a different email
               </button>
             </div>
           ) : (
             <>
-              {/* Magic Link coming soon — requires EMAIL_FROM domain verification in Resend */}
-              <div className="mb-6 p-4 rounded-xl text-center" style={{ background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.15)' }}>
-                <p className="text-sm" style={{ color: 'rgba(226,232,240,0.6)' }}>
-                  🔮 Magic Link sign-in coming soon
-                </p>
-                <p className="text-xs mt-1" style={{ color: 'rgba(226,232,240,0.35)' }}>
-                  Sign in with Google below for now
-                </p>
+              <div className="rounded-lg border border-[#b57248]/30 bg-[#070b16]/62 p-4 text-center">
+                <p className="text-sm text-[#ffe3b4]">Magic link sign-in is available when email delivery is configured.</p>
+                <p className="mt-1 text-xs text-[#f4d7a3]/48">Google sign-in stays available through the existing NextAuth provider.</p>
               </div>
 
-              {/* Google OAuth */}
+              <form onSubmit={handleMagicLink} className="mt-6 grid gap-4">
+                <label className="block">
+                  <span className="mb-2 block text-sm text-[#f4d7a3]/62">Email</span>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    className="tianji-love-field-input w-full rounded-lg border px-4 py-3 text-sm outline-none"
+                    placeholder="you@example.com"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  disabled={isLoading || !email.trim()}
+                  className="tianji-love-primary inline-flex min-h-12 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-5 text-sm font-semibold text-[#fff7e6] disabled:opacity-60"
+                >
+                  {isLoading ? 'Sending...' : 'Send magic link'}
+                </button>
+              </form>
+
+              <div className="my-6 h-px bg-[#b57248]/24" />
+
               <button
+                type="button"
                 onClick={handleGoogleLogin}
-                className="w-full py-3 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-3"
-                style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: '#E2E8F0',
-                }}
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-[#b57248]/36 bg-[#070b16]/72 px-5 text-sm font-semibold text-[#ffe3b4] transition hover:border-[#ffe3b4]/50"
               >
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
                 Continue with Google
               </button>
+              {error ? <p className="mt-4 text-center text-sm text-[#ffb4a3]">{error}</p> : null}
             </>
           )}
-        </div>
+        </TianjiLovePanel>
+      </section>
 
-        {/* Sign up note */}
-        <p className="text-center text-xs mt-6" style={{ color: 'rgba(226,232,240,0.25)' }}>
-          No password needed — just enter your email and click the link we send you.
-          <br />New accounts are created automatically on first sign-in.
-        </p>
-      </div>
-    </div>
+      <TianjiLoveFooter
+        homeHref="/"
+        disclaimer="Sign-in protects private reading history and profile data. Readings remain for reflection and relationship communication."
+        links={[
+          { label: 'Love Reading', href: '/relationship/new' },
+          { label: 'Ask', href: '/ask' },
+          { label: 'Draw', href: '/draw' },
+          { label: 'Pricing', href: '/pricing' },
+          { label: 'About', href: '/about' },
+          { label: 'Login', href: '/login' },
+          { label: 'Privacy', href: '/legal/privacy' },
+        ]}
+      />
+    </TianjiLoveShell>
   );
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center"
-        style={{ background: 'linear-gradient(135deg, #0a0a1a 0%, #1a1040 50%, #0a0a1a 100%)' }}>
-        <div className="text-white text-lg animate-pulse">Loading...</div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <TianjiLoveShell>
+          <div className="relative z-10 flex min-h-screen items-center justify-center text-[#ffe3b4]">Loading...</div>
+        </TianjiLoveShell>
+      }
+    >
       <LoginForm />
     </Suspense>
   );

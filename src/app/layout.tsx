@@ -1,33 +1,24 @@
 import type { Metadata } from 'next';
-import { Noto_Sans_SC } from 'next/font/google';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
 
-const tianjiSans = Noto_Sans_SC({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-  variable: '--font-tianji-sans',
-  fallback: ['Segoe UI', 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
-});
-
 export const metadata: Metadata = {
-  title: 'TianJi Global | Premium AI Destiny Platform',
-  description: 'A premium AI destiny platform for timing, relationship insight, and shareable readings.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.global'),
+  title: 'Tianji Love | AI Relationship Reading',
+  description: 'AI relationship reading for compatibility, love timing, one-question clarity, and three-card relationship insight.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.love'),
   openGraph: {
-    title: 'TianJi Global | Premium AI Destiny Platform',
-    description: 'A premium AI destiny platform for timing, relationship insight, and shareable readings.',
+    title: 'Tianji Love | AI Relationship Reading',
+    description: 'Compatibility, love timing, one-question clarity, and three-card relationship insight.',
     type: 'website',
     locale: 'en_US',
     alternateLocale: ['zh_CN'],
-    siteName: 'TianJi Global',
-    images: ['/api/og?title=TianJi+Global&subtitle=Premium+AI+Destiny+Platform'],
+    siteName: 'Tianji Love',
+    images: ['/api/og?title=Tianji+Love&subtitle=AI+Relationship+Reading'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TianJi Global | Premium AI Destiny Platform',
-    description: 'A premium AI destiny platform for timing, relationship insight, and shareable readings.',
+    title: 'Tianji Love | AI Relationship Reading',
+    description: 'Compatibility, love timing, one-question clarity, and three-card relationship insight.',
   },
   icons: {
     icon: [{ url: '/assets/favicon.svg', type: 'image/svg+xml' }],
@@ -47,7 +38,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${tianjiSans.variable} min-h-screen bg-[#050508] text-white antialiased`}>
+      <body className="min-h-screen bg-[#050508] text-white antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

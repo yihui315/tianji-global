@@ -8,7 +8,7 @@ import type { RelationshipReading } from '@/types/relationship';
 export async function POST(req: NextRequest) {
   try {
     const body: AnalyzeRelationshipRequest = await req.json();
-    const { relationType, personA, personB, premium = false } = body;
+    const { relationType, personA, personB, premium = false, lang: requestedLang = 'zh' } = body;
 
     if (!relationType || !personA?.nickname || !personB?.nickname || !personA?.birthDate || !personB?.birthDate) {
       return NextResponse.json<ApiResponse<null>>({
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
     const personABirthDate = personA.birthDate;
     const personBBirthDate = personB.birthDate;
-    const lang = personABirthDate < '2000-01-01' ? 'zh' : 'zh'; // Always zh for now
+    const lang = requestedLang === 'en' ? 'en' : 'zh';
 
     // Run compatibility analysis
     const { reading, dbData } = analyzeRelationship(
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       personB.nickname,
       personA.birthTime,
       personB.birthTime,
-      'zh',
+      lang,
     );
 
     // Try to persist to Supabase if configured

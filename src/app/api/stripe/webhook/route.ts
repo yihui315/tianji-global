@@ -148,6 +148,90 @@ async function insertAuditLog(
   );
 }
 
+type PayPerUseFlow = 'ask-question' | 'quick-draw';
+
+function isPayPerUseFlow(flow: string | undefined): flow is PayPerUseFlow {
+  return flow === 'ask-question' || flow === 'quick-draw';
+}
+
+async function ensurePayPerUsePurchasesTable(pool: Pool): Promise<void> {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS pay_per_use_purchases (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      stripe_checkout_session_id text NOT NULL UNIQUE,
+      stripe_payment_intent_id text UNIQUE,
+      flow text NOT NULL CHECK (flow IN ('ask-question', 'quick-draw')),
+      product_type text NOT NULL DEFAULT 'pay-per-use',
+      amount integer NOT NULL CHECK (amount >= 0),
+      currency text NOT NULL DEFAULT 'usd',
+      language text NOT NULL DEFAULT 'en',
+      paid_at timestamptz NOT NULL DEFAULT now(),
+      metadata jsonb NOT NULL DEFAULT '{}'::jsonb
+    )
+  `);
+}
+
+async function recordPayPerUsePurchase(
+  pool: Pool,
+  session: Stripe.Checkout.Session,
+  flow: PayPerUseFlow
+): Promise<void> {
+  await ensurePayPerUsePurchasesTable(pool);
+
+  const metadata = session.metadata ?? {};
+  const configuredAmount = Number.parseInt(metadata.amount ?? '', 10);
+  const amount =
+    Number.isFinite(configuredAmount) && configuredAmount >= 0
+      ? configuredAmount
+      : session.amount_total ?? 0;
+  const currency = metadata.currency || session.currency || 'usd';
+  const language = metadata.language || 'en';
+  const paymentIntentId =
+    typeof session.payment_intent === 'string'
+      ? session.payment_intent
+      : session.payment_intent?.id ?? null;
+
+  await pool.query(
+    `INSERT INTO pay_per_use_purchases
+       (stripe_checkout_session_id, stripe_payment_intent_id, flow, product_type,
+        amount, currency, language, metadata)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+     ON CONFLICT (stripe_checkout_session_id) DO UPDATE SET
+       stripe_payment_intent_id = COALESCE(EXCLUDED.stripe_payment_intent_id, pay_per_use_purchases.stripe_payment_intent_id),
+       amount = EXCLUDED.amount,
+       currency = EXCLUDED.currency,
+       language = EXCLUDED.language,
+       metadata = EXCLUDED.metadata`,
+    [
+      session.id,
+      paymentIntentId,
+      flow,
+      metadata.productType || 'pay-per-use',
+      amount,
+      currency,
+      language,
+      JSON.stringify({
+        ...metadata,
+        customer: session.customer,
+        paymentStatus: session.payment_status,
+        status: session.status,
+      }),
+    ]
+  );
+
+  await insertAuditLog(pool, null, 'subscription_created', {
+    event: 'checkout.session.completed',
+    sessionId: session.id,
+    flow,
+    productType: metadata.productType || 'pay-per-use',
+    amount,
+    currency,
+    language,
+  }).catch((error) => {
+    console.warn('[Webhook] pay-per-use audit_log insert skipped:', error);
+  });
+}
+
 /**
  * Update user's subscription_status and subscription_tier from the
  * most recent active subscription on record.
@@ -186,6 +270,13 @@ async function handleCheckoutSessionCompleted(
   pool: Pool,
   session: Stripe.Checkout.Session
 ): Promise<void> {
+  const flow = session.metadata?.flow;
+  if (isPayPerUseFlow(flow)) {
+    await recordPayPerUsePurchase(pool, session, flow);
+    console.log(`[Webhook] checkout.session.completed - recorded ${flow} purchase ${session.id}`);
+    return;
+  }
+
   const stripeCustomerId = session.customer as string;
   const userId = session.metadata?.userId;
 

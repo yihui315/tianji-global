@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-15 - TianJi Love latest candidate commit prep
+
+- Task ID: 20260515-tianji-love-latest-candidate-commit
+- Files changed: staged TianJi Love app, tests, public assets, scripts, project skills, masked evidence docs, `.env.example`, CI, and package script updates for commit.
+- Summary: Prepared the current TianJi Love local candidate for GitHub publication while excluding unsafe/non-runtime artifacts from the commit scope. Excluded `.env.local`, deployment tarballs, logs, screenshots/QA images, `.next`, `coverage`, `node_modules`, `tsconfig.tsbuildinfo`, and external `.claude/skills` reference bundles from the staged commit.
+- Commands run: `git status --short --branch`; `git diff --cached --stat`; `git diff --cached --check`; staged secret-shape scan with `git diff --cached -G`; `npm run release:check`.
+- Results: `git diff --cached --check` passed after excluding external reference docs with trailing whitespace. The staged artifact/path check found no env-local, deploy archives, logs, build cache, coverage, node_modules, or tsbuildinfo files. The staged secret-shape scan only matched `.env.example` placeholders. `npm run release:check` passed: typecheck, lint, 46 test files / 473 tests, build, route audit, copy audit, share audit, and upgrade audit.
+- Risks: Current branch is not `main`; repository production deploy automation is tied to `main` or a manual server workflow. Direct server deploy remains blocked by server permissions unless a deploy-capable path is restored. Untracked screenshots, logs, tarballs, ops docs, and external `.claude/skills` files remain in the local worktree but are intentionally not staged.
+- Next step: Commit and push `redesign-home-landing-20260420`; then use PR/merge or an approved deploy path to update production.
+
 ### 2026-05-15 - TianJi Love deploy permission blocker
 
 - Task ID: 20260515-tianji-love-deploy-permission-blocker

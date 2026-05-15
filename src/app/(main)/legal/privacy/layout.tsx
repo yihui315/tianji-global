@@ -1,18 +1,18 @@
 import type { Metadata } from 'next';
 
-const TITLE = 'Privacy Policy | 隐私政策 — How TianJi Handles Your Data';
+const TITLE = 'Privacy Policy | How Tianji Love Handles Your Data';
 const DESCRIPTION =
-  'How TianJi collects, uses, stores, and deletes your data. Your GDPR / CCPA rights, our 14-day deletion guarantee, and how to contact privacy@tianji.global.';
+  'How Tianji Love collects, uses, stores, and deletes your data, including privacy-safe public sharing and data request contacts.';
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: 'https://tianji.global/legal/privacy' },
+  alternates: { canonical: 'https://tianji.love/legal/privacy' },
   robots: { index: true, follow: true },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    url: 'https://tianji.global/legal/privacy',
+    url: 'https://tianji.love/legal/privacy',
     type: 'article',
   },
   twitter: {

@@ -1,284 +1,157 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
-import { GlassCard, LanguageSwitch } from '@/components/ui';
+import { Database, Lock, Mail, ShieldCheck } from 'lucide-react';
+
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
-import { LegalCosmicLayers } from '../_layers';
+import {
+  getTianjiLoveFooterNav,
+  getTianjiLovePrimaryCta,
+  getTianjiLovePrimaryNav,
+  TianjiLoveButton,
+  TianjiLoveFooter,
+  TianjiLoveHeader,
+  TianjiLovePanel,
+  TianjiLoveSectionTitle,
+  TianjiLoveShell,
+  TianjiLoveTrustCard,
+} from '@/components/tianji-love';
 
-const CONTENT = {
-  zh: {
-    eyebrow: '隐私政策',
-    title: '你的数据，我们怎么处理。',
-    lastUpdated: '最后更新：2024 年 12 月',
-    intro:
-      '天机全球（"我们"、"我们的"或"天机"）致力于保护您的隐私。本隐私政策解释了我们如何收集、使用、披露和保护您的个人信息。',
-    backHome: '返回首页',
-    deletionCta: '请求删除我的数据',
-    sections: [
-      {
-        title: '信息收集',
-        content: `我们收集以下类型的信息：
-
-• 您主动提供的信息：您在注册账户、订阅服务或填写表单时提供的姓名、电子邮件地址、出生日期、性别等。
-• 来自 Chinese metaphysics 服务的数据：当您使用我们的八字、命理、紫微斗数、易经等服务时，您提供的信息以及由我们的 AI 系统分析得出的洞察。
-• 支付信息：我们通过第三方支付处理器处理付款，我们不会存储您的完整信用卡信息。
-• 技术数据：IP 地址、浏览器类型、设备标识符、cookies 以及您如何使用我们的服务的技术日志。`,
-      },
-      {
-        title: '数据使用',
-        content: `我们使用收集的数据用于：
-
-• 提供和改善我们的服务：包括 AI 驱动的命理分析、个性化内容推荐。
-• 账户管理：处理注册、登录、密码重置等服务。
-• 通信：发送与服务相关的通知、更新、营销通讯（您可以随时选择退出）。
-• 安全和防欺诈：检测和预防欺诈、滥用或未经授权的访问。
-• 法律合规：遵守适用的法律和监管要求。`,
-      },
-      {
-        title: '数据存储与安全',
-        content: `数据存储：
-• 您的数据存储在安全的云服务器上。
-• 我们使用行业标准的加密技术保护数据传输和存储。
-
-数据保留：
-• 账户数据保留至您删除账户为止。
-• 分析数据在匿名化后可能保留更长时间。
-
-安全性：
-• 我们实施多层次安全措施，包括防火墙、入侵检测和定期安全审计。
-• 所有数据传输使用 SSL/TLS 加密。`,
-      },
-      {
-        title: 'Cookies',
-        content: `我们使用 cookies 和类似技术：
-
-• 必要的 Cookies：确保网站正常运作所必需的 cookies。
-• 分析 Cookies：帮助我们了解用户如何使用我们的网站。
-• 功能 Cookies：记住您的偏好设置。
-
-您可以通过浏览器设置管理或禁用 cookies，但这可能影响网站功能。`,
-      },
-      {
-        title: '您的权利（GDPR / CCPA）',
-        content: `根据您所在的司法管辖区，您可能有权：
-
-• 访问您的个人数据
-• 更正不准确的数据
-• 删除您的数据（"被遗忘权"）
-• 限制或反对数据处理
-• 数据可携带权
-• 撤回同意权
-• 向监管机构投诉的权利
-
-如需行使这些权利，请联系：privacy@tianji.global`,
-      },
-      {
-        title: '联系我们',
-        content: `如果您对本隐私政策有任何疑问或疑虑，请联系我们：
-
-• 电子邮件：hello@tianji.global
-• 隐私事务：privacy@tianji.global
-• 网站：https://tianji.global
-
-我们将尽快回复您的请求，并在 30 天内予以处理。`,
-      },
-    ],
-  },
+const copy = {
   en: {
+    nav: {
+      compatibility: 'Compatibility',
+      loveReading: 'Love Reading',
+      timing: 'Timing',
+      pricing: 'Pricing',
+      terms: 'Terms',
+    },
     eyebrow: 'Privacy Policy',
-    title: 'Your data — how we handle it.',
-    lastUpdated: 'Last updated: December 2024',
+    title: 'Your relationship data stays handled with care.',
+    updated: 'Last updated: May 2026',
     intro:
-      'TianJi Global ("we", "our", or "TianJi") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information.',
-    backHome: 'Back to home',
-    deletionCta: 'Request data deletion',
+      'This page explains how Tianji Love collects, uses, stores, and protects personal data, reading data, and account information.',
+    deletion: 'Request data deletion',
     sections: [
-      {
-        title: 'Information We Collect',
-        content: `We collect the following types of information:
-
-• Information you provide: Name, email address, date of birth, gender, and other details you provide when registering for an account, subscribing to services, or filling out forms.
-• Reading data: Birth time, location, questions you submit, and the AI-generated interpretations across our BaZi, Zi Wei Dou Shu, I Ching, Tarot, and other readings.
-• Payment information: We process payments through third-party payment processors. We do not store your complete credit card information.
-• Technical data: IP address, browser type, device identifiers, cookies, and technical logs of how you use our services.`,
-      },
-      {
-        title: 'How We Use Your Data',
-        content: `We use the collected data for:
-
-• Providing and improving our services: Including AI-driven fortune analysis and personalized content recommendations.
-• Account management: Processing registration, login, password reset, and other services.
-• Communication: Sending service-related notifications, updates, and marketing communications (you can opt out at any time).
-• Security and fraud prevention: Detecting and preventing fraud, abuse, or unauthorized access.
-• Legal compliance: Complying with applicable laws and regulatory requirements.`,
-      },
-      {
-        title: 'Data Storage & Security',
-        content: `Data Storage:
-• Your data is stored on secure cloud servers.
-• We use industry-standard encryption technologies to protect data in transit and at rest.
-
-Data Retention:
-• Account data is retained until you delete your account.
-• Anonymized analytics may be retained beyond account deletion for product improvement.
-
-Security:
-• We implement multi-layered security measures including firewalls, intrusion detection, and regular security audits.
-• All data transmissions are encrypted using SSL/TLS.`,
-      },
-      {
-        title: 'Cookies',
-        content: `We use cookies and similar technologies:
-
-• Essential Cookies: Necessary for the website to function properly.
-• Analytics Cookies: Help us understand how users use our website.
-• Functional Cookies: Remember your preferences.
-
-You can manage or disable cookies through your browser settings, but this may affect website functionality.`,
-      },
-      {
-        title: 'Your Rights (GDPR / CCPA)',
-        content: `Depending on your jurisdiction, you may have the right to:
-
-• Access your personal data
-• Correct inaccurate data
-• Delete your data ("Right to be Forgotten")
-• Restrict or object to data processing
-• Data portability
-• Withdraw consent
-• Lodge a complaint with a data protection authority
-
-To exercise these rights, please contact: privacy@tianji.global`,
-      },
-      {
-        title: 'Contact Us',
-        content: `If you have any questions or concerns about this Privacy Policy, please contact us:
-
-• Email: hello@tianji.global
-• Privacy: privacy@tianji.global
-• Website: https://tianji.global
-
-We respond to data requests within 30 days, and usually much sooner.`,
-      },
+      ['Information we collect', 'We may collect account details, language preference, birth details you enter, relationship questions, reading outputs, checkout status, and technical logs needed to keep the service secure.'],
+      ['How we use data', 'We use data to provide readings, save history, manage accounts, process checkout through Stripe, protect the service from abuse, and respond to support or privacy requests.'],
+      ['Payments', 'Payments are handled by Stripe. Tianji Love does not store complete card numbers. Billing events are used to unlock the paid surfaces already implemented in the product.'],
+      ['Public sharing', 'Public relationship share pages hide birth date, birth time, birth location, and timezone by default. This is a product rule as well as a privacy rule.'],
+      ['Retention and deletion', 'Account and reading data are kept while needed for the service unless deletion is requested or the law requires a different retention period. Contact privacy@tianji.love for deletion requests.'],
+      ['Your rights', 'Depending on where you live, you may request access, correction, deletion, export, restriction, objection, or withdrawal of consent. We respond through the privacy contact below.'],
+      ['Cookies and security', 'We use essential cookies and technical logs for authentication, preferences, security, and reliability. We use reasonable safeguards for data in transit and at rest.'],
+      ['Contact', 'For privacy questions, email privacy@tianji.love. For billing questions, email billing@tianji.love.'],
     ],
+    trust: [
+      { icon: Lock, title: 'Public birth data hidden', body: 'Share pages hide birth date, birth time, location, and timezone by default.' },
+      { icon: Database, title: 'Purpose-limited use', body: 'Data is used to provide readings, history, account, payment, support, and security functions.' },
+      { icon: Mail, title: 'Deletion channel', body: 'Privacy requests can start at privacy@tianji.love.' },
+    ],
+    footer:
+      'Privacy is part of the Tianji Love product contract, not an afterthought.',
+  },
+  zh: {
+    nav: {
+      compatibility: '关系合盘',
+      loveReading: '爱情解读',
+      timing: '时机',
+      pricing: '会员权益',
+      terms: '条款',
+    },
+    eyebrow: '隐私政策',
+    title: '你的关系数据，需要被认真处理。',
+    updated: '最后更新：2026 年 5 月',
+    intro: '本页说明 Tianji Love 如何收集、使用、存储和保护个人资料、解读数据与账号信息。',
+    deletion: '请求删除数据',
+    sections: [
+      ['我们收集的信息', '我们可能收集账号资料、语言偏好、你输入的出生资料、关系问题、解读输出、结账状态，以及维护服务安全所需的技术日志。'],
+      ['数据如何使用', '数据用于提供解读、保存历史、管理账号、通过 Stripe 处理结账、防止滥用，以及回应支持或隐私请求。'],
+      ['支付信息', '支付由 Stripe 处理。Tianji Love 不保存完整银行卡号。账单事件用于解锁产品中已经实现的付费页面和权益。'],
+      ['公开分享', '公开关系分享页默认隐藏出生日期、出生时间、出生地点和时区。这既是产品规则，也是隐私规则。'],
+      ['保留与删除', '账号和解读数据会在服务需要时保留，除非你请求删除，或法律要求不同的保留期限。删除请求请联系 privacy@tianji.love。'],
+      ['你的权利', '根据你的所在地，你可以请求访问、更正、删除、导出、限制处理、反对处理或撤回同意。我们会通过隐私邮箱回应。'],
+      ['Cookies 与安全', '我们使用必要 cookies 和技术日志来支持登录、偏好、安全与稳定性，并对传输和存储中的数据采取合理保护。'],
+      ['联系我们', '隐私问题请发邮件至 privacy@tianji.love。账单问题请发邮件至 billing@tianji.love。'],
+    ],
+    trust: [
+      { icon: Lock, title: '公开出生资料默认隐藏', body: '分享页默认隐藏出生日期、时间、地点和时区。' },
+      { icon: Database, title: '限定用途', body: '数据用于解读、历史、账号、支付、支持与安全功能。' },
+      { icon: Mail, title: '删除请求入口', body: '隐私请求可以从 privacy@tianji.love 开始。' },
+    ],
+    footer: '隐私是 Tianji Love 产品契约的一部分，而不是事后的补丁。',
   },
 } as const;
 
 export default function PrivacyPage() {
-  const [language] = useSyncedLanguage();
-  const [activeSection, setActiveSection] = useState<number | null>(0);
-  const t = CONTENT[language];
+  const [language, setLanguage] = useSyncedLanguage('en');
+  const [activeSection, setActiveSection] = useState(0);
+  const t = copy[language];
+  const href = (path: string) => withLanguageParam(path, language);
+  const toggleLanguage = () => setLanguage(language === 'zh' ? 'en' : 'zh');
 
-  const deletionMailto = `mailto:privacy@tianji.global?subject=${encodeURIComponent(
-    language === 'zh' ? '请求删除我的天机账号与数据' : 'Please delete my TianJi account and data',
+  const deletionHref = `mailto:privacy@tianji.love?subject=${encodeURIComponent(
+    language === 'zh' ? '请求删除我的 Tianji Love 账号与数据' : 'Please delete my Tianji Love account and data',
   )}`;
 
   return (
-    <main id="main-content" className="relative min-h-screen overflow-hidden bg-[#050508] text-white">
-      <LegalCosmicLayers />
+    <TianjiLoveShell className="tianji-love-privacy-page" ariaLabel="Tianji Love privacy policy">
+      <TianjiLoveHeader
+        homeHref={href('/')}
+        navItems={getTianjiLovePrimaryNav(language, href)}
+        cta={getTianjiLovePrimaryCta(language, href)}
+        languageLabel={language === 'zh' ? 'EN' : '中文'}
+        onLanguageToggle={toggleLanguage}
+      />
 
-      <LanguageSwitch className="fixed right-6 top-6 z-30" />
-
-      <header className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-6 pt-10">
-        <Link
-          href={withLanguageParam('/', language)}
-          className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.32em] text-white/45 transition hover:text-white/85"
-        >
-          <span aria-hidden>←</span> {t.backHome}
-        </Link>
-      </header>
-
-      <section className="relative z-10 mx-auto max-w-3xl px-6 pt-20 pb-12 text-center">
-        <p className="mb-5 text-[0.7rem] uppercase tracking-[0.36em] text-[rgba(212,175,119,0.78)]">
-          {t.eyebrow}
-        </p>
-        <h1 className="font-serif text-3xl leading-[1.18] text-white/95 sm:text-4xl md:text-5xl">
+      <section className="relative z-10 mx-auto w-full max-w-5xl px-5 py-16 text-center sm:px-8">
+        <p className="mb-5 text-xs uppercase tracking-[0.32em] text-[#d8b77b]/70">{t.eyebrow}</p>
+        <h1 className="mx-auto max-w-4xl font-serif text-[2.5rem] font-semibold leading-[1.1] text-[#ffe3b4] sm:text-[4rem]">
           {t.title}
         </h1>
-        <p className="mt-5 text-xs uppercase tracking-[0.24em] text-white/40">{t.lastUpdated}</p>
-        <p className="mx-auto mt-7 max-w-2xl text-base leading-8 text-white/65">{t.intro}</p>
+        <p className="mt-4 text-xs uppercase tracking-[0.22em] text-[#f4d7a3]/46">{t.updated}</p>
+        <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#f5d8aa]/78">{t.intro}</p>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-3xl px-6 pb-16">
+      <section className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-12 sm:px-8">
+        <div className="grid gap-4 md:grid-cols-3">
+          {t.trust.map((item) => (
+            <TianjiLoveTrustCard key={item.title} icon={item.icon} title={item.title} body={item.body} />
+          ))}
+        </div>
+      </section>
+
+      <section className="relative z-10 mx-auto w-full max-w-4xl px-5 pb-14 sm:px-8">
+        <TianjiLoveSectionTitle title={language === 'zh' ? '政策详情' : 'Policy Details'} className="mb-8" />
         <div className="space-y-3">
-          {t.sections.map((section, index) => {
+          {t.sections.map(([title, body], index) => {
             const isOpen = activeSection === index;
-            const tag = String(index + 1).padStart(2, '0');
             return (
-              <GlassCard
-                key={index}
-                level="card"
-                className="overflow-hidden rounded-[1.5rem] border border-white/[0.06] bg-white/[0.02] transition-colors hover:border-white/[0.12]"
-              >
+              <TianjiLovePanel key={title} as="article" className="p-0">
                 <button
                   type="button"
-                  id={`privacy-trigger-${index}`}
-                  onClick={() => setActiveSection(isOpen ? null : index)}
-                  className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+                  onClick={() => setActiveSection(isOpen ? -1 : index)}
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                   aria-expanded={isOpen}
-                  aria-controls={`privacy-panel-${index}`}
                 >
-                  <div className="flex items-center gap-4">
-                    <span className="inline-flex h-8 w-8 flex-none items-center justify-center rounded-full border border-[rgba(212,175,119,0.32)] text-[0.72rem] font-semibold tracking-[0.18em] text-[rgba(212,175,119,0.85)]">
-                      {tag}
-                    </span>
-                    <h3 className="font-serif text-lg text-white/92">{section.title}</h3>
-                  </div>
-                  <span
-                    aria-hidden
-                    className={`text-base text-white/40 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180 text-[rgba(212,175,119,0.85)]' : ''
-                    }`}
-                  >
-                    ▾
-                  </span>
+                  <span className="font-serif text-xl text-[#ffe3b4]">{title}</span>
+                  <span className="text-[#d8b77b]" aria-hidden>{isOpen ? '-' : '+'}</span>
                 </button>
-                {isOpen && (
-                  <div
-                    id={`privacy-panel-${index}`}
-                    role="region"
-                    aria-labelledby={`privacy-trigger-${index}`}
-                    className="border-t border-white/[0.06] bg-black/15 px-6 py-5 pl-[4.25rem]"
-                  >
-                    <pre className="whitespace-pre-line font-sans text-sm leading-7 text-white/65">
-                      {section.content}
-                    </pre>
-                  </div>
-                )}
-              </GlassCard>
+                {isOpen ? <p className="border-t border-[#b57248]/22 px-5 py-4 text-sm leading-7 text-[#f4d7a3]/70">{body}</p> : null}
+              </TianjiLovePanel>
             );
           })}
         </div>
-
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs uppercase tracking-[0.22em]">
-          <a
-            href={deletionMailto}
-            className="inline-flex items-center gap-2 rounded-full border border-[rgba(212,175,119,0.42)] bg-gradient-to-br from-[#f8e7c2] to-white px-6 py-3 font-semibold tracking-[0.2em] text-black transition hover:from-[#fff5dd]"
-          >
-            <span aria-hidden>✦</span>
-            {t.deletionCta}
-          </a>
-          <Link
-            href={withLanguageParam('/about', language)}
-            className="rounded-full border border-white/12 bg-white/[0.03] px-6 py-3 text-white/70 transition hover:border-white/30 hover:text-white"
-          >
-            {language === 'zh' ? '关于天机' : 'About TianJi'}
-          </Link>
+        <div className="mt-9 flex justify-center">
+          <TianjiLoveButton href={deletionHref}>{t.deletion}</TianjiLoveButton>
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-white/10 px-6 py-10 text-center text-xs uppercase tracking-[0.24em] text-white/30">
-        <Link href={withLanguageParam('/', language)} className="hover:text-white/65">
-          TianJi Global
-        </Link>
-        <p className="mt-3 normal-case tracking-normal text-white/40">
-          {language === 'zh'
-            ? '© 2026 TianJi Global · 你的数据，权利始终在你手里'
-            : '© 2026 TianJi Global · Your data, your rights, always'}
-        </p>
-      </footer>
-    </main>
+      <TianjiLoveFooter
+        homeHref={href('/')}
+        disclaimer={t.footer}
+        links={getTianjiLoveFooterNav(language, href)}
+      />
+    </TianjiLoveShell>
   );
 }

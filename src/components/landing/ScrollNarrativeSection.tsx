@@ -1,19 +1,12 @@
 'use client';
 
-import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-
-/* ═══════════════════════════════════════════════════════════════
-   ScrollNarrativeSection — Reveals destiny/unfolding story on scroll
-   Taste Rule: cinematic luxury, large negative space, parallax
-
-   modules: ziwei / bazi / yijing / tarot / western / fortune
-   ═══════════════════════════════════════════════════════════════ */
+import { useRef } from 'react';
 
 interface NarrativeBlock {
-  label: string;      // e.g. "01", "命宫"
-  heading: string;   // Chinese heading
-  body: string;       // Short paragraph
+  label: string;
+  heading: string;
+  body: string;
   align?: 'left' | 'center' | 'right';
 }
 
@@ -36,34 +29,39 @@ const blockVariants = {
   }),
 };
 
+function tianjiLoveAccent(color: string, fallback: string) {
+  return color.toLowerCase() === '#7c3aed' || color.toLowerCase() === '#a78bfa' ? fallback : color;
+}
+
 export default function ScrollNarrativeSection({
-  accentColor = '#7c3aed',
-  goldColor = '#D4AF37',
+  accentColor = '#ff7c82',
+  goldColor = '#d8b77b',
   blocks,
 }: ScrollNarrativeSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const loveAccent = tianjiLoveAccent(accentColor, '#ff7c82');
+  const loveGold = tianjiLoveAccent(goldColor, '#d8b77b');
 
   return (
     <section
       ref={ref}
       className="relative py-24 sm:py-36"
-      style={{ background: '#0a0a0a' }}
+      style={{ background: 'linear-gradient(180deg, #03040a 0%, #050812 55%, #03040a 100%)' }}
     >
-      {/* Background nebula */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(ellipse 70% 50% at 50% 50%, ${accentColor}0A 0%, transparent 70%)`,
+          background: `radial-gradient(ellipse 70% 50% at 50% 50%, ${loveAccent}16 0%, transparent 70%)`,
         }}
       />
 
-      <div className="max-w-4xl mx-auto px-6 sm:px-8 relative">
+      <div className="relative mx-auto max-w-4xl px-6 sm:px-8">
         {blocks.map((block, i) => {
           const align = block.align ?? 'center';
           return (
             <motion.div
-              key={i}
+              key={`${block.label}-${i}`}
               custom={i}
               variants={blockVariants}
               initial="hidden"
@@ -72,47 +70,37 @@ export default function ScrollNarrativeSection({
                 align === 'left' ? 'ml-0' : align === 'right' ? 'ml-auto max-w-lg' : 'mx-auto max-w-xl'
               }`}
             >
-              {/* Label badge */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={isInView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.5, delay: i * 0.15 + 0.1 }}
-                className="flex items-center gap-3 mb-5"
+                className="mb-5 flex items-center gap-3"
               >
-                <div
-                  className="w-8 h-px"
-                  style={{ background: `linear-gradient(to right, transparent, ${goldColor})` }}
-                />
-                <span
-                  className="text-[10px] tracking-[0.25em] uppercase font-medium"
-                  style={{ color: `${accentColor}CC` }}
-                >
+                <div className="h-px w-8" style={{ background: `linear-gradient(to right, transparent, ${loveGold})` }} />
+                <span className="text-[10px] font-medium uppercase tracking-[0.25em]" style={{ color: `${loveGold}CC` }}>
                   {block.label}
                 </span>
-                <div
-                  className="w-8 h-px"
-                  style={{ background: `linear-gradient(to left, transparent, ${goldColor})` }}
-                />
+                <div className="h-px w-8" style={{ background: `linear-gradient(to left, transparent, ${loveGold})` }} />
               </motion.div>
 
-              {/* Heading */}
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: i * 0.15 + 0.2 }}
-                className={`font-serif font-bold mb-4 ${align === 'center' ? 'text-center' : align === 'right' ? 'text-right' : 'text-left'}`}
+                className={`mb-4 font-serif font-bold ${
+                  align === 'center' ? 'text-center' : align === 'right' ? 'text-right' : 'text-left'
+                }`}
                 style={{
                   fontSize: 'clamp(1.6rem, 4vw, 2.5rem)',
-                  background: `linear-gradient(135deg, ${goldColor}CC 0%, #F0D87566 50%, ${goldColor}99 100%)`,
+                  background: `linear-gradient(135deg, ${loveGold} 0%, #ffe3b4 50%, ${loveGold}99 100%)`,
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  letterSpacing: '0.05em',
+                  letterSpacing: '0',
                 }}
               >
                 {block.heading}
               </motion.h2>
 
-              {/* Body */}
               <motion.p
                 initial={{ opacity: 0, y: 16 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -120,23 +108,22 @@ export default function ScrollNarrativeSection({
                 className={`text-sm leading-relaxed ${
                   align === 'center' ? 'text-center' : align === 'right' ? 'text-right' : 'text-left'
                 }`}
-                style={{ color: 'rgba(255,255,255,0.45)', letterSpacing: '0.02em' }}
+                style={{ color: 'rgba(244,215,163,0.66)', letterSpacing: '0' }}
               >
                 {block.body}
               </motion.p>
 
-              {/* Bottom divider */}
-              {i < blocks.length - 1 && (
+              {i < blocks.length - 1 ? (
                 <motion.div
                   initial={{ scaleX: 0 }}
                   animate={isInView ? { scaleX: 1 } : {}}
                   transition={{ duration: 1.2, delay: i * 0.15 + 0.5 }}
                   className="mt-12 h-px origin-center"
                   style={{
-                    background: `linear-gradient(to right, transparent, ${accentColor}33, transparent)`,
+                    background: `linear-gradient(to right, transparent, ${loveAccent}33, transparent)`,
                   }}
                 />
-              )}
+              ) : null}
             </motion.div>
           );
         })}
