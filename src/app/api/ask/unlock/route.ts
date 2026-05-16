@@ -10,12 +10,50 @@ import {
   decodeAskQuestionId,
   askQuestionLanguageSchema,
   ASK_QUESTION_UNLOCK_PRICE_USD_CENTS,
+  type AskAiMeta,
+  type AskQuestionLanguage,
 } from '@/lib/ask-question';
+import { generateTianjiModelResponse } from '@/lib/tianji-model-gateway';
 
 export const dynamic = 'force-dynamic';
 
 function tokenRef(id: string): string {
   return createHash('sha256').update(id).digest('hex');
+}
+
+function buildPaidAskSystemPrompt(language: AskQuestionLanguage): string {
+  const answerLanguage =
+    language === 'zh'
+      ? 'Answer in Simplified Chinese.'
+      : 'Answer in English.';
+
+  return [
+    'You are TianJi Love, a careful relationship reflection guide.',
+    answerLanguage,
+    'Generate the complete paid Ask reading with practical sections for situation, hidden tension, timing, next move, and reflection.',
+    'Use grounded relationship guidance, not deterministic fortune-telling.',
+    'Do not claim certainty, guarantee outcomes, or use fear-based payment urgency.',
+    'Do not provide medical, legal, financial, or crisis advice.',
+  ].join(' ');
+}
+
+function buildPaidAskPrompt(question: string): string {
+  return [
+    'Generate the paid TianJi Love Ask reading for this user question.',
+    '',
+    question,
+  ].join('\n');
+}
+
+function toAskAiMeta(response: Awaited<ReturnType<typeof generateTianjiModelResponse>>): AskAiMeta {
+  return {
+    provider: response.audit.provider,
+    model: response.audit.model,
+    fallbackUsed: response.audit.fallback,
+    safetyRewritten: response.audit.safetyRewriteApplied,
+    latencyMs: response.audit.latencyMs,
+    route: 'paid_ask',
+  };
 }
 
 const postBodySchema = z.object({
@@ -113,19 +151,31 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid or expired question id' }, { status: 400 });
     }
 
+    const gatewayResponse = await generateTianjiModelResponse({
+      intent: 'paid_ask',
+      prompt: buildPaidAskPrompt(decoded.question),
+      systemPrompt: buildPaidAskSystemPrompt(decoded.language),
+      maxTokens: 900,
+      temperature: 0.65,
+      responseFormat: 'text',
+    });
+    const answer = gatewayResponse.content.trim();
+
     return NextResponse.json({
       success: true,
       unlocked: true,
       data: {
         question: decoded.question,
         language: decoded.language,
-        fullAnswer: decoded.fullAnswer,
-        model: decoded.model,
-        provider: decoded.provider,
+        answer,
+        preview: null,
+        locked: false,
+        fullAnswer: answer,
+        aiMeta: toAskAiMeta(gatewayResponse),
       },
     });
   } catch (error) {
-    console.error('[api/ask/unlock] verify error:', error);
+    console.error('[api/ask/unlock] verify error:', error instanceof Error ? error.message : 'unknown');
     return NextResponse.json({ error: 'Unable to verify payment' }, { status: 500 });
   }
 }

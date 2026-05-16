@@ -1,11 +1,9 @@
 /**
  * Pay-per-Question · AskQuestion encrypted payload helpers
  *
- * Encodes a fully-generated AI answer + the original question into an
- * AES-256-GCM encrypted, base64url-safe token. The token is what gets
- * passed through Stripe checkout metadata and the success-redirect URL,
- * so a stateless serverless deploy can return the SAME answer the user
- * saw in the preview, without requiring a database row.
+ * Encodes the original question into an AES-256-GCM encrypted,
+ * base64url-safe token. Paid answers are generated after Stripe
+ * verification so unpaid users never receive the full reading.
  *
  * Companion to `src/lib/destiny-scan.ts`. Same encryption pattern
  * (AES-256-GCM with SHA-256-derived key + 12-byte IV + 16-byte auth tag),
@@ -28,6 +26,24 @@ export const askQuestionInputSchema = z.object({
 });
 
 export type AskQuestionInput = z.infer<typeof askQuestionInputSchema>;
+
+export type AskGatewayRoute = 'ask_preview' | 'paid_ask';
+
+export interface AskAiMeta {
+  provider: string;
+  model: string;
+  fallbackUsed: boolean;
+  safetyRewritten: boolean;
+  latencyMs?: number;
+  route: AskGatewayRoute;
+}
+
+export interface AskGatewayResponsePayload {
+  answer: string | null;
+  preview: string | null;
+  locked: boolean;
+  aiMeta?: AskAiMeta;
+}
 
 interface EncryptedAskPayload {
   question: string;

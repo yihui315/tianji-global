@@ -1,102 +1,94 @@
 # Brain Review Packet
 
-## Background
-
-The user asked to continue deployment and upgrade the live TianJi Love site to the latest version. The production target remains the self-hosted server at `186.244.244.81` with app path `/opt/tianji-global`, PM2 app `tianji-global`, and public domain `https://tianji.love`.
-
-Raw secret values were not read from server env files and are not recorded here.
-
 ## Task Goal
 
-Compare the server runtime with the latest GitHub candidate, upgrade if needed, and verify the public site after the check.
+Complete Revenue Gate Phase 2: connect the Ask pay-per-question paid path to the TianJi model gateway without breaking unpaid gating, and prepare local staged-smoke readiness evidence.
+
+## Decision Summary
+
+```text
+Ask gateway integration: Go
+Ask paid smoke: No-Go
+Ask revenue contract: Conditional Go
+Production deploy: No-Go
+```
+
+## What Changed
+
+- Created the Phase 2 task record and Ask revenue flow review before code edits.
+- Ask preview now returns a locked local teaser and encrypted question token only.
+- Ask preview no longer generates or stores the full paid answer before payment.
+- Unpaid Ask responses return `locked=true`, `answer=null`, and no provider/model metadata.
+- Paid Ask unlock verifies Stripe session status and `ask-question` metadata before generation.
+- Paid Ask generation now calls `generateTianjiModelResponse` with intent `paid_ask`.
+- Gateway route table now includes `paid_ask`, `ask_preview`, and `safety_rewrite`.
+- Paid Ask public output receives deterministic certainty-risk/fear-urgency safety rewrite.
+- Paid Ask response returns non-sensitive `aiMeta` with provider, model, fallback, safety, latency, and route only.
+- Added a static `audit:ask-revenue-contract` script and package script.
+- Updated gateway runbook, rollback docs, changelog, and evidence packet.
 
 ## Files Changed
 
-Local record-only changes:
-
+- `.ai/TASK_TIANJI_LOVE_REVENUE_GATE_PHASE2_20260516.md`
+- `.ai/TIANJI_LOVE_ASK_REVENUE_FLOW_REVIEW_20260516.md`
+- `.ai/TIANJI_LOVE_ASK_GATEWAY_EVIDENCE_20260516.md`
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md`
-
-No application runtime source was changed during this follow-up because the server was already on the latest candidate.
-
-## Source Selection
-
-Latest candidate selected:
-
-```text
-origin/redesign-home-landing-20260420
-4113adcaf49851a0a3bbc256b308e0076cfceb57
-```
-
-Reason:
-
-- It is the newest remote branch by commit date for the TianJi Love deployment candidate.
-- PR #48 is mergeable.
-- GitHub Actions `Build & Test` for PR #48 passed.
-- `origin/main` is older at `f2f4068bf89524e30b29dd56f16740bb1d7ce13c`.
-
-## Server State
-
-Server source after explicit fetch:
-
-```text
-4113adcaf49851a0a3bbc256b308e0076cfceb57
-branch: deploy/tianji-love-20260515
-```
-
-The server was already at the latest selected candidate, so no rebuild, reinstall, or PM2 restart was performed.
-
-## Validation
-
-| Check | Result |
-| --- | --- |
-| Local `git fetch --all --prune` | Pass |
-| PR #48 mergeability | `MERGEABLE` |
-| PR #48 GitHub `Build & Test` | Pass |
-| Server explicit refspec fetch | Pass |
-| Server HEAD equals latest candidate | Pass |
-| Root `nginx -t` | Pass |
-| PM2 `tianji-global` | Online under `deploy` |
-| Production smoke `/en` | 200 |
-| Production smoke `/zh-CN/pricing` | 200 |
-| Production smoke `/en/love-reading/result/demo` | 200 |
-| Production smoke `/api/checkout` invalid payload | 403 safe paid-unlock-disabled response |
-| Public `https://tianji.love/` | 200 |
-| Public homepage signals | `Tianji Love`, `Love is the one force that`, `Start Relationship Reading`, `Ask One Question`, `Draw Three Cards` |
+- `.env.example`
+- `package.json`
+- `docs/tianji-love-model-gateway-runbook.md`
+- `docs/tianji-love-model-gateway-rollback.md`
+- `scripts/audit-ask-revenue-contract.ts`
+- `src/app/api/ask/preview/route.ts`
+- `src/app/api/ask/unlock/route.ts`
+- `src/lib/ask-question.ts`
+- `src/lib/tianji-model-gateway.ts`
+- `src/__tests__/api/ask-paid-gateway.test.ts`
+- `src/__tests__/api/paywall-preview-timeout.test.ts`
 
 ## Commands Run
 
-- `git fetch --all --prune`
-- `git for-each-ref ... refs/remotes/origin`
-- `gh pr view 48 --json ...`
-- Remote `git fetch origin redesign-home-landing-20260420:refs/remotes/origin/redesign-home-landing-20260420 main:refs/remotes/origin/main`
-- Remote `git rev-parse HEAD`
-- Remote `git rev-parse refs/remotes/origin/redesign-home-landing-20260420`
-- Root `nginx -t`
-- Remote `SMOKE_BASE_URL=https://tianji.love npm run smoke:production`
-- Remote `pm2 list`
-- Public `curl` homepage checks
+| Command | Result |
+| --- | --- |
+| `npm run test -- src/__tests__/api/ask-paid-gateway.test.ts` before implementation | Failed as expected on missing Ask paid/unpaid gateway fields |
+| `npm run test -- src/__tests__/api/ask-paid-gateway.test.ts src/__tests__/api/paywall-preview-timeout.test.ts src/__tests__/api/paywall-preview-copy.test.ts src/__tests__/lib/paywall-chinese-copy.test.ts` | Pass, 4 files / 10 tests |
+| `npm run audit:ask-revenue-contract` | Pass, all fields `go`, overall `conditional-go` |
+| `npm run typecheck` | Pass |
+| `npm run lint` | Pass, no ESLint warnings or errors |
+| `npm run test -- src/__tests__/api/ask-paid-gateway.test.ts src/__tests__/lib/tianji-model-gateway.test.ts` | Pass, 2 files / 9 tests |
+| `npm run test` | Pass, 54 files / 505 tests |
+| `npm run build` | Pass, 106 static pages generated |
+| `npm run audit:routes` | Pass |
+| `npm run audit:copy` | Pass |
+| `npm run audit:share` | Pass |
+| `npm run audit:upgrade` | Pass |
+| `npm run audit:ask-revenue-contract` final run | Pass, all fields `go`, overall `conditional-go` |
+| `git diff --check` | Pass; LF/CRLF working-copy warnings only |
 
-## Result
+## Safety Notes
 
-The live site is already upgraded to the latest selected candidate. No runtime deploy action was necessary in this follow-up.
+- No real `.env` values were read or printed.
+- No real Stripe payment API call was made.
+- No live DeepSeek, MiniMax, Ollama, or email smoke was run.
+- No production database, production config, deployment setting, or secret was changed.
+- MiniMax remains internal/non-public and is not a public production default.
+- `aiMeta` excludes API keys, raw prompts, raw question text, provider request bodies, birth date/time/location, timezone, and full sensitive profiles.
+- Existing unrelated dirty/untracked worktree files were preserved.
 
-Production remains available at:
+## Remaining Risks
 
-```text
-https://tianji.love/
-```
+1. Stripe Ask paid smoke is still No-Go because no test-mode checkout/webhook smoke was run.
+2. DeepSeek live smoke is still No-Go because provider keys/readiness were not supplied or approved.
+3. Draw paid route remains Unknown and should be mapped separately.
+4. Ask webhook handling is contract-present through the existing Stripe webhook route, but Ask paid unlock currently relies on redirect/session verification rather than webhook-created entitlement storage.
+5. Production deploy remains No-Go until masked staging evidence and staged paid smoke are explicitly approved.
 
-## Risks
+## Suggested Next Gate
 
-- Supabase migrations were not applied.
-- Paid smoke was not run.
-- Paid checkout remains disabled by the production safety gate.
-- Server keeps untracked `.env.production` and backup env files, which is expected for production but should stay outside Git.
-- PR #48 still has a canceled/failing Vercel preview status even though the self-hosted production path and GitHub `Build & Test` are good.
+Collect masked staging/test evidence for Stripe key mode, webhook endpoint, app origin, DeepSeek provider readiness, and local/Ollama fallback readiness. Then run a staged Ask paid smoke only after explicit approval.
 
 ## Suggested Commit Message
 
 ```text
-ops: record latest tianji server deploy check
+feat: connect ask paid route to tianji model gateway
 ```

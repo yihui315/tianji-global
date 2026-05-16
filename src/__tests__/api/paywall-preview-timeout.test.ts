@@ -43,7 +43,7 @@ describe('paywall preview timeout fallback', () => {
     vi.unstubAllEnvs();
   });
 
-  it('returns an ask fallback when AI preview generation does not settle', async () => {
+  it('returns a locked ask preview without starting paid AI generation', async () => {
     const { POST } = await import('@/app/api/ask/preview/route');
 
     const response = await expectRouteToSettle(POST(postRequest('/api/ask/preview', {
@@ -54,15 +54,16 @@ describe('paywall preview timeout fallback', () => {
 
     expect(response.status).toBe(200);
     expect(json.success).toBe(true);
+    expect(json.locked).toBe(true);
+    expect(json.answer).toBeNull();
     expect(json.preview).toContain('Situation');
     expect(json.id).toEqual(expect.any(String));
     expect(json.meta).toMatchObject({
-      provider: 'local-fallback',
-      model: 'local-template',
-      fallbackReason: 'timeout',
-      timeoutMs: 5,
+      fallbackReason: 'local-preview',
     });
-    expect(json.meta.warning).toContain('timed out');
+    expect(json.meta.provider).toBeUndefined();
+    expect(json.meta.model).toBeUndefined();
+    expect(generateReport).not.toHaveBeenCalled();
   });
 
   it('returns a draw fallback when AI preview generation does not settle', async () => {
