@@ -1,12 +1,11 @@
 /**
  * POST /api/draw/preview
  *
- * Draws three server-side cards, creates a full reading, and returns a short
- * teaser plus an encrypted token for Stripe unlock.
+ * Draws three server-side cards, returns a limited locked preview, and stores
+ * only the card/question context for later paid unlock generation.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { generateReport } from '@/lib/ai-orchestrator';
 import { getAiPreviewTimeoutMs, resolvePreviewWithin } from '@/lib/ai-preview-timeout';
 import {
   buildDrawPreview,
@@ -16,27 +15,37 @@ import {
   QUICK_DRAW_SLOTS,
   QUICK_DRAW_UNLOCK_PRICE_DISPLAY,
   quickDrawInputSchema,
+  toDrawGatewayCards,
+  type DrawAiMeta,
   type DrawnSlot,
   type QuickDrawLanguage,
 } from '@/lib/quick-draw';
 import { interpretCard } from '@/lib/tarot';
+import { generateTianjiModelResponse } from '@/lib/tianji-model-gateway';
 
 export const dynamic = 'force-dynamic';
 
-const SYSTEM_PROMPT_EN =
-  'You are a tarot reader who blends classical card meanings with modern psychology. ' +
-  'Read yesterday, today, and tomorrow as one continuous arc. ' +
-  'Three short paragraphs, one per card. End with one practical reflection prompt. ' +
-  'Do not give medical, legal, or financial advice.';
+const SYSTEM_PROMPT_EN = [
+  'You are TianJi Love, a careful tarot relationship reflection guide.',
+  'Return a useful but limited free three-card reading.',
+  'Use three short paragraphs, one for each card, then one practical next step.',
+  'Do not include a paid/pro seven-day plan or report-ready section.',
+  'Do not claim certainty, guarantee outcomes, or use fear-based payment urgency.',
+  'Treat the reading as reflection, not prediction.',
+].join(' ');
 
-const SYSTEM_PROMPT_ZH =
-  '你是一位融合古典塔罗与现代心理学的解读者。请把昨天、今天、明天三张牌读成一段连续的弧线。' +
-  '三段简短解读，每段对应一张牌。结尾给出一个具体可行的反思问题。不要给医疗、法律或财务建议。';
+const SYSTEM_PROMPT_ZH = [
+  'You are TianJi Love, a careful tarot relationship reflection guide.',
+  'Answer in Simplified Chinese.',
+  'Return a useful but limited free three-card reading.',
+  'Use three short paragraphs, one for each card, then one practical next step.',
+  'Do not include a paid/pro seven-day plan or report-ready section.',
+  'Do not claim certainty, guarantee outcomes, or use fear-based payment urgency.',
+  'Treat the reading as reflection, not prediction.',
+].join(' ');
 
-const FOOTER_EN =
-  '\n\n- TianJi Global - For self-reflection only - Not professional advice.';
-
-const FOOTER_ZH = '\n\n- 天机全球 - 仅用于自我反思 - 不构成专业建议。';
+const FOOTER_EN = '\n\n- TianJi Love - For self-reflection only - Not professional advice.';
+const FOOTER_ZH = '\n\n- TianJi Love - 仅供自我反思 - 不构成专业建议。';
 
 function buildUserPrompt(
   question: string,
@@ -44,33 +53,36 @@ function buildUserPrompt(
   language: QuickDrawLanguage,
 ): string {
   const lines: string[] = [];
+
   if (question.trim()) {
-    lines.push(language === 'zh' ? `问卜者的问题：${question.trim()}` : `Querent's question: ${question.trim()}`);
+    lines.push(language === 'zh' ? `用户问题：${question.trim()}` : `Querent question: ${question.trim()}`);
   } else {
     lines.push(
       language === 'zh'
-        ? '问卜者没有提出具体问题，请围绕这三天的整体气氛作答。'
-        : 'The querent has not stated a specific question; read the three-day arc holistically.',
+        ? '用户没有提出具体问题，请围绕三张牌的关系能量给出简短反思。'
+        : 'The querent did not state a specific question; read the three-card relationship pattern holistically.',
     );
   }
+
   lines.push('');
+  lines.push(
+    language === 'zh'
+      ? 'Cards:'
+      : 'Cards:',
+  );
 
   for (let i = 0; i < draw.length; i++) {
     const slot = draw[i];
     const slotMeta = QUICK_DRAW_SLOTS[i];
     const fullCard = expandDrawnCard(slot);
+    const interpretation = fullCard ? interpretCard(fullCard, slot.isReversed, language) : '';
+    const slotLabel = language === 'zh' ? slotMeta.labelZh : slotMeta.labelEn;
+    const cardName = language === 'zh' ? slot.card.nameChinese : slot.card.name;
     const orientation = slot.isReversed
       ? language === 'zh' ? '逆位' : 'Reversed'
       : language === 'zh' ? '正位' : 'Upright';
-    const interp = fullCard ? interpretCard(fullCard, slot.isReversed, language) : '';
-    const slotLabel = language === 'zh' ? slotMeta.labelZh : slotMeta.labelEn;
-    const cardName = language === 'zh' ? slot.card.nameChinese : slot.card.name;
 
-    lines.push(
-      language === 'zh'
-        ? `${slotLabel}: ${cardName} (${orientation}) - ${interp}`
-        : `${slotLabel}: ${cardName} (${orientation}) - ${interp}`,
-    );
+    lines.push(`${slotLabel}: ${cardName} (${orientation}) - ${interpretation}`);
   }
 
   return lines.join('\n');
@@ -79,8 +91,8 @@ function buildUserPrompt(
 function buildMiniReadings(draw: DrawnSlot[], language: QuickDrawLanguage): DrawnSlot[] {
   return draw.map((slot) => {
     const fullCard = expandDrawnCard(slot);
-    const interp = fullCard ? interpretCard(fullCard, slot.isReversed, language) : '';
-    return { ...slot, miniReading: interp };
+    const interpretation = fullCard ? interpretCard(fullCard, slot.isReversed, language) : '';
+    return { ...slot, miniReading: interpretation };
   });
 }
 
@@ -92,7 +104,8 @@ function buildFallbackReading(question: string, draw: DrawnSlot[], language: Qui
     const orientation = slot.isReversed
       ? language === 'zh' ? '逆位' : 'reversed'
       : language === 'zh' ? '正位' : 'upright';
-    const meaning = slot.miniReading || (language === 'zh' ? '这张牌提醒你放慢并观察真实信号。' : 'This card asks you to slow down and read the real signal.');
+    const meaning = slot.miniReading ||
+      (language === 'zh' ? '这张牌提醒你放慢速度，观察真实信号。' : 'This card asks you to slow down and read the real signal.');
 
     if (language === 'zh') {
       return `${label} - ${cardName}（${orientation}）：${meaning}`;
@@ -102,17 +115,32 @@ function buildFallbackReading(question: string, draw: DrawnSlot[], language: Qui
 
   if (language === 'zh') {
     return [
-      question.trim() ? `围绕“${question.trim()}”，三张牌形成了一条从整理、聚焦到行动的线索。` : '这组三张牌形成了一条从整理、聚焦到行动的线索。',
+      question.trim()
+        ? `这组三张牌围绕「${question.trim()}」形成了一条从整理、聚焦到行动的线索。`
+        : '这组三张牌形成了一条从整理、聚焦到行动的线索。',
       ...lines,
-      '反思问题：今天你最应该停止消耗哪一件事，把精力交还给真正重要的行动？',
+      '实际下一步：先观察一个可验证的信号，再决定是否推进。把这当作反思，而不是确定预言。',
     ].join('\n\n');
   }
 
   return [
-    question.trim() ? `Around "${question.trim()}", the three cards form a movement from clearing, to focusing, to acting.` : 'The three cards form a movement from clearing, to focusing, to acting.',
+    question.trim()
+      ? `Around "${question.trim()}", the three cards form a movement from clearing, to focusing, to acting.`
+      : 'The three cards form a movement from clearing, to focusing, to acting.',
     ...lines,
-    'Reflection prompt: what should you stop feeding today so your energy can return to the action that matters?',
+    'Practical next step: wait for one observable signal before deciding whether to move closer. Treat this as reflection, not certainty.',
   ].join('\n\n');
+}
+
+function toDrawAiMeta(response: Awaited<ReturnType<typeof generateTianjiModelResponse>>): DrawAiMeta {
+  return {
+    provider: response.audit.provider,
+    model: response.audit.model,
+    fallbackUsed: response.audit.fallback,
+    safetyRewritten: response.audit.safetyRewriteApplied,
+    latencyMs: response.audit.latencyMs,
+    route: 'tarot_draw',
+  };
 }
 
 export async function POST(req: NextRequest) {
@@ -137,6 +165,7 @@ export async function POST(req: NextRequest) {
     let model = 'local-template';
     let provider = 'local-fallback';
     let latencyMs = 0;
+    let aiMeta: DrawAiMeta | undefined;
     let warning: string | undefined;
     let fallbackReason: 'timeout' | 'error' | undefined;
     let timeoutMs: number | undefined;
@@ -145,13 +174,13 @@ export async function POST(req: NextRequest) {
       const started = Date.now();
       const previewTimeoutMs = getAiPreviewTimeoutMs();
       const result = await resolvePreviewWithin(
-        generateReport({
+        generateTianjiModelResponse({
+          intent: 'tarot_draw',
           prompt: userPrompt,
           systemPrompt,
-          preferredProvider: 'packy',
-          taskType: 'analysis',
           responseFormat: 'text',
-          maxTokens: 900,
+          maxTokens: 650,
+          temperature: 0.65,
         }),
         previewTimeoutMs,
       );
@@ -165,9 +194,10 @@ export async function POST(req: NextRequest) {
       } else {
         const report = result.value;
         content = report.content.trim();
-        model = report.model;
-        provider = report.provider;
-        latencyMs = report.latencyMs ?? Date.now() - started;
+        model = report.audit.model;
+        provider = report.audit.provider;
+        latencyMs = report.audit.latencyMs ?? Date.now() - started;
+        aiMeta = toDrawAiMeta(report);
       }
     } catch (error) {
       warning = error instanceof Error ? error.message : 'AI provider unavailable';
@@ -175,15 +205,13 @@ export async function POST(req: NextRequest) {
       content = buildFallbackReading(question, draw, language);
     }
 
-    const fullReading = `${content}${footer}`;
-    const preview = buildDrawPreview(fullReading, language);
+    const reading = `${content}${footer}`;
+    const preview = buildDrawPreview(reading, language);
     const id = encodeQuickDrawId({
       question,
       language,
       draw,
-      fullReading,
-      model,
-      provider,
+      fullReading: '',
     });
 
     const previewDraw = draw.map((slot) => ({
@@ -194,10 +222,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       id,
+      reading,
       preview,
+      locked: true,
+      cards: toDrawGatewayCards(draw, language),
       previewDraw,
       language,
       price: QUICK_DRAW_UNLOCK_PRICE_DISPLAY,
+      aiMeta,
       meta: {
         model,
         provider,
@@ -208,7 +240,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('[api/draw/preview] error:', error);
+    console.error('[api/draw/preview] error:', error instanceof Error ? error.message : 'unknown');
     const message = error instanceof Error ? error.message : 'Internal error';
     return NextResponse.json({ error: message }, { status: 500 });
   }

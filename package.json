@@ -17,6 +17,7 @@
     "audit:share": "tsx scripts/audit-share.ts",
     "audit:upgrade": "tsx scripts/audit-upgrade.ts",
     "audit:ask-revenue-contract": "tsx scripts/audit-ask-revenue-contract.ts",
+    "audit:draw-revenue-contract": "tsx scripts/audit-draw-revenue-contract.ts",
     "audit:release-gate": "tsx scripts/audit-release-gate.ts",
     "release:check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run audit:routes && npm run audit:copy && npm run audit:share && npm run audit:upgrade",
     "upgrade:plan": "node scripts/generate-upgrade-plan.ts"

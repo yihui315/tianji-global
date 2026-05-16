@@ -8,6 +8,7 @@ export type TianjiModelIntent =
   | 'paid_ask'
   | 'ask_preview'
   | 'tarot-draw'
+  | 'tarot_draw'
   | 'support-faq'
   | 'safety-rewrite'
   | 'safety_rewrite'
@@ -130,6 +131,16 @@ const ROUTES: Record<TianjiModelIntent, TianjiModelRoute> = {
     safetyRewriteRequired: true,
     fallbackModels: ['ollama/gpt-oss:20b', 'deepseek/deepseek-v4-flash'],
   },
+  tarot_draw: {
+    intent: 'tarot_draw',
+    provider: 'ollama',
+    model: 'gemma4:31b',
+    preferredModel: 'ollama/gemma4:31b',
+    taskType: 'analysis',
+    publicUserFacing: true,
+    safetyRewriteRequired: true,
+    fallbackModels: ['deepseek/deepseek-v4-flash'],
+  },
   'support-faq': {
     intent: 'support-faq',
     provider: 'ollama',
@@ -199,6 +210,8 @@ const ROUTES: Record<TianjiModelIntent, TianjiModelRoute> = {
 
 const deterministicRewrites: Array<[RegExp, string]> = [
   [/\b100%\s+will\s+come\s+back\b/gi, 'may reconnect if the observable pattern supports it'],
+  [/\b100%\s+your\s+ex\s+will\s+return\b/gi, 'reconnection would depend on observable behavior from both people'],
+  [/\bthis\s+will\s+definitely\s+happen\b/gi, 'this may happen only if the pattern continues'],
   [/\bwill definitely\b/gi, 'may'],
   [/\bdefinitely\s+marry\b/gi, 'may need to evaluate commitment through real behavior'],
   [/\bguaranteed\b/gi, 'not promised'],
@@ -210,6 +223,10 @@ const deterministicRewrites: Array<[RegExp, string]> = [
   [/\bmust happen\b/gi, 'may happen if the pattern continues'],
   [/\bpay now or disaster will happen\b/gi, 'pause and look for observable signals before making any decision'],
   [/\bsoulmate is certain\b/gi, 'connection deserves careful reflection'],
+  [/\bbirthDate\b/gi, 'private profile detail'],
+  [/\bbirthTime\b/gi, 'private profile detail'],
+  [/\bbirthLocation\b/gi, 'private profile detail'],
+  [/\btimezone\b/gi, 'private profile detail'],
 ];
 
 export function getTianjiModelRoute(intent: TianjiModelIntent): TianjiModelRoute {

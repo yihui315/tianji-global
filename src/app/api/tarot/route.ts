@@ -8,9 +8,8 @@ import {
   type TarotCard,
   type SpreadLayout,
 } from '@/lib/tarot';
-import { interpretTarot } from '@/lib/ai-interpreter';
-import type { TarotData } from '@/lib/ai-prompts';
 import { filterSensitiveContent, addDisclaimer } from '@/lib/content-moderation';
+import { generateTianjiModelResponse } from '@/lib/tianji-model-gateway';
 
 export interface TarotReadingRequest {
   spreadType: 'single' | 'three-card' | 'celtic-cross';
@@ -37,13 +36,70 @@ export interface TarotReadingResponse {
   language: 'en' | 'zh';
 }
 
+function buildTarotSystemPrompt(language: 'en' | 'zh'): string {
+  const answerLanguage =
+    language === 'zh'
+      ? 'Answer in Simplified Chinese.'
+      : 'Answer in English.';
+
+  return [
+    'You are TianJi Love, a careful tarot relationship reflection guide.',
+    answerLanguage,
+    'Interpret the spread as reflective relationship patterns, not guaranteed future prediction.',
+    'Use grounded, practical language.',
+    'Do not claim certainty, guarantee outcomes, or use fear-based payment urgency.',
+  ].join(' ');
+}
+
+function buildTarotPrompt(params: {
+  spread: SpreadLayout;
+  drawnCards: DrawnCard[];
+  question?: string;
+  gender?: string;
+  language: 'en' | 'zh';
+}): string {
+  const { spread, drawnCards, question, gender, language } = params;
+  const lines = [
+    `Spread: ${spread.name}`,
+    question ? `Question: ${question}` : 'Question: no specific question was provided.',
+    gender ? `Gender context: ${gender}` : undefined,
+    '',
+    'Cards:',
+    ...drawnCards.map((drawn) => {
+      const position = language === 'zh' ? drawn.positionNameChinese : drawn.positionName;
+      const orientation = drawn.isReversed
+        ? language === 'zh' ? '逆位' : 'Reversed'
+        : language === 'zh' ? '正位' : 'Upright';
+      return `${drawn.position}. ${position}: ${drawn.card.name} (${orientation}) - ${drawn.interpretation}`;
+    }),
+  ];
+
+  return lines.filter((line): line is string => Boolean(line)).join('\n');
+}
+
+function toTarotAiMeta(response: Awaited<ReturnType<typeof generateTianjiModelResponse>>) {
+  return {
+    provider: response.audit.provider,
+    model: response.audit.model,
+    fallbackUsed: response.audit.fallback,
+    safetyRewritten: response.audit.safetyRewriteApplied,
+    latencyMs: response.audit.latencyMs,
+    route: 'tarot_draw' as const,
+  };
+}
+
+function buildDisclaimer(language: 'en' | 'zh') {
+  return language === 'zh'
+    ? 'AI塔罗解读仅供娱乐和自我反思，不构成专业心理、医疗、法律或财务建议。'
+    : 'AI tarot readings are for entertainment and self-reflection only, not professional psychological, medical, legal, or financial advice.';
+}
+
 // POST handler for tarot readings
 export async function POST(req: NextRequest) {
   try {
     const body: TarotReadingRequest = await req.json();
     const { spreadType, question, language = 'en', enhanceWithAI = false, gender } = body;
 
-    // Validate spread type
     const validSpreads = ['single', 'three-card', 'celtic-cross'];
     if (!spreadType || !validSpreads.includes(spreadType)) {
       return NextResponse.json(
@@ -55,7 +111,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Get spread layout
     const spreadMap: Record<string, number> = {
       single: 0,
       'three-card': 1,
@@ -63,7 +118,6 @@ export async function POST(req: NextRequest) {
     };
     const spread = spreadLayouts[spreadMap[spreadType]];
 
-    // Content safety check
     if (question) {
       const check = filterSensitiveContent(question);
       if (!check.safe) {
@@ -74,19 +128,20 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Shuffle deck and draw cards
     const shuffled = shuffleDeck();
     const { cards, isReversed } = drawCards(shuffled, spread.cardCount);
 
-    // Format drawn cards with interpretations
-    const drawnCards: DrawnCard[] = cards.map((card, index) => ({
-      card,
-      isReversed: isReversed[index],
-      position: index + 1,
-      positionName: spread.positions[index].name,
-      positionNameChinese: spread.positions[index].nameChinese,
-      interpretation: interpretCard(card, isReversed[index], language),
-    }));
+    const drawnCards: DrawnCard[] = cards.map((card, index) => {
+      const position = spread.positions[index];
+      return {
+        card,
+        isReversed: isReversed[index],
+        position: index + 1,
+        positionName: position.name,
+        positionNameChinese: position.nameChinese,
+        interpretation: interpretCard(card, isReversed[index], language),
+      };
+    });
 
     const response: Record<string, unknown> = {
       spread,
@@ -95,45 +150,26 @@ export async function POST(req: NextRequest) {
       totalCards: 78,
       language,
       meta: {
-        platform: 'TianJi Global | 天机全球',
+        platform: 'TianJi Global',
         version: '1.0.0',
         method: 'shuffled-deck',
       },
     };
 
-    // AI interpretation
     if (enhanceWithAI) {
       try {
-        const tarotData: TarotData = {
-          spread: {
-            positions: spread.positions.map((p, i) => ({
-              name: p.name,
-              nameEn: p.nameChinese, // spread name is in Chinese
-              description: p.description || p.nameChinese,
-            })),
-            cards: drawnCards.map(dc => ({
-              name: dc.card.name,
-              nameEn: dc.card.nameChinese || dc.card.name,
-              suit: dc.card.suit,
-              arcana: dc.card.arcana,
-              uprightMeaning: dc.card.meaning,
-              reversedMeaning: dc.card.reversedMeaning,
-            })),
-          },
-          question,
-          gender,
-        };
-
         const lang = language.startsWith('zh') ? 'zh' : 'en';
-        const { aiInterpretation, disclaimer, report } = await interpretTarot(tarotData, lang);
-        response.aiInterpretation = addDisclaimer(aiInterpretation, 'tarot');
-        response.disclaimer = disclaimer;
-        response.aiMeta = {
-          provider: report.provider,
-          model: report.model,
-          latencyMs: report.latencyMs,
-          costUSD: report.costUSD,
-        };
+        const report = await generateTianjiModelResponse({
+          intent: 'tarot_draw',
+          prompt: buildTarotPrompt({ spread, drawnCards, question, gender, language: lang }),
+          systemPrompt: buildTarotSystemPrompt(lang),
+          responseFormat: 'text',
+          maxTokens: 850,
+          temperature: 0.65,
+        });
+        response.aiInterpretation = addDisclaimer(report.content.trim(), 'tarot');
+        response.disclaimer = buildDisclaimer(lang);
+        response.aiMeta = toTarotAiMeta(report);
       } catch (aiErr) {
         response.aiError =
           aiErr instanceof Error ? aiErr.message : 'AI interpretation failed';
@@ -160,7 +196,6 @@ export async function GET(req: NextRequest) {
     const response: Record<string, unknown> = {
       card: {
         ...card,
-        // Normalize field names for consistency
         nameEn: card.nameChinese || card.name,
         arcana: card.arcana,
         uprightMeaning: card.meaning,
@@ -174,34 +209,27 @@ export async function GET(req: NextRequest) {
 
     if (enhanceWithAI) {
       try {
-        const tarotData: TarotData = {
-          spread: {
-            positions: [
-              { name: '今日', nameEn: 'Card of the Day', description: 'Today\'s energy card' },
-            ],
-            cards: [
-              {
-                name: card.name,
-                nameEn: card.nameChinese || card.name,
-                suit: card.suit,
-                arcana: card.arcana,
-                uprightMeaning: card.meaning,
-                reversedMeaning: card.reversedMeaning,
-              },
-            ],
-          },
-        };
-
         const lang = language.startsWith('zh') ? 'zh' : 'en';
-        const { aiInterpretation, disclaimer, report } = await interpretTarot(tarotData, lang);
-        response.aiInterpretation = addDisclaimer(aiInterpretation, 'tarot');
-        response.disclaimer = disclaimer;
-        response.aiMeta = {
-          provider: report.provider,
-          model: report.model,
-          latencyMs: report.latencyMs,
-          costUSD: report.costUSD,
-        };
+        const spread = spreadLayouts[0];
+        const drawnCards: DrawnCard[] = [{
+          card,
+          isReversed,
+          position: 1,
+          positionName: 'Card of the Day',
+          positionNameChinese: '今日',
+          interpretation,
+        }];
+        const report = await generateTianjiModelResponse({
+          intent: 'tarot_draw',
+          prompt: buildTarotPrompt({ spread, drawnCards, language: lang }),
+          systemPrompt: buildTarotSystemPrompt(lang),
+          responseFormat: 'text',
+          maxTokens: 650,
+          temperature: 0.65,
+        });
+        response.aiInterpretation = addDisclaimer(report.content.trim(), 'tarot');
+        response.disclaimer = buildDisclaimer(lang);
+        response.aiMeta = toTarotAiMeta(report);
       } catch (aiErr) {
         response.aiError =
           aiErr instanceof Error ? aiErr.message : 'AI interpretation failed';

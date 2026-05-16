@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-17 - TianJi Love Draw/Tarot gateway Phase 3
+
+- Task ID: 20260516-tianji-love-revenue-gate-phase3-draw
+- Files changed: `.ai/TASK_TIANJI_LOVE_REVENUE_GATE_PHASE3_DRAW_20260516.md`, `.ai/TIANJI_LOVE_DRAW_REVENUE_FLOW_REVIEW_20260516.md`, `.ai/TIANJI_LOVE_DRAW_GATEWAY_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `docs/tianji-love-model-gateway-runbook.md`, `docs/tianji-love-model-gateway-rollback.md`, `package.json`, `scripts/audit-draw-revenue-contract.ts`, `src/__tests__/api/draw-gateway.test.ts`, `src/app/api/draw/preview/route.ts`, `src/app/api/draw/unlock/route.ts`, `src/app/api/tarot/route.ts`, `src/lib/quick-draw.ts`, `src/lib/tianji-model-gateway.ts`
+- Summary: Completed Revenue Gate Phase 3 by wiring Draw/Tarot output to the TianJi model gateway. Free Draw now returns a useful locked limited reading and no paid/pro full reading in the token. Paid/pro Draw now verifies Stripe session state and `quick-draw` metadata before calling the `tarot_draw` gateway route. Enhanced Tarot readings also use `tarot_draw`. Public text passes deterministic certainty-risk safety rewrite and responses include non-sensitive `aiMeta`.
+- Commands run: RED `npm run test -- src/__tests__/api/draw-gateway.test.ts`; GREEN Draw gateway target; `npm run audit:draw-revenue-contract`; `npm run typecheck`; adjacent Draw/Tarot regression tests with one expected copy fix and rerun; `npm run lint`; required targeted `npm run test -- src/__tests__/api/draw-gateway.test.ts src/__tests__/lib/tianji-model-gateway.test.ts`; full `npm run test`; `npm run build`; `npm run audit:routes`; `npm run audit:copy`; `npm run audit:share`; `npm run audit:upgrade`; final Ask/Draw revenue contract audits; `git diff --check`.
+- Results: Draw gateway target passed 3/3; adjacent Draw/Tarot regression tests passed 23/23 after restoring the Chinese preview head contract; required Draw+gateway target passed 2 files / 10 tests; typecheck passed; lint passed; full test suite passed 55 files / 508 tests; production build passed with 106 static pages; route/copy/share/upgrade audits passed; Ask and Draw revenue audits returned all fields `go` with `overall: conditional-go`; diff whitespace check passed with LF/CRLF working-copy warnings only.
+- Risks: No live Stripe payment, Stripe webhook smoke, DeepSeek live call, MiniMax live quota call, Ollama live smoke, email send, production database mutation, production deploy, or paid smoke was run. Production remains No-Go pending Phase 4 staging/test evidence.
+- Next step: Enter Phase 4 staging live smoke readiness only after explicit approval for masked env inventory, non-paid smoke, Stripe test checkout/webhook smoke, DeepSeek test-key call, and MiniMax quota live check.
+
 ### 2026-05-17 - TianJi Love Ask paid gateway Phase 2
 
 - Task ID: 20260516-tianji-love-revenue-gate-phase2

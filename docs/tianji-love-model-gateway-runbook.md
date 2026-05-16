@@ -32,6 +32,19 @@ No real API keys are committed here. Do not put secrets in docs, commits, report
   - verifies payment status and the `ask-question` metadata flow before generation
   - calls the `paid_ask` gateway route only after paid unlock verification
   - returns non-sensitive `aiMeta` for paid generation
+- `src/app/api/draw/preview/route.ts`
+  - draws three cards server-side and returns a useful but limited locked preview
+  - calls the `tarot_draw` gateway route for the free/limited Draw reading when AI is available
+  - stores only the card/question context in the encrypted unlock token; it does not store the paid full reading before checkout
+  - preserves local fallback preview behavior when AI times out or fails
+- `src/app/api/draw/unlock/route.ts`
+  - creates the Draw one-time Stripe Checkout session
+  - verifies payment status and the `quick-draw` metadata flow before paid/pro generation
+  - calls the `tarot_draw` gateway route only after paid unlock verification
+  - returns non-sensitive `aiMeta` for paid/pro Draw generation
+- `src/app/api/tarot/route.ts`
+  - routes enhanced Tarot interpretations through `tarot_draw`
+  - returns non-sensitive `aiMeta` when an enhanced model reading is requested
 - `src/lib/ai-orchestrator.ts`
   - supports DeepSeek and MiniMax through OpenAI-compatible chat completions
   - keeps Ollama as the no-key local provider
@@ -49,6 +62,7 @@ No real API keys are committed here. Do not put secrets in docs, commits, report
 | `paid_ask` | `deepseek/deepseek-v4-flash` | yes | yes | `deepseek/deepseek-v4-pro`, `ollama/gemma4:31b` |
 | `ask_preview` | `ollama/gemma4:31b` | yes | yes | `ollama/gpt-oss:20b` |
 | `tarot-draw` | `ollama/gemma4:31b` | yes | yes | `ollama/gpt-oss:20b`, `deepseek/deepseek-v4-flash` |
+| `tarot_draw` | `ollama/gemma4:31b` | yes | yes | `deepseek/deepseek-v4-flash` |
 | `support-faq` | `ollama/gpt-oss:20b` | yes | yes | `deepseek/deepseek-v4-flash` |
 | `safety-rewrite` | `ollama/gpt-oss:20b` | yes | yes | `deepseek/deepseek-v4-flash` |
 | `safety_rewrite` | `ollama/gpt-oss:20b` | yes | yes | `deepseek/deepseek-v4-flash` |
@@ -105,6 +119,20 @@ npm run audit:ask-revenue-contract
 
 This audit is static and contract-only. It must not make live Stripe, DeepSeek, MiniMax, or email calls.
 
+Run the Draw/Tarot paid-boundary gateway contract:
+
+```bash
+npm run test -- src/__tests__/api/draw-gateway.test.ts src/__tests__/lib/tianji-model-gateway.test.ts
+```
+
+Run the Draw revenue contract audit:
+
+```bash
+npm run audit:draw-revenue-contract
+```
+
+This audit is also static and contract-only. It must not make live Stripe, DeepSeek, MiniMax, Ollama, or email calls.
+
 Run TypeScript validation:
 
 ```bash
@@ -125,6 +153,8 @@ The relationship analyze API is wired to gateway safety/metadata, but it still u
 
 Ask preview is now a locked local teaser only. Paid Ask generation is wired through the `paid_ask` gateway route after Stripe session verification. Local tests and contract audit use mocks/static source checks only; no live paid smoke or provider smoke has been run.
 
+Draw preview now returns a locked, limited three-card reading and token. Paid/pro Draw generation is wired through the `tarot_draw` gateway route after Stripe session verification. Enhanced `/api/tarot` interpretations also use `tarot_draw`. Local tests and contract audit use mocks/static source checks only; no live paid smoke or provider smoke has been run.
+
 ## Next Wiring Step
 
-The next safe implementation should collect masked staging evidence and run a staged Ask checkout/provider smoke only after explicit approval. Production deploy remains No-Go until Stripe test-mode evidence, webhook behavior, and DeepSeek/Ollama provider readiness are proven.
+The next safe implementation should collect masked staging evidence and run staged non-paid plus Stripe test-mode checkout/provider smoke only after explicit approval. Production deploy remains No-Go until Stripe test-mode evidence, webhook behavior, and DeepSeek/Ollama provider readiness are proven.

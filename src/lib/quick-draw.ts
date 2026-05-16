@@ -57,6 +57,31 @@ export interface DrawnSlot {
 
 export type QuickDrawSlot = 'yesterday' | 'today' | 'tomorrow';
 
+export type DrawGatewayRoute = 'tarot_draw';
+
+export interface DrawGatewayCard {
+  name: string;
+  position: string;
+  meaning: string;
+}
+
+export interface DrawAiMeta {
+  provider: string;
+  model: string;
+  fallbackUsed: boolean;
+  safetyRewritten: boolean;
+  latencyMs?: number;
+  route: DrawGatewayRoute;
+}
+
+export interface DrawGatewayResponsePayload {
+  reading: string | null;
+  preview: string | null;
+  locked: boolean;
+  cards?: DrawGatewayCard[];
+  aiMeta?: DrawAiMeta;
+}
+
 interface EncryptedDrawPayload {
   question: string;
   language: QuickDrawLanguage;
@@ -133,6 +158,22 @@ export function drawThreeCards(): DrawnSlot[] {
 /** Map a drawn card back to its full TarotCard row (for AI prompt). */
 export function expandDrawnCard(slot: DrawnSlot): TarotCard | undefined {
   return allCards.find((c) => c.id === slot.card.id);
+}
+
+export function toDrawGatewayCards(draw: DrawnSlot[], language: QuickDrawLanguage): DrawGatewayCard[] {
+  return draw.map((slot, index) => {
+    const meta = QUICK_DRAW_SLOTS[index];
+    const cardName = language === 'zh' ? slot.card.nameChinese : slot.card.name;
+    const orientation = slot.isReversed
+      ? language === 'zh' ? '逆位' : 'reversed'
+      : language === 'zh' ? '正位' : 'upright';
+
+    return {
+      name: `${cardName} (${orientation})`,
+      position: language === 'zh' ? meta.labelZh : meta.labelEn,
+      meaning: slot.miniReading,
+    };
+  });
 }
 
 // ─── Key derivation ────────────────────────────────────────────────────

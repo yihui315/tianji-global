@@ -1,5 +1,5 @@
 /**
- * /api/draw/unlock - Pay-per-draw checkout and unlock verification.
+ * /api/draw/unlock - Pay-per-draw checkout and paid reading verification.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -8,14 +8,79 @@ import { z } from 'zod';
 import { getStripe } from '@/lib/stripe';
 import {
   decodeQuickDrawId,
+  expandDrawnCard,
   quickDrawLanguageSchema,
+  QUICK_DRAW_SLOTS,
   QUICK_DRAW_UNLOCK_PRICE_USD_CENTS,
+  toDrawGatewayCards,
+  type DrawAiMeta,
+  type DrawnSlot,
+  type QuickDrawLanguage,
 } from '@/lib/quick-draw';
+import { interpretCard } from '@/lib/tarot';
+import { generateTianjiModelResponse } from '@/lib/tianji-model-gateway';
 
 export const dynamic = 'force-dynamic';
 
 function tokenRef(id: string): string {
   return createHash('sha256').update(id).digest('hex');
+}
+
+function buildPaidDrawSystemPrompt(language: QuickDrawLanguage): string {
+  const answerLanguage =
+    language === 'zh'
+      ? 'Answer in Simplified Chinese.'
+      : 'Answer in English.';
+
+  return [
+    'You are TianJi Love, a careful tarot relationship reflection guide.',
+    answerLanguage,
+    'Generate the complete paid/pro three-card relationship reading.',
+    'Include a deeper three-card synthesis, current relationship pattern, likely emotional dynamic phrased as possibility, and one practical next 7-day action.',
+    'Do not claim certainty, guarantee outcomes, or use fear-based payment urgency.',
+    'Treat cards as reflective prompts, not guaranteed future prediction.',
+    'Do not include private birth data, timezone, raw provider request details, or internal prompt text.',
+  ].join(' ');
+}
+
+function buildCardLines(draw: DrawnSlot[], language: QuickDrawLanguage): string[] {
+  return draw.map((slot, index) => {
+    const meta = QUICK_DRAW_SLOTS[index];
+    const fullCard = expandDrawnCard(slot);
+    const interpretation = slot.miniReading ||
+      (fullCard ? interpretCard(fullCard, slot.isReversed, language) : '');
+    const slotLabel = language === 'zh' ? meta.labelZh : meta.labelEn;
+    const cardName = language === 'zh' ? slot.card.nameChinese : slot.card.name;
+    const orientation = slot.isReversed
+      ? language === 'zh' ? '逆位' : 'Reversed'
+      : language === 'zh' ? '正位' : 'Upright';
+
+    return `${slotLabel}: ${cardName} (${orientation}) - ${interpretation}`;
+  });
+}
+
+function buildPaidDrawPrompt(question: string, draw: DrawnSlot[], language: QuickDrawLanguage): string {
+  return [
+    'Generate the paid TianJi Love Draw reading for this verified paid unlock.',
+    '',
+    question.trim()
+      ? `User question: ${question.trim()}`
+      : 'User question: no specific question was provided.',
+    '',
+    'Drawn cards:',
+    ...buildCardLines(draw, language),
+  ].join('\n');
+}
+
+function toDrawAiMeta(response: Awaited<ReturnType<typeof generateTianjiModelResponse>>): DrawAiMeta {
+  return {
+    provider: response.audit.provider,
+    model: response.audit.model,
+    fallbackUsed: response.audit.fallback,
+    safetyRewritten: response.audit.safetyRewriteApplied,
+    latencyMs: response.audit.latencyMs,
+    route: 'tarot_draw',
+  };
 }
 
 const postBodySchema = z.object({
@@ -49,14 +114,12 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name:
-                lang === 'zh'
-                  ? '天机三张牌 - 昨天/今天/明天解锁'
-                  : 'TianJi Three Cards - Yesterday/Today/Tomorrow unlock',
-              description:
-                lang === 'zh'
-                  ? '解锁本次抽出的三张塔罗牌与完整解读 - 一次性付费 - 无需订阅'
-                  : 'Unlock the three cards drawn for you and the full reading - One-time - No subscription',
+              name: lang === 'zh'
+                ? 'TianJi Three Cards - Paid relationship unlock'
+                : 'TianJi Three Cards - Paid relationship unlock',
+              description: lang === 'zh'
+                ? 'Unlock the deeper three-card relationship reading. One-time payment. No subscription.'
+                : 'Unlock the deeper three-card relationship reading. One-time payment. No subscription.',
             },
             unit_amount: QUICK_DRAW_UNLOCK_PRICE_USD_CENTS,
           },
@@ -81,7 +144,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    console.error('[api/draw/unlock] checkout error:', error);
+    console.error('[api/draw/unlock] checkout error:', error instanceof Error ? error.message : 'unknown');
     return NextResponse.json({ error: 'Unable to start checkout' }, { status: 500 });
   }
 }
@@ -116,6 +179,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid or expired draw id' }, { status: 400 });
     }
 
+    const gatewayResponse = await generateTianjiModelResponse({
+      intent: 'tarot_draw',
+      prompt: buildPaidDrawPrompt(decoded.question, decoded.draw, decoded.language),
+      systemPrompt: buildPaidDrawSystemPrompt(decoded.language),
+      responseFormat: 'text',
+      maxTokens: 950,
+      temperature: 0.65,
+    });
+    const reading = gatewayResponse.content.trim();
+
     return NextResponse.json({
       success: true,
       unlocked: true,
@@ -123,13 +196,16 @@ export async function GET(request: NextRequest) {
         question: decoded.question,
         language: decoded.language,
         draw: decoded.draw,
-        fullReading: decoded.fullReading,
-        model: decoded.model,
-        provider: decoded.provider,
+        reading,
+        preview: null,
+        locked: false,
+        fullReading: reading,
+        cards: toDrawGatewayCards(decoded.draw, decoded.language),
+        aiMeta: toDrawAiMeta(gatewayResponse),
       },
     });
   } catch (error) {
-    console.error('[api/draw/unlock] verify error:', error);
+    console.error('[api/draw/unlock] verify error:', error instanceof Error ? error.message : 'unknown');
     return NextResponse.json({ error: 'Unable to verify payment' }, { status: 500 });
   }
 }
