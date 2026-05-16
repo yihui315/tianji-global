@@ -666,6 +666,8 @@ export function analyzeRelationship(
     summary,
     timeline,
     isPremium: false,
+    accessLevel: 'free',
+    lockedSections: ['dimensions', 'next30Days', 'conflictRepair', 'conversationGuide', 'pdfReport', 'savedHistory'],
     createdAt: new Date().toISOString(),
   };
 

@@ -17,9 +17,9 @@ export const BILLING_PRODUCTS = {
   },
   compatibility_report: {
     productId: 'compatibility_report',
-    name: 'Compatibility Report',
-    description: 'A private two-person compatibility report.',
-    unitAmount: 1299,
+    name: 'Full Relationship Report',
+    description: 'A private two-person relationship compatibility report.',
+    unitAmount: 499,
     currency: 'usd',
     mode: 'payment',
     entitlement: 'compatibility_report',

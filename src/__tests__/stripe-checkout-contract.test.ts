@@ -15,7 +15,7 @@ describe('Stripe checkout billing contract', () => {
     expect(billing).toContain('solo_love_report');
     expect(billing).toContain('unitAmount: 499');
     expect(billing).toContain('compatibility_report');
-    expect(billing).toContain('unitAmount: 1299');
+    expect(billing).toContain('Full Relationship Report');
     expect(billing).not.toContain('tianji_plus_monthly');
     expect(billing).not.toContain("mode: 'subscription'");
     expect(billing).not.toContain('recurring');
@@ -29,6 +29,9 @@ describe('Stripe checkout billing contract', () => {
     expect(checkout).toContain("mode: 'payment'");
     expect(checkout).toContain('metadata');
     expect(checkout).toContain('readingSessionId');
+    expect(checkout).toContain('relationshipReadingId');
+    expect(checkout).toContain("source: checkoutSource");
+    expect(checkout).toContain('/relationship/result/');
     expect(checkout).toContain('idempotencyKey');
     expect(checkout).toContain('customer_email');
     expect(checkout).not.toContain('subscription_data');
@@ -62,6 +65,7 @@ describe('Stripe checkout billing contract', () => {
     expect(webhook).toContain("case 'checkout.session.completed'");
     expect(webhook).toContain('payment_status');
     expect(webhook).toContain('markOrderPaid');
+    expect(webhook).toContain('markRelationshipReadingPremium');
     expect(webhook).toContain('ensureReportJobForSession');
     expect(webhook).toContain('sendReportReadyEmailForCheckoutSession');
     expect(webhook).not.toContain("case 'invoice.paid'");

@@ -35,6 +35,31 @@ function coreResultText(data: any) {
 }
 
 describe('/api/relationship/analyze localization', () => {
+  it('tags free relationship analysis with TianJi Love gateway metadata', async () => {
+    const { POST } = await import('@/app/api/relationship/analyze/route');
+
+    const response = await POST(postRelationship({
+      relationType: 'romantic',
+      lang: 'en',
+      personA: { nickname: 'Alex', birthDate: '1992-05-11', birthTime: '08:30' },
+      personB: { nickname: 'Jordan', birthDate: '1994-09-21', birthTime: '21:15' },
+    }));
+    const json = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(json.success).toBe(true);
+    expect(json.data.aiMeta).toMatchObject({
+      gatewayIntent: 'relationship-report',
+      provider: 'ollama',
+      model: 'ollama/gemma4:31b',
+      publicUserFacing: true,
+      safetyRewriteApplied: false,
+      fallback: false,
+    });
+    expect(JSON.stringify(json.data.aiMeta)).not.toContain('Alex');
+    expect(JSON.stringify(json.data.aiMeta)).not.toContain('Jordan');
+  });
+
   it('returns English core result content when lang=en', async () => {
     const { POST } = await import('@/app/api/relationship/analyze/route');
 

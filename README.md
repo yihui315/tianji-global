@@ -28,7 +28,7 @@ TianJi Global is the world's premier AI-powered fortune and destiny analysis pla
 
 ### Platform Highlights
 
-- **Multi-AI Provider** — Claude, GPT-4, Grok, Gemini, Ollama — automatic fallback, cost tracking
+- **Multi-AI Provider** — Claude, GPT-4, Grok, Gemini, Ollama, DeepSeek, MiniMax — automatic fallback, cost tracking
 - **Bilingual** — English, 简体中文, 繁體中文
 - **Privacy-First** — Ollama local mode, no data stored unless authenticated
 - **Social Sharing** — Dynamic OG image generation per module type
@@ -42,7 +42,7 @@ TianJi Global is the world's premier AI-powered fortune and destiny analysis pla
 | Layer | Technology |
 |-------|-----------|
 | Frontend | Next.js 15 (App Router), React 19, Tailwind CSS, Chart.js |
-| AI | Anthropic Claude, OpenAI GPT-4, xAI Grok, Google Gemini, Ollama |
+| AI | Anthropic Claude, OpenAI GPT-4, xAI Grok, Google Gemini, Ollama, DeepSeek, MiniMax |
 | Auth | NextAuth v5 (Google OAuth + Credentials) |
 | Database | Supabase (PostgreSQL + Auth + Realtime) |
 | Payments | Stripe (Checkout + Webhooks + Billing Portal) |
@@ -79,6 +79,7 @@ src/
 │   └── charts/LifeChart.tsx # Chart.js fortune visualization
 ├── lib/
 │   ├── ai-orchestrator.ts   # Multi-model AI routing + fallback
+│   ├── tianji-model-gateway.ts # TianJi Love intent routing + safety rewrite
 │   ├── ai-models.ts         # Model registry with pricing
 │   ├── auth.ts              # NextAuth v5 config
 │   └── stripe.ts            # Stripe client + plans

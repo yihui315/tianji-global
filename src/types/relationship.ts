@@ -57,6 +57,15 @@ export interface RelationshipTimeline {
   next90Days?: string;
 }
 
+export interface RelationshipAiMeta {
+  gatewayIntent: 'relationship-report';
+  provider: string;
+  model: string;
+  publicUserFacing: boolean;
+  safetyRewriteApplied: boolean;
+  fallback: boolean;
+}
+
 export interface RelationshipReading {
   id: string;
   userId?: string;
@@ -79,6 +88,9 @@ export interface RelationshipReading {
   timeline?: RelationshipTimeline;
 
   isPremium: boolean;
+  accessLevel: 'free' | 'full';
+  lockedSections: string[];
+  aiMeta?: RelationshipAiMeta;
   createdAt: string;
 }
 

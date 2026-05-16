@@ -115,6 +115,8 @@ export default function SharePageClient() {
     summary: reading.summary,
     timeline: reading.timeline,
     isPremium: false,
+    accessLevel: 'free',
+    lockedSections: [],
     createdAt: '',
   };
 

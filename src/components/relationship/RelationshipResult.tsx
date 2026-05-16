@@ -1,9 +1,22 @@
 'use client';
 
-import { useState } from 'react';
-import { ChartNoAxesCombined, Copy, Lock, Share2, Sparkles } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  ChartNoAxesCombined,
+  Copy,
+  FileText,
+  Lock,
+  MessageCircleHeart,
+  Save,
+  Share2,
+  ShieldCheck,
+  Sparkles,
+  Timer,
+  Unlock,
+} from 'lucide-react';
 
 import { TianjiLovePanel } from '@/components/tianji-love';
+import { trackRelationshipEvent } from '@/lib/analytics/track';
 import { DimensionCard } from './RelationshipDimensionCard';
 import { RelationshipRadar } from './RelationshipRadar';
 import type { RelationshipReading } from '@/types/relationship';
@@ -16,34 +29,71 @@ interface RelationshipResultProps {
 
 const DIMENSION_KEYS = ['attraction', 'communication', 'conflict', 'rhythm', 'longTerm'] as const;
 
+const EXPERIMENT_ID = 'relationship-p0-sales-loop';
+const VARIANT = 'A';
+
 const resultCopy = {
   zh: {
-    eyebrow: '关系合盘报告',
-    score: '综合匹配',
-    radar: '关系雷达',
-    dimensions: '五维详情',
-    currentPhase: '当前阶段',
-    next30Days: '未来 30 天',
-    copyLink: '复制安全分享链接',
-    copied: '链接已复制',
-    share: '分享关系摘要',
-    shareFailed: '分享生成失败，请稍后再试。',
+    eyebrow: 'First Compatibility Signal',
+    score: '缁煎悎鍖归厤',
+    radar: 'Relationship radar',
+    dimensions: '浜旂淮璇︽儏',
+    nextMove: 'Your next best move',
+    lockedTitle: 'Unlock the Full Relationship Pattern — $4.99',
+    lockedBody: 'Full report unlocks all five dimensions, 30-day timing, conflict repair, conversation guidance, PDF-ready report, and saved history.',
+    unlock: 'Unlock the Full Relationship Pattern — $4.99',
+    unlockDisabled: 'Full report checkout is not enabled yet. Please save this reading and check back soon.',
+    unlockFailed: 'Checkout could not be started. Please save your reading first.',
+    currentPhase: '褰撳墠闃舵',
+    next30Days: '鏈潵 30 澶?',
+    copyLink: '澶嶅埗瀹夊叏鍒嗕韩閾炬帴',
+    copied: '閾炬帴宸插鍒?',
+    share: '鍒嗕韩鍏崇郴鎽樿',
+    shareFailed: 'Share link could not be created. Please save your reading first.',
     privacy: '分享内容默认不包含出生日期、出生时辰、出生地点或时区。',
+    trust: [
+      ['Reading method', 'Symbolic compatibility engine + guided interpretation'],
+      ['Data used', 'Birth dates and optional birth times'],
+      ['Not used in free signal', 'Birth location'],
+      ['Model confidence', 'Reflective guidance, not certainty'],
+      ['Boundary', 'Not crisis support or therapy'],
+    ],
   },
   en: {
-    eyebrow: 'Relationship Analysis',
+    eyebrow: 'First Compatibility Signal',
     score: 'Overall score',
     radar: 'Relationship radar',
     dimensions: 'Five dimensions',
+    nextMove: 'Your next best move',
+    lockedTitle: 'Unlock the Full Relationship Pattern — $4.99',
+    lockedBody: 'Full report unlocks all five dimensions, 30-day timing, conflict repair, conversation guidance, PDF-ready report, and saved history.',
+    unlock: 'Unlock the Full Relationship Pattern — $4.99',
+    unlockDisabled: 'Full report checkout is not enabled yet. Please save this reading and check back soon.',
+    unlockFailed: 'Checkout could not be started. Please save your reading first.',
     currentPhase: 'Current phase',
     next30Days: 'Next 30 days',
     copyLink: 'Copy safe share link',
     copied: 'Link copied',
     share: 'Share relationship summary',
-    shareFailed: 'Share link failed. Please try again.',
+    shareFailed: 'Share link could not be created. Please save your reading first.',
     privacy: 'Shared content excludes birth date, birth time, birth location, and timezone by default.',
+    trust: [
+      ['Reading method', 'Symbolic compatibility engine + guided interpretation'],
+      ['Data used', 'Birth dates and optional birth times'],
+      ['Not used in free signal', 'Birth location'],
+      ['Model confidence', 'Reflective guidance, not certainty'],
+      ['Boundary', 'Not crisis support or therapy'],
+    ],
   },
 } as const;
+
+const lockedItems = [
+  { icon: Sparkles, label: 'All five relationship dimensions' },
+  { icon: Timer, label: 'Next 30 days relationship window' },
+  { icon: MessageCircleHeart, label: 'Conflict repair and conversation guidance' },
+  { icon: FileText, label: 'PDF-ready sharing report' },
+  { icon: Save, label: 'Saved reading and history' },
+];
 
 function scoreColor(score: number) {
   if (score >= 70) return '#34D399';
@@ -51,16 +101,127 @@ function scoreColor(score: number) {
   return '#FF8F83';
 }
 
+function getNextMove(reading: RelationshipReading) {
+  const ordered = DIMENSION_KEYS.map((key) => reading.dimensions[key]).sort((left, right) => left.score - right.score);
+  return ordered[0]?.advice[0] ?? reading.summary.oneLiner;
+}
+
 export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultProps) {
-  const [activeTab, setActiveTab] = useState<'radar' | 'dimensions'>('radar');
   const [shareUrlCopied, setShareUrlCopied] = useState(false);
   const [shareLoading, setShareLoading] = useState(false);
   const [shareError, setShareError] = useState<string | null>(null);
+  const [unlockLoading, setUnlockLoading] = useState(false);
+  const [unlockError, setUnlockError] = useState<string | null>(null);
   const copy = resultCopy[lang] ?? resultCopy.zh;
+  const isFull = reading.accessLevel === 'full' || reading.isPremium;
+  const nextMove = useMemo(() => getNextMove(reading), [reading]);
+
+  useEffect(() => {
+    void trackRelationshipEvent({
+      event: 'relationship_result_view',
+      experiment_id: EXPERIMENT_ID,
+      variant: VARIANT,
+      relation_type: reading.relationType,
+      is_premium: isFull,
+      payload: {
+        lang,
+        accessLevel: reading.accessLevel,
+        report_type: 'compatibility_report',
+        funnel_stage: 'result_view',
+      },
+    });
+  }, [isFull, lang, reading.accessLevel, reading.relationType]);
+
+  const handleUnlock = async () => {
+    setUnlockError(null);
+    setUnlockLoading(true);
+
+    void trackRelationshipEvent({
+      event: 'relationship_unlock_click',
+      experiment_id: EXPERIMENT_ID,
+      variant: VARIANT,
+      relation_type: reading.relationType,
+      is_premium: false,
+      payload: {
+        lang,
+        productId: 'compatibility_report',
+        report_type: 'compatibility_report',
+        funnel_stage: 'unlock_click',
+      },
+    });
+
+    try {
+      void trackRelationshipEvent({
+        event: 'relationship_checkout_start',
+        experiment_id: EXPERIMENT_ID,
+        variant: VARIANT,
+        relation_type: reading.relationType,
+        payload: {
+          lang,
+          productId: 'compatibility_report',
+          report_type: 'compatibility_report',
+          funnel_stage: 'checkout_start',
+        },
+      });
+
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: 'compatibility_report',
+          source: 'relationship',
+          relationshipReadingId: reading.id,
+          locale: lang === 'en' ? 'en' : 'zh-CN',
+        }),
+      });
+      const json = await res.json();
+
+      if (res.status === 403) {
+        setUnlockError(copy.unlockDisabled);
+        return;
+      }
+
+      if (!res.ok || !json.success || !json.data?.url) {
+        setUnlockError(copy.unlockFailed);
+        return;
+      }
+
+      void trackRelationshipEvent({
+        event: 'relationship_checkout_success',
+        experiment_id: EXPERIMENT_ID,
+        variant: VARIANT,
+        relation_type: reading.relationType,
+        payload: {
+          lang,
+          productId: 'compatibility_report',
+          report_type: 'compatibility_report',
+          funnel_stage: 'checkout_session_created',
+        },
+      });
+      window.location.href = json.data.url;
+    } catch {
+      setUnlockError(copy.unlockFailed);
+    } finally {
+      setUnlockLoading(false);
+    }
+  };
 
   const handleCopyLink = async () => {
     setShareLoading(true);
     setShareError(null);
+
+    void trackRelationshipEvent({
+      event: 'relationship_share_click',
+      experiment_id: EXPERIMENT_ID,
+      variant: VARIANT,
+      relation_type: reading.relationType,
+      share_mode: 'summary',
+      payload: {
+        lang,
+        report_type: 'compatibility_report',
+        funnel_stage: 'share_click',
+      },
+    });
 
     try {
       const res = await fetch('/api/relationship/share', {
@@ -76,6 +237,18 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
       if (json.success && json.data?.shareUrl) {
         await navigator.clipboard.writeText(json.data.shareUrl);
         setShareUrlCopied(true);
+        void trackRelationshipEvent({
+          event: 'relationship_copy_success',
+          experiment_id: EXPERIMENT_ID,
+          variant: VARIANT,
+          relation_type: reading.relationType,
+          share_mode: 'summary',
+          payload: {
+            lang,
+            report_type: 'compatibility_report',
+            funnel_stage: 'copy_success',
+          },
+        });
         setTimeout(() => setShareUrlCopied(false), 3000);
       } else {
         setShareError(copy.shareFailed);
@@ -117,68 +290,101 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
         </div>
       </TianjiLovePanel>
 
-      <div className="grid grid-cols-2 rounded-full border border-[#d8b77b]/32 bg-black/26 p-1">
-        <button
-          type="button"
-          onClick={() => setActiveTab('radar')}
-          aria-pressed={activeTab === 'radar'}
-          className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full text-sm font-semibold transition ${
-            activeTab === 'radar' ? 'bg-[#ff6c73]/28 text-[#fff7e6]' : 'text-[#f4d7a3]/58 hover:text-[#ffe3b4]'
-          }`}
-        >
-          <ChartNoAxesCombined className="h-4 w-4" aria-hidden />
-          {copy.radar}
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab('dimensions')}
-          aria-pressed={activeTab === 'dimensions'}
-          className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full text-sm font-semibold transition ${
-            activeTab === 'dimensions' ? 'bg-[#ff6c73]/28 text-[#fff7e6]' : 'text-[#f4d7a3]/58 hover:text-[#ffe3b4]'
-          }`}
-        >
-          <Sparkles className="h-4 w-4" aria-hidden />
-          {copy.dimensions}
-        </button>
-      </div>
+      <TianjiLovePanel className="p-6">
+        <div className="flex items-start gap-3">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#ff6c73]/14 text-[#ff9c8b]">
+            <MessageCircleHeart className="h-5 w-5" aria-hidden />
+          </span>
+          <div>
+            <p className="text-xs uppercase tracking-[0.22em] text-[#d8b77b]/62">{copy.nextMove}</p>
+            <p className="mt-2 text-base leading-7 text-[#ffe3b4]">{nextMove}</p>
+          </div>
+        </div>
+      </TianjiLovePanel>
 
-      {activeTab === 'radar' ? (
+      <TianjiLovePanel className="p-6">
+        <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-[#ffe3b4]">
+          <ChartNoAxesCombined className="h-4 w-4 text-[#d8b77b]" aria-hidden />
+          {copy.radar}
+        </div>
+        <div className={!isFull ? 'relative overflow-hidden rounded-xl' : undefined}>
+          <div className={!isFull ? 'blur-[2px] opacity-45' : undefined}>
+            <RelationshipRadar
+              dimensions={reading.dimensions}
+              personANickname={reading.personA.nickname}
+              personBNickname={reading.personB.nickname}
+              lang={lang}
+            />
+          </div>
+          {!isFull && (
+            <div className="absolute inset-0 grid place-items-center bg-black/34 px-5 text-center">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#ffb49e]/40 bg-black/50 px-4 py-2 text-sm font-semibold text-[#fff7e6]">
+                <Lock className="h-4 w-4" aria-hidden />
+                {copy.lockedTitle}
+              </span>
+            </div>
+          )}
+        </div>
+      </TianjiLovePanel>
+
+      {!isFull ? (
         <TianjiLovePanel className="p-6">
-          <RelationshipRadar
-            dimensions={reading.dimensions}
-            personANickname={reading.personA.nickname}
-            personBNickname={reading.personB.nickname}
-            lang={lang}
-          />
+          <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">{copy.dimensions}</p>
+          <h2 className="mt-2 font-serif text-2xl text-[#ffe3b4]">{copy.lockedTitle}</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-[#f4d7a3]/68">{copy.lockedBody}</p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            {lockedItems.map((item) => (
+              <div key={item.label} className="flex items-center gap-3 rounded-lg border border-[#b57248]/22 bg-black/18 px-4 py-3 text-sm text-[#f4d7a3]/70">
+                <item.icon className="h-4 w-4 text-[#d8b77b]" aria-hidden />
+                {item.label}
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={handleUnlock}
+            disabled={unlockLoading}
+            className="relationship-form-submit mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#ffb49e]/60 px-5 text-sm font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
+          >
+            <Unlock className="h-4 w-4" aria-hidden />
+            {copy.unlock}
+          </button>
+          {unlockError && (
+            <p className="mt-3 rounded-xl border border-[#ff7f80]/30 bg-[#ff5264]/10 p-3 text-sm text-[#ffb4a3]">
+              {unlockError}
+            </p>
+          )}
         </TianjiLovePanel>
       ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {DIMENSION_KEYS.map((key) => (
-            <DimensionCard
-              key={key}
-              dimensionKey={key}
-              data={reading.dimensions[key]}
-              lang={lang}
-              isPremium={reading.isPremium}
-              onUnlock={() => {}}
-            />
-          ))}
-        </div>
-      )}
-
-      {reading.timeline && (
-        <TianjiLovePanel className="p-6">
-          <div className="grid gap-4 md:grid-cols-2">
-            <article className="rounded-xl border border-[#d8b77b]/18 bg-black/22 p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-[#d8b77b]/66">{copy.currentPhase}</p>
-              <p className="mt-2 text-sm leading-7 text-[#f4d7a3]/76">{reading.timeline.currentPhase}</p>
-            </article>
-            <article className="rounded-xl border border-[#d8b77b]/18 bg-black/22 p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-[#d8b77b]/66">{copy.next30Days}</p>
-              <p className="mt-2 text-sm leading-7 text-[#f4d7a3]/76">{reading.timeline.next30Days}</p>
-            </article>
+        <>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {DIMENSION_KEYS.map((key) => (
+              <DimensionCard
+                key={key}
+                dimensionKey={key}
+                data={reading.dimensions[key]}
+                lang={lang}
+                isPremium={reading.isPremium}
+                onUnlock={() => {}}
+              />
+            ))}
           </div>
-        </TianjiLovePanel>
+
+          {reading.timeline && (
+            <TianjiLovePanel className="p-6">
+              <div className="grid gap-4 md:grid-cols-2">
+                <article className="rounded-xl border border-[#d8b77b]/18 bg-black/22 p-4">
+                  <p className="text-xs uppercase tracking-[0.2em] text-[#d8b77b]/66">{copy.currentPhase}</p>
+                  <p className="mt-2 text-sm leading-7 text-[#f4d7a3]/76">{reading.timeline.currentPhase}</p>
+                </article>
+                <article className="rounded-xl border border-[#d8b77b]/18 bg-black/22 p-4">
+                  <p className="text-xs uppercase tracking-[0.2em] text-[#d8b77b]/66">{copy.next30Days}</p>
+                  <p className="mt-2 text-sm leading-7 text-[#f4d7a3]/76">{reading.timeline.next30Days}</p>
+                </article>
+              </div>
+            </TianjiLovePanel>
+          )}
+        </>
       )}
 
       {shareError && (
@@ -207,6 +413,21 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
           {copy.share}
         </button>
       </div>
+
+      <TianjiLovePanel className="p-5">
+        <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-[#ffe3b4]">
+          <ShieldCheck className="h-4 w-4 text-[#d8b77b]" aria-hidden />
+          Trust and privacy
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {copy.trust.map(([label, body]) => (
+            <div key={label} className="rounded-lg border border-[#b57248]/18 bg-black/18 p-3">
+              <p className="text-xs uppercase tracking-[0.18em] text-[#d8b77b]/60">{label}</p>
+              <p className="mt-1 text-sm leading-6 text-[#f4d7a3]/66">{body}</p>
+            </div>
+          ))}
+        </div>
+      </TianjiLovePanel>
 
       <p className="mx-auto flex max-w-3xl items-start justify-center gap-2 text-center text-xs leading-6 text-[#f4d7a3]/42">
         <Lock className="mt-1 h-3.5 w-3.5 shrink-0 text-[#d8b77b]/68" aria-hidden />

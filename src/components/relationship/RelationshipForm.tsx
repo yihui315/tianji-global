@@ -1,7 +1,7 @@
 'use client';
 
-import { FormEvent, type ComponentType, useState } from 'react';
-import { BriefcaseBusiness, Calendar, Clock, Heart, Lock, MapPin, User, Users } from 'lucide-react';
+import { FormEvent, type ComponentType, useRef, useState } from 'react';
+import { BriefcaseBusiness, Calendar, Clock, Heart, Lock, User, Users } from 'lucide-react';
 
 import { TianjiLoveFormField, TianjiLovePanel, cx } from '@/components/tianji-love';
 import type { RelationshipType } from '@/types/relationship';
@@ -12,6 +12,7 @@ interface RelationshipFormProps {
     personA: { nickname: string; birthDate: string; birthTime?: string; birthLocation?: string };
     personB: { nickname: string; birthDate: string; birthTime?: string; birthLocation?: string };
   }) => void;
+  onStart?: () => void;
   isLoading?: boolean;
   lang?: 'zh' | 'en';
 }
@@ -79,9 +80,9 @@ const formCopy = {
     birthTime: 'Birth time',
     birthTimeOptional: 'optional',
     birthLocation: 'Birth location',
-    birthLocationOptional: 'optional',
-    locationPlaceholder: 'City is enough',
-    submit: 'Generate relationship reading',
+    birthLocationOptional: 'reserved for full report',
+    locationPlaceholder: 'Birth location is reserved for advanced reports.',
+    submit: 'Start Free Compatibility Reading',
     loading: 'Reading relationship orbit',
     privacy: 'Birth details are used only for this reading; public shares exclude date, time, location, and timezone by default.',
     required: 'required',
@@ -154,23 +155,18 @@ function PersonFields({
           <Clock className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#d8b77b]" aria-hidden />
         </TianjiLoveFormField>
 
-        <TianjiLoveFormField label={`${copy.birthLocation} (${copy.birthLocationOptional})`}>
-          <input
-            type="text"
-            value={person.birthLocation}
-            onChange={(event) => onChange('birthLocation', event.target.value)}
-            placeholder={copy.locationPlaceholder}
-            className="tianji-love-field-input relationship-field-input h-13 min-h-13 w-full rounded-lg border border-[#b57248]/36 px-4 pr-11 text-sm outline-none transition focus:border-[#ffe3b4] focus:ring-2 focus:ring-[#d8b77b]/24"
-          />
-          <MapPin className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#d8b77b]" aria-hidden />
-        </TianjiLoveFormField>
+        <div className="rounded-lg border border-[#b57248]/22 bg-black/18 px-4 py-3 text-xs leading-5 text-[#f4d7a3]/52">
+          <span className="font-semibold text-[#d8b77b]">{copy.birthLocation}:</span>{' '}
+          {copy.locationPlaceholder}
+        </div>
       </div>
     </TianjiLovePanel>
   );
 }
 
-export function RelationshipForm({ onSubmit, isLoading = false, lang = 'zh' }: RelationshipFormProps) {
+export function RelationshipForm({ onSubmit, onStart, isLoading = false, lang = 'zh' }: RelationshipFormProps) {
   const copy = formCopy[lang];
+  const started = useRef(false);
   const [relationType, setRelationType] = useState<RelationshipType>('romantic');
   const [personA, setPersonA] = useState<PersonState>({ nickname: '', birthDate: '', birthTime: '', birthLocation: '' });
   const [personB, setPersonB] = useState<PersonState>({ nickname: '', birthDate: '', birthTime: '', birthLocation: '' });
@@ -193,8 +189,14 @@ export function RelationshipForm({ onSubmit, isLoading = false, lang = 'zh' }: R
     });
   };
 
+  const handleStart = () => {
+    if (started.current) return;
+    started.current = true;
+    onStart?.();
+  };
+
   return (
-    <form className="tianji-love-relationship-form space-y-7" onSubmit={handleSubmit}>
+    <form className="tianji-love-relationship-form space-y-7" onFocusCapture={handleStart} onSubmit={handleSubmit}>
       <div className="grid gap-3 sm:grid-cols-3">
         {RELATION_TYPES.map((item) => (
           <button

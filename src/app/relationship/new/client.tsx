@@ -24,6 +24,7 @@ import {
   TianjiLoveShell,
   TianjiLoveTrustCard,
 } from '@/components/tianji-love';
+import { trackRelationshipEvent } from '@/lib/analytics/track';
 import { type AppLanguage, isAppLanguage, withLanguageParam } from '@/lib/language-routing';
 import type { RelationshipReading, RelationshipType } from '@/types/relationship';
 
@@ -36,6 +37,14 @@ type RelationshipCopy = {
     body: string;
     primary: string;
     secondary: string;
+  };
+  sample: {
+    eyebrow: string;
+    title: string;
+    score: string;
+    pattern: string;
+    nextMove: string;
+    unlock: string;
   };
   trust: Array<{ title: string; body: string; icon: typeof Lock }>;
   steps: Array<{ title: string; body: string }>;
@@ -69,6 +78,14 @@ const relationshipCopy = {
       body: '输入双方的出生日期与可选时辰，先看吸引、沟通、冲突、节奏与长期稳定性，再决定是否进入更深的关系报告。',
       primary: '填写双方信息',
       secondary: '回到首页',
+    },
+    sample: {
+      eyebrow: 'Free First Signal',
+      title: '浣犲皢鐪嬪埌鐨勫厤璐规憳瑕?',
+      score: 'Overall compatibility score',
+      pattern: 'Top relationship pattern',
+      nextMove: 'Your next best move',
+      unlock: 'Full report unlocks five dimensions, timing, and communication guidance',
     },
     trust: [
       { title: '隐私优先', body: '公开分享默认不包含出生日期、时辰、地点或时区。', icon: Shield },
@@ -109,20 +126,28 @@ const relationshipCopy = {
       privacy: 'Privacy',
     },
     hero: {
-      eyebrow: 'Tianji Love / Relationship Orbit',
-      title: 'Read two charts as one relational field.',
-      line: 'Love is not a verdict. It is a pattern you can learn to hold.',
-      body: 'Enter both birth dates and optional birth hours to read attraction, communication, conflict, rhythm, and long-term stability before opening a deeper report.',
-      primary: 'Enter both profiles',
+      eyebrow: 'Tianji Love / AI Relationship Compatibility Report',
+      title: 'Reveal the hidden pattern between two people.',
+      line: 'Private by default · No public birth data · First signal is free',
+      body: 'Enter two birth dates to receive a private relationship reading across attraction, communication, conflict, timing, and long-term potential.',
+      primary: 'Start Free Compatibility Reading',
       secondary: 'Back home',
     },
+    sample: {
+      eyebrow: 'Free First Signal',
+      title: 'What your reading will show',
+      score: 'Overall Compatibility Score',
+      pattern: 'Top Pattern',
+      nextMove: 'Your next best move',
+      unlock: 'Full report unlocks five dimensions, 30-day timing, conflict repair, and communication guidance',
+    },
     trust: [
-      { title: 'Privacy First', body: 'Public shares exclude birth date, time, location, and timezone by default.', icon: Shield },
-      { title: 'Relationship Dynamics', body: 'The flow frames patterns and communication cues, not absolute predictions.', icon: MessageCircleHeart },
-      { title: 'Upgrade-ready', body: 'Start with a summary, then unlock deeper relationship dimensions when needed.', icon: Sparkles },
+      { title: 'Privacy First', body: 'No public birth data. Share links hide date, time, location, and timezone by default.', icon: Shield },
+      { title: 'First Signal', body: 'Free results show the core pattern before you decide whether to unlock depth.', icon: MessageCircleHeart },
+      { title: 'Full Report', body: 'Unlock all five dimensions, timing, and communication guidance when the reading earns it.', icon: Sparkles },
     ],
     steps: [
-      { title: '1. Align both profiles', body: 'Nicknames and birth dates are required; time and location improve context.' },
+      { title: '1. Align both profiles', body: 'Nicknames and birth dates are required; birth time is optional, and location is reserved for advanced reports.' },
       { title: '2. Generate the pattern', body: 'The system reads five dimensions and returns a clear relationship summary.' },
       { title: '3. Share safely or upgrade', body: 'Sharing stays privacy-safe while deeper reports remain private.' },
     ],
@@ -153,7 +178,7 @@ function getLanguageFromSearch(searchParams: URLSearchParams): AppLanguage {
 export default function RelationshipNewClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [language, setLanguage] = useState<AppLanguage>('zh');
+  const [language, setLanguage] = useState<AppLanguage>(() => getLanguageFromSearch(searchParams));
   const [result, setResult] = useState<RelationshipReading | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -161,6 +186,15 @@ export default function RelationshipNewClient() {
   useEffect(() => {
     setLanguage(getLanguageFromSearch(searchParams));
   }, [searchParams]);
+
+  useEffect(() => {
+    void trackRelationshipEvent({
+      event: 'relationship_page_view',
+      experiment_id: 'relationship-p0-sales-loop',
+      variant: 'A',
+      payload: { lang: language, surface: 'relationship_new', funnel_stage: 'page_view' },
+    });
+  }, [language]);
 
   const copy = relationshipCopy[language];
   const isZh = language === 'zh';
@@ -172,6 +206,15 @@ export default function RelationshipNewClient() {
     router.replace(withLanguageParam('/relationship/new', next), { scroll: false });
   };
 
+  const trackFormStart = () => {
+    void trackRelationshipEvent({
+      event: 'relationship_form_start',
+      experiment_id: 'relationship-p0-sales-loop',
+      variant: 'A',
+      payload: { lang: language, funnel_stage: 'form_start' },
+    });
+  };
+
   const handleSubmit = async (data: {
     relationType: RelationshipType;
     personA: { nickname: string; birthDate: string; birthTime?: string; birthLocation?: string };
@@ -179,6 +222,14 @@ export default function RelationshipNewClient() {
   }) => {
     setIsLoading(true);
     setError(null);
+
+    void trackRelationshipEvent({
+      event: 'relationship_form_submit',
+      experiment_id: 'relationship-p0-sales-loop',
+      variant: 'A',
+      relation_type: data.relationType,
+      payload: { lang: language, report_type: 'compatibility_report', funnel_stage: 'form_submit' },
+    });
 
     try {
       const res = await fetch('/api/relationship/analyze', {
@@ -196,12 +247,34 @@ export default function RelationshipNewClient() {
 
       if (!json.success) {
         setError(json.error ?? copy.error.fallback);
+        void trackRelationshipEvent({
+          event: 'relationship_error',
+          experiment_id: 'relationship-p0-sales-loop',
+          variant: 'A',
+          relation_type: data.relationType,
+          payload: { stage: 'analyze', lang: language, report_type: 'compatibility_report', funnel_stage: 'analysis_error' },
+        });
         return;
       }
 
       setResult(json.data);
+      void trackRelationshipEvent({
+        event: 'relationship_analysis_success',
+        experiment_id: 'relationship-p0-sales-loop',
+        variant: 'A',
+        relation_type: data.relationType,
+        is_premium: false,
+        payload: { lang: language, report_type: 'compatibility_report', funnel_stage: 'analysis_success' },
+      });
     } catch {
       setError(copy.error.fallback);
+      void trackRelationshipEvent({
+        event: 'relationship_error',
+        experiment_id: 'relationship-p0-sales-loop',
+        variant: 'A',
+        relation_type: data.relationType,
+        payload: { stage: 'analyze_exception', lang: language, report_type: 'compatibility_report', funnel_stage: 'analysis_error' },
+      });
     } finally {
       setIsLoading(false);
     }
@@ -241,8 +314,16 @@ export default function RelationshipNewClient() {
           <section className="relationship-hero-section relative z-10 mx-auto grid w-full max-w-7xl gap-8 px-5 pb-10 pt-12 sm:px-8 lg:min-h-[690px] lg:grid-cols-[minmax(520px,0.92fr)_minmax(520px,1fr)] lg:items-center">
             <div className="relative z-10 max-w-3xl">
               <p className="mb-5 text-xs uppercase tracking-[0.32em] text-[#d8b77b]/70">Compatibility Report · {copy.hero.eyebrow}</p>
+              {!isZh && (
+                <h1
+                  className="max-w-[720px] font-serif text-[2.3rem] font-semibold leading-[1.12] text-[#ffe3b4] sm:text-[3.6rem] lg:text-[4.35rem]"
+                  style={{ fontFamily: 'var(--font-tianji-display)' }}
+                >
+                  {copy.hero.title}
+                </h1>
+              )}
               <h1
-                className="max-w-[720px] font-serif text-[2.3rem] font-semibold leading-[1.12] text-[#ffe3b4] sm:text-[3.6rem] lg:text-[4.35rem]"
+                className={`${!isZh ? 'hidden ' : ''}max-w-[720px] font-serif text-[2.3rem] font-semibold leading-[1.12] text-[#ffe3b4] sm:text-[3.6rem] lg:text-[4.35rem]`}
                 style={{ fontFamily: 'var(--font-tianji-display)' }}
               >
                 {isZh ? (
@@ -303,6 +384,18 @@ export default function RelationshipNewClient() {
             <TianjiLovePanel className="love-birth-chart-panel p-5 sm:p-8">
               <TianjiLoveSectionTitle eyebrow="Birth Orbit Form" title={isZh ? '请填写双方的关系星轨' : 'Enter both relationship orbits'} className="mb-7" />
 
+              <div className="mb-7 rounded-xl border border-[#d8b77b]/20 bg-black/20 p-5">
+                <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">{copy.sample.eyebrow}</p>
+                <h2 className="mt-2 font-serif text-2xl text-[#ffe3b4]">{copy.sample.title}</h2>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {[copy.sample.score, copy.sample.pattern, copy.sample.nextMove, copy.sample.unlock].map((item) => (
+                    <div key={item} className="rounded-lg border border-[#b57248]/20 bg-[#d8b77b]/6 px-4 py-3 text-sm text-[#f4d7a3]/70">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {isLoading && (
                 <div className="mb-6 rounded-xl border border-[#d8b77b]/22 bg-[#d8b77b]/8 p-4 text-center">
                   <p className="font-semibold text-[#ffe3b4]">{copy.loading.title}</p>
@@ -317,7 +410,7 @@ export default function RelationshipNewClient() {
                 </div>
               )}
 
-              <RelationshipForm onSubmit={handleSubmit} isLoading={isLoading} lang={language} />
+              <RelationshipForm onSubmit={handleSubmit} onStart={trackFormStart} isLoading={isLoading} lang={language} />
             </TianjiLovePanel>
           </section>
 

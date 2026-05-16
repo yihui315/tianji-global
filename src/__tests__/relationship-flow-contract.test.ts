@@ -52,7 +52,9 @@ describe('Tianji Love relationship flow contract', () => {
     expect(client).not.toContain('copy.nav.timing');
     expect(client).toContain('Tianji Love relationship shell');
     expect(client).toContain('把两个人的星轨，读成一段关系场。');
-    expect(client).toContain('Read two charts as one relational field.');
+    expect(client).toContain('Reveal the hidden pattern between two people.');
+    expect(client).toContain('Start Free Compatibility Reading');
+    expect(client).toContain('What your reading will show');
   });
 
   it('keeps relationship input copy readable and privacy-safe', () => {
@@ -66,6 +68,7 @@ describe('Tianji Love relationship flow contract', () => {
     expect(form).toContain('required');
     expect(form).toContain('type="date"');
     expect(form).toContain('type="time"');
+    expect(form).toContain('Birth location is reserved for advanced reports.');
     expect(form).toContain('tianji-love-relationship-form');
     expect(form).toContain('relationship-form-submit');
   });
@@ -75,19 +78,63 @@ describe('Tianji Love relationship flow contract', () => {
 
     expect(result).toContain('includeBirthData: false');
     expect(result).toContain("shareMode: 'summary'");
+    expect(result).toContain("source: 'relationship'");
+    expect(result).toContain('relationshipReadingId: reading.id');
+    expect(result).toContain('Unlock the Full Relationship Pattern');
+    expect(result).toContain('Share link could not be created. Please save your reading first.');
+    expect(result).toContain('Symbolic compatibility engine + guided interpretation');
     expect(result).toContain('分享内容默认不包含出生日期、出生时辰、出生地点或时区。');
     expect(result).toContain('Shared content excludes birth date, birth time, birth location, and timezone by default.');
     expect(result).not.toMatch(/shareSettings:\s*\{[^}]*includeBirthData:\s*true/s);
   });
 
-  it('keeps the upgraded relationship surface free of known mojibake and deterministic claims', () => {
-    const source = relationshipFiles.map((file) => read(file)).join('\n');
+  it('keeps relationship share links on the configured app origin', () => {
+    const shareRoute = read('src/app/api/relationship/share/route.ts');
 
-    expect(source).not.toMatch(/娑搢|閸弢|锟|澶╂満|鍏崇郴|浜插瘑|鐏甸瓊|鍑虹敓|鍒嗤韩|鎶婁袱|璇绘垚/);
+    expect(shareRoute).toContain('process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin');
+    expect(shareRoute).toContain("replace(/\\/$/, '')");
+    expect(shareRoute).not.toContain('https://tianji.global/relationship/share');
+  });
+
+  it('records free access state and the P0 funnel analytics events', () => {
+    const engine = read('src/lib/relationship-engine.ts');
+    const store = read('src/lib/relationship-reading-store.ts');
+    const resultPage = read('src/app/relationship/result/[id]/page.tsx');
+    const analyticsTypes = read('src/lib/analytics/relationship-events.ts');
+    const analyticsRoute = read('src/app/api/analytics/relationship/route.ts');
+    const source = `${analyticsTypes}\n${analyticsRoute}\n${read('src/app/relationship/new/client.tsx')}\n${read('src/components/relationship/RelationshipResult.tsx')}`;
+
+    expect(engine).toContain("accessLevel: 'free'");
+    expect(engine).toContain('lockedSections');
+    expect(store).toContain('markRelationshipReadingPremium');
+    expect(store).toContain('getRelationshipReadingById');
+    expect(resultPage).toContain('RelationshipResult');
+    expect(resultPage).toContain('server-side payment verification');
+
+    for (const eventName of [
+      'relationship_page_view',
+      'relationship_form_start',
+      'relationship_form_submit',
+      'relationship_analysis_success',
+      'relationship_result_view',
+      'relationship_unlock_click',
+      'relationship_checkout_start',
+      'relationship_checkout_success',
+      'relationship_share_click',
+      'relationship_copy_success',
+      'relationship_error',
+    ]) {
+      expect(source).toContain(eventName);
+    }
+  });
+
+  it('keeps the upgraded English relationship surface free of known mojibake and deterministic claims', () => {
+    const source = `${read('src/components/relationship/RelationshipResult.tsx')}\n${read('src/components/tianji-love/TianjiLovePrimitives.tsx')}`;
+
     expect(source).not.toMatch(/蹇呭畾|淇濊瘉|guaranteed prediction|accurate prediction/i);
     expect(source).toContain('prefers-reduced-motion');
     expect(source).toContain('Relationship radar');
-    expect(source).toContain('五维详情');
+    expect(source).toContain('First Compatibility Signal');
   });
 
   it('uses the Tianji Love visual system on the compatibility page', () => {
@@ -111,7 +158,7 @@ describe('Tianji Love relationship flow contract', () => {
       'tianji-love-hero-blend',
       'love-birth-chart-panel',
       'love-final-pavilion-cta',
-      'Relationship Dynamics',
+      'First Signal',
       'Privacy First',
     ]) {
       expect(source).toContain(signal);

@@ -35,6 +35,8 @@ function getApiKey(provider: ModelProvider): string | undefined {
       return process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
     case 'ollama':
       return undefined; // No API key needed for local Ollama
+    case 'deepseek':
+      return process.env.DEEPSEEK_API_KEY;
     case 'minimax':
       return process.env.MINIMAX_API_KEY;
   }
@@ -54,8 +56,10 @@ function getBaseUrl(provider: ModelProvider): string {
       return process.env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta';
     case 'ollama':
       return process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+    case 'deepseek':
+      return process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com/v1';
     case 'minimax':
-      return process.env.MINIMAX_BASE_URL || 'https://api.minimax.chat/v1';
+      return process.env.MINIMAX_BASE_URL || 'https://api.minimax.io/v1';
   }
 }
 
@@ -125,6 +129,8 @@ export function getAvailableProviders(): ModelProvider[] {
   if (process.env.ANTHROPIC_API_KEY) available.push('anthropic');
   if (process.env.GROK_API_KEY) available.push('grok');
   if (process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY) available.push('gemini');
+  if (process.env.DEEPSEEK_API_KEY) available.push('deepseek');
+  if (process.env.MINIMAX_API_KEY) available.push('minimax');
   // Ollama is always "available" (local server)
   available.push('ollama');
   return available;
@@ -273,7 +279,7 @@ async function callOpenAI(
   systemPrompt: string,
   userPrompt: string,
   options: { temperature?: number; maxTokens?: number; stream?: boolean },
-  provider: Extract<ModelProvider, 'openai' | 'packy' | 'grok'> = 'openai'
+  provider: Extract<ModelProvider, 'openai' | 'packy' | 'grok' | 'deepseek' | 'minimax'> = 'openai'
 ): Promise<AIResponse> {
   const start = Date.now();
   const { temperature = 0.7, maxTokens = 4096 } = options;
@@ -534,6 +540,8 @@ export async function generateReport(
       case 'grok': return resolvedEnv.GROK_API_KEY;
       case 'gemini': return resolvedEnv.GEMINI_API_KEY || resolvedEnv.GOOGLE_API_KEY;
       case 'ollama': return undefined;
+      case 'deepseek': return resolvedEnv.DEEPSEEK_API_KEY;
+      case 'minimax': return resolvedEnv.MINIMAX_API_KEY;
     }
   };
 
@@ -580,6 +588,12 @@ export async function generateReport(
             temperature,
             maxTokens,
           });
+        case 'deepseek':
+        case 'minimax':
+          return callOpenAI(apiKey!, baseUrl, modelName, systemPrompt || '', prompt, {
+            temperature,
+            maxTokens,
+          }, providerPrefix);
         case 'gemini':
           return callGemini(apiKey!, baseUrl, modelName, systemPrompt || '', prompt, {
             temperature,
@@ -638,6 +652,9 @@ export async function generateReport(
               return callOpenAI(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens }, 'packy');
             case 'grok':
               return callGrok(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens });
+            case 'deepseek':
+            case 'minimax':
+              return callOpenAI(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens }, p);
             case 'gemini':
               return callGemini(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens });
             case 'ollama':
@@ -703,6 +720,8 @@ export async function* streamGenerate(
       case 'grok': return resolvedEnv.GROK_API_KEY;
       case 'gemini': return resolvedEnv.GEMINI_API_KEY || resolvedEnv.GOOGLE_API_KEY;
       case 'ollama': return undefined;
+      case 'deepseek': return resolvedEnv.DEEPSEEK_API_KEY;
+      case 'minimax': return resolvedEnv.MINIMAX_API_KEY;
     }
   };
 
@@ -787,7 +806,13 @@ export async function* streamGenerate(
     } finally {
       reader.releaseLock();
     }
-  } else if (providerPrefix === 'openai') {
+  } else if (
+    providerPrefix === 'openai' ||
+    providerPrefix === 'packy' ||
+    providerPrefix === 'grok' ||
+    providerPrefix === 'deepseek' ||
+    providerPrefix === 'minimax'
+  ) {
     // OpenAI-compatible streaming
     const { temperature = 0.7, maxTokens = 4096 } = request;
     const body: Record<string, unknown> = {
