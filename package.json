@@ -18,6 +18,7 @@
     "audit:upgrade": "tsx scripts/audit-upgrade.ts",
     "audit:ask-revenue-contract": "tsx scripts/audit-ask-revenue-contract.ts",
     "audit:draw-revenue-contract": "tsx scripts/audit-draw-revenue-contract.ts",
+    "audit:staging-degraded-mode": "tsx scripts/audit-staging-degraded-mode.ts",
     "audit:staging-env-readiness": "tsx scripts/audit-staging-env-readiness.ts",
     "audit:staging-launch-gate": "tsx scripts/audit-staging-launch-gate.ts",
     "smoke:staging:nonpaid": "tsx scripts/smoke-staging-nonpaid.ts",

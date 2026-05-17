@@ -92,6 +92,16 @@
 - Risks: No Stripe test checkout was run. No staging env evidence was available. Local analytics returned 503 because analytics persistence env is not configured. Production sales launch remains No-Go.
 - Next step: Collect masked staging env evidence, enable pay-per-use only in Stripe test mode on staging, then run Stripe test checkout and webhook unlock smoke.
 
+### 2026-05-17 - TianJi Love implementation-first staging degraded mode
+
+- Task ID: 20260516-tianji-love-implementation-first-staging-degraded-mode-lane-a
+- Files changed: `package.json`, `scripts/audit-staging-degraded-mode.ts`, `scripts/smoke-staging-nonpaid.ts`, `src/lib/staging-degraded-mode.ts`, `src/__tests__/scripts/staging-degraded-mode.test.ts`, `src/__tests__/landing-design-contract.test.ts`, `src/__tests__/report-generator-contract.test.ts`, `.ai/TASK_TIANJI_LOVE_DUAL_TRACK_WORKFLOW_20260516.md`, `.ai/TIANJI_LOVE_IMPLEMENTATION_FIRST_STAGING_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Added Lane A degraded-mode source-contract support without touching the forbidden parallel-boundary files. The audit emits the requested JSON fields, keeps default execution at `overall: no-go`, and returns `overall: conditional-go` only when the degraded-mode flags are explicitly set. Runtime paid unlock/provider/email enforcement remains `unknown` because wiring it would require editing forbidden files.
+- Commands run: `npm ci --ignore-scripts --no-audit --no-fund --loglevel=error`; `npm run typecheck`; `npm run lint`; `npm run test -- src/__tests__/scripts/staging-degraded-mode.test.ts`; `npm run test`; `npm run build`; `npm run audit:routes`; `npm run audit:copy`; `npm run audit:share`; `npm run audit:upgrade`; `npm run audit:ask-revenue-contract`; `npm run audit:draw-revenue-contract`; `npm run audit:staging-degraded-mode`; degraded-mode flags plus `npm run audit:staging-degraded-mode`; `git diff --check`.
+- Results: Typecheck passed; lint passed; targeted degraded-mode test passed 1 file / 7 tests; full test suite passed 57 files / 519 tests; build passed with 106 static pages; route/copy/share/upgrade audits passed; Ask and Draw revenue contract audits returned `overall: conditional-go`; default degraded-mode audit returned safe `overall: no-go`; degraded flags audit returned `overall: conditional-go`; diff whitespace check passed with LF/CRLF warnings only.
+- Risks: Runtime paid unlock locking and provider/email live-call disabling remain conditional because the necessary runtime files are off-limits in the dual-track parallel boundary. Staging env readiness, live provider smoke, Stripe test-live, webhook smoke, paid smoke, and production deploy remain No-Go.
+- Next step: Merge Lane A first, then rebase Lane B. Run a serial backend safety follow-up after both lanes merge if runtime guards are still required.
+
 ### 2026-05-16 - TianJi Love latest server redeploy check
 
 - Task ID: 20260516-tianji-love-latest-server-redeploy-check

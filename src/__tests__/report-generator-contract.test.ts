@@ -1,8 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 const repoRoot = process.cwd();
+
+vi.mock('@/lib/ai-orchestrator', () => ({
+  generateReport: vi.fn(async () => {
+    throw new Error('AI provider disabled for contract test');
+  }),
+}));
 
 function read(relativePath: string) {
   return fs.readFileSync(path.join(repoRoot, relativePath), 'utf8');

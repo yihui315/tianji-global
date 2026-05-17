@@ -2,109 +2,86 @@
 
 ## Task Goal
 
-Continue Phase 5B: verify staging env readiness through a local-only input runner without writing `.env`, printing secrets, running live provider smoke, Stripe test-live, webhook smoke, paid smoke, or production deploy.
+Implement Lane A from `.ai/TASK_TIANJI_LOVE_DUAL_TRACK_WORKFLOW_20260516.md`: implementation-first staging degraded mode, while keeping the write set disjoint from Lane B and avoiding forbidden shared files.
 
 ## Decision Summary
 
 ```text
-Phase 4 commit: 2040f66 Go
-Staging env readiness: No-Go
-Phase 5B local runner: Go
-AI runtime group: Go
-DeepSeek group: Go
-MiniMax group: Go
-App/Auth group: No-Go
-Supabase group: No-Go
-Stripe test mode group: No-Go
-Email group: No-Go
-Ollama group: No-Go
-Non-paid staging smoke: Not-run
-AI provider live smoke: Not-run
-Stripe test-live: Not-run
-Webhook smoke: Not-run
+Degraded-mode helper: Go
+Degraded-mode audit script: Go
+Non-paid smoke route/status logging: Go
+Public/free source contract: Conditional Go
+Paid unlock runtime guard: Blocked / Unknown in this lane
+Provider live-call runtime guard: Blocked / Unknown in this lane
+Email runtime guard: Blocked / Unknown in this lane
 Production deploy: No-Go
+Commit: Ready
 ```
 
 ## What Changed
 
-- Committed Phase 4 as `2040f66 feat: add tianji love staging smoke readiness gate`.
-- Created the Phase 5 task file and worktree review.
-- Ran masked env readiness and recorded missing names only.
-- Ran dry-run AI provider smoke, Stripe readiness-only, and aggregate staging launch gate.
-- Recorded non-paid staging smoke, AI provider live smoke, Stripe test-live, and webhook smoke as Not-run because env readiness is No-Go and live approval was not given.
-- Added optional Stripe CLI webhook smoke commands to the staging smoke runbook as documentation only.
-- Updated changelog, final evidence, and this review packet.
-- Added a local-only Phase 5B browser input runner for temporary env verification.
-- Re-ran masked readiness through the runner; values were not written to `.env`.
+- Added `src/lib/staging-degraded-mode.ts` for the requested degraded-mode flags and secret-safe helper decisions.
+- Added `scripts/audit-staging-degraded-mode.ts` with the exact JSON fields from the workflow.
+- Added `audit:staging-degraded-mode` to `package.json`.
+- Updated `scripts/smoke-staging-nonpaid.ts` so it does not call unlock routes and logs route/status/pass plus safe `aiMeta` only.
+- Added focused degraded-mode tests.
+- Stabilized existing landing/report contract tests for Windows CRLF and no-live-provider execution.
+- Recorded the dual-track workflow task file in this lane.
 
 ## Files Changed
 
-- `.ai/TASK_TIANJI_LOVE_STAGING_TEST_SMOKE_PHASE5_20260516.md`
-- `.ai/TIANJI_LOVE_PHASE5_WORKTREE_REVIEW_20260516.md`
-- `.ai/TIANJI_LOVE_PHASE5_ENV_READINESS_20260516.md`
-- `.ai/TIANJI_LOVE_PHASE5_DRY_RUN_GATE_20260516.md`
-- `.ai/TIANJI_LOVE_PHASE5_NONPAID_SMOKE_20260516.md`
-- `.ai/TIANJI_LOVE_PHASE5_AI_PROVIDER_LIVE_SMOKE_20260516.md`
-- `.ai/TIANJI_LOVE_PHASE5_STRIPE_TEST_READINESS_20260516.md`
-- `.ai/TIANJI_LOVE_PHASE5_STAGING_TEST_SMOKE_EVIDENCE_20260516.md`
+- `package.json`
+- `scripts/audit-staging-degraded-mode.ts`
+- `scripts/smoke-staging-nonpaid.ts`
+- `src/lib/staging-degraded-mode.ts`
+- `src/__tests__/scripts/staging-degraded-mode.test.ts`
+- `src/__tests__/landing-design-contract.test.ts`
+- `src/__tests__/report-generator-contract.test.ts`
+- `.ai/TASK_TIANJI_LOVE_DUAL_TRACK_WORKFLOW_20260516.md`
+- `.ai/TIANJI_LOVE_IMPLEMENTATION_FIRST_STAGING_EVIDENCE_20260516.md`
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md`
-- `docs/tianji-love-staging-smoke-runbook.md`
-- `.ai/TIANJI_LOVE_LOCAL_SERVER_API_CALLS_20260517.md`
-- `scripts/local-phase5b-env-runner.mjs`
 
 ## Commands Run
 
 | Command | Result |
 | --- | --- |
-| `git status --short` | Tracked worktree clean after Phase 4 commit; unrelated untracked artifacts remain |
-| `git log --oneline -8` | Confirmed latest commit `2040f66` |
-| `git branch --show-current` | `redesign-home-landing-20260420` |
-| `git show --stat --oneline -1` | Confirmed Phase 4 commit file scope |
-| `npm run audit:staging-env-readiness` | Expected No-Go; missing names only |
-| `npm run smoke:ai-providers` | Dry-run only; `overall: conditional-go` |
-| `npm run smoke:stripe:test-readiness` | Readiness-only; `overall: conditional-go` |
-| `npm run audit:staging-launch-gate` | `overall: no-go` because env readiness is No-Go and non-paid smoke was not run |
+| `npm ci --ignore-scripts --no-audit --no-fund --loglevel=error` | Pass; restored local JS tooling without lifecycle scripts |
 | `npm run typecheck` | Pass |
 | `npm run lint` | Pass |
-| `npm run test` | Pass, 56 files / 512 tests |
-| `npm run build` | Pass, 106 static pages generated |
+| `npm run test -- src/__tests__/scripts/staging-degraded-mode.test.ts` | Pass, 1 file / 7 tests |
+| `npm run test` | Pass, 57 files / 519 tests |
+| `npm run build` | Pass, 106 static pages |
 | `npm run audit:routes` | Pass |
 | `npm run audit:copy` | Pass |
 | `npm run audit:share` | Pass |
 | `npm run audit:upgrade` | Pass |
-| `npm run audit:ask-revenue-contract` | Pass, all fields `go`, overall `conditional-go` |
-| `npm run audit:draw-revenue-contract` | Pass, all fields `go`, overall `conditional-go` |
-| `git diff --check` | Pass; LF/CRLF working-copy warnings only |
-| targeted secret-shape scan over Phase 5 changed files | Pass; no raw secret-shaped values found |
-| `node --check scripts/local-phase5b-env-runner.mjs` | Pass |
-| local runner masked readiness execution | Pass execution; env readiness remains `overall: no-go` |
+| `npm run audit:ask-revenue-contract` | Pass, `overall: conditional-go` |
+| `npm run audit:draw-revenue-contract` | Pass, `overall: conditional-go` |
+| `npm run audit:staging-degraded-mode` | Pass command, expected safe default `overall: no-go` |
+| degraded flags + `npm run audit:staging-degraded-mode` | Pass command, `overall: conditional-go` |
+| `git diff --check` | Pass; LF/CRLF warnings only |
 
 ## Safety Notes
 
-- No `.env`, `.env.local`, credential, private key, provider key, Stripe secret, webhook secret, Supabase secret, or production config value was read or printed.
-- No hosted non-paid staging smoke was run.
-- No live DeepSeek, Ollama, MiniMax, Stripe, Supabase, or Resend call was made.
-- No Stripe checkout session, webhook trigger, paid smoke, email send, entitlement mutation, production database mutation, or production deploy was run.
-- No birth time, birth location, timezone, raw question text, raw prompt, or provider response body was logged.
-- MiniMax remains internal/research only and is not a public production default.
-- The local runner disables live provider smoke and Stripe test-live.
+- No `.env`, secret, credential, production config, Stripe live API, Supabase production mutation, Resend send, provider live call, paid smoke, or production deploy was run.
+- Initial forbidden-file edits were reverted before validation and are not in the current diff.
+- Current changed source files are within the adjusted Lane A scope.
+- Runtime paid unlock/provider/email enforcement remains intentionally unwired because those files are in the parallel boundary.
 
 ## Remaining Risks
 
-1. Staging env readiness is still No-Go.
-2. Missing groups: App/Auth, Supabase staging, Stripe test mode, Email, and Ollama.
-3. Non-paid staging smoke is Not-run.
-4. AI provider live smoke is Not-run.
-5. Stripe test-live and webhook smoke are Not-run.
-6. Production deploy remains No-Go.
+1. Runtime paid route locking is not implemented in this lane because `src/app/api/ask/unlock/route.ts` and `src/app/api/draw/unlock/route.ts` are off-limits.
+2. Runtime provider live-call disabling is not implemented in this lane because `src/lib/tianji-model-gateway.ts` is off-limits.
+3. Runtime email send disabling is only represented by helper/audit support because existing email runtime code is outside this lane.
+4. Staging env readiness and live smoke remain No-Go until configured and explicitly approved.
 
 ## Suggested Next Gate
 
-Provide/configure the remaining non-provider staging/test values through the local runner or server staging env, rerun masked env readiness, then explicitly approve non-paid staging smoke only after readiness becomes Go or explicitly accepted as Conditional Go.
+Merge Lane A first, then rebase Lane B. After both lanes are merged, schedule a serial backend safety task only if runtime paid unlock/provider/email enforcement is still required.
 
 ## Suggested Commit Message
 
 ```text
-chore: record tianji love staging test smoke evidence
+feat: add implementation-first staging degraded mode
 ```

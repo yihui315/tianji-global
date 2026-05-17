@@ -38,7 +38,7 @@ const moduleContracts = [
 ] as const;
 
 function read(relativePath: string) {
-  return fs.readFileSync(path.join(repoRoot, relativePath), 'utf8');
+  return fs.readFileSync(path.join(repoRoot, relativePath), 'utf8').replace(/\r\n/g, '\n');
 }
 
 function publicAssetExists(assetPath: string) {

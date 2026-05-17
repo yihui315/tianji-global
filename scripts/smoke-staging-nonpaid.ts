@@ -6,14 +6,31 @@ export type StagingNonPaidSmokeResult = {
   askPage: Status;
   drawPage: Status;
   pricingPage: Status;
+  loginPage: Status;
   relationshipNonPaid: Status;
   askPreviewNonPaid: Status;
   drawPreviewNonPaid: Status;
+  checks: SmokeCheck[];
   overall: OverallStatus;
 };
 
 type EnvLike = Record<string, string | undefined>;
 type FetchLike = typeof fetch;
+type SafeAiMeta = {
+  provider?: string;
+  model?: string;
+  fallbackUsed?: boolean;
+  safetyRewritten?: boolean;
+  latencyMs?: number;
+  route?: string;
+};
+type SmokeCheck = {
+  route: string;
+  method: 'GET' | 'POST';
+  status: Status;
+  passed: boolean;
+  aiMeta?: SafeAiMeta;
+};
 
 function normalizeBaseUrl(raw: string | undefined) {
   if (!raw) return undefined;
@@ -33,6 +50,28 @@ function statusFromResponse(response: Response) {
   if (response.status >= 200 && response.status < 400) return 'go';
   if (response.status === 404 || response.status >= 500) return 'no-go';
   return 'unknown';
+}
+
+function safeAiMeta(value: unknown): SafeAiMeta | undefined {
+  if (!value || typeof value !== 'object') return undefined;
+  const source = value as Record<string, unknown>;
+  const aiMeta = source.aiMeta && typeof source.aiMeta === 'object'
+    ? source.aiMeta as Record<string, unknown>
+    : source.data && typeof source.data === 'object' && (source.data as Record<string, unknown>).aiMeta &&
+        typeof (source.data as Record<string, unknown>).aiMeta === 'object'
+      ? (source.data as Record<string, unknown>).aiMeta as Record<string, unknown>
+      : undefined;
+
+  if (!aiMeta) return undefined;
+
+  return {
+    provider: typeof aiMeta.provider === 'string' ? aiMeta.provider : undefined,
+    model: typeof aiMeta.model === 'string' ? aiMeta.model : undefined,
+    fallbackUsed: typeof aiMeta.fallbackUsed === 'boolean' ? aiMeta.fallbackUsed : undefined,
+    safetyRewritten: typeof aiMeta.safetyRewritten === 'boolean' ? aiMeta.safetyRewritten : undefined,
+    latencyMs: typeof aiMeta.latencyMs === 'number' ? aiMeta.latencyMs : undefined,
+    route: typeof aiMeta.route === 'string' ? aiMeta.route : undefined,
+  };
 }
 
 function overallFor(statuses: Status[]): OverallStatus {
@@ -60,16 +99,24 @@ async function getStatus(fetchFn: FetchLike, baseUrl: string, path: string, limi
   }
 }
 
-async function postStatus(fetchFn: FetchLike, baseUrl: string, path: string, body: unknown, limitMs: number): Promise<Status> {
+async function postCheck(fetchFn: FetchLike, baseUrl: string, path: string, body: unknown, limitMs: number): Promise<SmokeCheck> {
   try {
     const response = await requestWithTimeout(fetchFn, `${baseUrl}${path}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(body),
     }, limitMs);
-    return statusFromResponse(response);
+    const status = statusFromResponse(response);
+    let aiMeta: SafeAiMeta | undefined;
+    try {
+      aiMeta = safeAiMeta(await response.json());
+    } catch {
+      aiMeta = undefined;
+    }
+
+    return { route: path, method: 'POST', status, passed: status === 'go', aiMeta };
   } catch {
-    return 'unknown';
+    return { route: path, method: 'POST', status: 'unknown', passed: false };
   }
 }
 
@@ -84,9 +131,11 @@ export async function runStagingNonPaidSmoke(
       askPage: 'unknown',
       drawPage: 'unknown',
       pricingPage: 'unknown',
+      loginPage: 'unknown',
       relationshipNonPaid: 'unknown',
       askPreviewNonPaid: 'unknown',
       drawPreviewNonPaid: 'unknown',
+      checks: [],
       overall: 'conditional-go',
     };
   }
@@ -97,7 +146,8 @@ export async function runStagingNonPaidSmoke(
   const askPage = await getStatus(fetchFn, baseUrl, '/ask', limitMs);
   const drawPage = await getStatus(fetchFn, baseUrl, '/draw', limitMs);
   const pricingPage = await getStatus(fetchFn, baseUrl, '/pricing', limitMs);
-  const relationshipNonPaid = await postStatus(fetchFn, baseUrl, '/api/relationship/analyze', {
+  const loginPage = await getStatus(fetchFn, baseUrl, '/login', limitMs);
+  const relationshipCheck = await postCheck(fetchFn, baseUrl, '/api/relationship/analyze', {
     relationType: 'romantic',
     lang,
     premium: false,
@@ -110,22 +160,33 @@ export async function runStagingNonPaidSmoke(
       birthDate: '2001-02-03',
     },
   }, limitMs);
-  const askPreviewNonPaid = await postStatus(fetchFn, baseUrl, '/api/ask/preview', {
+  const askPreviewCheck = await postCheck(fetchFn, baseUrl, '/api/ask/preview', {
     language: lang,
     question: 'Staging non-paid Ask preview smoke.',
   }, limitMs);
-  const drawPreviewNonPaid = await postStatus(fetchFn, baseUrl, '/api/draw/preview', {
+  const drawPreviewCheck = await postCheck(fetchFn, baseUrl, '/api/draw/preview', {
     language: lang,
     question: 'Staging non-paid Draw preview smoke.',
   }, limitMs);
+  const checks: SmokeCheck[] = [
+    { route: '/', method: 'GET', status: home, passed: home === 'go' },
+    { route: '/ask', method: 'GET', status: askPage, passed: askPage === 'go' },
+    { route: '/draw', method: 'GET', status: drawPage, passed: drawPage === 'go' },
+    { route: '/pricing', method: 'GET', status: pricingPage, passed: pricingPage === 'go' },
+    { route: '/login', method: 'GET', status: loginPage, passed: loginPage === 'go' },
+    relationshipCheck,
+    askPreviewCheck,
+    drawPreviewCheck,
+  ];
   const statuses = [
     home,
     askPage,
     drawPage,
     pricingPage,
-    relationshipNonPaid,
-    askPreviewNonPaid,
-    drawPreviewNonPaid,
+    loginPage,
+    relationshipCheck.status,
+    askPreviewCheck.status,
+    drawPreviewCheck.status,
   ];
 
   return {
@@ -133,9 +194,11 @@ export async function runStagingNonPaidSmoke(
     askPage,
     drawPage,
     pricingPage,
-    relationshipNonPaid,
-    askPreviewNonPaid,
-    drawPreviewNonPaid,
+    loginPage,
+    relationshipNonPaid: relationshipCheck.status,
+    askPreviewNonPaid: askPreviewCheck.status,
+    drawPreviewNonPaid: drawPreviewCheck.status,
+    checks,
     overall: overallFor(statuses),
   };
 }
