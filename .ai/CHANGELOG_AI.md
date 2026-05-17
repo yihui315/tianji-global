@@ -142,6 +142,16 @@
 - Risks: Runtime paid unlock locking and provider/email live-call disabling remain conditional because the necessary runtime files are off-limits in the dual-track parallel boundary. Staging env readiness, live provider smoke, Stripe test-live, webhook smoke, paid smoke, and production deploy remain No-Go.
 - Next step: Merge Lane A first, then rebase Lane B. Run a serial backend safety follow-up after both lanes merge if runtime guards are still required.
 
+### 2026-05-16 - TianJi Love staging degraded deploy execution
+
+- Task ID: 20260516-tianji-love-staging-degraded-deploy-execution
+- Files changed: `.ai/TIANJI_LOVE_STAGING_DEGRADED_DEPLOY_EXECUTION_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Attempted the Codex E degraded staging deploy execution gate from branch `chore/staging-degraded-deploy-execution`. No deploy was executed because the lane has no `node_modules`, so required npm gates could not run, and the read-only target scan found no concrete non-production staging deploy target.
+- Commands run: `git status --short`; `git log --oneline -8`; `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build:staging:degraded`; `npm run audit:staging-degraded-mode`; `npm run audit:staging:degraded`; dependency presence checks; read-only deploy target scan over `package.json`, staging runbooks, deploy docs, `vercel.json`, `next.config.js`, `ops/**`, `scripts/**`, and PM2/ecosystem config search.
+- Results: All npm validation commands were not runnable because local binaries were missing (`tsc`, `next`, `vitest`, `tsx`). `package-lock.json` exists, but `node_modules` is absent. No explicit non-production staging deploy target or `STAGING_BASE_URL` was found. Staging deploy and non-paid smoke were Not-run. Production deploy remained No-Go.
+- Risks: A dependency-ready lane and explicit staging target are still required before deploy execution can be attempted. Production-shaped self-hosted docs exist and must not be used as staging.
+- Next step: Restore dependencies in an approved dependency-ready worktree, provide a concrete non-production staging target, rerun the degraded gates, then deploy and run non-paid smoke only if all gates pass.
+
 ### 2026-05-16 - TianJi Love latest server redeploy check
 
 - Task ID: 20260516-tianji-love-latest-server-redeploy-check
