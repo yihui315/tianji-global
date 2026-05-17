@@ -12,6 +12,15 @@
 - Risks: Reusing `https://tianji.love` or `186.244.244.81` would be a production canary decision, not staging degraded deploy. Provider live smoke, Stripe test/live, webhook smoke, paid smoke, email send, Supabase mutation, and production deploy remain No-Go.
 - Next step: Provide or create a secret-safe non-production staging target, then rerun degraded build/audit and hosted non-paid smoke with `STAGING_BASE_URL`.
 
+### 2026-05-17 - TianJi Love production canary prep
+
+- Task ID: 20260516-tianji-love-production-canary-prep
+- Files changed: `docs/tianji-love-production-canary-runbook.md`, `.ai/TIANJI_LOVE_PRODUCTION_CANARY_PREP_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Prepared a docs-only production canary runbook and evidence packet for a future free canary covering homepage, pricing, relationship free, Ask preview, Draw preview, and login page. The runbook documents required initial production safety flags, explicit exclusions, Go/No-Go criteria, free smoke checklist, rollback steps, and an evidence template.
+- Commands run: `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run build:staging:degraded`; `npm run audit:routes`; `npm run audit:copy`; `npm run audit:share`; `npm run audit:upgrade`; `npm run audit:ask-revenue-contract`; `npm run audit:draw-revenue-contract`; `npm run audit:staging:degraded`; `git diff --check`; targeted secret-shape scan over changed docs.
+- Results: Typecheck passed. Lint passed. Full tests passed 67 files / 553 tests. Production build and staging degraded build passed with 106 static pages and existing NextAuth/jose Edge runtime warnings. Route/copy/share/upgrade audits passed. Ask and Draw revenue contract audits passed with `overall: conditional-go`. Staging degraded audit passed with `overall: go`. Diff check passed with LF/CRLF working-copy warnings only. Targeted docs secret-shape scan found 0 hits.
+- Risks: This does not authorize production deploy, paid smoke, Stripe test-live, provider live, email automation, Supabase mutation smoke, or Vedic paid public exposure. Masked runtime flag evidence and rollback owner/path remain required before canary execution.
+
 ### 2026-05-17 - TianJi Love Vedic relationship route wiring Lane I
 
 - Task ID: 20260516-tianji-love-vedic-relationship-route-wiring-lane-i
