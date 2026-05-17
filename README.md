@@ -221,6 +221,25 @@ See [`docs/US_SERVER_DEPLOY.md`](docs/US_SERVER_DEPLOY.md) for the current
 server runbook, required environment variable names, smoke checks, and GitHub
 Actions deployment setup.
 
+### Staging Smoke Readiness
+
+Phase 4 staging readiness is available as explicit, opt-in scripts. These checks are not part of the default production release gate.
+
+```bash
+npm run audit:staging-env-readiness
+npm run smoke:ai-providers
+npm run smoke:stripe:test-readiness
+npm run audit:staging-launch-gate
+```
+
+Hosted non-paid staging smoke requires an approved staging URL:
+
+```bash
+STAGING_BASE_URL=https://staging.example.com STAGING_NONPAID_SMOKE_ALLOW_LIVE=true npm run smoke:staging:nonpaid
+```
+
+Live provider smoke and Stripe test-live smoke require separate explicit approval and staging/test credentials. See [`docs/tianji-love-staging-smoke-runbook.md`](docs/tianji-love-staging-smoke-runbook.md).
+
 ---
 
 ## Contributing

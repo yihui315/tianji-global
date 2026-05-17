@@ -34,8 +34,24 @@ npm run test -- src/__tests__/api/ask-paid-gateway.test.ts
 npm run test -- src/__tests__/api/draw-gateway.test.ts
 npm run audit:ask-revenue-contract
 npm run audit:draw-revenue-contract
+npm run audit:staging-env-readiness
+npm run smoke:ai-providers
+npm run smoke:stripe:test-readiness
+npm run audit:staging-launch-gate
 npm run typecheck
 ```
+
+## Phase 4 Staging Smoke Rollback
+
+If a staging readiness or smoke command fails:
+
+1. Stop live smoke execution and keep production deploy No-Go.
+2. Preserve unpaid Ask and Draw gating. Do not bypass checkout/session verification to recover a smoke.
+3. Keep `AI_PROVIDER_SMOKE_MODE=dry-run` and `STRIPE_SMOKE_MODE=readiness` until the failing staging/test configuration is corrected.
+4. If a hosted non-paid smoke fails, remove `STAGING_NONPAID_SMOKE_ALLOW_LIVE=true` from subsequent runs until the route issue is fixed.
+5. If Stripe test-readiness flags production-shaped keys, remove those variables from staging before any test-live command.
+6. If provider smoke fails, keep gateway fallback and safety rewrite in place and repair provider-specific env/config outside production.
+7. Re-run the aggregate gate only after the specific failing readiness command returns `go` or an accepted `conditional-go`.
 
 ## Data Safety Notes
 

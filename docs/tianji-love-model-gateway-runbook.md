@@ -133,6 +133,28 @@ npm run audit:draw-revenue-contract
 
 This audit is also static and contract-only. It must not make live Stripe, DeepSeek, MiniMax, Ollama, or email calls.
 
+Run the Phase 4 staging readiness gates:
+
+```bash
+npm run audit:staging-env-readiness
+npm run smoke:ai-providers
+npm run smoke:stripe:test-readiness
+npm run audit:staging-launch-gate
+```
+
+These commands are readiness/dry-run by default. They must not print secret values or create live Stripe/provider side effects. Non-paid hosted staging smoke requires `STAGING_BASE_URL` plus an explicit approval latch:
+
+```bash
+STAGING_BASE_URL=https://staging.example.com STAGING_NONPAID_SMOKE_ALLOW_LIVE=true npm run smoke:staging:nonpaid
+```
+
+Live provider smoke and Stripe test-live smoke remain approval-required:
+
+```bash
+AI_PROVIDER_SMOKE_MODE=live AI_PROVIDER_SMOKE_ALLOW_LIVE=true npm run smoke:ai-providers
+STRIPE_SMOKE_MODE=test-live STRIPE_SMOKE_ALLOW_LIVE=true npm run smoke:stripe:test-readiness
+```
+
 Run TypeScript validation:
 
 ```bash
@@ -155,6 +177,8 @@ Ask preview is now a locked local teaser only. Paid Ask generation is wired thro
 
 Draw preview now returns a locked, limited three-card reading and token. Paid/pro Draw generation is wired through the `tarot_draw` gateway route after Stripe session verification. Enhanced `/api/tarot` interpretations also use `tarot_draw`. Local tests and contract audit use mocks/static source checks only; no live paid smoke or provider smoke has been run.
 
+Phase 4 staging readiness scripts now exist for masked env inventory, non-paid staging smoke planning, AI provider dry-run/live smoke gating, Stripe test-readiness gating, and aggregate launch-gate status. The current safe default is readiness-only. Live Stripe/provider checks and production deploy remain No-Go without explicit staging/test approval and credentials.
+
 ## Next Wiring Step
 
-The next safe implementation should collect masked staging evidence and run staged non-paid plus Stripe test-mode checkout/provider smoke only after explicit approval. Production deploy remains No-Go until Stripe test-mode evidence, webhook behavior, and DeepSeek/Ollama provider readiness are proven.
+The next safe implementation should collect approved staging evidence and run staged non-paid plus Stripe test-mode checkout/provider smoke only after explicit approval. Production deploy remains No-Go until Stripe test-mode evidence, webhook behavior, and DeepSeek/Ollama provider readiness are proven.

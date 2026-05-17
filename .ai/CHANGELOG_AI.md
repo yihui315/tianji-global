@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-17 - TianJi Love staging smoke readiness Phase 4
+
+- Task ID: 20260516-tianji-love-staging-smoke-readiness-phase4
+- Files changed: `.ai/TASK_TIANJI_LOVE_STAGING_SMOKE_READINESS_PHASE4_20260516.md`, `.ai/TIANJI_LOVE_PHASE4_WORKTREE_REVIEW_20260516.md`, `.ai/TIANJI_LOVE_STAGING_SMOKE_READINESS_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `README.md`, `docs/tianji-love-model-gateway-runbook.md`, `docs/tianji-love-model-gateway-rollback.md`, `docs/tianji-love-staging-smoke-runbook.md`, `package.json`, `scripts/audit-staging-env-readiness.ts`, `scripts/audit-staging-launch-gate.ts`, `scripts/smoke-ai-providers.ts`, `scripts/smoke-staging-nonpaid.ts`, `scripts/smoke-stripe-test-readiness.ts`, `src/__tests__/scripts/staging-smoke-readiness.test.ts`
+- Summary: Added Phase 4 staging smoke readiness gates without changing product behavior. The new scripts provide masked env presence inventory, non-paid staging smoke planning, AI provider dry-run/live-gated smoke, Stripe test-readiness, and aggregate launch-gate status. Documentation now records approval-required live commands, rollback boundaries, evidence requirements, and Go/No-Go criteria.
+- Commands run: Worktree review with `git status --short`, `git log --oneline -5`, `git diff -- tsconfig.tsbuildinfo`; restored `tsconfig.tsbuildinfo`; RED/GREEN targeted readiness tests; `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run audit:routes`; `npm run audit:copy`; `npm run audit:share`; `npm run audit:upgrade`; `npm run audit:ask-revenue-contract`; `npm run audit:draw-revenue-contract`; `npm run audit:staging-env-readiness`; `npm run smoke:ai-providers`; `npm run smoke:stripe:test-readiness`; `npm run audit:staging-launch-gate`; `git diff --check`; targeted secret-shape scan over Phase 4 changed files.
+- Results: Typecheck passed; lint passed; full test suite passed 56 files / 512 tests; build passed with 106 static pages; route/copy/share/upgrade audits passed; Ask and Draw revenue audits returned `overall: conditional-go`; env readiness returned `overall: no-go` with missing names only; AI provider smoke returned `overall: conditional-go` in dry-run; Stripe readiness returned `overall: conditional-go`; aggregate staging gate returned `overall: no-go`; diff whitespace check passed with LF/CRLF working-copy warnings only; refined secret-shape scan found no raw secret-shaped values.
+- Risks: No hosted non-paid staging smoke, Stripe test-live checkout, Stripe webhook smoke, DeepSeek live call, Ollama live call, MiniMax quota live call, email send, Supabase mutation, production config mutation, or production deploy was run. Production remains No-Go.
+- Next step: Configure/verify staging env names, then explicitly approve Phase 5 staging non-paid plus Stripe test checkout/webhook/provider smoke. Do not deploy production until those gates pass.
+
 ### 2026-05-17 - TianJi Love Draw/Tarot gateway Phase 3
 
 - Task ID: 20260516-tianji-love-revenue-gate-phase3-draw
