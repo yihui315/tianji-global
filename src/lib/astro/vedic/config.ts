@@ -1,4 +1,4 @@
-export type VedicReportMode = 'disabled' | 'preview' | 'full';
+export type VedicReportMode = 'disabled' | 'preview' | 'paid';
 
 export interface VedicReportConfig {
   enabled: boolean;
@@ -10,7 +10,7 @@ function isTruthy(value: string | undefined) {
 }
 
 function normalizeMode(value: string | undefined): VedicReportMode {
-  if (value === 'preview' || value === 'full') return value;
+  if (value === 'preview' || value === 'paid') return value;
   return 'disabled';
 }
 

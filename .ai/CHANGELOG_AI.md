@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-17 - TianJi Love Vedic paid report integration Lane H
+
+- Task ID: 20260516-tianji-love-vedic-paid-report-integration-lane-h
+- Files changed: `src/lib/astro/vedic/config.ts`, `src/lib/astro/vedic/index.ts`, `src/lib/astro/vedic/relationship-paid-adapter.ts`, `src/__tests__/vedic-paid-report-integration.test.ts`, `.ai/TIANJI_LOVE_VEDIC_PAID_REPORT_INTEGRATION_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Added a feature-flagged Vedic paid relationship report adapter. The adapter defaults to disabled, supports `preview` and `paid` modes, requires paid/pro entitlement for full reports, returns safe non-sensitive metadata, and adds Ask/Draw follow-up sections without changing live routes, Stripe, Supabase, Resend, or provider behavior.
+- Commands run: Lane H git/worktree checks; source inspection of Vedic, Relationship paid report jobs, billing, and Ask/Draw gateway tests; RED targeted Vedic paid integration test; targeted Vedic paid tests; targeted Vedic V1 plus paid tests; `npm run typecheck`; Ask/Draw gateway plus Vedic paid tests; `npm run lint`; `npm run test`; `npm run build`; route/copy/share/upgrade audits; Ask/Draw revenue contract audits; `npm run audit:staging:degraded`; `npm run build:staging:degraded`; `git diff --check`; targeted secret-shape scan.
+- Results: Targeted Vedic paid integration passed 1 file / 6 tests. Vedic V1 plus paid tests passed 5 files / 13 tests. Ask/Draw gateway plus Vedic paid tests passed 3 files / 13 tests. Typecheck and lint passed. Full tests passed 66 files / 545 tests. Build and staging degraded build passed with 106 static pages and existing NextAuth/jose Edge runtime warnings. Ask/Draw revenue contracts remain `conditional-go`; `audit:staging:degraded` remains `go`. Diff check passed with LF/CRLF warnings only, and targeted secret-shape scan returned `SECRET_SCAN_HITS=0`.
+- Risks: The current Relationship report job input does not yet provide structured `VedicChartData`, so this is adapter-ready integration rather than public route exposure. Vedic production exposure, paid live smoke, webhook smoke, provider live smoke, Supabase mutation, email send, and production deploy remain No-Go.
+- Next step: Add a feature-flagged Relationship report data path that can safely assemble or fetch Vedic chart data, then call the adapter only after paid/pro entitlement is confirmed.
+
 ### 2026-05-17 - TianJi Love Vedic astro skill V1
 
 - Task ID: 20260517-tianji-love-current-upgrade-plus-vedic-astro-v1
