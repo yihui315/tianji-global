@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-17 - TianJi Love staging degraded deploy execution recheck
+
+- Task ID: 20260516-tianji-love-staging-degraded-deploy-execution-recheck
+- Files changed: `.ai/TIANJI_LOVE_STAGING_DEGRADED_DEPLOY_EXECUTION_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Continued Lane E after merging the latest baseline through Vedic route wiring. The dependency/build blocker from the earlier Lane E attempt is resolved in the main worktree: typecheck, lint, full tests, normal build, degraded build, route/copy/share/upgrade audits, Ask/Draw revenue contract audits, and degraded staging audit all passed. Deployment was not executed because the repository still does not define a concrete non-production staging target or `STAGING_BASE_URL`; the only concrete server path remains production-shaped.
+- Commands run: `git status --short --branch`; `git log --oneline -10`; `git merge feat/wire-vedic-relationship-paid-route`; `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run build:staging:degraded`; route/copy/share/upgrade audits; Ask/Draw revenue contract audits; `npm run audit:staging:degraded`; `git diff --check`; read-only deploy target scan over package/docs/config/scripts.
+- Results: Full tests passed 67 files / 553 tests. Normal and degraded builds passed with 106 static pages and existing NextAuth/jose Edge runtime warnings. Ask/Draw revenue contracts remain `conditional-go`; `audit:staging:degraded` remains `go`. Staging deploy and non-paid hosted smoke remain Not-run because no explicit non-production staging target exists.
+- Risks: Reusing `https://tianji.love` or `186.244.244.81` would be a production canary decision, not staging degraded deploy. Provider live smoke, Stripe test/live, webhook smoke, paid smoke, email send, Supabase mutation, and production deploy remain No-Go.
+- Next step: Provide or create a secret-safe non-production staging target, then rerun degraded build/audit and hosted non-paid smoke with `STAGING_BASE_URL`.
+
 ### 2026-05-17 - TianJi Love Vedic relationship route wiring Lane I
 
 - Task ID: 20260516-tianji-love-vedic-relationship-route-wiring-lane-i
