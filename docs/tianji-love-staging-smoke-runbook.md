@@ -109,6 +109,15 @@ npm run smoke:stripe:test-readiness
 
 Webhook event delivery tests require explicit approval, test-mode Stripe only, and a staging endpoint. Do not mutate production subscriptions, entitlements, or customer records.
 
+Optional Stripe CLI webhook smoke plan, approval required and test mode only:
+
+```bash
+stripe listen --forward-to <STAGING_BASE_URL>/api/stripe/webhook
+stripe trigger checkout.session.completed
+```
+
+Do not paste the webhook signing secret into chat, logs, docs, or evidence. Evidence should record only that a test-mode event was received and the entitlement path was checked.
+
 ## 9. DeepSeek Live Provider Smoke
 
 Dry-run readiness:
@@ -194,4 +203,3 @@ If staging smoke fails:
 | AI provider live smoke | approved live staging calls pass without body/secrets logging | not approved, not run, or provider call fails |
 | MiniMax quota | approved quota check returns safe quota status | token-plan key absent or quota check fails |
 | Production deploy | only after all staging paid/live gates pass | default state for Phase 4 |
-

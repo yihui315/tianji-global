@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-17 - TianJi Love staging test smoke Phase 5
+
+- Task ID: 20260516-tianji-love-staging-test-smoke-phase5
+- Files changed: `.ai/TASK_TIANJI_LOVE_STAGING_TEST_SMOKE_PHASE5_20260516.md`, `.ai/TIANJI_LOVE_PHASE5_WORKTREE_REVIEW_20260516.md`, `.ai/TIANJI_LOVE_PHASE5_ENV_READINESS_20260516.md`, `.ai/TIANJI_LOVE_PHASE5_DRY_RUN_GATE_20260516.md`, `.ai/TIANJI_LOVE_PHASE5_NONPAID_SMOKE_20260516.md`, `.ai/TIANJI_LOVE_PHASE5_AI_PROVIDER_LIVE_SMOKE_20260516.md`, `.ai/TIANJI_LOVE_PHASE5_STRIPE_TEST_READINESS_20260516.md`, `.ai/TIANJI_LOVE_PHASE5_STAGING_TEST_SMOKE_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `docs/tianji-love-staging-smoke-runbook.md`
+- Summary: Committed Phase 4 as `2040f66`, then executed Phase 5 in the safe default path. Staging env readiness remains No-Go because required env names are not configured in this shell. Dry-run AI provider smoke and Stripe readiness-only checks ran and stayed Conditional Go. Hosted non-paid smoke, live provider smoke, Stripe test-live, webhook smoke, paid smoke, and production deploy were not run.
+- Commands run: `git status --short`; `git log --oneline -8`; `git branch --show-current`; `git show --stat --oneline -1`; `npm run audit:staging-env-readiness`; `npm run smoke:ai-providers`; `npm run smoke:stripe:test-readiness`; `npm run audit:staging-launch-gate`; `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run audit:routes`; `npm run audit:copy`; `npm run audit:share`; `npm run audit:upgrade`; `npm run audit:ask-revenue-contract`; `npm run audit:draw-revenue-contract`; final staging readiness/dry-run gates; `git diff --check`; targeted secret-shape scan over Phase 5 changed files.
+- Results: Typecheck passed; lint passed; full tests passed 56 files / 512 tests; build passed with 106 static pages; route/copy/share/upgrade audits passed; Ask and Draw revenue contract audits returned `overall: conditional-go`; env readiness returned `overall: no-go` with missing names only; AI provider smoke returned dry-run `overall: conditional-go`; Stripe readiness returned readiness-only `overall: conditional-go`; aggregate staging launch gate returned `overall: no-go`; diff whitespace check passed with LF/CRLF working-copy warnings only; targeted secret-shape scan found no raw secret-shaped values.
+- Risks: Staging env readiness is still No-Go. No hosted non-paid smoke, live provider smoke, MiniMax quota live check, Stripe test-live checkout, Stripe webhook smoke, paid smoke, Supabase mutation, email send, or production deploy was run.
+- Next step: Configure staging/test env names outside Codex, rerun masked env readiness, then explicitly approve non-paid staging smoke before any live provider or Stripe test-live smoke.
+
 ### 2026-05-17 - TianJi Love staging smoke readiness Phase 4
 
 - Task ID: 20260516-tianji-love-staging-smoke-readiness-phase4

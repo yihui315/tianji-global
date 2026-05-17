@@ -2,65 +2,59 @@
 
 ## Task Goal
 
-Complete Phase 4: prepare TianJi Love staging live smoke readiness evidence without changing feature behavior, running paid smoke, calling live providers, or deploying production.
+Complete Phase 5: execute the safe staging test-smoke evidence path after committing Phase 4, without running live provider smoke, Stripe test-live, webhook smoke, paid smoke, or production deploy while staging env readiness remains No-Go.
 
 ## Decision Summary
 
 ```text
+Phase 4 commit: 2040f66 Go
 Staging env readiness: No-Go
-Ask revenue contract: Conditional Go
-Draw revenue contract: Conditional Go
-AI provider smoke: Conditional Go, dry-run only
-Stripe test readiness: Conditional Go, readiness-only
+Dry-run aggregate gate: No-Go overall
 Non-paid staging smoke: Not-run
-Paid smoke: No-Go
+AI provider live smoke: Not-run
+Stripe test-live: Not-run
+Webhook smoke: Not-run
 Production deploy: No-Go
 ```
 
 ## What Changed
 
-- Restored `tsconfig.tsbuildinfo` after confirming it was a validation artifact.
-- Created the Phase 4 task record and worktree review.
-- Added masked staging env readiness audit with missing-name-only output.
-- Added non-paid staging smoke script for public routes and preview APIs, gated by staging URL and approval.
-- Added AI provider smoke script with dry-run default and explicit live-mode latch.
-- Added Stripe test-readiness script with readiness default and explicit test-live latch.
-- Added aggregate staging launch gate.
-- Added TDD coverage for the staging readiness scripts.
-- Added staging smoke runbook with approval-required live commands.
-- Updated gateway runbook, rollback docs, README, changelog, and evidence packet.
+- Committed Phase 4 as `2040f66 feat: add tianji love staging smoke readiness gate`.
+- Created the Phase 5 task file and worktree review.
+- Ran masked env readiness and recorded missing names only.
+- Ran dry-run AI provider smoke, Stripe readiness-only, and aggregate staging launch gate.
+- Recorded non-paid staging smoke, AI provider live smoke, Stripe test-live, and webhook smoke as Not-run because env readiness is No-Go and live approval was not given.
+- Added optional Stripe CLI webhook smoke commands to the staging smoke runbook as documentation only.
+- Updated changelog, final evidence, and this review packet.
 
 ## Files Changed
 
-- `.ai/TASK_TIANJI_LOVE_STAGING_SMOKE_READINESS_PHASE4_20260516.md`
-- `.ai/TIANJI_LOVE_PHASE4_WORKTREE_REVIEW_20260516.md`
-- `.ai/TIANJI_LOVE_STAGING_SMOKE_READINESS_EVIDENCE_20260516.md`
+- `.ai/TASK_TIANJI_LOVE_STAGING_TEST_SMOKE_PHASE5_20260516.md`
+- `.ai/TIANJI_LOVE_PHASE5_WORKTREE_REVIEW_20260516.md`
+- `.ai/TIANJI_LOVE_PHASE5_ENV_READINESS_20260516.md`
+- `.ai/TIANJI_LOVE_PHASE5_DRY_RUN_GATE_20260516.md`
+- `.ai/TIANJI_LOVE_PHASE5_NONPAID_SMOKE_20260516.md`
+- `.ai/TIANJI_LOVE_PHASE5_AI_PROVIDER_LIVE_SMOKE_20260516.md`
+- `.ai/TIANJI_LOVE_PHASE5_STRIPE_TEST_READINESS_20260516.md`
+- `.ai/TIANJI_LOVE_PHASE5_STAGING_TEST_SMOKE_EVIDENCE_20260516.md`
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md`
-- `README.md`
-- `docs/tianji-love-model-gateway-runbook.md`
-- `docs/tianji-love-model-gateway-rollback.md`
 - `docs/tianji-love-staging-smoke-runbook.md`
-- `package.json`
-- `scripts/audit-staging-env-readiness.ts`
-- `scripts/audit-staging-launch-gate.ts`
-- `scripts/smoke-ai-providers.ts`
-- `scripts/smoke-staging-nonpaid.ts`
-- `scripts/smoke-stripe-test-readiness.ts`
-- `src/__tests__/scripts/staging-smoke-readiness.test.ts`
 
 ## Commands Run
 
 | Command | Result |
 | --- | --- |
-| `git status --short` | Reviewed; tracked worktree clean after restoring `tsconfig.tsbuildinfo`; unrelated untracked artifacts remain |
-| `git log --oneline -5` | Latest commit before Phase 4: `edff8f0 feat: connect draw route to tianji model gateway` |
-| `git diff -- tsconfig.tsbuildinfo` | Confirmed validation cache diff before restore; clean after restore |
-| `git checkout -- tsconfig.tsbuildinfo` | Restored validation artifact |
-| `npm run test -- src/__tests__/scripts/staging-smoke-readiness.test.ts` before implementation | Failed as expected because Phase 4 script modules did not exist |
-| `npm run test -- src/__tests__/scripts/staging-smoke-readiness.test.ts` | Pass, 1 file / 4 tests |
+| `git status --short` | Tracked worktree clean after Phase 4 commit; unrelated untracked artifacts remain |
+| `git log --oneline -8` | Confirmed latest commit `2040f66` |
+| `git branch --show-current` | `redesign-home-landing-20260420` |
+| `git show --stat --oneline -1` | Confirmed Phase 4 commit file scope |
+| `npm run audit:staging-env-readiness` | Expected No-Go; missing names only |
+| `npm run smoke:ai-providers` | Dry-run only; `overall: conditional-go` |
+| `npm run smoke:stripe:test-readiness` | Readiness-only; `overall: conditional-go` |
+| `npm run audit:staging-launch-gate` | `overall: no-go` because env readiness is No-Go and non-paid smoke was not run |
 | `npm run typecheck` | Pass |
-| `npm run lint` | Pass, no ESLint warnings or errors |
+| `npm run lint` | Pass |
 | `npm run test` | Pass, 56 files / 512 tests |
 | `npm run build` | Pass, 106 static pages generated |
 | `npm run audit:routes` | Pass |
@@ -69,39 +63,32 @@ Production deploy: No-Go
 | `npm run audit:upgrade` | Pass |
 | `npm run audit:ask-revenue-contract` | Pass, all fields `go`, overall `conditional-go` |
 | `npm run audit:draw-revenue-contract` | Pass, all fields `go`, overall `conditional-go` |
-| `npm run audit:staging-env-readiness` | Expected local No-Go; missing names only, no values printed |
-| `npm run smoke:ai-providers` | Pass dry-run, overall `conditional-go` |
-| `npm run smoke:stripe:test-readiness` | Pass readiness-only, overall `conditional-go` |
-| `npm run audit:staging-launch-gate` | Pass execution; aggregate overall `no-go` because env readiness is No-Go and non-paid staging smoke was not run |
 | `git diff --check` | Pass; LF/CRLF working-copy warnings only |
-| targeted secret-shape scan over Phase 4 changed files | Pass after excluding intentional detector literals; no raw secret-shaped values found |
+| targeted secret-shape scan over Phase 5 changed files | Pass; no raw secret-shaped values found |
 
 ## Safety Notes
 
-- No real `.env` values were read or printed.
-- No real Stripe checkout, webhook, refund, subscription, or customer API call was made.
-- No live DeepSeek, Ollama, MiniMax, Supabase, or Resend call was made.
-- No production database, production config, deployment setting, or secret was changed.
-- No production deploy was run.
-- New scripts redact or avoid response bodies, prompts, price IDs, API keys, webhook secrets, raw question text, provider request bodies, and private relationship profile data.
+- No `.env`, `.env.local`, credential, private key, provider key, Stripe secret, webhook secret, Supabase secret, or production config value was read or printed.
+- No hosted non-paid staging smoke was run.
+- No live DeepSeek, Ollama, MiniMax, Stripe, Supabase, or Resend call was made.
+- No Stripe checkout session, webhook trigger, paid smoke, email send, entitlement mutation, production database mutation, or production deploy was run.
+- No birth time, birth location, timezone, raw question text, raw prompt, or provider response body was logged.
 - MiniMax remains internal/research only and is not a public production default.
-- Existing unrelated untracked worktree artifacts were preserved.
-- `git diff --check` passed after docs/evidence updates.
 
 ## Remaining Risks
 
-1. Staging env readiness is No-Go locally because required staging env names are not configured in this shell.
-2. Non-paid hosted staging smoke is Not-run because no approved `STAGING_BASE_URL` smoke was run.
-3. AI provider smoke is dry-run only; DeepSeek/Ollama/MiniMax live readiness is not proven.
-4. Stripe readiness is static/readiness-only; test checkout and webhook behavior are not proven.
-5. Paid smoke and production deploy remain No-Go.
+1. Staging env readiness is No-Go because required staging env names are not configured in this shell.
+2. Non-paid staging smoke is Not-run.
+3. AI provider live smoke is Not-run.
+4. Stripe test-live and webhook smoke are Not-run.
+5. Production deploy remains No-Go.
 
 ## Suggested Next Gate
 
-Phase 5: run approved staging non-paid smoke, Stripe test checkout/webhook smoke, and provider live smoke only after staging/test credentials are confirmed by presence/classification without printing values.
+Configure staging/test env names outside Codex, rerun masked env readiness, then explicitly approve non-paid staging smoke. Do not run provider live or Stripe test-live smoke until env readiness is Go or explicitly accepted as Conditional Go.
 
 ## Suggested Commit Message
 
 ```text
-feat: add tianji love staging smoke readiness gate
+chore: record tianji love staging test smoke evidence
 ```
