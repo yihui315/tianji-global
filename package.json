@@ -7,6 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "build:staging:degraded": "node -e \"const cp=require('node:child_process'); Object.assign(process.env,{STAGING_DEGRADED_MODE:'true',AI_PROVIDER_LIVE_DISABLED:'true',STRIPE_LIVE_DISABLED:'true',EMAIL_SEND_DISABLED:'true',SUPABASE_MUTATION_DISABLED:'true',NEXT_PUBLIC_APP_ENV:'staging'}); const r=cp.spawnSync('npm',['run','build'],{stdio:'inherit',shell:process.platform==='win32'}); process.exit(r.status ?? 1)\"",
+    "deploy:staging:degraded": "npm run build:staging:degraded",
     "start": "next start",
     "smoke:production": "node scripts/smoke-production.mjs",
     "serve": "NODE_ENV=production node src/index.js",

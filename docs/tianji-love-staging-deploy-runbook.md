@@ -21,9 +21,34 @@ Expected behavior:
 - Email send paths are disabled.
 - Production deploy remains blocked.
 
-## Required Minimal Env
+## Current Target Decision
 
-Set these non-secret flags for degraded staging build and runtime:
+Current status: no real staging host is configured in this repository.
+
+Recommended manual target: Vercel Preview or a dedicated Vercel staging project.
+
+Rationale:
+
+- This is a Next.js application.
+- `vercel.json` exists, but no local `.vercel/project.json` link is present.
+- No separate server staging domain, Nginx `server_name`, PM2 app, or deploy path is configured.
+- The documented self-hosted server path is production-shaped and must not be used as staging without a separate hostname and process.
+
+Do not deploy to `https://tianji.love` as part of staging degraded execution. That would be a production canary decision, not staging.
+
+## Vercel Staging Profile
+
+Use this profile after a human creates or links a Vercel Preview/staging project.
+
+```text
+Platform: Vercel
+Environment: Preview or dedicated staging project
+Project name: manual input required
+STAGING_BASE_URL: manual input required
+Production domain: must not be used
+```
+
+Required degraded flags in the Vercel environment:
 
 ```text
 NEXT_PUBLIC_APP_ENV=staging
@@ -32,6 +57,68 @@ AI_PROVIDER_LIVE_DISABLED=true
 STRIPE_LIVE_DISABLED=true
 EMAIL_SEND_DISABLED=true
 SUPABASE_MUTATION_DISABLED=true
+NEXT_PUBLIC_TIANJI_VEDIC_ENABLED=false
+TIANJI_VEDIC_REPORT_MODE=disabled
+```
+
+Deploy command status:
+
+```bash
+npm run deploy:staging:degraded
+```
+
+This wrapper only runs the degraded build gate. It intentionally does not call `vercel deploy` because no non-production Vercel target is linked in this checkout.
+
+After Vercel returns a real Preview/staging URL, configure:
+
+```text
+STAGING_BASE_URL=<vercel-preview-or-staging-url>
+```
+
+Then run:
+
+```bash
+STAGING_BASE_URL=<vercel-preview-or-staging-url> STAGING_NONPAID_SMOKE_ALLOW_LIVE=true npm run smoke:staging:nonpaid
+```
+
+Rollback for Vercel staging:
+
+1. Disable the preview deployment in Vercel or promote the previous known-good preview.
+2. Keep degraded flags enabled until the failing route is understood.
+3. Do not promote to production.
+4. Re-run `npm run audit:staging:degraded` before another staging smoke.
+
+## Server Staging Profile
+
+Use server staging only after a distinct non-production target exists.
+
+Required manual inputs:
+
+```text
+Host alias: manual input required, no password in docs
+Deploy path: must not be /opt/tianji-global production path
+PM2 app name: must not be tianji-global production app
+Nginx server_name: must not be tianji.love or www.tianji.love
+STAGING_BASE_URL: manual input required
+Rollback command/path: manual input required
+```
+
+Until those values exist, server staging is No-Go.
+
+## Required Minimal Env
+
+Set these non-secret flags for degraded staging build and runtime:
+
+```text
+NEXT_PUBLIC_APP_ENV=staging
+STAGING_BASE_URL=<staging-url-after-host-is-created>
+STAGING_DEGRADED_MODE=true
+AI_PROVIDER_LIVE_DISABLED=true
+STRIPE_LIVE_DISABLED=true
+EMAIL_SEND_DISABLED=true
+SUPABASE_MUTATION_DISABLED=true
+NEXT_PUBLIC_TIANJI_VEDIC_ENABLED=false
+TIANJI_VEDIC_REPORT_MODE=disabled
 ```
 
 Use staging or local-only values for normal application host/auth names when the target requires them. Do not paste secrets into chat, docs, or evidence.

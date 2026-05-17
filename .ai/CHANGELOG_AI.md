@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-18 - TianJi Love staging host target Lane K
+
+- Task ID: 20260516-tianji-love-staging-host-target-lane-k
+- Files changed: `.ai/TASK_TIANJI_LOVE_STAGING_HOST_TARGET_PHASE_K_20260516.md`, `.ai/TIANJI_LOVE_STAGING_HOST_TARGET_REVIEW_20260516.md`, `.ai/TIANJI_LOVE_STAGING_HOST_TARGET_EVIDENCE_20260516.md`, `.env.example`, `package.json`, `docs/tianji-love-staging-deploy-runbook.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Defined the staging host target decision for TianJi Love. Vercel is recommended as the fastest safe staging host, but no local `.vercel/project.json`, Vercel staging URL, server staging hostname, PM2 staging app, or `STAGING_BASE_URL` exists yet. Added non-secret staging env slots, documented Vercel/server staging profiles, and added a safe `deploy:staging:degraded` wrapper that only runs the degraded build gate.
+- Commands run: Lane K worktree creation; package/config/docs target inspection; `node` package JSON parse check; `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run build:staging:degraded`; `npm run audit:staging:degraded`; `npm run deploy:staging:degraded`; `git diff --check`; targeted secret-shape scans.
+- Results: Typecheck and lint passed. Full tests passed 67 files / 553 tests. Normal build, staging degraded build, and the build-only deploy wrapper passed. `audit:staging:degraded` returned `overall: go`. No hosted smoke was run because `STAGING_BASE_URL` is still missing.
+- Risks: This does not create a real Vercel/server staging host and does not authorize production deploy. Hosted staging deploy and non-paid smoke remain blocked until a real non-production `STAGING_BASE_URL` is supplied. Paid smoke, Stripe test-live, provider live, webhook smoke, email send, Supabase mutation, and production deploy remain No-Go.
+- Next step: Create/link a Vercel Preview or dedicated Vercel staging project, configure degraded flags outside the repo, set `STAGING_BASE_URL`, then run hosted non-paid smoke.
+
 ### 2026-05-17 - TianJi Love staging degraded deploy execution recheck
 
 - Task ID: 20260516-tianji-love-staging-degraded-deploy-execution-recheck
