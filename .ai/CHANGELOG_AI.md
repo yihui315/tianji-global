@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-17 - TianJi Love staging env pack and credential rotation Lane F
+
+- Task ID: 20260516-tianji-love-staging-env-pack-and-credential-rotation-lane-f
+- Files changed: `docs/tianji-love-staging-env-pack.md`, `docs/tianji-love-credential-rotation-checklist.md`, `.ai/TIANJI_LOVE_STAGING_ENV_PACK_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Added the Lane F staging env pack and credential rotation checklist. The env pack lists Minimal Degraded, Free-Flow, Provider Smoke, Paid Smoke, and Email env key groups for manual staging/test configuration without storing values. The rotation checklist explicitly requires any API/server credentials pasted into chat earlier to be rotated and old keys disabled.
+- Commands run: Initial `git status --short`, `git log --oneline -8`, branch check, targeted reads of `package.json`, `docs/tianji-love-staging-deploy-runbook.md`, `.env.example`, `.ai/CHANGELOG_AI.md`, and `.ai/REVIEW_PACKET.md`; `npm run typecheck`; dependency install attempts; `npm run lint`; `npm run test`; `npm run build`; `npm run audit:staging-env-readiness`; `git diff --check`.
+- Results: Documentation package created. Typecheck, lint, full tests, build, and diff check passed after installing validation dependencies with scripts disabled. `npm run audit:staging-env-readiness` returned expected `overall: no-go` with missing names only because staging/test values are not configured in this shell. This is Conditional Go for human configuration only; provider, paid, webhook, email send, Supabase mutation, and deploy gates remain No-Go until rotated values are configured out-of-band and masked readiness passes.
+- Risks: Previously pasted server/API credentials remain a manual security blocker until rotated and verified disabled. No live provider call, Stripe call, webhook smoke, email send, Supabase mutation, paid smoke, deploy, real env read, or secret print was run.
+- Next step: Rotate exposed credentials, configure staging/test values outside the repo, rerun `npm run audit:staging-env-readiness`, then request explicit approval before any provider, paid, email, Supabase mutation, webhook, or deploy smoke.
+
 ### 2026-05-17 - TianJi Love runtime guards wiring Lane C
 
 - Task ID: 20260516-tianji-love-runtime-guards-wiring-lane-c
