@@ -13,7 +13,17 @@ const RESULT_PATH = resolve(process.cwd(), '.ai/TIANJI_LOVE_PHASE5B_LOCAL_RUN_RE
 const fieldGroups = [
   {
     title: 'App / Auth',
-    fields: ['NEXT_PUBLIC_APP_URL', 'NEXTAUTH_URL', 'NEXTAUTH_SECRET'],
+    fields: ['NEXT_PUBLIC_APP_URL', 'NEXT_PUBLIC_APP_ENV', 'NEXTAUTH_URL', 'NEXTAUTH_SECRET'],
+  },
+  {
+    title: 'Staging degraded deploy flags',
+    fields: [
+      'STAGING_DEGRADED_MODE',
+      'AI_PROVIDER_LIVE_DISABLED',
+      'STRIPE_LIVE_DISABLED',
+      'EMAIL_SEND_DISABLED',
+      'SUPABASE_MUTATION_DISABLED',
+    ],
   },
   {
     title: 'Supabase staging',
@@ -73,6 +83,12 @@ const fieldGroups = [
 ];
 
 const defaults = {
+  NEXT_PUBLIC_APP_ENV: 'staging',
+  STAGING_DEGRADED_MODE: 'true',
+  AI_PROVIDER_LIVE_DISABLED: 'true',
+  STRIPE_LIVE_DISABLED: 'true',
+  EMAIL_SEND_DISABLED: 'true',
+  SUPABASE_MUTATION_DISABLED: 'true',
   AI_RUNTIME_MODE: 'hybrid',
   AI_FREE_PREVIEW_PROVIDER: 'ollama',
   AI_FREE_PREVIEW_MODEL: 'gemma4:31b',

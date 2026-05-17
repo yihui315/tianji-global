@@ -1,5 +1,11 @@
 # TianJi Love Staging Smoke Runbook
 
+## 0. Degraded Deploy Package
+
+For the current implementation-first staging package, use `docs/tianji-love-staging-deploy-runbook.md` first. That package sets degraded flags, builds safely, audits disabled-service behavior, and allows only non-paid staging smoke after a staging URL is approved.
+
+The degraded package keeps production deploy, paid smoke, Stripe test-live, webhook smoke, live provider smoke, Resend sends, and Supabase mutation smoke out of scope.
+
 ## 1. Preconditions
 
 Use this runbook only for staging or local readiness checks. Production deploy, production Stripe keys, production webhook secrets, production Supabase mutations, real email sends, and paid live smoke remain No-Go until separately approved.
@@ -37,6 +43,13 @@ Expected output groups:
 This command must print names only for missing variables. It must never print actual values.
 
 ## 3. Build Verification
+
+For the degraded staging deploy package:
+
+```bash
+npm run build:staging:degraded
+npm run audit:staging:degraded
+```
 
 Run the local build and contract gates before staging smoke:
 
@@ -185,6 +198,7 @@ If staging smoke fails:
 
 - stop running live smoke commands
 - keep production deploy No-Go
+- return to `docs/tianji-love-staging-deploy-runbook.md` and re-run the degraded audit before another deploy attempt
 - remove or disable staging-only env values in the hosting manager if they are suspected unsafe
 - keep Ask/Draw unpaid gates intact
 - keep provider calls behind gateway fallback and safety rewrite

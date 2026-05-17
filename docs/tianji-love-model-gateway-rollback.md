@@ -1,5 +1,17 @@
 # TianJi Love Model Gateway Rollback
 
+## Staging Degraded Deploy Package
+
+For the current implementation-first staging package, start with `docs/tianji-love-staging-deploy-runbook.md`. The package keeps `AI_PROVIDER_LIVE_DISABLED=true`, `STRIPE_LIVE_DISABLED=true`, `EMAIL_SEND_DISABLED=true`, and `SUPABASE_MUTATION_DISABLED=true` so gateway rollback work is not used to bypass disabled staging services.
+
+Before any gateway-specific route rollback, run:
+
+```bash
+npm run audit:staging:degraded
+```
+
+If the degraded audit fails, treat staging deploy as No-Go and fix the disabled-service contract before attempting non-paid smoke.
+
 ## When To Roll Back
 
 Roll back this gateway slice if any of these happen:

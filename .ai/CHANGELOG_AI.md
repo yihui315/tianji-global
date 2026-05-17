@@ -12,6 +12,16 @@
 - Risks: These guards are for staging degraded operation only. Real paid checkout/webhook/provider smoke still requires explicit staging/test credentials and separate approval. Production deploy remains No-Go.
 - Next step: Run the full Lane C verification gate, commit, then merge before Lane D.
 
+### 2026-05-17 - TianJi Love staging degraded deploy package Lane D
+
+- Task ID: 20260516-tianji-love-staging-deploy-package-lane-d
+- Files changed: `.env.example`, `package.json`, `scripts/local-phase5b-env-runner.mjs`, `docs/tianji-love-staging-deploy-runbook.md`, `docs/tianji-love-staging-smoke-runbook.md`, `docs/tianji-love-model-gateway-rollback.md`, `.ai/TIANJI_LOVE_STAGING_DEPLOY_PACKAGE_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Packaged implementation-first degraded mode for controlled staging deployment without touching Ask/Draw/gateway/Stripe runtime business logic. Added non-secret degraded flag examples, a no-new-dependency degraded build wrapper, a degraded audit wrapper, local Phase 5B runner defaults, a staging deploy runbook, and rollback/smoke runbook pointers.
+- Commands run: package JSON parse check; `node --check scripts/local-phase5b-env-runner.mjs`; `npm ci --ignore-scripts --no-audit --no-fund --loglevel=error` for this isolated worktree; `npm run audit:staging:degraded`; `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run build:staging:degraded`; `npm run audit:staging-degraded-mode`; `npm run audit:routes`; `npm run audit:copy`; `npm run audit:share`; `npm run audit:upgrade`.
+- Results: Package JSON and local runner syntax checks passed; typecheck passed; lint passed; full test suite passed 58 files / 525 tests; normal build passed with 106 static pages; degraded build wrapper passed with 106 static pages; route/copy/share/upgrade audits passed; default degraded audit returned expected `overall: no-go`; degraded audit wrapper returned `overall: conditional-go` in Lane D before Lane C, then `overall: go` after Lane C runtime guards were rebased in.
+- Risks: The deploy package itself does not configure staging env, run hosted non-paid smoke, run provider live smoke, run Stripe test-live, run webhook smoke, send email, mutate Supabase, or deploy production. Final degraded audit should be rerun after Lane C is merged because Lane C owns runtime guard wiring.
+- Next step: Merge Lane C first, rebase Lane D, then run the combined staging degraded and launch gates.
+
 ### 2026-05-16 - TianJi Love revenue funnel polish Lane B
 
 - Task ID: 20260516-tianji-love-revenue-funnel-polish-lane-b
