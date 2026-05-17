@@ -185,3 +185,55 @@ Phase 5 confirms this is still an environment/evidence blocker, not a feature-co
 Confirmed. No `.env` file, raw secret value, API key, webhook secret, price ID value, provider prompt, provider response body, raw question text, birth time, birth location, timezone, or production configuration value was read or printed.
 
 The final targeted secret-shape scan scope is limited to Phase 5 changed files and excludes broad workspace artifacts. It found no raw secret-shaped values.
+
+## Phase 5B Local Env Runner Recheck - 2026-05-17
+
+The local-only env input runner was used to run masked env readiness after temporary values were entered in the browser. The runner does not write submitted values to `.env`, does not commit values, and disables live provider smoke and Stripe test-live.
+
+Result:
+
+```json
+{
+  "app": "no-go",
+  "supabase": "no-go",
+  "stripeTestMode": "no-go",
+  "email": "no-go",
+  "aiRuntime": "go",
+  "ollama": "no-go",
+  "deepseek": "go",
+  "minimax": "go",
+  "overall": "no-go"
+}
+```
+
+Remaining missing names:
+
+```text
+EMAIL_FROM
+NEXTAUTH_SECRET
+NEXTAUTH_URL
+NEXT_PUBLIC_APP_URL
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_SUPABASE_URL
+OLLAMA_BASE_URL
+RESEND_API_KEY
+STRIPE_ASK_PRICE_ID
+STRIPE_DRAW_PRICE_ID
+STRIPE_PRO_MONTHLY_PRICE_ID
+STRIPE_PRO_YEARLY_PRICE_ID
+STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET
+SUPABASE_SERVICE_ROLE_KEY
+```
+
+Decision:
+
+```text
+Staging env readiness: No-Go
+Non-paid staging smoke: Not-run
+AI provider live smoke: Not-run
+Stripe test-live: Not-run
+Webhook smoke: Not-run
+Production deploy: No-Go
+```

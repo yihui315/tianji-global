@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-17 - TianJi Love Phase 5B local env readiness recheck
+
+- Task ID: 20260517-tianji-love-phase5b-local-env-readiness
+- Files changed: `.ai/TIANJI_LOVE_PHASE5_ENV_READINESS_20260516.md`, `.ai/TIANJI_LOVE_PHASE5_STAGING_TEST_SMOKE_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `.ai/TIANJI_LOVE_LOCAL_SERVER_API_CALLS_20260517.md`, `scripts/local-phase5b-env-runner.mjs`
+- Summary: Added a local-only Phase 5B env input runner so the operator can enter staging/test values in a browser without writing `.env` or printing secrets. Re-ran masked env readiness through the runner. AI runtime, DeepSeek, and MiniMax groups are now Go, but App/Auth, Supabase, Stripe test mode, Email, and Ollama remain No-Go. Overall staging env readiness remains No-Go.
+- Commands run: `node --check scripts/local-phase5b-env-runner.mjs`; `git diff --check -- scripts/local-phase5b-env-runner.mjs`; targeted secret-shape scans over the local runner and local server/API reference; local runner health check; local runner masked readiness execution.
+- Results: Local runner syntax/checks passed; secret-shape scans found no raw secret-shaped values in the created helper files; masked readiness returned `overall: no-go` with missing names only.
+- Risks: Previously pasted root/API credentials must still be treated as exposed and rotated. No hosted non-paid staging smoke, live provider smoke, Stripe test-live, webhook smoke, paid smoke, production deploy, Supabase mutation, or email send was run.
+- Next step: Provide/configure the remaining App/Auth, Supabase staging, Stripe test, Email, and Ollama values through the local runner or server staging env, then rerun masked readiness only.
+
 ### 2026-05-17 - TianJi Love staging test smoke Phase 5
 
 - Task ID: 20260516-tianji-love-staging-test-smoke-phase5

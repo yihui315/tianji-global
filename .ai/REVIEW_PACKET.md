@@ -2,14 +2,22 @@
 
 ## Task Goal
 
-Complete Phase 5: execute the safe staging test-smoke evidence path after committing Phase 4, without running live provider smoke, Stripe test-live, webhook smoke, paid smoke, or production deploy while staging env readiness remains No-Go.
+Continue Phase 5B: verify staging env readiness through a local-only input runner without writing `.env`, printing secrets, running live provider smoke, Stripe test-live, webhook smoke, paid smoke, or production deploy.
 
 ## Decision Summary
 
 ```text
 Phase 4 commit: 2040f66 Go
 Staging env readiness: No-Go
-Dry-run aggregate gate: No-Go overall
+Phase 5B local runner: Go
+AI runtime group: Go
+DeepSeek group: Go
+MiniMax group: Go
+App/Auth group: No-Go
+Supabase group: No-Go
+Stripe test mode group: No-Go
+Email group: No-Go
+Ollama group: No-Go
 Non-paid staging smoke: Not-run
 AI provider live smoke: Not-run
 Stripe test-live: Not-run
@@ -26,6 +34,8 @@ Production deploy: No-Go
 - Recorded non-paid staging smoke, AI provider live smoke, Stripe test-live, and webhook smoke as Not-run because env readiness is No-Go and live approval was not given.
 - Added optional Stripe CLI webhook smoke commands to the staging smoke runbook as documentation only.
 - Updated changelog, final evidence, and this review packet.
+- Added a local-only Phase 5B browser input runner for temporary env verification.
+- Re-ran masked readiness through the runner; values were not written to `.env`.
 
 ## Files Changed
 
@@ -40,6 +50,8 @@ Production deploy: No-Go
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md`
 - `docs/tianji-love-staging-smoke-runbook.md`
+- `.ai/TIANJI_LOVE_LOCAL_SERVER_API_CALLS_20260517.md`
+- `scripts/local-phase5b-env-runner.mjs`
 
 ## Commands Run
 
@@ -65,6 +77,8 @@ Production deploy: No-Go
 | `npm run audit:draw-revenue-contract` | Pass, all fields `go`, overall `conditional-go` |
 | `git diff --check` | Pass; LF/CRLF working-copy warnings only |
 | targeted secret-shape scan over Phase 5 changed files | Pass; no raw secret-shaped values found |
+| `node --check scripts/local-phase5b-env-runner.mjs` | Pass |
+| local runner masked readiness execution | Pass execution; env readiness remains `overall: no-go` |
 
 ## Safety Notes
 
@@ -74,18 +88,20 @@ Production deploy: No-Go
 - No Stripe checkout session, webhook trigger, paid smoke, email send, entitlement mutation, production database mutation, or production deploy was run.
 - No birth time, birth location, timezone, raw question text, raw prompt, or provider response body was logged.
 - MiniMax remains internal/research only and is not a public production default.
+- The local runner disables live provider smoke and Stripe test-live.
 
 ## Remaining Risks
 
-1. Staging env readiness is No-Go because required staging env names are not configured in this shell.
-2. Non-paid staging smoke is Not-run.
-3. AI provider live smoke is Not-run.
-4. Stripe test-live and webhook smoke are Not-run.
-5. Production deploy remains No-Go.
+1. Staging env readiness is still No-Go.
+2. Missing groups: App/Auth, Supabase staging, Stripe test mode, Email, and Ollama.
+3. Non-paid staging smoke is Not-run.
+4. AI provider live smoke is Not-run.
+5. Stripe test-live and webhook smoke are Not-run.
+6. Production deploy remains No-Go.
 
 ## Suggested Next Gate
 
-Configure staging/test env names outside Codex, rerun masked env readiness, then explicitly approve non-paid staging smoke. Do not run provider live or Stripe test-live smoke until env readiness is Go or explicitly accepted as Conditional Go.
+Provide/configure the remaining non-provider staging/test values through the local runner or server staging env, rerun masked env readiness, then explicitly approve non-paid staging smoke only after readiness becomes Go or explicitly accepted as Conditional Go.
 
 ## Suggested Commit Message
 

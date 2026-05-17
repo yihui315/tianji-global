@@ -74,3 +74,59 @@ Staging env readiness: No-Go
 ```
 
 Because env readiness is No-Go, Phase 5 must not run live provider smoke, Stripe test-live smoke, Stripe webhook smoke, paid smoke, or production deploy. Hosted non-paid staging smoke is also Not-run unless a staging URL is configured and explicitly approved.
+
+## Phase 5B Local Runner Recheck - 2026-05-17
+
+Command path:
+
+```text
+scripts/local-phase5b-env-runner.mjs
+```
+
+The local-only input runner executed masked env readiness with user-supplied temporary values kept in process/request scope and not written to `.env`.
+
+Group-level result:
+
+```json
+{
+  "app": "no-go",
+  "supabase": "no-go",
+  "stripeTestMode": "no-go",
+  "email": "no-go",
+  "aiRuntime": "go",
+  "ollama": "no-go",
+  "deepseek": "go",
+  "minimax": "go",
+  "overall": "no-go"
+}
+```
+
+Missing variable names only:
+
+```text
+EMAIL_FROM
+NEXTAUTH_SECRET
+NEXTAUTH_URL
+NEXT_PUBLIC_APP_URL
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_SUPABASE_URL
+OLLAMA_BASE_URL
+RESEND_API_KEY
+STRIPE_ASK_PRICE_ID
+STRIPE_DRAW_PRICE_ID
+STRIPE_PRO_MONTHLY_PRICE_ID
+STRIPE_PRO_YEARLY_PRICE_ID
+STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET
+SUPABASE_SERVICE_ROLE_KEY
+```
+
+Decision:
+
+```text
+Staging env readiness: No-Go
+Non-paid staging smoke: Not-run
+Live smoke: Not-run
+Production deploy: No-Go
+```
