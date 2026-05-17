@@ -13,6 +13,11 @@ import {
   type AskAiMeta,
   type AskQuestionLanguage,
 } from '@/lib/ask-question';
+import {
+  buildPaymentUnavailableBody,
+  isStagingDegradedMode,
+  isStripePaymentAvailable,
+} from '@/lib/staging-degraded-mode';
 import { generateTianjiModelResponse } from '@/lib/tianji-model-gateway';
 
 export const dynamic = 'force-dynamic';
@@ -63,6 +68,10 @@ const postBodySchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    if (isStagingDegradedMode() && !isStripePaymentAvailable()) {
+      return NextResponse.json(buildPaymentUnavailableBody(), { status: 503 });
+    }
+
     const body = await request.json().catch(() => ({}));
     const parsed = postBodySchema.safeParse(body);
     if (!parsed.success) {
@@ -122,6 +131,10 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
+  if (isStagingDegradedMode() && !isStripePaymentAvailable()) {
+    return NextResponse.json(buildPaymentUnavailableBody(), { status: 503 });
+  }
+
   const sessionId = request.nextUrl.searchParams.get('session_id');
   const queryId = request.nextUrl.searchParams.get('id');
   if (!sessionId) {

@@ -11,6 +11,11 @@ import { sendReportReadyEmailForCheckoutSession } from '@/lib/love-report-email'
 import { isPayPerUseEnabled } from '@/lib/pay-per-use';
 import { markRelationshipReadingPremium } from '@/lib/relationship-reading-store';
 import { ensureReportJobForSession, runReportJob } from '@/lib/report-jobs';
+import {
+  STAGING_DEGRADED_PAYMENT_UNAVAILABLE_CODE,
+  isStagingDegradedMode,
+  isStripePaymentAvailable,
+} from '@/lib/staging-degraded-mode';
 import { getStripe } from '@/lib/stripe';
 
 export const runtime = 'nodejs';
@@ -92,6 +97,13 @@ async function handleRefundEvent(object: Stripe.Charge | Stripe.Refund) {
 }
 
 export async function POST(request: NextRequest) {
+  if (isStagingDegradedMode() && !isStripePaymentAvailable()) {
+    return NextResponse.json({
+      received: true,
+      skipped: STAGING_DEGRADED_PAYMENT_UNAVAILABLE_CODE,
+    });
+  }
+
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret) {
     return NextResponse.json({ error: 'Missing webhook secret' }, { status: 500 });

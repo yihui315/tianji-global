@@ -1,4 +1,5 @@
 import { getSupabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
+import { isSupabaseMutationDisabled } from '@/lib/staging-degraded-mode';
 import type { RelationshipReading, RelationshipType } from '@/types/relationship';
 
 const uuidPattern =
@@ -62,6 +63,7 @@ export async function createRelationshipProfile(input: {
   relationType: RelationshipType;
   userId?: string | null;
 }): Promise<string | null> {
+  if (isSupabaseMutationDisabled()) return null;
   if (!isSupabaseConfigured()) return null;
 
   const { data, error } = await getSupabaseAdmin()
@@ -99,6 +101,7 @@ export async function getRelationshipReadingById(id: string): Promise<Relationsh
 }
 
 export async function markRelationshipReadingPremium(id: string): Promise<boolean> {
+  if (isSupabaseMutationDisabled()) return false;
   if (!isRelationshipReadingId(id) || !isSupabaseConfigured()) return false;
 
   const { error } = await getSupabaseAdmin()

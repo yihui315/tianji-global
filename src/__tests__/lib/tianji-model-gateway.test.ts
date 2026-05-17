@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   buildTianjiModelAuditEvent,
   generateTianjiModelResponse,
@@ -8,6 +8,14 @@ import {
 } from '@/lib/tianji-model-gateway';
 
 describe('TianJi Love model gateway routing', () => {
+  beforeEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   it('routes public free and paid surfaces to the intended model tiers', () => {
     expect(getTianjiModelRoute('love-preview')).toMatchObject({
       provider: 'ollama',
@@ -106,6 +114,36 @@ describe('TianJi Love model gateway routing', () => {
       latencyMs: 25,
       error: undefined,
     });
+  });
+
+  it('returns safe disabled content without calling providers when live providers are disabled', async () => {
+    vi.stubEnv('AI_PROVIDER_LIVE_DISABLED', 'true');
+    const generate = vi.fn();
+
+    const response = await generateTianjiModelResponse(
+      {
+        intent: 'ask-unlock',
+        prompt: 'raw question should not be returned',
+        systemPrompt: 'raw prompt should not be returned',
+      },
+      generate
+    );
+
+    expect(generate).not.toHaveBeenCalled();
+    expect(response.content).toContain('AI provider live calls are disabled');
+    expect(response.warnings).toEqual(['ai_provider_live_disabled']);
+    expect(response.audit).toMatchObject({
+      intent: 'ask-unlock',
+      provider: 'deepseek',
+      model: 'deepseek/deepseek-v4-flash',
+      fallback: false,
+      publicUserFacing: true,
+      safetyRewriteApplied: false,
+      costUSD: 0,
+      latencyMs: 0,
+      error: 'ai_provider_live_disabled',
+    });
+    expect(JSON.stringify(response)).not.toMatch(/raw question|raw prompt|API_KEY|birthDate|birthTime|birthLocation|timezone/i);
   });
 
   it('tries configured fallback models when the primary route fails', async () => {

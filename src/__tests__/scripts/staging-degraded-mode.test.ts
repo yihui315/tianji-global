@@ -43,7 +43,7 @@ describe('implementation-first staging degraded mode', () => {
     expect(result.askPreviewCanRun).toBe('go');
     expect(result.drawPreviewCanRun).toBe('go');
     expect(isStripePaymentAvailable({ ...degradedEnv, STRIPE_SECRET_KEY: undefined })).toBe(false);
-    expect(result.overall).toBe('conditional-go');
+    expect(result.overall).toBe('go');
   });
 
   it('degraded mode can pass public/free checks with Email missing', () => {
@@ -56,8 +56,8 @@ describe('implementation-first staging degraded mode', () => {
     expect(result.degradedModeEnv).toBe('go');
     expect(result.askPreviewCanRun).toBe('go');
     expect(result.drawPreviewCanRun).toBe('go');
-    expect(result.emailSendDisabled).toBe('unknown');
-    expect(result.overall).toBe('conditional-go');
+    expect(result.emailSendDisabled).toBe('go');
+    expect(result.overall).toBe('go');
   });
 
   it('paid routes are locked when Stripe missing', () => {
@@ -65,8 +65,8 @@ describe('implementation-first staging degraded mode', () => {
     const result = auditStagingDegradedMode(process.env);
 
     expect(isStripePaymentAvailable(process.env)).toBe(false);
-    expect(result.paidRoutesLockedWhenStripeMissing).toBe('unknown');
-    expect(result.overall).toBe('conditional-go');
+    expect(result.paidRoutesLockedWhenStripeMissing).toBe('go');
+    expect(result.overall).toBe('go');
   });
 
   it('provider live calls are disabled unless explicitly enabled', () => {
@@ -75,8 +75,19 @@ describe('implementation-first staging degraded mode', () => {
 
     expect(isAiProviderLiveDisabled(process.env)).toBe(true);
     expect(buildProviderDisabledContent()).toContain('AI provider live calls are disabled');
-    expect(result.providerLiveCallsDisabled).toBe('unknown');
-    expect(result.overall).toBe('conditional-go');
+    expect(result.providerLiveCallsDisabled).toBe('go');
+    expect(result.overall).toBe('go');
+  });
+
+  it('reports explicit guards once degraded wiring is present', () => {
+    stubDegradedEnv({ STRIPE_SECRET_KEY: undefined });
+    const result = auditStagingDegradedMode(process.env);
+
+    expect(result.paidRoutesLockedWhenStripeMissing).toBe('go');
+    expect(result.stripeWebhookGuarded).toBe('go');
+    expect(result.providerLiveCallsDisabled).toBe('go');
+    expect(result.emailSendDisabled).toBe('go');
+    expect(result.supabaseMutationDisabled).toBe('go');
   });
 
   it('public flows do not require Supabase service role', async () => {
@@ -89,7 +100,7 @@ describe('implementation-first staging degraded mode', () => {
 
     expect(result.relationshipFreeCanRun).toBe('go');
     expect(result.publicPagesCanLoad).toBe('go');
-    expect(result.overall).toBe('conditional-go');
+    expect(result.overall).toBe('go');
   });
 
   it('output does not include secrets', async () => {
@@ -121,6 +132,6 @@ describe('implementation-first staging degraded mode', () => {
     });
 
     expect(result.productionDeployBlocked).toBe('go');
-    expect(result.overall).toBe('conditional-go');
+    expect(result.overall).toBe('go');
   });
 });

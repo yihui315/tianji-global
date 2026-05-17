@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-17 - TianJi Love runtime guards wiring Lane C
+
+- Task ID: 20260516-tianji-love-runtime-guards-wiring-lane-c
+- Files changed: `src/app/api/ask/unlock/route.ts`, `src/app/api/draw/unlock/route.ts`, `src/app/api/stripe/webhook/route.ts`, `src/lib/tianji-model-gateway.ts`, `src/lib/love-report-email.ts`, `src/lib/relationship-reading-store.ts`, `scripts/audit-staging-degraded-mode.ts`, `src/__tests__/api/ask-paid-gateway.test.ts`, `src/__tests__/api/draw-gateway.test.ts`, `src/__tests__/api/stripe-webhook-degraded-guard.test.ts`, `src/__tests__/lib/tianji-model-gateway.test.ts`, `src/__tests__/lib/love-report-email.test.ts`, `src/__tests__/lib/relationship-reading-store-degraded.test.ts`, `src/__tests__/scripts/staging-degraded-mode.test.ts`, `.ai/TIANJI_LOVE_RUNTIME_GUARDS_WIRING_REVIEW_20260516.md`, `.ai/TIANJI_LOVE_RUNTIME_GUARDS_WIRING_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Wired staging degraded runtime guards into paid Ask/Draw unlocks, Stripe webhook handling, the TianJi model gateway provider path, report-ready email sending, and relationship Supabase mutation helpers. The degraded-mode audit now reports the runtime guard fields as Go when all degraded flags are explicitly enabled, while default execution remains No-Go.
+- Commands run: Targeted runtime guard tests; `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run audit:routes`; `npm run audit:copy`; `npm run audit:share`; `npm run audit:upgrade`; `npm run audit:ask-revenue-contract`; `npm run audit:draw-revenue-contract`; `npm run audit:staging-degraded-mode`; degraded flags plus `npm run audit:staging-degraded-mode`; `git diff --check`.
+- Results: Targeted runtime guard tests passed 7 files / 26 tests; typecheck passed; lint passed; full test suite passed 61 files / 532 tests; build passed with 106 static pages; route/copy/share/upgrade audits passed; Ask/Draw revenue contract audits returned `overall: conditional-go`; default degraded-mode audit returned safe `overall: no-go`; degraded flags audit returned `overall: go`; diff check passed with LF/CRLF warnings only. No live provider call, Stripe call, webhook smoke, email send, Supabase production mutation, paid smoke, or deploy was run.
+- Risks: These guards are for staging degraded operation only. Real paid checkout/webhook/provider smoke still requires explicit staging/test credentials and separate approval. Production deploy remains No-Go.
+- Next step: Run the full Lane C verification gate, commit, then merge before Lane D.
+
 ### 2026-05-16 - TianJi Love revenue funnel polish Lane B
 
 - Task ID: 20260516-tianji-love-revenue-funnel-polish-lane-b

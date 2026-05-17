@@ -1,4 +1,9 @@
 import { generateReport } from '@/lib/ai-orchestrator';
+import {
+  STAGING_DEGRADED_PROVIDER_DISABLED_CODE,
+  buildProviderDisabledContent,
+  isAiProviderLiveDisabled,
+} from '@/lib/staging-degraded-mode';
 import type { ModelProvider, ReportRequest, ReportResponse, TaskType } from '@/types/ai';
 
 export type TianjiModelIntent =
@@ -285,6 +290,27 @@ export async function generateTianjiModelResponse(
   generate: GenerateReportFn = generateReport
 ): Promise<TianjiModelGatewayResponse> {
   const route = getTianjiModelRoute(request.intent);
+  if (isAiProviderLiveDisabled()) {
+    const response: ReportResponse = {
+      content: buildProviderDisabledContent(),
+      provider: route.provider,
+      model: route.preferredModel,
+      tokensUsed: { input: 0, output: 0 },
+      costUSD: 0,
+      latencyMs: 0,
+      warnings: [STAGING_DEGRADED_PROVIDER_DISABLED_CODE],
+    };
+
+    return {
+      ...response,
+      route,
+      audit: buildTianjiModelAuditEvent(route, response, {
+        safetyRewriteApplied: false,
+        error: STAGING_DEGRADED_PROVIDER_DISABLED_CODE,
+      }),
+    };
+  }
+
   const { intent: _intent, ...reportRequest } = request;
   const modelAttempts = [route.preferredModel, ...route.fallbackModels];
   let lastError: unknown;

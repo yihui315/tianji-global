@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { getPaidOrderForCheckoutSession } from '@/lib/billing';
 import type { Locale } from '@/lib/i18n';
+import { isEmailSendDisabled } from '@/lib/staging-degraded-mode';
 
 export function buildPrivateReportLink(input: {
   appUrl: string;
@@ -26,6 +27,10 @@ export async function sendReportReadyEmailForCheckoutSession(input: {
   checkoutSessionId: string;
   locale: Locale;
 }): Promise<{ sent: boolean; reason?: string }> {
+  if (isEmailSendDisabled()) {
+    return { sent: false, reason: 'email_send_disabled' };
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     return { sent: false, reason: 'email_not_configured' };

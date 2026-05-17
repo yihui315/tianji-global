@@ -20,8 +20,10 @@ export type StagingDegradedModeAuditResult = {
   askPreviewCanRun: Status;
   drawPreviewCanRun: Status;
   paidRoutesLockedWhenStripeMissing: Status;
+  stripeWebhookGuarded: Status;
   providerLiveCallsDisabled: Status;
   emailSendDisabled: Status;
+  supabaseMutationDisabled: Status;
   productionDeployBlocked: Status;
   overall: OverallStatus;
 };
@@ -66,6 +68,8 @@ export function auditStagingDegradedMode(env: EnvLike = process.env): StagingDeg
   const drawPreview = read('src/app/api/draw/preview/route.ts');
   const gateway = read('src/lib/tianji-model-gateway.ts');
   const email = read('src/lib/love-report-email.ts');
+  const stripeWebhook = read('src/app/api/stripe/webhook/route.ts');
+  const relationshipStore = read('src/lib/relationship-reading-store.ts');
 
   const publicPagesCanLoad = statusWhen(
     exists('src/app/(main)/page.tsx') &&
@@ -100,10 +104,17 @@ export function auditStagingDegradedMode(env: EnvLike = process.env): StagingDeg
     : askPaidLocked === 'no-go' || drawPaidLocked === 'no-go'
       ? 'no-go'
       : 'unknown';
+  const stripeWebhookGuarded: Status = isStripeLiveDisabled(env)
+    ? guardedOrUnknown(
+        stripeWebhook,
+        ['isStagingDegradedMode()', 'isStripePaymentAvailable()', 'STAGING_DEGRADED_PAYMENT_UNAVAILABLE_CODE'],
+        ['constructEvent', 'recordStripeEvent'],
+      )
+    : 'no-go';
   const providerLiveCallsDisabled: Status = isAiProviderLiveDisabled(env)
     ? guardedOrUnknown(
         gateway,
-        ['isAiProviderLiveDisabled()', 'buildProviderDisabledContent()', 'ai_provider_live_disabled'],
+        ['isAiProviderLiveDisabled()', 'buildProviderDisabledContent()', 'STAGING_DEGRADED_PROVIDER_DISABLED_CODE'],
         ['generateReport'],
       )
     : 'no-go';
@@ -112,6 +123,13 @@ export function auditStagingDegradedMode(env: EnvLike = process.env): StagingDeg
         email,
         ['isEmailSendDisabled()', 'email_send_disabled'],
         ['new Resend(apiKey)'],
+      )
+    : 'no-go';
+  const supabaseMutationDisabled: Status = isSupabaseMutationDisabled(env)
+    ? guardedOrUnknown(
+        relationshipStore,
+        ['isSupabaseMutationDisabled()', 'return null', 'return false'],
+        ['.insert(', '.update('],
       )
     : 'no-go';
   const productionDeployBlocked = statusWhen(isProductionDeployBlocked(env));
@@ -123,8 +141,10 @@ export function auditStagingDegradedMode(env: EnvLike = process.env): StagingDeg
     askPreviewCanRun,
     drawPreviewCanRun,
     paidRoutesLockedWhenStripeMissing,
+    stripeWebhookGuarded,
     providerLiveCallsDisabled,
     emailSendDisabled,
+    supabaseMutationDisabled,
     productionDeployBlocked,
   };
 

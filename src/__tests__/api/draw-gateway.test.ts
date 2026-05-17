@@ -63,9 +63,14 @@ function sampleDraw(): DrawnSlot[] {
 describe('Draw gateway revenue contract', () => {
   beforeEach(() => {
     vi.resetModules();
+    vi.unstubAllEnvs();
     mocks.createSession.mockReset();
     mocks.retrieveSession.mockReset();
     mocks.generateReport.mockReset();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it('returns a useful limited free Draw reading through tarot_draw without full paid output', async () => {
@@ -185,5 +190,37 @@ describe('Draw gateway revenue contract', () => {
       safetyRewritten: true,
       route: 'tarot_draw',
     });
+  });
+
+  it('returns a safe locked 503 when Stripe env is missing in staging degraded mode', async () => {
+    vi.stubEnv('STAGING_DEGRADED_MODE', 'true');
+    vi.stubEnv('STRIPE_LIVE_DISABLED', 'true');
+    vi.stubEnv('STRIPE_SECRET_KEY', undefined);
+
+    const id = encodeQuickDrawId({
+      question: 'Will my ex return?',
+      language: 'en',
+      draw: sampleDraw(),
+      fullReading: '',
+    });
+
+    const { POST, GET } = await import('@/app/api/draw/unlock/route');
+    const postResponse = await POST(postRequest('/api/draw/unlock', { id, language: 'en' }));
+    const getResponse = await GET(getRequest(`/api/draw/unlock?session_id=cs_test_paid&id=${encodeURIComponent(id)}`));
+
+    for (const response of [postResponse, getResponse]) {
+      const json = await response.json();
+      expect(response.status).toBe(503);
+      expect(json).toMatchObject({
+        success: false,
+        locked: true,
+        code: 'payment_unavailable',
+      });
+      expect(JSON.stringify(json)).not.toMatch(/sk_|rk_|whsec_|birthDate|birthTime|birthLocation|timezone|prompt|Will my ex/i);
+    }
+
+    expect(mocks.createSession).not.toHaveBeenCalled();
+    expect(mocks.retrieveSession).not.toHaveBeenCalled();
+    expect(mocks.generateReport).not.toHaveBeenCalled();
   });
 });

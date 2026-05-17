@@ -41,9 +41,14 @@ function getRequest(path: string) {
 describe('Ask paid gateway contract', () => {
   beforeEach(() => {
     vi.resetModules();
+    vi.unstubAllEnvs();
     mocks.createSession.mockReset();
     mocks.retrieveSession.mockReset();
     mocks.generateReport.mockReset();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it('keeps unpaid Ask locked without returning full answers or provider metadata', async () => {
@@ -119,5 +124,36 @@ describe('Ask paid gateway contract', () => {
     expect(aiMetaJson).not.toContain('Will they come back');
     expect(aiMetaJson).not.toContain('cards guarantee');
     expect(aiMetaJson).not.toMatch(/API_KEY|birthDate|birthTime|birthLocation|timezone|prompt/i);
+  });
+
+  it('returns a safe locked 503 when Stripe env is missing in staging degraded mode', async () => {
+    vi.stubEnv('STAGING_DEGRADED_MODE', 'true');
+    vi.stubEnv('STRIPE_LIVE_DISABLED', 'true');
+    vi.stubEnv('STRIPE_SECRET_KEY', undefined);
+
+    const id = encodeAskQuestionId({
+      question: 'Should I text them again tonight?',
+      fullAnswer: '',
+      language: 'en',
+    });
+
+    const { POST, GET } = await import('@/app/api/ask/unlock/route');
+    const postResponse = await POST(postRequest('/api/ask/unlock', { id, language: 'en' }));
+    const getResponse = await GET(getRequest(`/api/ask/unlock?session_id=cs_test_paid&id=${encodeURIComponent(id)}`));
+
+    for (const response of [postResponse, getResponse]) {
+      const json = await response.json();
+      expect(response.status).toBe(503);
+      expect(json).toMatchObject({
+        success: false,
+        locked: true,
+        code: 'payment_unavailable',
+      });
+      expect(JSON.stringify(json)).not.toMatch(/sk_|rk_|whsec_|birthDate|birthTime|birthLocation|timezone|prompt|Should I text/i);
+    }
+
+    expect(mocks.createSession).not.toHaveBeenCalled();
+    expect(mocks.retrieveSession).not.toHaveBeenCalled();
+    expect(mocks.generateReport).not.toHaveBeenCalled();
   });
 });
