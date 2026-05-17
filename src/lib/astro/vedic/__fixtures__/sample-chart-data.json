@@ -1,0 +1,48 @@
+{
+  "metadata": {
+    "sourceType": "manual",
+    "zodiac": "sidereal",
+    "ayanamsa": "Lahiri",
+    "warnings": []
+  },
+  "ascendant": {
+    "sign": "Libra",
+    "degree": 4.2
+  },
+  "moonSign": "Cancer",
+  "moonNakshatra": {
+    "name": "Pushya",
+    "pada": 2,
+    "lord": "Saturn"
+  },
+  "planets": [
+    {
+      "planet": "Venus",
+      "sign": "Taurus",
+      "degree": 18.4,
+      "house": 8
+    },
+    {
+      "planet": "Mars",
+      "sign": "Aries",
+      "degree": 6.25,
+      "house": 7
+    }
+  ],
+  "houses": [
+    {
+      "house": 7,
+      "sign": "Aries",
+      "lord": "Mars"
+    }
+  ],
+  "dashaPeriods": [
+    {
+      "system": "Vimshottari",
+      "planet": "Moon",
+      "startDate": "2025-01-01",
+      "endDate": "2035-01-01"
+    }
+  ],
+  "warnings": []
+}

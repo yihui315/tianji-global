@@ -1,0 +1,4 @@
+interface:
+  display_name: "TianJi Vedic Astro"
+  short_description: "Vedic relationship-report workflow for TianJi Love"
+  default_prompt: "Use the TianJi Vedic Astro skill to build safe Jyotish relationship reports."

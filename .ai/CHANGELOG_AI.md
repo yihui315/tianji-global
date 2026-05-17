@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-17 - TianJi Love Vedic astro skill V1
+
+- Task ID: 20260517-tianji-love-current-upgrade-plus-vedic-astro-v1
+- Files changed: `.agents/skills/tianji-vedic-astro/SKILL.md`, `.agents/skills/tianji-vedic-astro/agents/openai.yaml`, `.ai/TIANJI_LOVE_CURRENT_UPGRADE_PLUS_VEDIC_ASTRO_TASK.md`, `.ai/TIANJI_LOVE_CURRENT_UPGRADE_PLUS_VEDIC_ASTRO_EVIDENCE.md`, `src/lib/astro/vedic/**`, `src/__tests__/vedic-*.test.ts`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Added an internal Vedic/Jyotish relationship-report V1 layer for TianJi Love. The layer includes a project skill, domain types, prompt builders, a Kundli PDF-text parser placeholder, report markdown generator, safety helper, feature-flag config defaults, synthetic fixtures, and focused tests. It is additive and does not connect to production routes, Stripe, Supabase, Resend, live providers, Ask/Draw unlocks, or deployment.
+- Commands run: Read workspace/project instructions and adjacent code; RED targeted Vedic tests; initialized the skill with `skill-creator`; GREEN targeted Vedic tests; `npm run typecheck`; skill quick validation; `npm run lint`; full `npm run test`; `npm run build`; route/copy/share/upgrade audits; Ask/Draw revenue contract audits; `npm run audit:staging:degraded`; `npm run build:staging:degraded`; `git diff --check`; targeted secret-shape scan.
+- Results: Targeted Vedic tests passed 4 files / 7 tests. Typecheck passed. Skill validator passed. Lint passed. Full tests passed 65 files / 539 tests. Build and staging degraded build passed with 106 static pages and existing NextAuth/jose Edge runtime warnings. Route/copy/share/upgrade audits passed. Ask/Draw revenue contracts remained `conditional-go`. `audit:staging:degraded` remained `go`. Secret-shape scan found no raw key-shaped values. Current staging/degraded baseline and Ask/Draw paid unlock guards are unchanged.
+- Risks: Kundli parsing is Conditional Go because V1 only parses obvious copied/extracted text and never fabricates missing chart data. Vedic production integration and paid unlock integration remain No-Go until a separate V2 relationship-flow task.
+- Next step: Keep current staging degraded deploy path unblocked; later connect Vedic to Relationship paid reports behind explicit feature flags.
+
 ### 2026-05-17 - TianJi Love staging env pack and credential rotation Lane F
 
 - Task ID: 20260516-tianji-love-staging-env-pack-and-credential-rotation-lane-f
