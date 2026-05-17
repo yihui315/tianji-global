@@ -17,6 +17,7 @@ import {
 
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
+import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 
 interface PreviewState {
   id: string;
@@ -124,9 +125,9 @@ const askCopy = {
       eyebrow: 'Your first love signal',
       title: 'A private preview is ready',
       paywallNote:
-        'Unlock the complete love reading for {price}: relationship pattern, hidden tension, timing cue, next best move, and one reflection prompt.',
+        'Unlock the full relationship answer for {price}: a deeper interpretation, practical next steps, and a safer reading of the emotional pattern behind this question.',
       assurance: 'Secure Stripe checkout. One-time payment. 24h refund window.',
-      unlockCta: 'Unlock complete love reading - {price}',
+      unlockCta: 'Unlock the full relationship answer - {price}',
       unlocking: 'Opening checkout...',
     },
     unlocked: {
@@ -134,10 +135,10 @@ const askCopy = {
       title: 'Your reading is open',
     },
     unlockBenefits: [
-      'The emotional pattern underneath the question',
-      'The hidden pressure or opportunity to notice',
-      'Whether this is a move-now, wait, or reframe moment',
-      'A concrete next step for the next 24 to 72 hours',
+      'A deeper interpretation of the emotional pattern',
+      'Practical next steps without claiming certain outcomes',
+      'A calmer read on whether to move, wait, or reframe',
+      'One reflection prompt to use before the next conversation',
     ],
     finalCta: {
       title: 'Love becomes easier to choose when the pattern is visible.',
@@ -327,6 +328,11 @@ export default function AskPage() {
         };
         setPreview(state);
         writeStoredPreview(state);
+        void trackRevenueFunnelEvent('ask_preview_view', {
+          lang: state.language,
+          surface: 'ask_page',
+          previewId: state.id,
+        });
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Network error');
       } finally {
@@ -339,6 +345,11 @@ export default function AskPage() {
   const onUnlock = useCallback(async () => {
     if (!preview || unlocking) return;
     setError(null);
+    void trackRevenueFunnelEvent('ask_unlock_click', {
+      lang: preview.language,
+      surface: 'ask_preview',
+      previewId: preview.id,
+    });
     try {
       setUnlocking(true);
       const res = await fetch('/api/ask/unlock', {

@@ -2,43 +2,45 @@
 
 ## Task Goal
 
-Implement Lane A from `.ai/TASK_TIANJI_LOVE_DUAL_TRACK_WORKFLOW_20260516.md`: implementation-first staging degraded mode, while keeping the write set disjoint from Lane B and avoiding forbidden shared files.
+Implement Lane B from `.ai/TASK_TIANJI_LOVE_DUAL_TRACK_WORKFLOW_20260516.md`: revenue funnel polish for Tianji Love frontend surfaces without touching backend payment behavior, gateways, Stripe webhook logic, unlock API core logic, staging smoke scripts, or production deployment files.
 
-## Decision Summary
+## Status
 
 ```text
-Degraded-mode helper: Go
-Degraded-mode audit script: Go
-Non-paid smoke route/status logging: Go
-Public/free source contract: Conditional Go
-Paid unlock runtime guard: Blocked / Unknown in this lane
-Provider live-call runtime guard: Blocked / Unknown in this lane
-Email runtime guard: Blocked / Unknown in this lane
-Production deploy: No-Go
+Revenue funnel polish source: Go
+Backend/payment behavior: Untouched
+Lane A baseline: Rebased after Lane A
+Lane A conflict risk: Resolved
 Commit: Ready
+Production deploy: No-Go
 ```
 
 ## What Changed
 
-- Added `src/lib/staging-degraded-mode.ts` for the requested degraded-mode flags and secret-safe helper decisions.
-- Added `scripts/audit-staging-degraded-mode.ts` with the exact JSON fields from the workflow.
-- Added `audit:staging-degraded-mode` to `package.json`.
-- Updated `scripts/smoke-staging-nonpaid.ts` so it does not call unlock routes and logs route/status/pass plus safe `aiMeta` only.
-- Added focused degraded-mode tests.
-- Stabilized existing landing/report contract tests for Windows CRLF and no-live-provider execution.
-- Recorded the dual-track workflow task file in this lane.
+- Homepage copy now leads with "Start Free Love Reading", "Ask One Question", and "Draw Three Cards".
+- Homepage product cards now map to Love Reading, Ask One Question, and Draw Three Cards.
+- Homepage trust strip now says private by default, reflection not certainty, no fear-based selling, and secure unlocks.
+- Ask preview CTA now says "Unlock the full relationship answer" and frames depth without leaking the paid answer.
+- Draw preview CTA now says "Unlock the full three-card relationship reading" and includes a practical next step.
+- Pricing now distinguishes Free preview, one-time Ask unlock, Draw unlock, Monthly, and Yearly.
+- Client analytics now sanitize sensitive funnel payload fields before sending.
+- Added Lane B funnel event helper and source-contract tests.
+- Kept Lane A's test-stability fixes from the rebased baseline.
 
 ## Files Changed
 
-- `package.json`
-- `scripts/audit-staging-degraded-mode.ts`
-- `scripts/smoke-staging-nonpaid.ts`
-- `src/lib/staging-degraded-mode.ts`
-- `src/__tests__/scripts/staging-degraded-mode.test.ts`
+- `src/components/home/TianjiLoveHome.tsx`
+- `src/app/(main)/ask/page.tsx`
+- `src/app/(main)/draw/page.tsx`
+- `src/app/(main)/pricing/page.tsx`
+- `src/components/relationship/RelationshipResult.tsx`
+- `src/lib/analytics/client.ts`
+- `src/lib/analytics/funnel-events.ts`
 - `src/__tests__/landing-design-contract.test.ts`
-- `src/__tests__/report-generator-contract.test.ts`
-- `.ai/TASK_TIANJI_LOVE_DUAL_TRACK_WORKFLOW_20260516.md`
-- `.ai/TIANJI_LOVE_IMPLEMENTATION_FIRST_STAGING_EVIDENCE_20260516.md`
+- `src/__tests__/revenue-funnel-polish-contract.test.ts`
+- `docs/tianji-love-revenue-funnel-runbook.md`
+- `.ai/TIANJI_LOVE_REVENUE_FUNNEL_REVIEW_20260516.md`
+- `.ai/TIANJI_LOVE_REVENUE_FUNNEL_POLISH_EVIDENCE_20260516.md`
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md`
 
@@ -46,11 +48,9 @@ Commit: Ready
 
 | Command | Result |
 | --- | --- |
-| `npm ci --ignore-scripts --no-audit --no-fund --loglevel=error` | Pass; restored local JS tooling without lifecycle scripts |
 | `npm run typecheck` | Pass |
 | `npm run lint` | Pass |
-| `npm run test -- src/__tests__/scripts/staging-degraded-mode.test.ts` | Pass, 1 file / 7 tests |
-| `npm run test` | Pass, 57 files / 519 tests |
+| `npm run test` | Pass, 57 files / 518 tests |
 | `npm run build` | Pass, 106 static pages |
 | `npm run audit:routes` | Pass |
 | `npm run audit:copy` | Pass |
@@ -58,30 +58,32 @@ Commit: Ready
 | `npm run audit:upgrade` | Pass |
 | `npm run audit:ask-revenue-contract` | Pass, `overall: conditional-go` |
 | `npm run audit:draw-revenue-contract` | Pass, `overall: conditional-go` |
-| `npm run audit:staging-degraded-mode` | Pass command, expected safe default `overall: no-go` |
-| degraded flags + `npm run audit:staging-degraded-mode` | Pass command, `overall: conditional-go` |
-| `git diff --check` | Pass; LF/CRLF warnings only |
+| `git diff --check` | Pass with LF/CRLF warnings only |
 
 ## Safety Notes
 
-- No `.env`, secret, credential, production config, Stripe live API, Supabase production mutation, Resend send, provider live call, paid smoke, or production deploy was run.
-- Initial forbidden-file edits were reverted before validation and are not in the current diff.
-- Current changed source files are within the adjusted Lane A scope.
-- Runtime paid unlock/provider/email enforcement remains intentionally unwired because those files are in the parallel boundary.
+- No `.env`, `.env.local`, secrets, credentials, provider keys, Stripe keys, webhook secrets, Supabase production data, Resend, or production config were read or printed.
+- No live Stripe, live provider, Supabase production, Resend, paid smoke, webhook smoke, or deploy command was run.
+- No backend payment behavior was changed.
+- No gateway, AI orchestrator, Stripe webhook, Ask unlock API, Draw unlock API, staging smoke script, or deployment file was edited.
+- Analytics payloads exclude birth date, birth time, birth location, timezone, raw question, full answer, and full result fields.
+
+## Revenue Funnel Decision
+
+Go for frontend/source funnel polish. Revenue contracts remain `conditional-go` because live Stripe/provider smoke was not run. Production deploy remains No-Go.
 
 ## Remaining Risks
 
-1. Runtime paid route locking is not implemented in this lane because `src/app/api/ask/unlock/route.ts` and `src/app/api/draw/unlock/route.ts` are off-limits.
-2. Runtime provider live-call disabling is not implemented in this lane because `src/lib/tianji-model-gateway.ts` is off-limits.
-3. Runtime email send disabling is only represented by helper/audit support because existing email runtime code is outside this lane.
-4. Staging env readiness and live smoke remain No-Go until configured and explicitly approved.
+1. Analytics persistence still depends on existing backend/environment configuration.
+2. Paid checkout smoke remains outside Lane B and was not run.
+3. Combined validation should run after Lane B is merged back into the primary worktree.
 
 ## Suggested Next Gate
 
-Merge Lane A first, then rebase Lane B. After both lanes are merged, schedule a serial backend safety task only if runtime paid unlock/provider/email enforcement is still required.
+Merge Lane B into the primary worktree and run the combined validation gate, including `audit:staging-degraded-mode`.
 
 ## Suggested Commit Message
 
 ```text
-feat: add implementation-first staging degraded mode
+feat: polish tianji love revenue funnel
 ```

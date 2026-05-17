@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Check, CreditCard, FileText, History, Lock, Sparkles, Star, Zap } from 'lucide-react';
@@ -8,6 +8,7 @@ import { Check, CreditCard, FileText, History, Lock, Sparkles, Star, Zap } from 
 import { PLANS, type PlanId } from '@/lib/stripe';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
+import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import {
   TianjiLoveButton,
   TianjiLoveFinalCta,
@@ -42,6 +43,24 @@ const pricingCopy = {
       secondary: 'Start relationship reading',
     },
     plansTitle: 'Tianji Love plans',
+    funnelTitle: 'Choose the depth you need',
+    funnelOptions: [
+      {
+        name: 'Free preview',
+        price: '$0',
+        body: 'Start with a private relationship signal, Ask preview, or three-card preview before any payment.',
+      },
+      {
+        name: 'One-time Ask unlock',
+        price: '$1.99',
+        body: 'Unlock one fuller relationship answer with deeper interpretation and practical next steps.',
+      },
+      {
+        name: 'Draw unlock',
+        price: '$2.99',
+        body: 'When available, unlock the full three-card relationship reading as reflection, not certainty.',
+      },
+    ],
     planBadge: 'Most chosen',
     monthly: {
       name: 'Love Monthly',
@@ -86,6 +105,7 @@ const pricingCopy = {
     faq: [
       ['Can I cancel later?', 'Yes. Keep the existing account flow; cancellation is handled from your account or Stripe portal where available.'],
       ['Does Pro promise exact future prediction?', 'No. Tianji Love is for reflection, timing, and relationship communication. It does not promise certainty.'],
+      ['What does a paid unlock add?', 'A paid unlock gives depth, structure, and next-step reflection. It does not make outcomes certain.'],
       ['Are my birth details public?', 'No. Public sharing excludes birth date, time, location, and timezone by default.'],
     ],
     final: {
@@ -181,11 +201,31 @@ export default function PricingPage() {
   const [loadingPlan, setLoadingPlan] = useState<PlanId | null>(null);
   const [error, setError] = useState('');
   const copy = pricingCopy[language];
+  const funnelTitle = 'funnelTitle' in copy ? copy.funnelTitle : pricingCopy.en.funnelTitle;
+  const funnelOptions = 'funnelOptions' in copy ? copy.funnelOptions : pricingCopy.en.funnelOptions;
   const isAuthenticated = !!session?.user;
   const href = (path: string) => withLanguageParam(path, language);
 
+  useEffect(() => {
+    void trackRevenueFunnelEvent('pricing_view', {
+      lang: language,
+      surface: 'pricing_page',
+    });
+  }, [language]);
+
   const handleSubscribe = async (planId: PlanId) => {
+    void trackRevenueFunnelEvent('pricing_plan_click', {
+      lang: language,
+      planId,
+      authenticated: isAuthenticated,
+    });
+
     if (!isAuthenticated) {
+      void trackRevenueFunnelEvent('login_start', {
+        lang: language,
+        source: 'pricing_plan_click',
+        planId,
+      });
       router.push(href('/login'));
       return;
     }
@@ -244,6 +284,22 @@ export default function PricingPage() {
             ))}
           </div>
         </TianjiLovePanel>
+      </section>
+
+      <section className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8">
+        <TianjiLoveSectionTitle title={funnelTitle} className="mb-10" />
+        <div className="grid gap-5 md:grid-cols-3">
+          {funnelOptions.map((item) => (
+            <TianjiLovePanel key={item.name} as="article" className="p-6">
+              <p className="text-xs uppercase tracking-[0.28em] text-[#d8b77b]/64">{item.price}</p>
+              <h2 className="mt-4 font-serif text-2xl text-[#ffe3b4]">{item.name}</h2>
+              <p className="mt-3 text-sm leading-7 text-[#f4d7a3]/66">{item.body}</p>
+            </TianjiLovePanel>
+          ))}
+        </div>
+        <p className="mx-auto mt-6 max-w-3xl text-center text-sm leading-7 text-[#f4d7a3]/62">
+          Paid unlocks add depth, not certainty. Monthly and Yearly plans add history and report-ready output where implemented.
+        </p>
       </section>
 
       <section id="plans" className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8">

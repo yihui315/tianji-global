@@ -7,6 +7,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { Calendar, ChevronRight, Globe2, Sparkles, Star, User, Users } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { type AppLanguage, isAppLanguage, withLanguageParam } from '@/lib/language-routing';
+import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 
 type SelectCopy = {
   label: string;
@@ -112,12 +113,12 @@ const loveCopy = {
       { label: 'Login', href: '/login' },
     ],
     hero: {
-      eyebrow: 'COSMIC INSIGHTS. REAL-LOVE GUIDANCE.',
-      titleLead: 'Love is the one force that',
-      titleAccent: 'bends fate.',
+      eyebrow: 'PRIVATE LOVE REFLECTION. CLEARER NEXT STEPS.',
+      titleLead: 'Read the pattern in love',
+      titleAccent: 'before you choose.',
       description:
-        'Start an AI relationship reading for compatibility, love timing, ask one question clarity, or a three-card relationship insight designed for modern love.',
-      primaryCta: 'Start Relationship Reading',
+        'Start with a free relationship reflection, ask one private question, or draw three cards for a practical next step. Tianji Love offers insight as reflection, not certainty.',
+      primaryCta: 'Start Free Love Reading',
       secondaryCta: 'Ask One Question',
       tertiaryCta: 'Draw Three Cards',
       trustCta: 'About Tianji Love',
@@ -143,68 +144,68 @@ const loveCopy = {
     },
     cards: [
       {
-        title: 'Karmic Patterns',
-        body: 'Uncover the repeating attraction patterns that shape your love life and how to break free.',
+        title: 'Love Reading',
+        body: 'Begin free with a private compatibility pattern, then unlock deeper dimensions only if the preview helps.',
         iconAsset: ICONS.karmicOrbit,
       },
       {
-        title: 'Relationship Dynamics',
-        body: 'See the deeper dynamics at play in your connection. Is it a lesson, a blessing, or both?',
+        title: 'Ask One Question',
+        body: 'Bring one real relationship question and unlock a fuller answer with practical next steps when useful.',
         iconAsset: ICONS.relationshipRings,
       },
       {
-        title: 'Future Timing',
-        body: 'Discover when your next meaningful romantic turning point is most likely to arrive.',
+        title: 'Draw Three Cards',
+        body: 'Use a three-card relationship spread to reflect on the current pattern, emotional dynamic, and next move.',
         iconAsset: ICONS.futureHourglass,
       },
     ],
     features: [
-      { title: 'Deep Analysis', body: 'Astrology + psychology for real clarity.', iconAsset: ICONS.deepScroll },
+      { title: 'Private by default', body: 'Birth details and questions stay out of public shares by default.', iconAsset: ICONS.privateLock },
       {
-        title: 'Emotional Compatibility',
-        body: 'Understand how you connect on a deeper level.',
+        title: 'Reflection, not certainty',
+        body: 'Readings name patterns and choices without guaranteed predictions.',
         iconAsset: ICONS.emotionalRings,
       },
-      { title: 'Privacy First', body: 'Your data is protected and never shared.', iconAsset: ICONS.privateLock },
-      { title: 'Actionable Guidance', body: 'Insights you can use to make better choices.', iconAsset: ICONS.clarityCompass },
+      { title: 'No fear-based selling', body: 'Start free and upgrade only when deeper guidance feels useful.', iconAsset: ICONS.deepScroll },
+      { title: 'Secure unlocks', body: 'One-time and subscription checkout flows use the existing secure payment path.', iconAsset: ICONS.clarityCompass },
     ],
     process: {
-      title: 'How It Works',
+      title: 'Free First, Deeper When Useful',
       steps: [
-        { number: '1', title: 'Enter Your Details', body: 'Share your birth information to begin your reading.' },
-        { number: '2', title: 'We Map the Pattern', body: 'Our system analyzes your chart and relationship indicators.' },
-        { number: '3', title: 'Receive Clear Guidance', body: 'Get practical insights to help you love with confidence.' },
+        { number: '1', title: 'Start free', body: 'Get a first relationship signal without a paid commitment.' },
+        { number: '2', title: 'Unlock depth', body: 'Use a one-time Ask or Draw unlock when the preview earns more attention.' },
+        { number: '3', title: 'Return with history', body: 'Subscribers keep report-ready readings and relationship history where implemented.' },
       ],
     },
     testimonials: {
-      title: 'People Found Clarity at Turning Points',
+      title: 'People Used Tianji Love For Clearer Reflection',
       cards: [
         {
           name: 'Emma',
           tag: 'Relationship clarity',
-          quote: 'It described my relationship patterns perfectly. I finally understand why I keep repeating the same cycles.',
+          quote: 'The preview gave me language for a pattern I could actually discuss.',
           avatar: '/assets/images/avatars/tianji-love-emma.png',
           tone: 'avatar-a',
         },
         {
           name: 'Sophie',
           tag: 'timing insight',
-          quote: 'The timing was incredibly accurate. I met someone new right when it said I would.',
+          quote: 'The timing spread helped me decide whether to reach out or pause.',
           avatar: '/assets/images/avatars/tianji-love-sophie.png',
           tone: 'avatar-b',
         },
         {
           name: 'Olivia',
           tag: 'Emotional growth',
-          quote: 'This reading helped me heal and make better choices. It has been life-changing.',
+          quote: 'I liked that it felt practical without telling me what had to happen.',
           avatar: '/assets/images/avatars/tianji-love-olivia.png',
           tone: 'avatar-c',
         },
       ],
     },
     cta: {
-      title: 'Your next chapter may already be written in the stars.',
-      button: 'Enter Tianji Love',
+      title: 'Start with the free signal. Unlock depth only when it helps.',
+      button: 'Start Free Love Reading',
     },
     footer: {
       tagline: 'Decode the pattern. Meet love with clearer eyes.',
@@ -401,6 +402,11 @@ export default function TianjiLoveHome() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    void trackRevenueFunnelEvent('relationship_start_click', {
+      surface: 'homepage_birth_form',
+      mode,
+      lang: activeLang,
+    });
     const form = event.currentTarget;
     const formData = new FormData(form);
     const year = String(formData.get('birthYear') || '');
@@ -460,14 +466,26 @@ export default function TianjiLoveHome() {
           </h1>
           <p className="mt-6 max-w-xl text-base leading-8 text-[#f5d8aa]/86 sm:text-lg">{copy.hero.description}</p>
           <div className="mt-8 flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:flex-wrap">
-            <Link href={href('/relationship/new')} className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition hover:border-[#ffd6ab] hover:text-white">
+            <Link
+              href={href('/relationship/new')}
+              onClick={() => void trackRevenueFunnelEvent('relationship_start_click', { surface: 'homepage_hero', lang: activeLang })}
+              className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition hover:border-[#ffd6ab] hover:text-white"
+            >
               {copy.hero.primaryCta}
               <ChevronRight className="ml-3 h-4 w-4" aria-hidden />
             </Link>
-            <Link href={href('/ask')} className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#d9b47c]/65 bg-black/28 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10">
+            <Link
+              href={href('/ask')}
+              onClick={() => void trackRevenueFunnelEvent('ask_preview_view', { surface: 'homepage_hero_click', lang: activeLang, intent: 'start' })}
+              className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#d9b47c]/65 bg-black/28 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10"
+            >
               {copy.hero.secondaryCta}
             </Link>
-            <Link href={href('/draw')} className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#d9b47c]/50 bg-black/18 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10">
+            <Link
+              href={href('/draw')}
+              onClick={() => void trackRevenueFunnelEvent('draw_preview_view', { surface: 'homepage_hero_click', lang: activeLang, intent: 'start' })}
+              className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#d9b47c]/50 bg-black/18 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10"
+            >
               {copy.hero.tertiaryCta}
             </Link>
             <Link href={href('/about')} className="inline-flex min-h-14 items-center justify-center rounded-lg px-2 text-base font-semibold text-[#f5d8aa]/82 transition hover:text-[#ffe3b4] sm:px-4">
@@ -549,7 +567,11 @@ function Header({
             <Globe2 className="h-4 w-4" aria-hidden />
             {activeLang === 'zh' ? '中' : 'EN'}
           </button>
-          <Link href={href('/relationship/new')} className="tianji-love-primary hidden min-h-12 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-6 text-sm font-semibold text-[#fff7e6] sm:inline-flex">
+          <Link
+            href={href('/relationship/new')}
+            onClick={() => void trackRevenueFunnelEvent('relationship_start_click', { surface: 'homepage_header', lang: activeLang })}
+            className="tianji-love-primary hidden min-h-12 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-6 text-sm font-semibold text-[#fff7e6] sm:inline-flex"
+          >
             {copy.hero.getStarted}
           </Link>
         </div>

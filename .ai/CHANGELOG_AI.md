@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-16 - TianJi Love revenue funnel polish Lane B
+
+- Task ID: 20260516-tianji-love-revenue-funnel-polish-lane-b
+- Files changed: `src/components/home/TianjiLoveHome.tsx`, `src/app/(main)/ask/page.tsx`, `src/app/(main)/draw/page.tsx`, `src/app/(main)/pricing/page.tsx`, `src/components/relationship/RelationshipResult.tsx`, `src/lib/analytics/client.ts`, `src/lib/analytics/funnel-events.ts`, `src/__tests__/landing-design-contract.test.ts`, `src/__tests__/report-generator-contract.test.ts`, `src/__tests__/revenue-funnel-polish-contract.test.ts`, `docs/tianji-love-revenue-funnel-runbook.md`, `.ai/TIANJI_LOVE_REVENUE_FUNNEL_REVIEW_20260516.md`, `.ai/TIANJI_LOVE_REVENUE_FUNNEL_POLISH_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Implemented Lane B frontend revenue funnel polish: clearer homepage free/Ask/Draw/pricing journey, safer Ask and Draw unlock framing, pricing clarity for free previews/one-time unlocks/subscriptions, privacy-safe funnel analytics helper, and focused contract tests. Backend payment, gateway, webhook, unlock API core logic, staging smoke scripts, and deployment files were untouched.
+- Commands run: `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run audit:routes`; `npm run audit:copy`; `npm run audit:share`; `npm run audit:upgrade`; `npm run audit:ask-revenue-contract`; `npm run audit:draw-revenue-contract`; `git diff --check`.
+- Results: Typecheck passed; lint passed; full test suite passed 57 files / 518 tests; build passed with 106 static pages; route/copy/share/upgrade audits passed; Ask/Draw revenue contract audits returned `overall: conditional-go`; diff check passed with LF/CRLF warnings only.
+- Risks: Analytics persistence still depends on existing backend/env configuration. Paid smoke, live provider calls, Stripe test-live, webhook smoke, Supabase production, Resend, and deploy were not run. Production remains No-Go.
+- Next step: Merge Lane A first, rebase Lane B, then merge Lane B and run the combined validation gate.
+
 ### 2026-05-17 - TianJi Love Phase 5B local env readiness recheck
 
 - Task ID: 20260517-tianji-love-phase5b-local-env-readiness

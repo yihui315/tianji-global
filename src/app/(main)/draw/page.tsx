@@ -5,6 +5,7 @@ import { CalendarHeart, Clock3, CreditCard, HeartHandshake, Lock, Sparkles, Star
 
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
+import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import {
   TianjiLoveButton,
   TianjiLoveFinalCta,
@@ -145,11 +146,11 @@ const timingCopy = {
     ],
     preview: {
       eyebrow: 'Your first timing signal',
-      title: 'A private timing preview is ready',
+      title: 'A private three-card relationship preview is ready',
       paywallNote:
-        'Unlock the complete timing reading for {price}: three timing windows, hidden pressure, best next move, and one grounding reflection.',
+        'Unlock the full three-card relationship reading for {price}: the deeper pattern, current emotional dynamic, and one practical next move - as reflection, not certainty.',
       assurance: 'Secure Stripe checkout. One-time unlock. No subscription required.',
-      unlockCta: 'Unlock complete timing reading - {price}',
+      unlockCta: 'Unlock the full three-card relationship reading - {price}',
       unlocking: 'Opening checkout...',
     },
     unlocked: {
@@ -390,6 +391,12 @@ export default function DrawPage() {
         };
         setPreview(state);
         writeStoredPreview(state);
+        void trackRevenueFunnelEvent('draw_preview_view', {
+          lang: state.language,
+          surface: 'draw_page',
+          previewId: state.id,
+          cardCount: state.previewDraw.length,
+        });
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Network error');
       } finally {
@@ -402,6 +409,12 @@ export default function DrawPage() {
   const onUnlock = useCallback(async () => {
     if (!preview || unlocking) return;
     setError(null);
+    void trackRevenueFunnelEvent('draw_unlock_click', {
+      lang: preview.language,
+      surface: 'draw_preview',
+      previewId: preview.id,
+      cardCount: preview.previewDraw.length,
+    });
     try {
       setUnlocking(true);
       const res = await fetch('/api/draw/unlock', {
@@ -499,6 +512,9 @@ export default function DrawPage() {
             ))}
           </div>
           <p className="mt-7 whitespace-pre-line text-base leading-8 text-[#fff4dd]/88">{preview.preview}</p>
+          <div className="mt-5 rounded-lg border border-[#b57248]/30 bg-black/20 px-4 py-3 text-sm leading-7 text-[#f4d7a3]/72">
+            Practical next step: choose one small action you can take with care, then use the full reading only if you want more depth.
+          </div>
           <div className="my-6 h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,198,130,0.62),transparent)]" />
           <div className="rounded-lg border border-[#b57248]/38 bg-[#090d18]/72 p-4 text-sm leading-7 text-[#f4d7a3]/74">
             {copy.preview.paywallNote.replace('{price}', preview.price)}

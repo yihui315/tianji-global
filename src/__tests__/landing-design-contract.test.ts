@@ -99,13 +99,13 @@ describe('Tianji Love landing redesign contract', () => {
       'Love Reading',
       'Ask',
       'Draw',
-      'How It Works',
       'Pricing',
       'Get Started',
-      'COSMIC INSIGHTS. REAL-LOVE GUIDANCE.',
-      'Love is the one force that',
-      'bends fate.',
-      'Start Relationship Reading',
+      'Free First, Deeper When Useful',
+      'PRIVATE LOVE REFLECTION. CLEARER NEXT STEPS.',
+      'Read the pattern in love',
+      'before you choose.',
+      'Start Free Love Reading',
       'Ask One Question',
       'Draw Three Cards',
       'About Tianji Love',
@@ -118,22 +118,22 @@ describe('Tianji Love landing redesign contract', () => {
       'Solo Reading',
       'Couple Reading',
       'Reveal My First Love Insight',
-      'Karmic Patterns',
-      'Relationship Dynamics',
-      'Future Timing',
-      'Deep Analysis',
-      'Emotional Compatibility',
-      'Privacy First',
-      'Actionable Guidance',
-      'Enter Your Details',
-      'We Map the Pattern',
-      'Receive Clear Guidance',
-      'People Found Clarity at Turning Points',
+      'Love Reading',
+      'Ask One Question',
+      'Draw Three Cards',
+      'Private by default',
+      'Reflection, not certainty',
+      'No fear-based selling',
+      'Secure unlocks',
+      'Start free',
+      'Unlock depth',
+      'Return with history',
+      'People Used Tianji Love For Clearer Reflection',
       'Emma',
       'Sophie',
       'Olivia',
       'tianji-love-testimonial-avatar',
-      'Your next chapter may already be written in the stars.',
+      'Start with the free signal. Unlock depth only when it helps.',
       'Tianji Love first-viewport reference',
       'love-hero-reference-grid',
       'love-hero-art-couple',
@@ -241,8 +241,8 @@ describe('Tianji Love landing redesign contract', () => {
     expect(home).not.toContain('涓栭棿');
     expect(home).not.toContain('鐖');
     expect(home).not.toContain('鍏崇郴');
-    expect(home).toContain('Love is the one force that');
-    expect(home).toContain('bends fate.');
+    expect(home).toContain('Read the pattern in love');
+    expect(home).toContain('before you choose.');
     expect(home).toContain('/relationship/new');
     expect(home).toContain('/ask');
     expect(home).toContain('/draw');
@@ -288,16 +288,16 @@ describe('Tianji Love landing redesign contract', () => {
       expect(englishNav).not.toContain(retiredMainPath);
     }
 
-    const primaryCta = home.indexOf("<Link href={href('/relationship/new')} className=\"tianji-love-primary inline-flex");
-    const askCta = home.indexOf("<Link href={href('/ask')} className=\"inline-flex min-h-14");
-    const drawCta = home.indexOf("<Link href={href('/draw')} className=\"inline-flex min-h-14");
-    const aboutCta = home.indexOf("<Link href={href('/about')} className=\"inline-flex min-h-14");
+    const primaryCta = home.indexOf("href={href('/relationship/new')}");
+    const askCta = home.indexOf("href={href('/ask')}");
+    const drawCta = home.indexOf("href={href('/draw')}");
+    const aboutCta = home.indexOf("href={href('/about')}");
 
     expect(primaryCta).toBeGreaterThanOrEqual(0);
     expect(askCta).toBeGreaterThan(primaryCta);
     expect(drawCta).toBeGreaterThan(askCta);
     expect(aboutCta).toBeGreaterThan(drawCta);
-    expect(home).toContain('Start Relationship Reading');
+    expect(home).toContain('Start Free Love Reading');
     expect(home).toContain('Ask One Question');
     expect(home).toContain('Draw Three Cards');
     expect(home).toContain('About Tianji Love');
@@ -313,9 +313,9 @@ describe('Tianji Love landing redesign contract', () => {
       expect(home).toContain(route);
     }
 
-    expect(englishCopy).toContain('AI relationship reading');
+    expect(englishCopy).toContain('free relationship reflection');
     expect(englishCopy).toContain('compatibility');
-    expect(englishCopy).toContain('love timing');
+    expect(englishCopy).toContain('reflection, not certainty');
     expect(englishCopy).not.toMatch(/[\u4e00-\u9fff]/);
     expect(chineseCopy).toContain('天机爱');
     expect(chineseCopy).toContain('开始关系解读');
@@ -370,9 +370,9 @@ describe('Tianji Love landing redesign contract', () => {
       'tianji-love-nav-links',
       'min-width: 900px',
       'prefers-reduced-motion',
-      'Karmic Patterns',
-      'Relationship Dynamics',
-      'Future Timing',
+      'Love Reading',
+      'Ask One Question',
+      'Draw Three Cards',
       'HowItWorks',
       'LoveTestimonials',
       'FinalCta',

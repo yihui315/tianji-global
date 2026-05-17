@@ -17,6 +17,7 @@ import {
 
 import { TianjiLovePanel } from '@/components/tianji-love';
 import { trackRelationshipEvent } from '@/lib/analytics/track';
+import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import { DimensionCard } from './RelationshipDimensionCard';
 import { RelationshipRadar } from './RelationshipRadar';
 import type { RelationshipReading } from '@/types/relationship';
@@ -130,6 +131,15 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
         funnel_stage: 'result_view',
       },
     });
+
+    if (!isFull) {
+      void trackRevenueFunnelEvent('relationship_free_result_view', {
+        lang,
+        surface: 'relationship_result',
+        relationType: reading.relationType,
+        accessLevel: reading.accessLevel,
+      });
+    }
   }, [isFull, lang, reading.accessLevel, reading.relationType]);
 
   const handleUnlock = async () => {
@@ -148,6 +158,13 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
         report_type: 'compatibility_report',
         funnel_stage: 'unlock_click',
       },
+    });
+
+    void trackRevenueFunnelEvent('relationship_upgrade_click', {
+      lang,
+      surface: 'relationship_result',
+      productId: 'compatibility_report',
+      relationType: reading.relationType,
     });
 
     try {
