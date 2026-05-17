@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import { applyVedicRelationshipRouteExtension, type VedicRelationshipPublicReport, type VedicRelationshipRouteMeta } from '@/lib/astro/vedic/relationship-route-extension';
+import type { VedicRelationshipPaidEntitlement } from '@/lib/astro/vedic/relationship-paid-adapter';
+import type { VedicChartData } from '@/lib/astro/vedic/types';
 import { generateReport } from '@/lib/ai-orchestrator';
 import { getLoveReadingSession } from '@/lib/love-reading-store';
 import type { ModelProvider } from '@/types/ai';
@@ -7,6 +10,8 @@ export interface LoveReportInput {
   sessionId: string;
   readingMode: 'solo' | 'compatibility';
   userId?: string | null;
+  vedicChartData?: VedicChartData | null;
+  vedicEntitlement?: VedicRelationshipPaidEntitlement | null;
 }
 
 export interface LoveReportGenerationMeta {
@@ -17,6 +22,7 @@ export interface LoveReportGenerationMeta {
   costUSD?: number;
   latencyMs?: number;
   warnings?: string[];
+  vedic?: VedicRelationshipRouteMeta;
 }
 
 export interface LoveReport {
@@ -29,6 +35,7 @@ export interface LoveReport {
   privateReportLink: string;
   disclaimer: string;
   generationMeta: LoveReportGenerationMeta;
+  vedicReport?: VedicRelationshipPublicReport | null;
 }
 
 const loveReportSchema = z
@@ -146,6 +153,16 @@ function parseReport(content: string): Omit<LoveReport, 'generationMeta'> {
   return parsed;
 }
 
+async function applyVedicExtension(input: LoveReportInput, report: LoveReport): Promise<LoveReport> {
+  const { report: extendedReport } = await applyVedicRelationshipRouteExtension({
+    report,
+    chartData: input.vedicChartData,
+    entitlement: input.vedicEntitlement,
+  });
+
+  return extendedReport;
+}
+
 export async function generateLoveReport(input: LoveReportInput): Promise<LoveReport> {
   const session = await getLoveReadingSession(input.sessionId);
   const fallback = buildFallbackReport(input, session?.teaser);
@@ -165,7 +182,7 @@ export async function generateLoveReport(input: LoveReportInput): Promise<LoveRe
     });
     const report = parseReport(response.content);
 
-    return {
+    return applyVedicExtension(input, {
       ...report,
       generationMeta: {
         source: 'ai',
@@ -176,9 +193,9 @@ export async function generateLoveReport(input: LoveReportInput): Promise<LoveRe
         latencyMs: response.latencyMs,
         warnings: response.warnings,
       },
-    };
+    });
   } catch (error) {
-    return {
+    return applyVedicExtension(input, {
       ...fallback,
       generationMeta: {
         source: 'fallback',
@@ -186,6 +203,6 @@ export async function generateLoveReport(input: LoveReportInput): Promise<LoveRe
           error instanceof Error ? error.message : 'AI report generation failed',
         ],
       },
-    };
+    });
   }
 }

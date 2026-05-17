@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-17 - TianJi Love Vedic relationship route wiring Lane I
+
+- Task ID: 20260516-tianji-love-vedic-relationship-route-wiring-lane-i
+- Files changed: `src/lib/astro/vedic/relationship-route-extension.ts`, `src/lib/astro/vedic/index.ts`, `src/lib/love-report-generator.ts`, `src/lib/trust-copy-guard.ts`, `src/app/api/report-jobs/create/route.ts`, `src/app/[locale]/love-reading/result/[id]/page.tsx`, `src/app/api/stripe/webhook/route.ts`, `src/__tests__/vedic-relationship-route-wiring.test.ts`, `.ai/TIANJI_LOVE_VEDIC_RELATIONSHIP_ROUTE_WIRING_REVIEW_20260516.md`, `.ai/TIANJI_LOVE_VEDIC_RELATIONSHIP_ROUTE_WIRING_EVIDENCE_20260516.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Wired the Vedic paid adapter into the Relationship paid report generation path behind explicit feature flags. Disabled mode leaves the report unchanged, preview mode records safe metadata only, and paid mode attaches a full Vedic report only when paid/pro entitlement and structured chart data are both present. Free Relationship analyze, Ask, Draw, Stripe live behavior, Supabase mutation behavior, Resend, and provider live calls were not changed.
+- Commands run: Lane H rebase and fast-forward merge; post-merge full validation; Lane I worktree creation; flow review; RED route-wiring test; targeted Vedic route tests; targeted Ask/Draw plus Vedic route tests; targeted report/trust/Vedic paid tests; `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run build:staging:degraded`; route/copy/share/upgrade audits; Ask/Draw revenue contract audits; `npm run audit:staging:degraded`; `git diff --check`; targeted secret-shape scans.
+- Results: Targeted Vedic route wiring passed 1 file / 8 tests. Ask/Draw plus Vedic route tests passed 3 files / 15 tests. Report/trust/Vedic paid tests passed 3 files / 12 tests after sequential rerun. Typecheck and lint passed. Full tests passed 67 files / 553 tests. Build and staging degraded build passed with 106 static pages and existing NextAuth/jose Edge runtime warnings. Ask/Draw revenue contracts remain `conditional-go`; `audit:staging:degraded` remains `go`; diff check passed with LF/CRLF warnings only.
+- Risks: The current paid relationship report path still does not assemble or fetch structured Vedic chart data from a public route, so runtime exposure is Conditional Go rather than public launch Go. Vedic remains disabled by default. Provider live smoke, Stripe test/live calls, webhook smoke, Supabase production mutation, email send, paid smoke, and production deploy remain No-Go.
+- Next step: Continue Lane E staging degraded deploy execution; later add a safe chart-data assembly path for paid Vedic reports behind the same flags.
+
 ### 2026-05-17 - TianJi Love Vedic paid report integration Lane H
 
 - Task ID: 20260516-tianji-love-vedic-paid-report-integration-lane-h

@@ -95,6 +95,10 @@ export default async function LoveReadingResultPage({ params, searchParams }: Pa
         sessionId: session.sessionId,
         readingMode: session.readingMode,
         userId: authSession?.user?.id ?? null,
+        vedicEntitlement: {
+          paid: true,
+          product: productId,
+        },
       })
     : null;
 

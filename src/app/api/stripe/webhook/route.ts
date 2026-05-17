@@ -72,6 +72,10 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     sessionId: readingSessionId,
     readingMode: readingModeFromProduct(productId),
     userId: session.metadata?.userId || null,
+    vedicEntitlement: {
+      paid: true,
+      product: productId,
+    },
   });
 
   await runReportJob(reportJob.id);

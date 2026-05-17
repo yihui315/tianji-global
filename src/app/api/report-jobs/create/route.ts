@@ -31,6 +31,10 @@ export async function POST(request: NextRequest) {
     const job = await ensureReportJobForSession({
       ...input,
       userId: session?.user?.id ?? null,
+      vedicEntitlement: {
+        paid: true,
+        product: entitlement,
+      },
     });
 
     void runReportJob(job.id);
