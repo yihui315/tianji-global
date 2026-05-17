@@ -2,40 +2,30 @@
 
 ## Task Goal
 
-Rebase Lane D after Lane C and review the staging degraded deploy package: build/start/smoke/rollback documentation, non-secret flag template, degraded build wrapper, degraded audit wrapper, and local Phase 5B runner defaults.
+Execute the TianJi Love degraded staging deploy path from branch `chore/staging-degraded-deploy-execution`, running the free/non-paid chain only, with paid, live-provider, webhook, email, Supabase mutation, and production paths locked.
 
 ## Status
 
 ```text
-Lane C runtime guards: Rebased in
-Staging deploy package: Go for controlled degraded staging package
-Degraded build wrapper: Go
-Degraded audit wrapper: Go after Lane C rebase
-Runtime business logic in Lane D: Untouched
+Runtime guards wiring: Previously Go
+Degraded staging local validation: No-Go / not runnable in this lane
+Deploy target: No-Go / concrete non-production target not found
+Staging deploy: Not-run
+Non-paid staging smoke: Not-run
+Paid routes: Locked by scope, not smoke-tested
 Live calls: Not-run
-Production deploy: No-Go
+Production deploy: No-Go / not-run
 ```
 
 ## What Changed
 
-- Preserved Lane C runtime guard wiring in the rebased branch.
-- Added explicit non-secret degraded staging flags to `.env.example`.
-- Added `npm run build:staging:degraded` using a Node inline wrapper, with no `cross-env` dependency.
-- Added `npm run audit:staging:degraded` using the same degraded flag profile.
-- Added degraded flag defaults to the local Phase 5B env runner so the operator can test the degraded profile without writing `.env`.
-- Created `docs/tianji-love-staging-deploy-runbook.md`.
-- Updated staging smoke and model gateway rollback docs to point to the degraded deploy package.
-- Recorded deploy-package evidence and remaining blocked live gates.
+- Created `.ai/TIANJI_LOVE_STAGING_DEGRADED_DEPLOY_EXECUTION_EVIDENCE_20260516.md`.
+- Recorded that deploy execution stopped before deployment because local validation commands could not run and no explicit non-production staging target was identified.
+- Updated `.ai/CHANGELOG_AI.md` and this review packet.
 
-## Files Changed By Lane D
+## Files Changed
 
-- `.env.example`
-- `package.json`
-- `scripts/local-phase5b-env-runner.mjs`
-- `docs/tianji-love-staging-deploy-runbook.md`
-- `docs/tianji-love-staging-smoke-runbook.md`
-- `docs/tianji-love-model-gateway-rollback.md`
-- `.ai/TIANJI_LOVE_STAGING_DEPLOY_PACKAGE_EVIDENCE_20260516.md`
+- `.ai/TIANJI_LOVE_STAGING_DEGRADED_DEPLOY_EXECUTION_EVIDENCE_20260516.md`
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md`
 
@@ -43,41 +33,47 @@ Production deploy: No-Go
 
 | Command | Result |
 | --- | --- |
-| `node -e "require('./package.json'); console.log('package-json-ok')"` | Pass |
-| `node --check scripts/local-phase5b-env-runner.mjs` | Pass |
-| `npm ci --ignore-scripts --no-audit --no-fund --loglevel=error` | Pass, installed deps for isolated worktree |
-| `npm run audit:staging:degraded` | Pass, `overall: conditional-go` before Lane C rebase; `overall: go` after Lane C rebase |
-| `npm run typecheck` | Pass |
-| `npm run lint` | Pass |
-| `npm run test` | Pass, 58 files / 525 tests before Lane C rebase |
-| `npm run build` | Pass, 106 static pages |
-| `npm run build:staging:degraded` | Pass, 106 static pages |
-| `npm run audit:staging-degraded-mode` | Expected default No-Go without flags |
-| `npm run audit:routes` | Pass |
-| `npm run audit:copy` | Pass |
-| `npm run audit:share` | Pass |
-| `npm run audit:upgrade` | Pass |
+| `git status --short` | Pass, no initial output. |
+| `git log --oneline -8` | Pass; latest commit `c04a4bd chore: add staging degraded deploy package`. |
+| `npm run typecheck` | Fail / not runnable: `tsc` missing. |
+| `npm run lint` | Fail / not runnable: `next` missing. |
+| `npm run test` | Fail / not runnable: `vitest` missing. |
+| `npm run build:staging:degraded` | Fail / not runnable: nested `next build` missing. |
+| `npm run audit:staging-degraded-mode` | Fail / not runnable: `tsx` missing. |
+| `npm run audit:staging:degraded` | Fail / not runnable: nested `tsx` missing. |
+| Dependency checks | `node_modules` absent, `package-lock.json` present, `node_modules/.bin/tsc.cmd` missing. |
+| Deploy target scan | Completed read-only; no `.env` files read. |
+
+## Deploy Target Decision
+
+No-Go.
+
+The staging degraded runbook defines the intended degraded flags and smoke command, but does not provide a real staging deploy target. The concrete deployment docs found in `docs/DEPLOY.md` and `docs/US_SERVER_DEPLOY.md` describe the production self-hosted path for `https://tianji.love`, `186.244.244.81`, `/opt/tianji-global`, and PM2 app `tianji-global`. No separate staging PM2/ecosystem/ops target was found.
+
+Because the task explicitly forbids guessing production, no deploy command was run.
 
 ## Safety Notes
 
-- No `.env`, `.env.local`, secrets, credentials, provider keys, Stripe keys, webhook secrets, Supabase production data, Resend, or production config were read or printed.
-- No live Stripe, live provider, Supabase production, Resend, paid smoke, webhook smoke, or deploy command was run.
-- No Ask/Draw/gateway/Stripe webhook runtime business files were edited by Lane D.
-- `.env.example` contains only non-secret placeholders and staging degraded flag examples.
+- No `.env`, `.env.local`, secret, credential, deployment key, production config, or provider value was read or printed.
+- No Stripe test-live, webhook smoke, paid smoke, live provider smoke, Resend send, Supabase mutation, production deploy, or real email was run.
+- No `npm install` or `npm ci` was run because the task write scope was limited to three `.ai` files.
+- No application source, deployment code, package file, lockfile, or config file was modified.
 
-## Staging Deploy Package Decision
+## Build / Test Result
 
-Go for controlled degraded staging package after Lane C is included. Final combined verification must rerun `audit:staging:degraded`, staging env readiness, dry-run provider/Stripe readiness, and aggregate launch gate from the primary worktree.
+No-Go / not runnable in this lane.
+
+The lane lacks installed dependencies, so required validation commands cannot prove the degraded staging candidate.
 
 ## Remaining Risks
 
-1. Hosted staging env is still not configured here.
-2. Hosted non-paid smoke was not run.
-3. Live provider smoke, Stripe test-live checkout, webhook entitlement smoke, paid smoke, and production deploy remain blocked.
-4. Final combined gate must be rerun after Lane C and Lane D are merged.
+1. Dependency-ready validation is still missing for this lane.
+2. A concrete non-production staging target is still missing.
+3. Hosted non-paid smoke remains unproven.
+4. Paid routes and live provider paths were kept locked by scope, but hosted runtime behavior was not re-smoked.
 
 ## Suggested Commit Message
 
 ```text
-chore: add staging degraded deploy package
+chore: record staging degraded deploy execution
 ```
