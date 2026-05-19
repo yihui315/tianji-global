@@ -135,7 +135,7 @@ Do not execute production canary until explicit manual approval is given.
 Approval phrase:
 
 ```text
-Approved: execute Lane M production free canary using server-side release build, free routes only, paid/live side effects locked.
+Approved: execute Lane M production free canary using server-side preflight build, free routes only, paid/live side effects locked.
 ```
 
 After approval, the operator must verify the production PM2 app name on the server, then pass it explicitly:
@@ -162,9 +162,13 @@ uses a new /var/www/tianji-global/releases/YYYYMMDD-HHMMSS-free-canary path
 does not copy staging .env.local
 appends free-canary side-effect locks without printing secret values
 runs npm ci --legacy-peer-deps and npm run build before switching current
-switches current only after build succeeds
+starts the candidate release on 127.0.0.1:3068 as PM2 app tianji-canary-preflight before switching current
+smokes candidate home, pricing, ask, draw, and login before switching current
+switches current only after build and candidate preflight succeed
 restarts only the verified PM2 app passed in PM2_APP
+waits up to 60 seconds for https://tianji.love/ to return 200 after PM2 restart
 smokes only free GET routes
+always stop/deletes tianji-canary-preflight on success or failure
 rolls back current symlink and restarts PM2 if post-switch smoke/restart fails
 does not run Stripe checkout, webhook replay, paid unlock, email send, Supabase mutation, or provider-live scaling
 ```
