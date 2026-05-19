@@ -1,143 +1,334 @@
-# TianJi Love Production Canary Runbook
+# TianJi Love Production Free Canary Runbook
 
-## Scope
+## 1. Scope
 
-This runbook prepares a production canary only. It does not approve or execute deployment.
+This runbook prepares a production free canary only.
 
-The canary is limited to free, non-mutating, non-paid customer surfaces:
+Do not deploy unless the user gives explicit manual approval. Do not approve paid launch from this runbook.
 
-- homepage
-- pricing
-- relationship free flow
-- Ask preview
-- Draw preview
-- login page
+Allowed production canary surfaces:
 
-The canary is intended to prove public navigation, copy, disabled-paid boundaries, free preview rendering, and rollback readiness after a separately approved production release.
-
-## Explicit Exclusions
-
-Do not include these flows in the production canary:
-
-- real paid Ask unlock
-- real paid Draw unlock
-- Vedic paid public exposure
-- Stripe live payment
-- provider live scaling or live load testing
-- email automation or real outbound email
-- webhook replay
-- database mutation smoke
-- production deploy execution from this runbook
-
-## Required Initial Flags
-
-Before any approved production canary begins, the runtime must be confirmed with these initial flag values. Record evidence as key names and status only; do not print secret values.
-
-| Key | Required value | Purpose |
-| --- | --- | --- |
-| `NEXT_PUBLIC_APP_ENV` | `production` | Confirms the public app is running in production mode. |
-| `STAGING_DEGRADED_MODE` | `false` | Confirms this is not the degraded staging profile. |
-| `AI_PROVIDER_LIVE_DISABLED` | `true` | Blocks live provider calls during the free canary. |
-| `STRIPE_LIVE_DISABLED` | `true` | Blocks live Stripe payment attempts. |
-| `EMAIL_SEND_DISABLED` | `true` | Blocks outbound email automation. |
-| `SUPABASE_MUTATION_DISABLED` | `true` | Blocks mutation smoke during the canary. |
-| `NEXT_PUBLIC_TIANJI_VEDIC_ENABLED` | `false` | Keeps Vedic public exposure disabled. |
-| `TIANJI_VEDIC_REPORT_MODE` | `disabled` | Keeps Vedic paid reports disabled in production canary. |
-
-## Go / No-Go Table
-
-| Gate | Go criteria | No-Go criteria | Decision |
-| --- | --- | --- | --- |
-| Source candidate | Exact commit, branch, and build artifact are recorded from the approved release process. | Candidate is ambiguous, dirty, unbuilt, or different from the approved commit. | No-Go until release evidence is attached. |
-| Required flags | All initial flags match the table above, verified without printing secrets. | Any flag is missing, unsafe, unknown, or printed with a secret value. | No-Go until fixed. |
-| Free public routes | Homepage, pricing, relationship free, Ask preview, Draw preview, and login page return expected non-paid content. | Any free route is unavailable, redirects to the wrong origin, shows a server error, or exposes paid-only content. | No-Go until fixed or rolled back. |
-| Paid boundaries | Paid Ask, paid Draw, Vedic paid reports, live Stripe, live provider calls, email sends, and Supabase mutations are disabled or not exercised. | Any excluded path is reachable, triggered, or unintentionally exposed. | Immediate No-Go and rollback. |
-| Privacy | No birth time, birth location, timezone, raw chart data, private report payloads, or secrets appear in public output or evidence. | Sensitive personal data or secret-shaped values appear in output, logs, or docs. | Immediate No-Go and rollback. |
-| Observability | HTTP status, route, timestamp, and reviewer are recorded for free canary checks. | Evidence is missing, unreviewable, or includes sensitive values. | No-Go until evidence is corrected. |
-| Rollback | A tested rollback owner and command path are named before canary start. | Rollback owner or path is unknown. | No-Go until rollback is ready. |
-
-## Smoke Checklist
-
-Run only after a separately approved production release and only with the required flags confirmed.
-
-| Step | Route or check | Expected result | Evidence to record |
-| --- | --- | --- | --- |
-| 1 | `/` | Homepage loads with TianJi Love public signals and no server error. | HTTP status, timestamp, commit, screenshot reference if captured. |
-| 2 | `/pricing` or localized pricing route | Pricing page loads; paid CTA does not complete a live checkout during canary. | HTTP status and disabled/live-blocked boundary note. |
-| 3 | `/relationship/new` | Free relationship entry and preview flow are usable without payment. | HTTP status and free result/preview note. |
-| 4 | Ask preview route or UI flow | Free Ask preview renders; paid unlock is not executed. | HTTP status and preview-only note. |
-| 5 | Draw preview route or UI flow | Free Draw preview renders; paid unlock is not executed. | HTTP status and preview-only note. |
-| 6 | `/login` | Login page loads from the production origin without wrong-origin redirects. | HTTP status and final URL. |
-| 7 | Paid boundary spot check | Paid unlock endpoints are not called; live payment is not attempted. | Reviewer attestation only. |
-| 8 | Provider/email/database boundary | Live provider scaling, outbound email, and mutation smoke are not run. | Reviewer attestation only. |
-
-Do not run paid smoke, Stripe test-live, provider live, webhook replay, or email automation as part of this checklist.
-
-## Rollback
-
-Rollback must be prepared before canary start.
-
-1. Stop canary immediately if any Go / No-Go row becomes No-Go.
-2. Notify the release owner and record the failing route, timestamp, status code, and current commit.
-3. Revert to the last known good production release using the approved deployment runbook for the active hosting path.
-4. Reconfirm the required initial flags after rollback.
-5. Re-run only the free route checks needed to prove the rollback restored public access.
-6. Record rollback evidence without secrets, request bodies, payment identifiers, provider payloads, or private user data.
-
-## Evidence Template
-
-Copy this template into the canary evidence packet for each approved production canary. Keep values masked and status-only.
-
-```md
-# TianJi Love Production Canary Evidence
-
-## Candidate
-
-- Date/time:
-- Reviewer:
-- Branch:
-- Commit:
-- Hosting path:
-- Deployment approval reference:
-- Production deploy executed by this task: No
-
-## Initial Flag Evidence
-
-| Key | Required value | Observed status | Evidence source |
-| --- | --- | --- | --- |
-| `NEXT_PUBLIC_APP_ENV` | `production` | unknown | masked runtime inventory |
-| `STAGING_DEGRADED_MODE` | `false` | unknown | masked runtime inventory |
-| `AI_PROVIDER_LIVE_DISABLED` | `true` | unknown | masked runtime inventory |
-| `STRIPE_LIVE_DISABLED` | `true` | unknown | masked runtime inventory |
-| `EMAIL_SEND_DISABLED` | `true` | unknown | masked runtime inventory |
-| `SUPABASE_MUTATION_DISABLED` | `true` | unknown | masked runtime inventory |
-| `NEXT_PUBLIC_TIANJI_VEDIC_ENABLED` | `false` | unknown | masked runtime inventory |
-| `TIANJI_VEDIC_REPORT_MODE` | `disabled` | unknown | masked runtime inventory |
-
-## Free Canary Smoke
-
-| Route or flow | Result | Status code | Notes |
-| --- | --- | ---: | --- |
-| homepage | not-run |  |  |
-| pricing | not-run |  |  |
-| relationship free | not-run |  |  |
-| Ask preview | not-run |  |  |
-| Draw preview | not-run |  |  |
-| login page | not-run |  |  |
-
-## Exclusion Attestation
-
-- Real paid Ask/Draw: not-run
-- Vedic paid public exposure: disabled/not-run
-- Stripe live payment: not-run
-- Provider live scaling: not-run
-- Email automation: not-run
-- Supabase mutation smoke: not-run
-- Production deploy by this canary prep task: not-run
-
-## Decision
-
-- Canary prep decision:
-- Remaining blockers:
-- Rollback owner/path:
+```text
+home
+pricing
+relationship free
+ask preview
+draw preview
+login
+paid routes locked / disabled
+Vedic paid disabled
 ```
+
+Blocked surfaces:
+
+```text
+Stripe live payment
+Stripe webhook
+Ask paid unlock
+Draw paid unlock
+Vedic paid public report
+email automation
+Supabase production mutation
+provider live scaling
+```
+
+## 2. Exact release path strategy
+
+Use a new release directory. Do not build directly in `current`.
+
+Release path pattern:
+
+```text
+/var/www/tianji-global/releases/YYYYMMDD-HHMMSS-free-canary
+```
+
+Current symlink:
+
+```text
+/var/www/tianji-global/current
+```
+
+Required preflight before execution:
+
+```bash
+set -euo pipefail
+
+OLD_RELEASE="$(readlink -f /var/www/tianji-global/current)"
+echo "old_release=${OLD_RELEASE}"
+test -d "${OLD_RELEASE}"
+
+ss -lntp | grep -E ':(3000|3103)\b' || true
+```
+
+Operator rule:
+
+```text
+Record the old release path before switching current. Do not delete it during the canary.
+```
+
+## 3. Env flag strategy
+
+Production free canary initial flags:
+
+```text
+NEXT_PUBLIC_APP_ENV=production
+STAGING_DEGRADED_MODE=true
+AI_PROVIDER_LIVE_DISABLED=true
+STRIPE_LIVE_DISABLED=true
+EMAIL_SEND_DISABLED=true
+SUPABASE_MUTATION_DISABLED=true
+NEXT_PUBLIC_TIANJI_VEDIC_ENABLED=false
+TIANJI_VEDIC_REPORT_MODE=disabled
+```
+
+Why `STAGING_DEGRADED_MODE=true` is used temporarily:
+
+```text
+Lane M is a production free canary, not a paid launch. The degraded guards intentionally keep live side effects locked while free public routes are checked on production.
+```
+
+Important build caution:
+
+```text
+npm run build:staging:degraded currently sets NEXT_PUBLIC_APP_ENV=staging inside package.json. For Lane M, prefer npm run build with the production free canary flags exported in the shell. Only use npm run build:staging:degraded if the operator explicitly accepts that public env label behavior.
+```
+
+Do not print production secrets. Do not `cat` production `.env` files.
+
+## 4. Build command
+
+Preferred build for Lane M:
+
+```bash
+export NEXT_PUBLIC_APP_ENV=production
+export STAGING_DEGRADED_MODE=true
+export AI_PROVIDER_LIVE_DISABLED=true
+export STRIPE_LIVE_DISABLED=true
+export EMAIL_SEND_DISABLED=true
+export SUPABASE_MUTATION_DISABLED=true
+export NEXT_PUBLIC_TIANJI_VEDIC_ENABLED=false
+export TIANJI_VEDIC_REPORT_MODE=disabled
+
+npm ci --legacy-peer-deps
+npm run build
+```
+
+Fallback build only with explicit acceptance of the staging public env label:
+
+```bash
+npm ci --legacy-peer-deps
+npm run build:staging:degraded
+```
+
+## 5. Production canary command template
+
+Preferred server-side script:
+
+```bash
+bash ops/tianji-love-production-free-canary.sh
+```
+
+Default behavior is dry-run only. It prints the planned release path, source branch, canary flags, and required execution environment, then exits without cloning, building, switching `current`, restarting PM2, or smoking production.
+
+Do not execute production canary until explicit manual approval is given.
+
+Approval phrase:
+
+```text
+Approved: execute Lane M production free canary using server-side release build, free routes only, paid/live side effects locked.
+```
+
+After approval, the operator must verify the production PM2 app name on the server, then pass it explicitly:
+
+```bash
+sudo -iu deploy bash <<'EOF'
+set -euo pipefail
+
+cd /path/to/reviewed/tianji-global
+
+CANARY_EXECUTE=true \
+PM2_APP=<verified-production-pm2-app> \
+bash ops/tianji-love-production-free-canary.sh
+EOF
+```
+
+Script safety properties:
+
+```text
+default dry-run
+requires CANARY_EXECUTE=true to deploy
+requires explicit PM2_APP and refuses tianji-staging
+uses a new /var/www/tianji-global/releases/YYYYMMDD-HHMMSS-free-canary path
+does not copy staging .env.local
+appends free-canary side-effect locks without printing secret values
+runs npm ci --legacy-peer-deps and npm run build before switching current
+switches current only after build succeeds
+restarts only the verified PM2 app passed in PM2_APP
+smokes only free GET routes
+rolls back current symlink and restarts PM2 if post-switch smoke/restart fails
+does not run Stripe checkout, webhook replay, paid unlock, email send, Supabase mutation, or provider-live scaling
+```
+
+Manual template, for review only. Prefer the script above because it has dry-run and rollback guardrails:
+
+```bash
+sudo -iu deploy bash <<'EOF'
+set -euo pipefail
+
+BRANCH="staging-degraded-20260518"
+REPO="https://github.com/yihui315/tianji-global.git"
+STAMP="$(date -u +%Y%m%d-%H%M%S)-free-canary"
+BASE="/var/www/tianji-global"
+RELEASE="${BASE}/releases/${STAMP}"
+OLD_RELEASE="$(readlink -f "${BASE}/current")"
+
+echo "old_release=${OLD_RELEASE}"
+test -d "${OLD_RELEASE}"
+
+mkdir -p "${RELEASE}"
+git clone -b "${BRANCH}" "${REPO}" "${RELEASE}"
+cd "${RELEASE}"
+
+git rev-parse HEAD
+git status --short
+test -f package.json
+test -f package-lock.json
+
+# Build a production free canary env without printing secret values.
+# If a production shared env file is used, copy it without cat/echo and append
+# the free-canary locks below so the final effective values are fail-closed.
+if [ -f "${BASE}/shared/.env.production" ]; then
+  cp "${BASE}/shared/.env.production" .env.local
+else
+  touch .env.local
+fi
+chmod 600 .env.local
+
+cat >> .env.local <<'ENVEOF'
+NEXT_PUBLIC_APP_ENV=production
+STAGING_DEGRADED_MODE=true
+AI_PROVIDER_LIVE_DISABLED=true
+STRIPE_LIVE_DISABLED=true
+EMAIL_SEND_DISABLED=true
+SUPABASE_MUTATION_DISABLED=true
+NEXT_PUBLIC_TIANJI_VEDIC_ENABLED=false
+TIANJI_VEDIC_REPORT_MODE=disabled
+PORT=3000
+NEXT_PUBLIC_APP_URL=https://tianji.love
+NEXTAUTH_URL=https://tianji.love
+AUTH_URL=https://tianji.love
+ENVEOF
+
+export NEXT_PUBLIC_APP_ENV=production
+export STAGING_DEGRADED_MODE=true
+export AI_PROVIDER_LIVE_DISABLED=true
+export STRIPE_LIVE_DISABLED=true
+export EMAIL_SEND_DISABLED=true
+export SUPABASE_MUTATION_DISABLED=true
+export NEXT_PUBLIC_TIANJI_VEDIC_ENABLED=false
+export TIANJI_VEDIC_REPORT_MODE=disabled
+
+npm ci --legacy-peer-deps
+npm run build
+
+ln -sfn "${RELEASE}" "${BASE}/current"
+
+cd "${BASE}/current"
+pm2 restart tianji-global --update-env
+pm2 status
+pm2 logs tianji-global --lines 80 --nostream
+
+echo "old_release=${OLD_RELEASE}" > "${BASE}/FREE_CANARY_ROLLBACK_TARGET"
+echo "new_release=${RELEASE}" >> "${BASE}/FREE_CANARY_ROLLBACK_TARGET"
+EOF
+```
+
+If the verified production PM2 app name is not `tianji-global`, replace only the PM2 app name after recording the observed name in the canary evidence.
+
+## 6. Smoke commands
+
+Run after the symlink switch and PM2 restart:
+
+```bash
+BASE_URL=https://tianji.love
+
+curl -sS -o /dev/null -w "home=%{http_code}\n" "$BASE_URL/"
+curl -sS -o /dev/null -w "pricing=%{http_code}\n" "$BASE_URL/pricing"
+curl -sS -o /dev/null -w "ask=%{http_code}\n" "$BASE_URL/ask"
+curl -sS -o /dev/null -w "draw=%{http_code}\n" "$BASE_URL/draw"
+curl -sS -o /dev/null -w "login=%{http_code}\n" "$BASE_URL/login"
+curl -sS -o /dev/null -w "relationship=%{http_code}\n" "$BASE_URL/relationship/new"
+
+SMOKE_BASE_URL=https://tianji.love npm run smoke:production || true
+```
+
+Manual free-flow checks:
+
+```text
+POST /api/relationship/analyze only with free test payload
+POST /api/ask/preview only with non-paid preview payload
+POST /api/draw/preview only with non-paid preview payload
+```
+
+Do not run checkout, webhook replay, paid unlock, email send, Supabase mutation, or provider live scaling in Lane M.
+
+## 7. Rollback commands
+
+Use if any free route returns repeated `5xx`, wrong-origin redirects, paid exposure, Vedic paid exposure, Stripe/webhook/email/Supabase side effects, or PM2 crash loops.
+
+```bash
+sudo -iu deploy bash <<'EOF'
+set -euo pipefail
+
+BASE="/var/www/tianji-global"
+OLD_RELEASE="$(grep '^old_release=' "${BASE}/FREE_CANARY_ROLLBACK_TARGET" | cut -d= -f2-)"
+test -d "${OLD_RELEASE}"
+
+ln -sfn "${OLD_RELEASE}" "${BASE}/current"
+cd "${BASE}/current"
+pm2 restart tianji-global --update-env
+pm2 status
+pm2 logs tianji-global --lines 80 --nostream
+
+curl -sS -o /dev/null -w "home=%{http_code}\n" https://tianji.love/
+curl -sS -o /dev/null -w "pricing=%{http_code}\n" https://tianji.love/pricing
+EOF
+```
+
+If the verified PM2 app name differs from `tianji-global`, use the verified name in both canary and rollback commands.
+
+## 8. Go / No-Go table
+
+| Gate | Go criteria | No-Go criteria | Decision before execution |
+| --- | --- | --- | --- |
+| Staging evidence | Hosted non-paid smoke overall `go` on `http://staging.tianji.love` | Missing or stale staging smoke | Go |
+| Source candidate | `origin/staging-degraded-20260518` equals `1370486c1b36aee8128da2b90cc31eff1e622983` | Candidate branch missing or stale | Go |
+| Production old release | Operator records `readlink -f /var/www/tianji-global/current` | Old release unknown | Conditional Go |
+| PM2 app | Operator verifies production app name before restart | App name unknown at execution time | Conditional Go |
+| Canary flags | All free-canary locks are effective and no secrets are printed | Any paid/live flag unsafe or printed secret | No-Go |
+| Free routes | Home, pricing, relationship free, ask preview, draw preview, login pass | Any repeated 5xx, wrong origin, or paid-only content | No-Go / rollback |
+| Paid/live routes | Remain locked or not exercised | Any live payment/webhook/email/Supabase mutation/provider expansion | Immediate rollback |
+| Vedic paid | Disabled from public exposure | Public paid report reachable | Immediate rollback |
+| Paid launch | Stripe/webhook/entitlement/provider/email/Supabase gates pass separately | Those gates are not-run | No-Go |
+
+## 9. Evidence capture checklist
+
+Record after execution, without secrets:
+
+```text
+old current release
+new release path
+source branch and commit
+build command used
+PM2 app name and status
+free route smoke status codes
+relationship/ask/draw preview result labels
+paid route lock attestation
+Vedic paid disabled attestation
+rollback target
+Go / No-Go decision
+```
+
+## 10. Final boundary
+
+This runbook prepares and describes a canary. It does not itself approve production execution, paid launch, Stripe live payment, webhook mutation, email automation, Supabase mutation, provider live scaling, or Vedic paid public exposure.
