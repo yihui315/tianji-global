@@ -2,92 +2,113 @@
 
 ## Task Goal
 
-Polish the TianJi Love post-free-canary user journey so ordinary users can more quickly understand the free product, optional one-time unlocks, and trust boundaries, without changing payment backend behavior or enabling paid launch.
+Start the three-lane post-free-canary closeout: publish the UX polish branch for staging, keep staging HTTPS and production observation as operator tasks, and prepare paid smoke plus prediction-quality evaluation without opening paid/live systems.
 
 ## Status
 
 ```text
-Production free canary: Go
-Production free routes: Go from prior hosted smoke
-UX conversion polish: Go locally
-Staging HTTPS runbook: Go / not executed
-Production deploy from Codex: Not-run
+Production free canary: Go from prior evidence
+UX polish local validation: Go
+UX polish Git branch: Go
+Server staging deploy: Not-run by Codex
+Hosted staging non-paid smoke: Not-run after this branch
+Staging HTTPS certbot: Not-run by Codex
+Production deploy: Not-run
 Paid launch: No-Go
-Stripe/webhook/provider live/email/Supabase mutation: Not-run
-Vedic paid public exposure: Disabled
+Vedic paid public exposure: Disabled / No-Go
 ```
 
 ## What Changed
 
-- Homepage hero copy now explains the value proposition more directly: private free relationship reading, Ask, Draw Timing, and optional deeper unlock only after preview value is clear.
-- Homepage now includes a sample reading CTA to the existing demo route.
-- English Draw/Timing naming is unified around `Draw Timing`.
-- Pricing now includes one-time unlocks for Ask, Draw Timing, and the currently blocked Relationship Destiny Report.
-- Pricing now explains what users receive after unlocking.
-- Chinese default-route Pricing copy now has localized one-time unlock and after-unlock sections instead of falling back to English.
-- Chinese nav labels now use `时机抽牌` for the Draw Timing surface.
-- Login loading state now has meaningful static fallback copy instead of only `Loading...`.
-- Testimonials/copy contracts were tightened away from guaranteed accuracy, healing, or life-changing promise language.
-- Added a staging HTTPS runbook for fixing `https://staging.tianji.love` separately from production.
+- Committed UX polish as `3aa044a35a5644e4baae32547569bd2135a00f28`.
+- Created and pushed `post-canary-ux-polish-20260520`.
+- Added staging deployment evidence with honest Not-run status for server checkout/build/smoke.
+- Added names-only paid smoke env inventory.
+- Added a 40-case prediction quality evaluation plan.
+- Updated changelog and this review packet.
 
 ## Files Changed
 
 ```text
-src/components/home/TianjiLoveHome.tsx
-src/components/tianji-love/TianjiLovePrimitives.tsx
-src/app/(main)/about/page.tsx
-src/app/(main)/ask/page.tsx
-src/app/(main)/draw/layout.tsx
-src/app/(main)/draw/page.tsx
-src/app/(main)/pricing/layout.tsx
-src/app/(main)/pricing/page.tsx
-src/app/(main)/readings/page.tsx
-src/app/login/page.tsx
-src/app/relationship/new/client.tsx
-src/__tests__/landing-design-contract.test.ts
-src/__tests__/revenue-funnel-polish-contract.test.ts
-src/__tests__/tianji-love-p0-pages-contract.test.ts
-docs/tianji-love-staging-https-runbook.md
-.ai/TIANJI_LOVE_STAGING_HTTPS_RUNBOOK_EVIDENCE_20260520.md
-.ai/TIANJI_LOVE_POST_CANARY_UX_CONVERSION_POLISH_20260520.md
+.ai/TIANJI_LOVE_POST_CANARY_UX_STAGING_EVIDENCE_20260520.md
+.ai/TIANJI_LOVE_PAID_SMOKE_ENV_INVENTORY_20260520.md
+.ai/TIANJI_LOVE_PREDICTION_QUALITY_EVAL_PLAN_20260520.md
 .ai/CHANGELOG_AI.md
 .ai/REVIEW_PACKET.md
 ```
+
+Earlier UX commit on the same pushed branch contains the runtime/test/docs changes listed in `.ai/TIANJI_LOVE_POST_CANARY_UX_CONVERSION_POLISH_20260520.md`.
 
 ## Commands Run
 
 | Command | Result |
 | --- | --- |
-| `npm run test -- src/__tests__/revenue-funnel-polish-contract.test.ts` | Pass, 9/9 after sequential rerun. |
-| `npm run test -- src/__tests__/landing-design-contract.test.ts src/__tests__/tianji-love-p0-pages-contract.test.ts` | Pass, 24/24 after updating expected copy. |
-| `npm run typecheck` | Pass. |
-| `npm run lint` | Pass. |
-| `npm run test` | Pass, 67 files / 556 tests. |
-| `npm run build` | Pass with existing NextAuth/jose Edge runtime warnings. |
-| `npm run audit:copy` | Pass. |
-| `npm run audit:share` | Pass. |
-| `npm run audit:upgrade` | Pass. |
-| `npm run audit:routes` | Pass. |
-| `npm run start -- -p 3059` | Pass, local preview returned 200. |
-| Puppeteer browser smoke for `/`, `/draw`, `/pricing`, `/login` on desktop/mobile | Pass, all 8 page loads returned 200 with required copy present and no page errors. |
-| `git diff --check` | Pass with LF/CRLF working-copy warnings only. |
+| `powershell -File .ai/run-ai-workflow.ps1 ... -PlanOnly` | Timed out after startup artifacts; not treated as complete plan evidence. |
+| `git commit -m "feat: polish post-canary love funnel UX"` | Pass, created `3aa044a`. |
+| `git ls-remote --heads origin post-canary-ux-polish-20260520` | Pass, initially no remote branch. |
+| `git branch post-canary-ux-polish-20260520` | Pass. |
+| `git push -u origin post-canary-ux-polish-20260520` | Pass, remote ref exists. |
+| Names-only process env inventory with `Test-Path Env:<KEY>` | Pass, values not read or printed. |
+| `.env.example` key-name slot inventory | Pass, values not used as secrets. |
+| Non-secret key-name search over `.env.example`, `src`, `scripts`, `docs`, `.ai` | Pass. |
+
+## Env Readiness
+
+```text
+paid smoke env readiness: No-Go
+Stripe test checkout readiness: No-Go
+Stripe webhook readiness: No-Go
+Ask/Draw entitlement smoke readiness: No-Go
+DeepSeek provider smoke readiness: No-Go
+MiniMax quota smoke readiness: No-Go
+Resend/email smoke readiness: No-Go
+Supabase staging mutation readiness: No-Go
+```
+
+Observed names-only blockers:
+
+```text
+STRIPE_ASK_PRICE_ID missing from .env.example
+STRIPE_DRAW_PRICE_ID missing from .env.example
+DEEPSEEK_MODEL_FLASH missing from .env.example
+DEEPSEEK_MODEL_PRO missing from .env.example
+local process env missing all requested paid smoke keys
+server masked env inventory not collected in this run
+```
 
 ## Safety Notes
 
 - No `.env`, `.env.local`, production env, or secret value was read or printed.
-- No production deploy, PM2 restart, symlink switch, Nginx reload, Stripe live call, webhook smoke, paid unlock enablement, provider live scaling, email send, or Supabase mutation was run.
-- The staging HTTPS runbook is documentation only; certbot was not run by Codex.
+- No production deploy, PM2 restart, symlink switch, Nginx reload, certbot, Stripe live call, webhook smoke, paid unlock enablement, provider live scaling, email send, or Supabase mutation was run.
+- Server staging deployment was not executed by Codex because no active server root shell/SSH session was available in this local run.
 - Paid launch remains No-Go.
 
-## Risks And Follow-Up
+## Next Step
 
-1. Run visual/browser QA against a local preview and staging before any production rollout of this polish.
-2. Execute the staging HTTPS runbook only with server-operator approval, and verify production guard smoke afterward.
-3. Pricing now explains paid value better, but actual paid launch remains blocked until Lane N Stripe/webhook/entitlement/provider/email/Supabase smoke passes.
-4. Keep the old production rollback release preserved during the 24-hour free canary observation window.
+Run the staging checkout/build/smoke commands on the server:
+
+```bash
+sudo -iu deploy bash <<'EOF'
+set -e
+cd /var/www/tianji-global-staging
+git fetch origin
+git checkout post-canary-ux-polish-20260520
+git pull --ff-only
+npm ci --legacy-peer-deps
+npm run build:staging:degraded
+pm2 restart tianji-staging --update-env
+STAGING_BASE_URL=http://staging.tianji.love npm run smoke:staging:nonpaid
+EOF
+```
+
+Only after staging hosted non-paid smoke passes should production free-canary approval be requested:
+
+```text
+Approved: execute production free canary for post-canary UX polish, free routes only, paid/live side effects locked.
+```
 
 ## Suggested Commit Message
 
 ```text
-feat: polish post-canary love funnel UX
+docs(ops): prepare paid smoke env inventory and quality eval
 ```

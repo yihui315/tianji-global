@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-20 - TianJi Love UX staging branch and paid smoke prep
+
+- Task ID: 20260520-tianji-love-ux-staging-branch-paid-smoke-prep
+- Files changed: `.ai/TIANJI_LOVE_POST_CANARY_UX_STAGING_EVIDENCE_20260520.md`, `.ai/TIANJI_LOVE_PAID_SMOKE_ENV_INVENTORY_20260520.md`, `.ai/TIANJI_LOVE_PREDICTION_QUALITY_EVAL_PLAN_20260520.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Pushed the post-canary UX polish to the dedicated branch `post-canary-ux-polish-20260520` at commit `3aa044a35a5644e4baae32547569bd2135a00f28`. Prepared report-only staging evidence showing that server staging deploy and hosted smoke are still Not-run by Codex. Added a names-only paid smoke env inventory and a 40-case relationship prediction quality evaluation plan. Production deploy and paid/live side effects remain blocked.
+- Commands run: YiHui PlanOnly attempt for the combined Lane P/Q/N goal; local Git status; UX commit; `git ls-remote --heads origin post-canary-ux-polish-20260520`; `git branch post-canary-ux-polish-20260520`; `git push -u origin post-canary-ux-polish-20260520`; names-only process env and `.env.example` slot inventory; non-secret key-name search over `.env.example`, `src`, `scripts`, `docs`, and `.ai`.
+- Results: Dedicated branch push passed and remote ref exists. YiHui PlanOnly wrote startup/status artifacts but the shell command timed out before a complete local plan report was available. Names-only inventory found local process env missing for all paid smoke keys, `.env.example` missing `STRIPE_ASK_PRICE_ID`, `STRIPE_DRAW_PRICE_ID`, `DEEPSEEK_MODEL_FLASH`, and `DEEPSEEK_MODEL_PRO`; no secret values were printed.
+- Risks: Server staging deploy, staging hosted non-paid smoke, staging HTTPS certbot, production update, paid smoke, Stripe/webhook/provider live/email/Supabase mutation, and Vedic paid public exposure were not run. Paid launch remains No-Go.
+- Next step: Run the documented server staging checkout/build/restart/smoke commands from `/var/www/tianji-global-staging`, then record actual hosted smoke evidence before requesting production free-canary approval.
+
 ### 2026-05-20 - TianJi Love post-canary UX conversion polish
 
 - Task ID: 20260520-tianji-love-post-canary-ux-conversion-polish
