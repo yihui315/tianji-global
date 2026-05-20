@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-21 - TianJi Love Lane S staging deploy readiness
+
+- Task ID: 20260521-tianji-love-lane-s-staging-deploy-ready
+- Files changed: `.ai/TIANJI_LOVE_LANE_S_STAGING_DEPLOY_READY_20260521.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Recorded the post-Lane-S staging deploy gate. The remote branch `post-canary-ux-polish-20260520` is available at commit `432517b`, production free routes sampled from the local workstation returned 200 for home, pricing, ask, draw, and login, and staging homepage returned 200 over both HTTP and HTTPS. Direct Codex staging deployment remains blocked because root and deploy SSH access to `186.244.244.81` are denied from this environment.
+- Commands run: read workspace and project instructions; read TianJi launch/evidence skills; checked git status, latest commits, package scripts, and remote branch ref; sampled production free routes with `curl.exe`; sampled staging HTTP/HTTPS homepage with `curl.exe`; probed root/deploy SSH in batch mode; updated evidence docs; ran targeted `git diff --check`, file existence check, and secret-shape scan over updated docs.
+- Results: Source branch readiness is Go. Public production free-route sample is Go. Staging homepage availability sample is Go. Codex direct server staging deploy is No-Go due SSH denial. Manual server-side staging deploy is prepared but not run by Codex.
+- Risks: Hosted staging build/restart/non-paid smoke for the Lane S diff is still Not-run. Production Lane S canary remains No-Go until staging smoke passes and explicit production approval is given. Paid launch remains No-Go.
+- Next step: Run the prepared server root-shell staging checkout/build/restart/smoke command, then record the hosted non-paid smoke result before any production canary approval.
+
 ### 2026-05-20 - TianJi Love funnel analytics contract
 
 - Task ID: 20260520-tianji-love-lane-s-funnel-analytics-contract

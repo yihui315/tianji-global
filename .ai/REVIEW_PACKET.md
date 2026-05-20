@@ -2,47 +2,38 @@
 
 ## Task Goal
 
-Implement Lane S: a minimal privacy-safe free-to-paid funnel analytics contract for TianJi Love, without enabling paid launch or live side effects.
+Continue the TianJi Love post-canary sequence after Lane S by recording whether the analytics-contract branch is ready for staging deployment, without executing production deploy or paid smoke.
 
 ## Status
 
 ```text
-Production UX polish canary: Go from prior server evidence
-Lane S local analytics contract: Go
-Production deploy: Not-run
-Staging deploy: Not-run for this new Lane S diff
+Production free + UX polish: Go from existing canary evidence
+Production public route sample: Go
+Staging homepage HTTP/HTTPS sample: Go
+Lane S source branch: Go
+Codex direct staging deploy: No-Go, SSH denied
+Manual staging deploy: Ready for operator
+Production Lane S canary: No-Go until staging smoke + explicit approval
 Paid launch: No-Go
-Stripe/webhook/email/Supabase paid mutation/provider live: Not enabled
-Vedic paid public exposure: Disabled / No-Go
 ```
+
+## Current Behavior
+
+- `origin/post-canary-ux-polish-20260520` points to `432517b feat: add tianji love funnel analytics contract`.
+- Public production route sample from this workstation returned 200 for `/`, `/pricing`, `/ask`, `/draw`, and `/login`.
+- Staging homepage returned 200 over `http://staging.tianji.love/` and `https://staging.tianji.love/`.
+- Direct server deployment from this Codex environment is blocked: both `root@186.244.244.81` and `deploy@186.244.244.81` reject SSH batch-mode auth.
 
 ## What Changed
 
-- Added canonical free-to-paid funnel event names:
-  `home_cta_click`, `relationship_started`, `relationship_free_completed`, `ask_preview_started`, `ask_preview_completed`, `draw_preview_started`, `draw_preview_completed`, `pricing_viewed`, `unlock_click`, and `login_started`.
-- Kept legacy revenue-funnel event names in the allowlist for compatibility.
-- Updated homepage, Ask, Draw, Pricing, Login, Relationship form, and Relationship result funnel calls to use the canonical event names.
-- Expanded analytics sanitization to strip raw questions, prompts, answers, full report/result text, and model/provider responses.
-- Added `SUPABASE_MUTATION_DISABLED` guards to generic and relationship analytics API routes so degraded/canary mode can skip analytics writes safely.
+- Added a Lane S staging deploy readiness evidence packet.
+- Updated the changelog and review packet with the current gate state.
+- Prepared the exact server root-shell staging deployment command for the operator.
 
 ## Files Changed
 
 ```text
-src/lib/analytics/funnel-events.ts
-src/lib/analytics/client.ts
-src/lib/trust-copy-guard.ts
-src/app/api/analytics/track/route.ts
-src/app/api/analytics/relationship/route.ts
-src/components/home/TianjiLoveHome.tsx
-src/app/(main)/ask/page.tsx
-src/app/(main)/draw/page.tsx
-src/app/(main)/pricing/page.tsx
-src/app/login/page.tsx
-src/app/relationship/new/client.tsx
-src/components/relationship/RelationshipResult.tsx
-src/__tests__/revenue-funnel-polish-contract.test.ts
-src/__tests__/trust-privacy-contract.test.ts
-.ai/TIANJI_LOVE_LANE_S_FUNNEL_ANALYTICS_CONTRACT_20260520.md
+.ai/TIANJI_LOVE_LANE_S_STAGING_DEPLOY_READY_20260521.md
 .ai/CHANGELOG_AI.md
 .ai/REVIEW_PACKET.md
 ```
@@ -51,47 +42,86 @@ src/__tests__/trust-privacy-contract.test.ts
 
 | Command | Result |
 | --- | --- |
-| `npm run test -- src/__tests__/revenue-funnel-polish-contract.test.ts` | Pass, 10/10 |
-| `npm run test -- src/__tests__/trust-privacy-contract.test.ts` | Pass, 4/4 after sequential rerun |
-| `npm run typecheck` | Pass |
-| `npm run lint` | Pass |
-| `npm run audit:share` | Pass |
-| `npm run audit:copy` | Pass |
-| `npm run test` | Pass, 67 files / 557 tests |
-| first `npm run build` | Failed on stale local `.next` manifest: `/horary` PageNotFoundError |
-| clear generated `.next` cache with path verification | Pass |
-| second `npm run build` | Pass, 106 static pages; existing jose/NextAuth Edge warning only |
-| `npm run audit:routes` | Pass |
-| `npm run audit:upgrade` | Pass |
-| `git diff --check` | Pass with LF/CRLF warnings only |
-| targeted secret-shape scan | Pass, 0 hits |
+| `git -c safe.directory=* status --short --branch` | Local branch is `post-canary-ux-polish-20260520`; unrelated user/other-process changes are present and were not staged |
+| `git -c safe.directory=* log --oneline -5` | Latest commit is `432517b feat: add tianji love funnel analytics contract` |
+| `git -c safe.directory=* ls-remote --heads origin post-canary-ux-polish-20260520` | Remote branch points to `432517bdede94ab4f1bac08ffaf99fc7c1c19d5c` |
+| `curl.exe ... https://tianji.love/` | `prod_home=200` |
+| `curl.exe ... https://tianji.love/pricing` | `prod_pricing=200` |
+| `curl.exe ... https://tianji.love/ask` | `prod_ask=200` |
+| `curl.exe ... https://tianji.love/draw` | `prod_draw=200` |
+| `curl.exe ... https://tianji.love/login` | `prod_login=200` |
+| `curl.exe ... http://staging.tianji.love/` | `staging_http_home=200` |
+| `curl.exe ... https://staging.tianji.love/` | `staging_https_home=200` |
+| `ssh -o BatchMode=yes -o ConnectTimeout=8 root@186.244.244.81 "echo root_ssh_ok"` | Failed, permission denied |
+| `ssh -o BatchMode=yes -o ConnectTimeout=8 deploy@186.244.244.81 "echo deploy_ssh_ok"` | Failed, permission denied |
+| `git diff --check -- .ai/TIANJI_LOVE_LANE_S_STAGING_DEPLOY_READY_20260521.md .ai/CHANGELOG_AI.md .ai/REVIEW_PACKET.md` | Pass with LF/CRLF working-copy warnings only |
+| `Test-Path` for the three updated docs | Pass |
+| targeted secret-shape scan over the three updated docs | Pass, 0 hits for Stripe/API/private-key/secret assignment patterns |
 
 ## Safety Notes
 
-- No production deploy, staging deploy, symlink switch, PM2 restart, certbot, server command, Stripe call, webhook replay, email send, Supabase paid mutation, provider live call, paid unlock enablement, or Vedic paid public exposure was performed.
+- No production deploy, current symlink switch, PM2 restart, certbot, Nginx reload, server build, server env read, Stripe call, webhook replay, email send, Supabase mutation, provider live call, paid unlock, or Vedic paid public exposure was performed.
 - No `.env`, `.env.local`, secret value, credential, production config, Stripe dashboard data, Supabase data, or provider key value was read or printed.
-- The analytics routes still attempt normal writes only when Supabase is configured and `SUPABASE_MUTATION_DISABLED` is not true; degraded/canary flags can skip writes with 202.
+- Existing local uncommitted source/auth changes were treated as external work and left untouched.
 
 ## Gate Matrix
 
 | Gate | Verdict | Reason |
 | --- | --- | --- |
-| Lane S local implementation | Go | Tests, typecheck, lint, build, and audits passed |
-| Analytics privacy contract | Go | Client and server sanitizers strip sensitive/high-content fields |
-| Degraded analytics write guard | Go | Generic and relationship routes honor `SUPABASE_MUTATION_DISABLED` |
-| Production update | No-Go | Needs staging smoke and explicit canary approval |
-| Paid smoke | No-Go | Not part of Lane S and not approved |
-| Production paid launch | No-Go | Stripe/webhook/entitlement/provider/email/Supabase smoke remains not-run |
+| Lane S source branch | Go | Remote branch exists at `432517b` |
+| Production current free route sample | Go | Public curl sample returned 200 for five free routes |
+| Staging host homepage sample | Go | HTTP and HTTPS homepage returned 200 |
+| Codex direct staging deploy | No-Go | root/deploy SSH denied |
+| Manual staging deploy | Conditional Go | Exact command prepared; operator must run on server |
+| Hosted non-paid smoke for Lane S | Not-run | Requires manual staging deploy first |
+| Production Lane S canary | No-Go | Requires staging smoke and explicit approval |
+| Paid smoke / paid launch | No-Go | Not approved and not run |
 
-## Risks And Follow-Up
+## Next Operator Command
 
-1. Stage this diff on `staging.tianji.love` under degraded flags before any production canary.
-2. Use the established 3068 preflight production free-canary path only after explicit approval.
-3. Confirm analytics writes are either safely skipped in degraded mode or pointed at approved staging/test storage before treating funnel metrics as real.
-4. Keep rollback releases and production observation in place.
+Run in the server root shell:
+
+```bash
+sudo -iu deploy bash <<'EOF'
+set -e
+
+cd /var/www/tianji-global-staging
+
+git fetch origin
+git checkout post-canary-ux-polish-20260520
+git pull --ff-only
+
+echo "=== current staging branch ==="
+git branch --show-current
+git log --oneline -5
+
+echo "=== install/build ==="
+npm ci --legacy-peer-deps
+npm run build:staging:degraded
+
+echo "=== restart staging only ==="
+pm2 restart tianji-staging --update-env
+
+echo "=== staging smoke ==="
+STAGING_BASE_URL=http://staging.tianji.love npm run smoke:staging:nonpaid
+EOF
+```
+
+## Explicitly Not Approved
+
+- Production Lane S canary.
+- `CANARY_EXECUTE=true`.
+- Stripe live.
+- Stripe webhook mutation.
+- Ask/Draw paid unlock.
+- Email automation.
+- Supabase production mutation.
+- Provider live scaling.
+- Vedic paid public exposure.
+- Rollback release deletion.
 
 ## Suggested Commit Message
 
 ```text
-feat: add tianji love funnel analytics contract
+docs(ops): record Lane S staging deploy gate
 ```
