@@ -309,6 +309,10 @@ export default function AskPage() {
       if (!question.trim() || loading) return;
       setError(null);
       setUnlocked(null);
+      void trackRevenueFunnelEvent('ask_preview_started', {
+        lang: language,
+        surface: 'ask_page',
+      });
       try {
         setLoading(true);
         const res = await fetch('/api/ask/preview', {
@@ -328,7 +332,7 @@ export default function AskPage() {
         };
         setPreview(state);
         writeStoredPreview(state);
-        void trackRevenueFunnelEvent('ask_preview_view', {
+        void trackRevenueFunnelEvent('ask_preview_completed', {
           lang: state.language,
           surface: 'ask_page',
           previewId: state.id,
@@ -345,9 +349,10 @@ export default function AskPage() {
   const onUnlock = useCallback(async () => {
     if (!preview || unlocking) return;
     setError(null);
-    void trackRevenueFunnelEvent('ask_unlock_click', {
+    void trackRevenueFunnelEvent('unlock_click', {
       lang: preview.language,
       surface: 'ask_preview',
+      product: 'ask_one_question',
       previewId: preview.id,
     });
     try {

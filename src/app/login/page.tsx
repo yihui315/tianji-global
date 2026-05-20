@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Mail, ShieldCheck, Sparkles } from 'lucide-react';
 
+import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import {
   TianjiLoveButton,
   TianjiLoveFooter,
@@ -22,6 +23,12 @@ function LoginForm() {
   const [error, setError] = useState('');
   const [magicSent, setMagicSent] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+
+  useEffect(() => {
+    void trackRevenueFunnelEvent('login_started', {
+      surface: 'login_page',
+    });
+  }, []);
 
   useEffect(() => {
     if (searchParams.get('verify')) {

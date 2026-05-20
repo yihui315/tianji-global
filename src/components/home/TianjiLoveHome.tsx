@@ -405,8 +405,9 @@ export default function TianjiLoveHome() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    void trackRevenueFunnelEvent('relationship_start_click', {
+    void trackRevenueFunnelEvent('home_cta_click', {
       surface: 'homepage_birth_form',
+      cta: mode === 'solo' ? 'ask_preview' : 'relationship',
       mode,
       lang: activeLang,
     });
@@ -471,7 +472,7 @@ export default function TianjiLoveHome() {
           <div className="mt-8 flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:flex-wrap">
             <Link
               href={href('/relationship/new')}
-              onClick={() => void trackRevenueFunnelEvent('relationship_start_click', { surface: 'homepage_hero', lang: activeLang })}
+              onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_hero', lang: activeLang, cta: 'relationship' })}
               className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition hover:border-[#ffd6ab] hover:text-white"
             >
               {copy.hero.primaryCta}
@@ -479,14 +480,14 @@ export default function TianjiLoveHome() {
             </Link>
             <Link
               href={href('/ask')}
-              onClick={() => void trackRevenueFunnelEvent('ask_preview_view', { surface: 'homepage_hero_click', lang: activeLang, intent: 'start' })}
+              onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_hero', lang: activeLang, cta: 'ask_preview' })}
               className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#d9b47c]/65 bg-black/28 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10"
             >
               {copy.hero.secondaryCta}
             </Link>
             <Link
               href={href('/draw')}
-              onClick={() => void trackRevenueFunnelEvent('draw_preview_view', { surface: 'homepage_hero_click', lang: activeLang, intent: 'start' })}
+              onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_hero', lang: activeLang, cta: 'draw_preview' })}
               className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#d9b47c]/50 bg-black/18 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10"
             >
               {copy.hero.tertiaryCta}
@@ -579,7 +580,7 @@ function Header({
           </button>
           <Link
             href={href('/relationship/new')}
-            onClick={() => void trackRevenueFunnelEvent('relationship_start_click', { surface: 'homepage_header', lang: activeLang })}
+            onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_header', lang: activeLang, cta: 'relationship' })}
             className="tianji-love-primary hidden min-h-12 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-6 text-sm font-semibold text-[#fff7e6] sm:inline-flex"
           >
             {copy.hero.getStarted}

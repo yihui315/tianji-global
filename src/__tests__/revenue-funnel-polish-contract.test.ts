@@ -3,6 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { sanitizeClientAnalyticsPayload } from '@/lib/analytics/client';
+import { FREE_TO_PAID_FUNNEL_EVENTS, isRevenueFunnelEventName } from '@/lib/analytics/funnel-events';
 
 const repoRoot = process.cwd();
 
@@ -19,7 +20,7 @@ describe('Tianji Love revenue funnel polish', () => {
     expect(home).toContain('Ask One Question');
     expect(home).toContain('Draw Timing Cards');
     expect(home).toContain('Free First, Deeper When Useful');
-    expect(home).toContain('relationship_start_click');
+    expect(home).toContain('home_cta_click');
   });
 
   it('homepage contains the Ask CTA and privacy-safe trust strip', () => {
@@ -40,8 +41,9 @@ describe('Tianji Love revenue funnel polish', () => {
 
     expect(ask).toContain('Unlock the full relationship answer');
     expect(ask).toContain('A deeper interpretation of the emotional pattern');
-    expect(ask).toContain('ask_preview_view');
-    expect(ask).toContain('ask_unlock_click');
+    expect(ask).toContain('ask_preview_started');
+    expect(ask).toContain('ask_preview_completed');
+    expect(ask).toContain('unlock_click');
     expect(ask).not.toMatch(/free full answer|complete answer for free|guaranteed outcome/i);
   });
 
@@ -52,8 +54,9 @@ describe('Tianji Love revenue funnel polish', () => {
     expect(draw).toContain('Unlock the full Draw Timing reading');
     expect(draw).toContain('Draw three timing cards for the choice in front of you.');
     expect(draw).toContain('Practical next step');
-    expect(draw).toContain('draw_preview_view');
-    expect(draw).toContain('draw_unlock_click');
+    expect(draw).toContain('draw_preview_started');
+    expect(draw).toContain('draw_preview_completed');
+    expect(draw).toContain('unlock_click');
     expect(draw).not.toMatch(/guaranteed prediction|guaranteed future|certain future/i);
   });
 
@@ -69,9 +72,9 @@ describe('Tianji Love revenue funnel polish', () => {
     expect(pricing).toContain('Love Monthly');
     expect(pricing).toContain('Love Yearly');
     expect(pricing).toContain('Paid unlocks add depth, not certainty');
-    expect(pricing).toContain('pricing_view');
-    expect(pricing).toContain('pricing_plan_click');
-    expect(pricing).toContain('login_start');
+    expect(pricing).toContain('pricing_viewed');
+    expect(pricing).toContain('unlock_click');
+    expect(pricing).toContain('login_started');
   });
 
   it('Login fallback shows useful static sign-in copy instead of a bare loading state', () => {
@@ -106,6 +109,10 @@ describe('Tianji Love revenue funnel polish', () => {
       timezone: 'Asia/Shanghai',
       rawQuestion: 'Should I contact them?',
       fullResult: 'Long generated result text',
+      modelResponse: 'Generated provider response',
+      providerOutput: 'Provider raw output',
+      prompt: 'Prompt text',
+      response: 'Raw response',
       safeSurface: 'ask_preview',
       cardCount: 3,
     });
@@ -114,5 +121,41 @@ describe('Tianji Love revenue funnel polish', () => {
       safeSurface: 'ask_preview',
       cardCount: 3,
     });
+  });
+
+  it('defines the free-to-paid funnel event allowlist and keeps analytics mutation guardable', () => {
+    const funnelEvents = read('src/lib/analytics/funnel-events.ts');
+    const trackRoute = read('src/app/api/analytics/track/route.ts');
+    const relationshipRoute = read('src/app/api/analytics/relationship/route.ts');
+    const relationshipNew = read('src/app/relationship/new/client.tsx');
+    const relationshipResult = read('src/components/relationship/RelationshipResult.tsx');
+    const login = read('src/app/login/page.tsx');
+
+    expect(FREE_TO_PAID_FUNNEL_EVENTS).toEqual([
+      'home_cta_click',
+      'relationship_started',
+      'relationship_free_completed',
+      'ask_preview_started',
+      'ask_preview_completed',
+      'draw_preview_started',
+      'draw_preview_completed',
+      'pricing_viewed',
+      'unlock_click',
+      'login_started',
+    ]);
+
+    for (const eventName of FREE_TO_PAID_FUNNEL_EVENTS) {
+      expect(isRevenueFunnelEventName(eventName)).toBe(true);
+      expect(funnelEvents).toContain(eventName);
+    }
+
+    expect(isRevenueFunnelEventName('raw_question_sent')).toBe(false);
+    expect(relationshipNew).toContain('relationship_started');
+    expect(relationshipResult).toContain('relationship_free_completed');
+    expect(login).toContain('login_started');
+    expect(trackRoute).toContain('isSupabaseMutationDisabled');
+    expect(relationshipRoute).toContain('isSupabaseMutationDisabled');
+    expect(trackRoute).toContain('supabase_mutation_disabled');
+    expect(relationshipRoute).toContain('supabase_mutation_disabled');
   });
 });

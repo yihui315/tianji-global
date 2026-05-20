@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase";
+import { isSupabaseMutationDisabled } from "@/lib/staging-degraded-mode";
 
 const ALLOWED_EVENTS = new Set([
   "relationship_page_view",
@@ -29,6 +30,17 @@ const ALLOWED_EVENTS = new Set([
 ] as const);
 
 export async function POST(req: NextRequest) {
+  if (isSupabaseMutationDisabled()) {
+    return NextResponse.json(
+      {
+        success: false,
+        skipped: true,
+        reason: "supabase_mutation_disabled",
+      },
+      { status: 202 }
+    );
+  }
+
   // ── Validate Supabase configuration ──────────────────────────────────────
   if (!isSupabaseConfigured()) {
     return NextResponse.json(

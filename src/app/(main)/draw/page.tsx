@@ -371,6 +371,10 @@ export default function DrawPage() {
       if (loading) return;
       setError(null);
       setUnlocked(null);
+      void trackRevenueFunnelEvent('draw_preview_started', {
+        lang,
+        surface: 'draw_page',
+      });
       try {
         setLoading(true);
         const res = await fetch('/api/draw/preview', {
@@ -391,7 +395,7 @@ export default function DrawPage() {
         };
         setPreview(state);
         writeStoredPreview(state);
-        void trackRevenueFunnelEvent('draw_preview_view', {
+        void trackRevenueFunnelEvent('draw_preview_completed', {
           lang: state.language,
           surface: 'draw_page',
           previewId: state.id,
@@ -409,9 +413,10 @@ export default function DrawPage() {
   const onUnlock = useCallback(async () => {
     if (!preview || unlocking) return;
     setError(null);
-    void trackRevenueFunnelEvent('draw_unlock_click', {
+    void trackRevenueFunnelEvent('unlock_click', {
       lang: preview.language,
       surface: 'draw_preview',
+      product: 'draw_timing',
       previewId: preview.id,
       cardCount: preview.previewDraw.length,
     });

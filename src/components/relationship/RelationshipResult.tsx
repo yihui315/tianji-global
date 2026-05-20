@@ -133,7 +133,7 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
     });
 
     if (!isFull) {
-      void trackRevenueFunnelEvent('relationship_free_result_view', {
+      void trackRevenueFunnelEvent('relationship_free_completed', {
         lang,
         surface: 'relationship_result',
         relationType: reading.relationType,
@@ -160,10 +160,11 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
       },
     });
 
-    void trackRevenueFunnelEvent('relationship_upgrade_click', {
+    void trackRevenueFunnelEvent('unlock_click', {
       lang,
       surface: 'relationship_result',
       productId: 'compatibility_report',
+      product: 'relationship_destiny_report',
       relationType: reading.relationType,
     });
 

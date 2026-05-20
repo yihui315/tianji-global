@@ -9,17 +9,31 @@ export interface ClientAnalyticsEvent {
 }
 
 const SENSITIVE_PAYLOAD_KEYS = new Set([
+  'answer',
+  'airesponse',
   'birthdate',
   'birthtime',
   'birthlocation',
   'birthplace',
-  'timezone',
-  'question',
-  'rawquestion',
   'fullanswer',
+  'fullreading',
+  'fullreport',
   'fullresult',
-  'resulttext',
+  'modeloutput',
+  'modelresponse',
+  'prompt',
+  'provideroutput',
+  'providerresponse',
+  'providerraw',
+  'question',
+  'rawproviderresponse',
+  'rawquestion',
+  'rawresponse',
   'rawresult',
+  'readingtext',
+  'response',
+  'resulttext',
+  'timezone',
 ]);
 
 function normalizePayloadKey(key: string) {

@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-20 - TianJi Love funnel analytics contract
+
+- Task ID: 20260520-tianji-love-lane-s-funnel-analytics-contract
+- Files changed: `src/lib/analytics/funnel-events.ts`, `src/lib/analytics/client.ts`, `src/lib/trust-copy-guard.ts`, `src/app/api/analytics/track/route.ts`, `src/app/api/analytics/relationship/route.ts`, `src/components/home/TianjiLoveHome.tsx`, `src/app/(main)/ask/page.tsx`, `src/app/(main)/draw/page.tsx`, `src/app/(main)/pricing/page.tsx`, `src/app/login/page.tsx`, `src/app/relationship/new/client.tsx`, `src/components/relationship/RelationshipResult.tsx`, `src/__tests__/revenue-funnel-polish-contract.test.ts`, `src/__tests__/trust-privacy-contract.test.ts`, `.ai/TIANJI_LOVE_LANE_S_FUNNEL_ANALYTICS_CONTRACT_20260520.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Implemented Lane S minimal free-to-paid funnel analytics contract with canonical event names for homepage CTA clicks, relationship start/free completion, Ask/Draw preview start/completion, pricing views, unlock clicks, and login starts. Expanded client/server analytics sanitizers to strip raw questions, prompts, model/provider responses, full report/result text, and birth/time/location/timezone fields. Added `SUPABASE_MUTATION_DISABLED` guards to generic and relationship analytics API routes so degraded/canary mode can skip writes with a 202 response.
+- Commands run: targeted revenue funnel contract test; targeted trust/privacy contract test; `npm run typecheck`; `npm run lint`; `npm run audit:share`; `npm run audit:copy`; `npm run test`; `npm run build`; `npm run audit:routes`; `npm run audit:upgrade`; `git diff --check`; targeted secret-shape scan.
+- Results: Targeted revenue funnel contract passed 10/10; targeted trust/privacy contract passed 4/4 after sequential rerun; typecheck, lint, share/copy audits, full tests, route/upgrade audits, diff check, and secret-shape scan passed. Full test passed 67 files / 557 tests. First build hit a stale local `.next` `/horary` page-manifest error; after clearing generated `.next` cache with path verification, build passed and generated 106 static pages with the existing jose/NextAuth Edge warning only.
+- Risks: This only lands the local analytics contract. It does not deploy, write production analytics, enable paid unlock, run Stripe/webhook/provider/email/Supabase paid smoke, or expose Vedic paid public. Production update remains No-Go until staging smoke and explicit production canary approval.
+- Next step: Deploy to staging degraded mode, run hosted non-paid smoke, then use the established 3068 preflight production free-canary path only after explicit approval.
+
 ### 2026-05-20 - TianJi Love post-canary operating gates
 
 - Task ID: 20260520-tianji-love-post-canary-operating-gates

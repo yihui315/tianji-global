@@ -251,21 +251,23 @@ export default function PricingPage() {
   const href = (path: string) => withLanguageParam(path, language);
 
   useEffect(() => {
-    void trackRevenueFunnelEvent('pricing_view', {
+    void trackRevenueFunnelEvent('pricing_viewed', {
       lang: language,
       surface: 'pricing_page',
     });
   }, [language]);
 
   const handleSubscribe = async (planId: PlanId) => {
-    void trackRevenueFunnelEvent('pricing_plan_click', {
+    void trackRevenueFunnelEvent('unlock_click', {
       lang: language,
+      surface: 'pricing_plan',
       planId,
+      product: planId,
       authenticated: isAuthenticated,
     });
 
     if (!isAuthenticated) {
-      void trackRevenueFunnelEvent('login_start', {
+      void trackRevenueFunnelEvent('login_started', {
         lang: language,
         source: 'pricing_plan_click',
         planId,

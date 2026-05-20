@@ -24,6 +24,7 @@ import {
   TianjiLoveShell,
   TianjiLoveTrustCard,
 } from '@/components/tianji-love';
+import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import { trackRelationshipEvent } from '@/lib/analytics/track';
 import { type AppLanguage, isAppLanguage, withLanguageParam } from '@/lib/language-routing';
 import type { RelationshipReading, RelationshipType } from '@/types/relationship';
@@ -212,6 +213,10 @@ export default function RelationshipNewClient() {
       experiment_id: 'relationship-p0-sales-loop',
       variant: 'A',
       payload: { lang: language, funnel_stage: 'form_start' },
+    });
+    void trackRevenueFunnelEvent('relationship_started', {
+      lang: language,
+      surface: 'relationship_form',
     });
   };
 
