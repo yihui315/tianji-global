@@ -3,7 +3,7 @@ import { JsonLd, SITE, buildBreadcrumb } from '@/components/seo/JsonLd';
 
 const TITLE = 'Tianji Love Pricing | Deeper Love Readings & Compatibility Reports';
 const DESCRIPTION =
-  'Tianji Love plans unlock deeper love readings, compatibility history, timing reports, and private report-ready pages without promising guaranteed predictions.';
+  'Tianji Love pricing explains free previews, one-time Ask and Draw Timing unlocks, subscription history, and private report-ready pages without promising guaranteed predictions.';
 const OG_URL = '/api/og?title=Tianji+Love+Pricing&subtitle=Love+readings+%C2%B7+Compatibility+%C2%B7+Timing&module=tianji';
 const PAGE_URL = `${SITE.url}/pricing`;
 
@@ -42,6 +42,24 @@ const productLd = {
   offers: [
     {
       '@type': 'Offer',
+      name: 'Ask One Question Unlock',
+      price: '1.99',
+      priceCurrency: 'USD',
+      url: PAGE_URL,
+      availability: 'https://schema.org/InStock',
+      category: 'one-time',
+    },
+    {
+      '@type': 'Offer',
+      name: 'Draw Timing Reading Unlock',
+      price: '2.99',
+      priceCurrency: 'USD',
+      url: PAGE_URL,
+      availability: 'https://schema.org/InStock',
+      category: 'one-time',
+    },
+    {
+      '@type': 'Offer',
       name: 'Tianji Love Monthly',
       price: '9.99',
       priceCurrency: 'USD',
@@ -74,6 +92,14 @@ const faqLd = {
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Yes. The free path gives a usable first reading before any upgrade. Paid plans unlock depth, history, and report surfaces.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What happens after unlocking?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'After unlocking, you receive a deeper private reading with practical next steps and clearer structure. Birth data and private questions are not placed into public share links by default.',
       },
     },
     {

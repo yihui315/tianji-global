@@ -105,26 +105,26 @@ const timingCopy = {
     nav: {
       loveReading: 'Love Reading',
       ask: 'Ask',
-      draw: 'Draw',
+      draw: 'Draw Timing',
       pricing: 'Pricing',
       about: 'About',
       login: 'Login',
       privacy: 'Privacy',
     },
     hero: {
-      eyebrow: 'Tianji Love / Timing',
-      title: 'Read the romantic timing around your next turn.',
-      accent: 'Not certainty. A clearer window.',
+      eyebrow: 'Tianji Love / Draw Timing Cards',
+      title: 'Draw three timing cards for the choice in front of you.',
+      accent: 'Yesterday. Today. Tomorrow. Not certainty.',
       body:
-        'Ask about a relationship pause, a reconnection, a choice, or the moment you are unsure whether to move. Tianji Love frames the timing as yesterday, today, and tomorrow so the next step feels less noisy.',
-      primary: 'Reveal my timing window',
+        'Ask about a relationship pause, a reconnection, a choice, or the moment you are unsure whether to move. Draw three timing cards for what led here, the live signal, and the next opening.',
+      primary: 'Draw my timing cards',
       secondary: 'Start relationship reading',
     },
     form: {
       eyebrow: 'Timing question',
-      title: 'Name the moment you are standing in',
+      title: 'Name the moment before you draw',
       description:
-        'Write one concrete situation. The preview stays private and the full timing reading unlocks only if the first signal feels useful.',
+        'Write one concrete situation. The preview stays private and the full Draw Timing reading unlocks only if the first signal feels useful.',
       placeholder:
         'e.g. We have been quiet for two weeks. Is this a moment to reach out, wait, or let the pattern complete itself?',
       helper: 'Private preview. One question. No public birth or relationship data.',
@@ -146,21 +146,21 @@ const timingCopy = {
     ],
     preview: {
       eyebrow: 'Your first timing signal',
-      title: 'A private three-card relationship preview is ready',
+      title: 'A private Draw Timing preview is ready',
       paywallNote:
-        'Unlock the full three-card relationship reading for {price}: the deeper pattern, current emotional dynamic, and one practical next move - as reflection, not certainty.',
+        'Unlock the full Draw Timing reading for {price}: the deeper pattern, current emotional dynamic, and one practical next move - as reflection, not certainty.',
       assurance: 'Secure Stripe checkout. One-time unlock. No subscription required.',
-      unlockCta: 'Unlock the full three-card relationship reading - {price}',
+      unlockCta: 'Unlock the full Draw Timing reading - {price}',
       unlocking: 'Opening checkout...',
     },
     unlocked: {
       eyebrow: 'Your complete timing reading',
-      title: 'The timing window is open',
+      title: 'Your Draw Timing window is open',
       reversed: 'Reframe',
       upright: 'Move',
     },
     final: {
-      title: 'When the timing is clearer, love stops feeling like a guess.',
+      title: 'Draw Timing helps the next step feel less noisy.',
       button: 'Ask A Love Question',
     },
     footer:
@@ -170,7 +170,7 @@ const timingCopy = {
     nav: {
       loveReading: '关系解读',
       ask: '提问',
-      draw: '抽牌',
+      draw: '时机抽牌',
       pricing: '会员权益',
       about: '关于',
       login: '登录',
@@ -434,7 +434,7 @@ export default function DrawPage() {
   }, [preview, unlocking]);
 
   return (
-    <TianjiLoveShell className="tianji-love-timing-page" ariaLabel="Tianji Love timing page">
+    <TianjiLoveShell className="tianji-love-timing-page" ariaLabel="Tianji Love Draw Timing page">
       <TianjiLoveHeader
         homeHref={href('/')}
         navItems={[
@@ -469,7 +469,7 @@ export default function DrawPage() {
           </div>
         </div>
 
-        <TianjiLoveHeroImage src={HERO_COUPLE} priority referenceSignal="Tianji Love timing red thread hero" className="lg:min-h-[620px]" />
+        <TianjiLoveHeroImage src={HERO_COUPLE} priority referenceSignal="Tianji Love Draw Timing red thread hero" className="lg:min-h-[620px]" />
       </section>
 
       <section id="timing-question" className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-12 sm:px-8">

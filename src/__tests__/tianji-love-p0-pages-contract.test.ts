@@ -50,7 +50,7 @@ describe('Tianji Love P0/P1 page visual contract', () => {
       expect(header, file).toMatch(/\/pricing/);
       expect(header, file).toMatch(/\/about/);
       expect(header, file).toMatch(/\/login/);
-      expect(header, file).not.toMatch(/Compatibility|Timing|Privacy|copy\.nav\.compatibility|copy\.nav\.timing|copy\.nav\.privacy|t\.nav\.compatibility|t\.nav\.timing|t\.nav\.privacy/);
+      expect(header, file).not.toMatch(/Compatibility|Privacy|copy\.nav\.compatibility|copy\.nav\.timing|copy\.nav\.privacy|t\.nav\.compatibility|t\.nav\.timing|t\.nav\.privacy/);
     }
   });
 
@@ -64,9 +64,9 @@ describe('Tianji Love P0/P1 page visual contract', () => {
     expect(page).toContain('TianjiLoveShell');
     expect(page).toContain('TianjiLoveHeader');
     expect(page).toContain('TianjiLoveHeroImage');
-    expect(page).toContain('Read the romantic timing around your next turn.');
+    expect(page).toContain('Draw three timing cards for the choice in front of you.');
     expect(page).toContain('看清下一次关系转折附近的时机。');
-    expect(page).toContain('Reveal my timing window');
+    expect(page).toContain('Draw my timing cards');
     expect(page).toContain('/assets/images/hero/tianji-love-couple-red-thread-16x9.png');
     expect(page).toContain('/assets/images/hero/tianji-love-moon-pavilion-16x9.png');
     expect(page).not.toContain('BackgroundVideoHero');
@@ -85,6 +85,9 @@ describe('Tianji Love P0/P1 page visual contract', () => {
     expect(page).toContain('TianjiLoveHeader');
     expect(page).toContain('TianjiLoveFinalCta');
     expect(page).toContain('Go deeper only when the reading earns it.');
+    expect(page).toContain('One-time unlocks before subscriptions');
+    expect(page).toContain('Relationship Destiny Report');
+    expect(page).toContain('What happens after unlocking');
     expect(page).toContain('当一次解读真的有帮助，再进入更深一层。');
     expect(page).toContain('Paid plans unlock depth and history, not guaranteed predictions.');
     expect(page).toContain('出生资料默认保持私密，公开分享不展示生日、时间、地点或时区。');
@@ -118,7 +121,7 @@ describe('Tianji Love P0/P1 page visual contract', () => {
     const source = `${pricing}\n${draw}\n${ask}\n${relationship}`;
 
     expect(pricing).toContain('Tianji Love Pricing | Deeper Love Readings & Compatibility Reports');
-    expect(draw).toContain('Tianji Love Timing | Relationship Turning Point Reading');
+    expect(draw).toContain('Tianji Love Draw Timing Cards | Relationship Turning Point Reading');
     expect(ask).toContain('Tianji Love Reading | Ask A Private Relationship Question');
     expect(relationship).toContain('Tianji Love Compatibility | Relationship Pattern Report');
     expect(source).not.toContain('TianJi Pro');
@@ -173,7 +176,7 @@ describe('Tianji Love P0/P1 page visual contract', () => {
     for (const signal of [
       "{ label: 'Love Reading', href: '/relationship/new'",
       "{ label: 'Ask', href: '/ask'",
-      "{ label: 'Draw', href: '/draw'",
+      "{ label: 'Draw Timing', href: '/draw'",
       "{ label: 'Pricing', href: '/pricing'",
       "{ label: 'About', href: '/about'",
       "{ label: 'Login', href: '/login'",
@@ -181,7 +184,7 @@ describe('Tianji Love P0/P1 page visual contract', () => {
       expect(primaryNav).toContain(signal);
     }
 
-    expect(primaryNav).not.toMatch(/Compatibility|Timing|History|Profile|Privacy|Terms/);
+    expect(primaryNav).not.toMatch(/Compatibility|History|Profile|Privacy|Terms/);
 
     for (const file of auxiliaryPages) {
       const source = read(file);
@@ -191,7 +194,7 @@ describe('Tianji Love P0/P1 page visual contract', () => {
       expect(source, file).toContain('getTianjiLovePrimaryCta');
       expect(header, file).toContain('getTianjiLovePrimaryNav');
       expect(header, file).toContain('getTianjiLovePrimaryCta');
-      expect(header, file).not.toMatch(/Compatibility|Timing|History|Profile|Privacy|Terms/);
+      expect(header, file).not.toMatch(/Compatibility|History|Profile|Privacy|Terms/);
       expect(header, file).not.toMatch(/t\.nav\.compatibility|t\.nav\.timing|t\.nav\.history|t\.nav\.profile|t\.nav\.privacy|t\.nav\.terms/);
     }
   });

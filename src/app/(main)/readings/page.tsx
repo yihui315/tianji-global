@@ -319,7 +319,7 @@ export default function ReadingsPage() {
                 {language === 'zh' ? '关系解读' : 'Start Relationship Reading'}
               </TianjiLoveButton>
               <TianjiLoveButton href={href('/draw')} variant="secondary">
-                {language === 'zh' ? '抽牌' : 'Draw Three Cards'}
+                {language === 'zh' ? '抽牌' : 'Draw Timing Cards'}
               </TianjiLoveButton>
             </div>
           </TianjiLovePanel>

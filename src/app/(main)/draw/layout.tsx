@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { JsonLd, SITE, buildBreadcrumb } from '@/components/seo/JsonLd';
 
-const TITLE = 'Tianji Love Timing | Relationship Turning Point Reading';
+const TITLE = 'Tianji Love Draw Timing Cards | Relationship Turning Point Reading';
 const DESCRIPTION =
-  'Ask about a relationship pause, reconnection, choice, or turning point. Tianji Love frames the timing as what led here, the live signal, and the next opening.';
-const OG_URL = '/api/og?title=Tianji+Love+Timing&subtitle=Relationship+turning+point+window&module=tianji';
+  'Ask about a relationship pause, reconnection, choice, or turning point. Draw three timing cards for what led here, the live signal, and the next opening.';
+const OG_URL = '/api/og?title=Tianji+Love+Draw+Timing+Cards&subtitle=Relationship+turning+point+window&module=tianji';
 const PAGE_URL = `${SITE.url}/draw`;
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: PAGE_URL,
     type: 'website',
-    images: [{ url: OG_URL, width: 1200, height: 630, alt: 'Tianji Love Timing' }],
+    images: [{ url: OG_URL, width: 1200, height: 630, alt: 'Tianji Love Draw Timing Cards' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -39,14 +39,14 @@ export const metadata: Metadata = {
 
 const breadcrumbLd = buildBreadcrumb([
   { name: 'Tianji Love Home', path: '/' },
-  { name: 'Timing', path: '/draw' },
+  { name: 'Draw Timing', path: '/draw' },
 ]);
 
 const serviceLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   '@id': `${PAGE_URL}#service`,
-  name: 'Tianji Love Timing',
+  name: 'Tianji Love Draw Timing Cards',
   alternateName: '关系时机解读',
   serviceType: 'Relationship timing reading',
   description: DESCRIPTION,

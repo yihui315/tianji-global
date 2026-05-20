@@ -27,6 +27,7 @@ type LoveCopy = {
     secondaryCta: string;
     tertiaryCta: string;
     trustCta: string;
+    sampleCta?: string;
     getStarted: string;
     trust: Array<{ label: string; iconAsset: string }>;
   };
@@ -107,21 +108,22 @@ const loveCopy = {
     nav: [
       { label: 'Love Reading', href: '/relationship/new' },
       { label: 'Ask', href: '/ask' },
-      { label: 'Draw', href: '/draw' },
+      { label: 'Draw Timing', href: '/draw' },
       { label: 'Pricing', href: '/pricing' },
       { label: 'About', href: '/about' },
       { label: 'Login', href: '/login' },
     ],
     hero: {
       eyebrow: 'PRIVATE LOVE REFLECTION. CLEARER NEXT STEPS.',
-      titleLead: 'Read the pattern in love',
-      titleAccent: 'before you choose.',
+      titleLead: 'Understand your love pattern',
+      titleAccent: 'before you make the next move.',
       description:
-        'Start with a free relationship reflection, ask one private question, or draw three cards for a practical next step. Tianji Love offers insight as reflection, not certainty.',
+        'Start with a private free relationship reading. Ask one question, check romantic timing, or unlock a deeper report only when the preview feels useful.',
       primaryCta: 'Start Free Love Reading',
       secondaryCta: 'Ask One Question',
-      tertiaryCta: 'Draw Three Cards',
+      tertiaryCta: 'Draw Timing Cards',
       trustCta: 'About Tianji Love',
+      sampleCta: 'View Sample Reading',
       getStarted: 'Get Started',
       trust: [
         { label: 'Private & Secure', iconAsset: ICONS.privateLock },
@@ -154,8 +156,8 @@ const loveCopy = {
         iconAsset: ICONS.relationshipRings,
       },
       {
-        title: 'Draw Three Cards',
-        body: 'Use a three-card relationship spread to reflect on the current pattern, emotional dynamic, and next move.',
+        title: 'Draw Timing Cards',
+        body: 'Draw three timing cards for what led here, what today asks, and the next opening.',
         iconAsset: ICONS.futureHourglass,
       },
     ],
@@ -173,7 +175,7 @@ const loveCopy = {
       title: 'Free First, Deeper When Useful',
       steps: [
         { number: '1', title: 'Start free', body: 'Get a first relationship signal without a paid commitment.' },
-        { number: '2', title: 'Unlock depth', body: 'Use a one-time Ask or Draw unlock when the preview earns more attention.' },
+        { number: '2', title: 'Unlock depth', body: 'Use a one-time Ask or Draw Timing unlock when the preview earns more attention.' },
         { number: '3', title: 'Return with history', body: 'Subscribers keep report-ready readings and relationship history where implemented.' },
       ],
     },
@@ -213,7 +215,7 @@ const loveCopy = {
       links: [
         { label: 'Love Reading', href: '/relationship/new' },
         { label: 'Ask', href: '/ask' },
-        { label: 'Draw', href: '/draw' },
+        { label: 'Draw Timing', href: '/draw' },
         { label: 'Pricing', href: '/pricing' },
         { label: 'About', href: '/about' },
         { label: 'Login', href: '/login' },
@@ -390,6 +392,7 @@ export default function TianjiLoveHome() {
 
   const yearOptions = useMemo(() => YEARS, []);
   const href = (path: string) => (path.startsWith('#') ? path : withLanguageParam(path, activeLang));
+  const sampleHref = activeLang === 'zh' ? '/zh-CN/love-reading/result/demo' : '/en/love-reading/result/demo';
 
   const toggleLanguage = () => {
     const nextLang = activeLang === 'zh' ? 'en' : 'zh';
@@ -492,6 +495,13 @@ export default function TianjiLoveHome() {
               {copy.hero.trustCta}
             </Link>
           </div>
+          <Link
+            href={sampleHref}
+            className="mt-4 inline-flex items-center text-sm font-semibold text-[#d8b77b] underline-offset-4 transition hover:text-[#ffe3b4] hover:underline"
+          >
+            {'sampleCta' in copy.hero ? copy.hero.sampleCta : 'View Sample Reading'}
+            <ChevronRight className="ml-1 h-4 w-4" aria-hidden />
+          </Link>
           <div className="mt-7 flex flex-wrap gap-x-7 gap-y-3 text-sm text-[#f5d8aa]/76">
             {copy.hero.trust.map((item) => (
               <span key={item.label} className="inline-flex items-center gap-2">

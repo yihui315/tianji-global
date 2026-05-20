@@ -103,11 +103,12 @@ describe('Tianji Love landing redesign contract', () => {
       'Get Started',
       'Free First, Deeper When Useful',
       'PRIVATE LOVE REFLECTION. CLEARER NEXT STEPS.',
-      'Read the pattern in love',
-      'before you choose.',
+      'Understand your love pattern',
+      'before you make the next move.',
       'Start Free Love Reading',
       'Ask One Question',
-      'Draw Three Cards',
+      'Draw Timing Cards',
+      'View Sample Reading',
       'About Tianji Love',
       'Private & Secure',
       'Personalized Insights',
@@ -120,7 +121,7 @@ describe('Tianji Love landing redesign contract', () => {
       'Reveal My First Love Insight',
       'Love Reading',
       'Ask One Question',
-      'Draw Three Cards',
+      'Draw Timing Cards',
       'Private by default',
       'Reflection, not certainty',
       'No fear-based selling',
@@ -241,8 +242,8 @@ describe('Tianji Love landing redesign contract', () => {
     expect(home).not.toContain('涓栭棿');
     expect(home).not.toContain('鐖');
     expect(home).not.toContain('鍏崇郴');
-    expect(home).toContain('Read the pattern in love');
-    expect(home).toContain('before you choose.');
+    expect(home).toContain('Understand your love pattern');
+    expect(home).toContain('before you make the next move.');
     expect(home).toContain('/relationship/new');
     expect(home).toContain('/ask');
     expect(home).toContain('/draw');
@@ -263,7 +264,7 @@ describe('Tianji Love landing redesign contract', () => {
     for (const signal of [
       "{ label: 'Love Reading', href: '/relationship/new' }",
       "{ label: 'Ask', href: '/ask' }",
-      "{ label: 'Draw', href: '/draw' }",
+      "{ label: 'Draw Timing', href: '/draw' }",
       "{ label: 'Pricing', href: '/pricing' }",
       "{ label: 'About', href: '/about' }",
       "{ label: 'Login', href: '/login' }",
@@ -273,7 +274,6 @@ describe('Tianji Love landing redesign contract', () => {
 
     for (const retiredMainPath of [
       'Compatibility',
-      'Timing',
       'How It Works',
       '/bazi',
       '/ziwei',
@@ -299,7 +299,7 @@ describe('Tianji Love landing redesign contract', () => {
     expect(aboutCta).toBeGreaterThan(drawCta);
     expect(home).toContain('Start Free Love Reading');
     expect(home).toContain('Ask One Question');
-    expect(home).toContain('Draw Three Cards');
+    expect(home).toContain('Draw Timing Cards');
     expect(home).toContain('About Tianji Love');
   });
 
@@ -313,9 +313,9 @@ describe('Tianji Love landing redesign contract', () => {
       expect(home).toContain(route);
     }
 
-    expect(englishCopy).toContain('free relationship reflection');
+    expect(englishCopy).toContain('private free relationship reading');
     expect(englishCopy).toContain('compatibility');
-    expect(englishCopy).toContain('reflection, not certainty');
+    expect(englishCopy).toContain('Reflection, not certainty');
     expect(englishCopy).not.toMatch(/[\u4e00-\u9fff]/);
     expect(chineseCopy).toContain('天机爱');
     expect(chineseCopy).toContain('开始关系解读');
@@ -372,7 +372,7 @@ describe('Tianji Love landing redesign contract', () => {
       'prefers-reduced-motion',
       'Love Reading',
       'Ask One Question',
-      'Draw Three Cards',
+      'Draw Timing Cards',
       'HowItWorks',
       'LoveTestimonials',
       'FinalCta',

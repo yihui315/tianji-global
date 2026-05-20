@@ -82,7 +82,7 @@ function LoginForm() {
         navItems={[
           { label: 'Love Reading', href: '/relationship/new' },
           { label: 'Ask', href: '/ask' },
-          { label: 'Draw', href: '/draw' },
+          { label: 'Draw Timing', href: '/draw' },
           { label: 'Pricing', href: '/pricing', mobile: true },
           { label: 'About', href: '/about' },
           { label: 'Login', href: '/login', mobile: true },
@@ -97,7 +97,7 @@ function LoginForm() {
             Return to your private love readings.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#f5d8aa]/78">
-            Sign in to access saved readings, compatibility history, profile settings, and checkout returns without changing the existing auth flow.
+            Sign in to save your readings, unlock deeper reports when available, and return from checkout without changing the existing auth flow.
           </p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <TianjiLoveTrustCard icon={ShieldCheck} title="Private account" body="Your history and profiles stay inside protected account surfaces." />
@@ -173,7 +173,7 @@ function LoginForm() {
         links={[
           { label: 'Love Reading', href: '/relationship/new' },
           { label: 'Ask', href: '/ask' },
-          { label: 'Draw', href: '/draw' },
+          { label: 'Draw Timing', href: '/draw' },
           { label: 'Pricing', href: '/pricing' },
           { label: 'About', href: '/about' },
           { label: 'Login', href: '/login' },
@@ -189,7 +189,14 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <TianjiLoveShell>
-          <div className="relative z-10 flex min-h-screen items-center justify-center text-[#ffe3b4]">Loading...</div>
+          <div className="relative z-10 flex min-h-screen items-center justify-center px-5 text-center">
+            <TianjiLovePanel className="w-full max-w-md p-7">
+              <h1 className="font-serif text-3xl text-[#ffe3b4]">Sign in to save your readings.</h1>
+              <p className="mt-3 text-sm leading-7 text-[#f4d7a3]/66">
+                Sign in to save your readings and unlock deeper reports. Loading secure sign-in options...
+              </p>
+            </TianjiLovePanel>
+          </div>
         </TianjiLoveShell>
       }
     >

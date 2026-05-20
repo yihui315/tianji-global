@@ -22,7 +22,7 @@ const copy = {
     nav: {
       loveReading: 'Love Reading',
       ask: 'Ask',
-      draw: 'Draw',
+      draw: 'Draw Timing',
       pricing: 'Pricing',
       about: 'About',
       login: 'Login',
@@ -65,7 +65,7 @@ const copy = {
     nav: {
       loveReading: '关系解读',
       ask: '提问',
-      draw: '抽牌',
+      draw: '时机抽牌',
       pricing: '会员权益',
       about: '关于',
       login: '登录',

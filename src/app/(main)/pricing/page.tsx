@@ -28,7 +28,7 @@ const pricingCopy = {
     nav: {
       loveReading: 'Love Reading',
       ask: 'Ask',
-      draw: 'Draw',
+      draw: 'Draw Timing',
       pricing: 'Pricing',
       about: 'About',
       login: 'Login',
@@ -43,7 +43,7 @@ const pricingCopy = {
       secondary: 'Start relationship reading',
     },
     plansTitle: 'Tianji Love plans',
-    funnelTitle: 'Choose the depth you need',
+    funnelTitle: 'One-time unlocks before subscriptions',
     funnelOptions: [
       {
         name: 'Free preview',
@@ -56,9 +56,14 @@ const pricingCopy = {
         body: 'Unlock one fuller relationship answer with deeper interpretation and practical next steps.',
       },
       {
-        name: 'Draw unlock',
+        name: 'Draw Timing Reading',
         price: '$2.99',
-        body: 'When available, unlock the full three-card relationship reading as reflection, not certainty.',
+        body: 'Unlock the full three-card timing reading as reflection, not certainty.',
+      },
+      {
+        name: 'Relationship Destiny Report',
+        price: 'Coming soon',
+        body: 'A deeper paid relationship report is still behind flags and will not be publicly exposed until smoke gates pass.',
       },
     ],
     planBadge: 'Most chosen',
@@ -95,6 +100,13 @@ const pricingCopy = {
       { icon: Sparkles, title: 'No inflated promise', body: 'Paid plans unlock depth and history, not guaranteed predictions.' },
     ],
     compareTitle: 'What Pro adds',
+    afterUnlockTitle: 'What happens after unlocking',
+    afterUnlock: [
+      { icon: FileText, title: 'A deeper private reading', body: 'Unlock adds fuller interpretation, practical next steps, and clearer structure after the preview.' },
+      { icon: History, title: 'Saved report surfaces where available', body: 'Subscription plans focus on history and report-ready pages as those surfaces are enabled.' },
+      { icon: Lock, title: 'Private by default', body: 'Birth data and private questions are not placed into public share links by default.' },
+      { icon: CreditCard, title: 'Secure checkout boundary', body: 'Checkout uses the existing Stripe path; paid launch remains gated until test smoke passes.' },
+    ],
     compare: [
       { icon: Check, title: 'Complete free readings remain', body: 'The free path still gives usable guidance before any upgrade.' },
       { icon: History, title: 'Longer reading history', body: 'Return to patterns and timing windows without losing the thread.' },
@@ -119,7 +131,7 @@ const pricingCopy = {
     nav: {
       loveReading: '关系解读',
       ask: '提问',
-      draw: '抽牌',
+      draw: '时机抽牌',
       pricing: '会员权益',
       about: '关于',
       login: '登录',
@@ -134,6 +146,29 @@ const pricingCopy = {
       secondary: '开始关系解读',
     },
     plansTitle: 'Tianji Love 方案',
+    funnelTitle: '先单次解锁，再考虑订阅',
+    funnelOptions: [
+      {
+        name: '免费预览',
+        price: '$0',
+        body: '先获得私密关系信号、Ask 预览或三张时机牌预览，再决定是否付费。',
+      },
+      {
+        name: 'Ask 单次解锁',
+        price: '$1.99',
+        body: '解锁一份更完整的关系回答，包含更深解释和可执行的下一步。',
+      },
+      {
+        name: '时机抽牌完整解读',
+        price: '$2.99',
+        body: '解锁完整三张时机牌解读，用作关系反思，而不是确定预言。',
+      },
+      {
+        name: 'Relationship Destiny Report',
+        price: '即将开放',
+        body: '更深入的付费关系报告仍在功能开关后，smoke gate 通过前不会公开曝光。',
+      },
+    ],
     planBadge: '更多人选择',
     monthly: {
       name: 'Love 月度',
@@ -168,6 +203,13 @@ const pricingCopy = {
       { icon: Sparkles, title: '不过度承诺', body: '付费解锁的是深度和历史，不是确定性的未来保证。' },
     ],
     compareTitle: 'Pro 增加什么',
+    afterUnlockTitle: '解锁后会得到什么',
+    afterUnlock: [
+      { icon: FileText, title: '更深入的私密解读', body: '在预览之后获得更完整的解释、实际下一步和更清晰的结构。' },
+      { icon: History, title: '可保存的报告页面', body: '订阅方案会重点支持历史记录和报告型页面，已开放的部分会在账户内呈现。' },
+      { icon: Lock, title: '默认保持私密', body: '出生信息和私密问题默认不会进入公开分享链接。' },
+      { icon: CreditCard, title: '安全结账边界', body: '结账沿用现有 Stripe 路径；正式付费上线仍需 test smoke 通过。' },
+    ],
     compare: [
       { icon: Check, title: '免费解读仍然完整', body: '升级前依然可以获得可用的基础指引。' },
       { icon: History, title: '更长历史记录', body: '可以回看关系模式和时机窗口，不丢失上下文。' },
@@ -203,6 +245,8 @@ export default function PricingPage() {
   const copy = pricingCopy[language];
   const funnelTitle = 'funnelTitle' in copy ? copy.funnelTitle : pricingCopy.en.funnelTitle;
   const funnelOptions = 'funnelOptions' in copy ? copy.funnelOptions : pricingCopy.en.funnelOptions;
+  const afterUnlockTitle = 'afterUnlockTitle' in copy ? copy.afterUnlockTitle : pricingCopy.en.afterUnlockTitle;
+  const afterUnlock = 'afterUnlock' in copy ? copy.afterUnlock : pricingCopy.en.afterUnlock;
   const isAuthenticated = !!session?.user;
   const href = (path: string) => withLanguageParam(path, language);
 
@@ -288,7 +332,7 @@ export default function PricingPage() {
 
       <section className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8">
         <TianjiLoveSectionTitle title={funnelTitle} className="mb-10" />
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-4">
           {funnelOptions.map((item) => (
             <TianjiLovePanel key={item.name} as="article" className="p-6">
               <p className="text-xs uppercase tracking-[0.28em] text-[#d8b77b]/64">{item.price}</p>
@@ -300,6 +344,15 @@ export default function PricingPage() {
         <p className="mx-auto mt-6 max-w-3xl text-center text-sm leading-7 text-[#f4d7a3]/62">
           Paid unlocks add depth, not certainty. Monthly and Yearly plans add history and report-ready output where implemented.
         </p>
+      </section>
+
+      <section className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8">
+        <TianjiLoveSectionTitle title={afterUnlockTitle} className="mb-10" />
+        <div className="grid gap-5 md:grid-cols-4">
+          {afterUnlock.map((item) => (
+            <TianjiLoveTrustCard key={item.title} icon={item.icon} title={item.title} body={item.body} />
+          ))}
+        </div>
       </section>
 
       <section id="plans" className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8">

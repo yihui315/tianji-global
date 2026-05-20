@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-20 - TianJi Love post-canary UX conversion polish
+
+- Task ID: 20260520-tianji-love-post-canary-ux-conversion-polish
+- Files changed: `src/components/home/TianjiLoveHome.tsx`, `src/components/tianji-love/TianjiLovePrimitives.tsx`, `src/app/(main)/about/page.tsx`, `src/app/(main)/ask/page.tsx`, `src/app/(main)/draw/layout.tsx`, `src/app/(main)/draw/page.tsx`, `src/app/(main)/pricing/layout.tsx`, `src/app/(main)/pricing/page.tsx`, `src/app/(main)/readings/page.tsx`, `src/app/login/page.tsx`, `src/app/relationship/new/client.tsx`, `src/__tests__/landing-design-contract.test.ts`, `src/__tests__/revenue-funnel-polish-contract.test.ts`, `src/__tests__/tianji-love-p0-pages-contract.test.ts`, `docs/tianji-love-staging-https-runbook.md`, `.ai/TIANJI_LOVE_STAGING_HTTPS_RUNBOOK_EVIDENCE_20260520.md`, `.ai/TIANJI_LOVE_POST_CANARY_UX_CONVERSION_POLISH_20260520.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Polished the post-free-canary love funnel without changing paid backend behavior. Homepage copy now explains the free preview to optional deeper unlock path more directly, Draw/Timing naming is unified as `Draw Timing` / `时机抽牌`, Pricing now explains one-time unlocks and what happens after unlocking in English and Chinese default-route copy, Login has a meaningful loading fallback, and safety-oriented tests protect against guaranteed prediction style claims. Added a staging HTTPS remediation runbook for the observed `https://staging.tianji.love` 502 path.
+- Commands run: targeted revenue funnel tests; targeted landing/P0 page tests; `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run audit:copy`; `npm run audit:share`; `npm run audit:upgrade`; `npm run audit:routes`; local `npm run start -- -p 3059`; Puppeteer browser smoke for `/`, `/draw`, `/pricing`, and `/login` on desktop and mobile; `git diff --check`; targeted secret-shape scan.
+- Results: Targeted revenue funnel tests passed 9/9. Targeted landing/P0 tests passed 24/24. Typecheck, lint, full tests, production build, copy/share/upgrade/route audits, local browser smoke, secret-shape scan, and diff check passed. Full tests passed 67 files / 556 tests. Build retained the existing Edge runtime warning only.
+- Risks: Staging HTTPS runbook was created but not executed by Codex. No production deploy, PM2 restart, env read, Stripe/webhook/provider live/email/Supabase mutation, paid unlock enablement, or Vedic paid public exposure was performed. Paid launch remains No-Go.
+- Next step: Run visual/browser QA for the polished pages, then use the established server-side canary path only after explicit approval. Separately execute the staging HTTPS runbook if approved by the operator.
+
 ### 2026-05-18 - TianJi Love staging host target Lane K
 
 - Task ID: 20260516-tianji-love-staging-host-target-lane-k

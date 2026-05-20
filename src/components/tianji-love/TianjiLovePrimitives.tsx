@@ -19,7 +19,7 @@ const PRIMARY_NAV: Record<TianjiLoveLanguage, TianjiLoveNavItem[]> = {
   en: [
     { label: 'Love Reading', href: '/relationship/new', mobile: true },
     { label: 'Ask', href: '/ask', mobile: true },
-    { label: 'Draw', href: '/draw', mobile: true },
+    { label: 'Draw Timing', href: '/draw', mobile: true },
     { label: 'Pricing', href: '/pricing' },
     { label: 'About', href: '/about' },
     { label: 'Login', href: '/login' },
