@@ -147,6 +147,7 @@ set -euo pipefail
 cd /path/to/reviewed/tianji-global
 
 CANARY_EXECUTE=true \
+CANARY_SOURCE_BRANCH=post-canary-ux-polish-20260520 \
 PM2_APP=<verified-production-pm2-app> \
 bash ops/tianji-love-production-free-canary.sh
 EOF
@@ -157,6 +158,7 @@ Script safety properties:
 ```text
 default dry-run
 requires CANARY_EXECUTE=true to deploy
+uses CANARY_SOURCE_BRANCH when supplied; defaults to staging-degraded-20260518
 requires explicit PM2_APP and refuses tianji-staging
 uses a new /var/www/tianji-global/releases/YYYYMMDD-HHMMSS-free-canary path
 does not copy staging .env.local
@@ -179,7 +181,7 @@ Manual template, for review only. Prefer the script above because it has dry-run
 sudo -iu deploy bash <<'EOF'
 set -euo pipefail
 
-BRANCH="staging-degraded-20260518"
+SOURCE_BRANCH="${CANARY_SOURCE_BRANCH:-staging-degraded-20260518}"
 REPO="https://github.com/yihui315/tianji-global.git"
 STAMP="$(date -u +%Y%m%d-%H%M%S)-free-canary"
 BASE="/var/www/tianji-global"
@@ -190,7 +192,7 @@ echo "old_release=${OLD_RELEASE}"
 test -d "${OLD_RELEASE}"
 
 mkdir -p "${RELEASE}"
-git clone -b "${BRANCH}" "${REPO}" "${RELEASE}"
+git clone -b "${SOURCE_BRANCH}" "${REPO}" "${RELEASE}"
 cd "${RELEASE}"
 
 git rev-parse HEAD
@@ -306,7 +308,7 @@ If the verified PM2 app name differs from `tianji-global`, use the verified name
 | Gate | Go criteria | No-Go criteria | Decision before execution |
 | --- | --- | --- | --- |
 | Staging evidence | Hosted non-paid smoke overall `go` on `http://staging.tianji.love` | Missing or stale staging smoke | Go |
-| Source candidate | `origin/staging-degraded-20260518` equals `1370486c1b36aee8128da2b90cc31eff1e622983` | Candidate branch missing or stale | Go |
+| Source candidate | Default `origin/staging-degraded-20260518`, or explicitly approved `CANARY_SOURCE_BRANCH` such as `post-canary-ux-polish-20260520`, is fetched and logged before execution | Candidate branch missing, stale, or not explicitly selected for the intended release | Conditional Go |
 | Production old release | Operator records `readlink -f /var/www/tianji-global/current` | Old release unknown | Conditional Go |
 | PM2 app | Operator verifies production app name before restart | App name unknown at execution time | Conditional Go |
 | Canary flags | All free-canary locks are effective and no secrets are printed | Any paid/live flag unsafe or printed secret | No-Go |

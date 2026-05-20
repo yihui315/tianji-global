@@ -2,7 +2,7 @@
 set -eEuo pipefail
 
 CANARY_EXECUTE="${CANARY_EXECUTE:-false}"
-BRANCH="${BRANCH:-staging-degraded-20260518}"
+SOURCE_BRANCH="${CANARY_SOURCE_BRANCH:-staging-degraded-20260518}"
 REPO_URL="${REPO_URL:-https://github.com/yihui315/tianji-global.git}"
 BASE_DIR="${BASE_DIR:-/var/www/tianji-global}"
 APP_PORT="${APP_PORT:-3000}"
@@ -55,8 +55,8 @@ deploy unless CANARY_EXECUTE=true is set.
 
 CANARY_EXECUTE is not true; no production mutation will be performed.
 
-Planned source branch:
-  ${BRANCH}
+Effective source branch:
+  ${SOURCE_BRANCH}
 
 Candidate release path:
   ${RELEASE_DIR}
@@ -85,6 +85,7 @@ Production port:
 
 Required execution env:
   CANARY_EXECUTE=true
+  CANARY_SOURCE_BRANCH=<candidate source branch, optional>
   PM2_APP=<verified production PM2 app name>
 
 Safety locks appended to the release .env.local:
@@ -322,9 +323,9 @@ fi
 
 log "old_release=${OLD_RELEASE}"
 log "new_release=${RELEASE_DIR}"
-log "cloning ${BRANCH}"
+log "cloning ${SOURCE_BRANCH}"
 mkdir -p "${BASE_DIR}/releases"
-git clone --branch "${BRANCH}" --single-branch "${REPO_URL}" "${RELEASE_DIR}"
+git clone --branch "${SOURCE_BRANCH}" --single-branch "${REPO_URL}" "${RELEASE_DIR}"
 
 cd "${RELEASE_DIR}"
 git rev-parse HEAD
@@ -350,7 +351,7 @@ SWITCHED_CURRENT=true
 cat > "${ROLLBACK_FILE}" <<EOF
 old_release=${OLD_RELEASE}
 new_release=${RELEASE_DIR}
-source_branch=${BRANCH}
+source_branch=${SOURCE_BRANCH}
 pm2_app=${PM2_APP}
 public_base_url=${PUBLIC_BASE_URL}
 EOF
