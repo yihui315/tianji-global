@@ -2,6 +2,26 @@
 
 ## Entries
 
+### 2026-05-20 - TianJi Love post-canary operating gates
+
+- Task ID: 20260520-tianji-love-post-canary-operating-gates
+- Files changed: `.ai/TIANJI_LOVE_LANE_O2_PRODUCTION_UX_CANARY_MONITORING_20260520.md`, `.ai/TIANJI_LOVE_LANE_N3_PAID_SMOKE_EXECUTION_EVIDENCE_20260520.md`, `.ai/TIANJI_LOVE_PREDICTION_QUALITY_EVAL_RESULT_20260520.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Added the post-canary operating gate packet for 72-hour production UX canary monitoring, Lane N3 paid-smoke execution readiness, and Lane R prediction-quality evaluation setup. This records the current production UX canary as Go while keeping paid launch, checkout/webhook smoke, provider live smoke, email smoke, Supabase mutation, and Vedic paid public exposure No-Go.
+- Commands run: Read workspace/project instructions, launch/evidence/revenue skills, package scripts, readiness scripts, paid-smoke runbook, `.env.example` key names only, git status, and current success evidence; ran `npm run audit:staging-env-readiness`; ran `npm run smoke:stripe:test-readiness`; ran `npm run smoke:ai-providers`.
+- Results: Staging env readiness returned `overall: no-go` in the local Codex shell because staging/test env values are not configured. Stripe readiness returned `overall: conditional-go` with Ask, Draw, subscription, webhook, and entitlement source readiness at `go`, but Stripe key mode `unknown`. AI provider smoke ran in default dry-run mode and returned `overall: conditional-go` with provider readiness `unknown`; no provider live call was made.
+- Risks: Actual production monitoring samples, Stripe test checkout, webhook replay, entitlement mutation, provider live smoke, email smoke, Supabase staging mutation, and 40-case prediction output scoring remain Not-run. Do not execute any paid or provider-live action without explicit approval and masked staging/test evidence.
+- Next step: Collect operator 72-hour production health samples and masked staging/test paid-smoke env evidence; then request explicit approval before any Stripe test checkout or webhook smoke.
+
+### 2026-05-20 - TianJi Love post-canary UX production success
+
+- Task ID: 20260520-tianji-love-post-canary-ux-production-success
+- Files changed: `.ai/TIANJI_LOVE_POST_CANARY_UX_PRODUCTION_SUCCESS_EVIDENCE_20260520.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Recorded user-provided production success evidence for the post-canary UX polish free canary. Production current now points to `/var/www/tianji-global/releases/20260520-122348-free-canary`, with previous rollback release `/var/www/tianji-global/releases/20260519-222548-free-canary` preserved. Candidate preflight on `3068` passed all free route checks before current switch; production readiness observed one transient `502` then `200`; production smoke passed home, pricing, ask, draw, login, and relationship at `200`.
+- Commands run: local evidence file creation and review-packet update only; targeted `git diff --check`; targeted secret-shape scan over updated evidence docs.
+- Results: Evidence packet records `tianji-global` and `tianji-staging` online, production listener `3000` online, staging listener `3058` online, preflight listener `3068` cleaned up, and listener `3103` still present. Paid launch remains No-Go.
+- Risks: This entry records user-provided server evidence; Codex did not rerun server smoke or inspect server env in this local step. Do not delete rollback releases, stop staging, enable Stripe live, run webhooks, enable paid unlock, run email automation, write production Supabase, scale provider live, or expose Vedic paid public.
+- Next step: Continue 24-hour production UX canary observation and prepare Lane N2 paid-smoke test environment evidence.
+
 ### 2026-05-20 - TianJi Love paid smoke env slots
 
 - Task ID: 20260520-tianji-love-paid-smoke-env-slots

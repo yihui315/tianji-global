@@ -2,38 +2,36 @@
 
 ## Task Goal
 
-Make the production free canary script able to deploy the post-canary UX branch explicitly, and document the missing paid-smoke env slots without enabling any paid/live behavior.
+Record the post-canary operating gates after the successful TianJi Love production UX polish canary: 72-hour production observation, paid-smoke test execution gate, and prediction-quality evaluation setup.
 
 ## Status
 
 ```text
-Production free canary: Go from prior evidence
-UX polish branch: post-canary-ux-polish-20260520
-Staging UX deploy: Not-run by Codex
-Canary source branch config: Go locally
-Production deploy: Not-run
-CANARY_EXECUTE=true: Not-run
+Production UX polish canary: Go
+Current production release: /var/www/tianji-global/releases/20260520-122348-free-canary
+Rollback release preserved: /var/www/tianji-global/releases/20260519-222548-free-canary
+Older rollback release preserved: /var/www/tianji-global/releases/20260502-155434
+Production free routes: Go from user-provided smoke evidence
+Lane O2 monitoring plan: Go
+Lane N3 paid-smoke execution: No-Go
+Prediction quality eval: Prepared / Not-run
 Paid launch: No-Go
-Vedic paid public exposure: Disabled / No-Go
 ```
 
 ## What Changed
 
-- `ops/tianji-love-production-free-canary.sh` now uses `CANARY_SOURCE_BRANCH` with default `staging-degraded-20260518`.
-- Dry-run output now shows `Effective source branch`.
-- Clone and rollback metadata now use the effective source branch.
-- `docs/tianji-love-production-canary-runbook.md` documents `CANARY_SOURCE_BRANCH=post-canary-ux-polish-20260520` for the UX canary path.
-- `.env.example` now includes names-only slots for `STRIPE_ASK_PRICE_ID`, `STRIPE_DRAW_PRICE_ID`, `DEEPSEEK_MODEL_FLASH`, and `DEEPSEEK_MODEL_PRO`.
-- Updated paid-smoke inventory to mark those slots as documented but still unproven in real staging env.
+- Added the Lane O2 72-hour production UX canary monitoring plan and rollback trigger checklist.
+- Added the Lane N3 paid-smoke execution gate evidence using safe local readiness commands only.
+- Added the Lane R 40-question prediction-quality evaluation set and scoring contract, with results explicitly marked Not-run.
+- Updated changelog and this review packet for Brain handoff.
 
 ## Files Changed
 
 ```text
-ops/tianji-love-production-free-canary.sh
-docs/tianji-love-production-canary-runbook.md
-.env.example
-.ai/TIANJI_LOVE_LANE_P2_CANARY_SOURCE_BRANCH_CONFIG_20260520.md
-.ai/TIANJI_LOVE_PAID_SMOKE_ENV_INVENTORY_20260520.md
+.ai/TIANJI_LOVE_POST_CANARY_UX_PRODUCTION_SUCCESS_EVIDENCE_20260520.md
+.ai/TIANJI_LOVE_LANE_O2_PRODUCTION_UX_CANARY_MONITORING_20260520.md
+.ai/TIANJI_LOVE_LANE_N3_PAID_SMOKE_EXECUTION_EVIDENCE_20260520.md
+.ai/TIANJI_LOVE_PREDICTION_QUALITY_EVAL_RESULT_20260520.md
 .ai/CHANGELOG_AI.md
 .ai/REVIEW_PACKET.md
 ```
@@ -42,58 +40,74 @@ docs/tianji-love-production-canary-runbook.md
 
 | Command | Result |
 | --- | --- |
-| Git Bash `bash -n ops/tianji-love-production-free-canary.sh` | Pass. |
-| Git Bash `CANARY_SOURCE_BRANCH=post-canary-ux-polish-20260520 bash ops/tianji-love-production-free-canary.sh` | Pass dry-run; no mutation. |
-| Names-only `.env.example` slot check | Pass; required slots now present. |
-| `git diff --check` | Pass with LF/CRLF working-copy warnings only. |
-| Targeted secret-shape scan over updated docs/script/env template | Pass, 0 hits for live/test secret-shaped values. |
+| Read workspace/project instructions and TianJi skills | Pass |
+| Read `package.json` and readiness scripts | Pass |
+| Read `.env.example` key names only | Pass |
+| `git status --short --branch` | Pass; dirty worktree includes current evidence docs plus unrelated untracked artifacts |
+| `npm run audit:staging-env-readiness` | Pass command execution; result `overall: no-go` because local staging/test env values are not configured |
+| `npm run smoke:stripe:test-readiness` | Pass command execution; result `overall: conditional-go` |
+| `npm run smoke:ai-providers` | Pass command execution; default dry-run result `overall: conditional-go` |
 
-## Dry-Run Result
+## Key Results
 
 ```text
-DRY RUN ONLY
-CANARY_EXECUTE is not true
-Effective source branch:
-  post-canary-ux-polish-20260520
-Candidate preflight:
-  port: 3068
-  PM2 app: tianji-canary-preflight
-No current symlink switch, production PM2 restart, production env write, paid smoke, or live side effect
+audit:staging-env-readiness:
+  overall=no-go
+  app/supabase/stripeTestMode/email/aiRuntime/ollama/deepseek/minimax=no-go
+
+smoke:stripe:test-readiness:
+  mode=readiness
+  stripeKeysLookTestMode=unknown
+  askCheckoutReadiness=go
+  drawCheckoutReadiness=go
+  subscriptionCheckoutReadiness=go
+  webhookReadiness=go
+  entitlementReadiness=go
+  overall=conditional-go
+
+smoke:ai-providers:
+  mode=dry-run
+  ollama=unknown
+  deepseekFlash=unknown
+  deepseekPro=unknown
+  minimaxQuota=unknown
+  overall=conditional-go
 ```
 
 ## Safety Notes
 
-- No `.env`, `.env.local`, production env, or secret value was read or printed.
-- No production deploy, symlink switch, PM2 restart, Nginx reload, certbot, Stripe live call, webhook smoke, paid unlock enablement, provider live scaling, email send, or Supabase mutation was run.
-- Paid-smoke values remain missing/unproven in real staging env. Adding `.env.example` slots is documentation only.
-- Production UX canary remains No-Go until staging hosted non-paid smoke passes and the user explicitly approves the production free canary.
+- No production deploy, symlink switch, PM2 restart, certbot, server command, or env file read was performed by Codex.
+- No `.env`, `.env.local`, secret value, credential, production config, Stripe dashboard data, Supabase data, or provider key value was read or printed.
+- No Stripe checkout session, webhook replay, entitlement mutation, email send, Supabase write, provider live call, paid unlock, or Vedic paid public exposure was run.
+- The prediction-quality result packet is intentionally Not-run; it does not invent model outputs or scores.
 
-## Next Step
+## Gate Matrix
 
-Run the staging deployment first:
+| Gate | Verdict | Reason |
+| --- | --- | --- |
+| Production UX polish free canary | Go | User-provided production evidence shows current release and free routes healthy |
+| 72-hour monitoring plan | Go | Observation criteria and rollback triggers recorded |
+| Keep current canary | Conditional Go | Needs 72-hour samples |
+| Stripe test checkout execution | No-Go | Env readiness no-go and explicit approval not present |
+| Webhook smoke | No-Go | Not approved and staging/test endpoint evidence not proven in this local step |
+| Ask/Draw entitlement smoke | No-Go | Requires approved staging/test checkout and webhook path |
+| Provider live smoke | No-Go | Only dry-run was executed |
+| Prediction quality paid beta | No-Go | 40-case output collection/scoring not-run |
+| Production paid launch | No-Go | Paid smoke gates remain not-run/unproven |
 
-```bash
-sudo -iu deploy bash <<'EOF'
-set -e
-cd /var/www/tianji-global-staging
-git fetch origin
-git checkout post-canary-ux-polish-20260520
-git pull --ff-only
-npm ci --legacy-peer-deps
-npm run build:staging:degraded
-pm2 restart tianji-staging --update-env
-STAGING_BASE_URL=http://staging.tianji.love npm run smoke:staging:nonpaid
-EOF
-```
+## Risks And Follow-Up
 
-Then dry-run the production script on the server before requesting approval:
-
-```bash
-CANARY_SOURCE_BRANCH=post-canary-ux-polish-20260520 bash ops/tianji-love-production-free-canary.sh
-```
+1. Keep rollback releases for at least 72 hours:
+   `/var/www/tianji-global/releases/20260519-222548-free-canary`
+   `/var/www/tianji-global/releases/20260502-155434`
+2. Collect production health samples for `/`, `/pricing`, `/ask`, `/draw`, and `/login`.
+3. Collect masked staging/test env evidence before paid smoke.
+4. Request explicit approval before Stripe test checkout and webhook smoke.
+5. Run the 40-case prediction evaluation only after the target environment and allowed provider behavior are approved.
+6. Keep Lane S analytics implementation separate; it was not implemented in this evidence/gate step.
 
 ## Suggested Commit Message
 
 ```text
-fix(ops): allow configurable production canary source branch
+docs(ops): record post-canary operating gates
 ```
