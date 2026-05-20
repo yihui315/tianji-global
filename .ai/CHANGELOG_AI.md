@@ -2,6 +2,26 @@
 
 ## Entries
 
+### 2026-05-20 - TianJi Love paid smoke env slots
+
+- Task ID: 20260520-tianji-love-paid-smoke-env-slots
+- Files changed: `.env.example`, `.ai/TIANJI_LOVE_PAID_SMOKE_ENV_INVENTORY_20260520.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Documented names-only paid-smoke env slots for `STRIPE_ASK_PRICE_ID`, `STRIPE_DRAW_PRICE_ID`, `DEEPSEEK_MODEL_FLASH`, and `DEEPSEEK_MODEL_PRO` without adding real values. Updated the paid-smoke inventory to mark those slots as documented but still unproven in real staging env.
+- Commands run: names-only `.env.example` slot check; `git diff --check`; targeted secret-shape scan.
+- Results: Required paid-smoke slots are present in `.env.example`; process env and staging/server masked values remain unproven. Secret-shape scan passed.
+- Risks: This does not make paid smoke eligible. Stripe/webhook/provider live/email/Supabase mutation and Vedic paid public exposure remain No-Go.
+- Next step: Collect masked staging env evidence with values hidden before any paid smoke approval.
+
+### 2026-05-20 - TianJi Love configurable canary source branch
+
+- Task ID: 20260520-tianji-love-configurable-canary-source-branch
+- Files changed: `ops/tianji-love-production-free-canary.sh`, `docs/tianji-love-production-canary-runbook.md`, `.ai/TIANJI_LOVE_LANE_P2_CANARY_SOURCE_BRANCH_CONFIG_20260520.md`
+- Summary: Made the production free canary source branch configurable through `CANARY_SOURCE_BRANCH`, defaulting to `staging-degraded-20260518`. This lets the post-canary UX branch be explicitly dry-run and later canaried with `CANARY_SOURCE_BRANCH=post-canary-ux-polish-20260520` after staging smoke passes.
+- Commands run: source/script/runbook inspection; Git Bash `bash -n ops/tianji-love-production-free-canary.sh`; Git Bash `CANARY_SOURCE_BRANCH=post-canary-ux-polish-20260520 bash ops/tianji-love-production-free-canary.sh`; `git diff --check`; targeted secret-shape scan.
+- Results: Local script syntax check passed. Dry-run printed the effective source branch as `post-canary-ux-polish-20260520` and performed no production mutation. Secret-shape scan passed for updated docs and script.
+- Risks: Staging deploy and hosted non-paid smoke for the UX branch are still Not-run by Codex. Production canary execution remains No-Go until staging smoke, server dry-run, and explicit approval. Paid launch remains No-Go.
+- Next step: Deploy `post-canary-ux-polish-20260520` to staging and run hosted non-paid smoke, then server dry-run the canary script with `CANARY_SOURCE_BRANCH=post-canary-ux-polish-20260520`.
+
 ### 2026-05-20 - TianJi Love UX staging branch and paid smoke prep
 
 - Task ID: 20260520-tianji-love-ux-staging-branch-paid-smoke-prep

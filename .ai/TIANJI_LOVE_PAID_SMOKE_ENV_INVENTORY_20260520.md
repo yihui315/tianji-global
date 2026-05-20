@@ -21,8 +21,8 @@ Stripe/Supabase/Resend/provider API calls: no
 | `STRIPE_SECRET_KEY` | missing | present | Blocked until staging masked test-mode evidence exists |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | missing | present | Blocked until staging masked test-mode evidence exists |
 | `STRIPE_WEBHOOK_SECRET` | missing | present | Blocked until staging webhook test evidence exists |
-| `STRIPE_ASK_PRICE_ID` | missing | missing | Blocker for Ask one-time test smoke mapping |
-| `STRIPE_DRAW_PRICE_ID` | missing | missing | Blocker for Draw one-time test smoke mapping |
+| `STRIPE_ASK_PRICE_ID` | missing | present | Slot documented; still blocked until staging masked test price evidence exists |
+| `STRIPE_DRAW_PRICE_ID` | missing | present | Slot documented; still blocked until staging masked test price evidence exists |
 | `STRIPE_PRO_MONTHLY_PRICE_ID` | missing | present | Blocked until staging masked test price evidence exists |
 | `STRIPE_PRO_YEARLY_PRICE_ID` | missing | present | Blocked until staging masked test price evidence exists |
 
@@ -40,8 +40,8 @@ Stripe/Supabase/Resend/provider API calls: no
 | --- | --- | --- | --- |
 | `DEEPSEEK_API_KEY` | missing | present | Blocked until staging masked provider evidence exists |
 | `DEEPSEEK_BASE_URL` | missing | present | Blocked until staging approved base URL evidence exists |
-| `DEEPSEEK_MODEL_FLASH` | missing | missing | Blocker for named Flash smoke contract |
-| `DEEPSEEK_MODEL_PRO` | missing | missing | Blocker for named Pro smoke contract |
+| `DEEPSEEK_MODEL_FLASH` | missing | present | Slot documented; still blocked until staging approved model evidence exists |
+| `DEEPSEEK_MODEL_PRO` | missing | present | Slot documented; still blocked until staging approved model evidence exists |
 | `OLLAMA_BASE_URL` | missing | present | Blocked until staging/runtime evidence exists |
 | `MINIMAX_API_KEY` | missing | present | Blocked until staging masked provider evidence exists |
 | `MINIMAX_TOKEN_PLAN_KEY` | missing | present | Blocked until quota/readiness smoke is approved |
@@ -77,8 +77,8 @@ Vedic paid public exposure: No-Go / disabled
 
 ## Blockers
 
-- `STRIPE_ASK_PRICE_ID` and `STRIPE_DRAW_PRICE_ID` are not present in `.env.example`.
-- `DEEPSEEK_MODEL_FLASH` and `DEEPSEEK_MODEL_PRO` are not present in `.env.example`.
+- Local process env still does not provide the paid smoke keys.
+- Staging/server masked values are not proven for `STRIPE_ASK_PRICE_ID`, `STRIPE_DRAW_PRICE_ID`, `DEEPSEEK_MODEL_FLASH`, or `DEEPSEEK_MODEL_PRO`.
 - No masked staging/server env inventory was collected in this run.
 - No test-mode Stripe checkout, webhook, entitlement, Supabase staging mutation, provider live, or email smoke was run.
 
