@@ -17,6 +17,7 @@ export type TianjiLoveLanguage = 'en' | 'zh';
 
 const PRIMARY_NAV: Record<TianjiLoveLanguage, TianjiLoveNavItem[]> = {
   en: [
+    { label: 'Love Test', href: '/love-test', mobile: true },
     { label: 'Love Reading', href: '/relationship/new', mobile: true },
     { label: 'Ask', href: '/ask', mobile: true },
     { label: 'Draw Timing', href: '/draw', mobile: true },
@@ -25,6 +26,7 @@ const PRIMARY_NAV: Record<TianjiLoveLanguage, TianjiLoveNavItem[]> = {
     { label: 'Login', href: '/login' },
   ],
   zh: [
+    { label: 'Love Test', href: '/love-test', mobile: true },
     { label: '关系解读', href: '/relationship/new', mobile: true },
     { label: '提问', href: '/ask', mobile: true },
     { label: '抽牌', href: '/draw', mobile: true },

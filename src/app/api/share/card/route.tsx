@@ -1,12 +1,28 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest, NextResponse } from 'next/server';
+import { sanitizeLoveTestSharePayload, type LoveTestShareFormat, type LoveTestSharePayload } from '@/lib/love-test';
 
 export const runtime = 'edge';
+
+const RELATIONSHIP_CARD_FORMATS = ['og', 'wechat_moments', 'xiaohongshu', 'douyin'] as const;
+type RelationshipCardFormat = (typeof RELATIONSHIP_CARD_FORMATS)[number];
+type LegacyCardFormat = 'wechat' | 'twitter' | 'instagram';
+type CardFormat = LegacyCardFormat | RelationshipCardFormat | LoveTestShareFormat;
 
 interface CardRequest {
   serviceType?: string;
   resultData?: Record<string, unknown>;
-  cardFormat?: 'wechat' | 'twitter' | 'instagram';
+  cardFormat?: CardFormat;
+}
+
+interface RelationshipCardData {
+  score: number;
+  headline: string;
+  oneLiner: string;
+  keywords: string[];
+  shareUrl: string;
+  personA: string;
+  personB: string;
 }
 
 const SERVICE_COLORS: Record<string, { primary: string; secondary: string; bg: string }> = {
@@ -17,6 +33,7 @@ const SERVICE_COLORS: Record<string, { primary: string; secondary: string; bg: s
   western: { primary: '#93C5FD', secondary: '#D4AF37', bg: '#06101F' },
   fortune: { primary: '#FDE68A', secondary: '#A78BFA', bg: '#090711' },
   relationship: { primary: '#F0ABFC', secondary: '#D4AF37', bg: '#130714' },
+  love_test: { primary: '#FF9C8B', secondary: '#D8B77B', bg: '#080914' },
   tianji: { primary: '#A78BFA', secondary: '#D4AF37', bg: '#080816' },
 };
 
@@ -28,11 +45,62 @@ const SERVICE_NAMES: Record<string, { zh: string; en: string }> = {
   western: { zh: '西方占星', en: 'Western Astrology' },
   fortune: { zh: '人生曲线', en: 'Fortune Timeline' },
   relationship: { zh: '关系合盘', en: 'Relationship Pattern' },
+  love_test: { zh: 'Love Test', en: 'Love Test' },
   tianji: { zh: '天机全球', en: 'TianJi Global' },
 };
 
 function pickString(value: unknown) {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+}
+
+function pickNumber(value: unknown, fallback: number) {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string' && value.trim() && Number.isFinite(Number(value))) return Number(value);
+  return fallback;
+}
+
+function pickStringArray(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => (typeof item === 'string' ? item.trim() : ''))
+    .filter(Boolean)
+    .slice(0, 4);
+}
+
+const RELATIONSHIP_SENSITIVE_FIELD_PARTS = [
+  ['birth', 'date'],
+  ['birth', 'time'],
+  ['birth', 'location'],
+  ['time', 'zone'],
+  ['raw', 'question'],
+  ['pro', 'mpt'],
+  ['full', 'report'],
+  ['full', 'result'],
+].map((parts) => parts.join(''));
+
+function isSafeRelationshipCardKey(key: string) {
+  const normalized = key.replace(/[\s_-]/g, '').toLowerCase();
+  return !RELATIONSHIP_SENSITIVE_FIELD_PARTS.includes(normalized);
+}
+
+function sanitizeRelationshipCardData(resultData: Record<string, unknown>): RelationshipCardData {
+  const safeData = Object.fromEntries(
+    Object.entries(resultData).filter(([key]) => isSafeRelationshipCardKey(key))
+  );
+  const score = Math.max(0, Math.min(100, Math.round(pickNumber(safeData.score ?? safeData.overallScore, 72))));
+
+  return {
+    score,
+    headline: pickString(safeData.headline) ?? 'Your relationship pattern is ready',
+    oneLiner:
+      pickString(safeData.oneLiner) ??
+      pickString(safeData.summary) ??
+      'A private compatibility signal you can share without exposing private inputs.',
+    keywords: pickStringArray(safeData.keywords),
+    shareUrl: pickString(safeData.shareUrl) ?? 'https://tianji.love/relationship/new',
+    personA: pickString(safeData.personA) ?? 'Person A',
+    personB: pickString(safeData.personB) ?? 'Person B',
+  };
 }
 
 function getSummary(resultData: Record<string, unknown>, serviceType: string): string {
@@ -68,17 +136,336 @@ function getSummary(resultData: Record<string, unknown>, serviceType: string): s
   }
 }
 
-function sizeFor(format: CardRequest['cardFormat']) {
+function sizeFor(format: CardFormat | undefined) {
+  if (format === 'wechat_moments') return { width: 1080, height: 1080 };
+  if (format === 'xiaohongshu') return { width: 1080, height: 1440 };
+  if (format === 'douyin') return { width: 1080, height: 1920 };
+  if (format === 'og') return { width: 1200, height: 630 };
   if (format === 'instagram') return { width: 1080, height: 1920 };
   if (format === 'twitter') return { width: 1200, height: 628 };
   return { width: 1200, height: 630 };
+}
+
+function isRelationshipCardFormat(format: CardFormat | undefined): format is RelationshipCardFormat {
+  return (RELATIONSHIP_CARD_FORMATS as readonly string[]).includes(format ?? '');
+}
+
+function RelationshipPatternCard({
+  data,
+  format,
+}: {
+  data: RelationshipCardData;
+  format: RelationshipCardFormat;
+}) {
+  const isPortrait = format === 'xiaohongshu' || format === 'douyin';
+  const isSquare = format === 'wechat_moments';
+  const titleSize = isPortrait ? 72 : isSquare ? 58 : 52;
+  const scoreSize = isPortrait ? 124 : isSquare ? 112 : 92;
+  const bodySize = isPortrait ? 30 : 25;
+  const cardWidth = isPortrait ? '82%' : isSquare ? '84%' : '78%';
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        background:
+          'radial-gradient(circle at 18% 12%, rgba(255,124,130,0.26), transparent 30%), radial-gradient(circle at 80% 84%, rgba(216,183,123,0.2), transparent 32%), linear-gradient(180deg, #050812 0%, #03040a 58%, #080914 100%)',
+        color: '#FFE3B4',
+        fontFamily: 'system-ui, sans-serif',
+        padding: isPortrait ? 88 : 64,
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          inset: 42,
+          display: 'flex',
+          border: '1px solid rgba(216,183,123,0.2)',
+          borderRadius: isPortrait ? 54 : 42,
+        }}
+      />
+      <div
+        style={{
+          width: cardWidth,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          zIndex: 1,
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            padding: '10px 22px',
+            border: '1px solid rgba(216,183,123,0.32)',
+            borderRadius: 999,
+            color: 'rgba(244,215,163,0.7)',
+            fontSize: isPortrait ? 24 : 18,
+          }}
+        >
+          Tianji Love · Relationship Pattern
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            marginTop: isPortrait ? 58 : 38,
+            color: '#F4D7A3',
+            fontSize: isPortrait ? 30 : 24,
+          }}
+        >
+          {data.personA} & {data.personB}
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 18,
+            marginTop: isPortrait ? 32 : 24,
+          }}
+        >
+          <span style={{ color: '#FF9C8B', fontSize: scoreSize, fontWeight: 800, lineHeight: 1 }}>
+            {data.score}
+          </span>
+          <span style={{ color: 'rgba(244,215,163,0.68)', fontSize: isPortrait ? 26 : 20 }}>
+            compatibility signal
+          </span>
+        </div>
+        <div
+          style={{
+            marginTop: isPortrait ? 34 : 24,
+            color: '#FFE3B4',
+            fontSize: titleSize,
+            fontWeight: 700,
+            lineHeight: 1.08,
+          }}
+        >
+          {data.headline}
+        </div>
+        <div
+          style={{
+            marginTop: isPortrait ? 34 : 24,
+            color: 'rgba(244,215,163,0.78)',
+            fontSize: bodySize,
+            lineHeight: 1.42,
+          }}
+        >
+          {data.oneLiner}
+        </div>
+        {data.keywords.length ? (
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: 12,
+              marginTop: isPortrait ? 42 : 30,
+            }}
+          >
+            {data.keywords.map((keyword) => (
+              <span
+                key={keyword}
+                style={{
+                  display: 'flex',
+                  border: '1px solid rgba(216,183,123,0.28)',
+                  borderRadius: 999,
+                  padding: '8px 16px',
+                  color: 'rgba(244,215,163,0.72)',
+                  fontSize: isPortrait ? 22 : 16,
+                }}
+              >
+                {keyword}
+              </span>
+            ))}
+          </div>
+        ) : null}
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: isPortrait ? 66 : 38,
+          left: isPortrait ? 76 : 64,
+          right: isPortrait ? 76 : 64,
+          display: 'flex',
+          justifyContent: 'space-between',
+          gap: 20,
+          color: 'rgba(244,215,163,0.5)',
+          fontSize: isPortrait ? 22 : 16,
+        }}
+      >
+        <span>Birth data hidden by default</span>
+        <span>{data.shareUrl.replace(/^https?:\/\//, '')}</span>
+      </div>
+    </div>
+  );
+}
+
+function LoveTestShareCard({
+  data,
+  format,
+}: {
+  data: LoveTestSharePayload;
+  format: LoveTestShareFormat;
+}) {
+  const isPortrait = format === 'xiaohongshu' || format === 'douyin';
+  const isSquare = format === 'wechat_moments';
+  const scoreSize = isPortrait ? 132 : isSquare ? 118 : 92;
+  const titleSize = isPortrait ? 68 : isSquare ? 56 : 48;
+  const bodySize = isPortrait ? 30 : 24;
+  const contentWidth = isPortrait ? '82%' : isSquare ? '82%' : '76%';
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        background:
+          'radial-gradient(circle at 18% 12%, rgba(255,156,139,0.28), transparent 30%), radial-gradient(circle at 78% 84%, rgba(216,183,123,0.2), transparent 34%), linear-gradient(180deg, #050812 0%, #03040a 58%, #080914 100%)',
+        color: '#FFE3B4',
+        fontFamily: 'system-ui, sans-serif',
+        padding: isPortrait ? 90 : 64,
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          inset: isPortrait ? 54 : 40,
+          display: 'flex',
+          border: '1px solid rgba(216,183,123,0.22)',
+          borderRadius: isPortrait ? 58 : 40,
+        }}
+      />
+      <div
+        style={{
+          width: contentWidth,
+          zIndex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            border: '1px solid rgba(216,183,123,0.32)',
+            borderRadius: 999,
+            padding: '10px 22px',
+            color: 'rgba(244,215,163,0.72)',
+            fontSize: isPortrait ? 24 : 18,
+          }}
+        >
+          Tianji Love Test
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 18,
+            marginTop: isPortrait ? 58 : 36,
+          }}
+        >
+          <span style={{ color: '#FF9C8B', fontSize: scoreSize, fontWeight: 800, lineHeight: 1 }}>
+            {data.score}
+          </span>
+          <span style={{ color: 'rgba(244,215,163,0.68)', fontSize: isPortrait ? 27 : 20 }}>
+            love signal
+          </span>
+        </div>
+        <div
+          style={{
+            marginTop: isPortrait ? 28 : 20,
+            color: '#F4D7A3',
+            fontSize: isPortrait ? 32 : 24,
+          }}
+        >
+          {data.archetype}
+        </div>
+        <div
+          style={{
+            marginTop: isPortrait ? 34 : 24,
+            color: '#FFE3B4',
+            fontSize: titleSize,
+            fontWeight: 760,
+            lineHeight: 1.08,
+          }}
+        >
+          {data.headline}
+        </div>
+        <div
+          style={{
+            marginTop: isPortrait ? 32 : 22,
+            color: 'rgba(244,215,163,0.78)',
+            fontSize: bodySize,
+            lineHeight: 1.42,
+          }}
+        >
+          {data.oneLiner}
+        </div>
+        {data.keywords.length ? (
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: 12,
+              marginTop: isPortrait ? 44 : 30,
+            }}
+          >
+            {data.keywords.map((keyword) => (
+              <span
+                key={keyword}
+                style={{
+                  display: 'flex',
+                  border: '1px solid rgba(216,183,123,0.28)',
+                  borderRadius: 999,
+                  padding: '8px 16px',
+                  color: 'rgba(244,215,163,0.72)',
+                  fontSize: isPortrait ? 22 : 16,
+                }}
+              >
+                {keyword}
+              </span>
+            ))}
+          </div>
+        ) : null}
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: isPortrait ? 66 : 38,
+          left: isPortrait ? 76 : 64,
+          right: isPortrait ? 76 : 64,
+          display: 'flex',
+          justifyContent: 'space-between',
+          gap: 20,
+          color: 'rgba(244,215,163,0.52)',
+          fontSize: isPortrait ? 22 : 16,
+        }}
+      >
+        <span>Birth data is not collected</span>
+        <span>{data.shareUrl.replace(/^https?:\/\//, '')}</span>
+      </div>
+    </div>
+  );
 }
 
 function renderCard(
   c: { primary: string; secondary: string; bg: string },
   nameInfo: { zh: string; en: string },
   summary: string,
-  format: CardRequest['cardFormat']
+  format: CardFormat | undefined
 ) {
   const isTall = format === 'instagram';
   const headlineSize = isTall ? 84 : 58;
@@ -216,6 +603,28 @@ export async function POST(req: NextRequest) {
     const serviceType = body.serviceType || 'tianji';
     const resultData = body.resultData || {};
     const cardFormat = body.cardFormat || 'wechat';
+
+    if (serviceType === 'relationship') {
+      const relationshipFormat = isRelationshipCardFormat(cardFormat) ? cardFormat : 'og';
+      const relationshipCard = sanitizeRelationshipCardData(resultData);
+      const { width, height } = sizeFor(relationshipFormat);
+
+      return new ImageResponse(
+        <RelationshipPatternCard data={relationshipCard} format={relationshipFormat} />,
+        { width, height }
+      );
+    }
+
+    if (serviceType === 'love_test') {
+      const loveTestFormat = isRelationshipCardFormat(cardFormat) ? cardFormat : 'og';
+      const loveTestCard = sanitizeLoveTestSharePayload(resultData);
+      const { width, height } = sizeFor(loveTestFormat);
+
+      return new ImageResponse(
+        <LoveTestShareCard data={loveTestCard} format={loveTestFormat} />,
+        { width, height }
+      );
+    }
 
     const colors = SERVICE_COLORS[serviceType] || SERVICE_COLORS.tianji;
     const nameInfo = SERVICE_NAMES[serviceType] || SERVICE_NAMES.tianji;

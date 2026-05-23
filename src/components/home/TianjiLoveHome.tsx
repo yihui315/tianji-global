@@ -23,6 +23,7 @@ type LoveCopy = {
     titleLead: string;
     titleAccent: string;
     description: string;
+    loveTestCta?: string;
     primaryCta: string;
     secondaryCta: string;
     tertiaryCta: string;
@@ -102,10 +103,26 @@ const ICONS = {
   emotionalRings: '/assets/images/icons/tianji-love-icon-emotional-rings.png',
 } as const;
 
-const loveCopy = {
+const homepageRelationshipProof = {
+  en: [
+    { label: 'Free first signal', body: 'Start with the compatibility pattern before any paid choice.' },
+    { label: 'Birth data hidden', body: 'Public sharing keeps private inputs out of the card and URL.' },
+    { label: 'Share-ready result', body: 'The result can become a social card for the first growth loop.' },
+    { label: 'Unlock depth only when useful', body: 'Paid depth adds detail, not certainty or pressure.' },
+  ],
+  zh: [
+    { label: 'Free first signal', body: 'Start with the compatibility pattern before any paid choice.' },
+    { label: 'Birth data hidden', body: 'Public sharing keeps private inputs out of the card and URL.' },
+    { label: 'Share-ready result', body: 'The result can become a social card for the first growth loop.' },
+    { label: 'Unlock depth only when useful', body: 'Paid depth adds detail, not certainty or pressure.' },
+  ],
+} satisfies Record<AppLanguage, Array<{ label: string; body: string }>>;
+
+const loveCopy: Record<AppLanguage, LoveCopy> = {
   en: {
     brand: 'Tianji Love',
     nav: [
+      { label: 'Love Test', href: '/love-test' },
       { label: 'Love Reading', href: '/relationship/new' },
       { label: 'Ask', href: '/ask' },
       { label: 'Draw Timing', href: '/draw' },
@@ -119,6 +136,7 @@ const loveCopy = {
       titleAccent: 'before you make the next move.',
       description:
         'Start with a private free relationship reading. Ask one question, check romantic timing, or unlock a deeper report only when the preview feels useful.',
+      loveTestCta: 'Take Love Test',
       primaryCta: 'Start Free Love Reading',
       secondaryCta: 'Ask One Question',
       tertiaryCta: 'Draw Timing Cards',
@@ -213,6 +231,7 @@ const loveCopy = {
       tagline: 'Decode the pattern. Meet love with clearer eyes.',
       disclaimer: 'Readings are for self-reflection and relationship communication, not medical, legal, or financial advice.',
       links: [
+        { label: 'Love Test', href: '/love-test' },
         { label: 'Love Reading', href: '/relationship/new' },
         { label: 'Ask', href: '/ask' },
         { label: 'Draw Timing', href: '/draw' },
@@ -471,12 +490,19 @@ export default function TianjiLoveHome() {
           <p className="mt-6 max-w-xl text-base leading-8 text-[#f5d8aa]/86 sm:text-lg">{copy.hero.description}</p>
           <div className="mt-8 flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:flex-wrap">
             <Link
-              href={href('/relationship/new')}
-              onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_hero', lang: activeLang, cta: 'relationship' })}
+              href={href('/love-test')}
+              onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_hero', lang: activeLang, cta: 'love_test' })}
               className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition hover:border-[#ffd6ab] hover:text-white"
             >
-              {copy.hero.primaryCta}
+              {copy.hero.loveTestCta ?? 'Take Love Test'}
               <ChevronRight className="ml-3 h-4 w-4" aria-hidden />
+            </Link>
+            <Link
+              href={href('/relationship/new')}
+              onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_hero', lang: activeLang, cta: 'relationship' })}
+              className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#d9b47c]/65 bg-black/28 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10"
+            >
+              {copy.hero.primaryCta}
             </Link>
             <Link
               href={href('/ask')}
@@ -509,6 +535,14 @@ export default function TianjiLoveHome() {
                 <TianjiLoveIcon src={item.iconAsset} size={18} className="tianji-love-inline-icon" />
                 {item.label}
               </span>
+            ))}
+          </div>
+          <div className="mt-6 grid w-full max-w-2xl gap-3 sm:grid-cols-2">
+            {homepageRelationshipProof[activeLang].map((item) => (
+              <div key={item.label} className="rounded-lg border border-[#b57248]/22 bg-black/20 p-3 backdrop-blur">
+                <p className="text-sm font-semibold text-[#ffe3b4]">{item.label}</p>
+                <p className="mt-1 text-xs leading-5 text-[#f4d7a3]/58">{item.body}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -552,6 +586,10 @@ function Header({
   href: (path: string) => string;
   onToggleLanguage: () => void;
 }) {
+  const navItems = copy.nav.some((item) => item.href === '/love-test')
+    ? copy.nav
+    : [{ label: 'Love Test', href: '/love-test' }, ...copy.nav];
+
   return (
     <header className="fixed inset-x-0 top-0 z-30 border-b border-[#d8b77b]/12 bg-[#02040c]/72 px-5 py-4 backdrop-blur-xl sm:px-8">
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-5">
@@ -566,7 +604,7 @@ function Header({
         </Link>
 
         <div className="tianji-love-nav-links hidden items-center gap-8 text-sm font-medium text-[#f5d8aa]/82 lg:flex">
-          {copy.nav.map((item) => (
+          {navItems.map((item) => (
             <Link key={item.label} href={href(item.href)} className="transition hover:text-[#ffe3b4]">
               {item.label}
             </Link>
@@ -792,6 +830,10 @@ function FinalCta({ copy, href }: { copy: LoveCopy; href: (path: string) => stri
 }
 
 function TianjiLoveFooter({ copy, href }: { copy: LoveCopy; href: (path: string) => string }) {
+  const footerLinks = copy.footer.links.some((item) => item.href === '/love-test')
+    ? copy.footer.links
+    : [{ label: 'Love Test', href: '/love-test' }, ...copy.footer.links];
+
   return (
     <footer className="relative z-10 border-t border-[#d8b77b]/14 bg-[#02040c]/94 px-5 py-8 text-[#f4d7a3]/70 sm:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
@@ -806,7 +848,7 @@ function TianjiLoveFooter({ copy, href }: { copy: LoveCopy; href: (path: string)
           </div>
         </div>
         <nav className="flex flex-wrap gap-x-7 gap-y-3 text-sm">
-          {copy.footer.links.map((item) => (
+          {footerLinks.map((item) => (
             <Link key={item.label} href={href(item.href)} className="transition hover:text-[#ffe3b4]">
               {item.label}
             </Link>

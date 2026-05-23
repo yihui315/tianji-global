@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, type FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import {
   ChevronRight,
   CreditCard,
@@ -238,7 +239,17 @@ function writeStoredPreview(state: PreviewState | null) {
 }
 
 export default function AskPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#02040c]" />}>
+      <AskPageContent />
+    </Suspense>
+  );
+}
+
+function AskPageContent() {
   const [language, setLanguage] = useSyncedLanguage('en');
+  const searchParams = useSearchParams();
+  const attributionSource = searchParams.get('source') === 'love_test' ? 'love_test' : undefined;
   const copy = askCopy[language];
 
   const [question, setQuestion] = useState('');
@@ -312,13 +323,14 @@ export default function AskPage() {
       void trackRevenueFunnelEvent('ask_preview_started', {
         lang: language,
         surface: 'ask_page',
+        source: attributionSource,
       });
       try {
         setLoading(true);
         const res = await fetch('/api/ask/preview', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question: question.trim(), language }),
+          body: JSON.stringify({ question: question.trim(), language, source: attributionSource }),
         });
         const json = await res.json();
         if (!res.ok || !json.success) {
@@ -336,6 +348,7 @@ export default function AskPage() {
           lang: state.language,
           surface: 'ask_page',
           previewId: state.id,
+          source: attributionSource,
         });
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Network error');
@@ -343,7 +356,7 @@ export default function AskPage() {
         setLoading(false);
       }
     },
-    [question, language, loading],
+    [question, language, loading, attributionSource],
   );
 
   const onUnlock = useCallback(async () => {
@@ -354,13 +367,14 @@ export default function AskPage() {
       surface: 'ask_preview',
       product: 'ask_one_question',
       previewId: preview.id,
+      source: attributionSource,
     });
     try {
       setUnlocking(true);
       const res = await fetch('/api/ask/unlock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: preview.id, language: preview.language }),
+        body: JSON.stringify({ id: preview.id, language: preview.language, source: attributionSource }),
       });
       const json = await res.json();
       if (!res.ok || !json.url) {
@@ -371,7 +385,7 @@ export default function AskPage() {
       setError(err instanceof Error ? err.message : 'Checkout failed');
       setUnlocking(false);
     }
-  }, [preview, unlocking]);
+  }, [preview, unlocking, attributionSource]);
 
   return (
     <main className="tianji-love-ask-page relative min-h-screen overflow-x-hidden bg-[#03040a] text-[#f7e8c8]" aria-label="Tianji Love reading page">

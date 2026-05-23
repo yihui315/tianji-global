@@ -64,6 +64,7 @@ function toAskAiMeta(response: Awaited<ReturnType<typeof generateTianjiModelResp
 const postBodySchema = z.object({
   id: z.string().min(20),
   language: askQuestionLanguageSchema.optional(),
+  source: z.enum(['love_test']).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -78,7 +79,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
     }
 
-    const { id, language } = parsed.data;
+    const { id, language, source: askSource } = parsed.data;
     const decoded = decodeAskQuestionId(id);
     if (!decoded) {
       return NextResponse.json({ error: 'Invalid or expired question id' }, { status: 400 });
@@ -87,6 +88,7 @@ export async function POST(request: NextRequest) {
     const lang = language ?? decoded.language ?? 'en';
     const stripe = getStripe();
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin;
+    const sourceParam = askSource ? `&source=${askSource}` : '';
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -114,9 +116,10 @@ export async function POST(request: NextRequest) {
         currency: 'usd',
         askQuestionRef: tokenRef(id),
         language: lang,
+        source: askSource ?? 'ask',
       },
-      success_url: `${appUrl}/ask?lang=${lang}&id=${encodeURIComponent(id)}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/ask?lang=${lang}&cancelled=1`,
+      success_url: `${appUrl}/ask?lang=${lang}${sourceParam}&id=${encodeURIComponent(id)}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/ask?lang=${lang}${sourceParam}&cancelled=1`,
     });
 
     if (!session.url) {
