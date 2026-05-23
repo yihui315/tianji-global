@@ -3,7 +3,11 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { sanitizeClientAnalyticsPayload } from '@/lib/analytics/client';
-import { FREE_TO_PAID_FUNNEL_EVENTS, isRevenueFunnelEventName } from '@/lib/analytics/funnel-events';
+import {
+  FREE_TO_PAID_FUNNEL_EVENTS,
+  LOVE_TEST_CONVERSION_EVENTS,
+  isRevenueFunnelEventName,
+} from '@/lib/analytics/funnel-events';
 
 const repoRoot = process.cwd();
 
@@ -82,6 +86,9 @@ describe('Tianji Love revenue funnel polish', () => {
 
     expect(login).toContain('Sign in to save your readings.');
     expect(login).toContain('unlock deeper reports');
+    expect(login).toContain('getProviders()');
+    expect(login).toContain('Email sign-in unavailable');
+    expect(login).toContain('Google sign-in appears when OAuth client settings are configured.');
     expect(login).not.toContain('>Loading...</div>');
   });
 
@@ -157,5 +164,30 @@ describe('Tianji Love revenue funnel polish', () => {
     expect(relationshipRoute).toContain('isSupabaseMutationDisabled');
     expect(trackRoute).toContain('supabase_mutation_disabled');
     expect(relationshipRoute).toContain('supabase_mutation_disabled');
+  });
+
+  it('defines Love-Test conversion events without sensitive analytics payloads', () => {
+    const loveTest = read('src/app/(main)/love-test/page.tsx');
+    const ask = read('src/app/(main)/ask/page.tsx');
+    const funnelEvents = read('src/lib/analytics/funnel-events.ts');
+
+    expect(LOVE_TEST_CONVERSION_EVENTS).toEqual([
+      'love_test_start',
+      'love_test_result_view',
+      'love_test_share_card_click',
+      'love_test_copy_result',
+      'love_test_ask_next_click',
+      'love_test_timing_click',
+    ]);
+
+    for (const eventName of LOVE_TEST_CONVERSION_EVENTS) {
+      expect(isRevenueFunnelEventName(eventName)).toBe(true);
+      expect(funnelEvents).toContain(eventName);
+      expect(loveTest).toContain(eventName);
+    }
+
+    expect(ask).toContain('intent: attributionIntent');
+    expect(ask).toContain('From your Love Test: ask the next question with more context.');
+    expect(loveTest).not.toMatch(/birthDate|birthTime|birthLocation|timezone|rawQuestion|prompt|fullReport|fullResult/i);
   });
 });

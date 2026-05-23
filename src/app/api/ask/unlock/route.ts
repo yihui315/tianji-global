@@ -19,6 +19,7 @@ import {
   isStripePaymentAvailable,
 } from '@/lib/staging-degraded-mode';
 import { generateTianjiModelResponse } from '@/lib/tianji-model-gateway';
+import { LOVE_TEST_ASK_INTENTS } from '@/lib/love-test';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,6 +66,7 @@ const postBodySchema = z.object({
   id: z.string().min(20),
   language: askQuestionLanguageSchema.optional(),
   source: z.enum(['love_test']).optional(),
+  intent: z.enum(LOVE_TEST_ASK_INTENTS).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -79,7 +81,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
     }
 
-    const { id, language, source: askSource } = parsed.data;
+    const { id, language, source: askSource, intent: askIntent } = parsed.data;
     const decoded = decodeAskQuestionId(id);
     if (!decoded) {
       return NextResponse.json({ error: 'Invalid or expired question id' }, { status: 400 });
@@ -89,6 +91,7 @@ export async function POST(request: NextRequest) {
     const stripe = getStripe();
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin;
     const sourceParam = askSource ? `&source=${askSource}` : '';
+    const intentParam = askIntent ? `&intent=${askIntent}` : '';
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -117,9 +120,10 @@ export async function POST(request: NextRequest) {
         askQuestionRef: tokenRef(id),
         language: lang,
         source: askSource ?? 'ask',
+        intent: askIntent ?? 'none',
       },
-      success_url: `${appUrl}/ask?lang=${lang}${sourceParam}&id=${encodeURIComponent(id)}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/ask?lang=${lang}${sourceParam}&cancelled=1`,
+      success_url: `${appUrl}/ask?lang=${lang}${sourceParam}${intentParam}&id=${encodeURIComponent(id)}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/ask?lang=${lang}${sourceParam}${intentParam}&cancelled=1`,
     });
 
     if (!session.url) {

@@ -3,6 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import {
+  LOVE_TEST_ASK_INTENTS,
   LOVE_TEST_SHARE_FORMATS,
   computeLoveTestResult,
   getLoveTestSharePayload,
@@ -67,11 +68,24 @@ describe('Love-Test MVP contract', () => {
 
     expect(page).toContain('computeLoveTestResult');
     expect(page).toContain('Love-Test MVP');
+    expect(page).toContain('Still wondering what this connection really means?');
     expect(page).toContain('serviceType: \'love_test\'');
     expect(page).toContain('LOVE_TEST_SHARE_FORMATS');
     expect(page).toContain('/api/share/card');
     expect(page).toContain('/ask?source=love_test');
+    expect(page).toContain('/ask?source=love_test&intent=what_are_they_thinking');
+    expect(page).toContain('/ask?source=love_test&intent=timing');
+    expect(page).toContain('/ask?source=love_test&intent=next_step');
+    expect(page).toContain('Ask what they are thinking now');
+    expect(page).toContain('Get timing advice');
+    expect(page).toContain('Copy my result');
     expect(page).toContain('Birth data is not collected');
+    expect(page).toContain('love_test_start');
+    expect(page).toContain('love_test_result_view');
+    expect(page).toContain('love_test_share_card_click');
+    expect(page).toContain('love_test_copy_result');
+    expect(page).toContain('love_test_ask_next_click');
+    expect(page).toContain('love_test_timing_click');
     expect(page).toContain('relationship_start_click');
     expect(page).not.toMatch(/birthDate|birthTime|birthLocation|timezone|fullReport|fullResult|rawQuestion|prompt/i);
   });
@@ -93,14 +107,24 @@ describe('Love-Test MVP contract', () => {
   it('preserves Ask attribution through preview, unlock, and checkout returns', () => {
     const askPage = read('src/app/(main)/ask/page.tsx');
     const askUnlock = read('src/app/api/ask/unlock/route.ts');
+    const askQuestion = read('src/lib/ask-question.ts');
 
+    expect(LOVE_TEST_ASK_INTENTS).toEqual(['what_are_they_thinking', 'timing', 'next_step']);
     expect(askPage).toContain('useSearchParams');
     expect(askPage).toContain('love_test');
     expect(askPage).toContain('attributionSource');
+    expect(askPage).toContain('isLoveTestAskIntent');
+    expect(askPage).toContain('attributionIntent');
+    expect(askPage).toContain('From your Love Test: ask the next question with more context.');
     expect(askPage).toContain('source: attributionSource');
+    expect(askPage).toContain('intent: attributionIntent');
     expect(askUnlock).toContain('source: askSource');
+    expect(askUnlock).toContain('intent: askIntent');
+    expect(askUnlock).toContain('intentParam');
     expect(askUnlock).toContain('source=${askSource}');
     expect(askUnlock).toContain("z.enum(['love_test'])");
+    expect(askQuestion).toContain('LOVE_TEST_ASK_INTENTS');
+    expect(askQuestion).toContain('intent: z.enum(LOVE_TEST_ASK_INTENTS).optional()');
   });
 
   it('creates requested Sprint 1 material and KPI tracking templates', () => {
@@ -117,7 +141,9 @@ describe('Love-Test MVP contract', () => {
     }
 
     expect(read('data/love-test-event-tracking.csv')).toContain('event_name,trigger,surface,required_payload,success_metric');
-    expect(read('data/love-test-kpi-tracking.csv')).toContain('period,visits,starts,results,share_card_clicks,ask_upsell_clicks');
+    expect(read('data/love-test-event-tracking.csv')).toContain('love_test_ask_next_click');
+    expect(read('data/love-test-event-tracking.csv')).toContain('love_test_timing_click');
+    expect(read('data/love-test-kpi-tracking.csv')).toContain('period,visits,starts,results,share_card_clicks,copy_result_clicks,ask_next_clicks,timing_clicks');
     expect(read('assets/love-test-personality.md')).toContain('deterministic result logic');
   });
 });

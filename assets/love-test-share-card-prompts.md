@@ -20,6 +20,17 @@ Editorial portrait card with a polished lifestyle feel, soft contrast, gold divi
 
 Vertical short-video cover style. Use high contrast, large score, punchy headline, and a clear bottom CTA: "Ask one relationship question next".
 
+## Viral Caption Overlay
+
+Use this caption template when the card needs social copy:
+
+```text
+I got "Soulmate Signal" on TianJi Love Test.
+Score: 88/100.
+It said: "Your connection grows when clarity meets patience."
+Try yours: tianji.love/love-test
+```
+
 ## Negative Prompt
 
 No medical claims, no guaranteed relationship outcomes, no sensitive personal data, no occult shock imagery, no screenshots of private forms, no payment screens.

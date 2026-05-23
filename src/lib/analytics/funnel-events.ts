@@ -13,6 +13,15 @@ export const FREE_TO_PAID_FUNNEL_EVENTS = [
   'login_started',
 ] as const;
 
+export const LOVE_TEST_CONVERSION_EVENTS = [
+  'love_test_start',
+  'love_test_result_view',
+  'love_test_share_card_click',
+  'love_test_copy_result',
+  'love_test_ask_next_click',
+  'love_test_timing_click',
+] as const;
+
 export const LEGACY_REVENUE_FUNNEL_EVENTS = [
   'relationship_start_click',
   'relationship_free_result_view',
@@ -28,12 +37,17 @@ export const LEGACY_REVENUE_FUNNEL_EVENTS = [
 
 export const REVENUE_FUNNEL_EVENT_ALLOWLIST = [
   ...FREE_TO_PAID_FUNNEL_EVENTS,
+  ...LOVE_TEST_CONVERSION_EVENTS,
   ...LEGACY_REVENUE_FUNNEL_EVENTS,
 ] as const;
 
 export type FreeToPaidFunnelEventName = (typeof FREE_TO_PAID_FUNNEL_EVENTS)[number];
+export type LoveTestConversionEventName = (typeof LOVE_TEST_CONVERSION_EVENTS)[number];
 export type LegacyRevenueFunnelEventName = (typeof LEGACY_REVENUE_FUNNEL_EVENTS)[number];
-export type RevenueFunnelEventName = FreeToPaidFunnelEventName | LegacyRevenueFunnelEventName;
+export type RevenueFunnelEventName =
+  | FreeToPaidFunnelEventName
+  | LoveTestConversionEventName
+  | LegacyRevenueFunnelEventName;
 
 export function isRevenueFunnelEventName(event: string): event is RevenueFunnelEventName {
   return (REVENUE_FUNNEL_EVENT_ALLOWLIST as readonly string[]).includes(event);

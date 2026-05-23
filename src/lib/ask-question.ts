@@ -14,6 +14,7 @@
 
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
 import { z } from 'zod';
+import { LOVE_TEST_ASK_INTENTS } from '@/lib/love-test';
 
 // ─── Schema ────────────────────────────────────────────────────────────
 
@@ -23,6 +24,8 @@ export type AskQuestionLanguage = z.infer<typeof askQuestionLanguageSchema>;
 export const askQuestionInputSchema = z.object({
   question: z.string().trim().min(3, 'question is too short').max(500, 'question is too long'),
   language: askQuestionLanguageSchema.default('en'),
+  source: z.enum(['love_test']).optional(),
+  intent: z.enum(LOVE_TEST_ASK_INTENTS).optional(),
 });
 
 export type AskQuestionInput = z.infer<typeof askQuestionInputSchema>;

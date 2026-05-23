@@ -1,7 +1,10 @@
 event_name,trigger,surface,required_payload,success_metric
 home_cta_click,user clicks homepage Love Test CTA,homepage_hero,"source=love_test; cta=love_test",love_test_visits
-relationship_start_click,user completes Love Test form,love_test_form,"source=love_test; result_id; archetype; score",love_test_results
-share_card_click,user clicks a share-card format,love_test_result,"source=love_test; card_format; result_id",share_card_clicks
-unlock_click,user clicks Ask one question from Love Test,love_test_result,"source=love_test; result_id; archetype",ask_upsell_clicks
-ask_preview_started,Ask page preview starts after Love Test,ask_page,"source=love_test",ask_preview_starts_attributed
-ask_preview_completed,Ask page preview completes after Love Test,ask_page,"source=love_test",ask_preview_completions_attributed
+love_test_start,user starts answering the Love Test,love_test_form,"source=love_test; surface",love_test_starts
+love_test_result_view,user completes Love Test and sees a result,love_test_result,"source=love_test; result_id; archetype; score",love_test_results
+love_test_share_card_click,user clicks a share-card PNG format,love_test_result,"source=love_test; card_format; result_id; archetype; score",share_card_clicks
+love_test_copy_result,user clicks Copy my result,love_test_result,"source=love_test; result_id; archetype; score",copy_result_clicks
+love_test_ask_next_click,user clicks next-question CTA,love_test_result,"source=love_test; intent; result_id; archetype; score",ask_next_clicks
+love_test_timing_click,user clicks timing CTA,love_test_result,"source=love_test; intent=timing; result_id; archetype; score",timing_clicks
+ask_preview_started,Ask page preview starts after Love Test,ask_page,"source=love_test; intent",ask_preview_starts_attributed
+ask_preview_completed,Ask page preview completes after Love Test,ask_page,"source=love_test; intent",ask_preview_completions_attributed

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { type FormEvent, useMemo, useState } from 'react';
+import { type FormEvent, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight,
   Copy,
@@ -107,6 +107,10 @@ const SHARE_FORMAT_LABELS: Record<LoveTestShareFormat, string> = {
   douyin: 'Douyin story',
 };
 
+const ASK_NEXT_HREF = '/ask?source=love_test&intent=what_are_they_thinking';
+const TIMING_ADVICE_HREF = '/ask?source=love_test&intent=timing';
+const NEXT_STEP_HREF = '/ask?source=love_test&intent=next_step';
+
 function href(path: string) {
   return withLanguageParam(path, 'en');
 }
@@ -116,21 +120,44 @@ export default function LoveTestPage() {
   const [submittedAnswers, setSubmittedAnswers] = useState<LoveTestInput | null>(null);
   const [copyState, setCopyState] = useState<'idle' | 'copied'>('idle');
   const [downloadState, setDownloadState] = useState<LoveTestShareFormat | null>(null);
+  const startTrackedRef = useRef(false);
   const result = useMemo(
     () => (submittedAnswers ? computeLoveTestResult(submittedAnswers) : null),
     [submittedAnswers],
   );
 
+  const trackLoveTestStart = (surface: string) => {
+    if (startTrackedRef.current) return;
+    startTrackedRef.current = true;
+    void trackRevenueFunnelEvent('love_test_start', {
+      source: 'love_test',
+      surface,
+    });
+  };
+
   const setAnswer = (key: keyof LoveTestInput, value: string) => {
+    trackLoveTestStart('love_test_form');
     setAnswers((current) => ({ ...current, [key]: value } as LoveTestInput));
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const nextResult = computeLoveTestResult(answers);
+    trackLoveTestStart('love_test_submit');
     setSubmittedAnswers(answers);
     void trackRevenueFunnelEvent('relationship_start_click', {
       source: 'love_test',
       surface: 'love_test_form',
+      result_id: nextResult.id,
+      archetype: nextResult.archetype,
+      score: nextResult.score,
+    });
+    void trackRevenueFunnelEvent('love_test_result_view', {
+      source: 'love_test',
+      surface: 'love_test_result',
+      result_id: nextResult.id,
+      archetype: nextResult.archetype,
+      score: nextResult.score,
     });
     window.requestAnimationFrame(() => {
       document.getElementById('love-test-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -145,16 +172,22 @@ export default function LoveTestPage() {
 
   const copyShareText = async () => {
     const payload = sharePayload();
-    if (!payload) return;
+    if (!payload || !result) return;
     const text = [
-      `Tianji Love Test: ${payload.archetype}`,
-      `${payload.score}/100`,
-      payload.headline,
-      payload.oneLiner,
-      payload.shareUrl,
+      `I got "${payload.archetype}" on TianJi Love Test.`,
+      `Score: ${payload.score}/100.`,
+      `It said: "${payload.oneLiner}"`,
+      `Try yours: ${payload.shareUrl}`,
     ].join('\n');
     await navigator.clipboard.writeText(text);
     setCopyState('copied');
+    void trackRevenueFunnelEvent('love_test_copy_result', {
+      source: 'love_test',
+      surface: 'love_test_result',
+      result_id: result.id,
+      archetype: result.archetype,
+      score: result.score,
+    });
     void trackRevenueFunnelEvent('relationship_free_result_view', {
       source: 'love_test',
       surface: 'love_test_share_text',
@@ -164,8 +197,16 @@ export default function LoveTestPage() {
 
   const downloadShareCard = async (format: LoveTestShareFormat) => {
     const payload = sharePayload();
-    if (!payload) return;
+    if (!payload || !result) return;
     setDownloadState(format);
+    void trackRevenueFunnelEvent('love_test_share_card_click', {
+      source: 'love_test',
+      surface: 'love_test_result',
+      card_format: format,
+      result_id: result.id,
+      archetype: result.archetype,
+      score: result.score,
+    });
     try {
       const response = await fetch('/api/share/card', {
         method: 'POST',
@@ -213,7 +254,7 @@ export default function LoveTestPage() {
             Take the private love test before you ask the harder question.
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-8 text-[#f4d7a3]/78 sm:text-lg">
-            A deterministic result flow that gives one clear relationship pattern, a private next step, and a share-card action without collecting birth data.
+            Still wondering what this connection really means? Take the private Love Test first — then ask TianJi the question you cannot stop thinking about.
           </p>
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
             <a href="#love-test-form" className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6]">
@@ -223,7 +264,7 @@ export default function LoveTestPage() {
             <TianjiLoveButton href={href('/relationship/new')} variant="secondary">
               Free Love Reading
             </TianjiLoveButton>
-            <TianjiLoveButton href={href('/ask?source=love_test')} variant="secondary">
+            <TianjiLoveButton href={href(NEXT_STEP_HREF)} variant="secondary">
               Ask One Question
             </TianjiLoveButton>
           </div>
@@ -325,8 +366,15 @@ export default function LoveTestPage() {
                 </div>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
-                    href={href('/ask?source=love_test')}
-                    onClick={() => void trackRevenueFunnelEvent('unlock_click', { source: 'love_test', surface: 'love_test_result', product: 'ask_one_question' })}
+                    href={href(NEXT_STEP_HREF)}
+                    onClick={() => void trackRevenueFunnelEvent('love_test_ask_next_click', {
+                      source: 'love_test',
+                      surface: 'love_test_result',
+                      intent: 'next_step',
+                      result_id: result.id,
+                      archetype: result.archetype,
+                      score: result.score,
+                    })}
                     className="tianji-love-primary inline-flex min-h-12 items-center justify-center rounded-xl border border-[#ffb49e]/60 px-5 text-sm font-semibold text-[#fff7e6]"
                   >
                     Ask about this result
@@ -342,6 +390,64 @@ export default function LoveTestPage() {
           </TianjiLovePanel>
 
           <TianjiLovePanel className="mt-5 p-6">
+            <div className="grid gap-4 md:grid-cols-3">
+              <article className="rounded-xl border border-[#ff9c8b]/26 bg-[#ff6c73]/10 p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-[#ffb49e]/74">Ask the next question</p>
+                <h3 className="mt-3 font-serif text-2xl text-[#ffe3b4]">What are they thinking now?</h3>
+                <p className="mt-3 text-sm leading-6 text-[#ffd6c6]/74">{result.upsellQuestion}</p>
+                <Link
+                  href={href(ASK_NEXT_HREF)}
+                  onClick={() => void trackRevenueFunnelEvent('love_test_ask_next_click', {
+                    source: 'love_test',
+                    surface: 'love_test_conversion_block',
+                    intent: 'what_are_they_thinking',
+                    result_id: result.id,
+                    archetype: result.archetype,
+                    score: result.score,
+                  })}
+                  className="tianji-love-primary mt-5 inline-flex min-h-11 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-4 text-sm font-semibold text-[#fff7e6]"
+                >
+                  Ask what they are thinking now
+                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+                </Link>
+              </article>
+              <article className="rounded-xl border border-[#d8b77b]/24 bg-[#d8b77b]/8 p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-[#d8b77b]/74">Unlock deeper timing</p>
+                <h3 className="mt-3 font-serif text-2xl text-[#ffe3b4]">Move when the signal is clearer.</h3>
+                <p className="mt-3 text-sm leading-6 text-[#f4d7a3]/74">Use the result as context for a private timing question before you text, wait, or reframe.</p>
+                <Link
+                  href={href(TIMING_ADVICE_HREF)}
+                  onClick={() => void trackRevenueFunnelEvent('love_test_timing_click', {
+                    source: 'love_test',
+                    surface: 'love_test_conversion_block',
+                    intent: 'timing',
+                    result_id: result.id,
+                    archetype: result.archetype,
+                    score: result.score,
+                  })}
+                  className="mt-5 inline-flex min-h-11 items-center justify-center rounded-lg border border-[#d8b77b]/30 bg-black/24 px-4 text-sm font-semibold text-[#f4d7a3]/78"
+                >
+                  Get timing advice
+                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+                </Link>
+              </article>
+              <article className="rounded-xl border border-[#b57248]/24 bg-black/18 p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-[#d8b77b]/62">Save your result</p>
+                <h3 className="mt-3 font-serif text-2xl text-[#ffe3b4]">Keep the signal handy.</h3>
+                <p className="mt-3 text-sm leading-6 text-[#f4d7a3]/68">Copy the safe result text with only score, archetype, one-liner, and a Love Test link.</p>
+                <button
+                  type="button"
+                  onClick={copyShareText}
+                  className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#d8b77b]/30 bg-black/24 px-4 text-sm font-semibold text-[#f4d7a3]/78"
+                >
+                  <Copy className="h-4 w-4" aria-hidden />
+                  {copyState === 'copied' ? 'Result copied' : 'Copy my result'}
+                </button>
+              </article>
+            </div>
+          </TianjiLovePanel>
+
+          <TianjiLovePanel className="mt-5 p-6">
             <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">Share card</p>
@@ -350,7 +456,7 @@ export default function LoveTestPage() {
               </div>
               <button type="button" onClick={copyShareText} className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-[#d8b77b]/30 bg-black/24 px-4 text-sm font-semibold text-[#f4d7a3]/78">
                 <Copy className="h-4 w-4" aria-hidden />
-                {copyState === 'copied' ? 'Copied' : 'Copy share text'}
+                {copyState === 'copied' ? 'Result copied' : 'Copy my result'}
               </button>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

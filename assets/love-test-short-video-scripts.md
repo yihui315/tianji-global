@@ -26,3 +26,21 @@ Beat 1: Result headline appears.
 Beat 2: User taps "Ask one question".
 Beat 3: Ask page opens with love-test attribution.
 CTA: "Start free. Unlock depth only when the preview helps."
+
+## Script 4: What Are They Thinking
+
+Hook: "Still wondering what this connection really means?"
+
+Beat 1: User finishes the Love Test and sees the archetype.
+Beat 2: The result offers "Ask what they are thinking now".
+Beat 3: Ask page opens with `source=love_test` and `intent=what_are_they_thinking`.
+CTA: "Take the private Love Test first, then ask the question you cannot stop thinking about."
+
+## Script 5: Copy And Share
+
+Hook: "I got \"Soulmate Signal\" on TianJi Love Test."
+
+Beat 1: Show the score and one-line insight.
+Beat 2: Tap "Copy my result".
+Beat 3: Show the safe share copy and PNG card formats.
+CTA: "Try yours at tianji.love/love-test."

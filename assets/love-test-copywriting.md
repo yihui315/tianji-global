@@ -16,9 +16,34 @@ Answer five private questions and get a deterministic love-pattern result you ca
 
 Want the next move, not just the pattern? Ask one private relationship question.
 
+## Conversion Blocks
+
+Ask the next question:
+
+CTA: Ask what they are thinking now
+
+URL: `/ask?source=love_test&intent=what_are_they_thinking`
+
+Unlock deeper timing:
+
+CTA: Get timing advice
+
+URL: `/ask?source=love_test&intent=timing`
+
+Save your result:
+
+CTA: Copy my result
+
 ## Share CTA
 
 Share the signal without sharing the private inputs.
+
+## Viral Share Template
+
+I got "Soulmate Signal" on TianJi Love Test.
+Score: 88/100.
+It said: "Your connection grows when clarity meets patience."
+Try yours: tianji.love/love-test
 
 ## Ask Attribution CTA
 

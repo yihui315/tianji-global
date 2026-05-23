@@ -1,2 +1,2 @@
-period,visits,starts,results,share_card_clicks,ask_upsell_clicks
-2026-05,0,0,0,0,0
+period,visits,starts,results,share_card_clicks,copy_result_clicks,ask_next_clicks,timing_clicks,ask_preview_starts,ask_preview_completions,ask_upsell_clicks
+2026-05,0,0,0,0,0,0,0,0,0,0

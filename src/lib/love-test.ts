@@ -1,6 +1,8 @@
 export const LOVE_TEST_SHARE_FORMATS = ['og', 'wechat_moments', 'xiaohongshu', 'douyin'] as const;
+export const LOVE_TEST_ASK_INTENTS = ['what_are_they_thinking', 'timing', 'next_step'] as const;
 
 export type LoveTestShareFormat = (typeof LOVE_TEST_SHARE_FORMATS)[number];
+export type LoveTestAskIntent = (typeof LOVE_TEST_ASK_INTENTS)[number];
 
 export type LoveTestStage = 'early' | 'dating' | 'committed' | 'complicated';
 export type LoveTestCommunication = 'direct' | 'gentle' | 'guarded' | 'playful';
@@ -36,6 +38,10 @@ export interface LoveTestSharePayload {
   archetype: string;
   keywords: string[];
   shareUrl: string;
+}
+
+export function isLoveTestAskIntent(value: unknown): value is LoveTestAskIntent {
+  return typeof value === 'string' && (LOVE_TEST_ASK_INTENTS as readonly string[]).includes(value);
 }
 
 const SCORE_TABLES = {

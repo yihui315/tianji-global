@@ -19,6 +19,7 @@ import {
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
+import { isLoveTestAskIntent } from '@/lib/love-test';
 
 interface PreviewState {
   id: string;
@@ -250,6 +251,8 @@ function AskPageContent() {
   const [language, setLanguage] = useSyncedLanguage('en');
   const searchParams = useSearchParams();
   const attributionSource = searchParams.get('source') === 'love_test' ? 'love_test' : undefined;
+  const rawIntent = searchParams.get('intent');
+  const attributionIntent = attributionSource === 'love_test' && isLoveTestAskIntent(rawIntent) ? rawIntent : undefined;
   const copy = askCopy[language];
 
   const [question, setQuestion] = useState('');
@@ -324,13 +327,19 @@ function AskPageContent() {
         lang: language,
         surface: 'ask_page',
         source: attributionSource,
+        intent: attributionIntent,
       });
       try {
         setLoading(true);
         const res = await fetch('/api/ask/preview', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question: question.trim(), language, source: attributionSource }),
+          body: JSON.stringify({
+            question: question.trim(),
+            language,
+            source: attributionSource,
+            intent: attributionIntent,
+          }),
         });
         const json = await res.json();
         if (!res.ok || !json.success) {
@@ -349,6 +358,7 @@ function AskPageContent() {
           surface: 'ask_page',
           previewId: state.id,
           source: attributionSource,
+          intent: attributionIntent,
         });
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Network error');
@@ -356,7 +366,7 @@ function AskPageContent() {
         setLoading(false);
       }
     },
-    [question, language, loading, attributionSource],
+    [question, language, loading, attributionSource, attributionIntent],
   );
 
   const onUnlock = useCallback(async () => {
@@ -368,13 +378,19 @@ function AskPageContent() {
       product: 'ask_one_question',
       previewId: preview.id,
       source: attributionSource,
+      intent: attributionIntent,
     });
     try {
       setUnlocking(true);
       const res = await fetch('/api/ask/unlock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: preview.id, language: preview.language, source: attributionSource }),
+        body: JSON.stringify({
+          id: preview.id,
+          language: preview.language,
+          source: attributionSource,
+          intent: attributionIntent,
+        }),
       });
       const json = await res.json();
       if (!res.ok || !json.url) {
@@ -385,7 +401,7 @@ function AskPageContent() {
       setError(err instanceof Error ? err.message : 'Checkout failed');
       setUnlocking(false);
     }
-  }, [preview, unlocking, attributionSource]);
+  }, [preview, unlocking, attributionSource, attributionIntent]);
 
   return (
     <main className="tianji-love-ask-page relative min-h-screen overflow-x-hidden bg-[#03040a] text-[#f7e8c8]" aria-label="Tianji Love reading page">
@@ -466,6 +482,11 @@ function AskPageContent() {
       </section>
 
       <section id="love-question" className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-12 sm:px-8">
+        {attributionSource === 'love_test' ? (
+          <div className="mb-5 rounded-lg border border-[#d8b77b]/34 bg-[#d8b77b]/8 px-4 py-3 text-sm leading-6 text-[#f4d7a3]/78">
+            From your Love Test: ask the next question with more context.
+          </div>
+        ) : null}
         <div className="love-birth-chart-panel rounded-xl border border-[#b57248]/46 bg-[#060b16]/82 px-5 py-8 shadow-[0_0_0_1px_rgba(255,217,157,0.035),0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur md:px-14">
           <div className="mb-7 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#d7a86c]/78">{copy.form.eyebrow}</p>
