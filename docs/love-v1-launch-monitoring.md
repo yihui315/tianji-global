@@ -33,4 +33,3 @@ Monitor for 72 hours after launch using the existing analytics and support syste
 3. Redeploy the previous known-good production branch.
 4. Verify `/en`, `/zh-CN`, pricing, privacy, terms, and existing core readings.
 5. Reconcile any paid orders created during the incident before retrying launch.
-

@@ -47,26 +47,26 @@ export interface DestinyResponseMeta {
 }
 
 export const MODULE_META: Record<string, ModuleMeta> = {
-  western: { label: 'Western', labelZh: '西洋占星', color: 'text-blue-300', emoji: '✦', gradient: 'from-blue-600 to-blue-800' },
-  bazi: { label: 'BaZi', labelZh: '八字', color: 'text-amber-300', emoji: '☯', gradient: 'from-amber-600 to-amber-800' },
-  ziwei: { label: 'Zi Wei', labelZh: '紫微斗数', color: 'text-purple-300', emoji: '✺', gradient: 'from-purple-600 to-purple-800' },
-  numerology: { label: 'Numerology', labelZh: '数字命理', color: 'text-fuchsia-300', emoji: '#', gradient: 'from-fuchsia-600 to-fuchsia-800' },
-  fortune: { label: 'Fortune Timeline', labelZh: '运势时间线', color: 'text-emerald-300', emoji: '⏳', gradient: 'from-emerald-600 to-emerald-800' },
-  relationship: { label: 'Relationship', labelZh: '关系合盘', color: 'text-rose-300', emoji: '❤', gradient: 'from-rose-600 to-rose-800' },
-  tarot: { label: 'Tarot', labelZh: '塔罗', color: 'text-pink-300', emoji: '🜁', gradient: 'from-pink-600 to-pink-800' },
-  yijing: { label: 'Yi Jing', labelZh: '易经', color: 'text-emerald-300', emoji: '☰', gradient: 'from-emerald-600 to-emerald-800' },
-  fengshui: { label: 'Feng Shui', labelZh: '风水', color: 'text-teal-300', emoji: '⌂', gradient: 'from-teal-600 to-teal-800' },
-  electional: { label: 'Electional', labelZh: '择日', color: 'text-cyan-300', emoji: '✧', gradient: 'from-cyan-600 to-cyan-800' },
-  transit: { label: 'Transit', labelZh: '行运', color: 'text-sky-300', emoji: '☄', gradient: 'from-sky-600 to-sky-800' },
-  'solar-return': { label: 'Solar Return', labelZh: '太阳回归', color: 'text-orange-300', emoji: '☼', gradient: 'from-orange-600 to-orange-800' },
+  western: { label: 'Western Astrology', labelZh: '西方占星', color: 'text-[#d8b77b]', emoji: 'A', gradient: 'from-[#7b3f33] to-[#2f1018]' },
+  bazi: { label: 'BaZi', labelZh: '八字', color: 'text-[#d8b77b]', emoji: 'B', gradient: 'from-[#8a5a2c] to-[#24150b]' },
+  ziwei: { label: 'Zi Wei', labelZh: '紫微斗数', color: 'text-[#d8b77b]', emoji: 'Z', gradient: 'from-[#6c4b8f] to-[#1b102b]' },
+  numerology: { label: 'Numerology', labelZh: '数字命理', color: 'text-[#d8b77b]', emoji: '#', gradient: 'from-[#7a4b69] to-[#24101c]' },
+  fortune: { label: 'Fortune Timeline', labelZh: '运势时间线', color: 'text-[#d8b77b]', emoji: 'T', gradient: 'from-[#4f6b48] to-[#0e1a10]' },
+  relationship: { label: 'Relationship', labelZh: '关系合盘', color: 'text-[#ff9c8b]', emoji: 'L', gradient: 'from-[#9d3e44] to-[#2a0c13]' },
+  tarot: { label: 'Tarot', labelZh: '塔罗', color: 'text-[#d8b77b]', emoji: 'R', gradient: 'from-[#724466] to-[#1b0d1c]' },
+  yijing: { label: 'Yi Jing', labelZh: '易经', color: 'text-[#d8b77b]', emoji: 'Y', gradient: 'from-[#526047] to-[#11180d]' },
+  fengshui: { label: 'Feng Shui', labelZh: '风水', color: 'text-[#d8b77b]', emoji: 'F', gradient: 'from-[#3f665e] to-[#0e1917]' },
+  electional: { label: 'Electional', labelZh: '择日', color: 'text-[#d8b77b]', emoji: 'E', gradient: 'from-[#4f5c75] to-[#10131d]' },
+  transit: { label: 'Transit', labelZh: '行运', color: 'text-[#d8b77b]', emoji: 'O', gradient: 'from-[#485d78] to-[#0f141e]' },
+  'solar-return': { label: 'Solar Return', labelZh: '太阳回归', color: 'text-[#d8b77b]', emoji: 'S', gradient: 'from-[#87603b] to-[#24150a]' },
 };
 
 export const FALLBACK_MODULE_META: ModuleMeta = {
   label: 'Reading',
   labelZh: '解读',
-  color: 'text-slate-300',
-  emoji: '✦',
-  gradient: 'from-slate-600 to-slate-800',
+  color: 'text-[#d8b77b]',
+  emoji: 'R',
+  gradient: 'from-[#6f5034] to-[#16100b]',
 };
 
 export function getModuleMeta(moduleType: string): ModuleMeta {

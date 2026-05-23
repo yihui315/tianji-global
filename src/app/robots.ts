@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getSiteUrl } from '@/lib/i18n';
+import { SITE } from '@/components/seo/JsonLd';
 
 /**
  * robots.txt — allow public landing routes; disallow private,
@@ -7,8 +7,6 @@ import { getSiteUrl } from '@/lib/i18n';
  * appear in search results.
  */
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = getSiteUrl();
-
   return {
     rules: [
       {
@@ -30,7 +28,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
+    sitemap: `${SITE.url}/sitemap.xml`,
+    host: SITE.url,
   };
 }

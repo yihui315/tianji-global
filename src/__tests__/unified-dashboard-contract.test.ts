@@ -21,9 +21,10 @@ const unifiedDisplayFiles = [
   'src/app/(main)/profile/page.tsx',
   'src/app/(main)/readings/page.tsx',
   'src/app/(main)/reading/[id]/page.tsx',
+  'src/app/login/page.tsx',
 ];
 
-const mojibakePattern = /(?:�|锟|鈥|鍛|鐗|瑗挎|绱|濉旂|鏄撶|涓|姝ｅ|杩斿|缁熶|鍘嗗)/;
+const mojibakePattern = /[�]|鈥|鈫|馃|锟|閳|娴|涓|鍏|瑙ｈ|闅愮|鏃舵|浼氬|璺宠|姝ｅ|杩斿|缁熶|鍛界|濉旂|漏/;
 
 function read(relativePath: string) {
   return fs.readFileSync(path.join(repoRoot, relativePath), 'utf8');
@@ -36,7 +37,7 @@ describe('unified dashboard contract', () => {
     }
 
     expect(getModuleMeta('ziwei').labelZh).toBe('紫微斗数');
-    expect(getModuleMeta('western').labelZh).toBe('西洋占星');
+    expect(getModuleMeta('western').labelZh).toBe('西方占星');
     expect(getPlanBadge('premium').labelZh).toBe('高级版');
     expect(getFeatureLabel('unifiedProfile', 'zh')).toBe('统一命理画像');
   });

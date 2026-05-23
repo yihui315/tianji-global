@@ -59,6 +59,65 @@ function getBaseUrl(provider: ModelProvider): string {
   }
 }
 
+const DEFAULT_AI_PROVIDER_TIMEOUT_MS = 30_000;
+const DEFAULT_OLLAMA_TIMEOUT_MS = 45_000;
+
+function readPositiveIntEnv(name: string, fallback: number): number {
+  const raw = process.env[name];
+  if (!raw) {
+    return fallback;
+  }
+
+  const parsed = Number.parseInt(raw, 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return fallback;
+  }
+
+  return parsed;
+}
+
+function getAiProviderTimeoutMs(): number {
+  return readPositiveIntEnv('AI_PROVIDER_TIMEOUT_MS', DEFAULT_AI_PROVIDER_TIMEOUT_MS);
+}
+
+function getOllamaTimeoutMs(): number {
+  return readPositiveIntEnv('OLLAMA_TIMEOUT_MS', DEFAULT_OLLAMA_TIMEOUT_MS);
+}
+
+async function fetchWithTimeout(
+  input: Parameters<typeof fetch>[0],
+  init: Parameters<typeof fetch>[1] = {},
+  timeoutMs = getAiProviderTimeoutMs(),
+): Promise<Response> {
+  const controller = new AbortController();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    const request = fetch(input, {
+      ...init,
+      signal: controller.signal,
+    });
+
+    const timeout = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        controller.abort();
+        reject(new Error(`AI provider request timed out after ${timeoutMs}ms`));
+      }, timeoutMs);
+    });
+
+    return await Promise.race([request, timeout]);
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error(`AI provider request timed out after ${timeoutMs}ms`);
+    }
+    throw error;
+  } finally {
+    if (timer) {
+      clearTimeout(timer);
+    }
+  }
+}
+
 export function getAvailableProviders(): ModelProvider[] {
   const available: ModelProvider[] = [];
   if (process.env.OPENAI_API_KEY) available.push('openai');
@@ -159,7 +218,7 @@ async function callAnthropic(
     body.messages = [{ role: 'user' as const, content: userPrompt }];
   }
 
-  const response = await fetch(`${baseUrl}/messages`, {
+  const response = await fetchWithTimeout(`${baseUrl}/messages`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -174,7 +233,7 @@ async function callAnthropic(
       temperature,
       max_tokens: maxTokens,
     }),
-  });
+  }, getAiProviderTimeoutMs());
 
   if (!response.ok) {
     const error = await response.text();
@@ -223,14 +282,14 @@ async function callOpenAI(
   if (systemPrompt) messages.push({ role: 'system', content: systemPrompt });
   messages.push({ role: 'user', content: userPrompt });
 
-  const response = await fetch(`${baseUrl}/chat/completions`, {
+  const response = await fetchWithTimeout(`${baseUrl}/chat/completions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({ model, messages, temperature, max_tokens: maxTokens }),
-  });
+  }, getAiProviderTimeoutMs());
 
   if (!response.ok) {
     const error = await response.text();
@@ -287,7 +346,7 @@ async function callGemini(
   // Gemini uses OpenAI-compatible endpoint when GOOGLE_API_KEY is used
   const contents = [{ role: 'user', parts: [{ text: userPrompt }] }];
 
-  const response = await fetch(
+  const response = await fetchWithTimeout(
     `${baseUrl}/models/${model}:generateContent?key=${apiKey}`,
     {
       method: 'POST',
@@ -297,7 +356,8 @@ async function callGemini(
         systemInstruction: systemPrompt ? { parts: [{ text: systemPrompt }] } : undefined,
         generationConfig: { temperature, maxOutputTokens: maxTokens },
       }),
-    }
+    },
+    getAiProviderTimeoutMs(),
   );
 
   if (!response.ok) {
@@ -342,12 +402,13 @@ async function callOllama(
 ): Promise<AIResponse> {
   const start = Date.now();
   const { temperature = 0.7, maxTokens = 4096 } = options;
+  const resolvedModel = await resolveOllamaModel(baseUrl, model);
 
-  const response = await fetch(`${baseUrl}/api/chat`, {
+  const response = await fetchWithTimeout(`${baseUrl}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model,
+      model: resolvedModel,
       messages: [
         ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
         { role: 'user', content: userPrompt },
@@ -356,7 +417,7 @@ async function callOllama(
       options: { num_predict: maxTokens },
       stream: false,
     }),
-  });
+  }, getOllamaTimeoutMs());
 
   if (!response.ok) {
     const error = await response.text();
@@ -371,10 +432,55 @@ async function callOllama(
   return {
     content: data.message?.content || '',
     raw: data,
-    model: `ollama/${model}`,
+    model: `ollama/${resolvedModel}`,
     provider: 'ollama',
     latencyMs: (data.total_duration || Date.now() - start) / 1_000_000,
   };
+}
+
+async function resolveOllamaModel(baseUrl: string, requestedModel: string): Promise<string> {
+  const candidates = [
+    process.env.OLLAMA_MODEL,
+    process.env.DEFAULT_OLLAMA_MODEL,
+    requestedModel,
+    'gemma4:latest',
+    'gpt-oss:20b',
+    'qwen3-coder:30b',
+    'gemma4:31b',
+    'qwen-distill:latest',
+    'deepseek-r1:32b',
+    'qwen2.5',
+    'llama3.3',
+  ].filter((candidate): candidate is string => Boolean(candidate));
+
+  try {
+    const response = await fetchWithTimeout(`${baseUrl}/api/tags`, { method: 'GET' }, getOllamaTimeoutMs());
+    if (!response.ok) {
+      return requestedModel;
+    }
+
+    const data = (await response.json()) as {
+      models?: Array<{ name?: string }>;
+    };
+    const installed = new Set(
+      (data.models ?? [])
+        .map((entry) => entry.name)
+        .filter((name): name is string => Boolean(name))
+    );
+
+    for (const candidate of candidates) {
+      if (installed.has(candidate)) {
+        return candidate;
+      }
+      if (!candidate.includes(':') && installed.has(`${candidate}:latest`)) {
+        return `${candidate}:latest`;
+      }
+    }
+  } catch {
+    return requestedModel;
+  }
+
+  return requestedModel;
 }
 
 // ─── Retry Logic ───────────────────────────────────────────────────────────────
@@ -630,7 +736,7 @@ export async function* streamGenerate(
       max_tokens: maxTokens,
     };
 
-    const response = await fetch(`${baseUrl}/messages`, {
+    const response = await fetchWithTimeout(`${baseUrl}/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -639,7 +745,7 @@ export async function* streamGenerate(
         'anthropic-dangerous-direct-browser-access': 'true',
       },
       body: JSON.stringify(body),
-    });
+    }, getAiProviderTimeoutMs());
 
     if (!response.ok) {
       const error = await response.text();
@@ -694,14 +800,14 @@ export async function* streamGenerate(
       max_tokens: maxTokens,
     };
 
-    const response = await fetch(`${baseUrl}/chat/completions`, {
+    const response = await fetchWithTimeout(`${baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify(body),
-    });
+    }, getAiProviderTimeoutMs());
 
     if (!response.ok) {
       const error = await response.text();

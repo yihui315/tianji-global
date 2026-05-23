@@ -1,163 +1,127 @@
 'use client';
 
-import Link from 'next/link';
-import { useState } from 'react';
+import { FileText, Lock, ShieldCheck } from 'lucide-react';
+
+import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { withLanguageParam } from '@/lib/language-routing';
+import {
+  getTianjiLoveFooterNav,
+  getTianjiLovePrimaryCta,
+  getTianjiLovePrimaryNav,
+  TianjiLoveButton,
+  TianjiLoveFooter,
+  TianjiLoveHeader,
+  TianjiLovePanel,
+  TianjiLoveSectionTitle,
+  TianjiLoveShell,
+  TianjiLoveTrustCard,
+} from '@/components/tianji-love';
+
+const copy = {
+  en: {
+    nav: {
+      compatibility: 'Compatibility',
+      loveReading: 'Love Reading',
+      timing: 'Timing',
+      pricing: 'Pricing',
+      privacy: 'Privacy',
+    },
+    eyebrow: 'Tianji Love / Legal',
+    title: 'Clear rules for a reflective product.',
+    body:
+      'The legal pages stay readable and compliance-first. The product is for reflection and relationship communication, not professional or crisis advice.',
+    privacyTitle: 'Privacy Policy',
+    privacyBody: 'How we handle personal data, reading data, cookies, deletion requests, and public sharing safeguards.',
+    termsTitle: 'Terms of Service',
+    termsBody: 'The conditions for using Tianji Love, including service scope, user responsibilities, and liability limits.',
+    open: 'Open page',
+    trust: [
+      { icon: Lock, title: 'Birth data protected', body: 'Public share surfaces hide birth date, time, location, and timezone by default.' },
+      { icon: FileText, title: 'Plain-language legal', body: 'Legal pages are styled with the product shell while staying easy to read.' },
+      { icon: ShieldCheck, title: 'Reflection only', body: 'Readings do not replace medical, legal, financial, or crisis support.' },
+    ],
+    footer:
+      'Tianji Love legal pages keep compliance and privacy clarity ahead of marketing language.',
+  },
+  zh: {
+    nav: {
+      compatibility: '关系合盘',
+      loveReading: '爱情解读',
+      timing: '时机',
+      pricing: '会员权益',
+      privacy: '隐私',
+    },
+    eyebrow: 'Tianji Love / 法律',
+    title: '给反思型产品准备的清晰规则。',
+    body: '法律页面保持可读与合规优先。产品用于反思和关系沟通，不替代专业或危机建议。',
+    privacyTitle: '隐私政策',
+    privacyBody: '说明我们如何处理个人资料、解读数据、cookies、删除请求和公开分享保护。',
+    termsTitle: '服务条款',
+    termsBody: '说明使用 Tianji Love 的条件，包括服务范围、用户责任和责任限制。',
+    open: '打开页面',
+    trust: [
+      { icon: Lock, title: '出生资料受保护', body: '公开分享默认隐藏出生日期、时间、地点和时区。' },
+      { icon: FileText, title: '清晰法律文本', body: '法律页面套用产品视觉，但仍以清楚易读为优先。' },
+      { icon: ShieldCheck, title: '仅用于反思', body: '解读不替代医疗、法律、财务或危机支持。' },
+    ],
+    footer: 'Tianji Love 法律页面把合规与隐私清晰度放在营销文案之前。',
+  },
+} as const;
 
 export default function LegalPage() {
-  const [language, setLanguage] = useState<'zh' | 'en'>('zh');
-
-  const content = {
-    zh: {
-      title: '法律声明',
-      subtitle: 'Legal',
-      description: '了解天机全球的服务条款和隐私政策。',
-      privacyTitle: '隐私政策',
-      privacyDesc: '了解我们如何收集、使用和保护您的个人信息。',
-      termsTitle: '服务条款',
-      termsDesc: '使用我们的服务即表示您同意以下条款和条件。',
-      updated: '最后更新：2024年',
-    },
-    en: {
-      title: 'Legal Notices',
-      subtitle: '法律声明',
-      description: 'Learn about TianJi Global\'s Terms of Service and Privacy Policy.',
-      privacyTitle: 'Privacy Policy',
-      privacyDesc: 'Learn how we collect, use, and protect your personal information.',
-      termsTitle: 'Terms of Service',
-      termsDesc: 'By using our services, you agree to the following terms and conditions.',
-      updated: 'Last updated: 2024',
-    },
-  };
-
-  const t = content[language];
+  const [language, setLanguage] = useSyncedLanguage('en');
+  const t = copy[language];
+  const href = (path: string) => withLanguageParam(path, language);
+  const toggleLanguage = () => setLanguage(language === 'zh' ? 'en' : 'zh');
 
   return (
-    <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
-      <div className="star-field" aria-hidden="true" />
+    <TianjiLoveShell className="tianji-love-legal-index" ariaLabel="Tianji Love legal index">
+      <TianjiLoveHeader
+        homeHref={href('/')}
+        navItems={getTianjiLovePrimaryNav(language, href)}
+        cta={getTianjiLovePrimaryCta(language, href)}
+        languageLabel={language === 'zh' ? 'EN' : '中文'}
+        onLanguageToggle={toggleLanguage}
+      />
 
-      <div className="relative z-10">
-        {/* Header */}
-        <header className="p-6">
-          <div className="flex justify-between items-center max-w-7xl mx-auto">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
-                天机全球
-              </h1>
-              <p className="text-purple-300/80 text-lg">TianJi Global</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href="/"
-                className="px-4 py-2 bg-slate-800/50 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition"
-              >
-                {language === 'zh' ? '返回首页' : 'Back to Home'}
-              </Link>
-              <button
-                onClick={() => setLanguage('zh')}
-                className={`px-3 py-1 rounded-full text-sm transition-all ${
-                  language === 'zh'
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700'
-                }`}
-              >
-                中文
-              </button>
-              <button
-                onClick={() => setLanguage('en')}
-                className={`px-3 py-1 rounded-full text-sm transition-all ${
-                  language === 'en'
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700'
-                }`}
-              >
-                EN
-              </button>
-            </div>
-          </div>
-        </header>
+      <section className="relative z-10 mx-auto w-full max-w-6xl px-5 py-16 text-center sm:px-8">
+        <p className="mb-5 text-xs uppercase tracking-[0.32em] text-[#d8b77b]/70">{t.eyebrow}</p>
+        <h1 className="mx-auto max-w-4xl font-serif text-[2.7rem] font-semibold leading-[1.08] text-[#ffe3b4] sm:text-[4.2rem]">
+          {t.title}
+        </h1>
+        <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#f5d8aa]/78">{t.body}</p>
+      </section>
 
-        {/* Content */}
-        <section className="px-6 py-12 md:py-20 max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              {t.title}
-            </h2>
-            <p className="text-purple-300 text-lg">{t.subtitle}</p>
-            <p className="text-slate-400 mt-2">{t.description}</p>
-            <p className="text-slate-500 text-sm mt-4">{t.updated}</p>
-          </div>
+      <section className="relative z-10 mx-auto grid w-full max-w-6xl gap-6 px-5 pb-12 sm:px-8 md:grid-cols-2">
+        <TianjiLovePanel as="article" className="p-7">
+          <Lock className="mb-5 h-9 w-9 text-[#d8b77b]" aria-hidden />
+          <h2 className="font-serif text-3xl text-[#ffe3b4]">{t.privacyTitle}</h2>
+          <p className="mt-4 text-base leading-8 text-[#f4d7a3]/70">{t.privacyBody}</p>
+          <TianjiLoveButton href={href('/legal/privacy')} className="mt-7">{t.open}</TianjiLoveButton>
+        </TianjiLovePanel>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Privacy Policy Card */}
-            <Link
-              href="/legal/privacy"
-              className="group relative overflow-hidden rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-purple-500/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/20 p-8"
-            >
-              <div className="absolute inset-0 border border-white/[0.06]" />
-              <div className="relative">
-                <div className="text-4xl mb-4">🔒</div>
-                <h3 className="text-2xl font-bold text-white mb-2">{t.privacyTitle}</h3>
-                <p className="text-slate-400">{t.privacyDesc}</p>
-                <div className="flex items-center text-purple-400 text-sm font-medium mt-4">
-                  <span>{language === 'zh' ? '查看详情' : 'View Details'}</span>
-                  <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              </div>
-            </Link>
+        <TianjiLovePanel as="article" className="p-7">
+          <FileText className="mb-5 h-9 w-9 text-[#d8b77b]" aria-hidden />
+          <h2 className="font-serif text-3xl text-[#ffe3b4]">{t.termsTitle}</h2>
+          <p className="mt-4 text-base leading-8 text-[#f4d7a3]/70">{t.termsBody}</p>
+          <TianjiLoveButton href={href('/legal/terms')} variant="secondary" className="mt-7">{t.open}</TianjiLoveButton>
+        </TianjiLovePanel>
+      </section>
 
-            {/* Terms of Service Card */}
-            <Link
-              href="/legal/terms"
-              className="group relative overflow-hidden rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-amber-500/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-amber-500/20 p-8"
-            >
-              <div className="absolute inset-0 border border-white/[0.06]" />
-              <div className="relative">
-                <div className="text-4xl mb-4">📜</div>
-                <h3 className="text-2xl font-bold text-white mb-2">{t.termsTitle}</h3>
-                <p className="text-slate-400">{t.termsDesc}</p>
-                <div className="flex items-center text-amber-400 text-sm font-medium mt-4">
-                  <span>{language === 'zh' ? '查看详情' : 'View Details'}</span>
-                  <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              </div>
-            </Link>
-          </div>
-        </section>
+      <section className="relative z-10 mx-auto w-full max-w-6xl px-5 py-10 sm:px-8">
+        <TianjiLoveSectionTitle title={language === 'zh' ? '法律页面统一标准' : 'Shared legal standards'} className="mb-8" />
+        <div className="grid gap-5 md:grid-cols-3">
+          {t.trust.map((item) => (
+            <TianjiLoveTrustCard key={item.title} icon={item.icon} title={item.title} body={item.body} />
+          ))}
+        </div>
+      </section>
 
-        {/* Footer */}
-        <footer className="text-center py-8 text-slate-500 text-sm">
-          <p>© 2024 TianJi Global · 天机全球</p>
-          <p className="mt-1">
-            {language === 'zh'
-              ? '融合传统智慧与现代科技'
-              : 'Bridging Traditional Wisdom & Modern Technology'}
-          </p>
-        </footer>
-      </div>
-
-      <style jsx>{`
-        .stars-container {
-          position: absolute;
-          inset: 0;
-          overflow: hidden;
-        }
-        .star {
-          position: absolute;
-          width: 2px;
-          height: 2px;
-          background: white;
-          border-radius: 50%;
-          animation: twinkle ease-in-out infinite;
-        }
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.2; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.5); }
-        }
-      `}</style>
-    </main>
+      <TianjiLoveFooter
+        homeHref={href('/')}
+        disclaimer={t.footer}
+        links={getTianjiLoveFooterNav(language, href)}
+      />
+    </TianjiLoveShell>
   );
 }

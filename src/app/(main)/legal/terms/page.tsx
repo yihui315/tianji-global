@@ -1,330 +1,153 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
-import { GlassCard, LanguageSwitch } from '@/components/ui';
+import { AlertTriangle, FileText, ShieldCheck } from 'lucide-react';
+
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
-import { LegalCosmicLayers } from '../_layers';
+import {
+  getTianjiLoveFooterNav,
+  getTianjiLovePrimaryCta,
+  getTianjiLovePrimaryNav,
+  TianjiLoveButton,
+  TianjiLoveFooter,
+  TianjiLoveHeader,
+  TianjiLovePanel,
+  TianjiLoveSectionTitle,
+  TianjiLoveShell,
+  TianjiLoveTrustCard,
+} from '@/components/tianji-love';
 
-const CONTENT = {
-  zh: {
-    eyebrow: '服务条款',
-    title: '使用天机服务的条件。',
-    lastUpdated: '最后更新：2024 年 12 月',
-    intro:
-      '欢迎使用天机全球服务。请仔细阅读以下条款，它们规定了您使用我们服务的法律条款和条件。',
-    backHome: '返回首页',
-    contactCta: '有问题写信给我们',
-    sections: [
-      {
-        title: '服务描述',
-        content: `天机全球提供以下服务：
-
-• 八字命理分析：基于中国传统八字系统的 AI 驱动分析
-• 紫微斗数：基于中国皇家星象学的命理服务
-• 易经占卜：运用易经 64 卦的占卜系统
-• 塔罗牌占卜：西方占卜体系的在线解读
-• 爱情配对：基于多种命理体系的两性兼容性分析
-• 择吉：选择吉日的传统方法
-• 其他与 Chinese metaphysics 相关的服务
-
-我们保留随时修改、暂停或终止任何服务的权利。`,
-      },
-      {
-        title: '娱乐免责声明',
-        content: `重要提示：
-
-• 天机全球的服务仅供娱乐和参考目的，不构成专业财务、医疗、法律或任何其他专业建议。
-• 命理分析基于传统智慧和 AI 算法，其结果不应被视为确定性预测。
-• 您应自主做出所有决定，并对自己的行为负责。
-• 我们不能保证任何预测、分析或占卜结果的准确性。
-• 如有健康、心理健康、法律或财务方面的疑虑，请咨询相关专业人士。
-• 使用我们的服务即表示您确认理解并接受以上声明。`,
-      },
-      {
-        title: '用户责任',
-        content: `作为用户，您同意：
-
-• 提供真实、准确的个人信息
-• 保护您的账户安全，不与他人共享登录凭据
-• 不得使用我们的服务从事任何非法或未经授权的目的
-• 不得尝试破解、干扰或破坏我们的系统
-• 不得转售或商业利用我们的服务
-• 遵守所有适用的本地、国家和国际法律
-• 对您的账户下发生的所有活动负责`,
-      },
-      {
-        title: '知识产权',
-        content: `天机全球网站、设计、标识、内容、AI 算法及所有相关知识产权均为天机全球或其许可方的财产。
-
-• 用户生成的内容归用户所有，但您授予我们使用您内容的有限许可以提供服务
-• 我们的 AI 生成的分析结果可供您个人使用，但未经授权不得商业分发
-• 未经明确书面许可，禁止复制、修改或分发我们的内容
-• 尊重版权和知识产权是我们的核心价值`,
-      },
-      {
-        title: '责任限制',
-        content: `在法律允许的最大范围内：
-
-• 天机全球不对任何间接、附带、特殊、后果性或惩罚性损害承担责任
-• 我们不对任何因使用我们的服务而产生的决策或行动负责
-• 我们对任何服务中断、技术问题或数据丢失不承担责任
-• 我们的总责任不超过您在过去 12 个月内支付给我们服务费用
-• 某些司法管辖区不允许限制或排除某些责任，因此这些限制可能不适用于您`,
-      },
-      {
-        title: '账户终止',
-        content: `我们可以基于以下原因终止或暂停您的账户：
-
-• 违反本服务条款的任何条款
-• 从事欺诈、非法或有害活动
-• 滥用服务或试图损害我们的系统
-• 长时间不活动（由我们自行决定）
-• 您选择关闭您的账户
-
-账户终止后：
-• 您将无法访问您的账户及相关数据
-• 我们可能会根据法律要求保留某些信息
-• 您已支付的费用不予退还（除非法律另有要求）`,
-      },
-      {
-        title: '适用法律',
-        content: `本服务条款受以下法律管辖并按其解释：
-
-• 如果您位于中华人民共和国境内，则受中华人民共和国法律管辖
-• 如果您位于其他地区，则适用国际商法原则
-
-争议解决：
-• 任何因本服务条款引起的争议应首先通过友好协商解决
-• 如协商不成，争议将提交有管辖权的法院解决
-• 您同意接受相关法院的属人管辖权`,
-      },
-      {
-        title: '联系我们',
-        content: `如对本服务条款有任何疑问，请联系我们：
-
-• 电子邮件：hello@tianji.global
-• 网站：https://tianji.global
-
-我们会尽快回复您的请求。`,
-      },
-    ],
-  },
+const copy = {
   en: {
+    nav: {
+      compatibility: 'Compatibility',
+      loveReading: 'Love Reading',
+      timing: 'Timing',
+      pricing: 'Pricing',
+      privacy: 'Privacy',
+    },
     eyebrow: 'Terms of Service',
-    title: 'The conditions for using TianJi.',
-    lastUpdated: 'Last updated: December 2024',
+    title: 'Use Tianji Love as reflection, not certainty.',
+    updated: 'Last updated: May 2026',
     intro:
-      'Welcome to TianJi Global. These Terms govern your use of our services — please read them carefully before continuing.',
-    backHome: 'Back to home',
-    contactCta: 'Email us with questions',
+      'These terms govern your use of Tianji Love. They are written to keep the product useful, privacy-safe, and clear about its limits.',
+    contact: 'Email us with questions',
     sections: [
-      {
-        title: 'Service Description',
-        content: `TianJi Global provides the following services:
-
-• Bazi Fortune Telling: AI-driven analysis based on the traditional Chinese BaZi system
-• Zi Wei Dou Shu: Fortune services based on Chinese imperial astrology
-• Yi Jing Divination: Divination system using the 64 hexagrams of I Ching
-• Tarot Reading: Single-card, three-card, and Celtic Cross spreads with AI interpretation
-• Love Matching: Compatibility analysis based on multiple metaphysical systems
-• Electional: Traditional methods for selecting auspicious dates
-• Additional divination tools, including numerology, transits, and electional astrology
-
-We reserve the right to modify, suspend, or terminate any service at any time.`,
-      },
-      {
-        title: 'Entertainment Disclaimer',
-        content: `Important Notice:
-
-• TianJi Global services are for entertainment and reference purposes only, and do not constitute professional financial, medical, legal, or any other professional advice.
-• Readings combine traditional methods with AI interpretation. Results are not deterministic predictions and should not be treated as guaranteed outcomes.
-• You should make all decisions independently and take responsibility for your own actions.
-• We cannot guarantee the accuracy of any predictions, analysis, or divination results.
-• For health, mental health, legal, or financial concerns, please consult qualified professionals.
-• By using our services, you confirm that you understand and accept the above disclaimer.`,
-      },
-      {
-        title: 'User Responsibilities',
-        content: `As a user, you agree to:
-
-• Provide true and accurate personal information
-• Protect your account security and not share login credentials with others
-• Not use our services for any illegal or unauthorized purposes
-• Not attempt to hack, interfere with, or disrupt our systems
-• Not resell or commercially exploit our services
-• Comply with all applicable local, national, and international laws
-• Be responsible for all activities occurring under your account`,
-      },
-      {
-        title: 'Intellectual Property',
-        content: `The TianJi Global website, designs, logos, content, AI algorithms, and all related intellectual property are the property of TianJi Global or its licensors.
-
-• User-generated content belongs to the user, but you grant us a limited license to use your content to provide services
-• Our AI-generated analysis results are for your personal use only. Commercial distribution without authorization is prohibited
-• Copying, modifying, or distributing our content without explicit written permission is prohibited
-• Respecting copyright and intellectual property is our core value`,
-      },
-      {
-        title: 'Limitation of Liability',
-        content: `To the maximum extent permitted by law:
-
-• TianJi Global shall not be liable for any indirect, incidental, special, consequential, or punitive damages
-• We are not responsible for any decisions or actions taken based on the use of our services
-• We assume no liability for service interruptions, technical issues, or data loss
-• Our total liability shall not exceed the fees you paid to us for services in the past 12 months
-• Some jurisdictions do not allow limitations or exclusions of certain liabilities, so these limitations may not apply to you`,
-      },
-      {
-        title: 'Account Termination',
-        content: `We may terminate or suspend your account for the following reasons:
-
-• Violation of any terms in this Terms of Service
-• Engagement in fraudulent, illegal, or harmful activities
-• Abuse of services or attempts to harm our systems
-• Prolonged inactivity (at our discretion)
-• You choose to close your account
-
-Upon account termination:
-• You will no longer be able to access your account and related data
-• We may retain certain information as required by law
-• Fees already paid are non-refundable (unless required by law)`,
-      },
-      {
-        title: 'Governing Law',
-        content: `These Terms of Service are governed by and construed in accordance with:
-
-• If you are located in the People's Republic of China, the laws of the PRC apply
-• If you are located in other regions, the principles of international commercial law apply
-
-Dispute Resolution:
-• Any disputes arising from these Terms of Service shall first be resolved through friendly negotiation
-• If negotiation fails, disputes shall be submitted to the competent court for resolution
-• You agree to submit to the personal jurisdiction of the relevant courts`,
-      },
-      {
-        title: 'Contact Us',
-        content: `If you have any questions about these Terms of Service, please contact us:
-
-• Email: hello@tianji.global
-• Website: https://tianji.global
-
-We will respond to your requests as soon as possible.`,
-      },
+      ['Service scope', 'Tianji Love provides love readings, compatibility reports, timing readings, private history, and related reflective report surfaces. Features may change as the product evolves.'],
+      ['Reflection-only disclaimer', 'Readings are for reflection and relationship communication. They are not medical, mental health, legal, financial, or crisis advice, and they do not guarantee outcomes.'],
+      ['User responsibilities', 'You agree to provide accurate information where needed, protect your account, use the service lawfully, and avoid misuse, scraping, resale, or interference with the service.'],
+      ['Payments and access', 'Paid access is handled through the existing checkout and billing flows. Pricing pages describe currently available paid features and do not create rights beyond the implemented product.'],
+      ['Privacy and sharing', 'Public share surfaces must not expose birth date, birth time, birth location, or timezone by default. See the Privacy Policy for data handling details.'],
+      ['Intellectual property', 'Tianji Love design, copy, code, and product assets belong to Tianji or its licensors. Your submitted content remains yours, with permission for us to process it to provide the service.'],
+      ['Limitations of liability', 'To the extent allowed by law, Tianji Love is not responsible for decisions made from readings, service interruptions, indirect damages, or outcomes outside the product.'],
+      ['Account termination', 'We may suspend or terminate accounts that violate these terms, abuse the service, or create legal or security risk. You may stop using the service at any time.'],
     ],
+    trust: [
+      { icon: AlertTriangle, title: 'No guaranteed predictions', body: 'The service names patterns and windows, not certain outcomes.' },
+      { icon: ShieldCheck, title: 'Privacy defaults preserved', body: 'Public share surfaces keep sensitive birth data hidden by default.' },
+      { icon: FileText, title: 'Implemented abilities only', body: 'Pricing and terms should reflect what the product actually supports.' },
+    ],
+    footer:
+      'Tianji Love terms keep the service reflective, privacy-safe, and honest about its limits.',
+  },
+  zh: {
+    nav: {
+      compatibility: '关系合盘',
+      loveReading: '爱情解读',
+      timing: '时机',
+      pricing: '会员权益',
+      privacy: '隐私',
+    },
+    eyebrow: '服务条款',
+    title: '请把 Tianji Love 用作反思，而不是确定性。',
+    updated: '最后更新：2026 年 5 月',
+    intro: '这些条款管理你对 Tianji Love 的使用，并确保产品保持有用、隐私安全，也清楚说明边界。',
+    contact: '有问题写信给我们',
+    sections: [
+      ['服务范围', 'Tianji Love 提供爱情解读、关系合盘、时机解读、私人历史和相关报告页面。功能可能随着产品演进而变化。'],
+      ['仅用于反思的声明', '解读用于反思和关系沟通，不构成医疗、心理健康、法律、财务或危机建议，也不保证结果。'],
+      ['用户责任', '你同意在需要时提供准确信息，保护账号，合法使用服务，并避免滥用、抓取、转售或干扰服务。'],
+      ['支付与访问', '付费访问通过现有结账和账单流程处理。价格页说明当前可用的付费功能，不产生超出已实现产品的权利。'],
+      ['隐私与分享', '公开分享页面默认不得展示出生日期、出生时间、出生地点或时区。数据处理细节请查看隐私政策。'],
+      ['知识产权', 'Tianji Love 的设计、文案、代码和产品资产属于 Tianji 或其许可方。你提交的内容属于你，我们仅为提供服务而处理。'],
+      ['责任限制', '在法律允许范围内，Tianji Love 不对基于解读做出的决定、服务中断、间接损失或产品之外的结果负责。'],
+      ['账号终止', '如果账号违反条款、滥用服务或带来法律/安全风险，我们可以暂停或终止账号。你也可以随时停止使用服务。'],
+    ],
+    trust: [
+      { icon: AlertTriangle, title: '不保证预测', body: '服务描述模式和窗口，不承诺确定结果。' },
+      { icon: ShieldCheck, title: '保留隐私默认值', body: '公开分享默认隐藏敏感出生资料。' },
+      { icon: FileText, title: '只承诺已实现能力', body: '价格和条款应反映产品实际支持的功能。' },
+    ],
+    footer: 'Tianji Love 条款让服务保持反思性、隐私安全，并诚实说明边界。',
   },
 } as const;
 
 export default function TermsPage() {
-  const [language] = useSyncedLanguage();
-  const [activeSection, setActiveSection] = useState<number | null>(0);
-  const t = CONTENT[language];
+  const [language, setLanguage] = useSyncedLanguage('en');
+  const [activeSection, setActiveSection] = useState(0);
+  const t = copy[language];
+  const href = (path: string) => withLanguageParam(path, language);
+  const toggleLanguage = () => setLanguage(language === 'zh' ? 'en' : 'zh');
 
   return (
-    <main id="main-content" className="relative min-h-screen overflow-hidden bg-[#050508] text-white">
-      <LegalCosmicLayers />
+    <TianjiLoveShell className="tianji-love-terms-page" ariaLabel="Tianji Love terms of service">
+      <TianjiLoveHeader
+        homeHref={href('/')}
+        navItems={getTianjiLovePrimaryNav(language, href)}
+        cta={getTianjiLovePrimaryCta(language, href)}
+        languageLabel={language === 'zh' ? 'EN' : '中文'}
+        onLanguageToggle={toggleLanguage}
+      />
 
-      <LanguageSwitch className="fixed right-6 top-6 z-30" />
-
-      <header className="relative z-10 mx-auto flex max-w-5xl items-center justify-between px-6 pt-10">
-        <Link
-          href={withLanguageParam('/', language)}
-          className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.32em] text-white/45 transition hover:text-white/85"
-        >
-          <span aria-hidden>←</span> {t.backHome}
-        </Link>
-      </header>
-
-      <section className="relative z-10 mx-auto max-w-3xl px-6 pt-20 pb-12 text-center">
-        <p className="mb-5 text-[0.7rem] uppercase tracking-[0.36em] text-[rgba(212,175,119,0.78)]">
-          {t.eyebrow}
-        </p>
-        <h1 className="font-serif text-3xl leading-[1.18] text-white/95 sm:text-4xl md:text-5xl">
+      <section className="relative z-10 mx-auto w-full max-w-5xl px-5 py-16 text-center sm:px-8">
+        <p className="mb-5 text-xs uppercase tracking-[0.32em] text-[#d8b77b]/70">{t.eyebrow}</p>
+        <h1 className="mx-auto max-w-4xl font-serif text-[2.5rem] font-semibold leading-[1.1] text-[#ffe3b4] sm:text-[4rem]">
           {t.title}
         </h1>
-        <p className="mt-5 text-xs uppercase tracking-[0.24em] text-white/40">{t.lastUpdated}</p>
-        <p className="mx-auto mt-7 max-w-2xl text-base leading-8 text-white/65">{t.intro}</p>
+        <p className="mt-4 text-xs uppercase tracking-[0.22em] text-[#f4d7a3]/46">{t.updated}</p>
+        <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#f5d8aa]/78">{t.intro}</p>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-3xl px-6 pb-16">
+      <section className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-12 sm:px-8">
+        <div className="grid gap-4 md:grid-cols-3">
+          {t.trust.map((item) => (
+            <TianjiLoveTrustCard key={item.title} icon={item.icon} title={item.title} body={item.body} />
+          ))}
+        </div>
+      </section>
+
+      <section className="relative z-10 mx-auto w-full max-w-4xl px-5 pb-14 sm:px-8">
+        <TianjiLoveSectionTitle title={language === 'zh' ? '条款详情' : 'Terms Details'} className="mb-8" />
         <div className="space-y-3">
-          {t.sections.map((section, index) => {
+          {t.sections.map(([title, body], index) => {
             const isOpen = activeSection === index;
-            const tag = String(index + 1).padStart(2, '0');
             return (
-              <GlassCard
-                key={index}
-                level="card"
-                className="overflow-hidden rounded-[1.5rem] border border-white/[0.06] bg-white/[0.02] transition-colors hover:border-white/[0.12]"
-              >
+              <TianjiLovePanel key={title} as="article" className="p-0">
                 <button
                   type="button"
-                  id={`terms-trigger-${index}`}
-                  onClick={() => setActiveSection(isOpen ? null : index)}
-                  className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+                  onClick={() => setActiveSection(isOpen ? -1 : index)}
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                   aria-expanded={isOpen}
-                  aria-controls={`terms-panel-${index}`}
                 >
-                  <div className="flex items-center gap-4">
-                    <span className="inline-flex h-8 w-8 flex-none items-center justify-center rounded-full border border-[rgba(212,175,119,0.32)] text-[0.72rem] font-semibold tracking-[0.18em] text-[rgba(212,175,119,0.85)]">
-                      {tag}
-                    </span>
-                    <h3 className="font-serif text-lg text-white/92">{section.title}</h3>
-                  </div>
-                  <span
-                    aria-hidden
-                    className={`text-base text-white/40 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180 text-[rgba(212,175,119,0.85)]' : ''
-                    }`}
-                  >
-                    ▾
-                  </span>
+                  <span className="font-serif text-xl text-[#ffe3b4]">{title}</span>
+                  <span className="text-[#d8b77b]" aria-hidden>{isOpen ? '-' : '+'}</span>
                 </button>
-                {isOpen && (
-                  <div
-                    id={`terms-panel-${index}`}
-                    role="region"
-                    aria-labelledby={`terms-trigger-${index}`}
-                    className="border-t border-white/[0.06] bg-black/15 px-6 py-5 pl-[4.25rem]"
-                  >
-                    <pre className="whitespace-pre-line font-sans text-sm leading-7 text-white/65">
-                      {section.content}
-                    </pre>
-                  </div>
-                )}
-              </GlassCard>
+                {isOpen ? <p className="border-t border-[#b57248]/22 px-5 py-4 text-sm leading-7 text-[#f4d7a3]/70">{body}</p> : null}
+              </TianjiLovePanel>
             );
           })}
         </div>
-
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs uppercase tracking-[0.22em]">
-          <a
-            href="mailto:hello@tianji.global"
-            className="inline-flex items-center gap-2 rounded-full border border-[rgba(212,175,119,0.42)] bg-gradient-to-br from-[#f8e7c2] to-white px-6 py-3 font-semibold tracking-[0.2em] text-black transition hover:from-[#fff5dd]"
-          >
-            <span aria-hidden>✦</span>
-            {t.contactCta}
-          </a>
-          <Link
-            href={withLanguageParam('/legal/privacy', language)}
-            className="rounded-full border border-white/12 bg-white/[0.03] px-6 py-3 text-white/70 transition hover:border-white/30 hover:text-white"
-          >
-            {language === 'zh' ? '隐私政策' : 'Privacy policy'}
-          </Link>
+        <div className="mt-9 flex justify-center">
+          <TianjiLoveButton href="mailto:hello@tianji.love">{t.contact}</TianjiLoveButton>
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-white/10 px-6 py-10 text-center text-xs uppercase tracking-[0.24em] text-white/30">
-        <Link href={withLanguageParam('/', language)} className="hover:text-white/65">
-          TianJi Global
-        </Link>
-        <p className="mt-3 normal-case tracking-normal text-white/40">
-          {language === 'zh'
-            ? '© 2026 TianJi Global · 不卖结果，不卖焦虑'
-            : '© 2026 TianJi Global · No outcome sales, no anxiety sales'}
-        </p>
-      </footer>
-    </main>
+      <TianjiLoveFooter
+        homeHref={href('/')}
+        disclaimer={t.footer}
+        links={getTianjiLoveFooterNav(language, href)}
+      />
+    </TianjiLoveShell>
   );
 }

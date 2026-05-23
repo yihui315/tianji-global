@@ -1,9 +1,9 @@
 'use client';
 
-import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { GlassCard } from '@/components/ui';
+import { useRef, type ReactNode } from 'react';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
+import { GlassCard } from '@/components/ui';
 
 type ShareCardType = 'ziwei' | 'bazi' | 'tarot' | 'synastry';
 
@@ -13,23 +13,29 @@ interface ShareSectionProps {
   ogBgSrc?: string;
   accentColor?: string;
   goldColor?: string;
-  title?: React.ReactNode;
-  subtitle?: React.ReactNode;
-  children?: React.ReactNode;
+  title?: ReactNode;
+  subtitle?: ReactNode;
+  children?: ReactNode;
+}
+
+function tianjiLoveAccent(color: string, fallback: string) {
+  return color.toLowerCase() === '#7c3aed' || color.toLowerCase() === '#a78bfa' ? fallback : color;
 }
 
 export default function ShareSection({
   type,
   resultData,
   ogBgSrc,
-  accentColor = '#7c3aed',
-  goldColor = '#D4AF37',
+  accentColor = '#ff7c82',
+  goldColor = '#d8b77b',
   title = 'Your reading is share-ready.',
   subtitle = 'Export a quiet, premium card for memory, reflection, or a private share.',
   children,
 }: ShareSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-60px' });
+  const loveAccent = tianjiLoveAccent(accentColor, '#ff7c82');
+  const loveGold = tianjiLoveAccent(goldColor, '#d8b77b');
 
   return (
     <section
@@ -38,22 +44,14 @@ export default function ShareSection({
       style={{
         background: ogBgSrc
           ? `url(${ogBgSrc}) center/cover no-repeat`
-          : 'linear-gradient(180deg, #0a0a0a 0%, #1a0a3a 50%, #0a0a0a 100%)',
+          : 'linear-gradient(180deg, #03040a 0%, #050812 50%, #03040a 100%)',
       }}
     >
-      {ogBgSrc && (
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'rgba(10,10,10,0.72)' }}
-        />
-      )}
+      {ogBgSrc ? <div className="pointer-events-none absolute inset-0" style={{ background: 'rgba(3,4,10,0.74)' }} /> : null}
 
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: `linear-gradient(to bottom, ${accentColor}0D 0%, transparent 30%)` }}
-      />
+      <div className="pointer-events-none absolute inset-0" style={{ background: `linear-gradient(to bottom, ${loveAccent}16 0%, transparent 30%)` }} />
 
-      <div className="max-w-2xl mx-auto px-6 sm:px-8 relative text-center">
+      <div className="relative mx-auto max-w-2xl px-6 text-center sm:px-8">
         <motion.div
           initial={{ opacity: 0, scaleX: 0 }}
           animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
@@ -61,9 +59,9 @@ export default function ShareSection({
           className="mb-10"
         >
           <div
-            className="h-px mx-auto"
+            className="mx-auto h-px"
             style={{
-              background: `linear-gradient(to right, transparent, ${goldColor}80, transparent)`,
+              background: `linear-gradient(to right, transparent, ${loveGold}80, transparent)`,
               maxWidth: '200px',
             }}
           />
@@ -76,49 +74,36 @@ export default function ShareSection({
           className="mb-6"
         >
           <h2
-            className="font-serif font-bold mb-3"
+            className="mb-3 font-serif font-bold"
             style={{
               fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-              background: `linear-gradient(135deg, ${goldColor} 0%, #F0D875 50%, ${goldColor} 100%)`,
+              background: `linear-gradient(135deg, ${loveGold} 0%, #ffe3b4 50%, ${loveGold} 100%)`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              letterSpacing: '0.1em',
-              filter: `drop-shadow(0 0 20px ${goldColor}33)`,
+              letterSpacing: '0',
+              filter: `drop-shadow(0 0 20px ${loveGold}33)`,
             }}
           >
             {title}
           </h2>
-          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em' }}>
+          <p className="text-sm" style={{ color: 'rgba(244,215,163,0.58)', letterSpacing: '0' }}>
             {subtitle}
           </p>
         </motion.div>
 
-        {type && resultData && (
+        {type && resultData ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.25 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+            className="mb-8 flex flex-col items-center justify-center gap-4 sm:flex-row"
           >
-            <AnimatedShareButton
-              type={type}
-              resultData={resultData}
-              format="webp"
-              language="zh"
-              variant="primary"
-            />
-
-            <AnimatedShareButton
-              type={type}
-              resultData={resultData}
-              format="png"
-              language="zh"
-              variant="secondary"
-            />
+            <AnimatedShareButton type={type} resultData={resultData} format="webp" language="zh" variant="primary" />
+            <AnimatedShareButton type={type} resultData={resultData} format="png" language="zh" variant="secondary" />
           </motion.div>
-        )}
+        ) : null}
 
-        {children && (
+        {children ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -127,18 +112,15 @@ export default function ShareSection({
           >
             {children}
           </motion.div>
-        )}
+        ) : null}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.4 }}
         >
-          <GlassCard
-            level="soft"
-            className="p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] inline-block"
-          >
-            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.35)', letterSpacing: '0.08em' }}>
+          <GlassCard level="soft" className="inline-block rounded-lg border border-[#b57248]/26 bg-[#070b16]/66 p-5">
+            <p className="text-xs" style={{ color: 'rgba(244,215,163,0.46)', letterSpacing: '0' }}>
               The visual background stays text-free. The share title is rendered in code.
             </p>
           </GlassCard>

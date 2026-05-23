@@ -1,11 +1,11 @@
 /**
- * Stripe Client — TianJi Global
- * Manages Stripe subscription billing integration
+ * Stripe Client - TianJi Global
+ * Manages Stripe subscription billing and pay-per-use checkout integration.
  */
 
 import Stripe from 'stripe';
 
-// Lazy initialization to avoid build-time errors when env vars are missing
+// Lazy initialization avoids build-time failures when env vars are absent.
 let _stripe: Stripe | null = null;
 
 export function getStripe(): Stripe {
@@ -15,21 +15,19 @@ export function getStripe(): Stripe {
       throw new Error('Missing STRIPE_SECRET_KEY environment variable');
     }
     _stripe = new Stripe(secretKey, {
-      apiVersion: '2025-04-30.basil',
+      apiVersion: '2026-02-25.clover',
       typescript: true,
     });
   }
   return _stripe;
 }
 
-// Alias for backward compatibility
+// Alias for backward compatibility.
 export const stripe = {
   get checkout() { return getStripe().checkout; },
   get billingPortal() { return getStripe().billingPortal; },
   get webhooks() { return getStripe().webhooks; },
 };
-
-// ─── Subscription Plans ────────────────────────────────────────────────────────
 
 export const PLANS = {
   PRO_MONTHLY: {
@@ -37,7 +35,7 @@ export const PLANS = {
     name: 'Pro Monthly',
     nameZh: '专业版月度',
     description: 'Unlimited readings, all fortune types, priority AI processing',
-    descriptionZh: '无限解读，所有命理类型，优先AI处理',
+    descriptionZh: '无限命理解读，全部命理类型，优先 AI 处理',
     price: 9.99,
     priceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || 'price_pro_monthly',
     interval: 'month' as const,
@@ -52,10 +50,10 @@ export const PLANS = {
       ],
       zh: [
         '无限命理解读',
-        '全部5种命理类型（紫微斗数、八字、易经、西方占星、塔罗）',
-        '优先AI处理',
-        '详细PDF报告',
-        '30天解读历史',
+        '全部 5 种命理类型（紫微斗数、八字、易经、西方占星、塔罗）',
+        '优先 AI 处理',
+        '详细 PDF 报告',
+        '30 天解读历史',
         '邮件支持',
       ],
     },
@@ -64,8 +62,8 @@ export const PLANS = {
     id: 'price_pro_yearly',
     name: 'Pro Yearly',
     nameZh: '专业版年度',
-    description: 'Best value — 2 months free',
-    descriptionZh: '最佳性价比 — 赠送2个月',
+    description: 'Best value - 2 months free',
+    descriptionZh: '最佳性价比 - 赠送 2 个月',
     price: 99.99,
     priceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID || 'price_pro_yearly',
     interval: 'year' as const,
@@ -79,8 +77,8 @@ export const PLANS = {
       ],
       zh: [
         '专业版月度全部功能',
-        '比月度方案节省17%',
-        '赠送2个月',
+        '相比月付节省 17%',
+        '赠送 2 个月',
         '专属年度报告',
         '优先客户支持',
       ],
@@ -89,8 +87,6 @@ export const PLANS = {
 } as const;
 
 export type PlanId = keyof typeof PLANS;
-
-// ─── Session Metadata ───────────────────────────────────────────────────────────
 
 export interface SubscriptionMetadata {
   userId: string;

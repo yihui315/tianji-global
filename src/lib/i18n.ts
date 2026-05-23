@@ -21,7 +21,11 @@ export const localizedPublicRoutes: Array<{
   priority: number;
 }> = [
   { path: '/', changeFrequency: 'daily', priority: 1 },
+  { path: '/ask', changeFrequency: 'weekly', priority: 0.85 },
+  { path: '/draw', changeFrequency: 'weekly', priority: 0.85 },
+  { path: '/relationship/new', changeFrequency: 'weekly', priority: 0.9 },
   { path: '/pricing', changeFrequency: 'weekly', priority: 0.9 },
+  { path: '/about', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/privacy', changeFrequency: 'yearly', priority: 0.45 },
   { path: '/terms', changeFrequency: 'yearly', priority: 0.45 },
 ];
