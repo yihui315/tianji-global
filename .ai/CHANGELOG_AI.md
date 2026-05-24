@@ -199,8 +199,8 @@ MiniMax API contract checked against the official compatible OpenAI text chat do
 
 ```text
 Endpoint: POST /v1/chat/completions
-Default base URL: https://api.minimax.io/v1
-China base URL option: https://api.minimaxi.com/v1
+Default base URL: https://api.minimaxi.com/v1
+Token Plan URL source: MiniMax M2.7 OpenAI-compatible Token Plan docs
 Default model: MiniMax-M2.7
 Token limit field: max_completion_tokens
 ```
@@ -320,3 +320,33 @@ Secrets printed: No
 - Retry after the MiniMax quota reset time.
 - If 429 persists after reset, verify the MiniMax token plan or choose a model/plan with available quota.
 - Keep generated marketing output in artifact review mode; do not enable social auto-posting.
+
+## 2026-05-24 - TianJi Love MiniMax Token Plan default alignment
+
+### What changed
+
+Aligned the TianJi Love MiniMax growth script default Base URL with the MiniMax M2.7 Token Plan OpenAI-compatible docs.
+
+```text
+Default base URL: https://api.minimaxi.com/v1
+Default model: MiniMax-M2.7
+Endpoint: POST /v1/chat/completions
+Token limit field: max_completion_tokens
+```
+
+### Runtime interpretation
+
+The prior GitHub Actions failures reached the MiniMax Token Plan API and returned `HTTP 429 rate_limit_error`. This confirms the request path is past npm install, env mapping, and auth shape; the remaining runtime blocker is Token Plan quota/usage availability, not Node.js 20.
+
+### Gate status
+
+```text
+MiniMax M2.7 Token Plan API config: Go
+Default Base URL alignment: Go
+MiniMax runtime: No-Go - prior run blocked by 429 quota/rate limit
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```

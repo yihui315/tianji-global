@@ -3,7 +3,7 @@
 import process from "node:process";
 import { pathToFileURL } from "node:url";
 
-const DEFAULT_BASE_URL = "https://api.minimax.io/v1";
+const DEFAULT_BASE_URL = "https://api.minimaxi.com/v1";
 const DEFAULT_MODEL = "MiniMax-M2.7";
 
 function redactSecrets(value, apiKey = "") {
