@@ -40,3 +40,71 @@ Paid smoke: No-Go
 ### Follow-up
 
 Re-run `TianJi Love Content Calendar` manually on branch `main` after this fix is merged.
+
+## 2026-05-24 - GitHub Actions Codex input fix merge/runtime verification
+
+### What changed
+
+Merged and verified branch:
+
+`fix/tianji-github-actions-codex-input-20260524`
+
+PR: `https://github.com/yihui315/tianji-global/pull/50`
+
+Merge commit: `43a1ceac882b6bbb623d5cd6953593e4160fe65b`
+
+Fixed Codex Action input from `openai_api_key` to `openai-api-key`.
+
+### Files verified
+
+- `.github/workflows/codex-self-evolution.yml`
+- `.github/workflows/codex-self-upgrade.yml`
+- `.github/workflows/relationship-ab-evolution.yml`
+- `.github/workflows/tianji-love-content-calendar.yml`
+- `.github/workflows/tianji-love-daily-growth.yml`
+- `.github/workflows/tianji-love-kpi-analysis.yml`
+
+### Validation
+
+```text
+PR check CI/CD: Pass
+openai_api_key in .github/workflows: 0 matches
+openai-api-key in .github/workflows: 6 matches
+git diff --check: Pass
+Workflow YAML parse: Pass
+Secret-shape scan: Pass
+Secrets printed: No
+```
+
+### Runtime verification
+
+```text
+OPENAI_API_KEY repo secret: Unknown by direct listing; prior failed runs showed masked input value, so likely present
+Workflow dispatch permission from local gh/API: Blocked - gh CLI not authenticated and unauthenticated REST dispatch returned 401
+
+TianJi Love Content Calendar: Blocked for new main rerun; previous pre-fix run failed on openai_api_key at 91d1049
+TianJi Love Daily Growth: Blocked for new main rerun; previous pre-fix run failed on openai_api_key at 91d1049
+TianJi Love KPI Analysis: Blocked for new main rerun; no main run found and dispatch auth is unavailable
+```
+
+### Gate status
+
+```text
+Codex Action input fix: Go
+PR merge: Go
+Content Calendar rerun: Blocked - workflow_dispatch requires authenticated GitHub CLI/API
+Daily Growth rerun: Blocked - workflow_dispatch requires authenticated GitHub CLI/API
+KPI Analysis rerun: Blocked - workflow_dispatch requires authenticated GitHub CLI/API
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+### Follow-up
+
+- Revoke/rotate previously pasted GitHub token.
+- Authenticate `gh` with `repo,workflow` scope or trigger the three workflows from the GitHub Actions UI on `main`.
+- If `OPENAI_API_KEY` is missing or invalid after an authenticated rerun, configure the repo secret without printing it.
+- If the Node.js 20 warning becomes blocking, upgrade affected action/runtime in a separate workflow maintenance task.
