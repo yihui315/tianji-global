@@ -394,8 +394,8 @@ scripts/tianji-love/generate-kpi-analysis.mjs
 ```text
 API style: OpenAI-compatible Chat Completions
 Endpoint: POST /v1/chat/completions
-Default base URL: https://api.minimax.io/v1
-China base URL option: https://api.minimaxi.com/v1
+Default base URL: https://api.minimaxi.com/v1
+Token Plan URL source: MiniMax M2.7 OpenAI-compatible Token Plan docs
 Default model: MiniMax-M2.7
 Token limit field: max_completion_tokens
 Required secret: MINIMAX_API_KEY
@@ -566,3 +566,45 @@ Secrets printed: No
 - If 429 persists after reset, verify MiniMax token plan quota or switch to a model/plan with usable quota.
 - Artifacts were not produced because generation failed before upload.
 - Keep social auto-posting and production deploy disabled.
+
+---
+
+# Review Packet - TianJi Love MiniMax Token Plan Default Alignment
+
+## Background
+
+The MiniMax M2.7 Token Plan docs list the OpenAI-compatible Base URL as `https://api.minimaxi.com/v1`, model `MiniMax-M2.7` or `MiniMax-M2.7-highspeed`, and endpoint `POST /v1/chat/completions`.
+
+## What Changed
+
+Updated the TianJi Love MiniMax client default Base URL to:
+
+```text
+https://api.minimaxi.com/v1
+```
+
+The script still reads `MINIMAX_BASE_URL` when provided, but the fail-closed default now matches the Token Plan docs.
+
+## Runtime Interpretation
+
+The latest failed GitHub Actions runs already reached MiniMax and returned:
+
+```text
+HTTP 429 rate_limit_error
+5-hour Token Plan Plus usage limit reached
+```
+
+That means the current remaining blocker is Token Plan quota/usage availability. It is not `npm ci`, not missing `MINIMAX_API_KEY`, not a model 404, not an endpoint 404, and not the Node.js 20 warning.
+
+## Gate Status
+
+```text
+MiniMax M2.7 Token Plan API config: Go
+Default Base URL alignment: Go
+MiniMax runtime: No-Go - prior run blocked by 429 quota/rate limit
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
