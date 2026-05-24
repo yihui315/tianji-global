@@ -1,29 +1,26 @@
-# TianJi Love Automated Growth System Phase 1 - 2026-05-24
+# TianJi Love Autonomous Growth Run - 2026-05-24
 
 ## What changed
 
-Created the first automated growth system for TianJi Love around `/love-test`, share-card distribution, `/ask` paid intent, future 9.9 one-question checkout readiness, marketing asset production, KPI tracking, and daily Codex optimization.
+Added a reusable autonomous money-making automation controller for TianJi Love and created the Day 1 manual publishing package.
 
-This task is docs/assets/data-only. It does not deploy, does not create Stripe checkout sessions, does not run paid smoke, and does not touch production.
+Detected mode:
+
+```text
+Mode A: Day 1 launch pack needed
+Mode F: Payment approval reminder only
+```
+
+Mode A was executed. Mode F remains blocked because the exact Stripe test-mode approval phrase was not provided.
 
 ## Files changed
 
 ```text
-assets/marketing/love-test-xiaohongshu-30-posts.md
-assets/marketing/love-test-douyin-30-scripts.md
-assets/marketing/love-test-videohao-15-scripts.md
-assets/marketing/love-test-share-copy-50.md
-assets/marketing/love-test-kol-dm-templates.md
-assets/marketing/love-test-seo-keywords-30.md
-assets/marketing/love-test-landing-page-copy.md
-assets/marketing/love-test-paid-intent-copy.md
-assets/marketing/love-test-ugc-case-template.md
-data/love-test-marketing-kpi.csv
-data/love-test-daily-growth-log.csv
-data/love-test-content-calendar.csv
-data/love-test-funnel-metrics.csv
-.ai/TIANJI_LOVE_DAILY_GROWTH_AUTOMATION_LOOP.md
+.ai/AUTO_RUN_TIANJI_LOVE.md
 .ai/TIANJI_LOVE_AUTOMATION_CONTROLLER.md
+assets/marketing/daily/day-001-publishing-pack.md
+assets/marketing/daily/day-001-review-checklist.md
+data/love-test-day-001-kpi-entry.csv
 .ai/CHANGELOG_AI.md
 .ai/REVIEW_PACKET.md
 ```
@@ -32,36 +29,28 @@ data/love-test-funnel-metrics.csv
 
 ```text
 Read AGENTS.md
-Read ai-divination-dev skill
+Read .ai/PROJECT_CONTEXT.md
+Read .ai/DECISIONS.md
+Read .ai/TASKS.md
+Read .ai/MODEL_ROUTING.md
+Read copywriting skill
 Read tianji-evidence-qa skill
 git status --short --branch
 git branch --show-current
-git remote -v
-Read package.json
-Read existing Love-Test assets and KPI CSVs
-Created marketing assets under assets/marketing/
-Created KPI/data CSV templates under data/
-Created .ai/TIANJI_LOVE_DAILY_GROWTH_AUTOMATION_LOOP.md
-Created .ai/TIANJI_LOVE_AUTOMATION_CONTROLLER.md
-Counted required marketing asset totals
-Ran targeted risk-phrase review over new docs/assets/data
-npm run typecheck
-npm run lint
-git diff --check
-Ran targeted secret-shape scan over new docs/assets/data
+Read marketing asset pools
+Read KPI CSV templates
+Read daily growth loop and automation controller
+git switch -c chore/love-test-daily-growth-20260524
+Created Day 1 publishing pack
+Created Day 1 review checklist
+Created Day 1 KPI entry CSV
+Updated autonomous automation controller
+Created AUTO_RUN_TIANJI_LOVE entrypoint
 ```
 
 ## Validation result
 
 ```text
-Xiaohongshu posts: 30/30
-Douyin scripts: 30/30
-Videohao scripts: 15/15
-Share captions: 50/50
-SEO keyword outlines: 30/30
-KPI CSV templates: Go
-Daily growth loop doc: Go
-Automation controller doc: Go
 typecheck: Pass
 lint: Pass
 git diff --check: Pass, existing unrelated line-ending warnings only
@@ -70,12 +59,24 @@ targeted secret-shape scan: Pass, 0 hits
 
 No app source changed; docs/assets/data-only validation was performed.
 
+## Automation result
+
+```text
+Daily publishing pack: Go
+KPI analysis: Not run - no real Day 1 metrics yet
+Funnel optimization: Not run - no source copy change needed
+Tests/build: Docs/assets/data-only validation passed
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
 ## Gate status
 
 ```text
-Marketing asset system: Go
-KPI tracking system: Go
-Daily growth loop: Go
+Daily growth automation: Go
+Marketing content generation: Go
+KPI tracking: Go
+Manual publishing: Ready after checklist review
 Stripe checkout execution: Not run
 Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
@@ -83,21 +84,19 @@ Production deploy: No-Go
 
 ## Risks and follow-up
 
-No production deploy, Stripe checkout, paid smoke, webhook replay, Supabase production mutation, provider live AI call, `.env` read/print/copy/diff, PM2/Nginx/certbot/server mutation, destructive git action, fake testimonials, fake user counts, or guaranteed relationship-outcome claims were performed.
+No production deploy, Stripe checkout, paid smoke, live payment, webhook replay, Supabase mutation, provider live AI call, `.env` read/print/copy/diff, PM2/Nginx/certbot/server mutation, social account auto-posting, destructive git action, fake testimonials, fake user numbers, or guaranteed relationship-outcome claims were performed.
 
 Unrelated dirty files remain unstaged and untouched.
 
-Next actions:
+Next autonomous task:
 
 ```text
-1. Manually review and publish selected content.
-2. Enter daily aggregate KPI data in the CSV templates.
-3. Run the daily growth loop after metrics exist.
-4. Keep Stripe test-mode paid smoke blocked until explicit approval.
+After manual publishing and KPI entry, run: 自动运行 TianJi Love
+Expected mode: KPI analysis if metrics exist, otherwise future 7-day content planning.
 ```
 
 ## Suggested commit message
 
 ```text
-chore(marketing): add love-test automated growth system
+chore(marketing): add love-test daily growth pack
 ```
