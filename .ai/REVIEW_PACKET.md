@@ -341,3 +341,130 @@ GitHub token rotation: Owner action required
 - Replace or rotate the `OPENAI_API_KEY` repository secret without printing it.
 - Re-run the three TianJi Love workflows on `main` after the OpenAI secret is replaced.
 - Keep Node.js 20 as a tracked warning; only treat it as No-Go if it becomes the failing step.
+
+---
+
+# Review Packet - TianJi Love MiniMax Workflow Replacement
+
+## Background
+
+The previous authenticated rerun proved that the Codex Action input fix was correct, but all three TianJi Love growth/KPI workflows failed at OpenAI runtime with `401 invalid_api_key`. This packet records the replacement path: remove Codex Action from those workflows and use MiniMax OpenAI-compatible Chat Completions through local scripts.
+
+## Current Behavior Before Change
+
+```text
+TianJi Love Content Calendar: openai/codex-action@v1 with OPENAI_API_KEY
+TianJi Love Daily Growth: openai/codex-action@v1 with OPENAI_API_KEY
+TianJi Love KPI Analysis: openai/codex-action@v1 with OPENAI_API_KEY
+Generated content mode: direct repository mutation and commit
+Workflow permission: contents: write
+Runtime blocker: OpenAI 401 invalid_api_key
+```
+
+## New Behavior
+
+```text
+GitHub Actions
+-> npm script
+-> scripts/ai/minimax-chat.mjs
+-> MiniMax /v1/chat/completions
+-> .ai/generated/*.md
+-> actions/upload-artifact@v4
+```
+
+The workflows are artifact-only and use `permissions: contents: read`.
+
+## Files Changed
+
+```text
+.github/workflows/tianji-love-content-calendar.yml
+.github/workflows/tianji-love-daily-growth.yml
+.github/workflows/tianji-love-kpi-analysis.yml
+package.json
+scripts/ai/minimax-chat.mjs
+scripts/tianji-love/generate-content-calendar.mjs
+scripts/tianji-love/generate-daily-growth.mjs
+scripts/tianji-love/generate-kpi-analysis.mjs
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## MiniMax Contract
+
+```text
+API style: OpenAI-compatible Chat Completions
+Endpoint: POST /v1/chat/completions
+Default base URL: https://api.minimax.io/v1
+China base URL option: https://api.minimaxi.com/v1
+Default model: MiniMax-M2.7
+Token limit field: max_completion_tokens
+Required secret: MINIMAX_API_KEY
+Optional secret/config: MINIMAX_BASE_URL
+Optional secret/config: MINIMAX_MODEL
+```
+
+## Validation
+
+```text
+node --check scripts/ai/minimax-chat.mjs: Pass
+node --check scripts/tianji-love/generate-content-calendar.mjs: Pass
+node --check scripts/tianji-love/generate-daily-growth.mjs: Pass
+node --check scripts/tianji-love/generate-kpi-analysis.mjs: Pass
+package.json parse: Pass
+npm ci: Timed out locally after 10 minutes
+npm ci --ignore-scripts --no-audit --no-fund: Pass
+npm run typecheck: Pass
+npm run lint: Pass
+git diff --check: Pass
+TianJi Love workflow YAML parse: Pass
+TianJi Love workflows Codex/OpenAI dependency scan: 0 matches
+Targeted secret-shape scan: Pass
+```
+
+## Local Runtime
+
+```text
+npm run tianji:content-calendar: Blocked locally - MINIMAX_API_KEY is missing
+npm run tianji:daily-growth: Blocked locally - MINIMAX_API_KEY is missing
+npm run tianji:kpi-analysis: Blocked locally - MINIMAX_API_KEY is missing
+```
+
+This is expected fail-closed behavior. No API key or token value was printed.
+
+## Safety Result
+
+```text
+Secrets printed: No
+Token values printed: No
+.env read: No
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Auto-commit generated content: Removed
+Workflow permissions: contents: read
+```
+
+## Gate Status
+
+```text
+OpenAI Codex Action dependency removed from TianJi Love workflows: Go
+MiniMax artifact workflow templates: Go
+MiniMax runtime on GitHub: Pending repo secrets
+Content Calendar MiniMax runtime: Pending
+Daily Growth MiniMax runtime: Pending
+KPI Analysis MiniMax runtime: Pending
+Social auto-posting: No-Go
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Secrets printed: No
+GitHub token rotation: Owner action required
+```
+
+## Risks And Follow-up
+
+- Repository owner must configure `MINIMAX_API_KEY`, `MINIMAX_BASE_URL`, and `MINIMAX_MODEL` in GitHub Actions secrets before runtime can pass.
+- After merge and secret configuration, manually dispatch the three workflows on `main` and inspect artifact outputs.
+- Revoke/rotate the previously pasted GitHub token.
+- Keep generated marketing output in artifact review mode until a separate publisher bridge is approved.

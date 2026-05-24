@@ -188,3 +188,84 @@ GitHub token rotation: Owner action required
 - Replace or rotate the `OPENAI_API_KEY` repository secret without printing it.
 - Re-run the three TianJi Love workflows on `main` after the secret is replaced.
 - Treat the Node.js 20 warning as non-blocking unless it becomes the failing step.
+
+## 2026-05-24 - TianJi Love workflows switched to MiniMax artifact generation
+
+### What changed
+
+Replaced the three TianJi Love growth/KPI workflows with project-local MiniMax Chat Completions scripts. The workflows no longer call `openai/codex-action@v1`, no longer read `OPENAI_API_KEY`, and now upload generated Markdown drafts as GitHub Actions artifacts instead of auto-committing generated content.
+
+MiniMax API contract checked against the official compatible OpenAI text chat docs:
+
+```text
+Endpoint: POST /v1/chat/completions
+Default base URL: https://api.minimax.io/v1
+China base URL option: https://api.minimaxi.com/v1
+Default model: MiniMax-M2.7
+Token limit field: max_completion_tokens
+```
+
+### Files changed
+
+```text
+.github/workflows/tianji-love-content-calendar.yml
+.github/workflows/tianji-love-daily-growth.yml
+.github/workflows/tianji-love-kpi-analysis.yml
+package.json
+scripts/ai/minimax-chat.mjs
+scripts/tianji-love/generate-content-calendar.mjs
+scripts/tianji-love/generate-daily-growth.mjs
+scripts/tianji-love/generate-kpi-analysis.mjs
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+### Validation
+
+```text
+node --check scripts/ai/minimax-chat.mjs: Pass
+node --check scripts/tianji-love/generate-content-calendar.mjs: Pass
+node --check scripts/tianji-love/generate-daily-growth.mjs: Pass
+node --check scripts/tianji-love/generate-kpi-analysis.mjs: Pass
+package.json parse: Pass
+npm ci: Timed out locally after 10 minutes
+npm ci --ignore-scripts --no-audit --no-fund: Pass
+npm run typecheck: Pass
+npm run lint: Pass
+git diff --check: Pass
+TianJi Love workflow YAML parse: Pass
+TianJi Love workflows openai/codex-action or OPENAI_API_KEY matches: 0
+Targeted secret-shape scan: Pass
+```
+
+### Runtime verification
+
+```text
+npm run tianji:content-calendar: Blocked locally - MINIMAX_API_KEY is missing
+npm run tianji:daily-growth: Blocked locally - MINIMAX_API_KEY is missing
+npm run tianji:kpi-analysis: Blocked locally - MINIMAX_API_KEY is missing
+```
+
+The missing-key behavior is fail-closed and did not print any secret value.
+
+### Gate status
+
+```text
+OpenAI Codex Action dependency removed from TianJi Love workflows: Go
+MiniMax artifact workflow templates: Go
+Workflow permissions: contents: read
+Auto-commit generated content: Removed
+Runtime with MiniMax secret: Pending owner configuration
+Social auto-posting: No-Go
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Secrets printed: No
+GitHub token rotation: Owner action required
+```
+
+### Follow-up
+
+- Configure `MINIMAX_API_KEY`, `MINIMAX_BASE_URL`, and `MINIMAX_MODEL` as GitHub Actions repository secrets.
+- Re-run the three TianJi Love workflows on `main` after merge and secret configuration.
+- Revoke/rotate the previously pasted GitHub token.

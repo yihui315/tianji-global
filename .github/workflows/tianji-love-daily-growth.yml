@@ -4,16 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       day:
-        description: "Optional day number, for example 002. Leave blank to let Codex choose the next day."
+        description: "Optional day number, for example 002."
         required: false
         type: string
   schedule:
     - cron: "17 1 * * *"
 
-# Use write only because this workflow commits generated docs/assets/data.
-# Do not grant actions/write, deployments/write, secrets access, or packages/write.
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: tianji-love-daily-growth-${{ github.ref }}
@@ -22,6 +20,12 @@ concurrency:
 jobs:
   daily-growth:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
+      MINIMAX_BASE_URL: ${{ secrets.MINIMAX_BASE_URL }}
+      MINIMAX_MODEL: ${{ secrets.MINIMAX_MODEL }}
+      TIANJI_LOVE_DAY: ${{ inputs.day }}
 
     steps:
       - name: Checkout
@@ -36,85 +40,11 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Prepare output directories
-        run: |
-          mkdir -p assets/marketing/daily data .ai
+      - name: Generate TianJi Love daily growth draft
+        run: npm run tianji:daily-growth
 
-      - name: Generate daily publishing pack
-        uses: openai/codex-action@v1
+      - name: Upload generated artifact
+        uses: actions/upload-artifact@v4
         with:
-          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          prompt: |
-            Use .agents/skills/tianji-github-daily-growth-skill/SKILL.md.
-
-            Goal: generate a TianJi Love daily publishing pack.
-            Optional requested day: ${{ inputs.day }}
-
-            Allowed outputs:
-            - assets/marketing/daily/day-XXX-publishing-pack.md
-            - assets/marketing/daily/day-XXX-review-checklist.md
-            - data/love-test-day-XXX-kpi-entry.csv
-            - .ai/CHANGELOG_AI.md
-            - .ai/REVIEW_PACKET.md
-
-            Hard stops:
-            - Do not auto-post to any platform.
-            - Do not read, print, copy, diff, or infer .env files or secrets.
-            - Do not run Stripe, checkout, paid smoke, webhook replay, Supabase mutation, provider live calls, server mutation, or production deploy.
-            - Do not modify app source.
-            - Do not invent KPI values, testimonials, customer numbers, or guaranteed relationship outcomes.
-
-            After writing files, record this gate:
-            GitHub automation skill stack: Go
-            Daily growth workflow template: Go
-            Publisher bridge: Prepared but no credentials
-            Social auto-posting: No-Go - requires explicit approval and platform-safe adapter
-            Stripe checkout execution: Not run
-            Paid smoke: No-Go - awaiting explicit approval
-            Production deploy: No-Go
-
-      - name: Validate allowed path scope
-        run: |
-          changed="$(git diff --name-only)"
-          if [ -z "$changed" ]; then
-            echo "No generated changes."
-            exit 0
-          fi
-          echo "$changed"
-          blocked="$(printf '%s\n' "$changed" | grep -Ev '^(assets/marketing/|data/|\.ai/CHANGELOG_AI\.md$|\.ai/REVIEW_PACKET\.md$)' || true)"
-          if [ -n "$blocked" ]; then
-            echo "Blocked unexpected paths:"
-            echo "$blocked"
-            exit 1
-          fi
-
-      - name: Run validation
-        run: |
-          npm run typecheck
-          npm run lint
-          git diff --check
-
-      - name: Targeted secret-shape scan
-        run: |
-          paths=""
-          for p in .agents/skills .github/workflows .ai assets/marketing data; do
-            if [ -e "$p" ]; then paths="$paths $p"; fi
-          done
-          if [ -z "$paths" ]; then exit 0; fi
-          if grep -RInE 'sk_(live|test)_[A-Za-z0-9]{8,}|rk_live_[A-Za-z0-9]{8,}|whsec_[A-Za-z0-9]{8,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA|OPENSSH|PRIVATE) KEY-----' $paths; then
-            echo "Secret-shaped value found in generated scope."
-            exit 1
-          fi
-
-      - name: Commit generated docs/assets/data
-        run: |
-          if git diff --quiet; then
-            echo "Nothing to commit."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- assets/marketing data .ai/CHANGELOG_AI.md .ai/REVIEW_PACKET.md
-          git diff --cached --check
-          git commit -m "chore(marketing): update TianJi Love daily growth pack"
-          git push
+          name: tianji-love-daily-growth
+          path: .ai/generated/tianji-love-daily-growth.md
