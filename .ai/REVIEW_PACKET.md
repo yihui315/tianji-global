@@ -608,3 +608,65 @@ Paid smoke: No-Go
 Social auto-posting: No-Go
 Secrets printed: No
 ```
+
+---
+
+# Review Packet - TianJi Love MiniMax 429 Runtime Follow-up
+
+## Background
+
+The MiniMax-backed TianJi Love workflows reached the Token Plan API but failed with `HTTP 429 rate_limit_error`. PR #55 aligned the default Base URL to `https://api.minimaxi.com/v1`; this follow-up reduces usage pressure and makes 429 failures clearer without printing secrets.
+
+## What Changed
+
+```text
+Default temperature: 0.4
+Default max_completion_tokens: 700
+429 retry behavior: 20s wait, 60s wait, then clear failure
+Content Calendar schedule: weekly
+Daily Growth schedule: manual-only
+KPI Analysis schedule: weekly
+```
+
+## Validation
+
+```text
+node --check scripts/ai/minimax-chat.mjs: Pass
+git diff --check: Pass
+TianJi Love workflow YAML parse: Pass
+TianJi Love workflows Codex/OpenAI dependency scan: 0 matches
+Targeted secret-shape scan: Pass
+Live MiniMax API call: Not run
+```
+
+## Runtime Verification
+
+```text
+TianJi Love KPI Analysis: Pending single-workflow smoke on main after merge
+TianJi Love Daily Growth: Pending, run only after KPI passes and a cooldown
+TianJi Love Content Calendar: Pending, run only after Daily Growth passes and a cooldown
+MiniMax runtime: No-Go until 429 is cleared by quota availability
+MiniMax 429 observed: Yes in prior main runs
+Artifacts uploaded: No in prior main runs
+```
+
+## Gate Status
+
+```text
+TianJi workflow MiniMax migration: Go
+MiniMax Base URL alignment: Go
+OpenAI API runtime: Bypassed
+Codex Action dependency in TianJi workflows: Removed
+MiniMax Token Plan runtime: No-Go - prior runs hit 429
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+## Follow-up
+
+- After merge, run only `TianJi Love KPI Analysis` first on `main`.
+- If KPI still returns 429, wait for quota reset, lower frequency further, or switch to another free/low-cost provider.
+- If KPI passes, wait 5-10 minutes before trying Daily Growth, then Content Calendar.

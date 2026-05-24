@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
 import process from "node:process";
+import { setTimeout as sleep } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
 
 const DEFAULT_BASE_URL = "https://api.minimaxi.com/v1";
 const DEFAULT_MODEL = "MiniMax-M2.7";
+const DEFAULT_TEMPERATURE = 0.4;
+const DEFAULT_MAX_TOKENS = 700;
+const RATE_LIMIT_RETRY_DELAYS_MS = [20_000, 60_000];
 
 function redactSecrets(value, apiKey = "") {
   let text = String(value ?? "");
@@ -37,11 +41,11 @@ export async function runMiniMaxChat(prompt, options = {}) {
     DEFAULT_MODEL;
   const temperature = asPositiveNumber(
     options.temperature ?? process.env.MINIMAX_TEMPERATURE,
-    0.7,
+    DEFAULT_TEMPERATURE,
   );
   const maxTokens = asPositiveNumber(
     options.maxTokens ?? process.env.MINIMAX_MAX_TOKENS,
-    1800,
+    DEFAULT_MAX_TOKENS,
   );
 
   if (!apiKey) {
@@ -57,34 +61,55 @@ export async function runMiniMaxChat(prompt, options = {}) {
   }
 
   const endpoint = `${baseUrl.replace(/\/$/, "")}/chat/completions`;
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model,
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are TianJi Love growth automation assistant. Return concise, practical, safe, non-sensitive output. Do not claim to have posted content. Produce draft-only artifacts.",
-        },
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      temperature,
-      max_completion_tokens: maxTokens,
-    }),
-  });
+  let response;
+  let bodyText = "";
 
-  const bodyText = await response.text();
+  for (let attempt = 0; attempt <= RATE_LIMIT_RETRY_DELAYS_MS.length; attempt += 1) {
+    response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are TianJi Love growth automation assistant. Return concise, practical, safe, non-sensitive output. Do not claim to have posted content. Produce draft-only artifacts.",
+          },
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+        temperature,
+        max_completion_tokens: maxTokens,
+      }),
+    });
+
+    bodyText = await response.text();
+
+    if (response.status !== 429 || attempt >= RATE_LIMIT_RETRY_DELAYS_MS.length) {
+      break;
+    }
+
+    const delayMs = RATE_LIMIT_RETRY_DELAYS_MS[attempt];
+    console.error(
+      `MiniMax API rate limited: HTTP 429. Retrying in ${delayMs / 1000}s ` +
+        `(attempt ${attempt + 2}/${RATE_LIMIT_RETRY_DELAYS_MS.length + 1}).`,
+    );
+    await sleep(delayMs);
+  }
 
   if (!response.ok) {
     console.error(`MiniMax API failed: HTTP ${response.status}`);
+    if (response.status === 429) {
+      console.error(
+        "MiniMax API rate limited: HTTP 429. Free Token Plan quota/rate limit is currently unavailable.",
+      );
+    }
     console.error(redactSecrets(bodyText, apiKey).slice(0, 1200));
     process.exitCode = 1;
     throw new Error(`MiniMax API request failed with HTTP ${response.status}.`);

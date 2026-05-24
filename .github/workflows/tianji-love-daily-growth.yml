@@ -7,8 +7,6 @@ on:
         description: "Optional day number, for example 002."
         required: false
         type: string
-  schedule:
-    - cron: "17 1 * * *"
 
 permissions:
   contents: read

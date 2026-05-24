@@ -3,7 +3,7 @@ name: TianJi Love Content Calendar
 on:
   workflow_dispatch:
   schedule:
-    - cron: "37 1 * * *"
+    - cron: "37 1 * * 1"
 
 permissions:
   contents: read
