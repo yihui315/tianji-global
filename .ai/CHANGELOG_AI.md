@@ -350,3 +350,45 @@ Paid smoke: No-Go
 Social auto-posting: No-Go
 Secrets printed: No
 ```
+
+## 2026-05-24 - MiniMax API smoke workflow
+
+### What changed
+
+Added a manual-only GitHub Actions workflow to verify the minimal MiniMax API path from GitHub Actions without running TianJi Love growth jobs.
+
+```text
+Workflow: MiniMax API Smoke
+Trigger: workflow_dispatch only
+Endpoint: POST /chat/completions under MINIMAX_BASE_URL
+Prompt: Reply with exactly: OK
+temperature: 0
+max_completion_tokens: 20
+```
+
+### Validation
+
+```text
+node --check scripts/ai/minimax-chat.mjs: Pass
+YAML parse: Pass
+git diff --check: Pass
+Targeted secret-shape scan: Pass
+Live MiniMax API call: Not run locally
+```
+
+### Gate status
+
+```text
+MiniMax API smoke workflow: Prepared
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+### Follow-up
+
+- Merge this workflow to `main`.
+- Manually run `MiniMax API Smoke` on `main`.
+- If smoke passes, run only `TianJi Love KPI Analysis` next.
