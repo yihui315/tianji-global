@@ -15,6 +15,7 @@ import {
   Row,
   Column,
 } from '@react-email/components';
+import type { DailyFortuneReport } from '@/types/daily-fortune';
 
 interface DigestSection {
   serviceType: string;
@@ -31,6 +32,7 @@ interface DailyDigestEmailProps {
   digestUrl: string;
   unsubscribeUrl: string;
   sections: DigestSection[];
+  dailyFortuneReport?: DailyFortuneReport;
   language?: 'zh' | 'en';
 }
 
@@ -72,6 +74,7 @@ export function DailyDigestEmail({
   digestUrl,
   unsubscribeUrl,
   sections,
+  dailyFortuneReport,
   language = 'zh',
 }: DailyDigestEmailProps) {
   const isZh = language === 'zh';
@@ -87,6 +90,10 @@ export function DailyDigestEmail({
   const footerText = isZh
     ? '您收到此邮件是因为已订阅天机全球每日运势推送'
     : 'You received this email because you subscribed to TianJi Global daily fortune updates.';
+  const effectiveDisclaimer = dailyFortuneReport?.disclaimer || disclaimer;
+  const scoreLabel: Record<keyof DailyFortuneReport['scores'], string> = isZh
+    ? { overall: '总分', love: '情感', career: '事业', wealth: '财富', health: '状态' }
+    : { overall: 'Overall', love: 'Love', career: 'Career', wealth: 'Wealth', health: 'Energy' };
 
   return (
     <Html>
@@ -116,6 +123,52 @@ export function DailyDigestEmail({
               {greeting}
             </Text>
           </Section>
+
+          {dailyFortuneReport && (
+            <Section style={{ backgroundColor: '#1e293b', borderRadius: 12, padding: '22px 24px', marginBottom: 16 }}>
+              <Text style={{ color: '#f8fafc', fontSize: 18, fontWeight: 700, margin: '0 0 8px 0' }}>
+                {dailyFortuneReport.headline}
+              </Text>
+              <Text style={{ color: '#cbd5e1', fontSize: 14, lineHeight: 1.65, margin: '0 0 16px 0' }}>
+                {dailyFortuneReport.summary}
+              </Text>
+
+              <Row>
+                {(['overall', 'love', 'career', 'wealth', 'health'] as Array<keyof DailyFortuneReport['scores']>).map((key) => (
+                  <Column key={key} style={{ paddingRight: 8 }}>
+                    <Text style={{ color: '#94a3b8', fontSize: 11, margin: 0 }}>
+                      {scoreLabel[key]}
+                    </Text>
+                    <Text style={{ color: '#f8fafc', fontSize: 20, fontWeight: 700, margin: '3px 0 0 0' }}>
+                      {dailyFortuneReport.scores[key]}
+                    </Text>
+                  </Column>
+                ))}
+              </Row>
+
+              {dailyFortuneReport.remedies.slice(0, 2).map((remedy) => (
+                <Section key={`${remedy.dimension}-${remedy.title}`} style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid #334155' }}>
+                  <Text style={{ color: '#fbbf24', fontSize: 13, fontWeight: 700, margin: '0 0 5px 0' }}>
+                    {remedy.title}
+                  </Text>
+                  <Text style={{ color: '#cbd5e1', fontSize: 13, lineHeight: 1.6, margin: 0 }}>
+                    {remedy.body}
+                  </Text>
+                  <Text style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.5, margin: '6px 0 0 0' }}>
+                    {remedy.reason}
+                  </Text>
+                </Section>
+              ))}
+
+              {dailyFortuneReport.locked && (
+                <Section style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid #334155' }}>
+                  <Text style={{ color: '#fbbf24', fontSize: 13, fontWeight: 700, margin: 0 }}>
+                    {isZh ? '升级后可查看更多化解建议与完整趋势。' : 'Upgrade to view more remedies and the full trend.'}
+                  </Text>
+                </Section>
+              )}
+            </Section>
+          )}
 
           {/* Digest Sections */}
           {sections.map((section) => (
@@ -210,7 +263,7 @@ export function DailyDigestEmail({
               ⚠️ {disclaimerLabel}: ENTERTAINMENT REFERENCE ONLY
             </Text>
             <Text style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.6, margin: 0 }}>
-              {disclaimer}
+              {effectiveDisclaimer}
             </Text>
           </Section>
 
