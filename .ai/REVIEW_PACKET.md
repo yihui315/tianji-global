@@ -98,3 +98,126 @@ Social auto-posting: No-Go
 ## Suggested Next Codex Instruction
 
 Merge `fix/tianji-github-actions-codex-input-20260524`, then manually re-run `TianJi Love Content Calendar` on branch `main`.
+
+---
+
+# Review Packet - GitHub Actions Codex Input Fix Merge/Runtime Verification
+
+## Background
+
+PR #50 merged the Codex Action input fix into `main`. This packet records the post-merge validation and the runtime verification boundary.
+
+## Merge Result
+
+```text
+Branch: fix/tianji-github-actions-codex-input-20260524
+PR: https://github.com/yihui315/tianji-global/pull/50
+PR check CI/CD: Pass
+Merge method: squash
+Merge commit: 43a1ceac882b6bbb623d5cd6953593e4160fe65b
+Remote fix branch: Deleted after merge
+```
+
+## Files Verified
+
+```text
+.github/workflows/codex-self-evolution.yml
+.github/workflows/codex-self-upgrade.yml
+.github/workflows/relationship-ab-evolution.yml
+.github/workflows/tianji-love-content-calendar.yml
+.github/workflows/tianji-love-daily-growth.yml
+.github/workflows/tianji-love-kpi-analysis.yml
+```
+
+## Commands Run
+
+```text
+git -c safe.directory=* fetch origin main
+git -c safe.directory=* fetch origin fix/tianji-github-actions-codex-input-20260524
+git -c safe.directory=* status --short --branch
+git -c safe.directory=* log --oneline -5
+rg -n "openai_api_key" .github/workflows
+rg -n "openai-api-key" .github/workflows
+git -c safe.directory=* diff --check
+python workflow YAML parse for .github/workflows/*.yml
+PowerShell targeted secret-shape scan over changed workflow and AI evidence files
+GitHub connector create PR #50
+GitHub connector fetch PR run status
+GitHub connector squash merge PR #50
+git -c safe.directory=* push origin --delete fix/tianji-github-actions-codex-input-20260524
+git -c safe.directory=* switch main
+git -c safe.directory=* pull --ff-only origin main
+curl.exe -L https://api.github.com/repos/yihui315/tianji-global/actions/workflows
+curl.exe -L workflow run lists for TianJi Love Content Calendar, Daily Growth, and KPI Analysis
+gh auth status
+gh workflow list
+gh secret list
+unauthenticated REST workflow_dispatch probe
+GitHub connector fetch failed job steps/logs for pre-fix Content Calendar and Daily Growth runs
+```
+
+## Validation Result
+
+```text
+openai_api_key in .github/workflows: 0 matches
+openai-api-key in .github/workflows: 6 matches
+git diff --check: Pass
+Workflow YAML parse: Pass, 11 workflow files parsed
+Secret-shape scan: Pass
+Secrets printed: No
+main contains merge commit: 43a1ceac882b6bbb623d5cd6953593e4160fe65b
+```
+
+## Runtime Verification
+
+```text
+OPENAI_API_KEY repo secret: Unknown by direct listing because gh CLI is not authenticated; prior failed logs showed the input value masked as ***, so the secret is likely present
+
+TianJi Love Content Calendar: Blocked for a new main rerun
+TianJi Love Daily Growth: Blocked for a new main rerun
+TianJi Love KPI Analysis: Blocked for a new main rerun
+```
+
+The runtime block is local GitHub authorization, not the workflow input fix:
+
+```text
+gh auth status: Not logged in
+GH_TOKEN: Missing
+GITHUB_TOKEN: Missing
+gh workflow list: blocked by gh auth
+gh secret list: blocked by gh auth
+workflow_dispatch REST probe: 401 Requires authentication
+```
+
+## Prior Failed Run Diagnosis
+
+The previous `main` workflow_dispatch runs were on commit `91d1049590b79792d6d5ffd31c128f59c7fa0348`, before PR #50 merged.
+
+```text
+TianJi Love Content Calendar run 26356551158: failed in Codex Action step due openai_api_key
+TianJi Love Daily Growth run 26356559331: failed in Codex Action step due openai_api_key
+TianJi Love KPI Analysis: no main run found
+Node.js 20 warning: Warning only in inspected pre-fix logs
+```
+
+## Gate Status
+
+```text
+Codex Action input fix: Go
+PR merge: Go
+Content Calendar rerun: Blocked - workflow_dispatch requires authenticated GitHub CLI/API
+Daily Growth rerun: Blocked - workflow_dispatch requires authenticated GitHub CLI/API
+KPI Analysis rerun: Blocked - workflow_dispatch requires authenticated GitHub CLI/API
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+## Risks And Follow-up
+
+- Revoke/rotate the previously pasted GitHub token immediately.
+- Authenticate `gh` with `repo,workflow` scope, then run the three workflow_dispatch jobs on `main`.
+- If the next authenticated run fails because `OPENAI_API_KEY` is missing or unauthorized, configure or rotate the repo secret without printing it.
+- Treat Node.js 20 as a warning unless it becomes the actual failing step.
