@@ -1,0 +1,42 @@
+name: TianJi Love Conversion Suggestions
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tianji-love-conversion-suggestions-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  conversion-suggestions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
+      MINIMAX_BASE_URL: ${{ secrets.MINIMAX_BASE_URL }}
+      MINIMAX_MODEL: ${{ secrets.MINIMAX_MODEL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Generate TianJi Love conversion suggestions draft
+        run: npm run tianji:conversion-suggestions
+
+      - name: Upload generated artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tianji-love-conversion-suggestions
+          path: .ai/generated/tianji-love-conversion-suggestions.md

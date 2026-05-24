@@ -21,7 +21,8 @@
     "upgrade:plan": "node scripts/generate-upgrade-plan.ts",
     "tianji:content-calendar": "node scripts/tianji-love/generate-content-calendar.mjs",
     "tianji:daily-growth": "node scripts/tianji-love/generate-daily-growth.mjs",
-    "tianji:kpi-analysis": "node scripts/tianji-love/generate-kpi-analysis.mjs"
+    "tianji:kpi-analysis": "node scripts/tianji-love/generate-kpi-analysis.mjs",
+    "tianji:conversion-suggestions": "node scripts/tianji-love/generate-conversion-suggestions.mjs"
   },
   "keywords": [
     "fortune",

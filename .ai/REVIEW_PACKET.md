@@ -1,3 +1,208 @@
+# Review Packet - TianJi Love Publishing Pack and Conversion Backlog
+
+## Background
+
+The MiniMax-backed KPI Analysis, Daily Growth, and Content Calendar workflows are verified Go with uploaded artifacts. The next business step is turning the pipeline into manual publishing and conversion work, while keeping social auto-posting, production deploy, Stripe checkout, and paid smoke disabled.
+
+## Task Goal
+
+Create a draft-only manual publishing pack and implementation-ready conversion backlog. Do not auto-post, deploy, run Stripe, run paid smoke, invent fake testimonials, invent fake metrics, or claim guaranteed relationship outcomes.
+
+## Runtime State
+
+```text
+KPI Analysis workflow: Go
+Daily Growth workflow: Go
+Content Calendar workflow: Go
+Conversion Suggestions workflow: Pending runtime after merge
+Artifacts downloaded: No - GitHub artifact body download requires authenticated access
+```
+
+## Artifact Review
+
+```text
+KPI Analysis quality: Pending artifact body review
+Daily Growth quality: Pending artifact body review
+Content Calendar quality: Pending artifact body review
+Conversion Suggestions quality: Pending runtime and artifact body review
+```
+
+Artifact metadata was verified, but reviewed artifact bodies were not copied because local `gh` is not authenticated and the artifact zip probe failed before content download. A status note was written to `.ai/publishing/source-artifacts/ARTIFACT_DOWNLOAD_STATUS.md`.
+
+## Publishing Pack
+
+```text
+Xiaohongshu posts: Created - 7 drafts
+Douyin scripts: Created - 5 drafts
+WeChat Video scripts: Created - 5 drafts
+Publish checklist: Created
+Conversion backlog: Created
+```
+
+## Changed Files
+
+```text
+.ai/publishing/source-artifacts/ARTIFACT_DOWNLOAD_STATUS.md
+.ai/publishing/xiaohongshu-posts.md
+.ai/publishing/douyin-scripts.md
+.ai/publishing/wechat-video-scripts.md
+.ai/publishing/publish-checklist.md
+.ai/publishing/conversion-backlog.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Content Decisions
+
+- First publishing route priority is `/relationship/new`, with `/ask` as the low-price single-question intent route.
+- Draft themes cover: 他现在到底在想什么, 你们还有没有缘分, 断联后他会不会回来, 暧昧对象是否认真, 复合概率测试, 今日爱情能量, 天机缘分测试.
+- All drafts avoid fake testimonials, fake metrics, guaranteed reconciliation, guaranteed love outcomes, and supernatural certainty.
+- Conversion backlog stays report-only and does not edit app code.
+
+## Validation Plan
+
+```text
+git diff --check
+targeted secret-shape scan
+```
+
+## Gate Status
+
+```text
+MiniMax draft pipeline: Go
+Manual publishing pack: Go - draft only
+Conversion backlog: Go - draft only
+Social auto-posting: No-Go
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Secrets printed: No
+```
+
+## Risks And Follow-up
+
+- Publishing drafts were produced from the approved TianJi Love content strategy, not from downloaded artifact bodies. Replace or refine after artifact download.
+- Conversion Suggestions workflow still needs merge to `main`, manual dispatch, and artifact review.
+- First implementation PR should be a P0 CTA/task only after at least one manual publishing signal is collected.
+
+---
+
+# Review Packet - TianJi Love MiniMax Growth Pipeline Phase 2
+
+## Background
+
+MiniMax API smoke and KPI Analysis had already moved to Go. This task verifies the remaining MiniMax-backed TianJi Love draft workflows, tightens generated content toward publishable/revenue-focused output, and adds a first conversion suggestion artifact without enabling code automation, deployment, Stripe, or social posting.
+
+## Task Goal
+
+Complete runtime verification for Daily Growth and Content Calendar, review artifact availability, improve prompts for content quality, and add a draft-only `TianJi Love Conversion Suggestions` artifact workflow.
+
+## Runtime Verification
+
+```text
+MiniMax API Smoke: Go
+TianJi Love KPI Analysis: Go - run 26361421145
+TianJi Love Daily Growth: Go - run 26361417380
+TianJi Love Content Calendar: Go - run 26361415667
+Artifacts uploaded: Yes
+```
+
+## Artifact Review
+
+```text
+KPI Analysis artifact: Go - tianji-love-kpi-analysis, id 7185793229, not expired
+Daily Growth artifact: Go - tianji-love-daily-growth, id 7185824316, not expired
+Content Calendar artifact: Go - tianji-love-content-calendar, id 7185823452, not expired
+
+KPI Analysis body quality: Blocked - artifact zip download requires authenticated GitHub access
+Daily Growth body quality: Blocked - artifact zip download requires authenticated GitHub access
+Content Calendar body quality: Blocked - artifact zip download requires authenticated GitHub access
+```
+
+## Changed Files
+
+```text
+.github/workflows/tianji-love-conversion-suggestions.yml
+package.json
+scripts/tianji-love/generate-content-calendar.mjs
+scripts/tianji-love/generate-conversion-suggestions.mjs
+scripts/tianji-love/generate-daily-growth.mjs
+scripts/tianji-love/generate-kpi-analysis.mjs
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Diff Summary
+
+- Strengthened Daily Growth prompt to require Xiaohongshu, Douyin, and WeChat Channels drafts, concrete channel actions, TianJi Love CTAs, product entry mapping, and no fake/guaranteed claims.
+- Strengthened Content Calendar prompt to require 7-day channel-specific publishable outlines, product entries, conversion goals, and safer Chinese growth themes.
+- Strengthened KPI Analysis prompt to identify funnel money leaks and route-level conversion recommendations.
+- Added `generate-conversion-suggestions.mjs` to create `.ai/generated/tianji-love-conversion-suggestions.md` from `.ai/generated/tianji-love-kpi-analysis.md` when present, with a fallback to known growth direction when absent.
+- Added `tianji:conversion-suggestions` npm script and an artifact-only GitHub workflow.
+
+## Commands Run
+
+```text
+Read workspace AGENTS.md, PROJECT_CONTEXT.md, DECISIONS.md, TASKS.md, MODEL_ROUTING.md
+Read target AGENTS.md, package.json, growth scripts, and workflow files
+git status --short --branch
+curl.exe -L https://api.github.com/repos/yihui315/tianji-global/actions/workflows
+curl.exe -L workflow run lists for KPI Analysis, Daily Growth, and Content Calendar
+curl.exe -L artifact metadata for the three successful runs
+gh workflow list --repo yihui315/tianji-global --limit 50
+gh auth login -h github.com --web --scopes repo,workflow
+curl.exe -L artifact zip download probe
+node --check scripts/ai/minimax-chat.mjs
+node --check scripts/tianji-love/generate-content-calendar.mjs
+node --check scripts/tianji-love/generate-daily-growth.mjs
+node --check scripts/tianji-love/generate-kpi-analysis.mjs
+node --check scripts/tianji-love/generate-conversion-suggestions.mjs
+node package.json parse
+python YAML parse for .github/workflows/tianji-love-*.yml
+git diff --check
+rg secret-shape scans
+```
+
+## Validation Result
+
+```text
+Script syntax checks: Pass
+package.json parse: Pass
+YAML parse: Pass, 5 TianJi Love workflow files
+git diff --check: Pass
+Targeted secret-shape scan: Pass - only intentional redaction regex matched
+Full repo secret-shape scan: Informational false positives in README placeholders and ordinary hyphenated English words
+```
+
+## Gate Status
+
+```text
+MiniMax API runtime: Go
+TianJi Love draft pipeline: Go
+Conversion suggestions artifact workflow: Prepared
+Auto website code changes from KPI: Not enabled
+OpenAI API runtime: Bypassed
+Codex Action dependency in TianJi workflows: Removed
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+## Risks And Follow-up
+
+- Local `gh` remains unauthenticated, so artifact body download and exact A/B/C/D content scoring are still pending authenticated GitHub access.
+- The conversion suggestions workflow reads `.ai/generated/tianji-love-kpi-analysis.md` when present; on a clean GitHub checkout it falls back to the known growth direction because prior workflow artifacts are not automatically present.
+- After merge, run `TianJi Love Conversion Suggestions` manually and review the artifact before turning recommendations into code PRs.
+- Manual publishing remains required; social auto-posting stays No-Go.
+
+## Suggested Next Codex Instruction
+
+After authenticating GitHub artifact access, download the three generated artifacts, score each A-D, and if at least B quality, create the first manual publishing pack plus a separate implementation task for the top 3 conversion suggestions.
+
+---
+
 # Review Packet - TianJi Love GitHub Actions Codex Input Fix
 
 ## Background

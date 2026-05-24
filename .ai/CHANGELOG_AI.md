@@ -1,5 +1,141 @@
 # AI Changelog
 
+## 2026-05-25 - TianJi Love publishing pack and conversion backlog
+
+### What changed
+
+Turned the verified MiniMax growth pipeline state into draft-only manual publishing assets and an implementation-ready conversion backlog. The publishing pack was created from the approved TianJi Love growth direction and safety rules because artifact body download is still blocked by unauthenticated GitHub artifact access in this local shell.
+
+### Runtime state
+
+```text
+KPI Analysis workflow: Go
+Daily Growth workflow: Go
+Content Calendar workflow: Go
+Conversion Suggestions workflow: Pending runtime after merge
+Artifacts downloaded: No - artifact metadata verified, body download blocked by GitHub auth
+```
+
+### Artifact quality
+
+```text
+KPI Analysis quality: Pending artifact body review
+Daily Growth quality: Pending artifact body review
+Content Calendar quality: Pending artifact body review
+Conversion Suggestions quality: Pending runtime and artifact body review
+```
+
+### Publishing pack
+
+```text
+Xiaohongshu posts: Created
+Douyin scripts: Created
+WeChat Video scripts: Created
+Publish checklist: Created
+Conversion backlog: Created
+Source artifact status note: Created
+```
+
+### Gate status
+
+```text
+MiniMax draft pipeline: Go
+Manual publishing pack: Go - draft only
+Conversion backlog: Go - draft only
+Social auto-posting: No-Go
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Secrets printed: No
+```
+
+### Follow-up
+
+- Merge `28e7aff feat(marketing): add TianJi Love conversion suggestions artifact` to `main`.
+- Run `TianJi Love Conversion Suggestions` on `main`.
+- Download four artifacts with authenticated GitHub access and replace the source-artifact status note with reviewed copies.
+- Score each artifact A/B/C/D before posting.
+- Manually publish one Xiaohongshu draft first, track clicks and paid intent, then choose one P0 CTA implementation task.
+
+## 2026-05-25 - TianJi Love MiniMax growth pipeline verification and conversion suggestions
+
+### What changed
+
+Verified the latest MiniMax-backed TianJi Love growth workflow runs on `main` through public GitHub Actions metadata, confirmed all three expected artifacts were uploaded, tightened growth prompts toward publishable Chinese short-form content and revenue CTAs, and added a draft-only conversion suggestions generator/workflow.
+
+### Runtime verification
+
+```text
+MiniMax API Smoke: Go
+TianJi Love KPI Analysis: Go
+TianJi Love Daily Growth: Go
+TianJi Love Content Calendar: Go
+Artifacts uploaded: Yes
+
+KPI Analysis run: 26361421145
+Daily Growth run: 26361417380
+Content Calendar run: 26361415667
+
+KPI Analysis artifact: tianji-love-kpi-analysis / 7185793229
+Daily Growth artifact: tianji-love-daily-growth / 7185824316
+Content Calendar artifact: tianji-love-content-calendar / 7185823452
+```
+
+### Content quality review
+
+```text
+KPI Analysis artifact quality: Blocked - artifact zip download requires authenticated GitHub access in this local shell
+Daily Growth artifact quality: Blocked - artifact zip download requires authenticated GitHub access in this local shell
+Content Calendar artifact quality: Blocked - artifact zip download requires authenticated GitHub access in this local shell
+```
+
+Because artifact body download was blocked, prompts were proactively improved to require stronger CTA, clearer product entry, Chinese short-video hooks, less generic advice, no fake data, no guaranteed outcomes, and a direct monetization angle.
+
+### Conversion suggestion artifact
+
+```text
+Added script: scripts/tianji-love/generate-conversion-suggestions.mjs
+Added npm script: tianji:conversion-suggestions
+Added workflow: .github/workflows/tianji-love-conversion-suggestions.yml
+Output: .ai/generated/tianji-love-conversion-suggestions.md
+Auto code changes: Not run
+```
+
+### Validation
+
+```text
+node --check scripts/ai/minimax-chat.mjs: Pass
+node --check scripts/tianji-love/generate-content-calendar.mjs: Pass
+node --check scripts/tianji-love/generate-daily-growth.mjs: Pass
+node --check scripts/tianji-love/generate-kpi-analysis.mjs: Pass
+node --check scripts/tianji-love/generate-conversion-suggestions.mjs: Pass
+package.json parse: Pass
+YAML parse for tianji-love workflows: Pass
+git diff --check: Pass
+Targeted secret-shape scan: Pass - only intentional redaction regex matched
+```
+
+### Gate status
+
+```text
+MiniMax API runtime: Go
+TianJi Love draft pipeline: Go
+OpenAI API runtime: Bypassed
+Codex Action dependency in TianJi workflows: Removed
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+### Follow-up
+
+- Authenticate GitHub CLI or use GitHub UI to download artifact zips and complete A/B/C/D body quality scoring.
+- If all artifacts are A/B, begin manual content publishing.
+- If artifacts are C/D, continue prompt tuning before publishing.
+- After the conversion suggestions workflow is merged and run, turn the top 3 suggestions into implementation PRs.
+
 ## 2026-05-24 - TianJi Love GitHub automation skill stack
 
 - Task ID: 20260524-tianji-github-marketing-automation-skills
