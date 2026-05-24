@@ -13,6 +13,7 @@ import {
   ASK_QUESTION_UNLOCK_PRICE_DISPLAY,
   type AskQuestionLanguage,
 } from '@/lib/ask-question';
+import { buildAskEvidence } from '@/lib/divination/evidence';
 import { LOVE_TEST_PAID_INTENT_META, isLoveTestPaidIntent, type LoveTestPaidIntent } from '@/lib/love-test';
 
 export const dynamic = 'force-dynamic';
@@ -82,6 +83,12 @@ export async function POST(req: NextRequest) {
       id,
       answer: null,
       preview,
+      evidence: buildAskEvidence({
+        question,
+        answer: fullPreviewAnswer,
+        language,
+        paid: false,
+      }),
       locked: true,
       language,
       price: ASK_QUESTION_UNLOCK_PRICE_DISPLAY,

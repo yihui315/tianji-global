@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-25 - TianJi Love divination evidence layer
+
+- Task ID: 20260525-tianji-love-divination-evidence-layer
+- Files changed: `src/types/divination.ts`, `src/lib/divination/evidence.ts`, `src/components/divination/DivinationEvidenceCard.tsx`, `src/lib/analytics/divination-events.ts`, Ask/Draw/Relationship API and UI wiring, focused tests, `.ai/TIANJI_LOVE_SKILL_MATCH_MATRIX_20260525.md`, `.ai/TIANJI_LOVE_DIVINATION_EVIDENCE_LAYER_20260525.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Added a structured, privacy-safe divination evidence layer for Ask, Draw, and Relationship results. Free previews now expose limited evidence signals and paid/full reports expose deeper evidence, timing, verification points, action advice, accuracy feedback, and evidence-driven unlock tracking.
+- Commands run: skill discovery commands; `git status --short --branch`; `git fetch origin main`; branch creation; targeted TDD suite; `npm run typecheck`; `npm run lint`; `npm run test`; `npm run build`; `npm run audit:routes`; `npm run audit:copy`; `npm run audit:share`; `npm run audit:upgrade`; `npm run audit:ask-revenue-contract`; `npm run audit:draw-revenue-contract`; `git diff --check`; Chrome headless non-paid QA for `/ask?lang=en`, `/draw?lang=en`, `/relationship/new?lang=en`.
+- Results: Targeted suite passed 5 files / 41 tests. Full suite passed 74 files / 595 tests. Typecheck, lint, build, route/copy/share/upgrade audits passed. Ask/Draw revenue audits returned conditional-go. Chrome headless local route QA passed for the three non-paid routes. Build retained existing jose Edge Runtime warnings.
+- Risks: Paid smoke remains No-Go without explicit safe Stripe test-mode approval. Production deploy was not run. In-app Browser tool was not callable, so local browser QA used Chrome headless screenshots. Existing unrelated dirty files remain in the working tree and were not intentionally staged.
+- Next step: Run an approved Stripe test-mode paid smoke for Ask/Draw/Relationship full unlock, then analyze `divination_accuracy_feedback_submitted` and `paid_unlock_from_evidence_clicked` rates.
+
 ### 2026-05-24 - TianJi Love safe publisher bridge
 
 - Task ID: 20260524-love-test-safe-publisher-bridge

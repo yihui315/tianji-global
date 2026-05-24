@@ -12,7 +12,10 @@ const analyticsEventSchema = z.object({
   moduleType: z.string().max(40).optional(),
   trafficSource: trafficSourceSchema.optional(),
   strategy: trafficStrategySchema.optional(),
-  payload: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.null()])).optional().default({}),
+  payload: z.record(
+    z.string(),
+    z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(z.string())]),
+  ).optional().default({}),
 });
 
 export async function POST(request: NextRequest) {

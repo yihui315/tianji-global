@@ -1,6 +1,7 @@
 // POST /api/relationship/analyze
 import { NextRequest, NextResponse } from 'next/server';
 import { analyzeRelationship } from '@/lib/relationship-engine';
+import { buildRelationshipEvidence } from '@/lib/divination/evidence';
 import { createRelationshipProfile } from '@/lib/relationship-reading-store';
 import { getSupabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
 import { getTianjiModelRoute, rewriteDeterministicPrediction } from '@/lib/tianji-model-gateway';
@@ -28,7 +29,7 @@ function rewriteDimension(
   };
 }
 
-function applyRelationshipGatewaySafety(reading: RelationshipReading): RelationshipReading {
+function applyRelationshipGatewaySafety(reading: RelationshipReading, language: 'zh' | 'en'): RelationshipReading {
   const route = getTianjiModelRoute('relationship-report');
   const state = { applied: false };
   const dimensions: RelationshipReading['dimensions'] = {
@@ -39,7 +40,7 @@ function applyRelationshipGatewaySafety(reading: RelationshipReading): Relations
     longTerm: rewriteDimension(reading.dimensions.longTerm, state),
   };
 
-  return {
+  const safeReading: RelationshipReading = {
     ...reading,
     summary: {
       headline: rewriteText(reading.summary.headline, state),
@@ -64,6 +65,15 @@ function applyRelationshipGatewaySafety(reading: RelationshipReading): Relations
       safetyRewriteApplied: state.applied,
       fallback: false,
     },
+  };
+
+  return {
+    ...safeReading,
+    evidence: buildRelationshipEvidence({
+      reading: safeReading,
+      paid: safeReading.accessLevel === 'full' || safeReading.isPremium,
+      language,
+    }),
   };
 }
 
@@ -94,7 +104,7 @@ export async function POST(req: NextRequest) {
       personB.birthTime,
       lang,
     );
-    const gatewayReading = applyRelationshipGatewaySafety(reading);
+    const gatewayReading = applyRelationshipGatewaySafety(reading, lang);
     const gatewayDbData = {
       ...dbData,
       summary: gatewayReading.summary,

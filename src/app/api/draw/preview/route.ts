@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAiPreviewTimeoutMs, resolvePreviewWithin } from '@/lib/ai-preview-timeout';
+import { buildDrawEvidence } from '@/lib/divination/evidence';
 import {
   buildDrawPreview,
   drawThreeCards,
@@ -224,6 +225,12 @@ export async function POST(req: NextRequest) {
       id,
       reading,
       preview,
+      evidence: buildDrawEvidence({
+        question,
+        draw,
+        language,
+        paid: false,
+      }),
       locked: true,
       cards: toDrawGatewayCards(draw, language),
       previewDraw,

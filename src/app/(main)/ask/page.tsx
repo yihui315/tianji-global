@@ -17,21 +17,25 @@ import {
 } from 'lucide-react';
 
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import { getLoveTestPaidIntentMeta, isLoveTestAskIntent } from '@/lib/love-test';
+import type { DivinationEvidence } from '@/types/divination';
 
 interface PreviewState {
   id: string;
   preview: string;
   language: 'en' | 'zh';
   price: string;
+  evidence?: DivinationEvidence;
 }
 
 interface UnlockedState {
   question: string;
   fullAnswer: string;
   language: 'en' | 'zh';
+  evidence?: DivinationEvidence;
 }
 
 type AskCopy = {
@@ -383,6 +387,7 @@ function AskPageContent() {
           preview: json.preview,
           language: json.language,
           price: json.price,
+          evidence: json.evidence,
         };
         setPreview(state);
         writeStoredPreview(state);
@@ -589,6 +594,16 @@ function AskPageContent() {
       {preview && !unlocked && (
         <ReadingPanel eyebrow={copy.preview.eyebrow} title={copy.preview.title}>
           <p className="whitespace-pre-line text-base leading-8 text-[#fff4dd]/88">{preview.preview}</p>
+          {preview.evidence ? (
+            <DivinationEvidenceCard
+              className="mt-6"
+              evidence={preview.evidence}
+              route="ask"
+              paid={false}
+              onUnlockClick={onUnlock}
+              unlockLabel={copy.preview.unlockCta.replace('{price}', preview.price)}
+            />
+          ) : null}
           {paidIntentMeta ? (
             <div className="mt-6 grid gap-3 md:grid-cols-3">
               {['Emotional state', 'Likely communication pattern', 'One safe next step'].map((item) => (
@@ -642,6 +657,14 @@ function AskPageContent() {
       {unlocked && (
         <ReadingPanel eyebrow={copy.unlocked.eyebrow} title={copy.unlocked.title}>
           <h3 className="font-serif text-2xl text-[#ffe3b4]">&quot;{unlocked.question}&quot;</h3>
+          {unlocked.evidence ? (
+            <DivinationEvidenceCard
+              className="mt-6"
+              evidence={unlocked.evidence}
+              route="ask"
+              paid
+            />
+          ) : null}
           <div className="mt-5 whitespace-pre-line text-base leading-8 text-[#fff4dd]/88">{unlocked.fullAnswer}</div>
         </ReadingPanel>
       )}

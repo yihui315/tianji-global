@@ -4,8 +4,10 @@ import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { CalendarHeart, Clock3, CreditCard, HeartHandshake, Lock, Sparkles, Star } from 'lucide-react';
 
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
+import type { DivinationEvidence } from '@/types/divination';
 import {
   TianjiLoveButton,
   TianjiLoveFinalCta,
@@ -32,6 +34,7 @@ interface PreviewState {
   language: Lang;
   price: string;
   previewDraw: PreviewSlotInfo[];
+  evidence?: DivinationEvidence;
 }
 
 interface UnlockedCard {
@@ -52,6 +55,7 @@ interface UnlockedState {
   language: Lang;
   draw: UnlockedCard[];
   fullReading: string;
+  evidence?: DivinationEvidence;
 }
 
 type TimingCopy = {
@@ -392,6 +396,7 @@ export default function DrawPage() {
           language: json.language,
           price: json.price,
           previewDraw: json.previewDraw,
+          evidence: json.evidence,
         };
         setPreview(state);
         writeStoredPreview(state);
@@ -517,6 +522,16 @@ export default function DrawPage() {
             ))}
           </div>
           <p className="mt-7 whitespace-pre-line text-base leading-8 text-[#fff4dd]/88">{preview.preview}</p>
+          {preview.evidence ? (
+            <DivinationEvidenceCard
+              className="mt-6"
+              evidence={preview.evidence}
+              route="draw"
+              paid={false}
+              onUnlockClick={onUnlock}
+              unlockLabel={copy.preview.unlockCta.replace('{price}', preview.price)}
+            />
+          ) : null}
           <div className="mt-5 rounded-lg border border-[#b57248]/30 bg-black/20 px-4 py-3 text-sm leading-7 text-[#f4d7a3]/72">
             Practical next step: choose one small action you can take with care, then use the full reading only if you want more depth.
           </div>
@@ -552,6 +567,14 @@ export default function DrawPage() {
             ))}
           </div>
           {unlocked.question ? <h3 className="mt-8 font-serif text-2xl text-[#ffe3b4]">&quot;{unlocked.question}&quot;</h3> : null}
+          {unlocked.evidence ? (
+            <DivinationEvidenceCard
+              className="mt-6"
+              evidence={unlocked.evidence}
+              route="draw"
+              paid
+            />
+          ) : null}
           <div className="mt-5 whitespace-pre-line text-base leading-8 text-[#fff4dd]/88">{unlocked.fullReading}</div>
         </ReadingPanel>
       ) : null}

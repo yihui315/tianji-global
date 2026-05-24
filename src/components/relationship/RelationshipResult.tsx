@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 
 import { TianjiLovePanel } from '@/components/tianji-love';
+import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
+import { buildRelationshipEvidence } from '@/lib/divination/evidence';
 import { trackRelationshipEvent } from '@/lib/analytics/track';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import { DimensionCard } from './RelationshipDimensionCard';
@@ -116,6 +118,14 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
   const copy = resultCopy[lang] ?? resultCopy.zh;
   const isFull = reading.accessLevel === 'full' || reading.isPremium;
   const nextMove = useMemo(() => getNextMove(reading), [reading]);
+  const evidence = useMemo(
+    () => reading.evidence ?? buildRelationshipEvidence({
+      reading,
+      paid: isFull,
+      language: lang === 'zh' ? 'zh' : 'en',
+    }),
+    [isFull, lang, reading],
+  );
 
   useEffect(() => {
     void trackRelationshipEvent({
@@ -319,6 +329,14 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
           </div>
         </div>
       </TianjiLovePanel>
+
+      <DivinationEvidenceCard
+        evidence={evidence}
+        route="relationship"
+        paid={isFull}
+        onUnlockClick={handleUnlock}
+        unlockLabel={copy.unlock}
+      />
 
       <TianjiLovePanel className="p-6">
         <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-[#ffe3b4]">

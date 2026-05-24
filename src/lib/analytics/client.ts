@@ -1,3 +1,5 @@
+type ClientAnalyticsPayloadValue = string | number | boolean | null | undefined | string[];
+
 export interface ClientAnalyticsEvent {
   event: string;
   experimentId?: string;
@@ -5,7 +7,7 @@ export interface ClientAnalyticsEvent {
   moduleType?: string;
   trafficSource?: string;
   strategy?: string;
-  payload?: Record<string, string | number | boolean | null | undefined>;
+  payload?: Record<string, ClientAnalyticsPayloadValue>;
 }
 
 const SENSITIVE_PAYLOAD_KEYS = new Set([
@@ -44,7 +46,17 @@ export function sanitizeClientAnalyticsPayload(
   payload: ClientAnalyticsEvent['payload'] = {},
 ): NonNullable<ClientAnalyticsEvent['payload']> {
   return Object.fromEntries(
-    Object.entries(payload).filter(([key]) => !SENSITIVE_PAYLOAD_KEYS.has(normalizePayloadKey(key))),
+    Object.entries(payload).filter(([key, value]) => {
+      if (SENSITIVE_PAYLOAD_KEYS.has(normalizePayloadKey(key))) return false;
+      return (
+        typeof value === 'string' ||
+        typeof value === 'number' ||
+        typeof value === 'boolean' ||
+        value === null ||
+        typeof value === 'undefined' ||
+        (Array.isArray(value) && value.every((item) => typeof item === 'string'))
+      );
+    }),
   );
 }
 

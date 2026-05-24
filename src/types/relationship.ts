@@ -1,5 +1,7 @@
 // ─── Relationship System Types ────────────────────────────────────────────────
 
+import type { DivinationEvidence } from '@/types/divination';
+
 export type RelationshipType = 'romantic' | 'friendship' | 'work';
 export type ShareMode = 'summary' | 'chart_only' | 'insight_card';
 export type Visibility = 'private' | 'hidden_birth_data';
@@ -90,6 +92,7 @@ export interface RelationshipReading {
   isPremium: boolean;
   accessLevel: 'free' | 'full';
   lockedSections: string[];
+  evidence?: DivinationEvidence;
   aiMeta?: RelationshipAiMeta;
   createdAt: string;
 }

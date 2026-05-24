@@ -105,6 +105,8 @@ describe('Tianji Love relationship flow contract', () => {
     const source = `${analyticsTypes}\n${analyticsRoute}\n${read('src/app/relationship/new/client.tsx')}\n${read('src/components/relationship/RelationshipResult.tsx')}`;
 
     expect(engine).toContain("accessLevel: 'free'");
+    expect(engine).toContain('buildRelationshipEvidence');
+    expect(resultPage).toContain('evidence');
     expect(engine).toContain('lockedSections');
     expect(store).toContain('markRelationshipReadingPremium');
     expect(store).toContain('getRelationshipReadingById');
@@ -126,6 +128,25 @@ describe('Tianji Love relationship flow contract', () => {
     ]) {
       expect(source).toContain(eventName);
     }
+  });
+
+  it('wires relationship evidence card with free/full boundaries and privacy-safe analytics', () => {
+    const result = read('src/components/relationship/RelationshipResult.tsx');
+    const relationshipType = read('src/types/relationship.ts');
+    const evidenceCard = read('src/components/divination/DivinationEvidenceCard.tsx');
+    const evidenceAnalytics = read('src/lib/analytics/divination-events.ts');
+
+    expect(relationshipType).toContain('evidence?: DivinationEvidence');
+    expect(result).toContain('DivinationEvidenceCard');
+    expect(result).toContain('buildRelationshipEvidence');
+    expect(result).toContain("route=\"relationship\"");
+    expect(result).toContain('paid={isFull}');
+    expect(result).toContain('onUnlockClick={handleUnlock}');
+    expect(evidenceCard).toContain('Did this feel accurate?');
+    expect(evidenceCard).toContain('paid_unlock_from_evidence_clicked');
+    expect(evidenceAnalytics).toContain('buildDivinationEvidenceAnalyticsPayload');
+    expect(evidenceAnalytics).toContain('sourceTypes');
+    expect(evidenceAnalytics).not.toMatch(/question|birthDate|birthTime|birthLocation|timezone|rawReport/i);
   });
 
   it('keeps the upgraded English relationship surface free of known mojibake and deterministic claims', () => {

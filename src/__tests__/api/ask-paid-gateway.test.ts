@@ -66,6 +66,12 @@ describe('Ask paid gateway contract', () => {
     expect(json.answer).toBeNull();
     expect(json.fullAnswer).toBeUndefined();
     expect(json.preview).toEqual(expect.any(String));
+    expect(json.evidence).toMatchObject({
+      confidence: expect.stringMatching(/low|medium|high/),
+      signals: expect.any(Array),
+    });
+    expect(json.evidence.signals.length).toBeLessThanOrEqual(3);
+    expect(JSON.stringify(json.evidence)).not.toContain('Should I text them again tonight?');
     expect(json.preview).not.toContain('complete reading');
     expect(json.aiMeta).toBeUndefined();
     expect(json.meta?.provider).toBeUndefined();
@@ -90,6 +96,10 @@ describe('Ask paid gateway contract', () => {
     expect(json.answer).toBeNull();
     expect(json.fullAnswer).toBeUndefined();
     expect(json.preview).toEqual(expect.any(String));
+    expect(json.evidence).toMatchObject({
+      confidence: expect.stringMatching(/low|medium|high/),
+      signals: expect.any(Array),
+    });
     expect(json.id).toEqual(expect.any(String));
     expect(json.url).toBeUndefined();
     expect(JSON.stringify(json)).not.toMatch(/stripe\.com|checkout\.stripe|birthDate|birthTime|birthLocation|timezone/i);
@@ -207,6 +217,13 @@ describe('Ask paid gateway contract', () => {
     expect(json.data.locked).toBe(false);
     expect(json.data.answer).toEqual(expect.any(String));
     expect(json.data.fullAnswer).toBe(json.data.answer);
+    expect(json.data.evidence).toMatchObject({
+      confidence: expect.stringMatching(/low|medium|high/),
+      signals: expect.any(Array),
+    });
+    expect(json.data.evidence.signals.length).toBeGreaterThanOrEqual(5);
+    expect(json.data.evidence.signals.length).toBeLessThanOrEqual(8);
+    expect(JSON.stringify(json.data.evidence)).not.toContain('Will they come back');
     expect(json.data.answer).not.toMatch(/100% will come back|definitely marry|destined to break up|pay now or disaster will happen|cards guarantee/i);
     expect(json.data.answer).toContain('self-reflection');
     expect(mocks.generateReport).toHaveBeenCalledWith(expect.objectContaining({

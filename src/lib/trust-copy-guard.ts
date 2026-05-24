@@ -1,4 +1,4 @@
-type PrimitivePayloadValue = string | number | boolean | null;
+type PrimitivePayloadValue = string | number | boolean | null | string[];
 
 const guaranteedPredictionPatterns = [
   /\bwe predict your future\b/i,
@@ -103,7 +103,13 @@ export function sanitizeAnalyticsPayload(payload: Record<string, unknown>) {
 
   for (const [key, value] of Object.entries(payload)) {
     if (isSensitivePrivacyKey(key)) continue;
-    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value === null) {
+    if (
+      typeof value === 'string' ||
+      typeof value === 'number' ||
+      typeof value === 'boolean' ||
+      value === null ||
+      (Array.isArray(value) && value.every((item) => typeof item === 'string'))
+    ) {
       sanitized[key] = value;
     }
   }

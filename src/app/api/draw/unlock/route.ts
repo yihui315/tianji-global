@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
 import { getStripe } from '@/lib/stripe';
+import { buildDrawEvidence } from '@/lib/divination/evidence';
 import {
   decodeQuickDrawId,
   expandDrawnCard,
@@ -214,6 +215,12 @@ export async function GET(request: NextRequest) {
         locked: false,
         fullReading: reading,
         cards: toDrawGatewayCards(decoded.draw, decoded.language),
+        evidence: buildDrawEvidence({
+          question: decoded.question,
+          draw: decoded.draw,
+          language: decoded.language,
+          paid: true,
+        }),
         aiMeta: toDrawAiMeta(gatewayResponse),
       },
     });

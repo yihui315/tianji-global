@@ -12,6 +12,7 @@ import type {
   RelationshipTimeline,
   ApiResponse,
 } from '@/types/relationship';
+import { buildRelationshipEvidence } from '@/lib/divination/evidence';
 
 // ─── Element Compatibility Map ──────────────────────────────────────────────────
 // How elements interact: [attraction_bonus, rhythm_compatibility]
@@ -670,6 +671,7 @@ export function analyzeRelationship(
     lockedSections: ['dimensions', 'next30Days', 'conflictRepair', 'conversationGuide', 'pdfReport', 'savedHistory'],
     createdAt: new Date().toISOString(),
   };
+  reading.evidence = buildRelationshipEvidence({ reading, paid: false, language: lang });
 
   return { reading, dbData };
 }

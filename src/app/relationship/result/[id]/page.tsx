@@ -13,6 +13,7 @@ import {
   TianjiLoveShell,
 } from '@/components/tianji-love';
 import { withLanguageParam, type AppLanguage } from '@/lib/language-routing';
+import { buildRelationshipEvidence } from '@/lib/divination/evidence';
 import { getRelationshipReadingById } from '@/lib/relationship-reading-store';
 
 type PageParams = {
@@ -42,6 +43,9 @@ export default async function RelationshipResultPage({ params, searchParams }: P
   if (!reading) notFound();
 
   const href = (path: string) => withLanguageParam(path, language);
+  const isPaid = reading.accessLevel === 'full' || reading.isPremium;
+  const evidence = reading.evidence ?? buildRelationshipEvidence({ reading, paid: isPaid, language });
+  const readingWithEvidence = { ...reading, evidence };
 
   return (
     <TianjiLoveShell className="tianji-love-relationship-result-page" ariaLabel="Tianji Love relationship result">
@@ -79,7 +83,7 @@ export default async function RelationshipResultPage({ params, searchParams }: P
         ) : null}
 
         <section className="mt-6">
-          <RelationshipResult reading={reading} lang={language} />
+          <RelationshipResult reading={readingWithEvidence} lang={language} />
         </section>
       </main>
 

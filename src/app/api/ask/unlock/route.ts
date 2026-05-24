@@ -13,6 +13,7 @@ import {
   type AskAiMeta,
   type AskQuestionLanguage,
 } from '@/lib/ask-question';
+import { buildAskEvidence } from '@/lib/divination/evidence';
 import {
   buildPaymentUnavailableBody,
   isStagingDegradedMode,
@@ -245,6 +246,12 @@ export async function GET(request: NextRequest) {
         preview: null,
         locked: false,
         fullAnswer: answer,
+        evidence: buildAskEvidence({
+          question: decoded.question,
+          answer,
+          language: decoded.language,
+          paid: true,
+        }),
         aiMeta: toAskAiMeta(gatewayResponse),
       },
     });

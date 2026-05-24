@@ -121,13 +121,40 @@ describe('Tianji Love revenue funnel polish', () => {
       prompt: 'Prompt text',
       response: 'Raw response',
       safeSurface: 'ask_preview',
+      sourceTypes: ['question', 'timing', 'safety'],
       cardCount: 3,
     });
 
     expect(sanitized).toEqual({
       safeSurface: 'ask_preview',
+      sourceTypes: ['question', 'timing', 'safety'],
       cardCount: 3,
     });
+  });
+
+  it('adds divination evidence analytics events without private content payloads', () => {
+    const evidenceEvents = read('src/lib/analytics/divination-events.ts');
+    const client = read('src/lib/analytics/client.ts');
+    const trackRoute = read('src/app/api/analytics/track/route.ts');
+    const ask = read('src/app/(main)/ask/page.tsx');
+    const draw = read('src/app/(main)/draw/page.tsx');
+    const relationship = read('src/components/relationship/RelationshipResult.tsx');
+
+    for (const eventName of [
+      'divination_evidence_viewed',
+      'divination_evidence_expand_clicked',
+      'divination_accuracy_feedback_submitted',
+      'paid_unlock_from_evidence_clicked',
+    ]) {
+      expect(evidenceEvents).toContain(eventName);
+    }
+
+    expect(evidenceEvents).toContain('buildDivinationEvidenceAnalyticsPayload');
+    expect(evidenceEvents).toContain('sourceTypes');
+    expect(client).toContain('string[]');
+    expect(trackRoute).toContain('z.array(z.string())');
+    expect(`${ask}\n${draw}\n${relationship}`).toContain('DivinationEvidenceCard');
+    expect(evidenceEvents).not.toMatch(/rawQuestion|birthDate|birthTime|birthLocation|timezone|fullReport|prompt/i);
   });
 
   it('defines the free-to-paid funnel event allowlist and keeps analytics mutation guardable', () => {

@@ -95,6 +95,12 @@ describe('Draw gateway revenue contract', () => {
     expect(json.locked).toBe(true);
     expect(json.reading).toEqual(expect.stringContaining('possible pattern'));
     expect(json.preview).toEqual(expect.any(String));
+    expect(json.evidence).toMatchObject({
+      confidence: expect.stringMatching(/low|medium|high/),
+      signals: expect.any(Array),
+    });
+    expect(json.evidence.signals.length).toBeLessThanOrEqual(3);
+    expect(JSON.stringify(json.evidence)).not.toContain('Should I reach out after the silence?');
     expect(json.cards).toHaveLength(3);
     expect(json.fullReading).toBeUndefined();
     expect(json.reading).not.toContain('seven-day action plan');
@@ -145,6 +151,13 @@ describe('Draw gateway revenue contract', () => {
     expect(json.data.locked).toBe(false);
     expect(json.data.reading).toEqual(expect.any(String));
     expect(json.data.fullReading).toBe(json.data.reading);
+    expect(json.data.evidence).toMatchObject({
+      confidence: expect.stringMatching(/low|medium|high/),
+      signals: expect.any(Array),
+    });
+    expect(json.data.evidence.signals.length).toBeGreaterThanOrEqual(5);
+    expect(json.data.evidence.signals.length).toBeLessThanOrEqual(8);
+    expect(JSON.stringify(json.data.evidence)).not.toContain('Will my ex return');
     expect(json.data.cards).toHaveLength(3);
     expect(json.data.reading).not.toMatch(/cards guarantee|this will definitely happen|100% your ex will return|destined to break up|pay now or disaster will happen/i);
     expect(json.data.reading).not.toMatch(/birthTime|birthLocation|timezone/i);
