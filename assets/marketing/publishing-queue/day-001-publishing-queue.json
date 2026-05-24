@@ -1,0 +1,338 @@
+[
+  {
+    "publish_date": "2026-05-24",
+    "channel": "xiaohongshu",
+    "content_id": "day001-xhs-01",
+    "content_type": "post",
+    "title": "What are they thinking now?",
+    "hook": "Stop rereading the chat. Map the relationship pattern first.",
+    "body_or_script": "A reflective post for ambiguous relationship moments. It positions Love Test as a private pattern map before asking what the other person may be thinking.",
+    "caption": "Private Love Test first, one focused question later.",
+    "hashtags": ["love-test", "relationship-clarity", "ambiguous-relationship"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "xiaohongshu",
+    "content_id": "day001-xhs-02",
+    "content_type": "post",
+    "title": "Should I reach out first?",
+    "hook": "Want to send the message? Check your motive first.",
+    "body_or_script": "A post about separating expression from reassurance-seeking before acting in an ambiguous relationship.",
+    "caption": "Act from clarity, not panic.",
+    "hashtags": ["love-test", "timing", "relationship-boundaries"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "xiaohongshu",
+    "content_id": "day001-xhs-03",
+    "content_type": "post",
+    "title": "Why does this relationship drain me?",
+    "hook": "Maybe you are not too sensitive. Maybe the pattern is not stable enough.",
+    "body_or_script": "A self-reflection post for users who feel pulled by a connection and need a non-diagnostic way to name the pattern.",
+    "caption": "See the pattern before blaming yourself.",
+    "hashtags": ["love-test", "emotional-clarity", "self-reflection"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "douyin",
+    "content_id": "day001-dy-01",
+    "content_type": "short_video",
+    "title": "Is their coldness a sign?",
+    "hook": "Coldness is a signal, not a verdict.",
+    "body_or_script": "Short video script: show a slow reply pattern, then zoom out to rhythm, timing, and safety. End with Love Test as the first step.",
+    "caption": "Do not judge the whole relationship from one cold reply.",
+    "hashtags": ["love-test", "relationship-pattern", "cold-reply"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "douyin",
+    "content_id": "day001-dy-02",
+    "content_type": "short_video",
+    "title": "When should I contact them?",
+    "hook": "Before pressing send, pause for three seconds.",
+    "body_or_script": "Short video script: message typed and deleted; voiceover asks whether the user is expressing something real or seeking reassurance.",
+    "caption": "First steady yourself, then decide the next move.",
+    "hashtags": ["love-test", "timing", "message-draft"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "videohao",
+    "content_id": "day001-vh-01",
+    "content_type": "short_video",
+    "title": "Uncertainty is what exhausts people",
+    "hook": "The hardest adult relationships are often not loveless. They are unclear.",
+    "body_or_script": "Mature video script for 25+ users: a night desk scene, phone face down, and Love Test framed as a relationship mirror, not a command.",
+    "caption": "A private mirror for unclear relationship patterns.",
+    "hashtags": ["love-test", "relationship-mirror", "private-reflection"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "share_card",
+    "content_id": "day001-share-01",
+    "content_type": "caption",
+    "title": "Share caption 01",
+    "hook": "Some relationships do not need a verdict tonight.",
+    "body_or_script": "Caption for result/share-card distribution after Love Test.",
+    "caption": "Some relationships do not need a verdict tonight. They need a little more clarity.",
+    "hashtags": ["love-test", "share-card"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "share_card",
+    "content_id": "day001-share-02",
+    "content_type": "caption",
+    "title": "Share caption 02",
+    "hook": "Not fortune-telling, a relationship mirror.",
+    "body_or_script": "Caption for reflective share-card use.",
+    "caption": "My Love Test result felt less like fortune-telling and more like a mirror.",
+    "hashtags": ["love-test", "relationship-clarity"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "share_card",
+    "content_id": "day001-share-03",
+    "content_type": "caption",
+    "title": "Share caption 03",
+    "hook": "If you are stuck in maybe, pause first.",
+    "body_or_script": "Caption for users in ambiguous relationships.",
+    "caption": "A small test for anyone stuck between maybe and what now.",
+    "hashtags": ["love-test", "ambiguous-relationship"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "share_card",
+    "content_id": "day001-share-04",
+    "content_type": "caption",
+    "title": "Share caption 04",
+    "hook": "A little clearer, not certain.",
+    "body_or_script": "Caption for soft emotional share-card use.",
+    "caption": "This result is not certainty. It is a cleaner place to think from.",
+    "hashtags": ["love-test", "self-reflection"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "share_card",
+    "content_id": "day001-share-05",
+    "content_type": "caption",
+    "title": "Share caption 05",
+    "hook": "Do not let anxiety write the next step.",
+    "body_or_script": "Caption for saving or reposting the result card.",
+    "caption": "This card reminded me: do not let anxiety write the next step.",
+    "hashtags": ["love-test", "relationship-boundaries"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "kol",
+    "content_id": "day001-kol-01",
+    "content_type": "dm_template",
+    "title": "Free reading invite",
+    "hook": "Would you try the free Love Test and share honest feedback?",
+    "body_or_script": "DM template for creators: invite free flow review only, no pressure to endorse or post.",
+    "caption": "Honest feedback requested; no testimonial required.",
+    "hashtags": ["creator-outreach", "love-test"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "kol",
+    "content_id": "day001-kol-02",
+    "content_type": "dm_template",
+    "title": "Honest feedback request",
+    "hook": "Does the copy feel safe, useful, and non-manipulative?",
+    "body_or_script": "DM template for creators focused on boundaries and relationship clarity. Requests critical feedback, not endorsement.",
+    "caption": "Critical feedback only, no fake testimonial.",
+    "hashtags": ["creator-feedback", "love-test"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "seo",
+    "content_id": "day001-seo-01",
+    "content_type": "keyword_outline",
+    "title": "Libra woman and Sagittarius man compatibility",
+    "hook": "Use astrology curiosity as a reflective entry, not a relationship verdict.",
+    "body_or_script": "SEO outline: attraction, communication rhythm, boundary reminders, and Love Test as a privacy-safe next step.",
+    "caption": "Use the test as reflection, not fate.",
+    "hashtags": ["seo", "compatibility", "love-test"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "seo",
+    "content_id": "day001-seo-02",
+    "content_type": "keyword_outline",
+    "title": "What to do when an ambiguous partner suddenly turns cold",
+    "hook": "Observe the whole pattern before reacting.",
+    "body_or_script": "SEO outline: coldness timing, one-off versus repeated patterns, when to express, when to pause.",
+    "caption": "Coldness is a signal, not a verdict.",
+    "hashtags": ["seo", "ambiguous-relationship", "love-test"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  },
+  {
+    "publish_date": "2026-05-24",
+    "channel": "seo",
+    "content_id": "day001-seo-03",
+    "content_type": "keyword_outline",
+    "title": "Are they still thinking about me?",
+    "hook": "Sort relationship signals before seeking reassurance.",
+    "body_or_script": "SEO outline: thoughts versus actions, unfinished feelings, communication signals, and a safe next step.",
+    "caption": "Do not claim to know their mind with certainty.",
+    "hashtags": ["seo", "relationship-clarity", "love-test"],
+    "cta_url": "https://tianji.love/love-test",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "safety_checks": {
+      "no_fake_testimonial": true,
+      "no_fake_numbers": true,
+      "no_guaranteed_outcome": true,
+      "no_medical_diagnosis": true,
+      "cta_present": true
+    }
+  }
+]

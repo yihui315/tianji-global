@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-24 - TianJi Love safe publisher bridge
+
+- Task ID: 20260524-love-test-safe-publisher-bridge
+- Files changed: `assets/marketing/publishing-queue/day-001-publishing-queue.csv`, `assets/marketing/publishing-queue/day-001-publishing-queue.json`, `assets/marketing/publishing-queue/README.md`, `.ai/TIANJI_LOVE_SAFE_PUBLISHER_BRIDGE.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Created a safe publisher bridge that converts the Day 1 publishing pack into reviewable CSV/JSON queue files for manual publishing or a future approved n8n/Postiz/Mixpost adapter.
+- Commands run: read workspace/project instructions and relevant skills; checked git status/current branch; created `chore/love-test-safe-publisher-bridge-20260524`; read Day 1 publishing pack, 7-day content calendar, hook pool, video script pool, and share-caption pool; created publishing queue CSV/JSON, queue README, and bridge evidence doc; parsed CSV/JSON queue counts; ran `npm run typecheck`; ran `npm run lint`; ran `git diff --check`; ran targeted secret-shape scan.
+- Results: Safe publisher bridge is Go. Publishing queue is Go with 16 pending-manual-review items: 3 Xiaohongshu posts, 2 Douyin scripts, 1 Videohao script, 5 share-card captions, 2 KOL DM templates, and 3 SEO outlines. CSV and JSON parsed successfully. Typecheck, lint, diff check, and targeted secret-shape scan passed.
+- Risks: This bridge does not auto-post, use account credentials/cookies/tokens, call platform APIs, bypass captchas, deploy production, create Stripe checkout sessions, run paid smoke, mutate Supabase, call provider live AI, or read `.env`.
+- Next step: Manually review the queue, publish approved items or import them into an explicitly approved platform-safe tool later, paste published URLs and metrics back into queue/KPI files, then run `自动运行 TianJi Love`.
+
 ### 2026-05-24 - TianJi Love autonomous growth run 7-day planning
 
 - Task ID: 20260524-love-test-autonomous-growth-run-7day-planning
