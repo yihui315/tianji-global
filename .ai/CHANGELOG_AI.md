@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-24 - TianJi Love Stripe test-mode paid smoke approval packet
+
+- Task ID: 20260524-love-test-stripe-test-mode-paid-smoke-approval-packet
+- Files changed: `.ai/TIANJI_LOVE_STRIPE_TEST_MODE_PAID_SMOKE_APPROVAL_PACKET_20260524.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Prepared the final approval packet for a future Stripe test-mode paid smoke of the `/love-test -> /ask` 9.9 one-question paid-intent funnel. The packet defines the required approval phrase, allowed scope, pre-smoke checks, success criteria, and stop conditions while keeping paid smoke and production deploy blocked.
+- Commands run: read current checkout readiness evidence and focused checkout source/tests; `npm run audit:love-test-checkout-readiness`; `npm run test -- --run src/__tests__/api/ask-paid-gateway.test.ts src/__tests__/love-test-mvp-contract.test.ts src/__tests__/revenue-funnel-polish-contract.test.ts src/__tests__/relationship-share-card-contract.test.ts`; `npm run typecheck`; `npm run lint`; `npm run audit:routes`; `npm run audit:share`; `npm run build:staging:degraded`; `git diff --check`.
+- Results: Checkout readiness audit passed with `overall=go`; focused paid-gateway/Love-Test/share/revenue tests passed 29/29; typecheck, lint, route audit, share audit, staging-degraded build, and diff check passed. Stripe checkout execution was not run. Paid smoke remains No-Go awaiting explicit approval.
+- Risks: This packet does not prove a Stripe test-mode transaction or hosted env key mode. Future smoke must stop if live Stripe, production URL, unclear env readiness, webhook replay requirement, Supabase mutation requirement, or missing approval is detected.
+- Next step: Do not run paid smoke unless the user explicitly says `批准跑 Stripe test-mode paid smoke`.
+
 ### 2026-05-24 - TianJi Love checkout readiness source ref
 
 - Task ID: 20260524-love-test-checkout-readiness-source-ref
