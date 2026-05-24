@@ -221,3 +221,123 @@ Secrets printed: No
 - Authenticate `gh` with `repo,workflow` scope, then run the three workflow_dispatch jobs on `main`.
 - If the next authenticated run fails because `OPENAI_API_KEY` is missing or unauthorized, configure or rotate the repo secret without printing it.
 - Treat Node.js 20 as a warning unless it becomes the actual failing step.
+
+---
+
+# Review Packet - TianJi Love Actions Runtime Rerun After Codex Input Fix
+
+## Background
+
+PR #50 fixed the Codex Action input name and PR #51 recorded the initial post-merge verification boundary. This packet records the authenticated main rerun and the next runtime blocker.
+
+## Main State Verified
+
+```text
+Input fix merge commit: 43a1cea
+Runtime verification docs merge commit: 608c476
+openai_api_key in .github/workflows: 0 matches
+openai-api-key in .github/workflows: 6 matches
+```
+
+## Dispatch Result
+
+```text
+Local gh authentication: No-Go - gh CLI not authenticated
+Authenticated workflow_dispatch: Go via GitHub Actions UI
+TianJi Love Content Calendar dispatch: Sent
+TianJi Love Daily Growth dispatch: Sent
+TianJi Love KPI Analysis dispatch: Sent
+```
+
+## Runs Reviewed
+
+```text
+TianJi Love Content Calendar run: 26357694312
+TianJi Love Content Calendar job: 77587333478
+
+TianJi Love Daily Growth run: 26357686684
+TianJi Love Daily Growth job: 77587313730
+
+TianJi Love KPI Analysis run: 26357691510
+TianJi Love KPI Analysis job: 77587325631
+```
+
+## Failure Diagnosis
+
+The old hard failure is resolved:
+
+```text
+Unexpected input(s) 'openai_api_key': Not observed in new main runs
+openai-api-key input accepted by Codex Action: Yes
+```
+
+The new blocker is OpenAI API key readiness:
+
+```text
+TianJi Love Content Calendar: Failed in Codex Action runtime with 401 invalid_api_key
+TianJi Love Daily Growth: Failed in Codex Action runtime with 401 invalid_api_key
+TianJi Love KPI Analysis: Failed in Codex Action runtime with 401 invalid_api_key
+OPENAI_API_KEY repo secret: Present but invalid or unauthorized
+```
+
+The inspected logs showed the OpenAI key input masked by GitHub Actions. No secret value or key fragment was recorded in this packet.
+
+## Node Runtime
+
+```text
+Node.js 20 warning: Warning only
+Blocking failure source: OpenAI 401 invalid_api_key
+```
+
+## Commands And Evidence Sources
+
+```text
+gh auth status
+gh auth login -h github.com --web --scopes repo,workflow
+gh auth login -h github.com --web --clipboard --scopes repo,workflow
+Get-CimInstance Win32_Process -Filter "name = 'gh.exe'"
+Stop-Process for hung gh auth login processes
+git -c safe.directory=* status --short --branch
+git -c safe.directory=* log --oneline -5
+rg -n "openai_api_key" .github/workflows
+rg -n "openai-api-key" .github/workflows
+Start-Process GitHub Actions workflow pages
+GitHub connector fetch workflow job steps/logs
+```
+
+## Safety Result
+
+```text
+Secrets printed: No
+Token values printed: No
+.env read: No
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+```
+
+## Gate Status
+
+```text
+Codex Action input fix: Go
+Workflow templates on main: Go
+Authenticated workflow_dispatch: Go via GitHub UI
+Local gh workflow_dispatch: No-Go - gh CLI not authenticated
+Content Calendar runtime: No-Go - invalid OpenAI API key
+Daily Growth runtime: No-Go - invalid OpenAI API key
+KPI Analysis runtime: No-Go - invalid OpenAI API key
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+GitHub token rotation: Owner action required
+```
+
+## Risks And Follow-up
+
+- Revoke/rotate the previously pasted GitHub token.
+- Replace or rotate the `OPENAI_API_KEY` repository secret without printing it.
+- Re-run the three TianJi Love workflows on `main` after the OpenAI secret is replaced.
+- Keep Node.js 20 as a tracked warning; only treat it as No-Go if it becomes the failing step.

@@ -108,3 +108,83 @@ Secrets printed: No
 - Authenticate `gh` with `repo,workflow` scope or trigger the three workflows from the GitHub Actions UI on `main`.
 - If `OPENAI_API_KEY` is missing or invalid after an authenticated rerun, configure the repo secret without printing it.
 - If the Node.js 20 warning becomes blocking, upgrade affected action/runtime in a separate workflow maintenance task.
+
+## 2026-05-24 - TianJi Love Actions runtime rerun after Codex input fix
+
+### What changed
+
+Triggered authenticated workflow_dispatch runs on `main` after the Codex Action input fix was merged.
+
+Local `gh` authentication remained unavailable, so runtime dispatch was completed through the GitHub Actions UI. GitHub connector logs were then inspected without printing secret values.
+
+### Main commits verified
+
+```text
+Input fix merge commit: 43a1cea
+Runtime verification docs merge commit: 608c476
+```
+
+### Runs inspected
+
+```text
+TianJi Love Content Calendar run: 26357694312
+TianJi Love Daily Growth run: 26357686684
+TianJi Love KPI Analysis run: 26357691510
+```
+
+### Commands run
+
+```text
+gh auth status
+gh auth login -h github.com --web --scopes repo,workflow
+gh auth login -h github.com --web --clipboard --scopes repo,workflow
+git -c safe.directory=* status --short --branch
+git -c safe.directory=* log --oneline -5
+rg -n "openai_api_key" .github/workflows
+rg -n "openai-api-key" .github/workflows
+GitHub Actions UI workflow_dispatch on main
+GitHub connector fetch workflow job steps/logs
+```
+
+### Validation
+
+```text
+openai_api_key in .github/workflows: 0 matches
+openai-api-key in .github/workflows: 6 matches
+Secrets printed: No
+```
+
+### Runtime verification
+
+```text
+TianJi Love Content Calendar: Fail - Codex Action reached OpenAI runtime but received 401 invalid_api_key
+TianJi Love Daily Growth: Fail - Codex Action reached OpenAI runtime but received 401 invalid_api_key
+TianJi Love KPI Analysis: Fail - Codex Action reached OpenAI runtime but received 401 invalid_api_key
+OPENAI_API_KEY repo secret: Present but invalid or unauthorized
+Node.js 20 warning: Warning only
+```
+
+### Gate status
+
+```text
+Codex Action input fix: Go
+Workflow templates on main: Go
+Authenticated workflow_dispatch: Go via GitHub UI
+Local gh workflow_dispatch: No-Go - gh CLI not authenticated
+Content Calendar runtime: No-Go - invalid OpenAI API key
+Daily Growth runtime: No-Go - invalid OpenAI API key
+KPI Analysis runtime: No-Go - invalid OpenAI API key
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+GitHub token rotation: Owner action required
+```
+
+### Follow-up
+
+- Revoke/rotate the previously pasted GitHub token.
+- Replace or rotate the `OPENAI_API_KEY` repository secret without printing it.
+- Re-run the three TianJi Love workflows on `main` after the secret is replaced.
+- Treat the Node.js 20 warning as non-blocking unless it becomes the failing step.
