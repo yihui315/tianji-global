@@ -59,16 +59,16 @@ git diff --check: Pass
 ## Source ref status
 
 ```text
-Local commit: captured after commit by git rev-parse --short HEAD
-Remote branch push: captured after git push
+Local commit: Go
+Remote branch push: Go
 Branch: chore/love-test-checkout-readiness-20260524
-Commit: captured in final source-ref output
+Commit: 08a8178 chore(love): audit paid-intent checkout readiness
 ```
 
 ## Gate status
 
 ```text
-Checkout readiness source ref: Pending commit/push
+Checkout readiness source ref: Go
 Checkout readiness audit: Go
 Stripe checkout execution: Not run
 Paid smoke: No-Go - awaiting explicit approval
