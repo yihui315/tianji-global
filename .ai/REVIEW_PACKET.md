@@ -1,3 +1,92 @@
+# Review Packet - TianJi Love Publishing Pack and Conversion Backlog
+
+## Background
+
+The MiniMax-backed KPI Analysis, Daily Growth, and Content Calendar workflows are verified Go with uploaded artifacts. The next business step is turning the pipeline into manual publishing and conversion work, while keeping social auto-posting, production deploy, Stripe checkout, and paid smoke disabled.
+
+## Task Goal
+
+Create a draft-only manual publishing pack and implementation-ready conversion backlog. Do not auto-post, deploy, run Stripe, run paid smoke, invent fake testimonials, invent fake metrics, or claim guaranteed relationship outcomes.
+
+## Runtime State
+
+```text
+KPI Analysis workflow: Go
+Daily Growth workflow: Go
+Content Calendar workflow: Go
+Conversion Suggestions workflow: Pending runtime after merge
+Artifacts downloaded: No - GitHub artifact body download requires authenticated access
+```
+
+## Artifact Review
+
+```text
+KPI Analysis quality: Pending artifact body review
+Daily Growth quality: Pending artifact body review
+Content Calendar quality: Pending artifact body review
+Conversion Suggestions quality: Pending runtime and artifact body review
+```
+
+Artifact metadata was verified, but reviewed artifact bodies were not copied because local `gh` is not authenticated and the artifact zip probe failed before content download. A status note was written to `.ai/publishing/source-artifacts/ARTIFACT_DOWNLOAD_STATUS.md`.
+
+## Publishing Pack
+
+```text
+Xiaohongshu posts: Created - 7 drafts
+Douyin scripts: Created - 5 drafts
+WeChat Video scripts: Created - 5 drafts
+Publish checklist: Created
+Conversion backlog: Created
+```
+
+## Changed Files
+
+```text
+.ai/publishing/source-artifacts/ARTIFACT_DOWNLOAD_STATUS.md
+.ai/publishing/xiaohongshu-posts.md
+.ai/publishing/douyin-scripts.md
+.ai/publishing/wechat-video-scripts.md
+.ai/publishing/publish-checklist.md
+.ai/publishing/conversion-backlog.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Content Decisions
+
+- First publishing route priority is `/relationship/new`, with `/ask` as the low-price single-question intent route.
+- Draft themes cover: 他现在到底在想什么, 你们还有没有缘分, 断联后他会不会回来, 暧昧对象是否认真, 复合概率测试, 今日爱情能量, 天机缘分测试.
+- All drafts avoid fake testimonials, fake metrics, guaranteed reconciliation, guaranteed love outcomes, and supernatural certainty.
+- Conversion backlog stays report-only and does not edit app code.
+
+## Validation Plan
+
+```text
+git diff --check
+targeted secret-shape scan
+```
+
+## Gate Status
+
+```text
+MiniMax draft pipeline: Go
+Manual publishing pack: Go - draft only
+Conversion backlog: Go - draft only
+Social auto-posting: No-Go
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Secrets printed: No
+```
+
+## Risks And Follow-up
+
+- Publishing drafts were produced from the approved TianJi Love content strategy, not from downloaded artifact bodies. Replace or refine after artifact download.
+- Conversion Suggestions workflow still needs merge to `main`, manual dispatch, and artifact review.
+- First implementation PR should be a P0 CTA/task only after at least one manual publishing signal is collected.
+
+---
+
 # Review Packet - TianJi Love MiniMax Growth Pipeline Phase 2
 
 ## Background
@@ -82,7 +171,7 @@ package.json parse: Pass
 YAML parse: Pass, 5 TianJi Love workflow files
 git diff --check: Pass
 Targeted secret-shape scan: Pass - only intentional redaction regex matched
-Full repo secret-shape scan: Informational false positives in README placeholders and ordinary words such as risk-taking
+Full repo secret-shape scan: Informational false positives in README placeholders and ordinary hyphenated English words
 ```
 
 ## Gate Status

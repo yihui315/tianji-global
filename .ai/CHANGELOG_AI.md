@@ -1,5 +1,62 @@
 # AI Changelog
 
+## 2026-05-25 - TianJi Love publishing pack and conversion backlog
+
+### What changed
+
+Turned the verified MiniMax growth pipeline state into draft-only manual publishing assets and an implementation-ready conversion backlog. The publishing pack was created from the approved TianJi Love growth direction and safety rules because artifact body download is still blocked by unauthenticated GitHub artifact access in this local shell.
+
+### Runtime state
+
+```text
+KPI Analysis workflow: Go
+Daily Growth workflow: Go
+Content Calendar workflow: Go
+Conversion Suggestions workflow: Pending runtime after merge
+Artifacts downloaded: No - artifact metadata verified, body download blocked by GitHub auth
+```
+
+### Artifact quality
+
+```text
+KPI Analysis quality: Pending artifact body review
+Daily Growth quality: Pending artifact body review
+Content Calendar quality: Pending artifact body review
+Conversion Suggestions quality: Pending runtime and artifact body review
+```
+
+### Publishing pack
+
+```text
+Xiaohongshu posts: Created
+Douyin scripts: Created
+WeChat Video scripts: Created
+Publish checklist: Created
+Conversion backlog: Created
+Source artifact status note: Created
+```
+
+### Gate status
+
+```text
+MiniMax draft pipeline: Go
+Manual publishing pack: Go - draft only
+Conversion backlog: Go - draft only
+Social auto-posting: No-Go
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Secrets printed: No
+```
+
+### Follow-up
+
+- Merge `28e7aff feat(marketing): add TianJi Love conversion suggestions artifact` to `main`.
+- Run `TianJi Love Conversion Suggestions` on `main`.
+- Download four artifacts with authenticated GitHub access and replace the source-artifact status note with reviewed copies.
+- Score each artifact A/B/C/D before posting.
+- Manually publish one Xiaohongshu draft first, track clicks and paid intent, then choose one P0 CTA implementation task.
+
 ## 2026-05-25 - TianJi Love MiniMax growth pipeline verification and conversion suggestions
 
 ### What changed
