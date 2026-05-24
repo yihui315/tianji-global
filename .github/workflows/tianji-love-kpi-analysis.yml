@@ -11,6 +11,8 @@ on:
         description: "Optional report date in YYYY-MM-DD."
         required: false
         type: string
+  schedule:
+    - cron: "57 1 * * 2"
 
 permissions:
   contents: read

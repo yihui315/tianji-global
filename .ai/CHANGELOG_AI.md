@@ -350,3 +350,68 @@ Paid smoke: No-Go
 Social auto-posting: No-Go
 Secrets printed: No
 ```
+
+## 2026-05-24 - TianJi Love MiniMax 429 runtime follow-up
+
+### What changed
+
+Reduced MiniMax free Token Plan pressure for the TianJi Love artifact workflows.
+
+```text
+Default temperature: 0.4
+Default max_completion_tokens: 700
+429 retry behavior: wait 20 seconds, then 60 seconds, then fail clearly
+Content Calendar schedule: weekly
+Daily Growth schedule: manual-only
+KPI Analysis schedule: weekly
+```
+
+### Main commits
+
+```text
+MiniMax migration commit: 95f354a
+MiniMax Base URL alignment: 1c2c0e7
+```
+
+### Validation
+
+```text
+node --check scripts/ai/minimax-chat.mjs: Pass
+git diff --check: Pass
+TianJi Love workflow YAML parse: Pass
+TianJi Love workflows Codex/OpenAI dependency scan: 0 matches
+Targeted secret-shape scan: Pass
+Live MiniMax API call: Not run
+```
+
+### Runtime verification
+
+```text
+TianJi Love KPI Analysis: Pending single-workflow smoke on main after merge
+TianJi Love Daily Growth: Pending, run only after KPI passes and a cooldown
+TianJi Love Content Calendar: Pending, run only after Daily Growth passes and a cooldown
+MiniMax runtime: No-Go until 429 is cleared by quota availability
+MiniMax 429 observed: Yes in prior main runs
+Artifacts uploaded: No in prior main runs
+```
+
+### Gate status
+
+```text
+TianJi workflow MiniMax migration: Go
+MiniMax Base URL alignment: Go
+OpenAI API runtime: Bypassed
+Codex Action dependency in TianJi workflows: Removed
+MiniMax Token Plan runtime: No-Go - prior runs hit 429
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+### Follow-up
+
+- After merge, run only `TianJi Love KPI Analysis` first on `main`.
+- If KPI still returns 429, wait for quota reset, lower frequency further, or switch to another free/low-cost provider.
+- If KPI passes, wait 5-10 minutes before trying Daily Growth, then Content Calendar.
