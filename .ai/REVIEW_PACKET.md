@@ -2,25 +2,24 @@
 
 ## What changed
 
-Added a reusable autonomous money-making automation controller for TianJi Love and created the Day 1 manual publishing package.
+Executed `自动运行 TianJi Love` using `.ai/AUTO_RUN_TIANJI_LOVE.md` and the autonomous controller.
 
 Detected mode:
 
 ```text
-Mode A: Day 1 launch pack needed
+Mode C: New marketing content needed
 Mode F: Payment approval reminder only
 ```
 
-Mode A was executed. Mode F remains blocked because the exact Stripe test-mode approval phrase was not provided.
+Reason: Day 1 KPI rows exist, but all tracked metrics are zero/manual-entry placeholders. Codex skipped fake KPI analysis and generated future content planning instead.
 
 ## Files changed
 
 ```text
-.ai/AUTO_RUN_TIANJI_LOVE.md
-.ai/TIANJI_LOVE_AUTOMATION_CONTROLLER.md
-assets/marketing/daily/day-001-publishing-pack.md
-assets/marketing/daily/day-001-review-checklist.md
-data/love-test-day-001-kpi-entry.csv
+assets/marketing/content-calendar-7day.md
+assets/marketing/love-test-next-30-hooks.md
+assets/marketing/love-test-next-20-video-scripts.md
+assets/marketing/love-test-next-20-share-captions.md
 .ai/CHANGELOG_AI.md
 .ai/REVIEW_PACKET.md
 ```
@@ -28,29 +27,29 @@ data/love-test-day-001-kpi-entry.csv
 ## Commands run
 
 ```text
-Read AGENTS.md
-Read .ai/PROJECT_CONTEXT.md
-Read .ai/DECISIONS.md
-Read .ai/TASKS.md
-Read .ai/MODEL_ROUTING.md
-Read copywriting skill
-Read tianji-evidence-qa skill
 git status --short --branch
-git branch --show-current
-Read marketing asset pools
-Read KPI CSV templates
-Read daily growth loop and automation controller
-git switch -c chore/love-test-daily-growth-20260524
-Created Day 1 publishing pack
-Created Day 1 review checklist
-Created Day 1 KPI entry CSV
-Updated autonomous automation controller
-Created AUTO_RUN_TIANJI_LOVE entrypoint
+Read .ai/AUTO_RUN_TIANJI_LOVE.md
+Read .ai/TIANJI_LOVE_AUTOMATION_CONTROLLER.md
+Read data/love-test-day-001-kpi-entry.csv
+Checked Mode C file existence
+Created assets/marketing/content-calendar-7day.md
+Created assets/marketing/love-test-next-30-hooks.md
+Created assets/marketing/love-test-next-20-video-scripts.md
+Created assets/marketing/love-test-next-20-share-captions.md
+Counted 7-day calendar, hooks, scripts, and captions
+npm run typecheck
+npm run lint
+git diff --check
+targeted secret-shape scan
 ```
 
 ## Validation result
 
 ```text
+7-day content calendar: 7/7
+Next hooks: 30/30
+Next video scripts: 20/20
+Next share captions: 20/20
 typecheck: Pass
 lint: Pass
 git diff --check: Pass, existing unrelated line-ending warnings only
@@ -62,8 +61,9 @@ No app source changed; docs/assets/data-only validation was performed.
 ## Automation result
 
 ```text
-Daily publishing pack: Go
-KPI analysis: Not run - no real Day 1 metrics yet
+Daily publishing pack: Already Go
+KPI analysis: Not run - no real non-zero Day 1 metrics yet
+Future content planning: Go
 Funnel optimization: Not run - no source copy change needed
 Tests/build: Docs/assets/data-only validation passed
 Paid smoke: No-Go - awaiting explicit approval
@@ -76,7 +76,7 @@ Production deploy: No-Go
 Daily growth automation: Go
 Marketing content generation: Go
 KPI tracking: Go
-Manual publishing: Ready after checklist review
+Manual publishing: Ready
 Stripe checkout execution: Not run
 Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
@@ -91,8 +91,8 @@ Unrelated dirty files remain unstaged and untouched.
 Next autonomous task:
 
 ```text
-After manual publishing and KPI entry, run: 自动运行 TianJi Love
-Expected mode: KPI analysis if metrics exist, otherwise future 7-day content planning.
+Manually publish selected Day 1 or 7-day content, enter real KPI values, then run: 自动运行 TianJi Love
+Expected mode: Mode B KPI analysis once non-zero metrics exist.
 ```
 
 ## Suggested commit message
