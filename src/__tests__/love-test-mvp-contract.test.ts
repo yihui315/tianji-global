@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   LOVE_TEST_ASK_INTENTS,
+  LOVE_TEST_PAID_INTENT_META,
+  LOVE_TEST_PAID_INTENTS,
   LOVE_TEST_SHARE_FORMATS,
   computeLoveTestResult,
   getLoveTestSharePayload,
@@ -110,12 +112,15 @@ describe('Love-Test MVP contract', () => {
     const askQuestion = read('src/lib/ask-question.ts');
 
     expect(LOVE_TEST_ASK_INTENTS).toEqual(['what_are_they_thinking', 'timing', 'next_step']);
+    expect(LOVE_TEST_PAID_INTENTS).toEqual(['what_are_they_thinking', 'timing', 'next_step']);
+    expect(LOVE_TEST_PAID_INTENT_META.what_are_they_thinking.priceLabel).toBe('9.9 first question');
     expect(askPage).toContain('useSearchParams');
     expect(askPage).toContain('love_test');
     expect(askPage).toContain('attributionSource');
     expect(askPage).toContain('isLoveTestAskIntent');
     expect(askPage).toContain('attributionIntent');
-    expect(askPage).toContain('From your Love Test: ask the next question with more context.');
+    expect(askPage).toContain('From your Love Test: ask one focused question before you overthink the whole relationship.');
+    expect(askPage).toContain('Checkout readiness required');
     expect(askPage).toContain('source: attributionSource');
     expect(askPage).toContain('intent: attributionIntent');
     expect(askUnlock).toContain('source: askSource');
@@ -143,7 +148,8 @@ describe('Love-Test MVP contract', () => {
     expect(read('data/love-test-event-tracking.csv')).toContain('event_name,trigger,surface,required_payload,success_metric');
     expect(read('data/love-test-event-tracking.csv')).toContain('love_test_ask_next_click');
     expect(read('data/love-test-event-tracking.csv')).toContain('love_test_timing_click');
-    expect(read('data/love-test-kpi-tracking.csv')).toContain('period,visits,starts,results,share_card_clicks,copy_result_clicks,ask_next_clicks,timing_clicks');
+    expect(read('data/love-test-event-tracking.csv')).toContain('love_test_paid_intent_view');
+    expect(read('data/love-test-kpi-tracking.csv')).toContain('paid_intent_views');
     expect(read('assets/love-test-personality.md')).toContain('deterministic result logic');
   });
 });

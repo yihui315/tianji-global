@@ -13,6 +13,7 @@ import {
   ASK_QUESTION_UNLOCK_PRICE_DISPLAY,
   type AskQuestionLanguage,
 } from '@/lib/ask-question';
+import { LOVE_TEST_PAID_INTENT_META, isLoveTestPaidIntent, type LoveTestPaidIntent } from '@/lib/love-test';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +35,25 @@ function buildFallbackAnswer(question: string, language: AskQuestionLanguage): s
   ].join('\n\n');
 }
 
+function buildLoveTestPaidIntentFallback(
+  question: string,
+  language: AskQuestionLanguage,
+  intent: LoveTestPaidIntent,
+): string {
+  const meta = LOVE_TEST_PAID_INTENT_META[intent];
+  if (language === 'zh') {
+    return buildFallbackAnswer(question, language);
+  }
+
+  return [
+    `${meta.title} ${meta.previewPromise}`,
+    'Emotional state: this reads like a connection where curiosity and self-protection are both active.',
+    'Likely communication pattern: watch whether replies become warmer after low-pressure clarity, not after chasing.',
+    'One safe next step: ask one calm, specific question and leave room for an honest answer.',
+    'Locked full answer: deeper interpretation, timing plan, 3-message suggestion, and what not to do stay locked until checkout readiness is approved.',
+  ].join('\n\n');
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -45,8 +65,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { question, language } = parsed.data;
-    const preview = buildAskPreview(buildFallbackAnswer(question, language), language);
+    const { question, language, source, intent } = parsed.data;
+    const fullPreviewAnswer =
+      source === 'love_test' && isLoveTestPaidIntent(intent)
+        ? buildLoveTestPaidIntentFallback(question, language, intent)
+        : buildFallbackAnswer(question, language);
+    const preview = buildAskPreview(fullPreviewAnswer, language);
     const id = encodeAskQuestionId({
       question,
       fullAnswer: '',

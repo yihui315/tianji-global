@@ -19,7 +19,7 @@ import {
   isStripePaymentAvailable,
 } from '@/lib/staging-degraded-mode';
 import { generateTianjiModelResponse } from '@/lib/tianji-model-gateway';
-import { LOVE_TEST_ASK_INTENTS } from '@/lib/love-test';
+import { LOVE_TEST_ASK_INTENTS, isLoveTestPaidIntent } from '@/lib/love-test';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,6 +62,44 @@ function toAskAiMeta(response: Awaited<ReturnType<typeof generateTianjiModelResp
   };
 }
 
+function getLoveTestPaidIntentCheckoutGate() {
+  const testModeReady = process.env.LOVE_TEST_PAID_INTENT_TEST_MODE_READY === 'true';
+  const paidSmokeApproved = process.env.LOVE_TEST_PAID_SMOKE_APPROVED === 'true';
+
+  if (!testModeReady) {
+    return {
+      status: 'blocked',
+      message: 'Checkout readiness required',
+      code: 'love_test_checkout_readiness_required',
+    } as const;
+  }
+
+  if (!paidSmokeApproved) {
+    return {
+      status: 'approval_required',
+      message: 'Test-mode checkout ready - awaiting approval',
+      code: 'love_test_paid_smoke_approval_required',
+    } as const;
+  }
+
+  return {
+    status: 'go',
+    message: 'Test-mode checkout approved',
+    code: 'love_test_checkout_go',
+  } as const;
+}
+
+function buildLoveTestCheckoutGateResponse(gate: ReturnType<typeof getLoveTestPaidIntentCheckoutGate>) {
+  return NextResponse.json(
+    {
+      error: gate.message,
+      code: gate.code,
+      checkoutReadiness: gate.status,
+    },
+    { status: gate.status === 'blocked' ? 423 : 403 },
+  );
+}
+
 const postBodySchema = z.object({
   id: z.string().min(20),
   language: askQuestionLanguageSchema.optional(),
@@ -88,6 +126,13 @@ export async function POST(request: NextRequest) {
     }
 
     const lang = language ?? decoded.language ?? 'en';
+    if (askSource === 'love_test' && isLoveTestPaidIntent(askIntent)) {
+      const loveTestCheckoutGate = getLoveTestPaidIntentCheckoutGate();
+      if (loveTestCheckoutGate.status !== 'go') {
+        return buildLoveTestCheckoutGateResponse(loveTestCheckoutGate);
+      }
+    }
+
     const stripe = getStripe();
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin;
     const sourceParam = askSource ? `&source=${askSource}` : '';
@@ -144,8 +189,17 @@ export async function GET(request: NextRequest) {
 
   const sessionId = request.nextUrl.searchParams.get('session_id');
   const queryId = request.nextUrl.searchParams.get('id');
+  const askSource = request.nextUrl.searchParams.get('source');
+  const askIntent = request.nextUrl.searchParams.get('intent');
   if (!sessionId) {
     return NextResponse.json({ error: 'session_id is required' }, { status: 400 });
+  }
+
+  if (askSource === 'love_test' && isLoveTestPaidIntent(askIntent)) {
+    const loveTestCheckoutGate = getLoveTestPaidIntentCheckoutGate();
+    if (loveTestCheckoutGate.status !== 'go') {
+      return buildLoveTestCheckoutGateResponse(loveTestCheckoutGate);
+    }
   }
 
   try {

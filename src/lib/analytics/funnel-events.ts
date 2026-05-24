@@ -20,6 +20,11 @@ export const LOVE_TEST_CONVERSION_EVENTS = [
   'love_test_copy_result',
   'love_test_ask_next_click',
   'love_test_timing_click',
+  'love_test_paid_intent_view',
+  'love_test_paid_preview_submit',
+  'love_test_paid_unlock_click',
+  'love_test_checkout_readiness_blocked',
+  'love_test_test_mode_checkout_ready',
 ] as const;
 
 export const LEGACY_REVENUE_FUNNEL_EVENTS = [

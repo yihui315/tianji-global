@@ -49,6 +49,26 @@ Try yours: tianji.love/love-test
 
 Continue from your Love Test result.
 
+## 9.9 One-Question Paid Intent
+
+From your Love Test: ask one focused question before you overthink the whole relationship.
+
+What are they thinking now?
+
+First question: 9.9
+
+You will see a short preview first. The deeper answer stays locked until checkout is ready.
+
+Checkout readiness required
+
+Test-mode checkout ready - awaiting approval
+
+## Locked Full Answer Copy
+
+The free preview gives emotional state, likely communication pattern, and one safe next step.
+
+The deeper interpretation, timing plan, 3-message suggestion, and what not to do stay locked until the test-mode checkout gate is approved.
+
 ## Guardrail Copy
 
 This test is for self-reflection and relationship communication. It does not predict, diagnose, or guarantee relationship outcomes.

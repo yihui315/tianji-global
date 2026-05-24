@@ -1,8 +1,35 @@
 export const LOVE_TEST_SHARE_FORMATS = ['og', 'wechat_moments', 'xiaohongshu', 'douyin'] as const;
-export const LOVE_TEST_ASK_INTENTS = ['what_are_they_thinking', 'timing', 'next_step'] as const;
+export const LOVE_TEST_PAID_INTENTS = ['what_are_they_thinking', 'timing', 'next_step'] as const;
+export const LOVE_TEST_ASK_INTENTS = LOVE_TEST_PAID_INTENTS;
 
 export type LoveTestShareFormat = (typeof LOVE_TEST_SHARE_FORMATS)[number];
-export type LoveTestAskIntent = (typeof LOVE_TEST_ASK_INTENTS)[number];
+export type LoveTestPaidIntent = (typeof LOVE_TEST_PAID_INTENTS)[number];
+export type LoveTestAskIntent = LoveTestPaidIntent;
+
+export const LOVE_TEST_PAID_INTENT_META = {
+  what_are_they_thinking: {
+    title: 'What are they thinking now?',
+    priceLabel: '9.9 first question',
+    previewPromise: 'See the emotional pattern first. Unlock the deeper answer only if it feels useful.',
+  },
+  timing: {
+    title: 'When should I act?',
+    priceLabel: '9.9 timing question',
+    previewPromise: 'Get the timing signal first. Unlock the deeper next-step advice only if needed.',
+  },
+  next_step: {
+    title: 'What should I do next?',
+    priceLabel: '9.9 next-step question',
+    previewPromise: 'See the safest first move. Unlock the full plan only if it matches your situation.',
+  },
+} satisfies Record<
+  LoveTestPaidIntent,
+  {
+    title: string;
+    priceLabel: string;
+    previewPromise: string;
+  }
+>;
 
 export type LoveTestStage = 'early' | 'dating' | 'committed' | 'complicated';
 export type LoveTestCommunication = 'direct' | 'gentle' | 'guarded' | 'playful';
@@ -42,6 +69,14 @@ export interface LoveTestSharePayload {
 
 export function isLoveTestAskIntent(value: unknown): value is LoveTestAskIntent {
   return typeof value === 'string' && (LOVE_TEST_ASK_INTENTS as readonly string[]).includes(value);
+}
+
+export function isLoveTestPaidIntent(value: unknown): value is LoveTestPaidIntent {
+  return typeof value === 'string' && (LOVE_TEST_PAID_INTENTS as readonly string[]).includes(value);
+}
+
+export function getLoveTestPaidIntentMeta(value: unknown) {
+  return isLoveTestPaidIntent(value) ? LOVE_TEST_PAID_INTENT_META[value] : null;
 }
 
 const SCORE_TABLES = {

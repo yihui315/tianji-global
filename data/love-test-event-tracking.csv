@@ -6,5 +6,10 @@ love_test_share_card_click,user clicks a share-card PNG format,love_test_result,
 love_test_copy_result,user clicks Copy my result,love_test_result,"source=love_test; result_id; archetype; score",copy_result_clicks
 love_test_ask_next_click,user clicks next-question CTA,love_test_result,"source=love_test; intent; result_id; archetype; score",ask_next_clicks
 love_test_timing_click,user clicks timing CTA,love_test_result,"source=love_test; intent=timing; result_id; archetype; score",timing_clicks
+love_test_paid_intent_view,user lands on Ask from Love Test paid intent,ask_page,"source=love_test; intent; checkout_readiness",paid_intent_views
+love_test_paid_preview_submit,user submits Ask preview from Love Test paid intent,ask_page,"source=love_test; intent; checkout_readiness",paid_preview_submits
+love_test_paid_unlock_click,user clicks locked paid-intent action,ask_preview,"source=love_test; intent; previewId; checkout_readiness",paid_unlock_clicks
+love_test_checkout_readiness_blocked,checkout/test readiness blocks paid-intent action,ask_preview,"source=love_test; intent; previewId",checkout_readiness_blocks
+love_test_test_mode_checkout_ready,test-mode checkout gate becomes ready after approval,ask_preview,"source=love_test; intent",test_mode_checkout_ready_events
 ask_preview_started,Ask page preview starts after Love Test,ask_page,"source=love_test; intent",ask_preview_starts_attributed
 ask_preview_completed,Ask page preview completes after Love Test,ask_page,"source=love_test; intent",ask_preview_completions_attributed

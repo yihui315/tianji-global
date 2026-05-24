@@ -19,7 +19,7 @@ import {
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
-import { isLoveTestAskIntent } from '@/lib/love-test';
+import { getLoveTestPaidIntentMeta, isLoveTestAskIntent } from '@/lib/love-test';
 
 interface PreviewState {
   id: string;
@@ -86,6 +86,8 @@ const PREVIEW_STORAGE_KEY = 'tianji.ask.preview';
 const LOGO_MARK = '/assets/images/brand/tianji-love-logo-mark.png';
 const HERO_COUPLE = '/assets/images/hero/tianji-love-couple-red-thread-16x9.png';
 const FINAL_PAVILION = '/assets/images/hero/tianji-love-moon-pavilion-16x9.png';
+const LOVE_TEST_CHECKOUT_READINESS_LABEL = 'Checkout readiness required';
+const LOVE_TEST_TEST_MODE_READY_LABEL = 'Test-mode checkout ready - awaiting approval';
 
 const askCopy = {
   en: {
@@ -239,6 +241,16 @@ function writeStoredPreview(state: PreviewState | null) {
   window.sessionStorage.setItem(PREVIEW_STORAGE_KEY, JSON.stringify(state));
 }
 
+function getLoveTestPaidIntentBody(intent: string | undefined) {
+  if (intent === 'what_are_they_thinking') {
+    return 'You will see a short preview first. The deeper answer stays locked until checkout is ready.';
+  }
+  if (intent === 'timing') {
+    return 'Preview the timing signal first. Unlock only if it helps.';
+  }
+  return 'Preview the safest first move first. Unlock the full plan only after the checkout gate is approved.';
+}
+
 export default function AskPage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#02040c]" />}>
@@ -253,6 +265,7 @@ function AskPageContent() {
   const attributionSource = searchParams.get('source') === 'love_test' ? 'love_test' : undefined;
   const rawIntent = searchParams.get('intent');
   const attributionIntent = attributionSource === 'love_test' && isLoveTestAskIntent(rawIntent) ? rawIntent : undefined;
+  const paidIntentMeta = attributionSource === 'love_test' ? getLoveTestPaidIntentMeta(attributionIntent) : null;
   const copy = askCopy[language];
 
   const [question, setQuestion] = useState('');
@@ -262,6 +275,7 @@ function AskPageContent() {
   const [unlocking, setUnlocking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const verifyAttempted = useRef(false);
+  const paidIntentViewTrackedRef = useRef(false);
 
   const href = (path: string) => withLanguageParam(path, language);
 
@@ -280,6 +294,17 @@ function AskPageContent() {
     const stored = readStoredPreview();
     if (stored) setPreview(stored);
   }, []);
+
+  useEffect(() => {
+    if (!paidIntentMeta || paidIntentViewTrackedRef.current) return;
+    paidIntentViewTrackedRef.current = true;
+    void trackRevenueFunnelEvent('love_test_paid_intent_view', {
+      source: 'love_test',
+      surface: 'ask_page',
+      intent: attributionIntent,
+      checkout_readiness: 'blocked',
+    });
+  }, [paidIntentMeta, attributionIntent]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -329,6 +354,14 @@ function AskPageContent() {
         source: attributionSource,
         intent: attributionIntent,
       });
+      if (paidIntentMeta) {
+        void trackRevenueFunnelEvent('love_test_paid_preview_submit', {
+          source: 'love_test',
+          surface: 'ask_page',
+          intent: attributionIntent,
+          checkout_readiness: 'blocked',
+        });
+      }
       try {
         setLoading(true);
         const res = await fetch('/api/ask/preview', {
@@ -366,12 +399,33 @@ function AskPageContent() {
         setLoading(false);
       }
     },
-    [question, language, loading, attributionSource, attributionIntent],
+    [question, language, loading, attributionSource, attributionIntent, paidIntentMeta],
   );
 
   const onUnlock = useCallback(async () => {
     if (!preview || unlocking) return;
     setError(null);
+    if (paidIntentMeta) {
+      void trackRevenueFunnelEvent('love_test_paid_unlock_click', {
+        lang: preview.language,
+        source: 'love_test',
+        surface: 'ask_preview',
+        product: 'love_test_one_question',
+        previewId: preview.id,
+        intent: attributionIntent,
+        checkout_readiness: 'blocked',
+      });
+      void trackRevenueFunnelEvent('love_test_checkout_readiness_blocked', {
+        lang: preview.language,
+        source: 'love_test',
+        surface: 'ask_preview',
+        product: 'love_test_one_question',
+        previewId: preview.id,
+        intent: attributionIntent,
+      });
+      setError(LOVE_TEST_CHECKOUT_READINESS_LABEL);
+      return;
+    }
     void trackRevenueFunnelEvent('unlock_click', {
       lang: preview.language,
       surface: 'ask_preview',
@@ -401,7 +455,7 @@ function AskPageContent() {
       setError(err instanceof Error ? err.message : 'Checkout failed');
       setUnlocking(false);
     }
-  }, [preview, unlocking, attributionSource, attributionIntent]);
+  }, [preview, unlocking, attributionSource, attributionIntent, paidIntentMeta]);
 
   return (
     <main className="tianji-love-ask-page relative min-h-screen overflow-x-hidden bg-[#03040a] text-[#f7e8c8]" aria-label="Tianji Love reading page">
@@ -484,7 +538,21 @@ function AskPageContent() {
       <section id="love-question" className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-12 sm:px-8">
         {attributionSource === 'love_test' ? (
           <div className="mb-5 rounded-lg border border-[#d8b77b]/34 bg-[#d8b77b]/8 px-4 py-3 text-sm leading-6 text-[#f4d7a3]/78">
-            From your Love Test: ask the next question with more context.
+            <p className="font-semibold text-[#ffe3b4]">
+              From your Love Test: ask one focused question before you overthink the whole relationship.
+            </p>
+            {paidIntentMeta ? (
+              <div className="mt-3 rounded-lg border border-[#ff9c8b]/26 bg-[#ff6c73]/10 p-4">
+                <p className="font-serif text-2xl text-[#ffe3b4]">{paidIntentMeta.title}</p>
+                <p className="mt-2 text-sm font-semibold text-[#ffcab5]">First question: 9.9</p>
+                <p className="mt-2 text-sm text-[#f4d7a3]/76">{getLoveTestPaidIntentBody(attributionIntent)}</p>
+                <p className="mt-2 text-sm text-[#f4d7a3]/62">{paidIntentMeta.previewPromise}</p>
+                <div className="mt-3 flex flex-col gap-2 text-xs uppercase tracking-[0.16em] text-[#f4d7a3]/58 sm:flex-row sm:items-center sm:justify-between">
+                  <span>{LOVE_TEST_CHECKOUT_READINESS_LABEL}</span>
+                  <span>Next gate: {LOVE_TEST_TEST_MODE_READY_LABEL}</span>
+                </div>
+              </div>
+            ) : null}
           </div>
         ) : null}
         <div className="love-birth-chart-panel rounded-xl border border-[#b57248]/46 bg-[#060b16]/82 px-5 py-8 shadow-[0_0_0_1px_rgba(255,217,157,0.035),0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur md:px-14">
@@ -521,22 +589,51 @@ function AskPageContent() {
       {preview && !unlocked && (
         <ReadingPanel eyebrow={copy.preview.eyebrow} title={copy.preview.title}>
           <p className="whitespace-pre-line text-base leading-8 text-[#fff4dd]/88">{preview.preview}</p>
+          {paidIntentMeta ? (
+            <div className="mt-6 grid gap-3 md:grid-cols-3">
+              {['Emotional state', 'Likely communication pattern', 'One safe next step'].map((item) => (
+                <div key={item} className="rounded-lg border border-[#d8b77b]/24 bg-[#d8b77b]/8 px-4 py-3">
+                  <p className="text-xs uppercase tracking-[0.18em] text-[#d8b77b]/68">{item}</p>
+                  <p className="mt-2 text-sm leading-6 text-[#f4d7a3]/74">Included in the private preview before any checkout gate.</p>
+                </div>
+              ))}
+            </div>
+          ) : null}
           <div className="my-6 h-px w-full bg-[linear-gradient(90deg,transparent,rgba(255,198,130,0.62),transparent)]" />
           <div className="rounded-lg border border-[#b57248]/38 bg-[#090d18]/72 p-4 text-sm leading-7 text-[#f4d7a3]/74">
-            {copy.preview.paywallNote.replace('{price}', preview.price)}
+            {paidIntentMeta
+              ? `${paidIntentMeta.priceLabel}: the deeper interpretation, timing plan, 3-message suggestion, and what not to do stay locked until checkout readiness is approved.`
+              : copy.preview.paywallNote.replace('{price}', preview.price)}
           </div>
-          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-            {copy.unlockBenefits.map((benefit) => (
-              <li key={benefit} className="rounded-lg border border-[#b57248]/28 bg-black/20 px-4 py-3 text-sm text-[#f4d7a3]/78">
-                <Star className="mr-2 inline h-4 w-4 fill-[#d8b77b] text-[#d8b77b]" aria-hidden />
-                {benefit}
-              </li>
-            ))}
-          </ul>
+          {paidIntentMeta ? (
+            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+              {['Deeper interpretation', 'Timing plan', '3-message suggestion', 'What not to do'].map((benefit) => (
+                <li key={benefit} className="rounded-lg border border-[#b57248]/28 bg-black/20 px-4 py-3 text-sm text-[#f4d7a3]/78">
+                  <Lock className="mr-2 inline h-4 w-4 text-[#d8b77b]" aria-hidden />
+                  {benefit}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+              {copy.unlockBenefits.map((benefit) => (
+                <li key={benefit} className="rounded-lg border border-[#b57248]/28 bg-black/20 px-4 py-3 text-sm text-[#f4d7a3]/78">
+                  <Star className="mr-2 inline h-4 w-4 fill-[#d8b77b] text-[#d8b77b]" aria-hidden />
+                  {benefit}
+                </li>
+              ))}
+            </ul>
+          )}
           <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <span className="text-xs tracking-[0.12em] text-[#f4d7a3]/58">{copy.preview.assurance}</span>
+            <span className="text-xs tracking-[0.12em] text-[#f4d7a3]/58">
+              {paidIntentMeta ? 'Test-mode checkout is approval-gated. No payment button is shown.' : copy.preview.assurance}
+            </span>
             <button type="button" onClick={onUnlock} disabled={unlocking} className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55">
-              {unlocking ? copy.preview.unlocking : copy.preview.unlockCta.replace('{price}', preview.price)}
+              {paidIntentMeta
+                ? LOVE_TEST_CHECKOUT_READINESS_LABEL
+                : unlocking
+                  ? copy.preview.unlocking
+                  : copy.preview.unlockCta.replace('{price}', preview.price)}
             </button>
           </div>
         </ReadingPanel>

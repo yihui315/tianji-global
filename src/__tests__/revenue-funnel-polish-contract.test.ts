@@ -178,16 +178,67 @@ describe('Tianji Love revenue funnel polish', () => {
       'love_test_copy_result',
       'love_test_ask_next_click',
       'love_test_timing_click',
+      'love_test_paid_intent_view',
+      'love_test_paid_preview_submit',
+      'love_test_paid_unlock_click',
+      'love_test_checkout_readiness_blocked',
+      'love_test_test_mode_checkout_ready',
     ]);
 
     for (const eventName of LOVE_TEST_CONVERSION_EVENTS) {
       expect(isRevenueFunnelEventName(eventName)).toBe(true);
       expect(funnelEvents).toContain(eventName);
+    }
+
+    for (const eventName of LOVE_TEST_CONVERSION_EVENTS.slice(0, 6)) {
       expect(loveTest).toContain(eventName);
     }
 
+    for (const eventName of LOVE_TEST_CONVERSION_EVENTS.slice(6, 10)) {
+      expect(ask).toContain(eventName);
+    }
+
     expect(ask).toContain('intent: attributionIntent');
-    expect(ask).toContain('From your Love Test: ask the next question with more context.');
+    expect(ask).toContain('From your Love Test: ask one focused question before you overthink the whole relationship.');
     expect(loveTest).not.toMatch(/birthDate|birthTime|birthLocation|timezone|rawQuestion|prompt|fullReport|fullResult/i);
+  });
+
+  it('keeps Love-Test one-question paid intent behind checkout readiness and paid-smoke approval gates', () => {
+    const ask = read('src/app/(main)/ask/page.tsx');
+    const askPreview = read('src/app/api/ask/preview/route.ts');
+    const askUnlock = read('src/app/api/ask/unlock/route.ts');
+    const loveTest = read('src/lib/love-test.ts');
+
+    expect(loveTest).toContain('LOVE_TEST_PAID_INTENTS');
+    expect(loveTest).toContain('what_are_they_thinking');
+    expect(loveTest).toContain('What are they thinking now?');
+    expect(loveTest).toContain('9.9 first question');
+    expect(loveTest).toContain('9.9 timing question');
+    expect(ask).toContain('paidIntentMeta.title');
+    expect(ask).toContain('First question: 9.9');
+    expect(ask).toContain('Checkout readiness required');
+    expect(ask).toContain('Test-mode checkout ready - awaiting approval');
+    expect(ask).toContain('Deeper interpretation');
+    expect(ask).toContain('Timing plan');
+    expect(ask).toContain('3-message suggestion');
+    expect(ask).toContain('What not to do');
+    expect(ask).toContain('love_test_paid_intent_view');
+    expect(ask).toContain('love_test_paid_preview_submit');
+    expect(ask).toContain('love_test_paid_unlock_click');
+    expect(ask).toContain('love_test_checkout_readiness_blocked');
+    expect(ask).toContain('setError(LOVE_TEST_CHECKOUT_READINESS_LABEL)');
+    expect(ask).not.toMatch(/live payment CTA|completed charge/i);
+
+    expect(askPreview).toContain('Emotional state');
+    expect(askPreview).toContain('Likely communication pattern');
+    expect(askPreview).toContain('One safe next step');
+    expect(askPreview).not.toContain('generateTianjiModelResponse');
+
+    expect(askUnlock).toContain('LOVE_TEST_PAID_INTENT_TEST_MODE_READY');
+    expect(askUnlock).toContain('LOVE_TEST_PAID_SMOKE_APPROVED');
+    expect(askUnlock).toContain('love_test_checkout_readiness_required');
+    expect(askUnlock.indexOf('getLoveTestPaidIntentCheckoutGate')).toBeLessThan(
+      askUnlock.indexOf('stripe.checkout.sessions.create'),
+    );
   });
 });
