@@ -1,0 +1,112 @@
+name: TianJi Love Content Calendar
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "37 1 * * *"
+
+# Use write only because this workflow commits generated marketing calendar assets.
+# Do not grant actions/write, deployments/write, secrets access, or packages/write.
+permissions:
+  contents: write
+
+concurrency:
+  group: tianji-love-content-calendar-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  content-calendar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Prepare output directories
+        run: |
+          mkdir -p assets/marketing .ai
+
+      - name: Maintain seven-day content pool
+        uses: openai/codex-action@v1
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          prompt: |
+            Use .agents/skills/tianji-github-content-calendar-skill/SKILL.md.
+
+            Goal: keep at least seven future days of TianJi Love content available.
+
+            Allowed outputs:
+            - assets/marketing/content-calendar-7day.md
+            - assets/marketing/love-test-next-30-hooks.md
+            - assets/marketing/love-test-next-20-video-scripts.md
+            - assets/marketing/love-test-next-20-share-captions.md
+            - .ai/CHANGELOG_AI.md
+            - .ai/REVIEW_PACKET.md
+
+            Rotate themes:
+            - What is he thinking now?
+            - Should I take the initiative in ambiguity?
+            - Will they come back after no contact?
+            - Is this relationship worth continuing?
+
+            Hard stops:
+            - Do not auto-post to any platform.
+            - Do not make fake testimonials, fake metrics, or guaranteed relationship claims.
+            - Do not read, print, copy, diff, or infer .env files or secrets.
+            - Do not run Stripe, checkout, paid smoke, webhook replay, Supabase mutation, provider live calls, server mutation, or production deploy.
+            - Do not modify app source.
+
+      - name: Validate allowed path scope
+        run: |
+          changed="$(git diff --name-only)"
+          if [ -z "$changed" ]; then
+            echo "No generated changes."
+            exit 0
+          fi
+          echo "$changed"
+          blocked="$(printf '%s\n' "$changed" | grep -Ev '^(assets/marketing/|\.ai/CHANGELOG_AI\.md$|\.ai/REVIEW_PACKET\.md$)' || true)"
+          if [ -n "$blocked" ]; then
+            echo "Blocked unexpected paths:"
+            echo "$blocked"
+            exit 1
+          fi
+
+      - name: Run validation
+        run: |
+          npm run typecheck
+          npm run lint
+          git diff --check
+
+      - name: Targeted secret-shape scan
+        run: |
+          paths=""
+          for p in .ai assets/marketing data; do
+            if [ -e "$p" ]; then paths="$paths $p"; fi
+          done
+          if [ -z "$paths" ]; then exit 0; fi
+          if grep -RInE 'sk_(live|test)_[A-Za-z0-9]{8,}|rk_live_[A-Za-z0-9]{8,}|whsec_[A-Za-z0-9]{8,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA|OPENSSH|PRIVATE) KEY-----' $paths; then
+            echo "Secret-shaped value found in generated scope."
+            exit 1
+          fi
+
+      - name: Commit generated calendar updates
+        run: |
+          if git diff --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- assets/marketing .ai/CHANGELOG_AI.md .ai/REVIEW_PACKET.md
+          git diff --cached --check
+          git commit -m "chore(marketing): refresh TianJi Love content calendar"
+          git push

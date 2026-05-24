@@ -1,0 +1,62 @@
+name: TianJi Love Safety Audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7 2 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tianji-love-safety-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  safety-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Diff whitespace check
+        run: git diff --check
+
+      - name: Verify workflow security shape
+        run: |
+          if grep -RInE '^[[:space:]]*pull_request_target[[:space:]]*:' .github/workflows; then
+            echo "pull_request_target is forbidden for TianJi Love automation."
+            exit 1
+          fi
+          if grep -RInE '^[[:space:]]+(actions|deployments|packages):[[:space:]]*write[[:space:]]*(#.*)?$' .github/workflows; then
+            echo "Forbidden broad workflow permission found."
+            exit 1
+          fi
+
+      - name: Targeted secret-shape scan
+        run: |
+          paths=""
+          for p in .agents/skills .github/workflows .ai assets/marketing data; do
+            if [ -e "$p" ]; then paths="$paths $p"; fi
+          done
+          if [ -z "$paths" ]; then exit 0; fi
+          if grep -RInE 'sk_(live|test)_[A-Za-z0-9]{8,}|rk_live_[A-Za-z0-9]{8,}|whsec_[A-Za-z0-9]{8,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA|OPENSSH|PRIVATE) KEY-----' $paths; then
+            echo "Secret-shaped value found in audited scope."
+            exit 1
+          fi
