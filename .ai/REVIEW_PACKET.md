@@ -1,112 +1,100 @@
-# Review Packet - TianJi Love GitHub Automation Skill Stack
+# Review Packet - TianJi Love GitHub Actions Codex Input Fix
 
 ## Background
 
-The user requested a safe GitHub automation skill stack for TianJi Love marketing automation. The stack should automate publishing-pack generation, KPI analysis, content calendar maintenance, funnel-copy optimization guidance, paid gate reminders, and publisher bridge preparation without auto-posting, running Stripe, deploying production, or reading secrets.
+The post-merge TianJi Love Content Calendar workflow failed before content generation because `openai/codex-action@v1` rejected the input name `openai_api_key`. The action expects `openai-api-key`.
 
 ## Task Goal
 
-Create six GitHub automation skills, four safe GitHub workflow templates, two documentation files, and AI implementation records.
+Fix all TianJi Love GitHub automation workflows that call Codex Action, then apply the same input-key correction to the existing Codex Action workflows so the required repository-wide scan has zero `openai_api_key` matches. Do this without changing production, payment, social publishing, secrets, or application source.
 
 ## Changed Files
 
 ```text
-.agents/skills/tianji-github-daily-growth-skill/SKILL.md
-.agents/skills/tianji-github-kpi-analysis-skill/SKILL.md
-.agents/skills/tianji-github-content-calendar-skill/SKILL.md
-.agents/skills/tianji-github-funnel-optimizer-skill/SKILL.md
-.agents/skills/tianji-github-paid-gate-skill/SKILL.md
-.agents/skills/tianji-github-safe-publisher-bridge-skill/SKILL.md
 .github/workflows/tianji-love-daily-growth.yml
 .github/workflows/tianji-love-kpi-analysis.yml
 .github/workflows/tianji-love-content-calendar.yml
-.github/workflows/tianji-love-safety-audit.yml
-.ai/TIANJI_LOVE_GITHUB_AUTOMATION_SKILL_STACK.md
-.ai/TIANJI_LOVE_GITHUB_ACTIONS_SECURITY_RULES.md
+.github/workflows/codex-self-evolution.yml
+.github/workflows/codex-self-upgrade.yml
+.github/workflows/relationship-ab-evolution.yml
 .ai/CHANGELOG_AI.md
 .ai/REVIEW_PACKET.md
 ```
 
 ## Key Diff Summary
 
-- Added one skill per automation concern, each with purpose, allowed actions, forbidden actions, inputs, outputs, validation commands, commit rules, and gate status format.
-- Added workflow templates for daily growth, KPI analysis, content calendar maintenance, and safety audit.
-- Added workflow path guards before commits.
-- Added targeted secret-shape scans over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, and `data/` when those paths exist.
-- Added docs explaining automatic actions, approval-required actions, manual runs, stop procedure, and output inspection.
+- Replaced `openai_api_key` with `openai-api-key` in the three TianJi Love workflows that call `openai/codex-action@v1`.
+- Replaced the same invalid input in `codex-self-evolution.yml`, `codex-self-upgrade.yml`, and `relationship-ab-evolution.yml` so `rg -n "openai_api_key" .github/workflows` returns zero matches.
+- Left `tianji-love-safety-audit.yml` unchanged because it does not call Codex Action.
+- Updated AI records with the root cause, validation, gate status, and follow-up.
 
 ## Main Design Decisions
 
-- Work was done in an isolated git worktree from `origin/main` because the original `tianji-global` checkout had unrelated dirty changes.
+- Work was done in an isolated git worktree from latest `origin/main` because the original `tianji-global` checkout has unrelated dirty changes.
+- Only the invalid action input name was changed.
 - No app source was changed.
 - No dependencies were added.
-- No `.env`, secret, production config, Stripe, Supabase, deployment, or server files were read or changed.
-- Workflow templates use `contents: write` only where generated docs/assets/data are committed. The safety workflow uses `contents: read`.
-- Paid smoke stays blocked unless the user gives the exact approval phrase: `批准跑 Stripe test-mode paid smoke`.
+- No `.env`, secret, production config, Stripe, Supabase, deployment, provider live call, or server files were read or changed.
+- The Node 20 warning was recorded as follow-up only; it was not the failure cause.
 
 ## Commands Run
 
 ```text
-Read top-level AGENTS.md, .ai/PROJECT_CONTEXT.md, .ai/DECISIONS.md, .ai/TASKS.md, .ai/MODEL_ROUTING.md
-Read relevant skill guidance: skill-creator, ai-divination-dev, github yeet, using-git-worktrees
-git -c safe.directory=* -C tianji-global status -sb
 git -c safe.directory=* -C tianji-global fetch origin main
-git -c safe.directory=* -C tianji-global worktree add C:/Users/Administrator/.config/superpowers/worktrees/tianji-global/chore-tianji-github-marketing-automation-skills-20260524 -b chore/tianji-github-marketing-automation-skills-20260524 origin/main
-Inspected package.json, AGENTS.md, existing workflows, existing skills, and .ai files in the isolated worktree
-npm ci
-npm install --ignore-scripts --no-audit --prefer-offline
-npm run typecheck
-npm run lint
+git -c safe.directory=* -C tianji-global worktree add tianji-global-fix-actions-codex-input-20260524 -b fix/tianji-github-actions-codex-input-20260524 origin/main
+Read AGENTS.md, package.json, and all four TianJi Love workflow files
+rg -n "openai_api_key|openai-api-key|OPENAI_API_KEY" .github/workflows
+git status --short
+rg -n "openai_api_key" .github/workflows
+rg -n "openai-api-key" .github/workflows
 git diff --check
-targeted secret-shape scan over .agents/skills, .github/workflows, .ai, assets/marketing, data
-workflow trigger/permission scan for forbidden YAML entries
-PyYAML parse of .github/workflows/tianji-love-*.yml
-quick_validate.py for all six new skills
+python -c "import pathlib, yaml; files=sorted(pathlib.Path('.github/workflows').glob('*.yml')); [yaml.safe_load(p.read_text(encoding='utf-8')) for p in files]; print('parsed=' + str(len(files)))"
+PowerShell targeted secret-shape scan over changed workflow and AI evidence files
 ```
-
-Note: the first `npm ci` process stopped returning output and was terminated after its CPU counter stopped changing. `npm install --ignore-scripts --no-audit --prefer-offline` completed successfully afterward and created the missing `.bin` links without tracked package file changes.
 
 ## Validation Result
 
 ```text
-npm run typecheck: Pass
-npm run lint: Pass, with existing Next.js next lint deprecation notice
+git status --short: Pass - only intended workflow and AI evidence files changed
+rg -n "openai_api_key" .github/workflows: Pass - zero matches
+rg -n "openai-api-key" .github/workflows: Pass - six Codex Action call sites
 git diff --check: Pass
-targeted secret-shape scan: Pass, no matches
-workflow forbidden trigger/permission scan: Pass, no matches
-workflow YAML parse: Pass
-skill quick_validate.py: Pass for all six skills
+workflow YAML parse: Pass - parsed 11 workflow files
+targeted secret-shape scan: Pass - no token/key material found outside intentional workflow regex guard strings
 ```
 
-The paid-gate skill includes the exact Chinese approval phrase, so its validator run needed `PYTHONUTF8=1` on Windows. With UTF-8 enabled, it passed.
+## Root Cause
+
+```text
+Workflow uses: openai_api_key
+Codex Action expects: openai-api-key
+```
 
 ## Gate Status
 
 ```text
-GitHub automation skill stack: Go
-Daily growth workflow template: Go
-KPI analysis workflow template: Go
-Content calendar workflow template: Go
-Safety audit workflow template: Go
-Publisher bridge: Prepared but no credentials
-Social auto-posting: No-Go - requires explicit approval and platform-safe adapter
+Content Calendar workflow input fix: Go
+Daily Growth workflow input fix: Go
+KPI Analysis workflow input fix: Go
+Existing Codex workflow input fix: Go
+Safety Audit workflow: Not changed - no Codex Action input
+Secrets printed: No
+Production deploy: Not run
 Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
+Paid smoke: No-Go
+Social auto-posting: No-Go
 ```
 
 ## Risks
 
-- Scheduled GitHub Actions will run only after these workflow files are merged into the default branch.
-- The Codex action steps require the repository to provide the expected OpenAI action secret/configuration. If missing, the generation steps will fail closed.
-- Commit-capable workflows can write generated docs/assets/data, so path guards and secret scans are required before commits.
-- Publisher bridge is queue/export-only. Real platform adapters need a separate approval and security review.
+- After this fix, the next likely workflow blocker is missing or insufficient `OPENAI_API_KEY` repository secret/config.
+- GitHub's Node.js 20 action deprecation warning remains a follow-up and was not addressed in this narrow fix.
+- Re-run `TianJi Love Content Calendar` manually on branch `main` after merge.
 
 ## Questions For Brain Review
 
-- Should generated marketing updates commit directly to the default branch after merge, or should a later workflow revision create PR branches instead?
-- Should the daily growth and content calendar schedules remain enabled by default after merge, or be converted to manual-only until the first supervised run?
+- Should the Node 20 warning be handled in a separate workflow maintenance task after this fix lands?
 
 ## Suggested Next Codex Instruction
 
-Run the new `TianJi Love Safety Audit` workflow manually after the branch is pushed, then decide whether daily growth should remain scheduled or manual-only before merging.
+Merge `fix/tianji-github-actions-codex-input-20260524`, then manually re-run `TianJi Love Content Calendar` on branch `main`.
