@@ -1,3 +1,119 @@
+# Review Packet - TianJi Love MiniMax Growth Pipeline Phase 2
+
+## Background
+
+MiniMax API smoke and KPI Analysis had already moved to Go. This task verifies the remaining MiniMax-backed TianJi Love draft workflows, tightens generated content toward publishable/revenue-focused output, and adds a first conversion suggestion artifact without enabling code automation, deployment, Stripe, or social posting.
+
+## Task Goal
+
+Complete runtime verification for Daily Growth and Content Calendar, review artifact availability, improve prompts for content quality, and add a draft-only `TianJi Love Conversion Suggestions` artifact workflow.
+
+## Runtime Verification
+
+```text
+MiniMax API Smoke: Go
+TianJi Love KPI Analysis: Go - run 26361421145
+TianJi Love Daily Growth: Go - run 26361417380
+TianJi Love Content Calendar: Go - run 26361415667
+Artifacts uploaded: Yes
+```
+
+## Artifact Review
+
+```text
+KPI Analysis artifact: Go - tianji-love-kpi-analysis, id 7185793229, not expired
+Daily Growth artifact: Go - tianji-love-daily-growth, id 7185824316, not expired
+Content Calendar artifact: Go - tianji-love-content-calendar, id 7185823452, not expired
+
+KPI Analysis body quality: Blocked - artifact zip download requires authenticated GitHub access
+Daily Growth body quality: Blocked - artifact zip download requires authenticated GitHub access
+Content Calendar body quality: Blocked - artifact zip download requires authenticated GitHub access
+```
+
+## Changed Files
+
+```text
+.github/workflows/tianji-love-conversion-suggestions.yml
+package.json
+scripts/tianji-love/generate-content-calendar.mjs
+scripts/tianji-love/generate-conversion-suggestions.mjs
+scripts/tianji-love/generate-daily-growth.mjs
+scripts/tianji-love/generate-kpi-analysis.mjs
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Diff Summary
+
+- Strengthened Daily Growth prompt to require Xiaohongshu, Douyin, and WeChat Channels drafts, concrete channel actions, TianJi Love CTAs, product entry mapping, and no fake/guaranteed claims.
+- Strengthened Content Calendar prompt to require 7-day channel-specific publishable outlines, product entries, conversion goals, and safer Chinese growth themes.
+- Strengthened KPI Analysis prompt to identify funnel money leaks and route-level conversion recommendations.
+- Added `generate-conversion-suggestions.mjs` to create `.ai/generated/tianji-love-conversion-suggestions.md` from `.ai/generated/tianji-love-kpi-analysis.md` when present, with a fallback to known growth direction when absent.
+- Added `tianji:conversion-suggestions` npm script and an artifact-only GitHub workflow.
+
+## Commands Run
+
+```text
+Read workspace AGENTS.md, PROJECT_CONTEXT.md, DECISIONS.md, TASKS.md, MODEL_ROUTING.md
+Read target AGENTS.md, package.json, growth scripts, and workflow files
+git status --short --branch
+curl.exe -L https://api.github.com/repos/yihui315/tianji-global/actions/workflows
+curl.exe -L workflow run lists for KPI Analysis, Daily Growth, and Content Calendar
+curl.exe -L artifact metadata for the three successful runs
+gh workflow list --repo yihui315/tianji-global --limit 50
+gh auth login -h github.com --web --scopes repo,workflow
+curl.exe -L artifact zip download probe
+node --check scripts/ai/minimax-chat.mjs
+node --check scripts/tianji-love/generate-content-calendar.mjs
+node --check scripts/tianji-love/generate-daily-growth.mjs
+node --check scripts/tianji-love/generate-kpi-analysis.mjs
+node --check scripts/tianji-love/generate-conversion-suggestions.mjs
+node package.json parse
+python YAML parse for .github/workflows/tianji-love-*.yml
+git diff --check
+rg secret-shape scans
+```
+
+## Validation Result
+
+```text
+Script syntax checks: Pass
+package.json parse: Pass
+YAML parse: Pass, 5 TianJi Love workflow files
+git diff --check: Pass
+Targeted secret-shape scan: Pass - only intentional redaction regex matched
+Full repo secret-shape scan: Informational false positives in README placeholders and ordinary words such as risk-taking
+```
+
+## Gate Status
+
+```text
+MiniMax API runtime: Go
+TianJi Love draft pipeline: Go
+Conversion suggestions artifact workflow: Prepared
+Auto website code changes from KPI: Not enabled
+OpenAI API runtime: Bypassed
+Codex Action dependency in TianJi workflows: Removed
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+## Risks And Follow-up
+
+- Local `gh` remains unauthenticated, so artifact body download and exact A/B/C/D content scoring are still pending authenticated GitHub access.
+- The conversion suggestions workflow reads `.ai/generated/tianji-love-kpi-analysis.md` when present; on a clean GitHub checkout it falls back to the known growth direction because prior workflow artifacts are not automatically present.
+- After merge, run `TianJi Love Conversion Suggestions` manually and review the artifact before turning recommendations into code PRs.
+- Manual publishing remains required; social auto-posting stays No-Go.
+
+## Suggested Next Codex Instruction
+
+After authenticating GitHub artifact access, download the three generated artifacts, score each A-D, and if at least B quality, create the first manual publishing pack plus a separate implementation task for the top 3 conversion suggestions.
+
+---
+
 # Review Packet - TianJi Love GitHub Actions Codex Input Fix
 
 ## Background
