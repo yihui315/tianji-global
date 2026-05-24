@@ -468,3 +468,101 @@ GitHub token rotation: Owner action required
 - After merge and secret configuration, manually dispatch the three workflows on `main` and inspect artifact outputs.
 - Revoke/rotate the previously pasted GitHub token.
 - Keep generated marketing output in artifact review mode until a separate publisher bridge is approved.
+
+---
+
+# Review Packet - TianJi Love MiniMax Runtime Verification
+
+## Background
+
+PR #53 moved the three TianJi Love growth/KPI workflows from Codex Action to MiniMax-backed project scripts. MiniMax GitHub Actions secrets were configured, then the three workflows were manually dispatched on `main`.
+
+## Main Commit
+
+```text
+95f354a fix(actions): run TianJi growth workflows on MiniMax API
+```
+
+## Runs Reviewed
+
+```text
+TianJi Love Content Calendar run: 26361415667
+TianJi Love Content Calendar job: 77597470019
+
+TianJi Love Daily Growth run: 26361417380
+TianJi Love Daily Growth job: 77597474090
+
+TianJi Love KPI Analysis run: 26361421145
+TianJi Love KPI Analysis job: 77597484443
+```
+
+## Runtime Verification
+
+```text
+TianJi Love Content Calendar: Fail - MiniMax HTTP 429 rate_limit_error
+TianJi Love Daily Growth: Fail - MiniMax HTTP 429 rate_limit_error
+TianJi Love KPI Analysis: Fail - MiniMax HTTP 429 rate_limit_error
+Expected artifacts uploaded: No
+MiniMax API runtime: No-Go - quota/rate limit
+```
+
+The workflows reached the MiniMax-backed script route:
+
+```text
+Checkout: Pass
+Setup Node: Pass
+npm ci: Pass
+Generate draft step: Fail at MiniMax API call
+Upload artifact: Skipped
+```
+
+## Failure Classification
+
+```text
+401 / 403: Not observed
+404 model not found: Not observed
+404 endpoint: Not observed
+429 / quota: Observed
+artifact missing: Consequence of failed generation step
+npm ci fail: Not observed
+YAML fail: Not observed
+```
+
+The MiniMax response reported a 5-hour Token Plan Plus usage limit and a reset at `2026-05-25T00:00:00+08:00`.
+
+## Safety Result
+
+```text
+Secrets printed: No
+Token values printed: No
+.env read: No
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Artifact-only verification: Yes
+```
+
+## Gate Status
+
+```text
+MiniMax GitHub Secrets: Go
+TianJi workflow MiniMax migration: Go
+OpenAI API runtime: Bypassed
+Codex Action dependency in TianJi workflows: Removed
+Content Calendar runtime: No-Go - MiniMax quota/rate limit
+Daily Growth runtime: No-Go - MiniMax quota/rate limit
+KPI Analysis runtime: No-Go - MiniMax quota/rate limit
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+## Risks And Follow-up
+
+- Retry after the MiniMax quota reset time.
+- If 429 persists after reset, verify MiniMax token plan quota or switch to a model/plan with usable quota.
+- Artifacts were not produced because generation failed before upload.
+- Keep social auto-posting and production deploy disabled.

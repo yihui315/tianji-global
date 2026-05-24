@@ -269,3 +269,54 @@ GitHub token rotation: Owner action required
 - Configure `MINIMAX_API_KEY`, `MINIMAX_BASE_URL`, and `MINIMAX_MODEL` as GitHub Actions repository secrets.
 - Re-run the three TianJi Love workflows on `main` after merge and secret configuration.
 - Revoke/rotate the previously pasted GitHub token.
+
+## 2026-05-24 - TianJi Love MiniMax workflow runtime verification
+
+### What changed
+
+Verified the MiniMax-backed TianJi Love workflow runtime on `main` after PR #53 merged and MiniMax GitHub Actions secrets were configured.
+
+### Main commit
+
+```text
+95f354a fix(actions): run TianJi growth workflows on MiniMax API
+```
+
+### Runtime verification
+
+```text
+TianJi Love Content Calendar run: 26361415667
+TianJi Love Daily Growth run: 26361417380
+TianJi Love KPI Analysis run: 26361421145
+
+TianJi Love Content Calendar: Fail - MiniMax HTTP 429 rate_limit_error
+TianJi Love Daily Growth: Fail - MiniMax HTTP 429 rate_limit_error
+TianJi Love KPI Analysis: Fail - MiniMax HTTP 429 rate_limit_error
+Expected artifacts uploaded: No
+MiniMax API runtime: No-Go - quota/rate limit
+```
+
+The workflow reached the MiniMax API with masked `MINIMAX_*` values. The failure message reported a 5-hour Token Plan Plus usage limit and a reset at `2026-05-25T00:00:00+08:00`.
+
+### Gate status
+
+```text
+MiniMax GitHub Secrets: Go
+TianJi workflow MiniMax migration: Go
+OpenAI API runtime: Bypassed
+Codex Action dependency in TianJi workflows: Removed
+Content Calendar runtime: No-Go - MiniMax quota/rate limit
+Daily Growth runtime: No-Go - MiniMax quota/rate limit
+KPI Analysis runtime: No-Go - MiniMax quota/rate limit
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+### Follow-up
+
+- Retry after the MiniMax quota reset time.
+- If 429 persists after reset, verify the MiniMax token plan or choose a model/plan with available quota.
+- Keep generated marketing output in artifact review mode; do not enable social auto-posting.
