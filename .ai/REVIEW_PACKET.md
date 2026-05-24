@@ -608,3 +608,54 @@ Paid smoke: No-Go
 Social auto-posting: No-Go
 Secrets printed: No
 ```
+
+---
+
+# Review Packet - MiniMax API Smoke Workflow
+
+## Background
+
+The TianJi Love growth workflows reached MiniMax but failed with `HTTP 429 rate_limit_error`. A smaller smoke workflow is needed to isolate GitHub Actions runner, secrets, Base URL, model, and Token Plan key connectivity from the longer generation jobs.
+
+## What Changed
+
+Added `.github/workflows/minimax-api-smoke.yml`.
+
+```text
+Workflow: MiniMax API Smoke
+Trigger: workflow_dispatch only
+Permissions: contents: read
+Request: tiny /chat/completions call
+Prompt: Reply with exactly: OK
+temperature: 0
+max_completion_tokens: 20
+Secrets printed: No
+```
+
+## Validation
+
+```text
+node --check scripts/ai/minimax-chat.mjs: Pass
+YAML parse: Pass
+git diff --check: Pass
+Targeted secret-shape scan: Pass
+Live MiniMax API call: Not run locally
+```
+
+## Gate Status
+
+```text
+MiniMax API smoke workflow: Prepared
+MiniMax API smoke runtime: Pending manual dispatch on main
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Social auto-posting: No-Go
+Secrets printed: No
+```
+
+## Follow-up
+
+- Merge this workflow to `main`.
+- Manually run `MiniMax API Smoke` on `main`.
+- If it returns `MiniMax API smoke: PASS`, run only `TianJi Love KPI Analysis` next.

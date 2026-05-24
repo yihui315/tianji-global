@@ -1,0 +1,114 @@
+name: MiniMax API Smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  minimax-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    env:
+      MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
+      MINIMAX_BASE_URL: ${{ secrets.MINIMAX_BASE_URL }}
+      MINIMAX_MODEL: ${{ secrets.MINIMAX_MODEL }}
+
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check required secrets are present
+        run: |
+          if [ -z "$MINIMAX_API_KEY" ]; then
+            echo "MINIMAX_API_KEY is missing"
+            exit 2
+          fi
+
+          if [ -z "$MINIMAX_BASE_URL" ]; then
+            echo "MINIMAX_BASE_URL is missing"
+            exit 2
+          fi
+
+          if [ -z "$MINIMAX_MODEL" ]; then
+            echo "MINIMAX_MODEL is missing"
+            exit 2
+          fi
+
+          echo "MiniMax secrets are present."
+          echo "Base URL is configured."
+          echo "Model is configured."
+
+      - name: Call MiniMax chat completions API
+        run: |
+          node --input-type=module <<'NODE'
+          const apiKey = process.env.MINIMAX_API_KEY;
+          const baseUrl = process.env.MINIMAX_BASE_URL.replace(/\/$/, "");
+          const model = process.env.MINIMAX_MODEL;
+
+          function redact(value) {
+            return String(value ?? "")
+              .split(apiKey).join("[REDACTED_MINIMAX_API_KEY]")
+              .replace(/Bearer\s+[A-Za-z0-9._\-+/=]{12,}/gi, "Bearer [REDACTED]")
+              .replace(/sk-[A-Za-z0-9_*.\-]{8,}/g, "[REDACTED_KEY]");
+          }
+
+          const payload = {
+            model,
+            messages: [
+              {
+                role: "system",
+                content: "You are a minimal API smoke test assistant."
+              },
+              {
+                role: "user",
+                content: "Reply with exactly: OK"
+              }
+            ],
+            temperature: 0,
+            max_completion_tokens: 20
+          };
+
+          const res = await fetch(`${baseUrl}/chat/completions`, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${apiKey}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+
+          const text = await res.text();
+
+          console.log(`MiniMax HTTP status: ${res.status}`);
+
+          if (!res.ok) {
+            console.error("MiniMax smoke failed.");
+            console.error(redact(text).slice(0, 1000));
+            process.exit(1);
+          }
+
+          let json;
+          try {
+            json = JSON.parse(text);
+          } catch {
+            console.error("MiniMax returned non-JSON response.");
+            console.error(redact(text).slice(0, 1000));
+            process.exit(1);
+          }
+
+          const content = json?.choices?.[0]?.message?.content || "";
+          console.log("MiniMax response content:");
+          console.log(content.slice(0, 200));
+
+          if (!content) {
+            console.error("MiniMax returned empty content.");
+            process.exit(1);
+          }
+
+          console.log("MiniMax API smoke: PASS");
+          NODE
