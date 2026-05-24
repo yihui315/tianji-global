@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-05-24 - TianJi Love checkout readiness source ref
+
+- Task ID: 20260524-love-test-checkout-readiness-source-ref
+- Files changed: `src/__tests__/api/ask-paid-gateway.test.ts`, `scripts/audit-love-test-checkout-readiness.mjs`, `package.json`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Prepared the 9.9 Love-Test paid-intent checkout readiness audit changes for a deployable source ref. The source changes strengthen locked-preview and checkout-block coverage, add a no-secrets readiness audit, and preserve the approval gate before any Stripe checkout path.
+- Commands run: workspace and repo status checks; focused diff and secret-shape scan over checkout readiness files; `npm run audit:love-test-checkout-readiness`; `npm run test -- --run src/__tests__/api/ask-paid-gateway.test.ts src/__tests__/love-test-mvp-contract.test.ts src/__tests__/revenue-funnel-polish-contract.test.ts src/__tests__/relationship-share-card-contract.test.ts`; `npm run typecheck`; `npm run lint`; `npm run audit:routes`; `npm run audit:share`; `npm run build:staging:degraded`; `git diff --check`.
+- Results: Checkout readiness audit is Go; local paid-intent readiness remains Go; Stripe checkout execution was not run; paid smoke remains No-Go awaiting explicit approval; production deploy remains No-Go. The exact source-ref commit is captured by the final git commit/log output for this branch.
+- Risks: `package.json` has unrelated dirty local work outside this task, so staging must include only the `audit:love-test-checkout-readiness` script entry from that file. This task does not prove a Stripe test-mode transaction; it proves code-path readiness and approval blocking only.
+- Next step: Push `chore/love-test-checkout-readiness-20260524` as the checkout readiness source ref, then request explicit approval before any Stripe test-mode paid smoke.
+
 ### 2026-05-21 - TianJi Love Lane S staging deploy readiness
 
 - Task ID: 20260521-tianji-love-lane-s-staging-deploy-ready

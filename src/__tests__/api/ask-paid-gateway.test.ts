@@ -73,6 +73,109 @@ describe('Ask paid gateway contract', () => {
     expect(generateReport).not.toHaveBeenCalled();
   });
 
+  it('returns a locked Love-Test paid-intent preview without Stripe, provider, or full-answer leakage', async () => {
+    const { POST } = await import('@/app/api/ask/preview/route');
+
+    const response = await POST(postRequest('/api/ask/preview', {
+      question: 'What are they thinking now?',
+      language: 'en',
+      source: 'love_test',
+      intent: 'what_are_they_thinking',
+    }));
+    const json = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(json.success).toBe(true);
+    expect(json.locked).toBe(true);
+    expect(json.answer).toBeNull();
+    expect(json.fullAnswer).toBeUndefined();
+    expect(json.preview).toEqual(expect.any(String));
+    expect(json.id).toEqual(expect.any(String));
+    expect(json.url).toBeUndefined();
+    expect(JSON.stringify(json)).not.toMatch(/stripe\.com|checkout\.stripe|birthDate|birthTime|birthLocation|timezone/i);
+    expect(mocks.createSession).not.toHaveBeenCalled();
+    expect(mocks.retrieveSession).not.toHaveBeenCalled();
+    expect(mocks.generateReport).not.toHaveBeenCalled();
+  });
+
+  it('rejects unknown Love-Test paid intent values without reaching checkout or provider code', async () => {
+    const { POST } = await import('@/app/api/ask/preview/route');
+
+    const response = await POST(postRequest('/api/ask/preview', {
+      question: 'Should I act now?',
+      language: 'en',
+      source: 'love_test',
+      intent: 'start_checkout_now',
+    }));
+    const json = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(json.error).toEqual(expect.any(String));
+    expect(mocks.createSession).not.toHaveBeenCalled();
+    expect(mocks.retrieveSession).not.toHaveBeenCalled();
+    expect(mocks.generateReport).not.toHaveBeenCalled();
+  });
+
+  it('blocks Love-Test paid-intent unlock before Stripe when checkout readiness is missing', async () => {
+    const id = encodeAskQuestionId({
+      question: 'What are they thinking now?',
+      fullAnswer: '',
+      language: 'en',
+    });
+
+    const { POST } = await import('@/app/api/ask/unlock/route');
+    const response = await POST(postRequest('/api/ask/unlock', {
+      id,
+      language: 'en',
+      source: 'love_test',
+      intent: 'what_are_they_thinking',
+    }));
+    const json = await response.json();
+
+    expect(response.status).toBe(423);
+    expect(json).toMatchObject({
+      error: 'Checkout readiness required',
+      code: 'love_test_checkout_readiness_required',
+      checkoutReadiness: 'blocked',
+    });
+    expect(json.url).toBeUndefined();
+    expect(JSON.stringify(json)).not.toMatch(/stripe\.com|checkout\.stripe|birthDate|birthTime|birthLocation|timezone|What are they thinking/i);
+    expect(mocks.createSession).not.toHaveBeenCalled();
+    expect(mocks.retrieveSession).not.toHaveBeenCalled();
+    expect(mocks.generateReport).not.toHaveBeenCalled();
+  });
+
+  it('requires explicit paid-smoke approval even after Love-Test test-mode readiness is marked ready', async () => {
+    vi.stubEnv('LOVE_TEST_PAID_INTENT_TEST_MODE_READY', 'true');
+
+    const id = encodeAskQuestionId({
+      question: 'When should I act?',
+      fullAnswer: '',
+      language: 'en',
+    });
+
+    const { POST } = await import('@/app/api/ask/unlock/route');
+    const response = await POST(postRequest('/api/ask/unlock', {
+      id,
+      language: 'en',
+      source: 'love_test',
+      intent: 'timing',
+    }));
+    const json = await response.json();
+
+    expect(response.status).toBe(403);
+    expect(json).toMatchObject({
+      error: 'Test-mode checkout ready - awaiting approval',
+      code: 'love_test_paid_smoke_approval_required',
+      checkoutReadiness: 'approval_required',
+    });
+    expect(json.url).toBeUndefined();
+    expect(JSON.stringify(json)).not.toMatch(/stripe\.com|checkout\.stripe|When should I act/i);
+    expect(mocks.createSession).not.toHaveBeenCalled();
+    expect(mocks.retrieveSession).not.toHaveBeenCalled();
+    expect(mocks.generateReport).not.toHaveBeenCalled();
+  });
+
   it('generates paid Ask answers through the TianJi gateway with safe aiMeta', async () => {
     const id = encodeAskQuestionId({
       question: 'Will they come back if I pay now?',
