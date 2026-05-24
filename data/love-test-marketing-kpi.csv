@@ -1,0 +1,4 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-05-24,xiaohongshu,xhs-001,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,template row
+2026-05-24,douyin,dy-001,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,template row
+2026-05-24,videohao,vh-001,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,template row

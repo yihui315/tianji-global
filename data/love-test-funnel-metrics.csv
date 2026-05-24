@@ -1,0 +1,2 @@
+date,homepage_to_love_test_ctr,love_test_start_rate,result_view_rate,share_card_click_rate,ask_next_click_rate,paid_intent_view_rate,preview_submit_rate,unlock_click_rate,checkout_ready_rate,paid_conversion_rate,notes
+2026-05-24,0,0,0,0,0,0,0,0,0,0,template baseline; paid conversion remains not measured until approved smoke/live gate

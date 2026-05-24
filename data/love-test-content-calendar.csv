@@ -1,0 +1,5 @@
+date,channel,content_id,theme,title_or_hook,asset_source,status,owner,metric_to_watch,notes
+2026-05-25,xiaohongshu,xhs-001,他现在到底在想什么,你不是想太多，你只是缺一个关系地图,assets/marketing/love-test-xiaohongshu-30-posts.md,planned,operator,love_test_starts,manual review before publish
+2026-05-25,douyin,dy-001,他现在到底在想什么,你不是想太多，你只是缺一个关系地图,assets/marketing/love-test-douyin-30-scripts.md,planned,operator,clicks,manual review before publish
+2026-05-26,xiaohongshu,xhs-002,你们到底有没有缘分,心动是真的，合不合适要看模式,assets/marketing/love-test-xiaohongshu-30-posts.md,planned,operator,result_views,manual review before publish
+2026-05-26,videohao,vh-001,关系里的不确定,成年人最累的关系是不确定,assets/marketing/love-test-videohao-15-scripts.md,planned,operator,ask_next_clicks,manual review before publish

@@ -1,15 +1,29 @@
-# TianJi Love Stripe Test-Mode Paid Smoke Approval Packet - 2026-05-24
+# TianJi Love Automated Growth System Phase 1 - 2026-05-24
 
 ## What changed
 
-Prepared the final approval packet for a future Stripe test-mode paid smoke of the `/love-test -> /ask` 9.9 one-question paid-intent funnel.
+Created the first automated growth system for TianJi Love around `/love-test`, share-card distribution, `/ask` paid intent, future 9.9 one-question checkout readiness, marketing asset production, KPI tracking, and daily Codex optimization.
 
-This task is approval-packet only. It does not deploy, does not create a Stripe checkout session, does not run paid smoke, and does not touch production.
+This task is docs/assets/data-only. It does not deploy, does not create Stripe checkout sessions, does not run paid smoke, and does not touch production.
 
 ## Files changed
 
 ```text
-.ai/TIANJI_LOVE_STRIPE_TEST_MODE_PAID_SMOKE_APPROVAL_PACKET_20260524.md
+assets/marketing/love-test-xiaohongshu-30-posts.md
+assets/marketing/love-test-douyin-30-scripts.md
+assets/marketing/love-test-videohao-15-scripts.md
+assets/marketing/love-test-share-copy-50.md
+assets/marketing/love-test-kol-dm-templates.md
+assets/marketing/love-test-seo-keywords-30.md
+assets/marketing/love-test-landing-page-copy.md
+assets/marketing/love-test-paid-intent-copy.md
+assets/marketing/love-test-ugc-case-template.md
+data/love-test-marketing-kpi.csv
+data/love-test-daily-growth-log.csv
+data/love-test-content-calendar.csv
+data/love-test-funnel-metrics.csv
+.ai/TIANJI_LOVE_DAILY_GROWTH_AUTOMATION_LOOP.md
+.ai/TIANJI_LOVE_AUTOMATION_CONTROLLER.md
 .ai/CHANGELOG_AI.md
 .ai/REVIEW_PACKET.md
 ```
@@ -18,60 +32,50 @@ This task is approval-packet only. It does not deploy, does not create a Stripe 
 
 ```text
 Read AGENTS.md
-Read tianji-revenue-safety-reviewer skill
-Read tianji-evidence-qa skill
 Read ai-divination-dev skill
+Read tianji-evidence-qa skill
 git status --short --branch
 git branch --show-current
 git remote -v
-Read .ai/CHANGELOG_AI.md
-Read .ai/REVIEW_PACKET.md
-Read src/__tests__/api/ask-paid-gateway.test.ts
-Read scripts/audit-love-test-checkout-readiness.mjs
-Read src/app/api/ask/unlock/route.ts
-Read src/app/api/stripe/checkout/route.ts
-Read src/app/api/stripe/webhook/route.ts
-Read src/app/api/ask/preview/route.ts
-rg focused readiness/checkout/webhook/gate terms
-npm run audit:love-test-checkout-readiness
-npm run test -- --run src/__tests__/api/ask-paid-gateway.test.ts src/__tests__/love-test-mvp-contract.test.ts src/__tests__/revenue-funnel-polish-contract.test.ts src/__tests__/relationship-share-card-contract.test.ts
+Read package.json
+Read existing Love-Test assets and KPI CSVs
+Created marketing assets under assets/marketing/
+Created KPI/data CSV templates under data/
+Created .ai/TIANJI_LOVE_DAILY_GROWTH_AUTOMATION_LOOP.md
+Created .ai/TIANJI_LOVE_AUTOMATION_CONTROLLER.md
+Counted required marketing asset totals
+Ran targeted risk-phrase review over new docs/assets/data
 npm run typecheck
 npm run lint
-npm run audit:routes
-npm run audit:share
-npm run build:staging:degraded
 git diff --check
+Ran targeted secret-shape scan over new docs/assets/data
 ```
 
-## Test/build result
+## Validation result
 
 ```text
-Checkout readiness audit: Pass, overall=go
-Ask paid gateway + Love-Test/share/revenue contracts: Pass, 29/29
+Xiaohongshu posts: 30/30
+Douyin scripts: 30/30
+Videohao scripts: 15/15
+Share captions: 50/50
+SEO keyword outlines: 30/30
+KPI CSV templates: Go
+Daily growth loop doc: Go
+Automation controller doc: Go
 typecheck: Pass
 lint: Pass
-audit:routes: Pass
-audit:share: Pass
-build:staging:degraded: Pass
-git diff --check: Pass, line-ending warnings only
+git diff --check: Pass, existing unrelated line-ending warnings only
+targeted secret-shape scan: Pass, 0 hits
 ```
 
-## Approval packet status
-
-```text
-Approval packet: Go
-Required approval phrase: 批准跑 Stripe test-mode paid smoke
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
+No app source changed; docs/assets/data-only validation was performed.
 
 ## Gate status
 
 ```text
-Checkout readiness source ref: Go
-Checkout readiness audit: Go
-Approval packet: Go
+Marketing asset system: Go
+KPI tracking system: Go
+Daily growth loop: Go
 Stripe checkout execution: Not run
 Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
@@ -79,18 +83,21 @@ Production deploy: No-Go
 
 ## Risks and follow-up
 
-No Stripe checkout session creation, paid smoke, production deploy, webhook replay, Supabase mutation, provider live AI call, `.env` read/print/copy/upload/diff, PM2/Nginx/certbot/SSL mutation, destructive git action, or unrelated dirty-file staging was performed.
+No production deploy, Stripe checkout, paid smoke, webhook replay, Supabase production mutation, provider live AI call, `.env` read/print/copy/diff, PM2/Nginx/certbot/server mutation, destructive git action, fake testimonials, fake user counts, or guaranteed relationship-outcome claims were performed.
 
-This approval packet does not prove Stripe test-mode transaction success or hosted env key mode. Future paid smoke must stop if live Stripe, production URL, unclear env readiness, webhook replay requirement, Supabase mutation requirement, provider live call requirement, or missing approval is detected.
+Unrelated dirty files remain unstaged and untouched.
 
-Next step remains blocked until the user explicitly says:
+Next actions:
 
 ```text
-批准跑 Stripe test-mode paid smoke
+1. Manually review and publish selected content.
+2. Enter daily aggregate KPI data in the CSV templates.
+3. Run the daily growth loop after metrics exist.
+4. Keep Stripe test-mode paid smoke blocked until explicit approval.
 ```
 
 ## Suggested commit message
 
 ```text
-chore(love): prepare stripe test-mode paid smoke approval
+chore(marketing): add love-test automated growth system
 ```
