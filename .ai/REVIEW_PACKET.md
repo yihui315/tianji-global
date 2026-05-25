@@ -1,3 +1,114 @@
+# Review Packet - TianJi Love Stripe Test-Mode Setup Evidence 20260525
+
+## Background
+
+PR #65 has been merged:
+
+```text
+PR #65: merged=true
+Merge SHA: 1c188ff0b062b28952f25b785f4fd1ad66465b72
+Launch decision before this task: No-Go until test-mode paid smoke passes
+```
+
+This task verifies Stripe Dashboard test-mode setup readiness without reading, printing, or committing real secrets.
+
+## Task Goal
+
+Help configure/verify Stripe Dashboard Test mode, detect the repo's actual env names, run masked readiness, and only proceed to paid smoke if strict readiness is Go.
+
+## Branch
+
+```text
+Branch: chore/tianji-stripe-testmode-smoke-20260525
+Base: origin/main at 1c188ff
+Worktree: D:\BrainSystem\...\tianji-global-stripe-testmode-smoke-20260525
+Original dirty workspace: untouched
+```
+
+## Changed Scope
+
+```text
+Readiness script now loads local .env.local for masked shape checks only.
+Added Stripe env mapping evidence.
+Added Stripe Dashboard Test-mode setup checklist/evidence.
+Added paid-smoke blocked evidence report.
+Updated changelog and review packet.
+```
+
+No `.env*`, secrets, credentials, production config, deployment config, migrations, production data, live Stripe, Supabase production data, or social publishing state was changed.
+
+## Current Behavior
+
+```text
+Ask: inline price_data checkout through /api/ask/unlock.
+Draw: inline price_data checkout through /api/draw/unlock.
+Relationship: inline price_data checkout through /api/checkout.
+Webhook path: /api/stripe/webhook.
+Webhook verification: Stripe-Signature + STRIPE_WEBHOOK_SECRET.
+Relationship entitlement: markRelationshipReadingPremium after validated checkout.session.completed.
+```
+
+## Validation Result
+
+```text
+Masked env presence: all required Stripe/Supabase test env missing in isolated worktree
+Stripe CLI availability: unavailable on PATH
+npm ci: Blocked/timeout after dependency install exceeded 4 minutes
+npm run smoke:stripe:test-readiness: Pass command exit, reports Blocked because test env is missing
+npm run smoke:stripe:test-readiness -- --strict: Blocked as expected because test env is missing
+node --check scripts/smoke-stripe-test-readiness.mjs: Pass
+```
+
+## Safety Result
+
+```text
+Secrets printed: No
+.env committed: No
+Stripe live mode: Not used
+Paid smoke: Not run
+Production deploy: Not run
+Production database mutation: Not run
+Social publishing: Not run
+```
+
+## Gate Status
+
+```text
+PR #65 merged: Go
+Stripe test env readiness: Blocked
+Supabase staging UUID persistence: Blocked
+Strict readiness: Blocked
+Relationship UUID reading: Not run
+Relationship checkout_start_from_free_preview: Not run
+Relationship Stripe test checkout: Not run
+Relationship webhook: Not run
+Relationship entitlement unlock: Not run
+Ask checkout_start_from_free_preview: Not run
+Ask Stripe test checkout: Not run
+Ask entitlement unlock: Not run
+Draw checkout_start_from_free_preview: Not run
+Draw Stripe test checkout: Not run
+Draw entitlement unlock: Not run
+Analytics privacy: Go
+Production deploy: Not run
+Stripe live mode: Not run
+Secrets printed: No
+Formal traffic / Day 1 publishing: Go only if paid smoke Go
+```
+
+## Risks And Follow-up
+
+- Strict readiness is blocked until local/staging test-mode Stripe and Supabase env are configured.
+- Stripe CLI is unavailable on PATH, so local webhook forwarding cannot run yet.
+- `npm ci` timed out before a full dependency install; rerun after env/CLI prep if full app/browser smoke is required.
+- Launch remains No-Go until Relationship, Ask, and Draw paid smoke pass in test mode.
+
+## Suggested Next Codex Instruction
+
+After the user creates `.env.local` in this isolated worktree with test-mode Stripe/Supabase values and installs Stripe CLI, rerun `npm ci`, `npm run smoke:stripe:test-readiness -- --strict`, then perform Relationship, Ask, and Draw test-mode paid smoke.
+
+---
+
 # Review Packet - TianJi Love Prelaunch Paid Funnel Fix 20260525
 
 ## Background

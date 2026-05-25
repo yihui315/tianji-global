@@ -1,5 +1,69 @@
 # AI Changelog
 
+## 2026-05-25 - TianJi Love Stripe test-mode setup evidence
+
+### What changed
+
+Confirmed PR #65 is merged, created an isolated smoke evidence worktree from `origin/main`, added `.env.local` loading to the Stripe readiness script for masked local shape checks, and wrote Stripe Dashboard test-mode setup, env mapping, and paid-smoke evidence docs. No real secrets were read into output, no `.env*` file was committed, no live Stripe was used, and no paid checkout was run.
+
+### Files changed
+
+```text
+scripts/smoke-stripe-test-readiness.mjs
+.ai/TIANJI_LOVE_STRIPE_ENV_MAPPING_20260525.md
+.ai/TIANJI_LOVE_STRIPE_DASHBOARD_TESTMODE_SETUP_20260525.md
+.ai/TIANJI_LOVE_TEST_MODE_PAID_SMOKE_20260525.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+### Validation
+
+```text
+PR #65 merged: Go, GitHub reports merged=true at 1c188ff
+Masked env presence: all required Stripe/Supabase test env missing in isolated worktree
+Stripe CLI availability: unavailable on PATH
+npm ci: Blocked/timeout after dependency install exceeded 4 minutes
+npm run smoke:stripe:test-readiness: Pass command exit, reports Blocked because test env is missing
+npm run smoke:stripe:test-readiness -- --strict: Blocked as expected because test env is missing
+node --check scripts/smoke-stripe-test-readiness.mjs: Pass
+Paid smoke: Not run
+Production deploy: Not run
+Stripe live mode: Not run
+Secrets printed: No
+```
+
+### Gate status
+
+```text
+PR #65 merged: Go
+Stripe test env readiness: Blocked
+Supabase staging UUID persistence: Blocked
+Strict readiness: Blocked
+Relationship UUID reading: Not run
+Relationship checkout_start_from_free_preview: Not run
+Relationship Stripe test checkout: Not run
+Relationship webhook: Not run
+Relationship entitlement unlock: Not run
+Ask checkout_start_from_free_preview: Not run
+Ask Stripe test checkout: Not run
+Ask entitlement unlock: Not run
+Draw checkout_start_from_free_preview: Not run
+Draw Stripe test checkout: Not run
+Draw entitlement unlock: Not run
+Analytics privacy: Go
+Production deploy: Not run
+Stripe live mode: Not run
+Secrets printed: No
+Formal traffic / Day 1 publishing: Go only if paid smoke Go
+```
+
+### Follow-up
+
+- User configures Stripe Dashboard Test mode resources and local `.env.local` with test-mode keys only.
+- Install or expose Stripe CLI on PATH.
+- Rerun strict readiness, then Relationship, Ask, and Draw paid smoke in that order.
+
 ## 2026-05-25 - TianJi Love prelaunch paid funnel hardening
 
 ### What changed

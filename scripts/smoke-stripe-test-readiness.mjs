@@ -3,10 +3,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import dotenv from 'dotenv';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = new Set(process.argv.slice(2));
 const strict = args.has('--strict') || process.env.STRICT === 'true';
+const localEnvPath = path.join(repoRoot, '.env.local');
+
+if (fs.existsSync(localEnvPath)) {
+  dotenv.config({ path: localEnvPath, override: false });
+}
 
 const FILES = {
   askPage: 'src/app/(main)/ask/page.tsx',
