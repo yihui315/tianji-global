@@ -1,3 +1,114 @@
+# Review Packet - TianJi Love Evidence Layer and Conversion Analytics
+
+## Background
+
+PR #58 and PR #59 are merged. The MiniMax growth pipeline, publishing pack, artifact review, Day 1 publishing packet, and next conversion backlog are on `main`. The next P0 implementation is the evidence layer / 准感 system plus safe analytics for free preview -> unlock click -> checkout start.
+
+## Task Goal
+
+Implement a reusable evidence layer for Ask, Draw, and Relationship, add premium evidence UI and accuracy feedback, add non-sensitive conversion analytics, validate, and prepare a PR. Do not deploy production, run live Stripe checkout, run paid smoke, print secrets, or store raw private fields in analytics payloads.
+
+## Files Changed
+
+```text
+src/lib/divination/evidence.ts
+src/lib/analytics/divination.ts
+src/lib/analytics/client.ts
+src/lib/trust-copy-guard.ts
+src/app/api/analytics/track/route.ts
+src/components/divination/DivinationEvidenceCard.tsx
+src/components/divination/AccuracyFeedback.tsx
+src/app/(main)/ask/page.tsx
+src/app/(main)/draw/page.tsx
+src/app/(main)/tarot/page.tsx
+src/components/relationship/RelationshipResult.tsx
+src/components/love-reading/LoveReportCheckoutButton.tsx
+src/__tests__/lib/divination-evidence.test.ts
+src/__tests__/divination-components-contract.test.ts
+.ai/TIANJI_LOVE_EVIDENCE_LAYER_ANALYTICS_20260525.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Decisions
+
+- Created `src/lib/divination/evidence.ts` as the shared evidence contract and builder layer.
+- Reused existing `/api/analytics/track` and extended its safe payload shape to allow `sourceTypes: string[]`.
+- Added stricter sensitive analytics key stripping for question/name/birth/partner/report/email/phone/IP fields.
+- Added `/ask` because the existing repo had `/api/ask` but no customer-facing `/ask` page.
+- Added `/draw` as a safe redirect alias to the evidence-enhanced `/tarot` route instead of duplicating the Tarot product page.
+- Relationship evidence CTA routes to `/pricing?source=relationship_evidence`; no live checkout or Stripe behavior is changed.
+
+## Commands Run
+
+```text
+git fetch origin main
+git pull origin main
+git switch -c feat/tianji-evidence-layer-analytics-20260525
+rg source inspection commands for ask/draw/relationship/analytics/checkout
+npm run typecheck
+npm run test -- --run src/__tests__/lib/divination-evidence.test.ts src/__tests__/divination-components-contract.test.ts
+npm run lint
+git diff --check
+npm run test
+npm run build
+npm run audit:routes
+npm run audit:copy
+npm run audit:share
+npm run audit:upgrade
+targeted forbidden-copy and analytics-sensitive-key scans
+```
+
+## Validation Results
+
+```text
+Typecheck: Pass
+Lint: Pass
+Targeted tests: Pass - 2 files / 6 tests
+Full tests: Pass - 45 files / 455 tests
+Build: Pass
+audit:routes: Pass
+audit:copy: Pass
+audit:share: Pass
+audit:upgrade: Pass
+git diff --check: Pass
+Forbidden prediction-copy scan: Pass
+Divination analytics sensitive-key scan: Pass
+```
+
+Build completed with existing Edge Runtime warnings from `jose` / `next-auth`; these are not introduced by this branch.
+
+## Gate Status
+
+```text
+Evidence layer implementation: Go
+Ask integration: Go
+Draw integration: Go
+Relationship integration: Go
+Analytics safety: Go
+Typecheck: Go
+Lint: Go
+Tests: Go
+Build: Go
+Production deploy: Not run
+Stripe live checkout: Not run
+Paid smoke: No-Go
+Secrets printed: No
+```
+
+## Remaining Risks
+
+- Relationship paid unlock is still not a verified relationship-specific checkout path.
+- `/draw` currently redirects to `/tarot`; this is intentional for the first P0 slice.
+- `/ask` is now usable but needs conversion-copy refinement after Day 1 data.
+- Checkout funnel verification remains blocked until explicit test/staging paid-smoke approval.
+
+## Suggested Next Codex Instruction
+
+Create a staging/test-only funnel verification PR for free preview -> unlock click -> checkout start, without live Stripe checkout, then tune `/relationship/new` first-screen CTA after Day 1 traffic.
+
+---
+
 # Review Packet - TianJi Love Post-Merge Artifact Review and Day 1 Publishing
 
 ## Background

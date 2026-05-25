@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { trackCheckoutStartFromFreePreview } from '@/lib/analytics/divination';
 import { trackClientEvent } from '@/lib/analytics/client';
 import type { BillingProductId } from '@/lib/billing';
 import type { Locale } from '@/lib/i18n';
@@ -25,6 +26,11 @@ export function LoveReportCheckoutButton({
       experimentId: 'love-v1',
       moduleType: 'love-reading',
       payload: { sessionId, productId, locale },
+    });
+    void trackCheckoutStartFromFreePreview({
+      route: 'relationship',
+      confidence: 'medium',
+      sourceTypes: ['relationship', 'timing', 'safety'],
     });
 
     try {

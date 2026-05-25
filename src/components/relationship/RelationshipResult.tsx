@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { MysticButton } from '@/components/ui/MysticButton';
+import { AccuracyFeedback } from '@/components/divination/AccuracyFeedback';
+import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
+import { buildRelationshipEvidence } from '@/lib/divination/evidence';
 import { RelationshipRadar } from './RelationshipRadar';
 import { DimensionCard } from './RelationshipDimensionCard';
 import type { RelationshipReading } from '@/types/relationship';
@@ -19,6 +22,11 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
   const [activeTab, setActiveTab] = useState<'radar' | 'dimensions'>('radar');
   const [shareUrlCopied, setShareUrlCopied] = useState(false);
   const [shareLoading, setShareLoading] = useState(false);
+  const evidence = useMemo(() => buildRelationshipEvidence(reading), [reading]);
+
+  const handleEvidenceUnlock = () => {
+    window.location.href = '/pricing?source=relationship_evidence';
+  };
 
   const handleCopyLink = async () => {
     try {
@@ -86,6 +94,20 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
           </div>
         </div>
       </GlassCard>
+
+      <DivinationEvidenceCard
+        evidence={evidence}
+        route="relationship"
+        paid={reading.isPremium}
+        locked={!reading.isPremium}
+        onUnlockClick={handleEvidenceUnlock}
+      />
+
+      <AccuracyFeedback
+        route="relationship"
+        paid={reading.isPremium}
+        confidence={evidence.confidence}
+      />
 
       {/* Radar / Dimensions Toggle */}
       <div className="flex gap-2">
