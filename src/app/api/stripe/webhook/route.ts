@@ -9,7 +9,13 @@ import {
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
 import { sendReportReadyEmailForCheckoutSession } from '@/lib/love-report-email';
 import { isPayPerUseEnabled } from '@/lib/pay-per-use';
+import { markRelationshipReadingPremium } from '@/lib/relationship-reading-store';
 import { ensureReportJobForSession, runReportJob } from '@/lib/report-jobs';
+import {
+  STAGING_DEGRADED_PAYMENT_UNAVAILABLE_CODE,
+  isStagingDegradedMode,
+  isStripePaymentAvailable,
+} from '@/lib/staging-degraded-mode';
 import { getStripe } from '@/lib/stripe';
 
 export const runtime = 'nodejs';
@@ -36,6 +42,8 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 
   const productId = metadataProductId(session.metadata);
   const readingSessionId = session.metadata?.readingSessionId;
+  const source = session.metadata?.source === 'relationship' ? 'relationship' : 'love_reading';
+  const relationshipReadingId = session.metadata?.relationshipReadingId || readingSessionId;
   if (!productId || !readingSessionId) return;
 
   await markOrderPaid({
@@ -46,11 +54,19 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   });
   await trackLoveFunnelEvent('love_checkout_success', {
     productId,
+    source,
     readingSessionId,
+    relationshipReadingId: source === 'relationship' ? relationshipReadingId : null,
     checkoutSessionId: session.id,
     amountTotal: session.amount_total ?? null,
     currency: session.currency ?? null,
   });
+
+  if (source === 'relationship') {
+    if (productId !== 'compatibility_report' || !relationshipReadingId) return;
+    await markRelationshipReadingPremium(relationshipReadingId);
+    return;
+  }
 
   const reportJob = await ensureReportJobForSession({
     sessionId: readingSessionId,
@@ -81,6 +97,13 @@ async function handleRefundEvent(object: Stripe.Charge | Stripe.Refund) {
 }
 
 export async function POST(request: NextRequest) {
+  if (isStagingDegradedMode() && !isStripePaymentAvailable()) {
+    return NextResponse.json({
+      received: true,
+      skipped: STAGING_DEGRADED_PAYMENT_UNAVAILABLE_CODE,
+    });
+  }
+
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret) {
     return NextResponse.json({ error: 'Missing webhook secret' }, { status: 500 });

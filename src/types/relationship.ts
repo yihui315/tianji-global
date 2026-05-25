@@ -1,5 +1,7 @@
 // ─── Relationship System Types ────────────────────────────────────────────────
 
+import type { DivinationEvidence } from '@/types/divination';
+
 export type RelationshipType = 'romantic' | 'friendship' | 'work';
 export type ShareMode = 'summary' | 'chart_only' | 'insight_card';
 export type Visibility = 'private' | 'hidden_birth_data';
@@ -57,6 +59,15 @@ export interface RelationshipTimeline {
   next90Days?: string;
 }
 
+export interface RelationshipAiMeta {
+  gatewayIntent: 'relationship-report';
+  provider: string;
+  model: string;
+  publicUserFacing: boolean;
+  safetyRewriteApplied: boolean;
+  fallback: boolean;
+}
+
 export interface RelationshipReading {
   id: string;
   userId?: string;
@@ -79,6 +90,10 @@ export interface RelationshipReading {
   timeline?: RelationshipTimeline;
 
   isPremium: boolean;
+  accessLevel?: 'free' | 'full';
+  lockedSections?: string[];
+  evidence?: DivinationEvidence;
+  aiMeta?: RelationshipAiMeta;
   createdAt: string;
 }
 

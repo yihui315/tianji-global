@@ -1,5 +1,62 @@
 # AI Changelog
 
+## 2026-05-25 - TianJi Love Divination Evidence Layer clean narrow PR
+
+### What changed
+
+Recreated the TianJi Love Divination Evidence Layer from latest `origin/main` on a clean worktree branch, avoiding PR #60's broad 53-commit / 325-file diff. The clean branch reapplies only the Evidence Layer implementation, its direct Ask/Draw/Relationship dependencies, focused tests, local QA evidence, required docs, and four referenced Tianji Love visual assets.
+
+### Branch
+
+```text
+Branch: feat/tianji-divination-evidence-layer-clean-20260525
+Base: origin/main cb12208
+Old PR #60: Not merged
+Old source commit referenced: 7333e68fbd3e0891051deb8cd2b420d2557f4dda
+Changed files before docs append: 47
+Production deploy: Not run
+Paid smoke: No-Go
+```
+
+### Validation
+
+```text
+npm run typecheck: Pass
+npm run lint: Pass
+focused Evidence/Ask/Draw/Relationship tests: Pass, 5 files / 24 tests
+npm run test: Pass, 48 files / 473 tests
+npm run build: Pass
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+git diff --check: Pass, CRLF warnings only
+targeted secret scan over changed files: Pass
+```
+
+### Local QA
+
+```text
+/ask?lang=en: Go
+/draw?lang=en: Go
+/relationship/new?lang=en: Go
+Evidence card: Go
+Feedback event trigger: Go
+Analytics private sentinel leakage: 0 detected
+Mobile horizontal overflow: 0 detected
+```
+
+### Gate status
+
+```text
+Divination Evidence Layer implementation: Go
+Clean narrow PR recreation: Go
+Non-paid local QA: Go
+Paid smoke: No-Go - not approved / not run
+Production deploy: No-Go
+Secrets printed: No
+```
+
 ## 2026-05-25 - TianJi Love post-merge artifact review and Day 1 publishing packet
 
 ### What changed

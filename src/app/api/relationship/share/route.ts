@@ -28,7 +28,8 @@ export async function POST(req: NextRequest) {
     };
 
     const slug = randomSlug(12);
-    const shareUrl = `https://tianji.global/relationship/share/${slug}`;
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin;
+    const shareUrl = `${appUrl.replace(/\/$/, '')}/relationship/share/${slug}`;
 
     if (isSupabaseConfigured()) {
       try {
