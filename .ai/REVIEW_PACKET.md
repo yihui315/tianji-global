@@ -1,3 +1,117 @@
+# Review Packet - TianJi Love Divination Evidence Layer Clean Narrow PR
+
+## Background
+
+PR #60 is intentionally not merged because it is too broad and not mergeable enough for `main`:
+
+```text
+PR #60: No-Go
+Reason: 53 commits / 325 files / mergeable=false / Vercel failed / remote CI missing / paid smoke not run
+```
+
+This packet records the clean-room recreation from latest `origin/main`.
+
+## Task Goal
+
+Recreate only the Divination Evidence Layer and direct wiring needed for Ask, Draw, and Relationship. Preserve payment and production gates: no live Stripe, no production deploy, no secrets, no PR #60 merge.
+
+## Branch
+
+```text
+Branch: feat/tianji-divination-evidence-layer-clean-20260525
+Base: origin/main cb12208
+Old source commit referenced: 7333e68fbd3e0891051deb8cd2b420d2557f4dda
+Worktree: C:\Users\Administrator\.config\superpowers\worktrees\tianji-global\feat-tianji-divination-evidence-layer-clean-20260525
+```
+
+## Changed Scope
+
+```text
+Structured evidence types and builders
+Divination evidence card UI
+Ask preview/unlock evidence wiring
+Draw preview/unlock evidence wiring
+Relationship analyze/result evidence wiring
+Privacy-safe analytics sanitizer/events
+Focused tests
+.ai evidence docs
+Four referenced Tianji Love visual assets
+```
+
+The diff is narrow relative to PR #60: 47 files before this changelog/review append, plus the required AI evidence updates.
+
+## Validation Result
+
+```text
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test -- --run src/__tests__/lib/divination-evidence.test.ts src/__tests__/api/ask-paid-gateway.test.ts src/__tests__/api/draw-gateway.test.ts src/__tests__/relationship-flow-contract.test.ts src/__tests__/revenue-funnel-polish-contract.test.ts: Pass, 5 files / 24 tests
+npm run test: Pass, 48 files / 473 tests
+npm run build: Pass
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+npm run audit:ask-revenue-contract: Not available on clean main
+npm run audit:draw-revenue-contract: Not available on clean main
+npm run smoke:stripe:test-readiness: Not available on clean main
+git diff --check: Pass, CRLF warnings only
+targeted secret-shape scan over changed files: Pass
+```
+
+## Non-Paid QA
+
+Puppeteer QA ran against local `next start` on port `3107` with a local dummy auth secret, not a real secret.
+
+```text
+/ask?lang=en: route render Go, preview evidence Go, confidence Go, timing Go, feedback Go, unlock CTA Go, mobile overflow Go
+/draw?lang=en: route render Go, preview evidence Go, confidence Go, timing Go, feedback Go, unlock CTA Go, mobile overflow Go
+/relationship/new?lang=en: route render Go, result evidence Go, confidence Go, timing Go, feedback Go, unlock CTA Go, mobile overflow Go
+Analytics events seen: divination_evidence_viewed, divination_accuracy_feedback_submitted
+Private sentinel leakage in analytics: 0 detected
+```
+
+## Safety Result
+
+```text
+Secrets printed: No
+.env read: No
+Stripe live mode: Not used
+Paid smoke: Not run
+Production deploy: Not run
+DNS/Nginx/PM2/server production state: Not touched
+Raw question/name/birth/payment leakage in analytics QA: 0 detected
+```
+
+## Gate Status
+
+```text
+Divination Evidence Layer idea: Go
+Clean implementation: Go
+Ask preview / paid unlock wiring: Go
+Draw preview / paid unlock wiring: Go
+Relationship reading/result wiring: Go
+Analytics privacy: Go
+Tests/build/audits: Go
+Non-paid local QA: Go
+PR #60 merge: No-Go
+Paid smoke: No-Go
+Production deploy: No-Go
+```
+
+## Risks And Follow-up
+
+- The clean PR still requires remote GitHub checks and mergeability verification after push.
+- Paid smoke remains No-Go until explicit Stripe test-mode approval and environment readiness.
+- The clean branch includes direct Ask/Draw support dependencies because latest `main` did not already contain those surfaces.
+- Ask/Draw revenue audit scripts and Stripe readiness smoke script are not present on clean `main`; they were recorded as not available, not as failing runtime gates.
+
+## Suggested Next Codex Instruction
+
+Push `feat/tianji-divination-evidence-layer-clean-20260525`, open a clean PR to `main`, wait for remote checks, and keep production deploy blocked until Stripe test-mode paid smoke passes.
+
+---
+
 # Review Packet - TianJi Love Post-Merge Artifact Review and Day 1 Publishing
 
 ## Background

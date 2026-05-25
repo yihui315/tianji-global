@@ -153,6 +153,10 @@ export async function generateLoveReport(input: LoveReportInput): Promise<LoveRe
   assertSafeReport(fallback);
 
   try {
+    if (process.env.NODE_ENV === 'test' || process.env.VITEST) {
+      throw new Error('AI report generation disabled during automated tests');
+    }
+
     const { systemPrompt, userPrompt } = buildPrompts(input, fallback);
     const response = await generateReport({
       prompt: userPrompt,

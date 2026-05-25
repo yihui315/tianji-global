@@ -35,6 +35,8 @@ function getApiKey(provider: ModelProvider): string | undefined {
       return process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
     case 'ollama':
       return undefined; // No API key needed for local Ollama
+    case 'deepseek':
+      return process.env.DEEPSEEK_API_KEY;
     case 'minimax':
       return process.env.MINIMAX_API_KEY;
   }
@@ -54,8 +56,69 @@ function getBaseUrl(provider: ModelProvider): string {
       return process.env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta';
     case 'ollama':
       return process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+    case 'deepseek':
+      return process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com/v1';
     case 'minimax':
-      return process.env.MINIMAX_BASE_URL || 'https://api.minimax.chat/v1';
+      return process.env.MINIMAX_BASE_URL || 'https://api.minimax.io/v1';
+  }
+}
+
+const DEFAULT_AI_PROVIDER_TIMEOUT_MS = 30_000;
+const DEFAULT_OLLAMA_TIMEOUT_MS = 45_000;
+
+function readPositiveIntEnv(name: string, fallback: number): number {
+  const raw = process.env[name];
+  if (!raw) {
+    return fallback;
+  }
+
+  const parsed = Number.parseInt(raw, 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return fallback;
+  }
+
+  return parsed;
+}
+
+function getAiProviderTimeoutMs(): number {
+  return readPositiveIntEnv('AI_PROVIDER_TIMEOUT_MS', DEFAULT_AI_PROVIDER_TIMEOUT_MS);
+}
+
+function getOllamaTimeoutMs(): number {
+  return readPositiveIntEnv('OLLAMA_TIMEOUT_MS', DEFAULT_OLLAMA_TIMEOUT_MS);
+}
+
+async function fetchWithTimeout(
+  input: Parameters<typeof fetch>[0],
+  init: Parameters<typeof fetch>[1] = {},
+  timeoutMs = getAiProviderTimeoutMs(),
+): Promise<Response> {
+  const controller = new AbortController();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    const request = fetch(input, {
+      ...init,
+      signal: controller.signal,
+    });
+
+    const timeout = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        controller.abort();
+        reject(new Error(`AI provider request timed out after ${timeoutMs}ms`));
+      }, timeoutMs);
+    });
+
+    return await Promise.race([request, timeout]);
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error(`AI provider request timed out after ${timeoutMs}ms`);
+    }
+    throw error;
+  } finally {
+    if (timer) {
+      clearTimeout(timer);
+    }
   }
 }
 
@@ -66,6 +129,8 @@ export function getAvailableProviders(): ModelProvider[] {
   if (process.env.ANTHROPIC_API_KEY) available.push('anthropic');
   if (process.env.GROK_API_KEY) available.push('grok');
   if (process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY) available.push('gemini');
+  if (process.env.DEEPSEEK_API_KEY) available.push('deepseek');
+  if (process.env.MINIMAX_API_KEY) available.push('minimax');
   // Ollama is always "available" (local server)
   available.push('ollama');
   return available;
@@ -159,7 +224,7 @@ async function callAnthropic(
     body.messages = [{ role: 'user' as const, content: userPrompt }];
   }
 
-  const response = await fetch(`${baseUrl}/messages`, {
+  const response = await fetchWithTimeout(`${baseUrl}/messages`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -174,7 +239,7 @@ async function callAnthropic(
       temperature,
       max_tokens: maxTokens,
     }),
-  });
+  }, getAiProviderTimeoutMs());
 
   if (!response.ok) {
     const error = await response.text();
@@ -214,7 +279,7 @@ async function callOpenAI(
   systemPrompt: string,
   userPrompt: string,
   options: { temperature?: number; maxTokens?: number; stream?: boolean },
-  provider: Extract<ModelProvider, 'openai' | 'packy' | 'grok'> = 'openai'
+  provider: Extract<ModelProvider, 'openai' | 'packy' | 'grok' | 'deepseek' | 'minimax'> = 'openai'
 ): Promise<AIResponse> {
   const start = Date.now();
   const { temperature = 0.7, maxTokens = 4096 } = options;
@@ -223,14 +288,14 @@ async function callOpenAI(
   if (systemPrompt) messages.push({ role: 'system', content: systemPrompt });
   messages.push({ role: 'user', content: userPrompt });
 
-  const response = await fetch(`${baseUrl}/chat/completions`, {
+  const response = await fetchWithTimeout(`${baseUrl}/chat/completions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({ model, messages, temperature, max_tokens: maxTokens }),
-  });
+  }, getAiProviderTimeoutMs());
 
   if (!response.ok) {
     const error = await response.text();
@@ -287,7 +352,7 @@ async function callGemini(
   // Gemini uses OpenAI-compatible endpoint when GOOGLE_API_KEY is used
   const contents = [{ role: 'user', parts: [{ text: userPrompt }] }];
 
-  const response = await fetch(
+  const response = await fetchWithTimeout(
     `${baseUrl}/models/${model}:generateContent?key=${apiKey}`,
     {
       method: 'POST',
@@ -297,7 +362,8 @@ async function callGemini(
         systemInstruction: systemPrompt ? { parts: [{ text: systemPrompt }] } : undefined,
         generationConfig: { temperature, maxOutputTokens: maxTokens },
       }),
-    }
+    },
+    getAiProviderTimeoutMs(),
   );
 
   if (!response.ok) {
@@ -342,12 +408,13 @@ async function callOllama(
 ): Promise<AIResponse> {
   const start = Date.now();
   const { temperature = 0.7, maxTokens = 4096 } = options;
+  const resolvedModel = await resolveOllamaModel(baseUrl, model);
 
-  const response = await fetch(`${baseUrl}/api/chat`, {
+  const response = await fetchWithTimeout(`${baseUrl}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model,
+      model: resolvedModel,
       messages: [
         ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
         { role: 'user', content: userPrompt },
@@ -356,7 +423,7 @@ async function callOllama(
       options: { num_predict: maxTokens },
       stream: false,
     }),
-  });
+  }, getOllamaTimeoutMs());
 
   if (!response.ok) {
     const error = await response.text();
@@ -371,10 +438,55 @@ async function callOllama(
   return {
     content: data.message?.content || '',
     raw: data,
-    model: `ollama/${model}`,
+    model: `ollama/${resolvedModel}`,
     provider: 'ollama',
     latencyMs: (data.total_duration || Date.now() - start) / 1_000_000,
   };
+}
+
+async function resolveOllamaModel(baseUrl: string, requestedModel: string): Promise<string> {
+  const candidates = [
+    process.env.OLLAMA_MODEL,
+    process.env.DEFAULT_OLLAMA_MODEL,
+    requestedModel,
+    'gemma4:latest',
+    'gpt-oss:20b',
+    'qwen3-coder:30b',
+    'gemma4:31b',
+    'qwen-distill:latest',
+    'deepseek-r1:32b',
+    'qwen2.5',
+    'llama3.3',
+  ].filter((candidate): candidate is string => Boolean(candidate));
+
+  try {
+    const response = await fetchWithTimeout(`${baseUrl}/api/tags`, { method: 'GET' }, getOllamaTimeoutMs());
+    if (!response.ok) {
+      return requestedModel;
+    }
+
+    const data = (await response.json()) as {
+      models?: Array<{ name?: string }>;
+    };
+    const installed = new Set(
+      (data.models ?? [])
+        .map((entry) => entry.name)
+        .filter((name): name is string => Boolean(name))
+    );
+
+    for (const candidate of candidates) {
+      if (installed.has(candidate)) {
+        return candidate;
+      }
+      if (!candidate.includes(':') && installed.has(`${candidate}:latest`)) {
+        return `${candidate}:latest`;
+      }
+    }
+  } catch {
+    return requestedModel;
+  }
+
+  return requestedModel;
 }
 
 // ─── Retry Logic ───────────────────────────────────────────────────────────────
@@ -428,6 +540,8 @@ export async function generateReport(
       case 'grok': return resolvedEnv.GROK_API_KEY;
       case 'gemini': return resolvedEnv.GEMINI_API_KEY || resolvedEnv.GOOGLE_API_KEY;
       case 'ollama': return undefined;
+      case 'deepseek': return resolvedEnv.DEEPSEEK_API_KEY;
+      case 'minimax': return resolvedEnv.MINIMAX_API_KEY;
     }
   };
 
@@ -474,6 +588,12 @@ export async function generateReport(
             temperature,
             maxTokens,
           });
+        case 'deepseek':
+        case 'minimax':
+          return callOpenAI(apiKey!, baseUrl, modelName, systemPrompt || '', prompt, {
+            temperature,
+            maxTokens,
+          }, providerPrefix);
         case 'gemini':
           return callGemini(apiKey!, baseUrl, modelName, systemPrompt || '', prompt, {
             temperature,
@@ -532,6 +652,9 @@ export async function generateReport(
               return callOpenAI(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens }, 'packy');
             case 'grok':
               return callGrok(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens });
+            case 'deepseek':
+            case 'minimax':
+              return callOpenAI(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens }, p);
             case 'gemini':
               return callGemini(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens });
             case 'ollama':
@@ -597,6 +720,8 @@ export async function* streamGenerate(
       case 'grok': return resolvedEnv.GROK_API_KEY;
       case 'gemini': return resolvedEnv.GEMINI_API_KEY || resolvedEnv.GOOGLE_API_KEY;
       case 'ollama': return undefined;
+      case 'deepseek': return resolvedEnv.DEEPSEEK_API_KEY;
+      case 'minimax': return resolvedEnv.MINIMAX_API_KEY;
     }
   };
 
@@ -630,7 +755,7 @@ export async function* streamGenerate(
       max_tokens: maxTokens,
     };
 
-    const response = await fetch(`${baseUrl}/messages`, {
+    const response = await fetchWithTimeout(`${baseUrl}/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -639,7 +764,7 @@ export async function* streamGenerate(
         'anthropic-dangerous-direct-browser-access': 'true',
       },
       body: JSON.stringify(body),
-    });
+    }, getAiProviderTimeoutMs());
 
     if (!response.ok) {
       const error = await response.text();
@@ -681,7 +806,13 @@ export async function* streamGenerate(
     } finally {
       reader.releaseLock();
     }
-  } else if (providerPrefix === 'openai') {
+  } else if (
+    providerPrefix === 'openai' ||
+    providerPrefix === 'packy' ||
+    providerPrefix === 'grok' ||
+    providerPrefix === 'deepseek' ||
+    providerPrefix === 'minimax'
+  ) {
     // OpenAI-compatible streaming
     const { temperature = 0.7, maxTokens = 4096 } = request;
     const body: Record<string, unknown> = {
@@ -694,14 +825,14 @@ export async function* streamGenerate(
       max_tokens: maxTokens,
     };
 
-    const response = await fetch(`${baseUrl}/chat/completions`, {
+    const response = await fetchWithTimeout(`${baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify(body),
-    });
+    }, getAiProviderTimeoutMs());
 
     if (!response.ok) {
       const error = await response.text();
