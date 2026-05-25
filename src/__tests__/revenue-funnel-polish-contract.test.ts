@@ -66,12 +66,22 @@ describe('Tianji Love evidence revenue contract', () => {
 
   it('sanitizes analytics payloads and rejects non-allowlisted funnel event names', () => {
     const sanitized = sanitizeClientAnalyticsPayload({
+      name: 'Private name',
+      partnerName: 'Private partner',
+      birthday: '1990-01-01',
       birthDate: '1990-01-01',
       birthTime: '10:00',
       birthLocation: 'Shanghai',
+      email: 'person@example.com',
+      phone: '+15555550100',
       timezone: 'Asia/Shanghai',
       rawQuestion: 'Should I contact them?',
+      rawReport: 'Full report body',
       fullResult: 'Long generated result text',
+      readingText: 'Reading body',
+      stripeSessionId: 'cs_test_123',
+      checkoutSessionId: 'cs_test_456',
+      paymentId: 'pi_test_123',
       modelResponse: 'Generated provider response',
       providerOutput: 'Provider raw output',
       prompt: 'Prompt text',
@@ -87,6 +97,35 @@ describe('Tianji Love evidence revenue contract', () => {
       cardCount: 3,
     });
     expect(isRevenueFunnelEventName('unlock_click')).toBe(true);
+    expect(isRevenueFunnelEventName('checkout_start_from_free_preview')).toBe(true);
+    expect(isRevenueFunnelEventName('relationship_checkout_blocked_missing_persisted_reading')).toBe(true);
     expect(isRevenueFunnelEventName('raw_question_sent')).toBe(false);
+  });
+
+  it('fires checkout_start_from_free_preview from free preview unlock CTAs with safe fields only', () => {
+    const askPage = read('src/app/(main)/ask/page.tsx');
+    const drawPage = read('src/app/(main)/draw/page.tsx');
+    const relationshipResult = read('src/components/relationship/RelationshipResult.tsx');
+
+    for (const [source, route, unlockHandler] of [
+      [askPage, 'ask', 'onUnlock'],
+      [drawPage, 'draw', 'onUnlock'],
+      [relationshipResult, 'relationship', 'handleUnlock'],
+    ] as const) {
+      expect(source).toContain("trackRevenueFunnelEvent('checkout_start_from_free_preview'");
+      expect(source).toContain(`route: '${route}'`);
+      expect(source).toContain('paid: false');
+      expect(source).toContain('confidence');
+      expect(source).toContain('evidenceSignalCount');
+      expect(source).toContain(`${unlockHandler}('evidence_card')`);
+      expect(source).toContain(`${unlockHandler}('result_unlock')`);
+    }
+
+    expect(askPage.indexOf("trackRevenueFunnelEvent('checkout_start_from_free_preview'"))
+      .toBeLessThan(askPage.indexOf("fetch('/api/ask/unlock'"));
+    expect(drawPage.indexOf("trackRevenueFunnelEvent('checkout_start_from_free_preview'"))
+      .toBeLessThan(drawPage.indexOf("fetch('/api/draw/unlock'"));
+    expect(relationshipResult.indexOf("trackRevenueFunnelEvent('checkout_start_from_free_preview'"))
+      .toBeLessThan(relationshipResult.indexOf("fetch('/api/checkout'"));
   });
 });

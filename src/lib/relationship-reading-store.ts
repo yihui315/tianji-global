@@ -14,8 +14,12 @@ export const RELATIONSHIP_LOCKED_SECTIONS = [
   'savedHistory',
 ] as const;
 
+export function isUuidReadingId(value: unknown): boolean {
+  return typeof value === 'string' && uuidPattern.test(value);
+}
+
 export function isRelationshipReadingId(value?: string | null) {
-  return Boolean(value && uuidPattern.test(value));
+  return isUuidReadingId(value);
 }
 
 function asNumber(value: unknown) {

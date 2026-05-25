@@ -1,3 +1,127 @@
+# Review Packet - TianJi Love P0 Paid Funnel Blocker Fix 20260525
+
+## Background
+
+PR #63 was merged first through the GitHub connector:
+
+```text
+PR #63: chore(tianji-love): verify paid funnel test readiness
+Merge SHA: 3b8be5197b5f6a0f4eec505b69e0506aeb08b678
+```
+
+PR #63 documented the remaining paid funnel blockers. This branch fixes app-side blockers that do not require real secrets.
+
+## Task Goal
+
+Fix paid funnel blockers for test-mode readiness without live Stripe, production deploy, real `.env` reads, secret printing, or paid smoke.
+
+## Branch
+
+```text
+Branch: fix/tianji-paid-funnel-blockers-20260525
+Base: origin/main at PR #63 merge SHA 3b8be5197b5f6a0f4eec505b69e0506aeb08b678
+Worktree: D:\BrainSystem\💼 工作专项\ai占卜\tianji-global-paid-funnel-blockers-20260525
+```
+
+## Changed Scope
+
+```text
+Exact checkout_start_from_free_preview analytics event
+Ask/Draw/Relationship free-preview checkout-start wiring
+Relationship UUID reading guard before checkout
+Safe blocked Relationship checkout analytics
+Webhook metadata guard before Relationship entitlement completion
+Stripe readiness script Relationship UUID guard reporting
+Focused contract tests
+.ai evidence docs
+```
+
+No production config, `.env`, secrets, migrations, provider credentials, live Stripe mode, paid checkout execution, or production deploy was changed.
+
+## Current Behavior
+
+Ask:
+
+- Free preview unlock now fires `checkout_start_from_free_preview` before `/api/ask/unlock`.
+- Payload is route/source/paid/confidence/evidence signal count only.
+
+Draw:
+
+- Free preview unlock now fires `checkout_start_from_free_preview` before `/api/draw/unlock`.
+- Payload is route/source/paid/confidence/evidence signal count only.
+
+Relationship:
+
+- Free preview unlock now requires UUID-shaped `reading.id` before `/api/checkout`.
+- Local fallback ids such as `rel_*` show `We need to save this reading before checkout. Please try again in a moment.`
+- Blocked checkout analytics sends only `{ route: 'relationship', reason: 'missing_uuid_reading_id' }`.
+- Valid UUID readings continue to `/api/checkout` and fire `checkout_start_from_free_preview`.
+- Webhook Relationship completion requires `compatibility_report` plus UUID-shaped relationship metadata before marking entitlement.
+
+## Validation Result
+
+```text
+npm ci --ignore-scripts --no-audit --no-fund: Pass
+npx vitest run src/__tests__/revenue-funnel-polish-contract.test.ts src/__tests__/relationship-flow-contract.test.ts src/__tests__/stripe-checkout-contract.test.ts: Pass, 3 files / 17 tests
+npm run typecheck: Pass
+npm run lint: Pass, Next.js lint deprecation warning only
+npm run test: Pass, 48 files / 477 tests
+npm run build: Pass, jose Edge Runtime warnings and webpack cache warning only
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+npm run smoke:stripe:test-readiness: Pass non-strict, reports Blocked because test env is missing
+git diff --check: Pass, CRLF warnings only
+targeted secret-shape scan over changed files: Pass
+```
+
+## Safety Result
+
+```text
+Secrets printed: No
+.env read: No
+Stripe live mode: Not used
+Paid smoke: Not run
+Production deploy: Not run
+DNS/Nginx/PM2/server production state: Not touched
+Raw question/name/birth/report/payment fields in checkout_start_from_free_preview: Not sent
+```
+
+## Gate Status
+
+```text
+PR #63 merged: Go
+checkout_start_from_free_preview implemented: Go
+Ask checkout-start analytics: Go
+Draw checkout-start analytics: Go
+Relationship UUID guard: Go
+Relationship fallback checkout blocked: Go
+Webhook/entitlement readiness: Partial
+Stripe test env readiness: Blocked unless test env present
+Typecheck: Go
+Lint: Go
+Tests: Go
+Build: Go
+Production deploy: Not run
+Stripe live mode: Not run
+Paid smoke: No-Go unless test-mode checkout actually ran
+Secrets printed: No
+```
+
+## Risks And Follow-up
+
+- Stripe and Supabase staging test env are still missing locally.
+- Relationship Supabase persistence is statically guarded but not runtime-proven.
+- Webhook/entitlement readiness is Partial until Stripe test-mode webhook and entitlement unlock run.
+- Keep formal traffic blocked until `/relationship/new -> UUID reading -> checkout_start_from_free_preview -> Stripe test checkout -> webhook -> entitlement unlock` is Go.
+
+## Suggested Next Codex Instruction
+
+Add masked Stripe and Supabase staging test env, run `npm run smoke:stripe:test-readiness -- --strict`, then run narrow Stripe test-mode paid smoke for Relationship, Ask, and Draw. Do not publish Day 1 traffic until paid smoke is Go.
+
+---
+
 # Review Packet - TianJi Love Paid Funnel Test Readiness 20260525
 
 ## Background

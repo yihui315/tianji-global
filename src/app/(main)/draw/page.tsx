@@ -100,6 +100,8 @@ type TimingCopy = {
   footer: string;
 };
 
+type CheckoutPreviewSource = 'evidence_card' | 'result_unlock';
+
 const PREVIEW_STORAGE_KEY = 'tianji.draw.preview';
 const HERO_COUPLE = '/assets/images/hero/tianji-love-couple-red-thread-16x9.png';
 const FINAL_PAVILION = '/assets/images/hero/tianji-love-moon-pavilion-16x9.png';
@@ -415,7 +417,7 @@ export default function DrawPage() {
     [question, lang, loading]
   );
 
-  const onUnlock = useCallback(async () => {
+  const onUnlock = useCallback(async (source: CheckoutPreviewSource = 'result_unlock') => {
     if (!preview || unlocking) return;
     setError(null);
     void trackRevenueFunnelEvent('unlock_click', {
@@ -424,6 +426,13 @@ export default function DrawPage() {
       product: 'draw_timing',
       previewId: preview.id,
       cardCount: preview.previewDraw.length,
+    });
+    void trackRevenueFunnelEvent('checkout_start_from_free_preview', {
+      route: 'draw',
+      source,
+      paid: false,
+      confidence: preview.evidence?.confidence,
+      evidenceSignalCount: preview.evidence?.signals.length,
     });
     try {
       setUnlocking(true);
@@ -528,7 +537,7 @@ export default function DrawPage() {
               evidence={preview.evidence}
               route="draw"
               paid={false}
-              onUnlockClick={onUnlock}
+              onUnlockClick={() => void onUnlock('evidence_card')}
               unlockLabel={copy.preview.unlockCta.replace('{price}', preview.price)}
             />
           ) : null}
@@ -544,7 +553,7 @@ export default function DrawPage() {
               <CreditCard className="h-4 w-4 text-[#d8b77b]" aria-hidden />
               {copy.preview.assurance}
             </span>
-            <button type="button" onClick={onUnlock} disabled={unlocking} className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55">
+            <button type="button" onClick={() => void onUnlock('result_unlock')} disabled={unlocking} className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55">
               {unlocking ? copy.preview.unlocking : copy.preview.unlockCta.replace('{price}', preview.price)}
             </button>
           </div>

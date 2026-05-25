@@ -1,5 +1,77 @@
 # AI Changelog
 
+## 2026-05-25 - TianJi Love P0 paid funnel blocker fix
+
+### What changed
+
+Merged PR #63 first, then created `fix/tianji-paid-funnel-blockers-20260525` from latest `origin/main`. Added the exact `checkout_start_from_free_preview` analytics event to Ask, Draw, and Relationship free-preview unlock paths; added a Relationship UUID reading guard before checkout; added safe blocked-checkout analytics; hardened Relationship webhook entitlement completion around product and UUID metadata; and extended Stripe readiness reporting for Relationship persistence blockers.
+
+### Files changed
+
+```text
+scripts/smoke-stripe-test-readiness.mjs
+src/__tests__/relationship-flow-contract.test.ts
+src/__tests__/revenue-funnel-polish-contract.test.ts
+src/__tests__/stripe-checkout-contract.test.ts
+src/app/(main)/ask/page.tsx
+src/app/(main)/draw/page.tsx
+src/app/api/stripe/webhook/route.ts
+src/components/relationship/RelationshipResult.tsx
+src/lib/analytics/client.ts
+src/lib/analytics/funnel-events.ts
+src/lib/relationship-reading-store.ts
+.ai/TIANJI_LOVE_PAID_FUNNEL_BLOCKER_FIX_20260525.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+### Validation
+
+```text
+GitHub connector merge PR #63: Pass, merged sha 3b8be5197b5f6a0f4eec505b69e0506aeb08b678
+npm ci --ignore-scripts --no-audit --no-fund: Pass
+npx vitest run src/__tests__/revenue-funnel-polish-contract.test.ts src/__tests__/relationship-flow-contract.test.ts src/__tests__/stripe-checkout-contract.test.ts: Pass, 3 files / 17 tests
+npm run typecheck: Pass
+npm run lint: Pass, Next.js lint deprecation warning only
+npm run test: Pass, 48 files / 477 tests
+npm run build: Pass, jose Edge Runtime warnings and webpack cache warning only
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+npm run smoke:stripe:test-readiness: Pass non-strict, reports Blocked because test env is missing
+git diff --check: Pass, CRLF warnings only
+targeted secret-shape scan over changed files: Pass
+```
+
+### Gate status
+
+```text
+PR #63 merged: Go
+checkout_start_from_free_preview implemented: Go
+Ask checkout-start analytics: Go
+Draw checkout-start analytics: Go
+Relationship UUID guard: Go
+Relationship fallback checkout blocked: Go
+Webhook/entitlement readiness: Partial
+Stripe test env readiness: Blocked unless test env present
+Typecheck: Go
+Lint: Go
+Tests: Go
+Build: Go
+Production deploy: Not run
+Stripe live mode: Not run
+Paid smoke: No-Go unless test-mode checkout actually ran
+Secrets printed: No
+```
+
+### Follow-up
+
+- Add masked Stripe and Supabase staging test env.
+- Run `npm run smoke:stripe:test-readiness -- --strict`.
+- Run Stripe test-mode checkout/webhook/entitlement smoke, especially `/relationship/new -> UUID reading -> checkout_start_from_free_preview -> webhook -> entitlement unlock`.
+- Keep formal traffic and production deploy blocked until test-mode paid funnel passes.
+
 ## 2026-05-25 - TianJi Love paid funnel test readiness after evidence layer
 
 ### What changed
