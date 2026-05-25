@@ -18,6 +18,7 @@
     "audit:share": "tsx scripts/audit-share.ts",
     "audit:upgrade": "tsx scripts/audit-upgrade.ts",
     "audit:release-gate": "npm run audit:routes && npm run audit:copy && npm run audit:share && npm run audit:upgrade",
+    "smoke:stripe:test-readiness": "node scripts/smoke-stripe-test-readiness.mjs",
     "upgrade:plan": "node scripts/generate-upgrade-plan.ts",
     "tianji:content-calendar": "node scripts/tianji-love/generate-content-calendar.mjs",
     "tianji:daily-growth": "node scripts/tianji-love/generate-daily-growth.mjs",

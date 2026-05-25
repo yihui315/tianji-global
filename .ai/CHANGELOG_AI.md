@@ -1,5 +1,62 @@
 # AI Changelog
 
+## 2026-05-25 - TianJi Love paid funnel test readiness after evidence layer
+
+### What changed
+
+Merged PR #62 first, then created an isolated readiness worktree from latest `origin/main`. Added a safe Stripe test-readiness script and evidence docs for Ask, Draw, and Relationship paid funnel readiness without running live Stripe, production deploy, real `.env` reads, paid checkout, or webhook replay.
+
+### Files changed
+
+```text
+package.json
+scripts/smoke-stripe-test-readiness.mjs
+.ai/TIANJI_LOVE_PAID_FUNNEL_TEST_READINESS_20260525.md
+.ai/TIANJI_LOVE_PAID_FUNNEL_SMOKE_PLAN_20260525.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+### Validation
+
+```text
+GitHub connector merge PR #62: Pass, merged sha 271dcd84bbed5b47ecea40b628685a66d34bd954
+node --check scripts/smoke-stripe-test-readiness.mjs: Pass
+npm run smoke:stripe:test-readiness: Pass, reports Blocked because test env is missing
+npm ci --ignore-scripts --no-audit --no-fund: Pass
+npm run typecheck: Pass
+npm run lint: Pass, Next.js lint deprecation warning only
+npm run test: Pass, 48 files / 473 tests
+npm run build: Pass, jose Edge Runtime warnings only
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+Puppeteer non-paid browser QA on /ask, /draw, /relationship/new: Pass
+```
+
+### Gate status
+
+```text
+PR #62 merged: Go
+Ask evidence/CTA/checkout-start readiness: Go static, paid completion Blocked
+Draw evidence/CTA/checkout-start readiness: Go static, paid completion Blocked
+Relationship evidence/CTA/checkout-start readiness: Go static, paid completion Blocked
+Stripe test env readiness: Blocked
+Webhook/entitlement test-mode: Not run
+Analytics privacy: Go
+Production deploy: Not run
+Stripe live mode: Not run
+Secrets printed: No
+```
+
+### Follow-up
+
+- Provide masked Stripe test-mode env and run `npm run smoke:stripe:test-readiness -- --strict`.
+- Prove Relationship persists a UUID reading in Supabase staging before checkout.
+- Run Stripe test-mode checkout/webhook/entitlement smoke in a narrow follow-up PR.
+- Keep Day 1 formal traffic blocked until test-mode paid funnel passes.
+
 ## 2026-05-25 - TianJi Love Divination Evidence Layer clean narrow PR
 
 ### What changed

@@ -1,3 +1,136 @@
+# Review Packet - TianJi Love Paid Funnel Test Readiness 20260525
+
+## Background
+
+PR #62 was merged first through the GitHub connector:
+
+```text
+PR #62: feat(product): add divination evidence layer
+Merge SHA: 271dcd84bbed5b47ecea40b628685a66d34bd954
+```
+
+The remaining gate is paid funnel test-mode readiness. Production deploy and Stripe live mode remain blocked.
+
+## Task Goal
+
+Verify test-mode paid funnel readiness for Ask, Draw, and Relationship without live Stripe and without production deploy. Add safe readiness automation and evidence docs if missing.
+
+## Branch
+
+```text
+Branch: chore/tianji-paid-funnel-test-readiness-20260525
+Base: origin/main at PR #62 merge SHA 271dcd84bbed5b47ecea40b628685a66d34bd954
+Worktree: D:\BrainSystem\💼 工作专项\ai占卜\tianji-global-paid-funnel-test-readiness-20260525
+Original dirty worktree: untouched
+```
+
+## Changed Scope
+
+```text
+package.json
+scripts/smoke-stripe-test-readiness.mjs
+.ai/TIANJI_LOVE_PAID_FUNNEL_TEST_READINESS_20260525.md
+.ai/TIANJI_LOVE_PAID_FUNNEL_SMOKE_PLAN_20260525.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+No checkout behavior, billing behavior, production config, `.env`, secrets, migrations, or provider config was changed.
+
+## Current Behavior
+
+Ask:
+
+- `/ask` renders evidence and unlock CTA after preview.
+- `/api/ask/unlock` creates a Stripe payment Checkout Session with inline `price_data`.
+- Paid completion is direct Checkout Session retrieval through `GET /api/ask/unlock`.
+
+Draw:
+
+- `/draw` renders evidence and unlock CTA after preview.
+- `/api/draw/unlock` creates a Stripe payment Checkout Session with inline `price_data`.
+- Paid completion is direct Checkout Session retrieval through `GET /api/draw/unlock`.
+
+Relationship:
+
+- `/relationship/new` renders evidence and unlock CTA after free result.
+- `RelationshipResult` posts `compatibility_report` to `/api/checkout`.
+- `/api/checkout` is gated by `ENABLE_PAY_PER_USE`.
+- `/api/stripe/webhook` can mark relationship readings premium on `checkout.session.completed`.
+- Local non-Supabase result ids are `rel_*`, while `/api/checkout` requires UUID. Test/staging must prove Supabase persistence returns UUID before Relationship smoke.
+
+## Validation Result
+
+```text
+node --check scripts/smoke-stripe-test-readiness.mjs: Pass
+npm run smoke:stripe:test-readiness: Pass, reports Blocked because test env is missing
+npm ci --ignore-scripts --no-audit --no-fund: Pass
+npm run typecheck: Pass
+npm run lint: Pass, Next.js lint deprecation warning only
+npm run test: Pass, 48 files / 473 tests
+npm run build: Pass, jose Edge Runtime warnings only
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+```
+
+## Non-Paid Browser QA
+
+Puppeteer QA ran against local `next start` on port `3062` with a dummy local auth secret and disabled live/provider flags. No real secret values were read or printed.
+
+```text
+/ask?lang=en: evidence Go, unlock CTA Go, accuracy feedback Go, mobile overflow Go, forbidden guarantee language 0, private payload leaks 0
+/draw?lang=en: evidence Go, unlock CTA Go, accuracy feedback Go, mobile overflow Go, forbidden guarantee language 0, private payload leaks 0
+/relationship/new?lang=en: evidence Go, unlock CTA Go, accuracy feedback Go, mobile overflow Go, forbidden guarantee language 0, private payload leaks 0
+Captured unlock/checkout/analytics requests: Ask 6, Draw 6, Relationship 8
+```
+
+## Safety Result
+
+```text
+Secrets printed: No
+.env read: No
+Stripe live mode: Not used
+Paid smoke: Not run
+Production deploy: Not run
+DNS/Nginx/PM2/server production state: Not touched
+Raw question/name/birth/payment leakage in unlock/checkout/analytics QA: 0 detected
+```
+
+## Gate Status
+
+```text
+PR #62 merged: Go
+Ask paid funnel readiness: Blocked - missing Stripe test env
+Draw paid funnel readiness: Blocked - missing Stripe test env
+Relationship paid funnel readiness: Blocked - missing Stripe test env, webhook, Supabase UUID evidence
+Stripe test env readiness: Blocked
+Checkout session test-mode: Not run
+Webhook/entitlement test-mode: Not run
+Analytics privacy: Go
+Typecheck: Go
+Lint: Go
+Tests: Go
+Build: Go
+Production deploy: Not run
+Stripe live mode: Not run
+Secrets printed: No
+```
+
+## Risks And Follow-up
+
+- Test/live Stripe mode is not enforced by code; it must be proven by masked env classification before smoke.
+- Relationship checkout is not executable from local fallback `rel_*` ids; staging Supabase must persist UUID readings.
+- The exact analytics event `checkout_start_from_free_preview` is not implemented; existing equivalents are `unlock_click`, `relationship_checkout_start`, `love_checkout_created`, and evidence unlock events.
+- Paid smoke remains No-Go until masked test env, webhook, callbacks, and Relationship persistence are proven.
+
+## Suggested Next Codex Instruction
+
+Provide masked Stripe test-mode/local or staging env, then run `npm run smoke:stripe:test-readiness -- --strict` and a narrow Stripe test-mode paid smoke for Ask, Draw, and Relationship. Keep production deploy and Day 1 formal traffic blocked until that passes.
+
+---
+
 # Review Packet - TianJi Love Divination Evidence Layer Clean Narrow PR
 
 ## Background
