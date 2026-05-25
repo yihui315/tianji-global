@@ -1,12 +1,15 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import SharePanel from '@/components/SharePanel';
 import PDFDownloadButton from '@/components/PDFDownloadButton';
 import { saveReading } from '@/lib/save-reading';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
 import TarotCardAnimation from '@/components/animations/TarotCardAnimation';
+import { AccuracyFeedback } from '@/components/divination/AccuracyFeedback';
+import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
 import { spreadLayouts, type DrawnCard, type SpreadLayout } from '@/lib/tarot';
+import { buildDrawEvidence } from '@/lib/divination/evidence';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { moduleLandingCopy } from '@/lib/language-routing';
 import {
@@ -58,6 +61,17 @@ export default function TarotPage() {
   const [error, setError] = useState<string | null>(null);
   const [showCard, setShowCard] = useState<number | null>(null);
   const copy = moduleLandingCopy.tarot[language];
+  const drawEvidence = useMemo(() => {
+    if (!reading) return null;
+
+    return buildDrawEvidence({
+      spreadName: reading.spread.name,
+      cardCount: reading.drawnCards.length,
+      reversedCount: reading.drawnCards.filter((item) => item.isReversed).length,
+      hasAiInterpretation: Boolean(reading.aiInterpretation),
+      timingWindow: spreadType === 'single' ? 'Use this as a same-day reflection.' : 'Use this as a 2-4 week reflection window.',
+    });
+  }, [reading, spreadType]);
 
   const currentSpread = spreadLayouts.find((_, index) => {
     if (spreadType === 'single') return index === 0;
@@ -260,6 +274,21 @@ export default function TarotPage() {
                         onClick={() => handleCardClick(index)}
                       />
                     ))}
+                  </div>
+                )}
+
+                {drawEvidence && (
+                  <div className="space-y-4">
+                    <DivinationEvidenceCard
+                      evidence={drawEvidence}
+                      route="draw"
+                      paid={Boolean(reading.aiInterpretation)}
+                    />
+                    <AccuracyFeedback
+                      route="draw"
+                      paid={Boolean(reading.aiInterpretation)}
+                      confidence={drawEvidence.confidence}
+                    />
                   </div>
                 )}
 

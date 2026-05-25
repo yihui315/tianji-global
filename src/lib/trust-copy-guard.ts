@@ -1,4 +1,4 @@
-type PrimitivePayloadValue = string | number | boolean | null;
+type PrimitivePayloadValue = string | string[] | number | boolean | null;
 
 const guaranteedPredictionPatterns = [
   /\bwe predict your future\b/i,
@@ -19,14 +19,27 @@ const professionalAdvicePatterns = [
 ];
 
 const sensitiveKeyNames = new Set([
+  'birthday',
   'birthdate',
   'birthtime',
   'birthplace',
   'birthlocation',
+  'email',
+  'ip',
+  'name',
+  'partnername',
+  'phone',
+  'question',
+  'rawquestion',
+  'rawreport',
+  'report',
   'relationshipanswer',
   'relationshipanswers',
+  'relationshipdetail',
+  'relationshipdetails',
   'rawrelationshipanswer',
   'rawrelationshipanswers',
+  'userquestion',
 ]);
 
 export const forbiddenTrustClaims = [
@@ -80,6 +93,11 @@ export function sanitizeAnalyticsPayload(payload: Record<string, unknown>) {
 
   for (const [key, value] of Object.entries(payload)) {
     if (isSensitivePrivacyKey(key)) continue;
+    if (Array.isArray(value) && value.every((item) => typeof item === 'string')) {
+      sanitized[key] = value.slice(0, 12).map((item) => item.slice(0, 80));
+      continue;
+    }
+
     if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value === null) {
       sanitized[key] = value;
     }

@@ -1,5 +1,71 @@
 # AI Changelog
 
+## 2026-05-25 - TianJi Love evidence layer and conversion analytics
+
+### What changed
+
+Implemented the P0 evidence layer / 准感 system and non-sensitive conversion analytics for Ask, Draw, and Relationship.
+
+### Implementation
+
+```text
+Evidence builders: Created
+Evidence UI card: Created
+Accuracy feedback: Created
+Ask page integration: Created
+Draw/Tarot integration: Created
+Relationship result integration: Created
+Checkout-start analytics hook: Created
+```
+
+### Safety
+
+```text
+Analytics payload excludes raw question/name/birth/partner/report/email/phone/IP fields.
+No guaranteed prediction copy added.
+No production deploy.
+No live Stripe checkout.
+No paid smoke.
+Secrets printed: No
+```
+
+### Validation
+
+```text
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test -- --run src/__tests__/lib/divination-evidence.test.ts src/__tests__/divination-components-contract.test.ts: Pass
+npm run test: Pass - 45 files / 455 tests
+npm run build: Pass
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+git diff --check: Pass
+Forbidden prediction-copy scan: Pass
+Divination analytics sensitive-key scan: Pass
+```
+
+Build completed with existing Edge Runtime warnings from `jose` / `next-auth`; not introduced by this branch.
+
+### Gate status
+
+```text
+Evidence layer implementation: Go
+Ask integration: Go
+Draw integration: Go
+Relationship integration: Go
+Analytics safety: Go
+Typecheck: Go
+Lint: Go
+Tests: Go
+Build: Go
+Production deploy: Not run
+Stripe live checkout: Not run
+Paid smoke: No-Go
+Secrets printed: No
+```
+
 ## 2026-05-25 - TianJi Love post-merge artifact review and Day 1 publishing packet
 
 ### What changed

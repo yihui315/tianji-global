@@ -5,7 +5,7 @@ export interface ClientAnalyticsEvent {
   moduleType?: string;
   trafficSource?: string;
   strategy?: string;
-  payload?: Record<string, string | number | boolean | null | undefined>;
+  payload?: Record<string, string | string[] | number | boolean | null | undefined>;
 }
 
 export async function trackClientEvent(input: ClientAnalyticsEvent) {
