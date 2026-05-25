@@ -1,5 +1,65 @@
 # AI Changelog
 
+## 2026-05-25 - TianJi Love post-merge artifact review and Day 1 publishing packet
+
+### What changed
+
+Completed the post-merge quality loop after PR #58. Verified the conversion suggestions workflow runtime on `main`, recorded artifact availability, reviewed the publishing/conversion assets, created a polished Day 1 manual publishing packet, and created the next conversion implementation backlog.
+
+### Runtime status
+
+```text
+PR #58 merged: Go
+Merge commit: 5b9a3e53fec905efe675b8f856c108e7263e9cec
+Vercel: Go
+Workflow present on main: Go
+TianJi Love Conversion Suggestions: Go
+Conversion Suggestions run: 26374543902
+Conversion Suggestions artifact: tianji-love-conversion-suggestions / 7188891555
+Artifact body download: Blocked locally - GitHub auth required
+```
+
+### Artifact quality
+
+```text
+KPI Analysis quality: C
+Daily Growth quality: B
+Content Calendar quality: B
+Conversion Suggestions quality: B
+```
+
+Scores are conservative because artifact zip body download requires authenticated GitHub access in this shell. Review used verified metadata, merged prompt contracts, checked-in publishing assets, and local conversion backlog.
+
+### Outputs
+
+```text
+.ai/TIANJI_LOVE_ARTIFACT_REVIEW_20260525.md: Created
+.ai/TIANJI_LOVE_DAY1_PUBLISHING_PACKET_20260525.md: Created
+.ai/TIANJI_LOVE_NEXT_CONVERSION_BACKLOG_20260525.md: Created
+```
+
+### Gate status
+
+```text
+MiniMax draft pipeline: Go
+Manual publishing pack: Go
+Conversion backlog: Go
+Artifact review: Go
+Day 1 publishing packet: Go
+Social auto-posting: No-Go
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Secrets printed: No
+```
+
+### Follow-up
+
+- Manually publish the Day 1 Xiaohongshu post only after final human review in the platform editor.
+- Track profile visits, website clicks, comments, and paid-intent signals in `.ai/publishing/publish-checklist.md`.
+- Download artifact bodies with authenticated GitHub access and update scores if the actual generated content differs.
+- Next implementation task should be the P0 evidence layer / 准感 system plus funnel analytics, not another workflow expansion.
+
 ## 2026-05-25 - TianJi Love publishing pack and conversion backlog
 
 ### What changed
