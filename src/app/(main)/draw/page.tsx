@@ -6,7 +6,11 @@ import { CalendarHeart, Clock3, CreditCard, HeartHandshake, Lock, Sparkles, Star
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
-import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
+import {
+  trackCheckoutStartFromFreePreview,
+  trackRevenueFunnelEvent,
+  type CheckoutStartFromFreePreviewSource,
+} from '@/lib/analytics/funnel-events';
 import type { DivinationEvidence } from '@/types/divination';
 import {
   TianjiLoveButton,
@@ -415,9 +419,15 @@ export default function DrawPage() {
     [question, lang, loading]
   );
 
-  const onUnlock = useCallback(async () => {
+  const onUnlock = useCallback(async (source: CheckoutStartFromFreePreviewSource = 'result_unlock') => {
     if (!preview || unlocking) return;
     setError(null);
+    void trackCheckoutStartFromFreePreview({
+      route: 'draw',
+      source,
+      confidence: preview.evidence?.confidence,
+      evidenceSignalCount: preview.evidence?.signals.length,
+    });
     void trackRevenueFunnelEvent('unlock_click', {
       lang: preview.language,
       surface: 'draw_preview',
@@ -544,7 +554,7 @@ export default function DrawPage() {
               <CreditCard className="h-4 w-4 text-[#d8b77b]" aria-hidden />
               {copy.preview.assurance}
             </span>
-            <button type="button" onClick={onUnlock} disabled={unlocking} className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55">
+            <button type="button" onClick={() => onUnlock('result_unlock')} disabled={unlocking} className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55">
               {unlocking ? copy.preview.unlocking : copy.preview.unlockCta.replace('{price}', preview.price)}
             </button>
           </div>

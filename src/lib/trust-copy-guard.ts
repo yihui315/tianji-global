@@ -25,6 +25,8 @@ const sensitiveKeyNames = new Set([
   'birthtime',
   'birthplace',
   'birthlocation',
+  'checkoutsessionid',
+  'email',
   'fullanswer',
   'fullreading',
   'fullreport',
@@ -32,6 +34,11 @@ const sensitiveKeyNames = new Set([
   'timezone',
   'modeloutput',
   'modelresponse',
+  'name',
+  'partnername',
+  'paymentid',
+  'paymentintentid',
+  'phone',
   'prompt',
   'provideroutput',
   'providerresponse',
@@ -50,6 +57,11 @@ const sensitiveKeyNames = new Set([
   'relationshipanswers',
   'rawrelationshipanswer',
   'rawrelationshipanswers',
+  'stripecheckoutsessionid',
+  'stripepaymentintentid',
+  'stripesessionid',
+  'supabaseid',
+  'supabaserowid',
 ]);
 
 export const forbiddenTrustClaims = [

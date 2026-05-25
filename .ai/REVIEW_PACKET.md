@@ -1,3 +1,167 @@
+# Review Packet - TianJi Love Prelaunch Paid Funnel Fix 20260525
+
+## Background
+
+The launch state before this task was:
+
+```text
+Evidence Layer: Go
+Non-paid QA: Go
+Publishing packet: Go
+Paid funnel readiness: Blocked
+Production deploy: No-Go
+Formal traffic / Day 1 publishing: No-Go
+```
+
+PR #63 could not be merged through local `gh` because the CLI is unauthenticated, but repository truth shows its content is already present:
+
+```text
+gh pr view 63: Blocked locally - gh unauthenticated
+PR #63 head commit: 6bbcc22
+origin/main: 3b8be51
+PR #63 head ancestor of origin/main: Yes
+```
+
+## Task Goal
+
+Fix app-side paid funnel blockers, prepare Stripe/Supabase test-mode verification, and produce final prelaunch Go/No-Go evidence without running production deploy, live Stripe, destructive database actions, or social publishing.
+
+## Branch
+
+```text
+Branch: fix/tianji-prelaunch-paid-funnel-20260525
+Base: origin/main at 3b8be51 chore(tianji-love): verify paid funnel test readiness
+Worktree: C:\Users\Administrator\.config\superpowers\worktrees\tianji-global\fix-tianji-prelaunch-paid-funnel-20260525
+Original dirty workspace: untouched
+```
+
+## Changed Scope
+
+```text
+Exact checkout_start_from_free_preview analytics event
+Ask checkout-start analytics wiring
+Draw checkout-start analytics wiring
+Relationship checkout-start analytics wiring
+Relationship UUID-shaped reading id guard
+Relationship rel_* fallback checkout block
+Safe relationship blocked analytics event
+Stripe checkout metadata validator
+Webhook unsafe metadata ignore path
+Stripe readiness script app-side checks
+Focused contract tests
+Prelaunch fix and Go/No-Go docs
+```
+
+No `.env`, secrets, credentials, production config, deployment config, migrations, production data, Nginx, PM2, DNS, live Stripe, or social publishing state was changed.
+
+## Current Behavior
+
+Ask:
+
+- Free preview evidence card can emit `checkout_start_from_free_preview`.
+- Payload is limited to route/source/paid/confidence/evidence signal count.
+- Paid completion still requires Stripe test-mode proof through the existing direct session verification path.
+
+Draw:
+
+- Free preview evidence card can emit `checkout_start_from_free_preview`.
+- Payload is limited to route/source/paid/confidence/evidence signal count.
+- Paid completion still requires Stripe test-mode proof through the existing direct session verification path.
+
+Relationship:
+
+- Free result evidence card and result unlock can emit checkout-start only for UUID-shaped persisted reading IDs.
+- `rel_*` local fallback IDs are blocked before `/api/checkout`.
+- Blocked fallback shows: `We need to save this reading before checkout. Please try again in a moment.`
+- Blocked fallback emits `relationship_checkout_blocked_missing_persisted_reading` with only `{ route, reason }`.
+- Webhook metadata validation refuses unsafe or missing metadata and never unlocks `rel_*` fallback IDs.
+
+## Validation Result
+
+```text
+npm ci --ignore-scripts --no-audit --prefer-offline: Pass
+Targeted tests: Pass, 4 files / 19 tests
+npm run typecheck: Pass
+npm run lint: Pass, Next.js lint deprecation warning only
+npm run test: Pass, 49 files / 479 tests
+npm run build: Pass, existing jose Edge Runtime warnings only
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+npm run smoke:stripe:test-readiness: Pass command exit, reports Blocked because test env is missing
+npm run smoke:stripe:test-readiness -- --strict: Blocked as expected because Stripe/Supabase test env is missing
+```
+
+## Browser QA
+
+Puppeteer QA ran against local `next start` on port `3063` with dummy local-only auth secrets. Analytics, unlock, and checkout requests were intercepted to avoid real payment calls.
+
+```text
+/ask?lang=en: evidence Go, unlock CTA Go, checkout-start analytics Go, accuracy feedback Go, mobile overflow Go, private analytics leakage 0
+/draw?lang=en: evidence Go, unlock CTA Go, checkout-start analytics Go, accuracy feedback Go, mobile overflow Go, private analytics leakage 0
+/tarot?lang=en: render Go, mobile overflow Go, guaranteed-prediction language check Go
+/relationship/new?lang=en: evidence Go, unlock CTA Go, rel_* fallback blocked before checkout Go, safe blocked event Go, safe blocked message Go, accuracy feedback Go, mobile overflow Go, private analytics leakage 0
+Captured analytics events: 15
+Captured stopped Ask/Draw unlocks: 2
+Captured checkout requests: 0
+```
+
+## Safety Result
+
+```text
+Secrets printed: No
+.env read: No
+Stripe live mode: Not used
+Paid smoke: Not run
+Production deploy: Not run
+DNS/Nginx/PM2/server production state: Not touched
+Destructive database actions: Not run
+Social publishing: Not run
+Private analytics payload leakage: 0 detected
+```
+
+## Gate Status
+
+```text
+PR #63 merged: Go
+checkout_start_from_free_preview implemented: Go
+Ask checkout-start analytics: Go
+Draw checkout-start analytics: Go
+Relationship checkout-start analytics: Go
+Relationship UUID guard: Go
+Relationship rel_* fallback blocked: Go
+Webhook metadata validation: Go
+Entitlement readiness: Partial
+Stripe test env readiness: Blocked
+Supabase staging UUID persistence: Blocked
+Strict readiness: Blocked
+Typecheck: Go
+Lint: Go
+Tests: Go
+Build: Go
+Audits: Go
+Browser QA: Go
+Production deploy: Not run
+Stripe live mode: Not run
+Paid smoke: No-Go unless test-mode checkout actually ran
+Secrets printed: No
+Formal traffic / Day 1 publishing: No-Go unless paid smoke Go
+```
+
+## Risks And Follow-up
+
+- Stripe/Supabase test env is not configured locally, so strict readiness is correctly blocked.
+- Relationship paid smoke remains blocked until Supabase staging returns UUID-shaped persisted reading IDs.
+- Ask and Draw paid completion are still not test-mode proven in this task.
+- Formal launch remains No-Go until Relationship, Ask, and Draw paid smoke pass in test mode.
+
+## Suggested Next Codex Instruction
+
+Configure masked Stripe test-mode env and Supabase staging persistence, then run strict readiness and real test-mode paid smoke for Relationship, Ask, and Draw. Keep production deploy and Day 1 formal traffic blocked until paid smoke is Go.
+
+---
+
 # Review Packet - TianJi Love Paid Funnel Test Readiness 20260525
 
 ## Background

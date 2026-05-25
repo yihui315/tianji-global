@@ -19,7 +19,11 @@ import {
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
-import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
+import {
+  trackCheckoutStartFromFreePreview,
+  trackRevenueFunnelEvent,
+  type CheckoutStartFromFreePreviewSource,
+} from '@/lib/analytics/funnel-events';
 import { getLoveTestPaidIntentMeta, isLoveTestAskIntent } from '@/lib/love-test';
 import type { DivinationEvidence } from '@/types/divination';
 
@@ -407,7 +411,7 @@ function AskPageContent() {
     [question, language, loading, attributionSource, attributionIntent, paidIntentMeta],
   );
 
-  const onUnlock = useCallback(async () => {
+  const onUnlock = useCallback(async (source: CheckoutStartFromFreePreviewSource = 'result_unlock') => {
     if (!preview || unlocking) return;
     setError(null);
     if (paidIntentMeta) {
@@ -431,6 +435,12 @@ function AskPageContent() {
       setError(LOVE_TEST_CHECKOUT_READINESS_LABEL);
       return;
     }
+    void trackCheckoutStartFromFreePreview({
+      route: 'ask',
+      source,
+      confidence: preview.evidence?.confidence,
+      evidenceSignalCount: preview.evidence?.signals.length,
+    });
     void trackRevenueFunnelEvent('unlock_click', {
       lang: preview.language,
       surface: 'ask_preview',
@@ -643,7 +653,7 @@ function AskPageContent() {
             <span className="text-xs tracking-[0.12em] text-[#f4d7a3]/58">
               {paidIntentMeta ? 'Test-mode checkout is approval-gated. No payment button is shown.' : copy.preview.assurance}
             </span>
-            <button type="button" onClick={onUnlock} disabled={unlocking} className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55">
+            <button type="button" onClick={() => onUnlock('result_unlock')} disabled={unlocking} className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55">
               {paidIntentMeta
                 ? LOVE_TEST_CHECKOUT_READINESS_LABEL
                 : unlocking

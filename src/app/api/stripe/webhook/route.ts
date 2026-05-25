@@ -16,22 +16,11 @@ import {
   isStagingDegradedMode,
   isStripePaymentAvailable,
 } from '@/lib/staging-degraded-mode';
+import { validateCheckoutSessionMetadata } from '@/lib/stripe-checkout-metadata';
 import { getStripe } from '@/lib/stripe';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-
-function metadataProductId(metadata?: Stripe.Metadata | null): BillingProductId | null {
-  const productId = metadata?.productId;
-  if (
-    productId === 'solo_love_report' ||
-    productId === 'compatibility_report'
-  ) {
-    return productId;
-  }
-
-  return null;
-}
 
 function readingModeFromProduct(productId: BillingProductId) {
   return productId === 'compatibility_report' ? 'compatibility' : 'solo';
@@ -40,11 +29,22 @@ function readingModeFromProduct(productId: BillingProductId) {
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
   if (session.mode !== 'payment' || session.payment_status !== 'paid') return;
 
-  const productId = metadataProductId(session.metadata);
-  const readingSessionId = session.metadata?.readingSessionId;
-  const source = session.metadata?.source === 'relationship' ? 'relationship' : 'love_reading';
-  const relationshipReadingId = session.metadata?.relationshipReadingId || readingSessionId;
-  if (!productId || !readingSessionId) return;
+  const metadataValidation = validateCheckoutSessionMetadata(session.metadata);
+  if (!metadataValidation.ok) {
+    console.warn('[stripe/webhook] ignored checkout.session.completed with unsafe metadata', {
+      reason: metadataValidation.reason,
+    });
+    return;
+  }
+
+  const {
+    productId,
+    source,
+    readingSessionId,
+    relationshipReadingId,
+    locale,
+    userId,
+  } = metadataValidation.metadata;
 
   await markOrderPaid({
     checkoutSessionId: session.id,
@@ -71,14 +71,14 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   const reportJob = await ensureReportJobForSession({
     sessionId: readingSessionId,
     readingMode: readingModeFromProduct(productId),
-    userId: session.metadata?.userId || null,
+    userId,
   });
 
   await runReportJob(reportJob.id);
   try {
     await sendReportReadyEmailForCheckoutSession({
       checkoutSessionId: session.id,
-      locale: session.metadata?.locale === 'zh-CN' ? 'zh-CN' : 'en',
+      locale,
     });
   } catch {
     console.warn('[stripe/webhook] report ready email was not sent');

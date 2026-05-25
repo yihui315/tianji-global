@@ -1,5 +1,91 @@
 # AI Changelog
 
+## 2026-05-25 - TianJi Love prelaunch paid funnel hardening
+
+### What changed
+
+Created a clean worktree from latest `origin/main` after confirming PR #63 content is already present in repository truth. Added the exact checkout-start analytics event, Relationship UUID checkout guard, safe blocked relationship analytics, webhook metadata validation, readiness-script app-side checks, focused tests, and final prelaunch Go/No-Go evidence docs.
+
+### Files changed
+
+```text
+src/lib/analytics/funnel-events.ts
+src/lib/analytics/client.ts
+src/lib/analytics/relationship-events.ts
+src/lib/trust-copy-guard.ts
+src/lib/reading-id.ts
+src/lib/stripe-checkout-metadata.ts
+src/lib/relationship-reading-store.ts
+src/components/divination/DivinationEvidenceCard.tsx
+src/components/relationship/RelationshipResult.tsx
+src/app/(main)/ask/page.tsx
+src/app/(main)/draw/page.tsx
+src/app/api/analytics/relationship/route.ts
+src/app/api/checkout/route.ts
+src/app/api/stripe/webhook/route.ts
+scripts/smoke-stripe-test-readiness.mjs
+src/__tests__/prelaunch-paid-funnel-contract.test.ts
+.ai/TIANJI_LOVE_PRELAUNCH_PAID_FUNNEL_FIX_20260525.md
+.ai/TIANJI_LOVE_PRELAUNCH_GO_NO_GO_20260525.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+### Validation
+
+```text
+gh pr view 63: Blocked locally - gh unauthenticated
+Repository truth for PR #63: Go - origin/main contains 6bbcc22 via 3b8be51
+npm ci --ignore-scripts --no-audit --prefer-offline: Pass
+Targeted tests: Pass, 4 files / 19 tests
+npm run typecheck: Pass
+npm run lint: Pass, Next.js lint deprecation warning only
+npm run test: Pass, 49 files / 479 tests
+npm run build: Pass, existing jose Edge Runtime warnings only
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+npm run smoke:stripe:test-readiness: Pass command exit, reports Blocked because test env is missing
+npm run smoke:stripe:test-readiness -- --strict: Blocked as expected because Stripe/Supabase test env is missing
+Puppeteer Browser QA on /ask, /draw, /tarot, /relationship/new: Pass
+```
+
+### Gate status
+
+```text
+PR #63 merged: Go
+checkout_start_from_free_preview implemented: Go
+Ask checkout-start analytics: Go
+Draw checkout-start analytics: Go
+Relationship checkout-start analytics: Go
+Relationship UUID guard: Go
+Relationship rel_* fallback blocked: Go
+Webhook metadata validation: Go
+Entitlement readiness: Partial
+Stripe test env readiness: Blocked
+Supabase staging UUID persistence: Blocked
+Strict readiness: Blocked
+Typecheck: Go
+Lint: Go
+Tests: Go
+Build: Go
+Audits: Go
+Browser QA: Go
+Production deploy: Not run
+Stripe live mode: Not run
+Paid smoke: No-Go unless test-mode checkout actually ran
+Secrets printed: No
+Formal traffic / Day 1 publishing: No-Go unless paid smoke Go
+```
+
+### Follow-up
+
+- Configure masked Stripe test-mode env.
+- Configure Supabase staging persistence and prove Relationship UUID readings.
+- Run strict readiness and real test-mode paid smoke for Relationship, Ask, and Draw.
+- Keep production deploy and Day 1 formal traffic blocked until paid smoke is Go.
+
 ## 2026-05-25 - TianJi Love paid funnel test readiness after evidence layer
 
 ### What changed

@@ -1,4 +1,13 @@
 import { trackClientEvent, type ClientAnalyticsEvent } from './client';
+import type {
+  DivinationEvidenceConfidence,
+  DivinationEvidenceRoute,
+} from '@/types/divination';
+
+export type CheckoutStartFromFreePreviewSource =
+  | 'evidence_card'
+  | 'result_unlock'
+  | 'pricing_cta';
 
 export const FREE_TO_PAID_FUNNEL_EVENTS = [
   'home_cta_click',
@@ -10,6 +19,7 @@ export const FREE_TO_PAID_FUNNEL_EVENTS = [
   'draw_preview_completed',
   'pricing_viewed',
   'unlock_click',
+  'checkout_start_from_free_preview',
   'login_started',
 ] as const;
 
@@ -72,4 +82,33 @@ export function trackRevenueFunnelEvent(
     moduleType: 'tianji_love',
     payload,
   });
+}
+
+export function buildCheckoutStartFromFreePreviewPayload(input: {
+  route: DivinationEvidenceRoute;
+  source: CheckoutStartFromFreePreviewSource;
+  confidence?: DivinationEvidenceConfidence;
+  evidenceSignalCount?: number;
+}): NonNullable<ClientAnalyticsEvent['payload']> {
+  return {
+    route: input.route,
+    source: input.source,
+    paid: false,
+    ...(input.confidence ? { confidence: input.confidence } : {}),
+    ...(typeof input.evidenceSignalCount === 'number'
+      ? { evidenceSignalCount: input.evidenceSignalCount }
+      : {}),
+  };
+}
+
+export function trackCheckoutStartFromFreePreview(input: {
+  route: DivinationEvidenceRoute;
+  source: CheckoutStartFromFreePreviewSource;
+  confidence?: DivinationEvidenceConfidence;
+  evidenceSignalCount?: number;
+}) {
+  return trackRevenueFunnelEvent(
+    'checkout_start_from_free_preview',
+    buildCheckoutStartFromFreePreviewPayload(input),
+  );
 }
