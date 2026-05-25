@@ -19,6 +19,7 @@ const FILES = {
   checkoutRoute: 'src/app/api/checkout/route.ts',
   stripeWebhook: 'src/app/api/stripe/webhook/route.ts',
   relationshipStore: 'src/lib/relationship-reading-store.ts',
+  funnelEvents: 'src/lib/analytics/funnel-events.ts',
   billing: 'src/lib/billing.ts',
   payPerUse: 'src/lib/pay-per-use.ts',
   analyticsClient: 'src/lib/analytics/client.ts',
@@ -86,6 +87,10 @@ function classifyUrl(value) {
   }
 }
 
+function classifyPresent(value) {
+  return value ? 'present' : 'missing';
+}
+
 function yesNo(value) {
   return value ? 'Go' : 'No-Go';
 }
@@ -138,6 +143,24 @@ const envChecks = [
     strictOk: (status) => status === 'present',
   },
   {
+    name: 'NEXT_PUBLIC_SUPABASE_URL',
+    status: classifyUrl(process.env.NEXT_PUBLIC_SUPABASE_URL),
+    requiredInStrict: true,
+    strictOk: (status) => status === 'present',
+  },
+  {
+    name: 'SUPABASE_SERVICE_ROLE_KEY',
+    status: classifyPresent(process.env.SUPABASE_SERVICE_ROLE_KEY),
+    requiredInStrict: true,
+    strictOk: (status) => status === 'present',
+  },
+  {
+    name: 'SUPABASE_MUTATION_DISABLED',
+    status: classifyBoolean(process.env.SUPABASE_MUTATION_DISABLED),
+    requiredInStrict: false,
+    strictOk: (status) => status !== 'present-true',
+  },
+  {
     name: 'LOVE_TEST_PAID_INTENT_TEST_MODE_READY',
     status: classifyBoolean(process.env.LOVE_TEST_PAID_INTENT_TEST_MODE_READY),
     requiredInStrict: false,
@@ -162,6 +185,7 @@ function askFunnel() {
       source.askUnlock.includes('isStripePaymentAvailable'),
     entitlementPath: hasAll(source.askUnlock, ['checkout.sessions.retrieve', "payment_status === 'paid'"]),
     analyticsSafe: source.askPage.includes('trackRevenueFunnelEvent') &&
+      source.askPage.includes('checkout_start_from_free_preview') &&
       source.divinationEvents.includes('buildDivinationEvidenceAnalyticsPayload') &&
       source.analyticsClient.includes('sanitizeClientAnalyticsPayload'),
     paidCompletion: 'Blocked until test-mode Stripe env is present; completion verifies checkout session directly.',
@@ -179,6 +203,7 @@ function drawFunnel() {
       source.drawUnlock.includes('isStripePaymentAvailable'),
     entitlementPath: hasAll(source.drawUnlock, ['checkout.sessions.retrieve', "payment_status === 'paid'"]),
     analyticsSafe: source.drawPage.includes('trackRevenueFunnelEvent') &&
+      source.drawPage.includes('checkout_start_from_free_preview') &&
       source.divinationEvents.includes('buildDivinationEvidenceAnalyticsPayload') &&
       source.analyticsClient.includes('sanitizeClientAnalyticsPayload'),
     paidCompletion: 'Blocked until test-mode Stripe env is present; completion verifies checkout session directly.',
@@ -198,6 +223,7 @@ function relationshipFunnel() {
     entitlementPath: source.stripeWebhook.includes('markRelationshipReadingPremium') &&
       source.relationshipStore.includes('markRelationshipReadingPremium'),
     analyticsSafe: source.relationshipResult.includes('trackRelationshipEvent') &&
+      source.relationshipResult.includes('checkout_start_from_free_preview') &&
       !source.relationshipResult.includes('birthDate') &&
       !source.relationshipResult.includes('birthTime') &&
       !source.relationshipResult.includes('birthLocation'),
@@ -207,6 +233,37 @@ function relationshipFunnel() {
 
 const funnels = [askFunnel(), drawFunnel(), relationshipFunnel()];
 
+function relationshipReadinessChecks() {
+  const guardIndex = source.relationshipResult.indexOf('isUuidReadingId(reading.id)');
+  const fetchIndex = source.relationshipResult.indexOf("fetch('/api/checkout'");
+  return [
+    {
+      name: 'Relationship checkout requires UUID reading ID guard',
+      ok: source.relationshipStore.includes('isUuidReadingId') &&
+        source.relationshipResult.includes('isUuidReadingId(reading.id)'),
+    },
+    {
+      name: 'Relationship fallback rel_* blocked before checkout',
+      ok: guardIndex >= 0 &&
+        fetchIndex >= 0 &&
+        guardIndex < fetchIndex &&
+        source.relationshipResult.includes('relationship_checkout_blocked_missing_persisted_reading') &&
+        source.relationshipResult.includes('missing_uuid_reading_id') &&
+        source.relationshipResult.includes('We need to save this reading before checkout. Please try again in a moment.'),
+    },
+    {
+      name: 'Relationship entitlement/webhook target route detected',
+      ok: source.checkoutRoute.includes("source === 'relationship'") &&
+        source.checkoutRoute.includes("relationshipReadingId: checkoutSource === 'relationship'") &&
+        source.stripeWebhook.includes('markRelationshipReadingPremium') &&
+        source.stripeWebhook.includes('isUuidReadingId') &&
+        source.relationshipStore.includes('markRelationshipReadingPremium'),
+    },
+  ];
+}
+
+const relationshipChecks = relationshipReadinessChecks();
+
 const routeFailures = funnels.flatMap((funnel) => {
   const failures = [];
   for (const key of ['routeExists', 'evidenceView', 'unlockCta', 'checkoutStart', 'stripeGuard', 'entitlementPath', 'analyticsSafe']) {
@@ -214,6 +271,10 @@ const routeFailures = funnels.flatMap((funnel) => {
   }
   return failures;
 });
+
+const relationshipReadinessFailures = relationshipChecks
+  .filter((check) => !check.ok)
+  .map((check) => check.name);
 
 const liveKeyFindings = envChecks
   .filter((check) => check.status === 'live-shaped')
@@ -223,10 +284,20 @@ const readinessEnvFailures = envChecks
   .filter((check) => check.requiredInStrict && !check.strictOk(check.status))
   .map((check) => `${check.name}: ${check.status}`);
 
+const relationshipStrictBlockers = strict && (
+  process.env.SUPABASE_MUTATION_DISABLED === 'true' ||
+  !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  !process.env.SUPABASE_SERVICE_ROLE_KEY
+)
+  ? ['Relationship paid smoke: Blocked unless Supabase staging persistence is configured and can return UUID reading IDs.']
+  : [];
+
 const blockers = [
   ...liveKeyFindings,
   ...readinessEnvFailures,
   ...routeFailures,
+  ...relationshipReadinessFailures,
+  ...relationshipStrictBlockers,
 ];
 
 console.log('# TianJi Love Stripe Test-Mode Paid Funnel Readiness');
@@ -248,6 +319,12 @@ for (const funnel of funnels) {
     `| ${funnel.name} | ${yesNo(funnel.routeExists)} | ${yesNo(funnel.evidenceView)} | ${yesNo(funnel.unlockCta)} | ${yesNo(funnel.checkoutStart)} | ${yesNo(funnel.stripeGuard)} | ${yesNo(funnel.entitlementPath)} | ${yesNo(funnel.analyticsSafe)} | ${funnel.paidCompletion} |`
   );
 }
+console.log('');
+console.log('## Relationship paid-funnel readiness');
+for (const check of relationshipChecks) {
+  console.log(`- ${check.name}: ${check.ok ? 'present' : 'missing'}`);
+}
+console.log('- Relationship paid smoke: Blocked unless Supabase staging persistence is configured and can return UUID reading IDs.');
 console.log('');
 console.log('## Static findings');
 console.log('- Ask checkout start: /api/ask/unlock POST creates a Stripe payment Checkout Session with inline price_data.');

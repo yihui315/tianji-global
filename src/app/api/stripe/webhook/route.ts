@@ -9,7 +9,10 @@ import {
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
 import { sendReportReadyEmailForCheckoutSession } from '@/lib/love-report-email';
 import { isPayPerUseEnabled } from '@/lib/pay-per-use';
-import { markRelationshipReadingPremium } from '@/lib/relationship-reading-store';
+import {
+  isUuidReadingId,
+  markRelationshipReadingPremium,
+} from '@/lib/relationship-reading-store';
 import { ensureReportJobForSession, runReportJob } from '@/lib/report-jobs';
 import {
   STAGING_DEGRADED_PAYMENT_UNAVAILABLE_CODE,
@@ -45,6 +48,16 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   const source = session.metadata?.source === 'relationship' ? 'relationship' : 'love_reading';
   const relationshipReadingId = session.metadata?.relationshipReadingId || readingSessionId;
   if (!productId || !readingSessionId) return;
+  const persistedRelationshipReadingId =
+    source === 'relationship' && isUuidReadingId(relationshipReadingId)
+      ? relationshipReadingId
+      : null;
+  if (
+    source === 'relationship' &&
+    (productId !== 'compatibility_report' || !persistedRelationshipReadingId)
+  ) {
+    return;
+  }
 
   await markOrderPaid({
     checkoutSessionId: session.id,
@@ -56,15 +69,15 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     productId,
     source,
     readingSessionId,
-    relationshipReadingId: source === 'relationship' ? relationshipReadingId : null,
+    relationshipReadingId: source === 'relationship' ? persistedRelationshipReadingId : null,
     checkoutSessionId: session.id,
     amountTotal: session.amount_total ?? null,
     currency: session.currency ?? null,
   });
 
   if (source === 'relationship') {
-    if (productId !== 'compatibility_report' || !relationshipReadingId) return;
-    await markRelationshipReadingPremium(relationshipReadingId);
+    if (!persistedRelationshipReadingId) return;
+    await markRelationshipReadingPremium(persistedRelationshipReadingId);
     return;
   }
 

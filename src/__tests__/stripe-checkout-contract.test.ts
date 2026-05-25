@@ -29,6 +29,9 @@ describe('Stripe checkout billing contract', () => {
     expect(checkout).toContain("mode: 'payment'");
     expect(checkout).toContain('metadata');
     expect(checkout).toContain('readingSessionId');
+    expect(checkout).toContain('productId: product.productId');
+    expect(checkout).toContain('source: checkoutSource');
+    expect(checkout).toContain("relationshipReadingId: checkoutSource === 'relationship' ? checkoutReferenceId : ''");
     expect(checkout).toContain('idempotencyKey');
     expect(checkout).toContain('customer_email');
     expect(checkout).not.toContain('subscription_data');
@@ -61,7 +64,10 @@ describe('Stripe checkout billing contract', () => {
     expect(webhook).toContain('recordStripeEvent');
     expect(webhook).toContain("case 'checkout.session.completed'");
     expect(webhook).toContain('payment_status');
+    expect(webhook).toContain('metadataProductId');
+    expect(webhook).toContain('isUuidReadingId');
     expect(webhook).toContain('markOrderPaid');
+    expect(webhook).toContain('markRelationshipReadingPremium');
     expect(webhook).toContain('ensureReportJobForSession');
     expect(webhook).toContain('sendReportReadyEmailForCheckoutSession');
     expect(webhook).not.toContain("case 'invoice.paid'");
@@ -69,6 +75,21 @@ describe('Stripe checkout billing contract', () => {
     expect(webhook).not.toContain("case 'customer.subscription.updated'");
     expect(webhook).toContain('isPayPerUseEnabled');
     expect(webhook).toContain('pay_per_use_disabled');
+  });
+
+  it('requires safe metadata before webhook entitlement completion', () => {
+    const checkout = read('src/app/api/checkout/route.ts');
+    const relationshipResult = read('src/components/relationship/RelationshipResult.tsx');
+    const webhook = read('src/app/api/stripe/webhook/route.ts');
+
+    expect(relationshipResult).toContain("productId: 'compatibility_report'");
+    expect(checkout).toContain("source === 'relationship'");
+    expect(checkout).toContain('relationshipReadingId');
+    expect(webhook).toContain("productId !== 'compatibility_report'");
+    expect(webhook).toContain('persistedRelationshipReadingId');
+    expect(webhook).toContain('markRelationshipReadingPremium(persistedRelationshipReadingId)');
+    expect(webhook.indexOf('persistedRelationshipReadingId'))
+      .toBeLessThan(webhook.indexOf('await markOrderPaid'));
   });
 
   it('adds one-time billing tables and an entitlement checker', () => {
@@ -94,5 +115,14 @@ describe('Stripe checkout billing contract', () => {
     expect(email).toContain('buildPrivateReportLink');
     expect(email).toContain('Your TianJi Love report is ready');
     expect(email).not.toMatch(/birth(Date|Time|Place)/);
+  });
+
+  it('reports relationship UUID checkout guard in the Stripe readiness script', () => {
+    const readinessScript = read('scripts/smoke-stripe-test-readiness.mjs');
+
+    expect(readinessScript).toContain('Relationship checkout requires UUID reading ID guard');
+    expect(readinessScript).toContain('Relationship fallback rel_* blocked before checkout');
+    expect(readinessScript).toContain('Relationship entitlement/webhook target route detected');
+    expect(readinessScript).toContain('Relationship paid smoke: Blocked unless Supabase staging persistence is configured and can return UUID reading IDs.');
   });
 });

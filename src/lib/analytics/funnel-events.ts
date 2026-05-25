@@ -10,6 +10,8 @@ export const FREE_TO_PAID_FUNNEL_EVENTS = [
   'draw_preview_completed',
   'pricing_viewed',
   'unlock_click',
+  'checkout_start_from_free_preview',
+  'relationship_checkout_blocked_missing_persisted_reading',
   'login_started',
 ] as const;
 

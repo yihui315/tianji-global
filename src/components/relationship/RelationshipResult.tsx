@@ -20,6 +20,7 @@ import { DivinationEvidenceCard } from '@/components/divination/DivinationEviden
 import { buildRelationshipEvidence } from '@/lib/divination/evidence';
 import { trackRelationshipEvent } from '@/lib/analytics/track';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
+import { isUuidReadingId } from '@/lib/relationship-reading-store';
 import { DimensionCard } from './RelationshipDimensionCard';
 import { RelationshipRadar } from './RelationshipRadar';
 import type { RelationshipReading } from '@/types/relationship';
@@ -34,6 +35,9 @@ const DIMENSION_KEYS = ['attraction', 'communication', 'conflict', 'rhythm', 'lo
 
 const EXPERIMENT_ID = 'relationship-p0-sales-loop';
 const VARIANT = 'A';
+const RELATIONSHIP_PERSISTENCE_BLOCKED_MESSAGE =
+  'We need to save this reading before checkout. Please try again in a moment.';
+type CheckoutPreviewSource = 'evidence_card' | 'result_unlock';
 
 const resultCopy = {
   zh: {
@@ -47,6 +51,7 @@ const resultCopy = {
     unlock: 'Unlock the Full Relationship Pattern — $4.99',
     unlockDisabled: 'Full report checkout is not enabled yet. Please save this reading and check back soon.',
     unlockFailed: 'Checkout could not be started. Please save your reading first.',
+    persistBeforeCheckout: RELATIONSHIP_PERSISTENCE_BLOCKED_MESSAGE,
     currentPhase: '褰撳墠闃舵',
     next30Days: '鏈潵 30 澶?',
     copyLink: '澶嶅埗瀹夊叏鍒嗕韩閾炬帴',
@@ -73,6 +78,7 @@ const resultCopy = {
     unlock: 'Unlock the Full Relationship Pattern — $4.99',
     unlockDisabled: 'Full report checkout is not enabled yet. Please save this reading and check back soon.',
     unlockFailed: 'Checkout could not be started. Please save your reading first.',
+    persistBeforeCheckout: RELATIONSHIP_PERSISTENCE_BLOCKED_MESSAGE,
     currentPhase: 'Current phase',
     next30Days: 'Next 30 days',
     copyLink: 'Copy safe share link',
@@ -152,8 +158,18 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
     }
   }, [isFull, lang, reading.accessLevel, reading.relationType]);
 
-  const handleUnlock = async () => {
+  const handleUnlock = async (source: CheckoutPreviewSource = 'result_unlock') => {
     setUnlockError(null);
+
+    if (!isUuidReadingId(reading.id)) {
+      setUnlockError(copy.persistBeforeCheckout);
+      void trackRevenueFunnelEvent('relationship_checkout_blocked_missing_persisted_reading', {
+        route: 'relationship',
+        reason: 'missing_uuid_reading_id',
+      });
+      return;
+    }
+
     setUnlockLoading(true);
 
     void trackRelationshipEvent({
@@ -176,6 +192,13 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
       productId: 'compatibility_report',
       product: 'relationship_destiny_report',
       relationType: reading.relationType,
+    });
+    void trackRevenueFunnelEvent('checkout_start_from_free_preview', {
+      route: 'relationship',
+      source,
+      paid: false,
+      confidence: evidence.confidence,
+      evidenceSignalCount: evidence.signals.length,
     });
 
     try {
@@ -334,7 +357,7 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
         evidence={evidence}
         route="relationship"
         paid={isFull}
-        onUnlockClick={handleUnlock}
+        onUnlockClick={() => void handleUnlock('evidence_card')}
         unlockLabel={copy.unlock}
       />
 
@@ -378,7 +401,7 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
           </div>
           <button
             type="button"
-            onClick={handleUnlock}
+            onClick={() => void handleUnlock('result_unlock')}
             disabled={unlockLoading}
             className="relationship-form-submit mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#ffb49e]/60 px-5 text-sm font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
           >
