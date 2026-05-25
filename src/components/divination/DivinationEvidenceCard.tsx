@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 import { trackDivinationEvidenceEvent } from '@/lib/analytics/divination-events';
+import type { CheckoutStartFromFreePreviewSource } from '@/lib/analytics/funnel-events';
 import type {
   DivinationAccuracyFeedback,
   DivinationEvidence,
@@ -22,7 +23,7 @@ type DivinationEvidenceCardProps = {
   evidence: DivinationEvidence;
   route: DivinationEvidenceRoute;
   paid: boolean;
-  onUnlockClick?: () => void;
+  onUnlockClick?: (source: CheckoutStartFromFreePreviewSource) => void;
   unlockLabel?: string;
   className?: string;
 };
@@ -90,7 +91,7 @@ export function DivinationEvidenceCard({
       paid,
       evidence,
     });
-    onUnlockClick?.();
+    onUnlockClick?.('evidence_card');
   };
 
   const hasDetail = Boolean(evidence.userCanVerify?.length || evidence.actionAdvice?.length);

@@ -1,9 +1,7 @@
 import { getSupabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
+import { isUuidReadingId } from '@/lib/reading-id';
 import { isSupabaseMutationDisabled } from '@/lib/staging-degraded-mode';
 import type { RelationshipReading, RelationshipType } from '@/types/relationship';
-
-const uuidPattern =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export const RELATIONSHIP_LOCKED_SECTIONS = [
   'dimensions',
@@ -15,7 +13,7 @@ export const RELATIONSHIP_LOCKED_SECTIONS = [
 ] as const;
 
 export function isRelationshipReadingId(value?: string | null) {
-  return Boolean(value && uuidPattern.test(value));
+  return isUuidReadingId(value);
 }
 
 function asNumber(value: unknown) {

@@ -8,10 +8,8 @@ import {
 } from '@/lib/billing';
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
 import { requirePayPerUseEnabled } from '@/lib/pay-per-use';
+import { isUuidReadingId } from '@/lib/reading-id';
 import { getStripe } from '@/lib/stripe';
-
-const uuidPattern =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export async function POST(request: NextRequest) {
   const payPerUseGate = requirePayPerUseEnabled();
@@ -43,7 +41,7 @@ export async function POST(request: NextRequest) {
     if (!checkoutReferenceId) {
       return NextResponse.json({ error: 'Missing readingSessionId' }, { status: 400 });
     }
-    if (!uuidPattern.test(checkoutReferenceId)) {
+    if (!isUuidReadingId(checkoutReferenceId)) {
       return NextResponse.json({ error: 'Invalid readingSessionId' }, { status: 400 });
     }
 

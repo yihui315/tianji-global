@@ -17,6 +17,7 @@ export type RelationshipEventName =
   | "relationship_copy_success"
   | "relationship_unlock_click"
   | "relationship_checkout_start"
+  | "relationship_checkout_blocked_missing_persisted_reading"
   | "relationship_checkout_success"
   | "relationship_error"
   | "relationship_upgrade_click"

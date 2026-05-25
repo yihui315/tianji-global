@@ -19,7 +19,12 @@ import { TianjiLovePanel } from '@/components/tianji-love';
 import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
 import { buildRelationshipEvidence } from '@/lib/divination/evidence';
 import { trackRelationshipEvent } from '@/lib/analytics/track';
-import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
+import {
+  trackCheckoutStartFromFreePreview,
+  trackRevenueFunnelEvent,
+  type CheckoutStartFromFreePreviewSource,
+} from '@/lib/analytics/funnel-events';
+import { isUuidReadingId } from '@/lib/reading-id';
 import { DimensionCard } from './RelationshipDimensionCard';
 import { RelationshipRadar } from './RelationshipRadar';
 import type { RelationshipReading } from '@/types/relationship';
@@ -46,6 +51,7 @@ const resultCopy = {
     lockedBody: 'Full report unlocks all five dimensions, 30-day timing, conflict repair, conversation guidance, PDF-ready report, and saved history.',
     unlock: 'Unlock the Full Relationship Pattern — $4.99',
     unlockDisabled: 'Full report checkout is not enabled yet. Please save this reading and check back soon.',
+    unlockMissingPersistedReading: 'We need to save this reading before checkout. Please try again in a moment.',
     unlockFailed: 'Checkout could not be started. Please save your reading first.',
     currentPhase: '褰撳墠闃舵',
     next30Days: '鏈潵 30 澶?',
@@ -72,6 +78,7 @@ const resultCopy = {
     lockedBody: 'Full report unlocks all five dimensions, 30-day timing, conflict repair, conversation guidance, PDF-ready report, and saved history.',
     unlock: 'Unlock the Full Relationship Pattern — $4.99',
     unlockDisabled: 'Full report checkout is not enabled yet. Please save this reading and check back soon.',
+    unlockMissingPersistedReading: 'We need to save this reading before checkout. Please try again in a moment.',
     unlockFailed: 'Checkout could not be started. Please save your reading first.',
     currentPhase: 'Current phase',
     next30Days: 'Next 30 days',
@@ -152,9 +159,8 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
     }
   }, [isFull, lang, reading.accessLevel, reading.relationType]);
 
-  const handleUnlock = async () => {
+  const handleUnlock = async (source: CheckoutStartFromFreePreviewSource = 'result_unlock') => {
     setUnlockError(null);
-    setUnlockLoading(true);
 
     void trackRelationshipEvent({
       event: 'relationship_unlock_click',
@@ -178,7 +184,31 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
       relationType: reading.relationType,
     });
 
+    if (!isUuidReadingId(reading.id)) {
+      void trackRelationshipEvent({
+        event: 'relationship_checkout_blocked_missing_persisted_reading',
+        experiment_id: EXPERIMENT_ID,
+        variant: VARIANT,
+        relation_type: reading.relationType,
+        is_premium: false,
+        payload: {
+          route: 'relationship',
+          reason: 'missing_uuid_reading_id',
+        },
+      });
+      setUnlockError(copy.unlockMissingPersistedReading);
+      return;
+    }
+
+    setUnlockLoading(true);
+
     try {
+      void trackCheckoutStartFromFreePreview({
+        route: 'relationship',
+        source,
+        confidence: evidence.confidence,
+        evidenceSignalCount: evidence.signals.length,
+      });
       void trackRelationshipEvent({
         event: 'relationship_checkout_start',
         experiment_id: EXPERIMENT_ID,
@@ -378,7 +408,7 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
           </div>
           <button
             type="button"
-            onClick={handleUnlock}
+            onClick={() => handleUnlock('result_unlock')}
             disabled={unlockLoading}
             className="relationship-form-submit mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#ffb49e]/60 px-5 text-sm font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto"
           >
