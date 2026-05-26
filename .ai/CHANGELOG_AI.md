@@ -1,5 +1,161 @@
 # AI Changelog
 
+## 2026-05-26 - PR #67 cloud deploy gate correction
+
+### What changed
+
+Corrected PR #67 evidence to match TianJi Love deployment reality: production deploys on a cloud server, not Vercel. Vercel preview failure is therefore irrelevant/non-blocking for this automation governance PR unless GitHub branch protection physically requires it. PR #67 remains workflow hardening only: disable two content-generation schedules and retain manual `workflow_dispatch`.
+
+### Validation
+
+```text
+PR #67 state: open
+PR #67 mergeable: true
+PR #67 head: 78d7b8aa51cba07f73d3889640060b07c94ea818
+Changed scope: two workflow files plus .ai evidence
+Content calendar schedule/cron: Disabled
+Daily growth schedule/cron: Disabled
+workflow_dispatch: Retained in both workflows
+Vercel status: Irrelevant / Non-blocking
+Production deploy: Not run
+Paid smoke: Not run
+Social auto-posting: Not run
+```
+
+### Gate status
+
+```text
+Deployment model: Cloud server
+Vercel status: Irrelevant / Non-blocking
+PR #67 merge readiness: Go
+Manual-first enforcement: Go
+Production deploy: No-Go
+Paid smoke: No-Go
+Social auto-posting: No-Go
+```
+
+## 2026-05-26 - PR #67 owner Vercel ack gate
+
+### What changed
+
+Recorded the final owner Vercel acknowledgement gate for PR #67. GitHub connector still reports PR #67 as open and mergeable at head `304b675654c54b8c958f8ad3130928b2cb79f0b0`, but Vercel remains failed and no owner rerun/log acknowledgement has been provided in this task. No workflow or business code was changed.
+
+### Validation
+
+```text
+PR #67 state: open
+PR #67 mergeable: true
+PR #67 head: 304b675654c54b8c958f8ad3130928b2cb79f0b0
+Vercel status: failure
+Owner acknowledgement: No
+Production deploy: Not run
+Paid smoke: Not run
+Social auto-posting: Not run
+```
+
+### Gate status
+
+```text
+PR #67 merge readiness: Conditional Go
+Vercel failure: Unknown
+Owner acknowledgement: No
+Manual-first enforcement: Go
+Production deploy: No-Go
+Paid smoke: No-Go
+Social auto-posting: No-Go
+```
+
+## 2026-05-26 - PR #67 Vercel failure triage and PR #60 cleanup
+
+### What changed
+
+Triaged the failing Vercel status on PR #67 without reading secrets or deploying. Local validation confirms the manual-first workflow changes remain valid: both target workflows retain `workflow_dispatch` and have no active `schedule` or `cron` keys. Public Vercel status only exposes a failed check and overview page; deployment metadata/log details require Vercel authentication, so merge readiness remains Conditional Go pending owner rerun or private log review. Added a superseded comment to PR #60 through the GitHub connector.
+
+### Files changed
+
+```text
+.ai/TIANJI_LOVE_PR67_VERCEL_TRIAGE_20260526.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+.ai/TASKS.md
+.ai/AUTOPILOT_STATUS.json
+.ai/AUTOPILOT_REPORT.md
+```
+
+### Validation
+
+```text
+PR #67 metadata via GitHub connector: Open, mergeable
+PR #67 Vercel status: Failure
+origin/main Vercel status: Success
+Vercel public dashboard: overview page only, no public build error summary
+Vercel public deployment API: 403 without auth token
+Vercel public events API: 404
+JSON status parse: Pass
+YAML parse: Pass for both changed workflows
+Trigger audit: Pass, no schedule or cron keys remain in the two changed workflows
+workflow_dispatch audit: Pass, retained in both changed workflows
+Requested .ai plus workflow secret-pattern scan: 2 redacted matches in pre-existing 20260525 evidence docs
+Current changed-file secret-pattern scan: Pass, no matches
+YiHui ValidateLight: Pass via restricted MCP
+npm build/test: Not run
+```
+
+### Gate status
+
+```text
+PR #67 merge readiness: Conditional Go
+Vercel failure: Unknown
+Manual-first enforcement: Go
+PR #60 cleanup: Done
+Production deploy: No-Go
+Paid smoke: No-Go
+Social auto-posting: No-Go
+```
+
+## 2026-05-26 - TianJi Love automation manual-first enforcement
+
+### What changed
+
+Created a clean PR branch from `origin/main@1c188ff0b062b28952f25b785f4fd1ad66465b72` and disabled active scheduled triggers for the two TianJi Love content-generation workflows. Both workflows retain manual `workflow_dispatch` so the first supervised week can use owner-run, reviewable artifact generation instead of unattended scheduled runs.
+
+### Files changed
+
+```text
+.github/workflows/tianji-love-content-calendar.yml
+.github/workflows/tianji-love-daily-growth.yml
+.ai/TIANJI_LOVE_AUTOMATION_MANUAL_FIRST_ENFORCEMENT_20260526.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+.ai/TASKS.md
+.ai/AUTOPILOT_STATUS.json
+.ai/AUTOPILOT_REPORT.md
+```
+
+### Validation
+
+```text
+JSON status parse: Pass
+YAML parse: Pass for both changed workflows
+Trigger audit: Pass, no schedule or cron keys remain in the two changed workflows
+workflow_dispatch audit: Pass, retained in both changed workflows
+Requested .ai plus workflow secret-pattern scan: 2 redacted matches in pre-existing 20260525 evidence docs, not in this task's changed files
+Changed-file secret-pattern scan: Pass, no matches
+YiHui ValidateLight: Pass via restricted MCP
+```
+
+### Gate status
+
+```text
+Manual-first enforcement PR: Go
+Content calendar schedule: Disabled
+Daily growth schedule: Disabled
+workflow_dispatch retained: Go
+Production deploy: No-Go
+Paid smoke: No-Go
+Social auto-posting: No-Go
+```
+
 ## 2026-05-25 - TianJi Love prelaunch paid funnel hardening
 
 ### What changed
