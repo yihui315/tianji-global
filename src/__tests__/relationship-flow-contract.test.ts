@@ -58,4 +58,21 @@ describe('Tianji Love relationship evidence contract', () => {
     expect(evidenceAnalytics).toContain('divination_accuracy_feedback_submitted');
     expect(evidenceAnalytics).not.toMatch(/rawQuestion|birthDate|birthTime|birthLocation|timezone|fullReport|prompt/i);
   });
+
+  it('uses Pretext for stable relationship result text layout without private data coupling', () => {
+    const packageJson = JSON.parse(read('package.json')) as { dependencies?: Record<string, string> };
+    const hook = read('src/components/relationship/usePretextTextLayout.ts');
+    const result = read('src/components/relationship/RelationshipResult.tsx');
+    const dimension = read('src/components/relationship/RelationshipDimensionCard.tsx');
+
+    expect(packageJson.dependencies?.['@chenglou/pretext']).toMatch(/^\^0\.0\.7/);
+    expect(hook).toContain("from '@chenglou/pretext'");
+    expect(hook).toContain('ResizeObserver');
+    expect(hook).toContain('whiteSpace');
+    expect(hook).toContain('catch');
+    expect(result).toContain('headlineLayout');
+    expect(result).toContain('nextMoveLayout');
+    expect(dimension).toContain('summaryLayout');
+    expect(hook).not.toMatch(/birthDate|birthTime|birthLocation|timezone/);
+  });
 });

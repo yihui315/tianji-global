@@ -1,5 +1,27 @@
 # AI Changelog
 
+## 2026-05-26 - TianJi Love relationship Pretext layout merge readiness
+
+### What changed
+
+Prepared the Relationship result Pretext layout stabilization as a narrow merge-ready slice. The client hook observes rendered text width, measures headline, summary, next move, locked body, and dimension summaries with `@chenglou/pretext`, and applies stable `minHeight` values with a safe fallback when measurement is unavailable.
+
+### Scope control
+
+Kept the PR line separate from payment closed-loop work. Ask, Draw, payment routes, Auth, API behavior, Supabase, Stripe, env files, deployment config, social workflows, and public share privacy behavior were not changed for this task.
+
+### Validation
+
+On the isolated PR branch from `origin/main`, `npm run test -- --run src/__tests__/relationship-flow-contract.test.ts` passed 4/4. `npm run typecheck -- --pretty false`, `npm run lint`, `npm run build`, full `npm run test` (49 files / 480 tests), `npm run audit:routes`, `npm run audit:copy`, `npm run audit:share`, `npm run audit:upgrade`, `python -m json.tool .ai/AUTOPILOT_STATUS.json`, `yihui_validate_light`, and `git diff --check` passed. Earlier pre-isolation validation on the source branch passed 74 files / 596 tests.
+
+### Visual QA
+
+Desktop `scrollWidth=1365`, `clientWidth=1365`, no horizontal overflow. Mobile `scrollWidth=390`, `clientWidth=390`, no horizontal overflow. Mobile measured min-heights were headline `140px`, summary `112px`, next move `56px`, locked body `112px`.
+
+### Known noise
+
+Existing `/api/analytics/relationship` 503 appeared during local smoke. No pageerror was observed and this does not point to Pretext.
+
 ## 2026-05-25 - TianJi Love prelaunch paid funnel hardening
 
 ### What changed

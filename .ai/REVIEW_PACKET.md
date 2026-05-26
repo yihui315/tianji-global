@@ -1,3 +1,112 @@
+# TianJi Love Pretext Layout Merge Readiness - Review Packet
+
+## 2026-05-26 relationship Pretext layout merge readiness
+
+Prepared a small relationship-only Pretext integration for a narrow PR.
+
+## Goal
+
+Use `@chenglou/pretext` to make TianJi Love relationship result text more layout-stable without changing payment, Auth, API, privacy, Ask/Draw, deployment, Stripe, Supabase, or workflow surfaces.
+
+## Changed Files
+
+```text
+package.json
+package-lock.json
+src/components/relationship/usePretextTextLayout.ts
+src/components/relationship/RelationshipResult.tsx
+src/components/relationship/RelationshipDimensionCard.tsx
+src/__tests__/relationship-flow-contract.test.ts
+.ai/TIANJI_LOVE_PRETEXT_LAYOUT_QA_20260526.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Diff Summary
+
+- Added `@chenglou/pretext@0.0.7`.
+- Added `usePretextTextLayout`, a client-only hook that observes element width, measures text with Pretext, and applies stable `minHeight`.
+- Wired the hook into relationship result headline, summary, next move, locked report body, and dimension summaries.
+- Kept the hook privacy-agnostic: it receives display text only and does not know about birth dates, birth times, locations, timezones, Stripe, Supabase, or analytics payloads.
+- Kept payment closed-loop work out of this PR line.
+
+## Validation
+
+```text
+npm run test -- --run src/__tests__/relationship-flow-contract.test.ts
+Passed, 4/4 on the isolated PR branch from `origin/main`.
+
+npm run typecheck -- --pretty false
+Passed.
+
+npm run lint
+Passed. Existing Next lint deprecation notice only.
+
+npm run build
+Passed.
+
+npm run test
+Passed, 49 files / 480 tests on the isolated PR branch from `origin/main`.
+
+npm run audit:routes
+Passed.
+
+npm run audit:copy
+Passed.
+
+npm run audit:share
+Passed.
+
+npm run audit:upgrade
+Passed.
+
+git diff --check
+Passed.
+
+python -m json.tool .ai/AUTOPILOT_STATUS.json
+Passed.
+
+yihui_validate_light
+Passed.
+
+Earlier pre-isolation source branch validation:
+- targeted relationship contract: 11/11
+- full test: 74 files / 596 tests
+```
+
+## Visual QA
+
+```text
+Desktop:
+- scrollWidth: 1365
+- clientWidth: 1365
+- horizontal overflow: No
+- min-height: headline 56px, summary 56px, next move 56px, locked body 56px
+
+Mobile:
+- scrollWidth: 390
+- clientWidth: 390
+- horizontal overflow: No
+- min-height: headline 140px, summary 112px, next move 56px, locked body 112px
+
+Known noise:
+- Existing /api/analytics/relationship 503 appeared during local smoke.
+- No pageerror was observed.
+```
+
+## Risks And Follow-Up
+
+- Bundle size increases slightly on the relationship route.
+- Analytics 503 is existing local noise and should remain a separate follow-up.
+- Payment closed loop remains out of scope and should continue on a separate branch/PR.
+- Production deploy and paid smoke remain No-Go.
+
+## Suggested Commit Message
+
+```text
+feat(relationship): stabilize result text layout with pretext
+```
+
 # Review Packet - TianJi Love Prelaunch Paid Funnel Fix 20260525
 
 ## Background
