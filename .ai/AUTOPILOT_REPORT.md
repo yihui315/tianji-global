@@ -1,19 +1,17 @@
-# Autopilot Report - PR #67 Vercel Failure Triage and PR #60 Cleanup
+# Autopilot Report - PR #67 Owner Vercel Ack Gate
 
-Status: done
+Status: blocked
 
 ## Summary
 
-Triaged PR #67 Vercel failure from trusted branch `chore/tianji-automation-manual-first-20260526` without deployment, paid smoke, secret access, live environment changes, social posting, or business-code edits.
+PR #67 remains open and mergeable by GitHub metadata at head `304b675654c54b8c958f8ad3130928b2cb79f0b0`, but Vercel still reports failure. No owner rerun result or private Vercel log acknowledgement was provided in this task.
 
-Local validation confirms the two content-generation workflows remain manual-first:
+Manual-first enforcement remains Go from local validation:
 
 - `.github/workflows/tianji-love-content-calendar.yml`
 - `.github/workflows/tianji-love-daily-growth.yml`
 
-Both keep manual `workflow_dispatch` and no longer contain active `schedule` or `cron` keys. GitHub connector reports PR #67 is open and mergeable, but the PR head Vercel status remains failure. Public Vercel endpoints did not expose build logs without authentication, so merge readiness remains Conditional Go pending owner rerun or private log review.
-
-PR #60 received a superseded comment through the GitHub connector.
+Both keep manual `workflow_dispatch` and no longer contain active `schedule` or `cron` keys. PR #67 must not be merged until owner resolves or acknowledges the Vercel gate.
 
 ## Safety
 
@@ -27,20 +25,16 @@ PR #60 received a superseded comment through the GitHub connector.
 ## Validation
 
 ```text
-JSON status parse: Pass
-YAML parse: Pass
-Trigger audit: Pass, no schedule or cron keys remain in the two changed workflows
-workflow_dispatch audit: Pass
-Requested .ai plus workflow secret-pattern scan: 2 redacted matches in pre-existing 20260525 evidence docs
-Current changed-file secret-pattern scan: Pass, no matches
-YiHui ValidateLight: Pass via restricted MCP
+PR #67 state: open
+PR #67 mergeable: true
+PR #67 head: 304b675654c54b8c958f8ad3130928b2cb79f0b0
 PR #67 Vercel status: Failure
-origin/main Vercel status: Success
-Vercel public logs: unavailable without authentication
+Owner acknowledgement: No
 ```
 
 ## Follow-up
 
-- Do not merge PR #67 until Vercel is rerun, inspected by owner, or explicitly accepted as unrelated/transient.
-- If Vercel logs show a workflow YAML issue, make only the smallest workflow fix.
-- PR #60 can be closed later if owner wants; it now has a superseded comment.
+- Owner should open the Vercel target and rerun or inspect the failure.
+- If rerun succeeds, mark PR #67 merge readiness Go.
+- If private logs show unrelated/acceptable failure, keep Conditional Go with owner acknowledgement.
+- If logs show PR-related failure, provide a non-secret category and make only the minimal fix.

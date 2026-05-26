@@ -1,5 +1,36 @@
 # AI Changelog
 
+## 2026-05-26 - PR #67 owner Vercel ack gate
+
+### What changed
+
+Recorded the final owner Vercel acknowledgement gate for PR #67. GitHub connector still reports PR #67 as open and mergeable at head `304b675654c54b8c958f8ad3130928b2cb79f0b0`, but Vercel remains failed and no owner rerun/log acknowledgement has been provided in this task. No workflow or business code was changed.
+
+### Validation
+
+```text
+PR #67 state: open
+PR #67 mergeable: true
+PR #67 head: 304b675654c54b8c958f8ad3130928b2cb79f0b0
+Vercel status: failure
+Owner acknowledgement: No
+Production deploy: Not run
+Paid smoke: Not run
+Social auto-posting: Not run
+```
+
+### Gate status
+
+```text
+PR #67 merge readiness: Conditional Go
+Vercel failure: Unknown
+Owner acknowledgement: No
+Manual-first enforcement: Go
+Production deploy: No-Go
+Paid smoke: No-Go
+Social auto-posting: No-Go
+```
+
 ## 2026-05-26 - PR #67 Vercel failure triage and PR #60 cleanup
 
 ### What changed

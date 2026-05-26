@@ -2,6 +2,17 @@
 
 ## Current task
 
+### Task ID: 20260526-pr67-owner-vercel-ack-gate
+
+- Status: blocked-awaiting-owner-vercel-action
+- Owner: Codex Executor
+- Goal: Record the final owner Vercel acknowledgement/rerun gate for PR #67 without deployment, paid smoke, secrets, live env changes, social posting, or PR scope expansion.
+- Result: PR #67 remains open and mergeable at head `304b675654c54b8c958f8ad3130928b2cb79f0b0`, but Vercel remains failure and no owner Vercel rerun/log acknowledgement has been provided. Evidence was recorded in `.ai/TIANJI_LOVE_PR67_OWNER_VERCEL_ACK_20260526.md`.
+- Gate status: PR #67 merge readiness Conditional Go; Vercel failure Unknown; owner acknowledgement No; manual-first enforcement Go; production deploy No-Go; paid smoke No-Go; social auto-posting No-Go.
+- Follow-up: Owner must rerun the Vercel deployment or provide non-secret private-log acknowledgement before PR #67 can be merged.
+
+## Previous task
+
 ### Task ID: 20260526-pr67-vercel-triage-pr60-cleanup
 
 - Status: done-with-codex-executor
