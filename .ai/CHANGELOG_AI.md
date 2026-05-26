@@ -2,6 +2,17 @@
 
 ## Entries
 
+### 2026-05-26 - TianJi Love relationship Pretext layout merge readiness
+
+- Task ID: `20260526-tianji-love-pretext-layout-merge-readiness`
+- Files changed: `package.json`, `package-lock.json`, `src/components/relationship/usePretextTextLayout.ts`, `src/components/relationship/RelationshipResult.tsx`, `src/components/relationship/RelationshipDimensionCard.tsx`, `src/__tests__/relationship-flow-contract.test.ts`, `.ai/TIANJI_LOVE_PRETEXT_LAYOUT_QA_20260526.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Summary: Prepared the Relationship result Pretext layout stabilization as a narrow merge-ready slice. The client hook observes rendered text width, measures headline, summary, next move, locked body, and dimension summaries with `@chenglou/pretext`, and applies stable `minHeight` values with a safe fallback when measurement is unavailable.
+- Scope control: Kept the PR line separate from payment closed-loop work. Ask, Draw, payment routes, Auth, API behavior, Supabase, Stripe, env files, deployment config, social workflows, and public share privacy behavior were not changed for this task.
+- Validation: `npm run test -- --run src/__tests__/relationship-flow-contract.test.ts` passed 11/11. `npm run typecheck -- --pretty false`, `npm run lint`, `npm run build`, full `npm run test` (74 files / 596 tests), `npm run audit:routes`, `npm run audit:copy`, `npm run audit:share`, `npm run audit:upgrade`, and `git diff --check` passed.
+- Visual QA: Local production smoke on `/relationship/new?lang=en` confirmed desktop `scrollWidth=1365`, `clientWidth=1365`, no horizontal overflow; mobile `scrollWidth=390`, `clientWidth=390`, no horizontal overflow. Mobile measured min-heights were headline `140px`, summary `112px`, next move `56px`, locked body `112px`.
+- Known noise: Existing `/api/analytics/relationship` 503 appeared during local smoke. No pageerror was observed and this does not point to Pretext.
+- Risks: This is an additive client-side measurement layer and slightly increases the Relationship route bundle. Production deploy and paid smoke remain No-Go.
+
 ### 2026-05-25 - TianJi Love divination evidence layer
 
 - Task ID: 20260525-tianji-love-divination-evidence-layer

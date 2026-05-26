@@ -12,6 +12,7 @@ import type {
 } from '@/lib/analytics/relationship-events';
 import type { RelationshipDimensionScore } from '@/types/relationship';
 import type { Language } from '@/types/reading';
+import { usePretextTextLayout } from './usePretextTextLayout';
 
 type IconComponent = ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
 
@@ -102,6 +103,12 @@ export function DimensionCard({
   const copy = sectionCopy[language];
   const label = labels[dimensionKey as keyof typeof labels] ?? dimensionKey;
   const Icon = meta.icon;
+  const summaryLayout = usePretextTextLayout<HTMLParagraphElement>({
+    text: data.summary,
+    font: '14px Inter, system-ui, sans-serif',
+    lineHeight: 28,
+    minHeight: 28,
+  });
 
   return (
     <TianjiLovePanel className="p-5">
@@ -117,7 +124,7 @@ export function DimensionCard({
         <span className="ml-auto text-2xl font-bold" style={{ color: scoreColor(data.score) }}>{data.score}</span>
       </div>
 
-      <p className="mb-4 text-sm leading-7 text-[#f4d7a3]/72">{data.summary}</p>
+      <p ref={summaryLayout.ref} style={summaryLayout.style} className="mb-4 text-sm leading-7 text-[#f4d7a3]/72">{data.summary}</p>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {data.strengths.length > 0 && (
@@ -167,6 +174,12 @@ export function ExpandableDimensionCard({
   const copy = sectionCopy[language];
   const label = labels[dimensionKey as keyof typeof labels] ?? dimensionKey;
   const Icon = meta.icon;
+  const summaryLayout = usePretextTextLayout<HTMLParagraphElement>({
+    text: data.summary,
+    font: '14px Inter, system-ui, sans-serif',
+    lineHeight: 28,
+    minHeight: 28,
+  });
 
   const handleToggle = async () => {
     const next = !expanded;
@@ -199,7 +212,7 @@ export function ExpandableDimensionCard({
           </div>
           <span className="ml-auto text-2xl font-bold" style={{ color: scoreColor(data.score) }}>{data.score}</span>
         </div>
-        <p className="text-sm leading-7 text-[#f4d7a3]/72">{data.summary}</p>
+        <p ref={summaryLayout.ref} style={summaryLayout.style} className="text-sm leading-7 text-[#f4d7a3]/72">{data.summary}</p>
         {!expanded && !isPremium && (
           <p className="mt-3 inline-flex items-center gap-2 text-xs font-semibold" style={{ color: meta.color }}>
             <RefreshCw className="h-3.5 w-3.5" aria-hidden />
