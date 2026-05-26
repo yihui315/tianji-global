@@ -1,5 +1,39 @@
 # AI Changelog
 
+## 2026-05-26 - PR #67 cloud deploy gate correction
+
+### What changed
+
+Corrected PR #67 evidence to match TianJi Love deployment reality: production deploys on a cloud server, not Vercel. Vercel preview failure is therefore irrelevant/non-blocking for this automation governance PR unless GitHub branch protection physically requires it. PR #67 remains workflow hardening only: disable two content-generation schedules and retain manual `workflow_dispatch`.
+
+### Validation
+
+```text
+PR #67 state: open
+PR #67 mergeable: true
+PR #67 head: 78d7b8aa51cba07f73d3889640060b07c94ea818
+Changed scope: two workflow files plus .ai evidence
+Content calendar schedule/cron: Disabled
+Daily growth schedule/cron: Disabled
+workflow_dispatch: Retained in both workflows
+Vercel status: Irrelevant / Non-blocking
+Production deploy: Not run
+Paid smoke: Not run
+Social auto-posting: Not run
+```
+
+### Gate status
+
+```text
+Deployment model: Cloud server
+Vercel status: Irrelevant / Non-blocking
+PR #67 merge readiness: Go
+Manual-first enforcement: Go
+Production deploy: No-Go
+Paid smoke: No-Go
+Social auto-posting: No-Go
+```
+
 ## 2026-05-26 - PR #67 owner Vercel ack gate
 
 ### What changed

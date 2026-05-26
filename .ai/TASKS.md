@@ -2,6 +2,17 @@
 
 ## Current task
 
+### Task ID: 20260526-pr67-cloud-deploy-gate-correction
+
+- Status: done-with-codex-executor
+- Owner: Codex Executor
+- Goal: Correct PR #67 evidence so Vercel preview failure is no longer treated as a production deploy gate for TianJi Love, which deploys on a cloud server.
+- Result: Recorded `.ai/TIANJI_LOVE_PR67_CLOUD_DEPLOY_GATE_CORRECTION_20260526.md`. PR #67 is open and mergeable at head `78d7b8aa51cba07f73d3889640060b07c94ea818`; changed scope remains the two workflow schedule files plus `.ai` evidence. Trigger audit confirms no active `schedule` or `cron` keys in the two content workflows and `workflow_dispatch` retained. Vercel status is now classified as Irrelevant / Non-blocking for this cloud-server project unless GitHub branch protection physically requires it.
+- Gate status: Deployment model Cloud server; Vercel status Irrelevant / Non-blocking; PR #67 merge readiness Go; manual-first enforcement Go; production deploy No-Go; paid smoke No-Go; social auto-posting No-Go.
+- Follow-up: Merge PR #67 if GitHub allows it and owner accepts the automation governance scope. If GitHub branch protection requires Vercel, treat that as a protection-rule mismatch to handle separately.
+
+## Previous task
+
 ### Task ID: 20260526-pr67-owner-vercel-ack-gate
 
 - Status: blocked-awaiting-owner-vercel-action

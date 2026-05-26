@@ -1,17 +1,17 @@
-# Autopilot Report - PR #67 Owner Vercel Ack Gate
+# Autopilot Report - PR #67 Cloud Deploy Gate Correction
 
-Status: blocked
+Status: done
 
 ## Summary
 
-PR #67 remains open and mergeable by GitHub metadata at head `304b675654c54b8c958f8ad3130928b2cb79f0b0`, but Vercel still reports failure. No owner rerun result or private Vercel log acknowledgement was provided in this task.
+Corrected PR #67 gate evidence to match deployment reality: TianJi Love production deploys on a cloud server, not Vercel. Vercel preview failure is irrelevant/non-blocking for this automation governance PR unless GitHub branch protection physically requires it.
 
 Manual-first enforcement remains Go from local validation:
 
 - `.github/workflows/tianji-love-content-calendar.yml`
 - `.github/workflows/tianji-love-daily-growth.yml`
 
-Both keep manual `workflow_dispatch` and no longer contain active `schedule` or `cron` keys. PR #67 must not be merged until owner resolves or acknowledges the Vercel gate.
+Both keep manual `workflow_dispatch` and no longer contain active `schedule` or `cron` keys. PR #67 does not deploy production, run paid smoke, or enable social auto-posting.
 
 ## Safety
 
@@ -27,14 +27,16 @@ Both keep manual `workflow_dispatch` and no longer contain active `schedule` or 
 ```text
 PR #67 state: open
 PR #67 mergeable: true
-PR #67 head: 304b675654c54b8c958f8ad3130928b2cb79f0b0
-PR #67 Vercel status: Failure
-Owner acknowledgement: No
+PR #67 head: 78d7b8aa51cba07f73d3889640060b07c94ea818
+Changed scope: two workflow files plus .ai evidence
+Content calendar schedule/cron: Disabled
+Daily growth schedule/cron: Disabled
+workflow_dispatch: Retained in both workflows
+Vercel status: Irrelevant / Non-blocking
 ```
 
 ## Follow-up
 
-- Owner should open the Vercel target and rerun or inspect the failure.
-- If rerun succeeds, mark PR #67 merge readiness Go.
-- If private logs show unrelated/acceptable failure, keep Conditional Go with owner acknowledgement.
-- If logs show PR-related failure, provide a non-secret category and make only the minimal fix.
+- Merge PR #67 if GitHub allows it and owner accepts the automation-hardening scope.
+- If GitHub branch protection requires Vercel, handle that as a repository protection-rule mismatch for this cloud-server project.
+- Keep production deploy, paid smoke, and social auto-posting as separate No-Go gates.
