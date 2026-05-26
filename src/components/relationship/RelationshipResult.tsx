@@ -27,6 +27,7 @@ import {
 import { isUuidReadingId } from '@/lib/reading-id';
 import { DimensionCard } from './RelationshipDimensionCard';
 import { RelationshipRadar } from './RelationshipRadar';
+import { usePretextTextLayout } from './usePretextTextLayout';
 import type { RelationshipReading } from '@/types/relationship';
 import type { Language } from '@/types/reading';
 
@@ -133,6 +134,30 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
     }),
     [isFull, lang, reading],
   );
+  const headlineLayout = usePretextTextLayout<HTMLHeadingElement>({
+    text: reading.summary.headline,
+    font: '600 20px Inter, system-ui, sans-serif',
+    lineHeight: 28,
+    minHeight: 28,
+  });
+  const oneLinerLayout = usePretextTextLayout<HTMLParagraphElement>({
+    text: reading.summary.oneLiner,
+    font: '14px Inter, system-ui, sans-serif',
+    lineHeight: 28,
+    minHeight: 28,
+  });
+  const nextMoveLayout = usePretextTextLayout<HTMLParagraphElement>({
+    text: nextMove,
+    font: '16px Inter, system-ui, sans-serif',
+    lineHeight: 28,
+    minHeight: 28,
+  });
+  const lockedBodyLayout = usePretextTextLayout<HTMLParagraphElement>({
+    text: copy.lockedBody,
+    font: '14px Inter, system-ui, sans-serif',
+    lineHeight: 28,
+    minHeight: 28,
+  });
 
   useEffect(() => {
     void trackRelationshipEvent({
@@ -333,8 +358,8 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
             </span>
             <span className="text-sm text-[#f4d7a3]/60">{copy.score}</span>
           </div>
-          <h2 className="mx-auto mt-5 max-w-2xl text-xl font-semibold text-[#ffe3b4]">{reading.summary.headline}</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[#f4d7a3]/70">{reading.summary.oneLiner}</p>
+          <h2 ref={headlineLayout.ref} style={headlineLayout.style} className="mx-auto mt-5 max-w-2xl text-xl font-semibold text-[#ffe3b4]">{reading.summary.headline}</h2>
+          <p ref={oneLinerLayout.ref} style={oneLinerLayout.style} className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[#f4d7a3]/70">{reading.summary.oneLiner}</p>
           <div className="mt-5 flex flex-wrap justify-center gap-2">
             {reading.summary.keywords.map((keyword) => (
               <span
@@ -355,7 +380,7 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
           </span>
           <div>
             <p className="text-xs uppercase tracking-[0.22em] text-[#d8b77b]/62">{copy.nextMove}</p>
-            <p className="mt-2 text-base leading-7 text-[#ffe3b4]">{nextMove}</p>
+            <p ref={nextMoveLayout.ref} style={nextMoveLayout.style} className="mt-2 text-base leading-7 text-[#ffe3b4]">{nextMove}</p>
           </div>
         </div>
       </TianjiLovePanel>
@@ -397,7 +422,7 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
         <TianjiLovePanel className="p-6">
           <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">{copy.dimensions}</p>
           <h2 className="mt-2 font-serif text-2xl text-[#ffe3b4]">{copy.lockedTitle}</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-[#f4d7a3]/68">{copy.lockedBody}</p>
+          <p ref={lockedBodyLayout.ref} style={lockedBodyLayout.style} className="mt-3 max-w-3xl text-sm leading-7 text-[#f4d7a3]/68">{copy.lockedBody}</p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {lockedItems.map((item) => (
               <div key={item.label} className="flex items-center gap-3 rounded-lg border border-[#b57248]/22 bg-black/18 px-4 py-3 text-sm text-[#f4d7a3]/70">

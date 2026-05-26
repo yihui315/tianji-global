@@ -1,0 +1,6 @@
+{
+  "status": "done",
+  "summary": "Pretext Relationship layout merge-readiness evidence is prepared with validation gates passing and payment/deploy work explicitly out of scope.",
+  "next_step": "Open a narrow PR for the Pretext layout commit; continue payment closed-loop work on a separate branch.",
+  "needs_user": false
+}
