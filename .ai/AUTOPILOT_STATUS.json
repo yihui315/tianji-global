@@ -1,0 +1,6 @@
+{
+  "status": "done",
+  "summary": "Manual-first enforcement branch prepared from origin/main. Scheduled triggers are disabled for the TianJi Love content-calendar and daily-growth workflows, while workflow_dispatch remains available for supervised manual runs.",
+  "next_step": "Open the PR, review the workflow-only diff and evidence, then run the content workflows manually during the supervised week before deciding whether to restore schedules.",
+  "needs_user": false
+}

@@ -1,5 +1,48 @@
 # AI Changelog
 
+## 2026-05-26 - TianJi Love automation manual-first enforcement
+
+### What changed
+
+Created a clean PR branch from `origin/main@1c188ff0b062b28952f25b785f4fd1ad66465b72` and disabled active scheduled triggers for the two TianJi Love content-generation workflows. Both workflows retain manual `workflow_dispatch` so the first supervised week can use owner-run, reviewable artifact generation instead of unattended scheduled runs.
+
+### Files changed
+
+```text
+.github/workflows/tianji-love-content-calendar.yml
+.github/workflows/tianji-love-daily-growth.yml
+.ai/TIANJI_LOVE_AUTOMATION_MANUAL_FIRST_ENFORCEMENT_20260526.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+.ai/TASKS.md
+.ai/AUTOPILOT_STATUS.json
+.ai/AUTOPILOT_REPORT.md
+```
+
+### Validation
+
+```text
+JSON status parse: Pass
+YAML parse: Pass for both changed workflows
+Trigger audit: Pass, no schedule or cron keys remain in the two changed workflows
+workflow_dispatch audit: Pass, retained in both changed workflows
+Requested .ai plus workflow secret-pattern scan: 2 redacted matches in pre-existing 20260525 evidence docs, not in this task's changed files
+Changed-file secret-pattern scan: Pass, no matches
+YiHui ValidateLight: Pass via restricted MCP
+```
+
+### Gate status
+
+```text
+Manual-first enforcement PR: Go
+Content calendar schedule: Disabled
+Daily growth schedule: Disabled
+workflow_dispatch retained: Go
+Production deploy: No-Go
+Paid smoke: No-Go
+Social auto-posting: No-Go
+```
+
 ## 2026-05-25 - TianJi Love prelaunch paid funnel hardening
 
 ### What changed
