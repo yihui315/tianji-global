@@ -1,6 +1,6 @@
 {
   "status": "done",
-  "summary": "Manual-first enforcement branch prepared from origin/main. Scheduled triggers are disabled for the TianJi Love content-calendar and daily-growth workflows, while workflow_dispatch remains available for supervised manual runs.",
-  "next_step": "Open the PR, review the workflow-only diff and evidence, then run the content workflows manually during the supervised week before deciding whether to restore schedules.",
+  "summary": "PR #67 Vercel failure was triaged without secrets or deployment. Local workflow/evidence validation is green, but the remote Vercel failure remains unknown because public logs require Vercel authentication. PR #60 received a superseded comment.",
+  "next_step": "Do not merge PR #67 until the owner reruns or inspects the Vercel failure in private Vercel/GitHub UI, or explicitly accepts it as unrelated/transient.",
   "needs_user": false
 }

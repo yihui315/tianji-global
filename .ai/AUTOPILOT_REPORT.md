@@ -1,15 +1,19 @@
-# Autopilot Report - TianJi Love Automation Manual-First Enforcement
+# Autopilot Report - PR #67 Vercel Failure Triage and PR #60 Cleanup
 
 Status: done
 
 ## Summary
 
-Prepared the manual-first enforcement PR branch from trusted `origin/main@1c188ff0b062b28952f25b785f4fd1ad66465b72`.
+Triaged PR #67 Vercel failure from trusted branch `chore/tianji-automation-manual-first-20260526` without deployment, paid smoke, secret access, live environment changes, social posting, or business-code edits.
 
-The two content-generation workflows now keep manual `workflow_dispatch` and no longer have active scheduled triggers:
+Local validation confirms the two content-generation workflows remain manual-first:
 
 - `.github/workflows/tianji-love-content-calendar.yml`
 - `.github/workflows/tianji-love-daily-growth.yml`
+
+Both keep manual `workflow_dispatch` and no longer contain active `schedule` or `cron` keys. GitHub connector reports PR #67 is open and mergeable, but the PR head Vercel status remains failure. Public Vercel endpoints did not expose build logs without authentication, so merge readiness remains Conditional Go pending owner rerun or private log review.
+
+PR #60 received a superseded comment through the GitHub connector.
 
 ## Safety
 
@@ -27,13 +31,16 @@ JSON status parse: Pass
 YAML parse: Pass
 Trigger audit: Pass, no schedule or cron keys remain in the two changed workflows
 workflow_dispatch audit: Pass
-Changed-file secret-pattern scan: Pass, no matches
+Requested .ai plus workflow secret-pattern scan: 2 redacted matches in pre-existing 20260525 evidence docs
+Current changed-file secret-pattern scan: Pass, no matches
 YiHui ValidateLight: Pass via restricted MCP
+PR #67 Vercel status: Failure
+origin/main Vercel status: Success
+Vercel public logs: unavailable without authentication
 ```
 
 ## Follow-up
 
-- Open and review the PR.
-- Run the two content workflows manually during the supervised week.
-- Decide whether to restore schedules after generated content quality, run safety, and cost behavior are reviewed.
-- Add an authenticated superseded comment to PR #60 or close it.
+- Do not merge PR #67 until Vercel is rerun, inspected by owner, or explicitly accepted as unrelated/transient.
+- If Vercel logs show a workflow YAML issue, make only the smallest workflow fix.
+- PR #60 can be closed later if owner wants; it now has a superseded comment.

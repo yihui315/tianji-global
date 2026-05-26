@@ -1,3 +1,98 @@
+# Review Packet - PR #67 Vercel Failure Triage and PR #60 Cleanup 20260526
+
+## Background
+
+PR #67 disabled scheduled runs for the two TianJi Love content-generation workflows while retaining manual `workflow_dispatch`. After push, GitHub reported a failing Vercel status on the PR head, while `origin/main@1c188ff0b062b28952f25b785f4fd1ad66465b72` remained Vercel-green. PR #60 was already superseded by PR #62 and later governance/manual-first work.
+
+## Task Goal
+
+Determine whether the PR #67 Vercel failure is caused by the manual-first workflow changes, without production deploy, paid smoke, secret access, live env changes, social auto-posting, or business-code changes. Add a superseded comment to PR #60 if authenticated tooling is available.
+
+## Branch
+
+```text
+Branch: chore/tianji-automation-manual-first-20260526
+Base: origin/main at 1c188ff0b062b28952f25b785f4fd1ad66465b72
+PR: https://github.com/yihui315/tianji-global/pull/67
+Head before triage evidence: 6cfbf2d94d10b601d1b25c7ce4c8dfd92524b3e2
+Worktree: D:\BrainSystem\💼 工作专项\ai占卜\tianji-global-automation-manual-first-20260526
+Original dirty workspace: untouched
+```
+
+## Changed Scope
+
+```text
+Added PR #67 Vercel failure triage evidence
+Updated AI changelog, review packet, task board, autopilot status, and autopilot report
+Commented on PR #60 as superseded through GitHub connector
+No workflow YAML fix was made because local YAML/trigger validation is green
+```
+
+## Current Behavior
+
+```text
+tianji-love-content-calendar.yml: workflow_dispatch retained, no active schedule/cron
+tianji-love-daily-growth.yml: workflow_dispatch retained, no active schedule/cron
+PR #67: open and mergeable by GitHub metadata, but Vercel status failure remains
+PR #60: open, superseded comment added
+```
+
+## Validation Result
+
+```text
+PR #67 metadata via GitHub connector: Open, mergeable
+PR #67 Vercel status: Failure
+origin/main Vercel status: Success
+Vercel public dashboard: overview page only, no public build error summary
+Vercel public deployment API: 403 without auth token
+Vercel public events API: 404
+gh pr view/checks: unavailable because gh is not authenticated
+JSON status parse: Pass
+YAML parse: Pass for both changed workflows
+Trigger audit: Pass, no schedule or cron keys remain in the two changed workflows
+workflow_dispatch audit: Pass, retained in both changed workflows
+Requested .ai plus workflow secret-pattern scan: 2 redacted matches in pre-existing 20260525 evidence docs
+Current changed-file secret-pattern scan: Pass, no matches
+YiHui ValidateLight: Pass via restricted MCP
+npm build/test: Not run
+```
+
+## Safety Result
+
+```text
+Secrets printed: No
+.env read: No
+Stripe live mode: Not used
+Paid smoke: Not run
+Production deploy: Not run
+DNS/Nginx/PM2/server production state: Not touched
+Destructive database actions: Not run
+Social publishing: Not run
+```
+
+## Gate Status
+
+```text
+PR #67 merge readiness: Conditional Go
+Vercel failure: Unknown
+Manual-first enforcement: Go
+PR #60 cleanup: Done
+Production deploy: No-Go
+Paid smoke: No-Go
+Social auto-posting: No-Go
+```
+
+## Follow-up
+
+```text
+Do not merge PR #67 until Vercel is rerun, inspected by owner in private Vercel UI, or explicitly accepted as unrelated/transient.
+If Vercel logs show YAML/workflow shape failure, make only the smallest workflow fix.
+If Vercel logs show unrelated project/env or transient failure, PR #67 can remain Conditional Go after owner acknowledgement or successful rerun.
+PR #60 can be closed later if owner wants, but it now has a superseded comment.
+```
+
+---
+
 # Review Packet - TianJi Love Automation Manual-First Enforcement 20260526
 
 ## Background

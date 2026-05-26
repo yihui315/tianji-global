@@ -1,5 +1,53 @@
 # AI Changelog
 
+## 2026-05-26 - PR #67 Vercel failure triage and PR #60 cleanup
+
+### What changed
+
+Triaged the failing Vercel status on PR #67 without reading secrets or deploying. Local validation confirms the manual-first workflow changes remain valid: both target workflows retain `workflow_dispatch` and have no active `schedule` or `cron` keys. Public Vercel status only exposes a failed check and overview page; deployment metadata/log details require Vercel authentication, so merge readiness remains Conditional Go pending owner rerun or private log review. Added a superseded comment to PR #60 through the GitHub connector.
+
+### Files changed
+
+```text
+.ai/TIANJI_LOVE_PR67_VERCEL_TRIAGE_20260526.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+.ai/TASKS.md
+.ai/AUTOPILOT_STATUS.json
+.ai/AUTOPILOT_REPORT.md
+```
+
+### Validation
+
+```text
+PR #67 metadata via GitHub connector: Open, mergeable
+PR #67 Vercel status: Failure
+origin/main Vercel status: Success
+Vercel public dashboard: overview page only, no public build error summary
+Vercel public deployment API: 403 without auth token
+Vercel public events API: 404
+JSON status parse: Pass
+YAML parse: Pass for both changed workflows
+Trigger audit: Pass, no schedule or cron keys remain in the two changed workflows
+workflow_dispatch audit: Pass, retained in both changed workflows
+Requested .ai plus workflow secret-pattern scan: 2 redacted matches in pre-existing 20260525 evidence docs
+Current changed-file secret-pattern scan: Pass, no matches
+YiHui ValidateLight: Pass via restricted MCP
+npm build/test: Not run
+```
+
+### Gate status
+
+```text
+PR #67 merge readiness: Conditional Go
+Vercel failure: Unknown
+Manual-first enforcement: Go
+PR #60 cleanup: Done
+Production deploy: No-Go
+Paid smoke: No-Go
+Social auto-posting: No-Go
+```
+
 ## 2026-05-26 - TianJi Love automation manual-first enforcement
 
 ### What changed
