@@ -1,3 +1,110 @@
+# TianJi Love Auth Login System Cloud Readiness - Review Packet
+
+## 2026-05-27 auth login readiness
+
+Prepared an isolated Auth/login branch for the production login failure where Google OAuth was exposed with an empty `client_id`.
+
+## Goal
+
+Install the latest login system safely by preparing a deployable PR slice. Keep the work scoped to Auth/login readiness and do not touch payment, Stripe, Supabase production config, env files, deployment state, or paid smoke.
+
+## Changed Files
+
+```text
+package.json
+scripts/audit-auth-env-readiness.mjs
+src/app/login/page.tsx
+src/lib/auth.ts
+src/lib/auth-options.ts
+src/lib/auth-origin.ts
+src/middleware.ts
+src/__tests__/lib/auth-options.test.ts
+src/__tests__/lib/auth-origin.test.ts
+src/__tests__/middleware-edge-boundary.test.ts
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Diff Summary
+
+- Google provider is now exposed only when both Google OAuth env values are present.
+- Resend Magic Link is optional and only appears when database, Resend API key, sender, and send guard are ready.
+- Login page calls `getProviders()` and only renders available sign-in methods.
+- Middleware now uses `next-auth/jwt` token presence checks and avoids importing Node-only Auth/Postgres modules into Edge runtime.
+- Auth redirects use request/proxy origin helpers to avoid wrong-origin redirects.
+- Added masked auth env readiness audit for cloud/staging checks without printing secrets.
+
+## Validation
+
+```text
+npm ci --ignore-scripts --no-audit --prefer-offline
+npm run test -- --run src/__tests__/lib/auth-origin.test.ts src/__tests__/lib/auth-options.test.ts src/__tests__/middleware-edge-boundary.test.ts
+npm run typecheck -- --pretty false
+npm run lint
+npm run audit:auth-env-readiness with dummy masked staging values
+npm run build
+npm run test
+npm run audit:routes
+npm run audit:copy
+npm run audit:share
+npm run audit:upgrade
+git diff --check
+local next start smoke on port 3058 with dummy AUTH_SECRET only
+```
+
+## Results
+
+```text
+Targeted Auth tests: Pass, 3 files / 10 tests
+Typecheck: Pass
+Lint: Pass, Next lint deprecated warning only
+Masked auth env readiness: Pass with dummy values
+Build: Pass, existing jose/NextAuth Edge runtime warnings only
+Full test: Pass, 52 files / 490 tests
+Route/copy/share/upgrade audits: Pass
+Diff check: Pass, CRLF working-copy warnings only
+Local production smoke: /api/auth/providers returned {} when Google env was absent but AUTH_SECRET was present
+```
+
+## Production Diagnosis
+
+Read-only production probing before this branch showed:
+
+```text
+https://tianji.love/api/auth/providers: Google listed
+Google OAuth start URL: client_id was empty
+deploy@186.244.244.81 SSH: permission denied
+```
+
+This branch prevents exposing a broken Google provider when Google OAuth env is incomplete. It does not set real cloud env values.
+
+## Gate Status
+
+```text
+Auth code readiness: Go
+Provider readiness gating: Go
+Middleware Edge boundary: Go
+Build/test/audits: Go
+Cloud env readiness: Conditional Go
+Cloud deploy: Not run
+Payment changes: Not in scope
+Stripe/Supabase production changes: Not in scope
+Paid smoke: No-Go / Not in scope
+Secrets printed: No
+```
+
+## Risks And Follow-Up
+
+- Cloud login still requires real server env values: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `AUTH_SECRET` or `NEXTAUTH_SECRET`, `NEXTAUTH_URL=https://tianji.love`, `AUTH_URL=https://tianji.love`, and `NEXT_PUBLIC_APP_URL=https://tianji.love`.
+- Google Console must include `https://tianji.love/api/auth/callback/google`.
+- Codex cannot deploy directly over SSH from this workstation because server SSH is denied. Use the existing `Deploy US Server` GitHub Actions workflow after merging, or provide deploy SSH access.
+
+## Suggested Commit Message
+
+```text
+fix(auth): gate login providers by runtime readiness
+```
+
 # TianJi Love Pretext Layout Merge Readiness - Review Packet
 
 ## 2026-05-26 relationship Pretext layout merge readiness
