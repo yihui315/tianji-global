@@ -1,3 +1,53 @@
+# 2026-05-27 - TianJi Love Auth Login System Cloud Readiness
+
+## What changed
+
+- Prepared an isolated Auth/login branch from `origin/main` for the cloud-server login failure where production exposed Google OAuth with an empty `client_id`.
+- Moved NextAuth provider construction into `src/lib/auth-options.ts`, exposing Google only when both `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are configured.
+- Added optional Resend Magic Link provider readiness behind database, Resend, sender, and send-enabled guards.
+- Replaced middleware's `auth()` wrapper with an Edge-safe `getToken` check so middleware does not import Node/Postgres auth adapter code.
+- Added same-origin auth redirect helpers for proxy/local host handling.
+- Updated `/login` to query `getProviders()` and only show configured sign-in methods.
+- Added masked auth env readiness audit and focused Auth/middleware contract tests.
+
+## Validation
+
+```text
+npm ci --ignore-scripts --no-audit --prefer-offline: Pass
+npm run test -- --run src/__tests__/lib/auth-origin.test.ts src/__tests__/lib/auth-options.test.ts src/__tests__/middleware-edge-boundary.test.ts: Pass, 3 files / 10 tests
+npm run typecheck -- --pretty false: Pass
+npm run lint: Pass, Next lint deprecation warning only
+npm run audit:auth-env-readiness with dummy masked staging values: Pass / Google OAuth readiness Go
+npm run build: Pass, existing jose/NextAuth Edge runtime warnings only
+npm run test: Pass, 52 files / 490 tests
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+git diff --check: Pass, CRLF working-copy warnings only
+local next start smoke with only AUTH_SECRET: /api/auth/providers returned {}
+```
+
+## Gate status
+
+```text
+Auth code readiness: Go
+Provider readiness gating: Go
+Middleware Edge boundary: Go
+Build/test/audits: Go
+Cloud env readiness: Conditional Go - server must provide real OAuth/env values
+Cloud deploy: Not run
+Paid smoke: No-Go / Not in scope
+Payment/Stripe/Supabase changes: Not in scope
+Secrets printed: No
+```
+
+## Follow-up
+
+- Cloud server still needs real `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `AUTH_SECRET` or `NEXTAUTH_SECRET`, `NEXTAUTH_URL=https://tianji.love`, `AUTH_URL=https://tianji.love`, and `NEXT_PUBLIC_APP_URL=https://tianji.love`.
+- Google Console must allow `https://tianji.love/api/auth/callback/google`.
+- Deploy requires GitHub Actions `Deploy US Server` or working SSH access; local SSH to `deploy@186.244.244.81` is still denied.
+
 # AI Changelog
 
 ## 2026-05-26 - TianJi Love relationship Pretext layout merge readiness

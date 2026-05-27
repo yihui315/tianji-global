@@ -17,6 +17,7 @@
     "audit:copy": "tsx scripts/audit-copy.ts",
     "audit:share": "tsx scripts/audit-share.ts",
     "audit:upgrade": "tsx scripts/audit-upgrade.ts",
+    "audit:auth-env-readiness": "node scripts/audit-auth-env-readiness.mjs",
     "audit:release-gate": "npm run audit:routes && npm run audit:copy && npm run audit:share && npm run audit:upgrade",
     "smoke:stripe:test-readiness": "node scripts/smoke-stripe-test-readiness.mjs",
     "upgrade:plan": "node scripts/generate-upgrade-plan.ts",
