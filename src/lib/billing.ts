@@ -1,30 +1,46 @@
 import type Stripe from 'stripe';
 import { getPool } from '@/lib/db';
+import {
+  LOVE_PREMIUM_REPORT_CHECKOUT_READINESS_ERROR,
+  LOVE_PREMIUM_REPORT_LEGACY_PRODUCT_TYPES,
+  LOVE_PREMIUM_REPORT_PRICE,
+  LOVE_PREMIUM_REPORT_PRODUCT_TYPE,
+  STRIPE_LOVE_PREMIUM_REPORT_PRICE_ID_ENV,
+  getLovePremiumReportStripePriceId,
+  normalizeLoveProductType,
+  type LovePremiumReportProductType,
+} from '@/lib/love-reading/revenue-contract';
 
-export type BillingProductId =
-  | 'solo_love_report'
-  | 'compatibility_report';
+export type LegacyLoveReportProductId =
+  (typeof LOVE_PREMIUM_REPORT_LEGACY_PRODUCT_TYPES)[number];
+
+export type BillingProductId = LovePremiumReportProductType | LegacyLoveReportProductId;
+
+export type BillingProduct = {
+  productId: LovePremiumReportProductType;
+  legacyProductIds: readonly LegacyLoveReportProductId[];
+  name: string;
+  description: string;
+  unitAmount: number;
+  currency: string;
+  mode: 'payment';
+  entitlement: LovePremiumReportProductType;
+  stripePriceIdEnv: typeof STRIPE_LOVE_PREMIUM_REPORT_PRICE_ID_ENV;
+};
 
 export const BILLING_PRODUCTS = {
-  solo_love_report: {
-    productId: 'solo_love_report',
-    name: 'Solo Love Report',
-    description: 'A private complete love pattern report.',
-    unitAmount: 499,
-    currency: 'usd',
+  [LOVE_PREMIUM_REPORT_PRODUCT_TYPE]: {
+    productId: LOVE_PREMIUM_REPORT_PRODUCT_TYPE,
+    legacyProductIds: LOVE_PREMIUM_REPORT_LEGACY_PRODUCT_TYPES,
+    name: 'TianJi Love Premium Relationship Report',
+    description: 'A private premium relationship report.',
+    unitAmount: LOVE_PREMIUM_REPORT_PRICE.amountMinor,
+    currency: LOVE_PREMIUM_REPORT_PRICE.currency,
     mode: 'payment',
-    entitlement: 'solo_love_report',
+    entitlement: LOVE_PREMIUM_REPORT_PRODUCT_TYPE,
+    stripePriceIdEnv: STRIPE_LOVE_PREMIUM_REPORT_PRICE_ID_ENV,
   },
-  compatibility_report: {
-    productId: 'compatibility_report',
-    name: 'Full Relationship Report',
-    description: 'A private two-person relationship compatibility report.',
-    unitAmount: 499,
-    currency: 'usd',
-    mode: 'payment',
-    entitlement: 'compatibility_report',
-  },
-} as const;
+} as const satisfies Record<LovePremiumReportProductType, BillingProduct>;
 
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -33,13 +49,45 @@ function optionalUuid(value?: string | null) {
   return value && uuidPattern.test(value) ? value : null;
 }
 
-export type BillingProduct = (typeof BILLING_PRODUCTS)[BillingProductId];
-
-export function getBillingProduct(productId: string): BillingProduct | null {
-  return (BILLING_PRODUCTS as Record<string, BillingProduct>)[productId] ?? null;
+export function getBillingProduct(productId: string | null | undefined): BillingProduct | null {
+  const normalizedProductType = normalizeLoveProductType(productId);
+  return normalizedProductType ? BILLING_PRODUCTS[normalizedProductType] : null;
 }
 
-export function buildLineItem(product: BillingProduct) {
+export function getLovePremiumReportCheckoutPriceId(
+  env: Record<string, string | undefined> = process.env
+): string | null {
+  return getLovePremiumReportStripePriceId(env);
+}
+
+export function getCheckoutPriceIdReadiness(
+  product: BillingProduct,
+  env: Record<string, string | undefined> = process.env
+):
+  | { ready: true; priceId: string }
+  | {
+      ready: false;
+      code: typeof LOVE_PREMIUM_REPORT_CHECKOUT_READINESS_ERROR;
+      error: string;
+    } {
+  const priceId = env[product.stripePriceIdEnv]?.trim() || null;
+  if (priceId) return { ready: true, priceId };
+
+  return {
+    ready: false,
+    code: LOVE_PREMIUM_REPORT_CHECKOUT_READINESS_ERROR,
+    error: 'Love premium report checkout is not configured',
+  };
+}
+
+export function buildLineItem(product: BillingProduct, stripePriceId?: string | null) {
+  if (stripePriceId) {
+    return {
+      price: stripePriceId,
+      quantity: 1,
+    };
+  }
+
   return {
     price_data: {
       currency: product.currency,
@@ -51,6 +99,13 @@ export function buildLineItem(product: BillingProduct) {
     },
     quantity: 1,
   };
+}
+
+function entitlementCandidates(entitlement: string): string[] {
+  const normalized = normalizeLoveProductType(entitlement);
+  if (!normalized) return [entitlement];
+
+  return [normalized, ...LOVE_PREMIUM_REPORT_LEGACY_PRODUCT_TYPES];
 }
 
 export async function createPendingOrder(input: {
@@ -152,7 +207,7 @@ export async function grantEntitlement(input: {
   checkoutSessionId?: string | null;
 }) {
   if (!process.env.DATABASE_URL || !input.checkoutSessionId) return;
-  if (BILLING_PRODUCTS[input.productId]) {
+  if (getBillingProduct(input.productId)) {
     await markOrderPaid({ checkoutSessionId: input.checkoutSessionId });
   }
 }
@@ -163,13 +218,14 @@ export async function hasEntitlement(input: {
   entitlement: string;
 }): Promise<boolean> {
   if (!process.env.DATABASE_URL) return false;
+  const entitlements = entitlementCandidates(input.entitlement);
 
   const result = await getPool().query(
     `
       select exists (
         select 1 from orders
         where status = 'paid'
-          and entitlement = $1
+          and entitlement = any($1::text[])
           and (
             (
               $2 <> ''
@@ -184,7 +240,7 @@ export async function hasEntitlement(input: {
           )
       ) as entitled
     `,
-    [input.entitlement, input.readingSessionId ?? '', input.userId ?? '']
+    [entitlements, input.readingSessionId ?? '', input.userId ?? '']
   );
 
   return Boolean(result.rows[0]?.entitled);
@@ -209,11 +265,12 @@ export async function getPaidOrderForCheckoutSession(checkoutSessionId: string):
   );
 
   const row = result.rows[0];
-  if (!row || !getBillingProduct(row.product_id)) return null;
+  const product = getBillingProduct(row?.product_id);
+  if (!row || !product) return null;
 
   return {
     readingSessionId: String(row.reading_session_id),
     customerEmail: row.customer_email ?? null,
-    productId: row.product_id,
+    productId: product.productId,
   };
 }

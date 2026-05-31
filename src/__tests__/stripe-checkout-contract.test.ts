@@ -9,13 +9,16 @@ function read(relativePath: string) {
 }
 
 describe('Stripe checkout billing contract', () => {
-  it('defines the two Love V1 one-time products with fixed USD amounts', () => {
+  it('defines the canonical Love premium one-time product with legacy aliases', () => {
     const billing = read('src/lib/billing.ts');
+    const revenueContract = read('src/lib/love-reading/revenue-contract.ts');
 
-    expect(billing).toContain('solo_love_report');
-    expect(billing).toContain('unitAmount: 499');
-    expect(billing).toContain('compatibility_report');
-    expect(billing).toContain('Full Relationship Report');
+    expect(revenueContract).toContain("LOVE_PREMIUM_REPORT_PRODUCT_TYPE = 'love_premium_report'");
+    expect(revenueContract).toContain('solo_love_report');
+    expect(revenueContract).toContain('compatibility_report');
+    expect(billing).toContain('LOVE_PREMIUM_REPORT_PRICE.amountMinor');
+    expect(billing).toContain('LOVE_PREMIUM_REPORT_PRICE.currency');
+    expect(billing).toContain('STRIPE_LOVE_PREMIUM_REPORT_PRICE_ID');
     expect(billing).not.toContain('tianji_plus_monthly');
     expect(billing).not.toContain("mode: 'subscription'");
     expect(billing).not.toContain('recurring');
@@ -26,6 +29,8 @@ describe('Stripe checkout billing contract', () => {
 
     expect(checkout).toContain('checkout.sessions.create');
     expect(checkout).toContain('getBillingProduct');
+    expect(checkout).toContain('normalizeLoveProductType');
+    expect(checkout).toContain('getCheckoutPriceIdReadiness');
     expect(checkout).toContain("mode: 'payment'");
     expect(checkout).toContain('metadata');
     expect(checkout).toContain('readingSessionId');
@@ -34,6 +39,9 @@ describe('Stripe checkout billing contract', () => {
     expect(checkout).toContain('/relationship/result/');
     expect(checkout).toContain('idempotencyKey');
     expect(checkout).toContain('customer_email');
+    expect(checkout.indexOf('getCheckoutPriceIdReadiness')).toBeLessThan(
+      checkout.indexOf('checkout.sessions.create')
+    );
     expect(checkout).not.toContain('subscription_data');
     expect(checkout).not.toContain('CHECKOUT_SESSION_ID');
   });

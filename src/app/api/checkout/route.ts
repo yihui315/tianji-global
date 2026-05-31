@@ -3,9 +3,14 @@ import { auth } from '@/lib/auth';
 import {
   buildLineItem,
   createPendingOrder,
+  getCheckoutPriceIdReadiness,
   getBillingProduct,
   type BillingProductId,
 } from '@/lib/billing';
+import {
+  isLovePremiumReportProduct,
+  normalizeLoveProductType,
+} from '@/lib/love-reading/revenue-contract';
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
 import { requirePayPerUseEnabled } from '@/lib/pay-per-use';
 import { getStripe } from '@/lib/stripe';
@@ -27,7 +32,13 @@ export async function POST(request: NextRequest) {
       email?: string;
     };
 
-    const product = getBillingProduct(body.productId ?? '');
+    const inputProductType = body.productId ?? '';
+    const normalizedProductType = normalizeLoveProductType(inputProductType);
+    if (!normalizedProductType || !isLovePremiumReportProduct(inputProductType)) {
+      return NextResponse.json({ error: 'Invalid productId' }, { status: 400 });
+    }
+
+    const product = getBillingProduct(normalizedProductType);
     if (!product) {
       return NextResponse.json({ error: 'Invalid productId' }, { status: 400 });
     }
@@ -37,9 +48,6 @@ export async function POST(request: NextRequest) {
         ? body.relationshipReadingId ?? body.readingSessionId
         : body.readingSessionId;
 
-    if (checkoutSource === 'relationship' && product.productId !== 'compatibility_report') {
-      return NextResponse.json({ error: 'Invalid relationship product' }, { status: 400 });
-    }
     if (!checkoutReferenceId) {
       return NextResponse.json({ error: 'Missing readingSessionId' }, { status: 400 });
     }
@@ -48,11 +56,30 @@ export async function POST(request: NextRequest) {
     }
 
     const session = await auth();
+    const checkoutPriceReadiness = getCheckoutPriceIdReadiness(product);
+    if (!checkoutPriceReadiness.ready) {
+      return NextResponse.json(
+        {
+          error: checkoutPriceReadiness.error,
+          code: checkoutPriceReadiness.code,
+          checkoutReadiness: 'blocked',
+          productId: product.productId,
+        },
+        { status: 503 }
+      );
+    }
+
     const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000').replace(/\/$/, '');
     const locale = body.locale ?? 'en';
     const customerEmail = session?.user?.email ?? body.email ?? undefined;
+    const loveReportMode =
+      checkoutSource === 'relationship' || inputProductType === 'compatibility_report'
+        ? 'compatibility'
+        : 'solo';
     const metadata = {
-      productId: product.productId,
+      productId: normalizedProductType,
+      legacyProductId: inputProductType !== normalizedProductType ? inputProductType : '',
+      loveReportMode,
       source: checkoutSource,
       readingSessionId: checkoutReferenceId,
       relationshipReadingId: checkoutSource === 'relationship' ? checkoutReferenceId : '',
@@ -67,7 +94,7 @@ export async function POST(request: NextRequest) {
     const checkoutSession = await getStripe().checkout.sessions.create(
       {
         mode: 'payment',
-        line_items: [buildLineItem(product)],
+        line_items: [buildLineItem(product, checkoutPriceReadiness.priceId)],
         customer_email: customerEmail,
         client_reference_id: checkoutReferenceId,
         metadata,
@@ -76,7 +103,7 @@ export async function POST(request: NextRequest) {
         allow_promotion_codes: true,
       },
       {
-        idempotencyKey: `${checkoutSource}:${product.productId}:${checkoutReferenceId}:${session?.user?.id ?? body.email ?? 'guest'}`,
+        idempotencyKey: `${checkoutSource}:${normalizedProductType}:${checkoutReferenceId}:${session?.user?.id ?? body.email ?? 'guest'}`,
       }
     );
 

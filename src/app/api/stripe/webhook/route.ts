@@ -7,6 +7,7 @@ import {
   type BillingProductId,
 } from '@/lib/billing';
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
+import { normalizeLoveProductType } from '@/lib/love-reading/revenue-contract';
 import { sendReportReadyEmailForCheckoutSession } from '@/lib/love-report-email';
 import { isPayPerUseEnabled } from '@/lib/pay-per-use';
 import { markRelationshipReadingPremium } from '@/lib/relationship-reading-store';
@@ -22,19 +23,18 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function metadataProductId(metadata?: Stripe.Metadata | null): BillingProductId | null {
-  const productId = metadata?.productId;
-  if (
-    productId === 'solo_love_report' ||
-    productId === 'compatibility_report'
-  ) {
-    return productId;
-  }
-
-  return null;
+  return normalizeLoveProductType(metadata?.productId ?? metadata?.legacyProductId);
 }
 
-function readingModeFromProduct(productId: BillingProductId) {
-  return productId === 'compatibility_report' ? 'compatibility' : 'solo';
+function readingModeFromMetadata(metadata?: Stripe.Metadata | null) {
+  if (
+    metadata?.loveReportMode === 'compatibility' ||
+    metadata?.legacyProductId === 'compatibility_report'
+  ) {
+    return 'compatibility';
+  }
+
+  return 'solo';
 }
 
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
@@ -63,14 +63,14 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   });
 
   if (source === 'relationship') {
-    if (productId !== 'compatibility_report' || !relationshipReadingId) return;
+    if (!relationshipReadingId) return;
     await markRelationshipReadingPremium(relationshipReadingId);
     return;
   }
 
   const reportJob = await ensureReportJobForSession({
     sessionId: readingSessionId,
-    readingMode: readingModeFromProduct(productId),
+    readingMode: readingModeFromMetadata(session.metadata),
     userId: session.metadata?.userId || null,
     vedicEntitlement: {
       paid: true,
