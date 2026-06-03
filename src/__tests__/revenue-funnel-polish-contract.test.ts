@@ -3,7 +3,11 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { sanitizeClientAnalyticsPayload } from '@/lib/analytics/client';
-import { isRevenueFunnelEventName } from '@/lib/analytics/funnel-events';
+import {
+  DAILY_ORACLE_CONVERSION_EVENTS,
+  LOVE_TEST_CONVERSION_EVENTS,
+  isRevenueFunnelEventName,
+} from '@/lib/analytics/funnel-events';
 
 const repoRoot = process.cwd();
 
@@ -88,5 +92,47 @@ describe('Tianji Love evidence revenue contract', () => {
     });
     expect(isRevenueFunnelEventName('unlock_click')).toBe(true);
     expect(isRevenueFunnelEventName('raw_question_sent')).toBe(false);
+  });
+
+  it('allowlists Love Test and Daily Oracle growth events without sensitive payloads', () => {
+    const funnelEvents = read('src/lib/analytics/funnel-events.ts');
+    const loveTest = read('src/app/(main)/love-test/page.tsx');
+    const dailyOracle = read('src/app/(main)/daily-oracle/page.tsx');
+    const relationshipNew = read('src/app/relationship/new/client.tsx');
+    const home = read('src/components/home/TianjiLoveHome.tsx');
+
+    expect(LOVE_TEST_CONVERSION_EVENTS).toEqual([
+      'growth_fate_test_view',
+      'growth_fate_test_start',
+      'growth_fate_test_result',
+      'growth_fate_test_cta_click',
+      'love_test_start',
+      'love_test_result_view',
+      'love_test_share_card_click',
+      'love_test_copy_result',
+      'love_test_ask_next_click',
+      'love_test_timing_click',
+      'love_test_paid_intent_view',
+      'love_test_paid_preview_submit',
+      'love_test_paid_unlock_click',
+      'love_test_checkout_readiness_blocked',
+      'love_test_test_mode_checkout_ready',
+    ]);
+    expect(DAILY_ORACLE_CONVERSION_EVENTS).toEqual([
+      'growth_daily_oracle_view',
+      'growth_daily_oracle_draw',
+      'growth_daily_oracle_share_click',
+      'growth_daily_oracle_love_test_click',
+      'growth_daily_oracle_love_reading_click',
+    ]);
+
+    for (const eventName of [...LOVE_TEST_CONVERSION_EVENTS, ...DAILY_ORACLE_CONVERSION_EVENTS]) {
+      expect(isRevenueFunnelEventName(eventName)).toBe(true);
+      expect(funnelEvents).toContain(eventName);
+    }
+
+    expect(`${loveTest}\n${relationshipNew}\n${home}`).toContain('growth_fate_test_cta_click');
+    expect(`${dailyOracle}\n${loveTest}\n${home}`).toContain('growth_daily_oracle_view');
+    expect(`${loveTest}\n${dailyOracle}`).not.toMatch(/birthDate|birthTime|birthLocation|timezone|rawQuestion|prompt|fullReport|fullResult/i);
   });
 });

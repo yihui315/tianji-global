@@ -24,6 +24,10 @@ export const FREE_TO_PAID_FUNNEL_EVENTS = [
 ] as const;
 
 export const LOVE_TEST_CONVERSION_EVENTS = [
+  'growth_fate_test_view',
+  'growth_fate_test_start',
+  'growth_fate_test_result',
+  'growth_fate_test_cta_click',
   'love_test_start',
   'love_test_result_view',
   'love_test_share_card_click',
@@ -35,6 +39,14 @@ export const LOVE_TEST_CONVERSION_EVENTS = [
   'love_test_paid_unlock_click',
   'love_test_checkout_readiness_blocked',
   'love_test_test_mode_checkout_ready',
+] as const;
+
+export const DAILY_ORACLE_CONVERSION_EVENTS = [
+  'growth_daily_oracle_view',
+  'growth_daily_oracle_draw',
+  'growth_daily_oracle_share_click',
+  'growth_daily_oracle_love_test_click',
+  'growth_daily_oracle_love_reading_click',
 ] as const;
 
 export const LEGACY_REVENUE_FUNNEL_EVENTS = [
@@ -53,15 +65,18 @@ export const LEGACY_REVENUE_FUNNEL_EVENTS = [
 export const REVENUE_FUNNEL_EVENT_ALLOWLIST = [
   ...FREE_TO_PAID_FUNNEL_EVENTS,
   ...LOVE_TEST_CONVERSION_EVENTS,
+  ...DAILY_ORACLE_CONVERSION_EVENTS,
   ...LEGACY_REVENUE_FUNNEL_EVENTS,
 ] as const;
 
 export type FreeToPaidFunnelEventName = (typeof FREE_TO_PAID_FUNNEL_EVENTS)[number];
 export type LoveTestConversionEventName = (typeof LOVE_TEST_CONVERSION_EVENTS)[number];
+export type DailyOracleConversionEventName = (typeof DAILY_ORACLE_CONVERSION_EVENTS)[number];
 export type LegacyRevenueFunnelEventName = (typeof LEGACY_REVENUE_FUNNEL_EVENTS)[number];
 export type RevenueFunnelEventName =
   | FreeToPaidFunnelEventName
   | LoveTestConversionEventName
+  | DailyOracleConversionEventName
   | LegacyRevenueFunnelEventName;
 
 export function isRevenueFunnelEventName(event: string): event is RevenueFunnelEventName {

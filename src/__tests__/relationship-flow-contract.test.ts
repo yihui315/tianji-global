@@ -75,4 +75,16 @@ describe('Tianji Love relationship evidence contract', () => {
     expect(dimension).toContain('summaryLayout');
     expect(hook).not.toMatch(/birthDate|birthTime|birthLocation|timezone/);
   });
+
+  it('adds a relationship-page entry into the free fate match test without payment execution', () => {
+    const client = read('src/app/relationship/new/client.tsx');
+
+    expect(client).toContain('Free Fate Match Test');
+    expect(client).toContain('Not sure yet? Test the signal first.');
+    expect(client).toContain('Take Free Fate Match Test');
+    expect(client).toContain('href="/love-test"');
+    expect(client).toContain('growth_fate_test_cta_click');
+    expect(client).toContain("source: 'relationship_new'");
+    expect(client).not.toMatch(/stripe\.checkout\.sessions\.create|webhook|supabase/i);
+  });
 });

@@ -1,9 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RelationshipForm } from '@/components/relationship/RelationshipForm';
 import { RelationshipResult } from '@/components/relationship/RelationshipResult';
+import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import type { RelationshipReading, RelationshipType } from '@/types/relationship';
 
 export default function RelationshipNewClient() {
@@ -87,6 +89,32 @@ export default function RelationshipNewClient() {
             {error}
           </div>
         )}
+
+        <div
+          className="mb-6 rounded-xl p-5 text-center"
+          style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.18)' }}
+        >
+          <p className="text-xs uppercase tracking-[0.22em]" style={{ color: 'rgba(253,230,138,0.72)' }}>
+            Free Fate Match Test
+          </p>
+          <h2 className="mt-2 text-xl font-semibold text-white">Not sure yet? Test the signal first.</h2>
+          <p className="mx-auto mt-2 max-w-2xl text-sm leading-6" style={{ color: 'rgba(226,232,240,0.62)' }}>
+            Use two nicknames and one relationship concern before sharing birth details. No payment path is opened.
+          </p>
+          <Link
+            href="/love-test"
+            onClick={() =>
+              void trackRevenueFunnelEvent('growth_fate_test_cta_click', {
+                source: 'relationship_new',
+                surface: 'relationship_entry_polish',
+                cta: 'free_fate_test',
+              })
+            }
+            className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full bg-amber-100 px-5 text-sm font-bold text-[#160b14]"
+          >
+            Take Free Fate Match Test
+          </Link>
+        </div>
 
         <RelationshipForm onSubmit={handleSubmit} isLoading={isLoading} lang="zh" />
 
