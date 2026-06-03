@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import { sanitizeClientAnalyticsPayload } from '@/lib/analytics/client';
 import {
+  DAILY_ORACLE_CONVERSION_EVENTS,
   FREE_TO_PAID_FUNNEL_EVENTS,
   LOVE_TEST_CONVERSION_EVENTS,
   isRevenueFunnelEventName,
@@ -23,6 +24,12 @@ describe('Tianji Love revenue funnel polish', () => {
     expect(home).toContain('Love Reading');
     expect(home).toContain('Ask One Question');
     expect(home).toContain('Draw Timing Cards');
+    expect(home).toContain('Free Fate Match Test');
+    expect(home).toContain('Take Free Fate Match Test');
+    expect(home).toContain('homepage_free_fate_test_entry');
+    expect(home).toContain('Daily Love Oracle');
+    expect(home).toContain("Draw Today's Oracle");
+    expect(home).toContain('homepage_daily_oracle_entry');
     expect(home).toContain('Free First, Deeper When Useful');
     expect(home).toContain('home_cta_click');
   });
@@ -199,6 +206,10 @@ describe('Tianji Love revenue funnel polish', () => {
     const funnelEvents = read('src/lib/analytics/funnel-events.ts');
 
     expect(LOVE_TEST_CONVERSION_EVENTS).toEqual([
+      'growth_fate_test_view',
+      'growth_fate_test_start',
+      'growth_fate_test_result',
+      'growth_fate_test_cta_click',
       'love_test_start',
       'love_test_result_view',
       'love_test_share_card_click',
@@ -217,17 +228,42 @@ describe('Tianji Love revenue funnel polish', () => {
       expect(funnelEvents).toContain(eventName);
     }
 
-    for (const eventName of LOVE_TEST_CONVERSION_EVENTS.slice(0, 6)) {
+    for (const eventName of LOVE_TEST_CONVERSION_EVENTS.slice(0, 10)) {
       expect(loveTest).toContain(eventName);
     }
 
-    for (const eventName of LOVE_TEST_CONVERSION_EVENTS.slice(6, 10)) {
+    for (const eventName of LOVE_TEST_CONVERSION_EVENTS.slice(10, 14)) {
       expect(ask).toContain(eventName);
     }
 
     expect(ask).toContain('intent: attributionIntent');
     expect(ask).toContain('From your Love Test: ask one focused question before you overthink the whole relationship.');
     expect(loveTest).not.toMatch(/birthDate|birthTime|birthLocation|timezone|rawQuestion|prompt|fullReport|fullResult/i);
+  });
+
+  it('defines Daily Oracle retention events without sensitive analytics payloads', () => {
+    const dailyOracle = read('src/app/(main)/daily-oracle/page.tsx');
+    const loveTest = read('src/app/(main)/love-test/page.tsx');
+    const funnelEvents = read('src/lib/analytics/funnel-events.ts');
+
+    expect(DAILY_ORACLE_CONVERSION_EVENTS).toEqual([
+      'growth_daily_oracle_view',
+      'growth_daily_oracle_draw',
+      'growth_daily_oracle_share_click',
+      'growth_daily_oracle_love_test_click',
+      'growth_daily_oracle_love_reading_click',
+    ]);
+
+    for (const eventName of DAILY_ORACLE_CONVERSION_EVENTS) {
+      expect(isRevenueFunnelEventName(eventName)).toBe(true);
+      expect(funnelEvents).toContain(eventName);
+      expect(`${dailyOracle}\n${loveTest}`).toContain(eventName);
+    }
+
+    expect(dailyOracle).toContain('/love-test?source=daily_oracle');
+    expect(dailyOracle).toContain('/relationship/new?source=daily_oracle');
+    expect(dailyOracle).toContain('No payment path');
+    expect(dailyOracle).not.toMatch(/yourName|theirName|mainConcern|birthDate|birthTime|birthLocation|timezone|rawQuestion|prompt|fullReport|fullResult/i);
   });
 
   it('keeps Love-Test one-question paid intent behind checkout readiness and paid-smoke approval gates', () => {

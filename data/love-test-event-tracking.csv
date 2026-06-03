@@ -1,5 +1,9 @@
 event_name,trigger,surface,required_payload,success_metric
 home_cta_click,user clicks homepage Love Test CTA,homepage_hero,"source=love_test; cta=love_test",love_test_visits
+growth_fate_test_view,user views the free Fate Match Test page,free_fate_match_test,"source=love_test; surface",fate_test_views
+growth_fate_test_start,user edits any required Fate Match Test field,free_fate_match_form,"source=love_test; surface",fate_test_starts
+growth_fate_test_result,user completes the free Fate Match Test,free_fate_match_result,"source=love_test; result_id; archetype; score; match_level",fate_test_results
+growth_fate_test_cta_click,user clicks a non-payment Fate Match CTA,free_fate_match_result,"source=love_test; cta; result_id",fate_test_cta_clicks
 love_test_start,user starts answering the Love Test,love_test_form,"source=love_test; surface",love_test_starts
 love_test_result_view,user completes Love Test and sees a result,love_test_result,"source=love_test; result_id; archetype; score",love_test_results
 love_test_share_card_click,user clicks a share-card PNG format,love_test_result,"source=love_test; card_format; result_id; archetype; score",share_card_clicks

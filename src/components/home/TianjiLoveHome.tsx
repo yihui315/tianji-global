@@ -45,6 +45,20 @@ type LoveCopy = {
     cta: string;
     helper: string;
   };
+  freeFateTest: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    cta: string;
+    proof: string[];
+  };
+  dailyOracle: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    cta: string;
+    proof: string[];
+  };
   cards: Array<{ title: string; body: string; iconAsset: string }>;
   features: Array<{ title: string; body: string; iconAsset: string }>;
   process: {
@@ -161,6 +175,22 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
       relationship: 'Couple Reading',
       cta: 'Reveal My First Love Insight',
       helper: 'Your first insight is private, practical, and designed for clarity.',
+    },
+    freeFateTest: {
+      eyebrow: 'Free Fate Match Test',
+      title: 'Not ready for a full reading? Test the signal first.',
+      body:
+        'Use two nicknames, the relationship status, and one question to get a private fate-match snapshot before any checkout path.',
+      cta: 'Take Free Fate Match Test',
+      proof: ['No checkout', 'No birth data required', 'Share-safe result'],
+    },
+    dailyOracle: {
+      eyebrow: 'Daily Love Oracle',
+      title: 'Return tomorrow for one small relationship signal.',
+      body:
+        'Draw a deterministic daily love insight by mood, then choose whether to take the Free Fate Match Test or open the full Love Reading flow.',
+      cta: "Draw Today's Oracle",
+      proof: ['No login', 'No payment', 'Privacy-safe share text'],
     },
     cards: [
       {
@@ -281,6 +311,20 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
       relationship: '双人合盘',
       cta: '揭示我的第一条爱情洞察',
       helper: '你的第一条洞察将保持私密，并用于自我理解与关系沟通。',
+    },
+    freeFateTest: {
+      eyebrow: '免费缘分测试',
+      title: '还不确定要做完整解读？先测一条缘分信号。',
+      body: '只用两个昵称、关系状态和一个问题，先得到一份私密的缘分速测结果，不进入任何支付路径。',
+      cta: '免费测缘分',
+      proof: ['不进入支付', '不需要出生资料', '分享不暴露输入'],
+    },
+    dailyOracle: {
+      eyebrow: '今日天机每日签',
+      title: '每天回来抽一支关系灵感签。',
+      body: '选择今天的关系状态，得到一条不收集隐私、不进入支付路径的每日关系提示。',
+      cta: '抽今日签',
+      proof: ['无需登录', '不进入支付', '分享不含私人输入'],
     },
     cards: [
       {
@@ -556,6 +600,9 @@ export default function TianjiLoveHome() {
         </div>
       </section>
 
+      <FreeFateTestEntry copy={copy} activeLang={activeLang} href={href} />
+      <DailyOracleEntry copy={copy} activeLang={activeLang} href={href} />
+
       <section className="tianji-love-form-section relative z-10 mx-auto w-full max-w-6xl px-5 sm:px-8">
         <BirthChartForm copy={copy} mode={mode} setMode={setMode} onSubmit={handleSubmit} yearOptions={yearOptions} />
       </section>
@@ -626,6 +673,96 @@ function Header({
         </div>
       </nav>
     </header>
+  );
+}
+
+function FreeFateTestEntry({
+  copy,
+  activeLang,
+  href,
+}: {
+  copy: LoveCopy;
+  activeLang: AppLanguage;
+  href: (path: string) => string;
+}) {
+  return (
+    <section className="tianji-love-free-fate-entry relative z-10 border-y border-[#b57248]/24 bg-[#060b16]/72 px-5 py-8 sm:px-8">
+      <div className="mx-auto grid w-full max-w-7xl gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#d8b77b]/78">{copy.freeFateTest.eyebrow}</p>
+          <h2 className="mt-3 max-w-3xl font-serif text-[2rem] font-semibold leading-tight text-[#ffe3b4] sm:text-[2.65rem]">
+            {copy.freeFateTest.title}
+          </h2>
+          <p className="mt-4 max-w-3xl text-base leading-8 text-[#f5d8aa]/76">{copy.freeFateTest.body}</p>
+          <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#f4d7a3]/70">
+            {copy.freeFateTest.proof.map((item) => (
+              <span key={item} className="rounded-full border border-[#d8b77b]/24 bg-black/18 px-3 py-2">
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+        <Link
+          href={href('/love-test')}
+          onClick={() =>
+            void trackRevenueFunnelEvent('home_cta_click', {
+              surface: 'homepage_free_fate_test_entry',
+              lang: activeLang,
+              cta: 'free_fate_test',
+            })
+          }
+          className="tianji-love-primary inline-flex min-h-14 w-full items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition hover:border-[#ffd6ab] hover:text-white md:w-auto"
+        >
+          {copy.freeFateTest.cta}
+          <ChevronRight className="ml-3 h-4 w-4" aria-hidden />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function DailyOracleEntry({
+  copy,
+  activeLang,
+  href,
+}: {
+  copy: LoveCopy;
+  activeLang: AppLanguage;
+  href: (path: string) => string;
+}) {
+  return (
+    <section className="tianji-love-daily-oracle-entry relative z-10 border-b border-[#b57248]/24 bg-[#030813]/84 px-5 py-8 sm:px-8">
+      <div className="mx-auto grid w-full max-w-7xl gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#d8b77b]/78">{copy.dailyOracle.eyebrow}</p>
+          <h2 className="mt-3 max-w-3xl font-serif text-[2rem] font-semibold leading-tight text-[#ffe3b4] sm:text-[2.55rem]">
+            {copy.dailyOracle.title}
+          </h2>
+          <p className="mt-4 max-w-3xl text-base leading-8 text-[#f5d8aa]/76">{copy.dailyOracle.body}</p>
+          <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#f4d7a3]/70">
+            {copy.dailyOracle.proof.map((item) => (
+              <span key={item} className="rounded-full border border-[#d8b77b]/24 bg-black/18 px-3 py-2">
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+        <Link
+          href={href('/daily-oracle')}
+          onClick={() =>
+            void trackRevenueFunnelEvent('home_cta_click', {
+              surface: 'homepage_daily_oracle_entry',
+              lang: activeLang,
+              cta: 'daily_oracle',
+            })
+          }
+          className="tianji-love-primary inline-flex min-h-14 w-full items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition hover:border-[#ffd6ab] hover:text-white md:w-auto"
+        >
+          {copy.dailyOracle.cta}
+          <ChevronRight className="ml-3 h-4 w-4" aria-hidden />
+        </Link>
+      </div>
+    </section>
   );
 }
 

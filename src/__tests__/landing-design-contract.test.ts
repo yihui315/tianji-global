@@ -105,6 +105,14 @@ describe('Tianji Love landing redesign contract', () => {
       'PRIVATE LOVE REFLECTION. CLEARER NEXT STEPS.',
       'Understand your love pattern',
       'before you make the next move.',
+      'Free Fate Match Test',
+      'Not ready for a full reading? Test the signal first.',
+      'Take Free Fate Match Test',
+      'homepage_free_fate_test_entry',
+      'Daily Love Oracle',
+      'Return tomorrow for one small relationship signal.',
+      "Draw Today's Oracle",
+      'homepage_daily_oracle_entry',
       'Start Free Love Reading',
       'Ask One Question',
       'Draw Timing Cards',
@@ -309,7 +317,7 @@ describe('Tianji Love landing redesign contract', () => {
     const englishCopy = home.slice(home.indexOf('  en: {'), home.indexOf('  zh: {'));
     const chineseCopy = home.slice(home.indexOf('  zh: {'), home.indexOf('} satisfies Record<AppLanguage, LoveCopy>'));
 
-    for (const route of ['/relationship/new', '/ask', '/draw', '/about', '/pricing', '/login']) {
+    for (const route of ['/relationship/new', '/ask', '/draw', '/about', '/pricing', '/login', '/daily-oracle']) {
       expect(home).toContain(route);
     }
 

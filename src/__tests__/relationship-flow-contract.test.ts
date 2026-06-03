@@ -39,6 +39,7 @@ describe('Tianji Love relationship flow contract', () => {
     expect(client).toContain('withLanguageParam');
     expect(client).toContain("withLanguageParam('/relationship/new', next)");
     expect(client).toContain("href('/')");
+    expect(client).toContain("href('/love-test')");
     expect(client).toContain("href('/ask')");
     expect(client).toContain("href('/draw')");
     expect(client).toContain("href('/pricing')");
@@ -54,6 +55,11 @@ describe('Tianji Love relationship flow contract', () => {
     expect(client).toContain('把两个人的星轨，读成一段关系场。');
     expect(client).toContain('Reveal the hidden pattern between two people.');
     expect(client).toContain('Start Free Compatibility Reading');
+    expect(client).toContain('Take Free Fate Match Test');
+    expect(client).toContain('Not sure yet? Test the signal first without birth data or checkout.');
+    expect(client).toContain('growth_fate_test_cta_click');
+    expect(client).toContain('sm:flex-wrap');
+    expect(client).toContain('w-full sm:w-auto');
     expect(client).toContain('What your reading will show');
   });
 

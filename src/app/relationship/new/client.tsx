@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
@@ -30,13 +31,15 @@ import { type AppLanguage, isAppLanguage, withLanguageParam } from '@/lib/langua
 import type { RelationshipReading, RelationshipType } from '@/types/relationship';
 
 type RelationshipCopy = {
-  nav: { home: string; loveReading: string; ask: string; draw: string; pricing: string; about: string; login: string; privacy: string };
+  nav: { home: string; loveTest: string; loveReading: string; ask: string; draw: string; pricing: string; about: string; login: string; privacy: string };
   hero: {
     eyebrow: string;
     title: string;
     line: string;
     body: string;
     primary: string;
+    fateTestCta: string;
+    fateTestHint: string;
     secondary: string;
   };
   sample: {
@@ -64,6 +67,7 @@ const relationshipCopy = {
   zh: {
     nav: {
       home: '天机爱',
+      loveTest: '缘分测试',
       loveReading: '关系解读',
       ask: '提问',
       draw: '时机抽牌',
@@ -78,11 +82,13 @@ const relationshipCopy = {
       line: 'Love is not a verdict. It is a pattern you can learn to hold.',
       body: '输入双方的出生日期与可选时辰，先看吸引、沟通、冲突、节奏与长期稳定性，再决定是否进入更深的关系报告。',
       primary: '填写双方信息',
+      fateTestCta: '先免费测缘分',
+      fateTestHint: '还不确定？先用昵称和一个问题测一条缘分信号，不进入支付。',
       secondary: '回到首页',
     },
     sample: {
       eyebrow: 'Free First Signal',
-      title: '浣犲皢鐪嬪埌鐨勫厤璐规憳瑕?',
+      title: '你将看到的免费摘要',
       score: 'Overall compatibility score',
       pattern: 'Top relationship pattern',
       nextMove: 'Your next best move',
@@ -118,6 +124,7 @@ const relationshipCopy = {
   en: {
     nav: {
       home: 'Tianji Love',
+      loveTest: 'Love Test',
       loveReading: 'Love Reading',
       ask: 'Ask',
       draw: 'Draw Timing',
@@ -132,6 +139,8 @@ const relationshipCopy = {
       line: 'Private by default · No public birth data · First signal is free',
       body: 'Enter two birth dates to receive a private relationship reading across attraction, communication, conflict, timing, and long-term potential.',
       primary: 'Start Free Compatibility Reading',
+      fateTestCta: 'Take Free Fate Match Test',
+      fateTestHint: 'Not sure yet? Test the signal first without birth data or checkout.',
       secondary: 'Back home',
     },
     sample: {
@@ -173,7 +182,7 @@ const relationshipCopy = {
 
 function getLanguageFromSearch(searchParams: URLSearchParams): AppLanguage {
   const queryLang = searchParams.get('lang');
-  return isAppLanguage(queryLang) ? queryLang : 'zh';
+  return isAppLanguage(queryLang) ? queryLang : 'en';
 }
 
 export default function RelationshipNewClient() {
@@ -290,6 +299,7 @@ export default function RelationshipNewClient() {
       <TianjiLoveHeader
         homeHref={href('/')}
         navItems={[
+          { label: copy.nav.loveTest, href: href('/love-test') },
           { label: copy.nav.loveReading, href: href('/relationship/new') },
           { label: copy.nav.ask, href: href('/ask') },
           { label: copy.nav.draw, href: href('/draw') },
@@ -349,18 +359,34 @@ export default function RelationshipNewClient() {
                 {copy.hero.line}
               </p>
               <p className="mt-6 max-w-2xl text-base leading-8 text-[#f5d8aa]/78 sm:text-lg">{copy.hero.body}</p>
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+              <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                 <a
                   href="#relationship-form"
-                  className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6]"
+                  className="tianji-love-primary inline-flex min-h-14 w-full items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] sm:w-auto"
                 >
                   {copy.hero.primary}
                   <Heart className="ml-3 h-4 w-4" aria-hidden />
                 </a>
-                <TianjiLoveButton href={href('/')} variant="secondary">
+                <Link
+                  href={href('/love-test')}
+                  onClick={() =>
+                    void trackRevenueFunnelEvent('growth_fate_test_cta_click', {
+                      source: 'relationship_new',
+                      surface: 'relationship_hero',
+                      lang: language,
+                      cta: 'free_fate_test',
+                    })
+                  }
+                  className="tianji-love-secondary inline-flex min-h-14 w-full items-center justify-center rounded-lg border border-[#b57248]/58 bg-black/24 px-8 text-base font-semibold text-[#f7ddb2] transition hover:border-[#ffe1a6] sm:w-auto"
+                >
+                  {copy.hero.fateTestCta}
+                  <Sparkles className="ml-3 h-4 w-4" aria-hidden />
+                </Link>
+                <TianjiLoveButton href={href('/')} variant="secondary" className="w-full sm:w-auto">
                   {copy.hero.secondary}
                 </TianjiLoveButton>
               </div>
+              <p className="mt-3 max-w-xl text-sm leading-6 text-[#f4d7a3]/62">{copy.hero.fateTestHint}</p>
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
                 {copy.trust.map((item) => (
                   <TianjiLoveTrustCard key={item.title} icon={item.icon} title={item.title} body={item.body} />
@@ -427,6 +453,7 @@ export default function RelationshipNewClient() {
         homeHref={href('/')}
         disclaimer={copy.footer}
         links={[
+          { label: copy.nav.loveTest, href: href('/love-test') },
           { label: copy.nav.loveReading, href: href('/relationship/new') },
           { label: copy.nav.ask, href: href('/ask') },
           { label: copy.nav.draw, href: href('/draw') },
