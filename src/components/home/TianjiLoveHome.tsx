@@ -17,6 +17,7 @@ import {
   TimerReset,
 } from 'lucide-react';
 import { trackClientEvent } from '@/lib/analytics/client';
+import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 
 type ReadingMode = 'solo' | 'compatibility';
 
@@ -150,6 +151,7 @@ export function TianjiLoveHome() {
         errorCopy={errorCopy}
         isSubmitting={isSubmitting}
       />
+      <GrowthEntrySections />
       <InsightCards />
       <HowItWorks />
       <Testimonials />
@@ -157,6 +159,64 @@ export function TianjiLoveHome() {
       <CosmicFooter />
       <ReducedMotionStyle />
     </main>
+  );
+}
+
+function GrowthEntrySections() {
+  return (
+    <section className="border-y border-white/10 bg-[#0b0d1a] px-5 py-10 sm:px-8 lg:px-12">
+      <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-2">
+        <article className="min-h-[236px] rounded-lg border border-rose-200/14 bg-white/[0.055] p-6 shadow-xl shadow-black/18">
+          <div className="inline-flex items-center gap-2 rounded-full border border-rose-200/20 bg-rose-100/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-rose-50">
+            Free Fate Match Test
+          </div>
+          <h2 className="mt-5 font-serif text-3xl font-semibold text-white">
+            Not ready for a full reading? Test the signal first.
+          </h2>
+          <p className="mt-4 text-sm leading-7 text-white/66">
+            Answer with two nicknames, your current relationship status, and one concern. No birth data is required.
+          </p>
+          <Link
+            href="/love-test"
+            onClick={() =>
+              void trackRevenueFunnelEvent('home_cta_click', {
+                surface: 'homepage_free_fate_test_entry',
+                cta: 'free_fate_test',
+              })
+            }
+            className="mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-rose-100 px-5 text-sm font-bold text-[#160b14] shadow-[0_18px_48px_rgba(251,113,133,0.22)] transition hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-rose-100/80"
+          >
+            Take Free Fate Match Test
+            <Sparkles className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </article>
+
+        <article className="min-h-[236px] rounded-lg border border-amber-100/14 bg-white/[0.055] p-6 shadow-xl shadow-black/18">
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-100/20 bg-amber-100/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-50">
+            Daily Love Oracle
+          </div>
+          <h2 className="mt-5 font-serif text-3xl font-semibold text-white">
+            Return tomorrow for one small relationship signal.
+          </h2>
+          <p className="mt-4 text-sm leading-7 text-white/66">
+            Draw a deterministic daily love insight by mood. No login, no database write, and no payment path.
+          </p>
+          <Link
+            href="/daily-oracle"
+            onClick={() =>
+              void trackRevenueFunnelEvent('home_cta_click', {
+                surface: 'homepage_daily_oracle_entry',
+                cta: 'daily_oracle',
+              })
+            }
+            className="mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-amber-100 px-5 text-sm font-bold text-[#160f10] shadow-[0_18px_48px_rgba(251,191,36,0.18)] transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-amber-100/80"
+          >
+            Draw Today&apos;s Oracle
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </article>
+      </div>
+    </section>
   );
 }
 
