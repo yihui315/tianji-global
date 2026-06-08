@@ -29,7 +29,12 @@ export type RelationshipVariant = "A" | "B";
 
 export type RelationshipType = "romantic" | "friendship" | "work";
 
-export type RelationshipShareMode = "summary" | "graph" | "one_liner";
+export type RelationshipShareMode =
+  | "summary"
+  | "graph"
+  | "one_liner"
+  | "chart_only"
+  | "insight_card";
 
 export type RelationshipDimension =
   | "attraction"

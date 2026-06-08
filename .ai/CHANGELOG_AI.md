@@ -1,3 +1,42 @@
+# 2026-06-08 - TianJi Love auth premium baseline mainline integration
+
+## What changed
+
+- Created clean mainline branch `feat/tianji-love-auth-premium-mainline-20260608` from `origin/main`.
+- Integrated the auth-ready premium Love report baseline from `e45891a` without merging unrelated dirty workspace files.
+- Preserved current mainline pricing/page structure while routing the pricing secondary CTA into `/relationship/new`.
+- Restored launch-visible relationship result copy from mojibake to readable text.
+- Updated `/relationship/new` to default to English for the Western funnel, preserve `?lang=zh`, and wrap the client search-param reader in `Suspense` for production build.
+- Added `report-entitlement` helper required by the premium report generator.
+
+## Validation
+
+```text
+npm run typecheck: Pass
+npm run lint: Pass, Next lint deprecation warning only
+npm run test -- --run love report/share/world-class contract tests: Pass, 6 files / 18 tests
+npm run test: Pass, 60 files / 522 tests
+npm run build: Pass, existing Edge runtime static-generation warning only
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+npm run audit:auth-env-readiness: No-Go, required masked staging env evidence missing
+```
+
+## Gate status
+
+```text
+Source readiness: Go
+Mainline PR readiness: Go
+Static/build readiness: Go
+Staging auth env readiness: No-Go until masked env presence is provided
+Production deploy: Not run
+Stripe checkout: Not run
+Paid smoke: No-Go
+Secrets printed: No
+```
+
 # 2026-05-27 - TianJi Love Auth Login System Cloud Readiness
 
 ## What changed

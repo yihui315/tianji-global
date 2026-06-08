@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   ChartNoAxesCombined,
   Copy,
+  Download,
   FileText,
   Lock,
   MessageCircleHeart,
@@ -43,30 +44,30 @@ const VARIANT = 'A';
 
 const resultCopy = {
   zh: {
-    eyebrow: 'First Compatibility Signal',
-    score: '缁煎悎鍖归厤',
-    radar: 'Relationship radar',
-    dimensions: '浜旂淮璇︽儏',
-    nextMove: 'Your next best move',
-    lockedTitle: 'Unlock the Full Relationship Pattern — $4.99',
-    lockedBody: 'Full report unlocks all five dimensions, 30-day timing, conflict repair, conversation guidance, PDF-ready report, and saved history.',
-    unlock: 'Unlock the Full Relationship Pattern — $4.99',
-    unlockDisabled: 'Full report checkout is not enabled yet. Please save this reading and check back soon.',
+    eyebrow: '初始匹配信号',
+    score: '综合匹配',
+    radar: '关系雷达',
+    dimensions: '五维详情',
+    nextMove: '你的下一步',
+    lockedTitle: '解锁完整关系模式 - $4.99',
+    lockedBody: '完整报告会解锁五个维度、未来 30 天时机、冲突修复、沟通建议、可保存报告和历史记录。',
+    unlock: '解锁完整关系模式 - $4.99',
+    unlockDisabled: '完整报告结账尚未开启。请先保存本次解读，稍后再回来查看。',
     unlockMissingPersistedReading: 'We need to save this reading before checkout. Please try again in a moment.',
-    unlockFailed: 'Checkout could not be started. Please save your reading first.',
-    currentPhase: '褰撳墠闃舵',
-    next30Days: '鏈潵 30 澶?',
-    copyLink: '澶嶅埗瀹夊叏鍒嗕韩閾炬帴',
-    copied: '閾炬帴宸插鍒?',
-    share: '鍒嗕韩鍏崇郴鎽樿',
-    shareFailed: 'Share link could not be created. Please save your reading first.',
+    unlockFailed: '暂时无法开始结账。请先保存本次解读。',
+    currentPhase: '当前阶段',
+    next30Days: '未来 30 天',
+    copyLink: '复制安全分享链接',
+    copied: '链接已复制',
+    share: '分享关系摘要',
+    shareFailed: '暂时无法创建分享链接。请先保存本次解读。',
     privacy: '分享内容默认不包含出生日期、出生时辰、出生地点或时区。',
     trust: [
-      ['Reading method', 'Symbolic compatibility engine + guided interpretation'],
-      ['Data used', 'Birth dates and optional birth times'],
-      ['Not used in free signal', 'Birth location'],
-      ['Model confidence', 'Reflective guidance, not certainty'],
-      ['Boundary', 'Not crisis support or therapy'],
+      ['解读方法', '象征匹配引擎 + 引导式解读'],
+      ['使用数据', '出生日期和可选出生时辰'],
+      ['免费信号不使用', '出生地点'],
+      ['模型信心', '反思性建议，不是确定性结论'],
+      ['边界', '不替代危机支持或心理治疗'],
     ],
   },
   en: {
@@ -75,9 +76,9 @@ const resultCopy = {
     radar: 'Relationship radar',
     dimensions: 'Five dimensions',
     nextMove: 'Your next best move',
-    lockedTitle: 'Unlock the Full Relationship Pattern — $4.99',
+    lockedTitle: 'Unlock the Full Relationship Pattern - $4.99',
     lockedBody: 'Full report unlocks all five dimensions, 30-day timing, conflict repair, conversation guidance, PDF-ready report, and saved history.',
-    unlock: 'Unlock the Full Relationship Pattern — $4.99',
+    unlock: 'Unlock the Full Relationship Pattern - $4.99',
     unlockDisabled: 'Full report checkout is not enabled yet. Please save this reading and check back soon.',
     unlockMissingPersistedReading: 'We need to save this reading before checkout. Please try again in a moment.',
     unlockFailed: 'Checkout could not be started. Please save your reading first.',
@@ -106,6 +107,19 @@ const lockedItems = [
   { icon: Save, label: 'Saved reading and history' },
 ];
 
+type RelationshipShareCardFormat = 'og' | 'wechat_moments' | 'xiaohongshu' | 'douyin';
+
+const relationshipShareCardFormats: Array<{
+  format: RelationshipShareCardFormat;
+  label: string;
+  detail: string;
+}> = [
+  { format: 'wechat_moments', label: 'Moments square', detail: '1080 x 1080' },
+  { format: 'xiaohongshu', label: 'Xiaohongshu', detail: '1080 x 1440' },
+  { format: 'douyin', label: 'Douyin story', detail: '1080 x 1920' },
+  { format: 'og', label: 'Wide OG', detail: '1200 x 630' },
+];
+
 function scoreColor(score: number) {
   if (score >= 70) return '#34D399';
   if (score >= 50) return '#F5B35D';
@@ -117,9 +131,33 @@ function getNextMove(reading: RelationshipReading) {
   return ordered[0]?.advice[0] ?? reading.summary.oneLiner;
 }
 
+function getSafeRelationshipShareText(reading: RelationshipReading, shareUrl: string) {
+  return [
+    `${reading.personA.nickname} & ${reading.personB.nickname}`,
+    reading.summary.headline,
+    reading.summary.oneLiner,
+    `Compatibility signal: ${reading.overallScore}/100`,
+    shareUrl,
+  ].filter(Boolean).join('\n');
+}
+
+function getRelationshipCardPayload(reading: RelationshipReading, shareUrl: string) {
+  return {
+    score: reading.overallScore,
+    headline: reading.summary.headline,
+    oneLiner: reading.summary.oneLiner,
+    keywords: reading.summary.keywords,
+    personA: reading.personA.nickname,
+    personB: reading.personB.nickname,
+    shareUrl,
+  };
+}
+
 export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultProps) {
   const [shareUrlCopied, setShareUrlCopied] = useState(false);
   const [shareLoading, setShareLoading] = useState(false);
+  const [shareCardCopied, setShareCardCopied] = useState(false);
+  const [shareCardLoading, setShareCardLoading] = useState<RelationshipShareCardFormat | 'copy' | null>(null);
   const [shareError, setShareError] = useState<string | null>(null);
   const [unlockLoading, setUnlockLoading] = useState(false);
   const [unlockError, setUnlockError] = useState<string | null>(null);
@@ -343,6 +381,105 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
     }
   };
 
+  const trackShareCardEvent = (
+    event: 'relationship_share_click' | 'relationship_share_success' | 'relationship_copy_success',
+    cardFormat: RelationshipShareCardFormat,
+    funnelStage: string,
+  ) => {
+    void trackRelationshipEvent({
+      event,
+      experiment_id: EXPERIMENT_ID,
+      variant: VARIANT,
+      relation_type: reading.relationType,
+      share_mode: 'insight_card',
+      payload: {
+        lang,
+        surface: 'relationship_result',
+        shareMode: 'insight_card',
+        cardFormat,
+        relationType: reading.relationType,
+        accessLevel: reading.accessLevel,
+        funnel_stage: funnelStage,
+      },
+    });
+  };
+
+  const createRelationshipShareUrl = async (shareMode: 'summary' | 'insight_card') => {
+    const res = await fetch('/api/relationship/share', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        readingId: reading.id,
+        shareSettings: { includeNames: true, includeBirthData: false, shareMode },
+      }),
+    });
+    const json = await res.json();
+
+    if (json.success && json.data?.shareUrl) {
+      return json.data.shareUrl as string;
+    }
+
+    throw new Error(copy.shareFailed);
+  };
+
+  const handleCopyShareText = async () => {
+    const cardFormat: RelationshipShareCardFormat = 'og';
+    setShareCardLoading('copy');
+    setShareError(null);
+    trackShareCardEvent('relationship_share_click', cardFormat, 'share_card_copy_click');
+
+    try {
+      const shareUrl = await createRelationshipShareUrl('insight_card');
+      await navigator.clipboard.writeText(getSafeRelationshipShareText(reading, shareUrl));
+      setShareCardCopied(true);
+      trackShareCardEvent('relationship_copy_success', cardFormat, 'share_card_copy_success');
+      trackShareCardEvent('relationship_share_success', cardFormat, 'share_card_copy_success');
+      setTimeout(() => setShareCardCopied(false), 3000);
+    } catch {
+      setShareError(copy.shareFailed);
+    } finally {
+      setShareCardLoading(null);
+    }
+  };
+
+  const handleDownloadCard = async (cardFormat: RelationshipShareCardFormat) => {
+    setShareCardLoading(cardFormat);
+    setShareError(null);
+    trackShareCardEvent('relationship_share_click', cardFormat, 'share_card_download_click');
+
+    try {
+      const shareUrl = await createRelationshipShareUrl('insight_card');
+      const response = await fetch('/api/share/card', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          serviceType: 'relationship',
+          cardFormat,
+          resultData: getRelationshipCardPayload(reading, shareUrl),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(copy.shareFailed);
+      }
+
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = objectUrl;
+      anchor.download = `tianji-love-${cardFormat}.png`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(objectUrl);
+      trackShareCardEvent('relationship_share_success', cardFormat, 'share_card_download_success');
+    } catch {
+      setShareError(copy.shareFailed);
+    } finally {
+      setShareCardLoading(null);
+    }
+  };
+
   return (
     <div className="space-y-7">
       <TianjiLovePanel className="p-7 text-center">
@@ -483,6 +620,48 @@ export function RelationshipResult({ reading, lang = 'zh' }: RelationshipResultP
           {shareError}
         </div>
       )}
+
+      <TianjiLovePanel className="p-6">
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.24em] text-[#d8b77b]/62">Share card</p>
+            <h2 className="mt-2 font-serif text-2xl text-[#ffe3b4]">Turn the free signal into a social card</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-[#f4d7a3]/62">
+              Card text uses only names, score, headline, one-liner, keywords, and the safe share URL.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleCopyShareText}
+            disabled={Boolean(shareCardLoading)}
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-[#d8b77b]/30 bg-black/24 px-4 text-sm font-semibold text-[#f4d7a3]/78 transition hover:border-[#ffe3b4]/44 hover:text-[#ffe3b4] disabled:opacity-55"
+          >
+            <Copy className="h-4 w-4" aria-hidden />
+            {shareCardCopied ? 'Copied' : 'Copy share text'}
+          </button>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {relationshipShareCardFormats.map((item) => (
+            <button
+              key={item.format}
+              type="button"
+              onClick={() => handleDownloadCard(item.format)}
+              disabled={Boolean(shareCardLoading)}
+              className="rounded-xl border border-[#b57248]/24 bg-black/18 p-4 text-left transition hover:border-[#ffb49e]/44 disabled:opacity-55"
+            >
+              <span className="flex items-center gap-2 text-sm font-semibold text-[#ffe3b4]">
+                <Download className="h-4 w-4 text-[#d8b77b]" aria-hidden />
+                Download PNG
+              </span>
+              <span className="mt-2 block text-sm text-[#f4d7a3]/66">{item.label}</span>
+              <span className="mt-1 block text-xs text-[#f4d7a3]/44">{item.detail}</span>
+            </button>
+          ))}
+        </div>
+        <p className="mt-4 text-xs leading-5 text-[#f4d7a3]/42">
+          Birth data hidden by default. Public share cards never include private input fields.
+        </p>
+      </TianjiLovePanel>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <button

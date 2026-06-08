@@ -9,11 +9,13 @@ export function LoveFunnelAnalytics({
   sessionId,
   productId,
   checkoutStatus,
+  isPaid,
 }: {
   event: 'love_result_view';
   sessionId: string;
   productId: BillingProductId;
   checkoutStatus?: string;
+  isPaid?: boolean;
 }) {
   useEffect(() => {
     void trackClientEvent({
@@ -35,7 +37,23 @@ export function LoveFunnelAnalytics({
         payload: { sessionId, productId },
       });
     }
-  }, [checkoutStatus, event, productId, sessionId]);
+    if (checkoutStatus === 'cancelled') {
+      void trackClientEvent({
+        event: 'checkout_cancel',
+        experimentId: 'love-v1',
+        moduleType: 'love-reading',
+        payload: { sessionId, productId },
+      });
+    }
+    if (isPaid) {
+      void trackClientEvent({
+        event: 'premium_report_view',
+        experimentId: 'love-v1',
+        moduleType: 'love-reading',
+        payload: { sessionId, productId },
+      });
+    }
+  }, [checkoutStatus, event, isPaid, productId, sessionId]);
 
   return null;
 }

@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
             patternTags: session.teaser.patternTags,
             lockedSectionsCount: session.teaser.lockedSections.length,
           },
+          freePreviewReport: session.freePreviewReport,
         },
       },
       { status: 201 }

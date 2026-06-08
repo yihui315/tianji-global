@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-05-17T03:40:02.300Z",
+  "mode": "readiness",
+  "envReadiness": "no-go",
+  "liveProviderSmoke": "not-run",
+  "stripeTestLive": "not-run",
+  "productionDeploy": "no-go",
+  "commands": [
+    {
+      "scriptName": "audit:staging-env-readiness",
+      "exitCode": 0,
+      "stdout": "\n> tianji-global@1.0.0 audit:staging-env-readiness\n> tsx scripts/audit-staging-env-readiness.ts\n\n{\n  \"app\": \"no-go\",\n  \"supabase\": \"no-go\",\n  \"stripeTestMode\": \"no-go\",\n  \"email\": \"no-go\",\n  \"aiRuntime\": \"go\",\n  \"ollama\": \"no-go\",\n  \"deepseek\": \"go\",\n  \"minimax\": \"go\",\n  \"overall\": \"no-go\",\n  \"missingNamesOnly\": [\n    \"EMAIL_FROM\",\n    \"NEXTAUTH_SECRET\",\n    \"NEXTAUTH_URL\",\n    \"NEXT_PUBLIC_APP_URL\",\n    \"NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY\",\n    \"NEXT_PUBLIC_SUPABASE_ANON_KEY\",\n    \"NEXT_PUBLIC_SUPABASE_URL\",\n    \"OLLAMA_BASE_URL\",\n    \"RESEND_API_KEY\",\n    \"STRIPE_ASK_PRICE_ID\",\n    \"STRIPE_DRAW_PRICE_ID\",\n    \"STRIPE_PRO_MONTHLY_PRICE_ID\",\n    \"STRIPE_PRO_YEARLY_PRICE_ID\",\n    \"STRIPE_SECRET_KEY\",\n    \"STRIPE_WEBHOOK_SECRET\",\n    \"SUPABASE_SERVICE_ROLE_KEY\"\n  ]\n}\n",
+      "stderr": "",
+      "json": {
+        "app": "no-go",
+        "supabase": "no-go",
+        "stripeTestMode": "no-go",
+        "email": "no-go",
+        "aiRuntime": "go",
+        "ollama": "no-go",
+        "deepseek": "go",
+        "minimax": "go",
+        "overall": "no-go",
+        "missingNamesOnly": [
+          "EMAIL_FROM",
+          "NEXTAUTH_SECRET",
+          "NEXTAUTH_URL",
+          "NEXT_PUBLIC_APP_URL",
+          "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+          "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+          "NEXT_PUBLIC_SUPABASE_URL",
+          "OLLAMA_BASE_URL",
+          "RESEND_API_KEY",
+          "STRIPE_ASK_PRICE_ID",
+          "STRIPE_DRAW_PRICE_ID",
+          "STRIPE_PRO_MONTHLY_PRICE_ID",
+          "STRIPE_PRO_YEARLY_PRICE_ID",
+          "STRIPE_SECRET_KEY",
+          "STRIPE_WEBHOOK_SECRET",
+          "SUPABASE_SERVICE_ROLE_KEY"
+        ]
+      }
+    }
+  ],
+  "note": "No submitted env values are stored in this result."
+}

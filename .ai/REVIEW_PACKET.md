@@ -1,3 +1,73 @@
+# TianJi Love Auth Premium Mainline Integration - Review Packet
+
+## 2026-06-08 mainline branch
+
+Prepared a clean `origin/main` integration branch for the TianJi Love auth-ready premium report baseline.
+
+## Goal
+
+Move the latest TianJi Love source work toward mainline readiness and launch review quality, without deploying, running paid smoke, mutating production data, or reading secrets.
+
+## Branch
+
+```text
+Branch: feat/tianji-love-auth-premium-mainline-20260608
+Base: origin/main at 0ae5d40
+Source commit integrated: e45891a feat(love): ship auth-ready premium report baseline
+```
+
+## Key Diff Summary
+
+- Integrated premium Love report schema, generator, privacy mask, quality checks, i18n contract tests, and session API handling.
+- Preserved mainline pricing hero structure and changed its secondary CTA to `/relationship/new`.
+- Made `/relationship/new` default to English for the Western launch funnel while preserving Chinese via `?lang=zh`.
+- Added a `Suspense` boundary for `/relationship/new` so `useSearchParams()` does not block production build prerendering.
+- Restored launch-visible relationship result copy and paywall/share labels to readable text.
+- Added `report-entitlement` helper used by premium report generation.
+
+## Validation
+
+```text
+npm run typecheck: Pass
+npm run lint: Pass
+npm run test -- --run src/__tests__/love-report-i18n.test.ts src/__tests__/love-report-privacy.test.ts src/__tests__/love-report-quality-check.test.ts src/__tests__/love-report-schema-contract.test.ts src/__tests__/love-reading-session-contract.test.ts src/__tests__/tianji-love-world-class-gap-contract.test.ts src/__tests__/relationship-share-card-contract.test.ts: Pass, 6 files / 18 tests
+npm run test: Pass, 60 files / 522 tests
+npm run build: Pass
+npm run audit:routes: Pass
+npm run audit:copy: Pass
+npm run audit:share: Pass
+npm run audit:upgrade: Pass
+npm run audit:auth-env-readiness: No-Go, required masked staging env evidence missing
+```
+
+## Gate Status
+
+```text
+Source Go: Yes
+Mainline PR readiness: Go
+Static/build readiness: Go
+Staging execution readiness: No-Go until masked auth env readiness is provided
+Production deploy: Not run
+Stripe checkout: Not run
+Webhook replay: Not run
+Paid smoke: No-Go
+Secrets printed: No
+```
+
+## Risks And Follow-Up
+
+- Hosted staging still needs masked presence evidence for `AUTH_SECRET` or `NEXTAUTH_SECRET`, `AUTH_URL` or `NEXTAUTH_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `NEXT_PUBLIC_APP_URL`.
+- Build still reports an existing NextAuth/jose Edge runtime static generation warning; it did not fail the build.
+- Do not run production deploy, live Stripe, webhook replay, or paid smoke from this branch without explicit execution approval and masked environment evidence.
+
+## Suggested Commit Message
+
+```text
+feat(love): prepare auth premium baseline for mainline
+```
+
+---
+
 # TianJi Love Auth Login System Cloud Readiness - Review Packet
 
 ## 2026-05-27 auth login readiness
