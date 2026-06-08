@@ -14,6 +14,8 @@ import { filterSensitiveContent, addDisclaimer } from '@/lib/content-moderation'
 
 export interface TarotReadingRequest {
   spreadType: 'single' | 'three-card' | 'celtic-cross';
+  /** @deprecated Use spreadType instead */
+  spread?: string;
   question?: string;
   language?: 'en' | 'zh';
   enhanceWithAI?: boolean;
@@ -41,11 +43,15 @@ export interface TarotReadingResponse {
 export async function POST(req: NextRequest) {
   try {
     const body: TarotReadingRequest = await req.json();
-    const { spreadType, question, language = 'en', enhanceWithAI = false, gender } = body;
+    const { spreadType, spread, question, language = 'en', enhanceWithAI = false, gender } = body;
+
+    // Support both "spreadType" and "spread" (alias for backwards compatibility)
+    const effectiveSpreadType = spreadType ?? spread;
+    const effectiveLanguage = language ?? 'en';
 
     // Validate spread type
     const validSpreads = ['single', 'three-card', 'celtic-cross'];
-    if (!spreadType || !validSpreads.includes(spreadType)) {
+    if (!effectiveSpreadType || !validSpreads.includes(effectiveSpreadType)) {
       return NextResponse.json(
         {
           error:
@@ -61,7 +67,7 @@ export async function POST(req: NextRequest) {
       'three-card': 1,
       'celtic-cross': 2,
     };
-    const spread = spreadLayouts[spreadMap[spreadType]];
+    const chosenSpread = spreadLayouts[spreadMap[effectiveSpreadType]];
 
     // Content safety check
     if (question) {
@@ -76,24 +82,27 @@ export async function POST(req: NextRequest) {
 
     // Shuffle deck and draw cards
     const shuffled = shuffleDeck();
-    const { cards, isReversed } = drawCards(shuffled, spread.cardCount);
+    const { cards, isReversed } = drawCards(shuffled, chosenSpread.cardCount);
 
     // Format drawn cards with interpretations
     const drawnCards: DrawnCard[] = cards.map((card, index) => ({
       card,
       isReversed: isReversed[index],
       position: index + 1,
-      positionName: spread.positions[index].name,
-      positionNameChinese: spread.positions[index].nameChinese,
-      interpretation: interpretCard(card, isReversed[index], language),
+      positionName: chosenSpread.positions[index].name,
+      positionNameChinese: chosenSpread.positions[index].nameChinese,
+      interpretation: interpretCard(card, isReversed[index], effectiveLanguage),
     }));
 
     const response: Record<string, unknown> = {
-      spread,
+      spread: chosenSpread,
+      spreadType: effectiveSpreadType, // normalize field name in response
       question,
       drawnCards,
       totalCards: 78,
-      language,
+      language: effectiveLanguage,
+      locked: false,
+      price: null,
       meta: {
         platform: 'TianJi Global | 天机全球',
         version: '1.0.0',
@@ -106,7 +115,7 @@ export async function POST(req: NextRequest) {
       try {
         const tarotData: TarotData = {
           spread: {
-            positions: spread.positions.map((p, i) => ({
+            positions: chosenSpread.positions.map((p, i) => ({
               name: p.name,
               nameEn: p.nameChinese, // spread name is in Chinese
               description: p.description || p.nameChinese,
@@ -124,7 +133,7 @@ export async function POST(req: NextRequest) {
           gender,
         };
 
-        const lang = language.startsWith('zh') ? 'zh' : 'en';
+        const lang = effectiveLanguage.startsWith('zh') ? 'zh' : 'en';
         const { aiInterpretation, disclaimer, report } = await interpretTarot(tarotData, lang);
         response.aiInterpretation = addDisclaimer(aiInterpretation, 'tarot');
         response.disclaimer = disclaimer;
@@ -192,7 +201,7 @@ export async function GET(req: NextRequest) {
           },
         };
 
-        const lang = language.startsWith('zh') ? 'zh' : 'en';
+        const lang = effectiveLanguage.startsWith('zh') ? 'zh' : 'en';
         const { aiInterpretation, disclaimer, report } = await interpretTarot(tarotData, lang);
         response.aiInterpretation = addDisclaimer(aiInterpretation, 'tarot');
         response.disclaimer = disclaimer;

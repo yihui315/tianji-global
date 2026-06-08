@@ -95,7 +95,7 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[#0a0a0a] overflow-x-hidden min-h-screen">
+    <div id="main-content" className="bg-[#0a0a0a] overflow-x-hidden min-h-screen">
       <a href="#main-content" className="tj-skip-link">
         Skip to main content · 跳至主内容
       </a>

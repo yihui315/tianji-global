@@ -370,7 +370,7 @@ export default function PricingPage() {
         ctaLabel={isAuthenticated ? copy.hero.cta.auth : copy.hero.cta.guest}
         ctaHref="#plans"
         secondaryCtaLabel={copy.hero.secondary}
-        secondaryCtaHref="#compare"
+        secondaryCtaHref={withLanguageParam('/relationship/new', language)}
         stats={[...copy.hero.stats]}
       />
 

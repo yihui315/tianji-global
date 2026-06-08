@@ -117,13 +117,14 @@ export async function GET(req: NextRequest) {
       }, { status: 404 });
     }
 
-    // Increment view count (fire and forget)
-    void Promise.resolve(
-      supabase
-        .from('relationship_shares')
-        .update({ view_count: (share.view_count ?? 0) + 1 })
-        .eq('id', share.id)
-    ).catch(() => {});
+    // Increment view count
+    supabase
+      .from('relationship_shares')
+      .update({ view_count: (share.view_count ?? 0) + 1 })
+      .eq('id', share.id)
+      .then(({ error: viewErr }) => {
+        if (viewErr) console.warn('[relationship/share] view count update failed:', viewErr);
+      });
 
     // Fetch the reading
     const { data: reading, error: readingError } = await supabase

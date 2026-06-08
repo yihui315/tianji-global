@@ -25,7 +25,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
   }, [error]);
 
   return (
-    <html lang="en">
+    <html lang="zh">
       <body
         style={{
           margin: 0,

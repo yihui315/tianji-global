@@ -44,8 +44,16 @@ export async function POST(req: NextRequest) {
     try {
       reading = calculateFullReading(name.trim(), birthdate);
     } catch (calcErr) {
+      const msg = calcErr instanceof Error ? calcErr.message : 'Calculation failed';
+      // Improve error messages for known edge cases
+      if (msg.includes('Invalid birthdate')) {
+        return NextResponse.json(
+          { error: `${msg}. Accepted formats: YYYY-MM-DD, MM/DD/YYYY, YYYYMMDD`, code: 'INVALID_BIRTHDATE' },
+          { status: 422 }
+        );
+      }
       return NextResponse.json(
-        { error: calcErr instanceof Error ? calcErr.message : 'Calculation failed', code: 'CALCULATION_ERROR' },
+        { error: msg, code: 'CALCULATION_ERROR' },
         { status: 422 }
       );
     }

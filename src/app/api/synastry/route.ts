@@ -57,70 +57,85 @@ export async function POST(req: NextRequest) {
       enhanceWithAI = false,
     } = body;
 
-    let synastryResult: ReturnType<typeof computeBaZiSynastry | typeof computeZiweiSynastry>;
+    let synastryResult: ReturnType<typeof computeBaZiSynastry> | ReturnType<typeof computeZiweiSynastry>;
     let narrative: SynastryNarrativeReport | null = null;
-
-    if (systemType === 'bazi') {
-      synastryResult = computeBaZiSynastry(
-        computeBaZiPillars(person1 as BaZiPersonInput),
-        computeBaZiPillars(person2 as BaZiPersonInput)
-      );
-    } else if (systemType === 'ziwei') {
-      const ziweiPerson1 = person1 as ZiweiPersonInput;
-      const ziweiPerson2 = person2 as ZiweiPersonInput;
-
-      const chart1 = generateBySolar({
-        birthday: ziweiPerson1.birthday,
-        birthTime: ziweiPerson1.birthTime,
-        gender: ziweiPerson1.gender ?? 'male',
-        language: language === 'en' ? 'en-US' : 'zh-CN',
-      });
-      const chart2 = generateBySolar({
-        birthday: ziweiPerson2.birthday,
-        birthTime: ziweiPerson2.birthTime,
-        gender: ziweiPerson2.gender ?? 'male',
-        language: language === 'en' ? 'en-US' : 'zh-CN',
-      });
-
-      synastryResult = computeZiweiSynastry(
-        extractZiweiSynastryInput(chart1),
-        extractZiweiSynastryInput(chart2)
-      );
-    } else {
-      return NextResponse.json(
-        { error: `systemType '${systemType}' not yet supported` },
-        { status: 400 }
-      );
-    }
-
-    const coherence = validateSynastryReport(
-      toPlainRecord(person1),
-      toPlainRecord(person2),
-      systemType,
-      undefined,
-      { language }
-    );
-
-    if (!coherence.valid) {
-      return NextResponse.json(
-        {
-          error: 'Synastry coherence check failed',
-          violations: coherence.violations,
-          warnings: coherence.warnings,
-        },
-        { status: 422 }
-      );
-    }
+    let coherence: { valid: boolean; warnings: string[]; violations: string[] } = { valid: true, warnings: [], violations: [] };
 
     try {
-      narrative = composeSynastryNarrative(
-        synastryResult as Parameters<typeof composeSynastryNarrative>[0],
-        { system: systemType as 'bazi' | 'ziwei', language, depth }
-      );
-    } catch {
-      narrative = null;
-    }
+      if (systemType === 'bazi') {
+        synastryResult = computeBaZiSynastry(
+          computeBaZiPillars(person1 as BaZiPersonInput),
+          computeBaZiPillars(person2 as BaZiPersonInput)
+        );
+      } else if (systemType === 'ziwei') {
+        const ziweiPerson1 = person1 as ZiweiPersonInput;
+        const ziweiPerson2 = person2 as ZiweiPersonInput;
 
+        const chart1 = generateBySolar({
+          birthday: ziweiPerson1.birthday,
+          birthTime: ziweiPerson1.birthTime,
+          gender: ziweiPerson1.gender ?? 'male',
+          language: language === 'en' ? 'en-US' : 'zh-CN',
+        });
+        const chart2 = generateBySolar({
+          birthday: ziweiPerson2.birthday,
+          birthTime: ziweiPerson2.birthTime,
+          gender: ziweiPerson2.gender ?? 'male',
+          language: language === 'en' ? 'en-US' : 'zh-CN',
+        });
+
+        synastryResult = computeZiweiSynastry(
+          extractZiweiSynastryInput(chart1),
+          extractZiweiSynastryInput(chart2)
+        );
+      } else {
+        return NextResponse.json(
+          { error: `systemType '${systemType}' not yet supported` },
+          { status: 400 }
+        );
+      }
+
+      // Coherence check — inside computation so it can fail the try block
+      try {
+        coherence = validateSynastryReport(
+          toPlainRecord(person1),
+          toPlainRecord(person2),
+          systemType as 'bazi' | 'ziwei',
+          undefined,
+          { language }
+        );
+        if (!coherence.valid) {
+          return NextResponse.json(
+            {
+              error: 'Synastry coherence check failed',
+              violations: coherence.violations,
+              warnings: coherence.warnings,
+            },
+            { status: 422 }
+          );
+        }
+      } catch (cohErr) {
+        console.warn('[synastry] coherence check failed, skipping:', cohErr);
+      }
+
+      // Narrative composition
+      try {
+        narrative = composeSynastryNarrative(
+          synastryResult as Parameters<typeof composeSynastryNarrative>[0],
+          { system: systemType as 'bazi' | 'ziwei', language, depth }
+        );
+      } catch (narrErr) {
+        console.warn('[synastry] narrative composition failed, continuing without:', narrErr);
+        narrative = null;
+      }
+    } catch (syncErr) {
+      const msg = syncErr instanceof Error ? syncErr.message : String(syncErr);
+      console.error('[synastry] computation failed:', msg, syncErr);
+      return NextResponse.json(
+        { error: `Synastry computation failed: ${msg}` },
+        { status: 500 }
+      );
+    }
     let aiEnhancedNarrative: string | null = null;
     if (enhanceWithAI && narrative) {
       try {

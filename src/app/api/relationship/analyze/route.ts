@@ -8,7 +8,7 @@ import type { RelationshipReading } from '@/types/relationship';
 export async function POST(req: NextRequest) {
   try {
     const body: AnalyzeRelationshipRequest = await req.json();
-    const { relationType, personA, personB, premium = false } = body;
+    const { relationType, personA, personB } = body;
 
     if (!relationType || !personA?.nickname || !personB?.nickname || !personA?.birthDate || !personB?.birthDate) {
       return NextResponse.json<ApiResponse<null>>({
@@ -16,6 +16,9 @@ export async function POST(req: NextRequest) {
         error: 'Missing required fields: relationType, personA.nickname, personB.nickname, personA.birthDate, personB.birthDate',
       }, { status: 400 });
     }
+
+    // Normalize relationType: "couple" → "romantic"
+    const normalizedRelationType = relationType === 'couple' ? 'romantic' : relationType;
 
     const personABirthDate = personA.birthDate;
     const personBBirthDate = personB.birthDate;
@@ -25,7 +28,7 @@ export async function POST(req: NextRequest) {
     const { reading, dbData } = analyzeRelationship(
       personABirthDate,
       personBBirthDate,
-      relationType,
+      normalizedRelationType as 'romantic' | 'friendship' | 'work',
       personA.nickname,
       personB.nickname,
       personA.birthTime,
@@ -50,7 +53,7 @@ export async function POST(req: NextRequest) {
             summary: dbData.summary as any,
             dimensions: dbData.dimensions as any,
             timeline: dbData.timeline as any,
-            is_premium: premium,
+            is_premium: false, // Always free for now — premium requires Stripe checkout
           })
           .select('id')
           .single();
@@ -65,13 +68,14 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json<ApiResponse<RelationshipReading>>({
       success: true,
-      data: reading,
+      data: { ...reading, relationType: normalizedRelationType as RelationshipReading['relationType'] },
     });
   } catch (err) {
-    console.error('[relationship/analyze]', err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('[relationship/analyze]', message, err);
     return NextResponse.json<ApiResponse<null>>({
       success: false,
-      error: 'Analysis failed. Please check input data.',
+      error: `Analysis failed: ${message}`,
     }, { status: 500 });
   }
 }
