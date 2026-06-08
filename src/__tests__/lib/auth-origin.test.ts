@@ -33,4 +33,16 @@ describe('auth redirect origin helpers', () => {
 
     expect(loginUrl.toString()).toBe('https://preview.tianji.love/login?callbackUrl=%2Fprofile');
   });
+
+  it('keeps the loopback request host when local Next proxy headers say localhost', () => {
+    const request = requestLike('http://localhost:3057/dashboard', {
+      host: '127.0.0.1:3057',
+      'x-forwarded-host': 'localhost:3057',
+      'x-forwarded-proto': 'http',
+    });
+
+    const loginUrl = buildLoginRedirectUrl(request, '/dashboard');
+
+    expect(loginUrl.toString()).toBe('http://127.0.0.1:3057/login?callbackUrl=%2Fdashboard');
+  });
 });

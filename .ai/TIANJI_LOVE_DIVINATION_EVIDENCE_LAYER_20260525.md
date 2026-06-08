@@ -175,3 +175,89 @@ Pass: /relationship/new?lang=en HTTP 200 screenshot 921443 bytes.
 | Non-paid local QA | Go |
 | Paid smoke | No-Go unless explicitly tested in safe Stripe test mode |
 | Production deploy | No-Go |
+
+## 2026-05-25 - Divination Evidence Layer PR merge and paid smoke gate
+
+### What changed
+
+Reviewed PR #60 for TianJi Love Divination Evidence Layer merge readiness and Stripe test-mode paid smoke eligibility. The PR was not merged because the remote gate is not safe.
+
+### PR
+
+```text
+PR: https://github.com/yihui315/tianji-global/pull/60
+Branch: feat/tianji-divination-evidence-layer-20260525
+Source commit: 7333e68fbd3e0891051deb8cd2b420d2557f4dda
+Merge commit: N/A
+```
+
+### Validation
+
+```text
+CI/CD: No-Go - no GitHub Actions workflow runs found for the source commit.
+Typecheck: Pass locally in prior PR validation; not rerun after merge because PR was not merged.
+Lint: Pass locally in prior PR validation; not rerun after merge because PR was not merged.
+Tests: Pass locally in prior PR validation; not rerun after merge because PR was not merged.
+Build: Pass locally in prior PR validation; not rerun after merge because PR was not merged.
+Vercel: Fail - GitHub combined status reports Vercel failure.
+Conflicts: Blocked/unknown detail - GitHub reports mergeable=false.
+Mergeable: No.
+Route/copy/share/upgrade audits: Pass locally in prior PR validation; not rerun after merge because PR was not merged.
+Ask revenue audit: Conditional Go.
+Draw revenue audit: Conditional Go.
+Non-paid QA: Go in prior PR validation; not rerun after merge because PR was not merged.
+```
+
+### Paid smoke
+
+```text
+Ask paid smoke: Not run / No-Go.
+Draw paid smoke: Not run / No-Go.
+Relationship paid smoke: Not run / No-Go.
+Stripe mode: Unknown in current shell; live not used.
+Stripe readiness: conditional-go.
+```
+
+No Stripe checkout session was created. No live Stripe payment was run. Paid smoke remains blocked until explicit test-mode approval and masked test-mode env evidence are available.
+
+### Analytics privacy
+
+```text
+paid_unlock_from_evidence_clicked: Source/test verified; not runtime verified through checkout.
+divination_accuracy_feedback_submitted: Source/test verified; not runtime verified through checkout.
+Private input leakage: No in source/test validation; runtime checkout leakage unknown because paid smoke was not run.
+```
+
+### Commands run
+
+```text
+git status --short --branch
+git fetch origin main
+GitHub PR/status/check review through the GitHub connector
+npm run smoke:stripe:test-readiness
+npm run audit:ask-revenue-contract
+npm run audit:draw-revenue-contract
+```
+
+### Gate status
+
+```text
+Divination Evidence Layer implementation: Go
+Ask preview / paid unlock wiring: Go
+Draw preview / paid unlock wiring: Go
+Relationship reading/result wiring: Go
+Analytics: Go
+Tests/build/audits: Go based on prior local PR validation
+PR merge: No-Go / Pending
+Non-paid QA: Go based on prior local PR validation
+Paid smoke: No-Go
+Production deploy: No-Go
+Secrets printed: No
+```
+
+### Follow-up
+
+* Rebase or recreate a narrow PR containing only the Divination Evidence Layer changes.
+* Restore passing remote CI/build checks and resolve `mergeable=false`.
+* Run Ask, Draw, and Relationship Stripe test-mode paid smoke only after explicit test-mode approval and safe masked env evidence.
+* Keep production deploy No-Go until paid smoke passes.

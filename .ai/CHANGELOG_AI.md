@@ -13,6 +13,16 @@
 - Known noise: Existing `/api/analytics/relationship` 503 appeared during local smoke. No pageerror was observed and this does not point to Pretext.
 - Risks: This is an additive client-side measurement layer and slightly increases the Relationship route bundle. Production deploy and paid smoke remain No-Go.
 
+### 2026-05-25 - Divination Evidence Layer PR merge and paid smoke gate
+
+- Task ID: 20260525-tianji-love-evidence-layer-pr60-gate
+- Files changed: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `.ai/TIANJI_LOVE_DIVINATION_EVIDENCE_LAYER_20260525.md`
+- Summary: Reviewed PR #60 for merge readiness and paid-smoke eligibility. The PR remains open and was not merged because GitHub reports `mergeable=false`, Vercel reports `failure`, no GitHub Actions workflow runs were found for source commit `7333e68fbd3e0891051deb8cd2b420d2557f4dda`, and the PR diff spans 53 commits / 325 files, which is broader than the evidence-layer scope. Production deploy was not run.
+- Commands run: GitHub PR/status/check review through the GitHub connector; `git status --short --branch`; `git fetch origin main`; `npm run smoke:stripe:test-readiness`; `npm run audit:ask-revenue-contract`; `npm run audit:draw-revenue-contract`.
+- Results: PR merge is No-Go/Pending. Vercel is Fail, CI/CD is unavailable/no runs, and mergeability is No. Stripe readiness is `overall: conditional-go` with `stripeKeysLookTestMode: unknown`, so no Stripe test checkout was started. Ask and Draw revenue audits remain `overall: conditional-go`.
+- Risks: Paid smoke remains No-Go until explicit Stripe test-mode approval and test-mode env evidence are available. Analytics privacy for paid unlock events was not runtime-verified in checkout. The current PR includes many out-of-scope files and should be narrowed or rebuilt before merge.
+- Next step: Rebase or recreate a narrow PR containing only the Divination Evidence Layer changes, restore passing required checks, then run Ask/Draw/Relationship Stripe test-mode paid smoke before production release.
+
 ### 2026-05-25 - TianJi Love divination evidence layer
 
 - Task ID: 20260525-tianji-love-divination-evidence-layer

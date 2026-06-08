@@ -433,7 +433,7 @@ export function getFortuneReportPrompt(data: FortuneData, language: Language = '
     ].filter(Boolean).join('\n');
 
     return language === 'zh'
-      ? `浣犳槸涓€浣嶈瀺鍚堜紶缁熷懡鐞嗕笌鐜颁唬蹇冪悊瀛︾殑涓撲笟鍛界悊甯堛€?\n\n鐢ㄦ埛褰撳墠杩愬娍涓婁笅鏂囷細\n${liteContext}\n\n璇锋彁渚涗竴浠界畝娲佺殑姣忔棩杩愬娍瑙ｈ锛屽寘鍚綋鏃ユ婚銆佹敞鎰忎簨椤广€佸彲鎵ц寤鸿锛屽苟淇濇寔璋ㄦ厧鍏嶈矗澹版槑銆?\n\n${OUTPUT_SCHEMA_ZH}`
+      ? `你是一位融合传统命理与现代心理学的专业命理师。\n\n用户当前运势上下文：\n${liteContext}\n\n请提供一份简洁的每日运势解读，包含当日主题、注意事项、可执行建议，并保持谨慎免责声明。\n\n${OUTPUT_SCHEMA_ZH}`
       : `You are a professional fortune consultant blending metaphysics with modern psychology.\n\nCurrent context:\n${liteContext}\n\nProvide a concise daily fortune reading with an overall theme, watch-outs, practical guidance, and a careful disclaimer.\n\n${OUTPUT_SCHEMA_EN}`;
   }
 

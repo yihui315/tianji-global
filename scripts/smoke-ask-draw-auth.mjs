@@ -7,6 +7,27 @@ function normalizeBaseUrl(value) {
   return value.replace(/\/$/, '');
 }
 
+function isLoopbackHostname(hostname) {
+  const value = hostname.toLowerCase();
+  return value === 'localhost' || value === '127.0.0.1' || value === '::1' || value === '[::1]';
+}
+
+function originsMatch(actualOrigin, expectedOrigin) {
+  if (actualOrigin === expectedOrigin) {
+    return true;
+  }
+
+  const actual = new URL(actualOrigin);
+  const expected = new URL(expectedOrigin);
+
+  return (
+    actual.protocol === expected.protocol &&
+    actual.port === expected.port &&
+    isLoopbackHostname(actual.hostname) &&
+    isLoopbackHostname(expected.hostname)
+  );
+}
+
 function assert(condition, message) {
   if (!condition) {
     throw new Error(message);
@@ -47,7 +68,7 @@ async function checkAuthRedirect(path) {
 
   const redirectUrl = new URL(location, baseUrl);
   assert(
-    redirectUrl.origin === baseUrl,
+    originsMatch(redirectUrl.origin, baseUrl),
     `${path} redirected to ${redirectUrl.origin}, expected ${baseUrl}`,
   );
   assert(redirectUrl.pathname === '/login', `${path} redirected to ${redirectUrl.pathname}, expected /login`);

@@ -44,8 +44,41 @@ Every change must be: intentional, scored, recorded, and reversible.
 
 ## Current Priority
 
-**Relationship module is the active experimental focus.**
-No other module may be modified during an experiment run.
+**TianJi Love Relationship Revenue Loop Productionization**
+
+Primary goal:
+Ship a production-safe Love Reading funnel that converts users from free relationship preview to paid premium relationship report.
+
+Execution order:
+1. relationship-master Skill
+2. canonical LoveReport schema
+3. deterministic free preview report
+4. privacy-safe share payload
+5. paid premium report generation
+6. Stripe test-mode one-time checkout and entitlement mapping
+7. report job recovery
+8. analytics and AB testing
+9. staging QA
+10. production launch review
+
+Hard rules:
+- Do not expose full birth date, birth time, birth place, private questions, payment state, or raw engine output in public share pages.
+- Do not modify secrets, live Stripe settings, production Supabase, production env, or irreversible deployment settings without explicit approval.
+- Prefer one-time paid Love Report before subscriptions.
+- Every product change must include tests or QA evidence.
+- Every revenue change must include a rollback path.
+- Do not expand unrelated modules until the Love Reading revenue loop is production-ready.
+
+Revenue safety gates:
+- Before any TianJi Love revenue, launch, deploy, staging, smoke, payment, webhook, entitlement, or workflow-automation task, read the top-level workspace latest gate index `.ai/TIANJI_LOVE_LATEST_GATE_INDEX_20260602.md` first, or the newest dated replacement if one exists.
+- Treat payment, checkout, webhook, entitlement, database, auth, billing, deployment, production configuration, and key/env tasks as high risk by default.
+- High-risk TianJi Love tasks may proceed only in test mode, with masked evidence, and on local or staging targets unless the user gives explicit approval for a narrower action.
+- Do not run live Stripe, production Supabase, production deploy, real paid smoke, production data mutation, or Managed Agent.
+- Do not read, print, copy, diff, infer, or summarize raw `.env` values, secrets, credentials, tokens, webhook secrets, Stripe Price IDs, or production configuration values.
+- Evidence packets must record presence, mode, target, and verdict only. Missing evidence is a blocker.
+- Distinguish Source Go, Static/Readiness Conditional Go, and Execution Go. Source readiness never authorizes checkout execution, webhook replay, paid smoke, production deploy, or production data mutation.
+- In mixed dirty worktrees, list exact task files before commit and avoid automatic staging unless explicitly approved.
+- For local browser/GStack QA on Windows, prefer an ASCII-only path or documented junction if the non-ASCII workspace path affects Next.js route rendering.
 
 ---
 

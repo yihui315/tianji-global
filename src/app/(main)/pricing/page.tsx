@@ -319,7 +319,7 @@ export default function PricingPage() {
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#f5d8aa]/78">{copy.hero.body}</p>
           <div className="mt-8 flex flex-col gap-4 sm:flex-row">
             <TianjiLoveButton href="#plans">{copy.hero.primary}</TianjiLoveButton>
-            <TianjiLoveButton href={href('/ask')} variant="secondary">{copy.hero.secondary}</TianjiLoveButton>
+            <TianjiLoveButton href={href('/relationship/new')} variant="secondary">{copy.hero.secondary}</TianjiLoveButton>
           </div>
         </div>
 

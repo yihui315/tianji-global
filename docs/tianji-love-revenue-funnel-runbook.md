@@ -44,6 +44,17 @@ Client funnel payloads must exclude:
 
 Use `trackRevenueFunnelEvent()` from `src/lib/analytics/funnel-events.ts`. It routes through `trackClientEvent()`, which strips sensitive payload keys before sending to `/api/analytics/track`.
 
+## Relationship-first viral loop KPI mapping
+
+No schema migration is required for the Week 1-2 relationship-first viral loop. Use the existing `analytics_events` rows and safe payload fields.
+
+| KPI | Existing signal | Notes |
+| --- | --- | --- |
+| DAU | `relationship_page_view`, `relationship_result_view`, and homepage `home_cta_click` | Count unique visitors when identity/session data is available; otherwise use event volume as a launch proxy. |
+| share rate | `relationship_share_click`, `relationship_share_success`, and `relationship_copy_success` | Segment by `shareMode` and `cardFormat` from sanitized payload. |
+| conversion | `relationship_unlock_click`, `relationship_checkout_start`, `unlock_click` | Checkout success remains gated by approved Stripe/test evidence outside this frontend-only slice. |
+| 7-day retention | future `relationship_return_7d` | Keep as a defined retention event until lifecycle tracking is wired. |
+
 ## Validation
 
 Run these before merging Lane B:

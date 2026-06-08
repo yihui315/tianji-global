@@ -15,11 +15,34 @@ function normalizeProtocol(value: string | undefined): string | undefined {
   return value?.replace(/:$/, '') || undefined;
 }
 
+function hostnameFromHost(value: string | undefined): string | undefined {
+  const host = value?.trim().toLowerCase();
+
+  if (!host) {
+    return undefined;
+  }
+
+  if (host.startsWith('[')) {
+    const bracketEnd = host.indexOf(']');
+    return bracketEnd === -1 ? host : host.slice(1, bracketEnd);
+  }
+
+  return host.split(':')[0];
+}
+
+function shouldPreferRequestHost(forwardedHost: string | undefined, requestHost: string | undefined): boolean {
+  const forwardedHostname = hostnameFromHost(forwardedHost);
+  const requestHostname = hostnameFromHost(requestHost);
+
+  return forwardedHostname === 'localhost' && (requestHostname === '127.0.0.1' || requestHostname === '::1');
+}
+
 export function getRequestOrigin(req: AuthOriginRequest): string {
-  const host =
-    firstHeaderValue(req.headers.get('x-forwarded-host')) ??
-    firstHeaderValue(req.headers.get('host')) ??
-    req.nextUrl.host;
+  const forwardedHost = firstHeaderValue(req.headers.get('x-forwarded-host'));
+  const requestHost = firstHeaderValue(req.headers.get('host'));
+  const host = shouldPreferRequestHost(forwardedHost, requestHost)
+    ? requestHost
+    : forwardedHost ?? requestHost ?? req.nextUrl.host;
 
   if (!host) {
     return req.nextUrl.origin;

@@ -26,6 +26,7 @@
     "audit:love-test-checkout-readiness": "node scripts/audit-love-test-checkout-readiness.mjs",
     "audit:staging-env-readiness": "tsx scripts/audit-staging-env-readiness.ts",
     "audit:staging-launch-gate": "tsx scripts/audit-staging-launch-gate.ts",
+    "audit:auth-env-readiness": "node scripts/audit-auth-env-readiness.mjs",
     "smoke:staging:nonpaid": "tsx scripts/smoke-staging-nonpaid.ts",
     "smoke:ai-providers": "tsx scripts/smoke-ai-providers.ts",
     "smoke:stripe:test-readiness": "tsx scripts/smoke-stripe-test-readiness.ts",

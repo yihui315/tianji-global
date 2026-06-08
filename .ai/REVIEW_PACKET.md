@@ -97,6 +97,45 @@ Known noise:
 feat(relationship): stabilize result text layout with pretext
 ```
 
+## 2026-05-25 PR #60 merge and paid smoke gate
+
+PR #60 remains open and should not be merged yet.
+
+```text
+PR: https://github.com/yihui315/tianji-global/pull/60
+Branch: feat/tianji-divination-evidence-layer-20260525
+Source commit: 7333e68fbd3e0891051deb8cd2b420d2557f4dda
+Merge commit: N/A
+```
+
+Gate review:
+
+```text
+CI/CD: No-Go - no GitHub Actions workflow runs found for the source commit.
+Vercel: Fail - GitHub combined status reports Vercel failure.
+Conflicts: Blocked/unknown detail - GitHub reports mergeable=false.
+Mergeable: No.
+PR diff risk: No-Go - 53 commits / 325 files, broader than the evidence-layer scope.
+PR merge: No-Go / Pending.
+Production deploy: Not run.
+```
+
+Paid smoke readiness:
+
+```text
+npm run smoke:stripe:test-readiness
+overall: conditional-go
+stripeKeysLookTestMode: unknown
+
+npm run audit:ask-revenue-contract
+overall: conditional-go
+
+npm run audit:draw-revenue-contract
+overall: conditional-go
+```
+
+Paid checkout smoke was not run because safe Stripe test-mode env evidence is not available in the current shell and explicit test-mode paid-smoke approval remains required. Analytics privacy remains source/test verified, but the paid unlock and feedback events were not runtime-verified through checkout in this gate pass.
+
 ## What changed
 
 Implemented a safe evidence and accuracy-feeling layer across Ask, Draw, and Relationship.

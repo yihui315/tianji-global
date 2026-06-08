@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { getProviders, signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Mail, ShieldCheck, Sparkles } from 'lucide-react';
 
@@ -23,11 +23,40 @@ function LoginForm() {
   const [error, setError] = useState('');
   const [magicSent, setMagicSent] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [availableProviders, setAvailableProviders] = useState<Record<string, boolean>>({});
+  const [providersLoaded, setProvidersLoaded] = useState(false);
+
+  const emailLoginAvailable = Boolean(availableProviders.resend);
+  const googleLoginAvailable = Boolean(availableProviders.google);
 
   useEffect(() => {
     void trackRevenueFunnelEvent('login_started', {
       surface: 'login_page',
     });
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    getProviders()
+      .then((providers) => {
+        if (!active) return;
+        setAvailableProviders({
+          resend: Boolean(providers?.resend),
+          google: Boolean(providers?.google),
+        });
+      })
+      .catch(() => {
+        if (!active) return;
+        setAvailableProviders({});
+      })
+      .finally(() => {
+        if (active) setProvidersLoaded(true);
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -42,6 +71,10 @@ function LoginForm() {
   const handleMagicLink = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!email.trim()) return;
+    if (!emailLoginAvailable) {
+      setError('Email sign-in is not configured for this environment yet. Please use Google if available.');
+      return;
+    }
     setIsLoading(true);
     setError('');
 
@@ -65,6 +98,10 @@ function LoginForm() {
   };
 
   const handleGoogleLogin = () => {
+    if (!googleLoginAvailable) {
+      setError('Google sign-in is not configured for this environment yet.');
+      return;
+    }
     signIn('google', { callbackUrl: '/dashboard' });
   };
 
@@ -135,8 +172,12 @@ function LoginForm() {
           ) : (
             <>
               <div className="rounded-lg border border-[#b57248]/30 bg-[#070b16]/62 p-4 text-center">
-                <p className="text-sm text-[#ffe3b4]">Magic link sign-in is available when email delivery is configured.</p>
-                <p className="mt-1 text-xs text-[#f4d7a3]/48">Google sign-in stays available through the existing NextAuth provider.</p>
+                <p className="text-sm text-[#ffe3b4]">
+                  {emailLoginAvailable ? 'Magic link sign-in is ready for this environment.' : 'Magic link sign-in appears when verified email delivery and database storage are configured.'}
+                </p>
+                <p className="mt-1 text-xs text-[#f4d7a3]/48">
+                  {googleLoginAvailable ? 'Google sign-in is ready through the existing NextAuth provider.' : 'Google sign-in appears when OAuth client settings are configured.'}
+                </p>
               </div>
 
               <form onSubmit={handleMagicLink} className="mt-6 grid gap-4">
@@ -152,22 +193,31 @@ function LoginForm() {
                 </label>
                 <button
                   type="submit"
-                  disabled={isLoading || !email.trim()}
+                  disabled={isLoading || !email.trim() || !emailLoginAvailable}
                   className="tianji-love-primary inline-flex min-h-12 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-5 text-sm font-semibold text-[#fff7e6] disabled:opacity-60"
                 >
-                  {isLoading ? 'Sending...' : 'Send magic link'}
+                  {isLoading ? 'Sending...' : emailLoginAvailable ? 'Send magic link' : 'Email sign-in unavailable'}
                 </button>
               </form>
 
-              <div className="my-6 h-px bg-[#b57248]/24" />
+              {googleLoginAvailable ? (
+                <>
+                  <div className="my-6 h-px bg-[#b57248]/24" />
 
-              <button
-                type="button"
-                onClick={handleGoogleLogin}
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-[#b57248]/36 bg-[#070b16]/72 px-5 text-sm font-semibold text-[#ffe3b4] transition hover:border-[#ffe3b4]/50"
-              >
-                Continue with Google
-              </button>
+                  <button
+                    type="button"
+                    onClick={handleGoogleLogin}
+                    className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-[#b57248]/36 bg-[#070b16]/72 px-5 text-sm font-semibold text-[#ffe3b4] transition hover:border-[#ffe3b4]/50"
+                  >
+                    Continue with Google
+                  </button>
+                </>
+              ) : null}
+              {providersLoaded && !emailLoginAvailable && !googleLoginAvailable ? (
+                <p className="mt-4 text-center text-sm leading-6 text-[#ffb4a3]">
+                  Sign-in is not configured for this environment yet. Configure Google OAuth or Resend Magic Link before member login can be used.
+                </p>
+              ) : null}
               {error ? <p className="mt-4 text-center text-sm text-[#ffb4a3]">{error}</p> : null}
             </>
           )}
