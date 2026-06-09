@@ -366,7 +366,7 @@ function TianjiLoveIcon({
   );
 }
 
-export default function TianjiLoveHome() {
+export function TianjiLoveHome() {
   const router = useRouter();
   const { lang, setLang } = useLanguage();
   const initialLanguageSyncedRef = useRef(false);
