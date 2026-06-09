@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { LoveComplianceFooter } from '@/components/love-reading/LoveComplianceFooter';
 import { RelationshipForm } from '@/components/relationship/RelationshipForm';
 import { RelationshipResult } from '@/components/relationship/RelationshipResult';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
@@ -149,6 +150,8 @@ export default function RelationshipNewClient() {
         </div>
 
         <RelationshipForm onSubmit={handleSubmit} isLoading={isLoading} lang={language} />
+
+        <LoveComplianceFooter language={language} className="mt-6" />
 
         <div className="text-center mt-8">
           <button

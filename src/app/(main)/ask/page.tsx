@@ -24,8 +24,14 @@ import {
   trackRevenueFunnelEvent,
   type CheckoutStartFromFreePreviewSource,
 } from '@/lib/analytics/funnel-events';
+import { LoveComplianceFooter } from '@/components/love-reading/LoveComplianceFooter';
 import { getLoveTestPaidIntentMeta, isLoveTestAskIntent } from '@/lib/love-test';
 import type { DivinationEvidence } from '@/types/divination';
+import {
+  PREVIEW_SECTIONS_FREE,
+  isSectionLocked,
+} from '@/lib/ask-question';
+import type { LoveReportSections } from '@/lib/love-report-sections';
 
 interface PreviewState {
   id: string;
@@ -33,6 +39,7 @@ interface PreviewState {
   language: 'en' | 'zh';
   price: string;
   evidence?: DivinationEvidence;
+  loveReportSections?: LoveReportSections;
 }
 
 interface UnlockedState {
@@ -77,6 +84,11 @@ type AskCopy = {
     assurance: string;
     unlockCta: string;
     unlocking: string;
+    paywallTitle: string;
+    paywallBlurb: string;
+    sectionLocked: string;
+    sectionFree: string;
+    restorePurchase: string;
   };
   unlocked: {
     eyebrow: string;
@@ -392,6 +404,7 @@ function AskPageContent() {
           language: json.language,
           price: json.price,
           evidence: json.evidence,
+          loveReportSections: json.loveReportSections,
         };
         setPreview(state);
         writeStoredPreview(state);
@@ -598,6 +611,7 @@ function AskPageContent() {
               </button>
             </div>
           </form>
+          <LoveComplianceFooter language={language} className="mt-6" />
         </div>
       </section>
 

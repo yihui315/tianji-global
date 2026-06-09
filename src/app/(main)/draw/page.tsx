@@ -4,6 +4,7 @@ import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { CalendarHeart, Clock3, CreditCard, HeartHandshake, Lock, Sparkles, Star } from 'lucide-react';
 
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { LoveComplianceFooter } from '@/components/love-reading/LoveComplianceFooter';
 import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
 import {
@@ -596,6 +597,10 @@ export default function DrawPage() {
       ) : null}
 
       <TianjiLoveFinalCta imageSrc={FINAL_PAVILION} title={copy.final.title} buttonLabel={copy.final.button} href={href('/ask')} />
+
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-5 pb-8 sm:px-8">
+        <LoveComplianceFooter language={lang} />
+      </div>
 
       <TianjiLoveFooter
         homeHref={href('/')}

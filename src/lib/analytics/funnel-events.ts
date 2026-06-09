@@ -127,3 +127,46 @@ export function trackCheckoutStartFromFreePreview(input: {
     buildCheckoutStartFromFreePreviewPayload(input),
   );
 }
+
+// Love Reading Revenue Funnel Events
+// Landing → Free Test → Paid Unlock → Report → Upsell
+
+export function trackLandingView(page: string) {
+  console.log('[FUNNEL] trackLandingView', { page });
+}
+
+export function trackFreeTestStart(source: string) {
+  console.log('[FUNNEL] trackFreeTestStart', { source });
+}
+
+export function trackFreeTestComplete(readingId: string, result: object) {
+  console.log('[FUNNEL] trackFreeTestComplete', { readingId, result });
+}
+
+export function trackPaidQuestionClick(productId: string, price: number) {
+  console.log('[FUNNEL] trackPaidQuestionClick', { productId, price });
+}
+
+export function trackCheckoutStart(productId: string, source: string) {
+  console.log('[FUNNEL] trackCheckoutStart', { productId, source });
+}
+
+export function trackCheckoutSuccess(orderId: string, productId: string, amount: number) {
+  console.log('[FUNNEL] trackCheckoutSuccess', { orderId, productId, amount });
+}
+
+export function trackReportView(readingId: string, type: 'free' | 'paid') {
+  console.log('[FUNNEL] trackReportView', { readingId, type });
+}
+
+export function trackDeepReportUpsellClick(readingId: string) {
+  console.log('[FUNNEL] trackDeepReportUpsellClick', { readingId });
+}
+
+export function trackSubscriptionClick() {
+  console.log('[FUNNEL] trackSubscriptionClick', {});
+}
+
+export function trackShareClick(readingId: string, platform: string) {
+  console.log('[FUNNEL] trackShareClick', { readingId, platform });
+}

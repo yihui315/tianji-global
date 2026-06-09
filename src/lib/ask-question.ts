@@ -16,6 +16,9 @@ import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:
 import { z } from 'zod';
 import { LOVE_TEST_ASK_INTENTS } from '@/lib/love-test';
 
+// Forward-declare to avoid circular import; actual type lives in love-report-sections.ts
+export type { LoveReportSections } from '@/lib/love-report-sections';
+
 // ─── Schema ────────────────────────────────────────────────────────────
 
 export const askQuestionLanguageSchema = z.enum(['en', 'zh']);
@@ -148,3 +151,19 @@ export const ASK_QUESTION_UNLOCK_PRICE_USD_CENTS = 199;
 
 /** Display price for UI (no decimals if integer; 2 decimals otherwise). */
 export const ASK_QUESTION_UNLOCK_PRICE_DISPLAY = '$1.99';
+
+/** Number of sections always shown for free in the preview (first 2 of 8). */
+export const PREVIEW_SECTIONS_FREE = 2;
+
+/**
+ * Returns true if a section index (0-based) is locked behind the paywall.
+ * Sections 0..PREVIEW_SECTIONS_FREE-1 are always free.
+ * The free preview shows 30% of section 2 (index 2) as a "teaser";
+ * sections 3..7 are fully blurred.
+ */
+export function isSectionLocked(sectionIndex: number): boolean {
+  return sectionIndex >= PREVIEW_SECTIONS_FREE;
+}
+
+/** Product ID for solo love question checkout. */
+export const SOLO_LOVE_QUESTION_PRODUCT_ID = 'solo_love_question';

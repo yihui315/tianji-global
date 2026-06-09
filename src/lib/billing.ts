@@ -3,7 +3,8 @@ import { getPool } from '@/lib/db';
 
 export type BillingProductId =
   | 'solo_love_report'
-  | 'compatibility_report';
+  | 'compatibility_report'
+  | 'solo_love_question';
 
 export const BILLING_PRODUCTS = {
   solo_love_report: {
@@ -23,6 +24,15 @@ export const BILLING_PRODUCTS = {
     currency: 'usd',
     mode: 'payment',
     entitlement: 'compatibility_report',
+  },
+  solo_love_question: {
+    productId: 'solo_love_question',
+    name: 'One Private Love Question',
+    description: 'Ask one private love question. Get instant clarity on what they feel, what is blocking your connection, and what your next best step should be.',
+    unitAmount: 199,
+    currency: 'usd',
+    mode: 'payment',
+    entitlement: 'solo_love_question',
   },
 } as const;
 

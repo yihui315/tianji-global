@@ -151,6 +151,7 @@ export function TianjiLoveHome() {
         errorCopy={errorCopy}
         isSubmitting={isSubmitting}
       />
+      <HotQuestionsModule />
       <GrowthEntrySections />
       <InsightCards />
       <HowItWorks />
@@ -274,14 +275,14 @@ function HeroLoveSection({
         <div className="max-w-3xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-rose-200/20 bg-rose-100/10 px-4 py-2 text-sm text-rose-50 shadow-[0_0_44px_rgba(244,63,94,0.18)] backdrop-blur">
             <Heart className="h-4 w-4 fill-rose-200/60 text-rose-100" aria-hidden="true" />
-            Private cosmic reading for modern love
+            PRIVATE LOVE GUIDANCE.
           </div>
           <h1 className="max-w-4xl font-serif text-4xl font-semibold leading-[0.96] text-white sm:text-6xl lg:text-7xl">
-            Love is the one force that bends fate.
+            Does Your Ex Still
+            <span className="text-rose-200"> Think About You?</span>
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-white/78 sm:mt-6 sm:text-xl sm:leading-8">
-            Discover your romantic patterns, emotional timing, and relationship compatibility
-            through a private cosmic reading designed for modern love.
+            Get a private love reading in 3 minutes. Discover what they may feel, what is blocking your connection, and what your next best step should be.
           </p>
           <p className="mt-5 max-w-2xl text-base font-semibold text-amber-100">
             Discover patterns. Understand timing. Make clearer relationship choices.
@@ -313,6 +314,38 @@ function HeroLoveSection({
           errorCopy={errorCopy}
           isSubmitting={isSubmitting}
         />
+      </div>
+    </section>
+  );
+}
+
+const hotQuestions = [
+  { label: 'Does my ex still love me?', question: 'Does my ex still love me?' },
+  { label: 'Will we get back together?', question: 'Will we get back together?' },
+  { label: 'Should I text them first?', question: 'Should I text them first?' },
+  { label: 'Is this relationship worth saving?', question: 'Is this relationship worth saving?' },
+];
+
+function HotQuestionsModule() {
+  return (
+    <section className="border-b border-white/10 bg-[#0d1020] px-5 py-10 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-7xl">
+        <p className="mb-6 text-sm font-semibold uppercase tracking-[0.2em] text-rose-100/80">
+          Popular love questions
+        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {hotQuestions.map((item) => (
+            <Link
+              key={item.label}
+              href={`/ask?question=${encodeURIComponent(item.question)}`}
+              className="flex items-center gap-3 rounded-lg border border-rose-200/20 bg-rose-100/8 px-4 py-4 text-sm text-white/85 shadow-md transition hover:border-rose-200/50 hover:bg-rose-100/14 hover:text-white focus:outline-none focus:ring-2 focus:ring-rose-200/60"
+            >
+              <Heart className="h-4 w-4 shrink-0 text-rose-200" aria-hidden="true" />
+              <span className="font-medium">{item.label}</span>
+              <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-white/50" aria-hidden="true" />
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

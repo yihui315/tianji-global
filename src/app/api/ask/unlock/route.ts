@@ -21,6 +21,7 @@ import {
 } from '@/lib/staging-degraded-mode';
 import { generateTianjiModelResponse } from '@/lib/tianji-model-gateway';
 import { LOVE_TEST_ASK_INTENTS, isLoveTestPaidIntent } from '@/lib/love-test';
+import { buildLoveReportSections, type LoveReportInput } from '@/lib/love-report-sections';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,6 +42,14 @@ function buildPaidAskSystemPrompt(language: AskQuestionLanguage): string {
     'Use grounded relationship guidance, not deterministic fortune-telling.',
     'Do not claim certainty, guarantee outcomes, or use fear-based payment urgency.',
     'Do not provide medical, legal, financial, or crisis advice.',
+    'After the readable answer, include a JSON block with these fields: relationshipEnergy, whatTheyMayBeFeeling, whatTheyAreNotSaying, mainBlockage, reconciliationPotential, timingGuidance, bestNextStep, finalMessage.',
+    'relationshipEnergy must be one of: warm | blocked | uncertain | fading | magnetic.',
+    'mainBlockage must be one of: fear | pride | distance | third-party | emotional-exhaustion.',
+    'reconciliationPotential must be one of: low | medium | high.',
+    'bestNextStep must be one of: text | wait | clarify | move-on | observe.',
+    'timingGuidance must be a string like "7-30 days" or "2 weeks".',
+    'finalMessage must be a warm, encouraging closing sentence of 1-2 lines.',
+    'Format the JSON as: ```json\n{...}\n``` at the end of your response.',
   ].join(' ');
 }
 
@@ -61,6 +70,56 @@ function toAskAiMeta(response: Awaited<ReturnType<typeof generateTianjiModelResp
     latencyMs: response.audit.latencyMs,
     route: 'paid_ask',
   };
+}
+
+/**
+ * Extract a JSON block from the AI response and parse it into LoveReportInput.
+ * Returns null if parsing fails — the readable answer is still usable.
+ */
+function extractLoveReportData(
+  rawResponse: string,
+  language: AskQuestionLanguage,
+): LoveReportInput | null {
+  const jsonMatch = rawResponse.match(/```json\n([\s\S]+?)\n```/);
+  if (!jsonMatch) return null;
+  try {
+    const parsed = JSON.parse(jsonMatch[1]);
+    // Validate and coerce required fields
+    const validEnergies = ['warm', 'blocked', 'uncertain', 'fading', 'magnetic'];
+    const validBlockages = ['fear', 'pride', 'distance', 'third-party', 'emotional-exhaustion'];
+    const validPotential = ['low', 'medium', 'high'];
+    const validSteps = ['text', 'wait', 'clarify', 'move-on', 'observe'];
+
+    if (
+      typeof parsed.relationshipEnergy === 'string' &&
+      validEnergies.includes(parsed.relationshipEnergy) &&
+      typeof parsed.whatTheyMayBeFeeling === 'string' &&
+      typeof parsed.whatTheyAreNotSaying === 'string' &&
+      typeof parsed.mainBlockage === 'string' &&
+      validBlockages.includes(parsed.mainBlockage) &&
+      typeof parsed.reconciliationPotential === 'string' &&
+      validPotential.includes(parsed.reconciliationPotential) &&
+      typeof parsed.timingGuidance === 'string' &&
+      typeof parsed.bestNextStep === 'string' &&
+      validSteps.includes(parsed.bestNextStep) &&
+      typeof parsed.finalMessage === 'string'
+    ) {
+      return {
+        relationshipEnergy: parsed.relationshipEnergy,
+        whatTheyMayBeFeeling: parsed.whatTheyMayBeFeeling,
+        whatTheyAreNotSaying: parsed.whatTheyAreNotSaying,
+        mainBlockage: parsed.mainBlockage,
+        reconciliationPotential: parsed.reconciliationPotential,
+        timingGuidance: parsed.timingGuidance,
+        bestNextStep: parsed.bestNextStep,
+        finalMessage: parsed.finalMessage,
+        language,
+      };
+    }
+  } catch {
+    // malformed JSON — skip
+  }
+  return null;
 }
 
 function getLoveTestPaidIntentCheckoutGate() {
@@ -234,7 +293,14 @@ export async function GET(request: NextRequest) {
       temperature: 0.65,
       responseFormat: 'text',
     });
-    const answer = gatewayResponse.content.trim();
+    const rawAnswer = gatewayResponse.content.trim();
+
+    // Extract structured data for love report sections
+    const reportInput = extractLoveReportData(rawAnswer, decoded.language);
+    const loveReportSections = reportInput ? buildLoveReportSections(reportInput) : null;
+
+    // Strip the JSON block from the readable answer if present
+    const answer = rawAnswer.replace(/```json\n[\s\S]+?\n```/g, '').trim();
 
     return NextResponse.json({
       success: true,
@@ -253,6 +319,7 @@ export async function GET(request: NextRequest) {
           paid: true,
         }),
         aiMeta: toAskAiMeta(gatewayResponse),
+        loveReportSections: loveReportSections ?? undefined,
       },
     });
   } catch (error) {

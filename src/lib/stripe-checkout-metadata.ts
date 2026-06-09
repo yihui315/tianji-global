@@ -29,7 +29,11 @@ export type CheckoutMetadataValidation =
     };
 
 function isBillingProductId(value: unknown): value is BillingProductId {
-  return value === 'solo_love_report' || value === 'compatibility_report';
+  return (
+    value === 'solo_love_report' ||
+    value === 'compatibility_report' ||
+    value === 'solo_love_question'
+  );
 }
 
 function normalizeSource(value: unknown): CheckoutMetadataSource | null {
@@ -73,7 +77,7 @@ export function validateCheckoutSessionMetadata(
     }
   }
 
-  if (source === 'love_reading' && productId !== 'solo_love_report') {
+  if (source === 'love_reading' && productId !== 'solo_love_report' && productId !== 'solo_love_question') {
     return { ok: false, reason: 'invalid_relationship_product' };
   }
 
