@@ -71,7 +71,7 @@ function applyRelationshipGatewaySafety(reading: RelationshipReading, language: 
     ...safeReading,
     evidence: buildRelationshipEvidence({
       reading: safeReading,
-      paid: safeReading.accessLevel === 'full' || safeReading.isPremium,
+      paid: safeReading.isPremium,
       language,
     }),
   };
@@ -93,11 +93,15 @@ export async function POST(req: NextRequest) {
     const personBBirthDate = personB.birthDate;
     const lang = requestedLang === 'en' ? 'en' : 'zh';
 
+    // Normalize 'couple' → 'romantic' (RelationshipType union is 'romantic'|'friendship'|'work')
+    const normalizedRelationType: 'romantic' | 'friendship' | 'work' =
+      relationType === 'couple' ? 'romantic' : relationType as 'romantic' | 'friendship' | 'work';
+
     // Run compatibility analysis
     const { reading, dbData } = analyzeRelationship(
       personABirthDate,
       personBBirthDate,
-      relationType,
+      normalizedRelationType,
       personA.nickname,
       personB.nickname,
       personA.birthTime,
