@@ -56,6 +56,21 @@ export const localizedPublicRoutes: Array<{
   { path: '/signs-your-relationship-is-karmic', changeFrequency: 'monthly', priority: 0.75 },
   { path: '/how-to-let-go-of-someone-you-love', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/future-of-my-relationship', changeFrequency: 'weekly', priority: 0.85 },
+  // P32 — 10 new long-tail SEO pages
+  { path: '/can-astrology-predict-my-marriage-timeline', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/how-to-read-tarot-cards-for-relationship-advice', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/does-he-really-love-me-or-is-he-just-playing', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/my-husband-doesnt-understand-me-anymore', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/why-do-i-fall-for-unavailable-men', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/is-my-crush-flirting-or-just-being-nice', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/how-to-know-if-my-ex-is-over-me', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/signs-my-friend-is-secretly-in-love-with-me', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/how-to-deal-with-jealous-partner', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/love-forecast-this-week-june-2025', changeFrequency: 'weekly', priority: 0.75 },
+  // Additional pages
+  { path: '/trust', changeFrequency: 'yearly', priority: 0.4 },
+  { path: '/status', changeFrequency: 'daily', priority: 0.5 },
+  { path: '/twin-flame-separation', changeFrequency: 'monthly', priority: 0.75 },
 ];
 
 export function isSupportedLocale(locale: string): locale is Locale {
