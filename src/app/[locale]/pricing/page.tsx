@@ -18,6 +18,7 @@ type PricingCopy = {
     description: string;
     badge?: string;
     modules?: string[];
+    features?: string[];
   }>;
 };
 
@@ -53,6 +54,19 @@ const copy = {
           'Compatibility Score — calibrated signal with narrative',
           'Karmic Pattern — recurring soul-level patterns',
           'Communication Style — dominant style and how to adapt',
+        ],
+      },
+      {
+        name: 'Monthly Pass',
+        price: '$9.99/mo',
+        badge: 'Best value',
+        description:
+          'Unlimited love readings + daily love oracle + PDF downloads. Everything you need for ongoing relationship clarity.',
+        features: [
+          'Unlimited relationship readings',
+          'Daily love oracle card',
+          '10 PDF downloads per month',
+          'Priority support',
         ],
       },
       {
@@ -99,6 +113,19 @@ const copy = {
         price: '$9.99',
         description: '一次性报告额度，适合送给想认真理解关系的人。',
       },
+      {
+        name: '月度通行证',
+        price: '$9.99/月',
+        badge: '最超值',
+        description:
+          '无限关系解读 + 每日爱情签 + PDF下载。持续获得关系洞察的一切所需。',
+        features: [
+          '无限关系解读',
+          '每日爱情签卡',
+          '每月10次PDF下载',
+          '优先客服支持',
+        ],
+      },
     ],
   },
 } satisfies Record<Locale, PricingCopy>;
@@ -140,8 +167,8 @@ export default async function PricingPage({ params }: PageParams) {
             {t.cta}
           </Link>
         </section>
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {t.plans.map(({ name, price, badge, description, modules }) => (
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          {t.plans.map(({ name, price, badge, description, modules, features }) => (
             <article key={name} className="rounded-3xl border border-white/10 bg-white/[0.055] p-6">
               {badge && (
                 <div className="mb-3 inline-block rounded-full bg-[rgba(212,175,119,0.15)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-[rgba(212,175,119,0.9)]">
@@ -157,6 +184,16 @@ export default async function PricingPage({ params }: PageParams) {
                     <li key={mod} className="flex gap-2 text-xs text-white/50">
                       <span className="mt-1.5 h-1 w-1 flex-none rounded-full bg-[rgba(212,175,119,0.7)]" />
                       <span>{mod}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {features && features.length > 0 && (
+                <ul className="mt-4 space-y-2 border-t border-white/10 pt-4">
+                  {features.map((feat) => (
+                    <li key={feat} className="flex gap-2 text-xs text-white/50">
+                      <span className="mt-1.5 h-1 w-1 flex-none rounded-full bg-[rgba(212,175,119,0.7)]" />
+                      <span>{feat}</span>
                     </li>
                   ))}
                 </ul>
