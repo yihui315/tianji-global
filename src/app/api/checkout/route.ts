@@ -38,11 +38,10 @@ export async function POST(request: NextRequest) {
     if (checkoutSource === 'relationship' && product.productId !== 'compatibility_report') {
       return NextResponse.json({ error: 'Invalid relationship product' }, { status: 400 });
     }
-    if (!checkoutReferenceId) {
+    const isSubscription = product.mode === 'subscription';
+    const hasValidRef = !isSubscription && checkoutReferenceId && isUuidReadingId(checkoutReferenceId);
+    if (!isSubscription && !hasValidRef) {
       return NextResponse.json({ error: 'Missing readingSessionId' }, { status: 400 });
-    }
-    if (!isUuidReadingId(checkoutReferenceId)) {
-      return NextResponse.json({ error: 'Invalid readingSessionId' }, { status: 400 });
     }
 
     const session = await auth();
@@ -62,19 +61,26 @@ export async function POST(request: NextRequest) {
         ? `/relationship/result/${checkoutReferenceId}?lang=${locale === 'zh-CN' ? 'zh' : 'en'}`
         : `/${locale}/love-reading/result/${checkoutReferenceId}`;
 
+    const successUrl = isSubscription
+      ? `${appUrl}/${locale}/pricing?checkout=success`
+      : `${appUrl}${resultPath}${resultPath.includes('?') ? '&' : '?'}checkout=success`;
+    const cancelUrl = isSubscription
+      ? `${appUrl}/${locale}/pricing?checkout=cancelled`
+      : `${appUrl}${resultPath}${resultPath.includes('?') ? '&' : '?'}checkout=cancelled`;
+
     const checkoutSession = await getStripe().checkout.sessions.create(
       {
-        mode: 'payment',
+        mode: product.mode as 'payment' | 'subscription',
         line_items: [buildLineItem(product)],
         customer_email: customerEmail,
-        client_reference_id: checkoutReferenceId,
+        client_reference_id: isSubscription ? `subscription:${product.productId}` : checkoutReferenceId,
         metadata,
-        success_url: `${appUrl}${resultPath}${resultPath.includes('?') ? '&' : '?'}checkout=success`,
-        cancel_url: `${appUrl}${resultPath}${resultPath.includes('?') ? '&' : '?'}checkout=cancelled`,
+        success_url: successUrl,
+        cancel_url: cancelUrl,
         allow_promotion_codes: true,
       },
       {
-        idempotencyKey: `${checkoutSource}:${product.productId}:${checkoutReferenceId}:${session?.user?.id ?? body.email ?? 'guest'}`,
+        idempotencyKey: `${checkoutSource}:${product.productId}:${isSubscription ? 'subscription' : checkoutReferenceId}:${session?.user?.id ?? body.email ?? 'guest'}`,
       }
     );
 
@@ -82,14 +88,14 @@ export async function POST(request: NextRequest) {
       product,
       checkoutSessionId: checkoutSession.id,
       userId: session?.user?.id ?? null,
-      readingSessionId: checkoutReferenceId,
+      readingSessionId: isSubscription ? null : checkoutReferenceId,
       customerEmail,
     });
     await trackLoveFunnelEvent('love_checkout_created', {
       productId: product.productId,
       source: checkoutSource,
-      readingSessionId: checkoutReferenceId,
-      relationshipReadingId: checkoutSource === 'relationship' ? checkoutReferenceId : null,
+      readingSessionId: isSubscription ? null : checkoutReferenceId,
+      relationshipReadingId: checkoutSource === 'relationship' && !isSubscription ? checkoutReferenceId : null,
       checkoutSessionId: checkoutSession.id,
       amountTotal: product.unitAmount,
       currency: product.currency,

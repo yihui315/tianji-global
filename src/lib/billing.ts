@@ -3,7 +3,8 @@ import { getPool } from '@/lib/db';
 
 export type BillingProductId =
   | 'solo_love_report'
-  | 'compatibility_report';
+  | 'compatibility_report'
+  | 'monthly_pass';
 
 export const BILLING_PRODUCTS = {
   solo_love_report: {
@@ -24,6 +25,16 @@ export const BILLING_PRODUCTS = {
     mode: 'payment',
     entitlement: 'compatibility_report',
   },
+  monthly_pass: {
+    productId: 'monthly_pass',
+    name: 'Monthly Pass',
+    description: 'Unlimited love readings + daily love oracle + PDF downloads.',
+    unitAmount: 999,
+    currency: 'usd',
+    mode: 'subscription',
+    entitlement: 'monthly_pass',
+    interval: 'month',
+  },
 } as const;
 
 const uuidPattern =
@@ -40,7 +51,7 @@ export function getBillingProduct(productId: string): BillingProduct | null {
 }
 
 export function buildLineItem(product: BillingProduct) {
-  return {
+  const base = {
     price_data: {
       currency: product.currency,
       unit_amount: product.unitAmount,
@@ -51,6 +62,16 @@ export function buildLineItem(product: BillingProduct) {
     },
     quantity: 1,
   };
+  if (product.mode === 'subscription') {
+    return {
+      ...base,
+      price_data: {
+        ...base.price_data,
+        recurring: { interval: (product as { interval?: string }).interval ?? 'month' },
+      },
+    };
+  }
+  return base;
 }
 
 export async function createPendingOrder(input: {
