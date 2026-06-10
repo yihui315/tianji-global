@@ -112,24 +112,24 @@ const loveCopy = {
       { label: 'Login', href: '/login' },
     ],
     hero: {
-      eyebrow: 'COSMIC INSIGHTS. REAL-LOVE GUIDANCE.',
-      titleLead: 'Love is the one force that',
-      titleAccent: 'bends fate.',
+      eyebrow: 'PRIVATE LOVE GUIDANCE. REAL ANSWERS.',
+      titleLead: 'Does your ex still think about you?',
+      titleAccent: '',
       description:
-        'Start an AI relationship reading for compatibility, love timing, ask one question clarity, or a three-card relationship insight designed for modern love.',
-      primaryCta: 'Start Relationship Reading',
-      secondaryCta: 'Ask One Question',
+        'Get a private love reading in 3 minutes. Discover what they may feel, what is blocking your connection, and what your next best step should be.',
+      primaryCta: 'Check My Love Signals for Free',
+      secondaryCta: 'Get My Private Love Reading – $1.99',
       tertiaryCta: 'Draw Three Cards',
       trustCta: 'About Tianji Love',
       getStarted: 'Get Started',
       trust: [
         { label: 'Private & Secure', iconAsset: ICONS.privateLock },
-        { label: 'Personalized Insights', iconAsset: ICONS.personalized },
+        { label: '12,000+ Users Globally', iconAsset: ICONS.personalized },
         { label: 'Designed for Clarity', iconAsset: ICONS.clarityCompass },
       ],
     },
     form: {
-      title: 'Align Your Birth Chart',
+      title: 'Get Your Free Love Signal Check',
       selects: {
         year: { label: 'Birth Year', placeholder: 'Select year', options: YEARS },
         month: { label: 'Month', placeholder: 'Select month', options: MONTHS },
@@ -138,26 +138,37 @@ const loveCopy = {
       },
       solo: 'Solo Reading',
       relationship: 'Couple Reading',
-      cta: 'Reveal My First Love Insight',
-      helper: 'Your first insight is private, practical, and designed for clarity.',
+      cta: 'Reveal My Love Signals Free',
+      helper: 'Your first love signal check is free, private, and takes 3 minutes.',
     },
     cards: [
       {
-        title: 'Karmic Patterns',
-        body: 'Uncover the repeating attraction patterns that shape your love life and how to break free.',
+        title: 'Will We Get Back Together?',
+        body: 'Discover the relationship energy between you — what is pulling you together or keeping you apart.',
         iconAsset: ICONS.karmicOrbit,
       },
       {
-        title: 'Relationship Dynamics',
-        body: 'See the deeper dynamics at play in your connection. Is it a lesson, a blessing, or both?',
+        title: 'What Do They Really Feel?',
+        body: 'Get clear insight into your partner or ex-partner\'s inner feelings and emotional truth.',
         iconAsset: ICONS.relationshipRings,
       },
       {
-        title: 'Future Timing',
-        body: 'Discover when your next meaningful romantic turning point is most likely to arrive.',
+        title: 'Should I Reach Out Now?',
+        body: 'Know the best timing and next step. Make your move with confidence, not guesswork.',
         iconAsset: ICONS.futureHourglass,
       },
     ],
+    hotQuestions: {
+      title: 'Popular Love Questions',
+      items: [
+        { q: 'Will my ex come back?', href: '/relationship/new' },
+        { q: 'Does my ex still love me?', href: '/en/does-my-ex-still-love-me' },
+        { q: 'Should I text my ex?', href: '/en/should-i-text-my-ex' },
+        { q: 'What is blocking our connection?', href: '/relationship/new' },
+        { q: 'When will I meet someone new?', href: '/relationship/new' },
+        { q: 'Is my ex thinking about me?', href: '/en/is-my-ex-thinking-about-me' },
+      ],
+    },
     features: [
       { title: 'Deep Analysis', body: 'Astrology + psychology for real clarity.', iconAsset: ICONS.deepScroll },
       { title: 'Emotional Compatibility', body: 'Understand how you connect on a deeper level.', iconAsset: ICONS.emotionalRings },
@@ -167,9 +178,9 @@ const loveCopy = {
     process: {
       title: 'How It Works',
       steps: [
-        { number: '1', title: 'Enter Your Details', body: 'Share your birth information to begin your reading.' },
-        { number: '2', title: 'We Map the Pattern', body: 'Our system analyzes your chart and relationship indicators.' },
-        { number: '3', title: 'Receive Clear Guidance', body: 'Get practical insights to help you love with confidence.' },
+        { number: '1', title: 'Enter Your Details', body: 'Share your birth info. Takes 3 minutes.' },
+        { number: '2', title: 'Get Your Love Signal', body: 'Receive a private reading with real insights about your situation.' },
+        { number: '3', title: 'Know Your Next Step', body: 'Understand what to do next — with clarity and confidence.' },
       ],
     },
     testimonials: {
@@ -228,23 +239,23 @@ const loveCopy = {
       { label: '登录', href: '/login' },
     ],
     hero: {
-      eyebrow: '宇宙洞察，真实的爱之指引。',
-      titleLead: '爱是唯一能让命运转弯的力量。',
+      eyebrow: '私密情感指引，真实答案。',
+      titleLead: '前任心里还有你吗？',
       titleAccent: '',
-      description: '在这里，我们以星轨、关系与时机，解读你灵魂深处的情感命题。',
-      primaryCta: '开始关系解读',
-      secondaryCta: '问一个问题',
+      description: '3分钟获得专属爱情解读。了解对方真实感受、阻碍你们的原因、以及你应该采取的下一步。',
+      primaryCta: '免费测试我的爱情信号',
+      secondaryCta: '获取私密解读 $1.99',
       tertiaryCta: '抽三张牌',
       trustCta: '了解 Tianji Love',
       getStarted: '开始',
       trust: [
         { label: '隐私安全', iconAsset: ICONS.privateLock },
-        { label: '专属洞察', iconAsset: ICONS.personalized },
+        { label: '全球 12,000+ 用户', iconAsset: ICONS.personalized },
         { label: '清晰指引', iconAsset: ICONS.clarityCompass },
       ],
     },
     form: {
-      title: '对齐你的本命星图',
+      title: '免费获取你的爱情信号',
       selects: {
         year: { label: '出生年', placeholder: '请选择年份', options: YEARS },
         month: { label: '月', placeholder: '请选择月份', options: MONTHS },
@@ -253,26 +264,37 @@ const loveCopy = {
       },
       solo: '单人解读',
       relationship: '双人合盘',
-      cta: '揭示我的第一条爱情洞察',
-      helper: '你的第一条洞察将保持私密，并用于自我理解与关系沟通。',
+      cta: '免费揭示我的爱情信号',
+      helper: '免费、隐私保护、仅需3分钟。',
     },
     cards: [
       {
-        title: '宿缘模式',
-        body: '为什么你总会被同一种人吸引？',
+        title: '我们还能复合吗？',
+        body: '了解你们之间的能量 — 是什么在拉近你们，还是让你们分离。',
         iconAsset: ICONS.karmicOrbit,
       },
       {
-        title: '关系动力',
-        body: '这段连接是一份礼物、一堂课，还是两者皆有？',
+        title: '对方真实感受是什么？',
+        body: '清晰洞察你伴侣或前任的内心感受和情感真相。',
         iconAsset: ICONS.relationshipRings,
       },
       {
-        title: '未来时机',
-        body: '下一个重要的情感转折点会在何时靠近？',
+        title: '现在应该联系对方吗？',
+        body: '把握最佳时机和下一步行动。带着自信行动，而非猜测。',
         iconAsset: ICONS.futureHourglass,
       },
     ],
+    hotQuestions: {
+      title: '热门情感问题',
+      items: [
+        { q: '前任会回来吗？', href: '/relationship/new' },
+        { q: '前任还爱我吗？', href: '/zh-CN/does-my-ex-still-love-me' },
+        { q: '我应该发消息给前任吗？', href: '/zh-CN/should-i-text-my-ex' },
+        { q: '什么阻碍了我们的关系？', href: '/relationship/new' },
+        { q: '我什么时候会遇到新的人？', href: '/relationship/new' },
+        { q: '前任在想我吗？', href: '/zh-CN/is-my-ex-thinking-about-me' },
+      ],
+    },
     features: [
       { title: '深度解析', body: '以星象与心理线索提供真实清晰感。', iconAsset: ICONS.deepScroll },
       { title: '情感契合', body: '理解你们在更深层如何连接。', iconAsset: ICONS.emotionalRings },
@@ -280,33 +302,33 @@ const loveCopy = {
       { title: '可行动指引', body: '把洞察转化成更好的选择。', iconAsset: ICONS.clarityCompass },
     ],
     process: {
-      title: '如何开始',
+      title: '如何使用',
       steps: [
-        { number: '1', title: '输入你的信息', body: '分享出生信息，开启第一段解读。' },
-        { number: '2', title: '映射关系模式', body: '系统分析你的星轨与关系指标。' },
-        { number: '3', title: '收到清晰建议', body: '把洞察转化为更稳定的行动。' },
+        { number: '1', title: '输入你的信息', body: '分享出生信息，仅需3分钟。' },
+        { number: '2', title: '获得你的爱情信号', body: '收到针对你情况的私密解读。' },
+        { number: '3', title: '知道下一步该怎么做', body: '带着清晰和自信，了解下一步行动。' },
       ],
     },
     testimonials: {
-      title: '她们在命运转折处读懂了爱',
+      title: '她们在情感转折处找到了答案',
       cards: [
         {
           name: '林小姐',
-          tag: '情感清晰',
-          quote: '它准确说出了我反复进入同一种关系的原因，我终于明白自己在等待什么。',
+          tag: '前任洞察',
+          quote: '它说出了我反复进入同一种关系的原因。我终于知道下一步该怎么做了。',
           avatar: '/assets/images/avatars/tianji-love-emma.png',
           tone: 'avatar-a',
         },
         {
           name: '苏小姐',
-          tag: '时机洞察',
-          quote: '那段时机判断很准，我在真正准备好的时候遇见了新的人。',
+          tag: '时机判断',
+          quote: '时机预测很准。我在自己准备好的时候遇见了对的人。',
           avatar: '/assets/images/avatars/tianji-love-sophie.png',
           tone: 'avatar-b',
         },
         {
           name: '陈小姐',
-          tag: '关系成长',
+          tag: '情感清晰',
           quote: '这次解读让我在爱里更清醒，也更温柔。',
           avatar: '/assets/images/avatars/tianji-love-olivia.png',
           tone: 'avatar-c',
@@ -314,8 +336,8 @@ const loveCopy = {
       ],
     },
     cta: {
-      title: '你的下一章，也许早已写在星光里。',
-      button: '进入天机爱',
+      title: '你的答案，就在这3分钟里。',
+      button: '免费测试我的爱情信号',
     },
     footer: {
       tagline: '看懂关系的模式，带着更清晰的眼睛去爱。',
@@ -465,6 +487,25 @@ export function TianjiLoveHome() {
           <InsightCard key={card.title} card={card} />
         ))}
       </section>
+
+      {copy.hotQuestions && (
+        <section className="relative z-10 mx-auto w-full max-w-5xl px-5 py-6 sm:px-8">
+          <h2 className="mb-6 text-center font-serif text-2xl font-semibold text-[#ffe3b4]">
+            {copy.hotQuestions.title}
+          </h2>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {copy.hotQuestions.items.map((item) => (
+              <Link
+                key={item.q}
+                href={href(item.href)}
+                className="rounded-lg border border-[#d8b77b]/22 bg-[#0e0e1a]/60 px-4 py-3 text-center text-sm text-[#f5d8aa] transition hover:border-[#d8b77b]/60 hover:bg-[#1a1a2e]/80"
+              >
+                {item.q}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <FeatureStrip features={copy.features} />
       <HowItWorks process={copy.process} />
