@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["version", "experiments", "meta"],
+  "properties": {
+    "version": { "type": "string" },
+    "experiments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "surface", "surfaceArea", "createdAt", "status", "results", "scoring"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "surface": { "type": "string" },
+          "surfaceArea": {
+            "type": "string",
+            "enum": ["hero_summary", "pattern_naming", "dimension_cards", "current_window", "share_card", "upgrade_cta"]
+          },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "running", "keep", "discard"]
+          },
+          "delta": { "type": "number" },
+          "keepThreshold": { "type": "number", "default": 2 },
+          "baseline": { "$ref": "#/definitions/scoreBreakdown" },
+          "variant": { "$ref": "#/definitions/scoreBreakdown" },
+          "results": { "$ref": "#/definitions/results" },
+          "scoring": { "$ref": "#/definitions/scoring" },
+          "decision": {
+            "type": "string",
+            "enum": ["keep", "discard"],
+            "description": "Computed: delta >= 2 → keep, else discard"
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": ["created", "description", "owner"],
+      "properties": {
+        "created": { "type": "string", "format": "date-time" },
+        "updated": { "type": "string", "format": "date-time" },
+        "description": { "type": "string" },
+        "owner": { "type": "string" },
+        "platform": { "type": "string" }
+      }
+    }
+  },
+  "definitions": {
+    "scoreBreakdown": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "object",
+          "properties": {
+            "hasHeroSummary": { "type": "number" },
+            "hasPattern": { "type": "number" },
+            "hasFiveDimensions": { "type": "number" },
+            "hasCurrentWindow": { "type": "number" },
+            "hasPracticalGuidance": { "type": "number" },
+            "hasPremiumSection": { "type": "number" },
+            "shareModes": { "type": "number" }
+          }
+        },
+        "copyQuality": {
+          "type": "object",
+          "properties": {
+            "headlineStrength": { "type": "number" },
+            "patternClarity": { "type": "number" },
+            "emotionalResonance": { "type": "number" },
+            "upgradeStrength": { "type": "number" }
+          }
+        },
+        "total": { "type": "number" }
+      }
+    },
+    "results": {
+      "type": "object",
+      "properties": {
+        "abResultPath": { "type": "string" },
+        "reportPath": { "type": "string" },
+        "appliedTo": { "type": "string" }
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "properties": {
+        "maxBase": { "type": "number", "const": 74 },
+        "maxCopyQuality": { "type": "number", "const": 66 },
+        "maxTotal": { "type": "number", "const": 140 },
+        "keepThreshold": { "type": "number", "const": 2 }
+      }
+    }
+  }
+}
