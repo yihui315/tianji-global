@@ -1,0 +1,53 @@
+name: TianJi Love KPI Analysis
+
+on:
+  workflow_dispatch:
+    inputs:
+      day:
+        description: "Required day number, for example 001."
+        required: true
+        type: string
+      report_date:
+        description: "Optional report date in YYYY-MM-DD."
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tianji-love-kpi-analysis-${{ github.ref }}-${{ inputs.day }}
+  cancel-in-progress: false
+
+jobs:
+  kpi-analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
+      MINIMAX_BASE_URL: ${{ secrets.MINIMAX_BASE_URL }}
+      MINIMAX_MODEL: ${{ secrets.MINIMAX_MODEL }}
+      TIANJI_LOVE_DAY: ${{ inputs.day }}
+      TIANJI_LOVE_REPORT_DATE: ${{ inputs.report_date }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Generate TianJi Love KPI analysis draft
+        run: npm run tianji:kpi-analysis
+
+      - name: Upload generated artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tianji-love-kpi-analysis
+          path: .ai/generated/tianji-love-kpi-analysis.md

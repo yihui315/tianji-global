@@ -22,6 +22,7 @@ describe('Tianji Love homepage contract', () => {
 
     for (const componentName of [
       'HeroLoveSection',
+      'GrowthEntrySections',
       'BirthChartForm',
       'ReadingModeToggle',
       'InsightCards',
@@ -43,6 +44,26 @@ describe('Tianji Love homepage contract', () => {
     expect(component).toContain('id="birth-chart-form"');
     expect(component).toContain('Start free love reading');
     expect(component).toContain('relationship-hero-master-16x9.jpg');
+  });
+
+  it('adds non-payment growth entries for Love Test and Daily Oracle', () => {
+    const component = read('src/components/home/TianjiLoveHome.tsx');
+
+    for (const signal of [
+      'Free Fate Match Test',
+      'Not ready for a full reading? Test the signal first.',
+      'Take Free Fate Match Test',
+      'homepage_free_fate_test_entry',
+      'href="/love-test"',
+      'Daily Love Oracle',
+      'Return tomorrow for one small relationship signal.',
+      'Draw Today&apos;s Oracle',
+      'homepage_daily_oracle_entry',
+      'href="/daily-oracle"',
+      'No login, no database write, and no payment path.',
+    ]) {
+      expect(component).toContain(signal);
+    }
   });
 
   it('submits the birth chart form to the free reading funnel', () => {

@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { getPool } from '@/lib/db';
+import { generateFreePreviewReport } from '@/lib/love-reading/free-preview-generator';
+import type { LoveReport } from '@/lib/love-reading/report-schema';
 
 export type LoveReadingLocale = 'en' | 'zh-CN';
 export type LoveReadingMode = 'solo' | 'compatibility';
@@ -27,6 +29,7 @@ export interface LoveReadingSessionRecord {
   readingMode: LoveReadingMode;
   status: 'teaser_ready';
   teaser: LoveReadingTeaser;
+  freePreviewReport: LoveReport;
   createdAt: string;
 }
 
@@ -74,6 +77,24 @@ function buildTeaser(readingMode: LoveReadingMode): LoveReadingTeaser {
   };
 }
 
+function normalizeBirthDate(value: unknown) {
+  if (value instanceof Date) return value.toISOString().slice(0, 10);
+  return typeof value === 'string' ? value.slice(0, 10) : undefined;
+}
+
+function buildFreePreviewReport(input: CreateLoveReadingSessionInput, createdAt: string) {
+  return generateFreePreviewReport({
+    locale: input.locale,
+    readingMode: input.readingMode,
+    personA: {
+      birthDate: input.birthDate,
+      birthTime: input.birthTime ?? null,
+      birthPlace: input.birthPlace ?? null,
+    },
+    createdAt,
+  });
+}
+
 export function resetLoveReadingMemoryStoreForTests() {
   memorySessions.clear();
 }
@@ -85,6 +106,7 @@ export async function createLoveReadingSession(
   const birthProfileId = randomUUID();
   const teaser = buildTeaser(input.readingMode);
   const createdAt = new Date().toISOString();
+  const freePreviewReport = buildFreePreviewReport(input, createdAt);
   const record: LoveReadingSessionRecord = {
     sessionId,
     birthProfileId,
@@ -92,6 +114,7 @@ export async function createLoveReadingSession(
     readingMode: input.readingMode,
     status: 'teaser_ready',
     teaser,
+    freePreviewReport,
     createdAt,
   };
 
@@ -197,9 +220,13 @@ export async function getLoveReadingSession(
         rt.summary,
         rt.pattern_tags,
         rt.locked_sections,
-        rt.content
+        rt.content,
+        bp.birth_date,
+        bp.birth_time,
+        bp.birth_place
       from reading_sessions rs
       join reading_teasers rt on rt.session_id = rs.id
+      join birth_profiles bp on bp.id = rs.birth_profile_id
       where rs.id = $1
       limit 1
     `,
@@ -214,6 +241,9 @@ export async function getLoveReadingSession(
   const fallbackTeaser = buildTeaser(row.reading_mode);
   const teaserContent =
     typeof row.content === 'string' ? JSON.parse(row.content || '{}') : row.content ?? {};
+  const createdAt =
+    row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at);
+  const birthDate = normalizeBirthDate(row.birth_date) ?? '2000-01-01';
 
   return {
     sessionId: row.session_id,
@@ -221,8 +251,7 @@ export async function getLoveReadingSession(
     locale: row.locale,
     readingMode: row.reading_mode,
     status: row.status,
-    createdAt:
-      row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at),
+    createdAt,
     teaser: {
       summary: row.summary,
       emotionalInsight:
@@ -238,5 +267,15 @@ export async function getLoveReadingSession(
         ? row.locked_sections
         : JSON.parse(row.locked_sections ?? '[]'),
     },
+    freePreviewReport: buildFreePreviewReport(
+      {
+        locale: row.locale,
+        readingMode: row.reading_mode,
+        birthDate,
+        birthTime: row.birth_time ? String(row.birth_time) : null,
+        birthPlace: row.birth_place ? String(row.birth_place) : null,
+      },
+      createdAt
+    ),
   };
 }

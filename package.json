@@ -17,8 +17,14 @@
     "audit:copy": "tsx scripts/audit-copy.ts",
     "audit:share": "tsx scripts/audit-share.ts",
     "audit:upgrade": "tsx scripts/audit-upgrade.ts",
+    "audit:auth-env-readiness": "node scripts/audit-auth-env-readiness.mjs",
     "audit:release-gate": "npm run audit:routes && npm run audit:copy && npm run audit:share && npm run audit:upgrade",
-    "upgrade:plan": "node scripts/generate-upgrade-plan.ts"
+    "smoke:stripe:test-readiness": "node scripts/smoke-stripe-test-readiness.mjs",
+    "upgrade:plan": "node scripts/generate-upgrade-plan.ts",
+    "tianji:content-calendar": "node scripts/tianji-love/generate-content-calendar.mjs",
+    "tianji:daily-growth": "node scripts/tianji-love/generate-daily-growth.mjs",
+    "tianji:kpi-analysis": "node scripts/tianji-love/generate-kpi-analysis.mjs",
+    "tianji:conversion-suggestions": "node scripts/tianji-love/generate-conversion-suggestions.mjs"
   },
   "keywords": [
     "fortune",
@@ -44,6 +50,7 @@
     "@astrodraw/astrochart": "^3.0.2",
     "@auth/core": "^0.41.0",
     "@auth/pg-adapter": "^1.11.1",
+    "@chenglou/pretext": "^0.0.7",
     "@react-email/components": "^1.0.11",
     "@react-pdf/renderer": "^4.4.0",
     "@stripe/stripe-js": "^9.1.0",

@@ -1,13 +1,50 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { RelationshipForm } from '@/components/relationship/RelationshipForm';
 import { RelationshipResult } from '@/components/relationship/RelationshipResult';
+import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
+import { isAppLanguage, type AppLanguage } from '@/lib/language-routing';
 import type { RelationshipReading, RelationshipType } from '@/types/relationship';
+
+const copy = {
+  en: {
+    analyzing: 'Analyzing...',
+    title: 'Relationship Compatibility Reading',
+    loadingBody: 'Reading the structure and rhythm of this relationship...',
+    body: 'Enter two birth profiles to decode compatibility, attraction, communication patterns, and near-term timing.',
+    backToNamesPrefix: 'Back to',
+    testEyebrow: 'Free Fate Match Test',
+    testTitle: 'Not sure yet? Test the signal first.',
+    testBody: 'Use two nicknames and one relationship concern before sharing birth details. No payment path is opened.',
+    testCta: 'Take Free Fate Match Test',
+    back: 'Back',
+  },
+  zh: {
+    analyzing: '分析中...',
+    title: '关系合盘分析',
+    loadingBody: '基于星盘结构深度解读你们的关系模式...',
+    body: '输入两个人的出生信息，AI 解码你们的关系结构、吸引力、沟通方式与未来节律。',
+    backToNamesPrefix: '返回',
+    testEyebrow: '免费缘分测试',
+    testTitle: '还不确定？先测试关系信号。',
+    testBody: '先用两个昵称和一个关系问题获取初始判断，再决定是否填写出生细节。不会打开支付路径。',
+    testCta: '开始免费缘分测试',
+    back: '返回',
+  },
+} satisfies Record<AppLanguage, Record<string, string>>;
+
+function getLanguage(queryLang: string | null): AppLanguage {
+  return isAppLanguage(queryLang) ? queryLang : 'en';
+}
 
 export default function RelationshipNewClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const language = getLanguage(searchParams.get('lang'));
+  const t = copy[language];
   const [result, setResult] = useState<RelationshipReading | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +76,7 @@ export default function RelationshipNewClient() {
       }
 
       setResult(json.data);
-    } catch (e) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setIsLoading(false);
@@ -56,10 +93,10 @@ export default function RelationshipNewClient() {
               className="text-xs underline mb-4"
               style={{ color: 'rgba(226,232,240,0.4)' }}
             >
-              ← {result.personA.nickname} & {result.personB.nickname}
+              {t.backToNamesPrefix} {result.personA.nickname} & {result.personB.nickname}
             </button>
           </div>
-          <RelationshipResult reading={result} lang="zh" />
+          <RelationshipResult reading={result} lang={language} />
         </div>
       </div>
     );
@@ -68,16 +105,13 @@ export default function RelationshipNewClient() {
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0a0a1a 0%, #1a1040 50%, #0a0a1a 100%)' }}>
       <div className="max-w-4xl mx-auto px-4 py-12">
-        {/* Header */}
         <div className="text-center mb-10">
-          <div className="text-4xl mb-3">💕</div>
+          <div className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-pink-200/70">TianJi Love</div>
           <h1 className="text-3xl font-serif font-bold mb-2 text-white">
-            {isLoading ? '分析中...' : '关系合盘分析'}
+            {isLoading ? t.analyzing : t.title}
           </h1>
           <p className="text-sm" style={{ color: 'rgba(226,232,240,0.55)' }}>
-            {isLoading
-              ? '基于星盘结构深度解读你们的关系模式...'
-              : '输入两个人的出生信息，AI 解码你们的关系结构、吸引力、沟通方式与未来节律'}
+            {isLoading ? t.loadingBody : t.body}
           </p>
         </div>
 
@@ -88,16 +122,41 @@ export default function RelationshipNewClient() {
           </div>
         )}
 
-        <RelationshipForm onSubmit={handleSubmit} isLoading={isLoading} lang="zh" />
+        <div
+          className="mb-6 rounded-xl p-5 text-center"
+          style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.18)' }}
+        >
+          <p className="text-xs uppercase tracking-[0.22em]" style={{ color: 'rgba(253,230,138,0.72)' }}>
+            {t.testEyebrow}
+          </p>
+          <h2 className="mt-2 text-xl font-semibold text-white">{t.testTitle}</h2>
+          <p className="mx-auto mt-2 max-w-2xl text-sm leading-6" style={{ color: 'rgba(226,232,240,0.62)' }}>
+            {t.testBody}
+          </p>
+          <Link
+            href="/love-test"
+            onClick={() =>
+              void trackRevenueFunnelEvent('growth_fate_test_cta_click', {
+                source: 'relationship_new',
+                surface: 'relationship_entry_polish',
+                cta: 'free_fate_test',
+              })
+            }
+            className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full bg-amber-100 px-5 text-sm font-bold text-[#160b14]"
+          >
+            {t.testCta}
+          </Link>
+        </div>
 
-        {/* Back link */}
+        <RelationshipForm onSubmit={handleSubmit} isLoading={isLoading} lang={language} />
+
         <div className="text-center mt-8">
           <button
             onClick={() => router.back()}
             className="text-xs"
             style={{ color: 'rgba(226,232,240,0.3)' }}
           >
-            ← 返回首页
+            {t.back}
           </button>
         </div>
       </div>

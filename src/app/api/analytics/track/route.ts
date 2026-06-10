@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { getPool } from '@/lib/db';
 import { trafficSourceSchema, trafficStrategySchema } from '@/lib/traffic-evolution';
 import { sanitizeAnalyticsPayload } from '@/lib/trust-copy-guard';
+import { isSupabaseMutationDisabled } from '@/lib/staging-degraded-mode';
 
 const analyticsEventSchema = z.object({
   event: z.string().min(1).max(80),
@@ -11,11 +12,25 @@ const analyticsEventSchema = z.object({
   moduleType: z.string().max(40).optional(),
   trafficSource: trafficSourceSchema.optional(),
   strategy: trafficStrategySchema.optional(),
-  payload: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.null()])).optional().default({}),
+  payload: z.record(
+    z.string(),
+    z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(z.string())]),
+  ).optional().default({}),
 });
 
 export async function POST(request: NextRequest) {
   try {
+    if (isSupabaseMutationDisabled()) {
+      return NextResponse.json(
+        {
+          success: false,
+          skipped: true,
+          reason: 'supabase_mutation_disabled',
+        },
+        { status: 202 }
+      );
+    }
+
     const body = analyticsEventSchema.parse(await request.json());
     const pool = getPool();
 

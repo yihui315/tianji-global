@@ -5,7 +5,15 @@
 
 // ─── Provider & Model Types ──────────────────────────────────────────────────
 
-export type ModelProvider = 'openai' | 'anthropic' | 'grok' | 'gemini' | 'ollama' | 'minimax' | 'packy';
+export type ModelProvider =
+  | 'openai'
+  | 'anthropic'
+  | 'grok'
+  | 'gemini'
+  | 'ollama'
+  | 'deepseek'
+  | 'minimax'
+  | 'packy';
 
 export type TaskType = 'analysis' | 'creative' | 'fast' | 'privacy';
 
@@ -118,6 +126,23 @@ export const MODEL_REGISTRY: ModelEntry[] = [
     costPer1kOutput: 0.0006,
     recommendedFor: ['fast'],
   },
+  // DeepSeek V4 (OpenAI-compatible)
+  {
+    id: 'deepseek/deepseek-v4-flash',
+    provider: 'deepseek',
+    contextLength: 1000000,
+    inputCostPer1M: 0.07,
+    outputCostPer1M: 0.28,
+    recommendedFor: ['analysis', 'fast'],
+  },
+  {
+    id: 'deepseek/deepseek-v4-pro',
+    provider: 'deepseek',
+    contextLength: 1000000,
+    inputCostPer1M: 0.7,
+    outputCostPer1M: 2.5,
+    recommendedFor: ['analysis'],
+  },
   // Grok
   {
     id: 'grok/grok-2',
@@ -150,6 +175,30 @@ export const MODEL_REGISTRY: ModelEntry[] = [
     recommendedFor: ['privacy'],
   },
   {
+    id: 'ollama/gemma4:31b',
+    provider: 'ollama',
+    contextLength: 16000,
+    recommendedFor: ['analysis', 'privacy'],
+  },
+  {
+    id: 'ollama/gpt-oss:20b',
+    provider: 'ollama',
+    contextLength: 8000,
+    recommendedFor: ['fast', 'privacy'],
+  },
+  {
+    id: 'ollama/llava:7b',
+    provider: 'ollama',
+    contextLength: 8000,
+    recommendedFor: ['privacy'],
+  },
+  {
+    id: 'ollama/deepseek-r1:32b',
+    provider: 'ollama',
+    contextLength: 16000,
+    recommendedFor: ['analysis'],
+  },
+  {
     id: 'ollama/qwen2.5',
     provider: 'ollama',
     contextLength: 128000,
@@ -162,6 +211,12 @@ export const MODEL_REGISTRY: ModelEntry[] = [
     contextLength: 1000000,
     costPer1kInput: 0.001,
     costPer1kOutput: 0.005,
+    recommendedFor: ['fast', 'analysis'],
+  },
+  {
+    id: 'minimax/MiniMax-M2.7',
+    provider: 'minimax',
+    contextLength: 1000000,
     recommendedFor: ['fast', 'analysis'],
   },
   // Packy (OpenAI-compatible, via www.packyapi.com)

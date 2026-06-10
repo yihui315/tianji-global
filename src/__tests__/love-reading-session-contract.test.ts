@@ -86,6 +86,14 @@ describe('love reading session funnel', () => {
       path.join(repoRoot, 'src/app/[locale]/love-reading/result/[id]/page.tsx'),
       'utf8'
     );
+    const checkoutButton = fs.readFileSync(
+      path.join(repoRoot, 'src/components/love-reading/LoveReportCheckoutButton.tsx'),
+      'utf8'
+    );
+    const analytics = fs.readFileSync(
+      path.join(repoRoot, 'src/components/love-reading/LoveFunnelAnalytics.tsx'),
+      'utf8'
+    );
     const migration = fs.readFileSync(
       path.join(repoRoot, 'supabase/migrations/20260507_love_reading_funnel.sql'),
       'utf8'
@@ -97,9 +105,18 @@ describe('love reading session funnel', () => {
 
     expect(resultPage).toContain('getLoveReadingSession');
     expect(resultPage).toContain('Free teaser result');
+    expect(resultPage).toContain('Your free relationship map');
+    expect(resultPage).toContain('freeReport.dimensions');
+    expect(resultPage).toContain('freeReport.currentWindow');
     expect(resultPage).toContain('Locked premium sections');
+    expect(resultPage).toContain('generatePremiumLoveReport');
+    expect(resultPage).toContain('premiumReport.premiumSections');
     expect(resultPage).toContain('LoveReportCheckoutButton');
     expect(resultPage).toContain('ReportJobPoller');
+    expect(checkoutButton).toContain('Unlock complete relationship report');
+    expect(checkoutButton).toContain('Checkout opens only when the payment gate is configured.');
+    expect(analytics).toContain("event: 'checkout_cancel'");
+    expect(analytics).toContain("event: 'premium_report_view'");
     expect(resultPage).not.toMatch(/birth(Date|Time|Place)/);
 
     for (const tableName of ['reading_sessions', 'birth_profiles', 'reading_teasers']) {

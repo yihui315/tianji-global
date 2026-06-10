@@ -9,34 +9,66 @@ import {
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
 import { sendReportReadyEmailForCheckoutSession } from '@/lib/love-report-email';
 import { isPayPerUseEnabled } from '@/lib/pay-per-use';
+import { markRelationshipReadingPremium } from '@/lib/relationship-reading-store';
 import { ensureReportJobForSession, runReportJob } from '@/lib/report-jobs';
+import { grantEntitlement, revokeEntitlement } from '@/lib/entitlements';
+import {
+  STAGING_DEGRADED_PAYMENT_UNAVAILABLE_CODE,
+  isStagingDegradedMode,
+  isStripePaymentAvailable,
+} from '@/lib/staging-degraded-mode';
+import { validateCheckoutSessionMetadata } from '@/lib/stripe-checkout-metadata';
 import { getStripe } from '@/lib/stripe';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-
-function metadataProductId(metadata?: Stripe.Metadata | null): BillingProductId | null {
-  const productId = metadata?.productId;
-  if (
-    productId === 'solo_love_report' ||
-    productId === 'compatibility_report'
-  ) {
-    return productId;
-  }
-
-  return null;
-}
 
 function readingModeFromProduct(productId: BillingProductId) {
   return productId === 'compatibility_report' ? 'compatibility' : 'solo';
 }
 
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
-  if (session.mode !== 'payment' || session.payment_status !== 'paid') return;
+  if (session.payment_status !== 'paid') return;
 
-  const productId = metadataProductId(session.metadata);
-  const readingSessionId = session.metadata?.readingSessionId;
-  if (!productId || !readingSessionId) return;
+  const metadataValidation = validateCheckoutSessionMetadata(session.metadata);
+  if (!metadataValidation.ok) {
+    console.warn('[stripe/webhook] ignored checkout.session.completed with unsafe metadata', {
+      reason: metadataValidation.reason,
+    });
+    return;
+  }
+
+  const { productId, source, readingSessionId, relationshipReadingId, locale, userId } =
+    metadataValidation.metadata;
+
+  // Handle subscription mode (monthly_pass)
+  if (session.mode === 'subscription') {
+    await markOrderPaid({
+      checkoutSessionId: session.id,
+      stripePaymentIntentId: null,
+      customerEmail: session.customer_details?.email ?? session.customer_email ?? null,
+    });
+    await trackLoveFunnelEvent('love_checkout_success', {
+      productId,
+      source,
+      readingSessionId: null,
+      relationshipReadingId: null,
+      checkoutSessionId: session.id,
+      amountTotal: session.amount_total ?? null,
+      currency: session.currency ?? null,
+    });
+    await grantEntitlement({
+      userId: userId || null,
+      customerEmail: session.customer_details?.email ?? session.customer_email ?? null,
+      productId,
+      stripeSubscriptionId: typeof session.subscription === 'string' ? session.subscription : null,
+    });
+    console.log('[stripe/webhook] subscription activated:', session.id);
+    return;
+  }
+
+  // Handle one-time payment
+  if (session.mode !== 'payment') return;
 
   await markOrderPaid({
     checkoutSessionId: session.id,
@@ -46,23 +78,31 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   });
   await trackLoveFunnelEvent('love_checkout_success', {
     productId,
+    source,
     readingSessionId,
+    relationshipReadingId: source === 'relationship' ? relationshipReadingId : null,
     checkoutSessionId: session.id,
     amountTotal: session.amount_total ?? null,
     currency: session.currency ?? null,
   });
 
+  if (source === 'relationship') {
+    if (productId !== 'compatibility_report' || !relationshipReadingId) return;
+    await markRelationshipReadingPremium(relationshipReadingId);
+    return;
+  }
+
   const reportJob = await ensureReportJobForSession({
     sessionId: readingSessionId,
     readingMode: readingModeFromProduct(productId),
-    userId: session.metadata?.userId || null,
+    userId,
   });
 
   await runReportJob(reportJob.id);
   try {
     await sendReportReadyEmailForCheckoutSession({
       checkoutSessionId: session.id,
-      locale: session.metadata?.locale === 'zh-CN' ? 'zh-CN' : 'en',
+      locale,
     });
   } catch {
     console.warn('[stripe/webhook] report ready email was not sent');
@@ -81,6 +121,13 @@ async function handleRefundEvent(object: Stripe.Charge | Stripe.Refund) {
 }
 
 export async function POST(request: NextRequest) {
+  if (isStagingDegradedMode() && !isStripePaymentAvailable()) {
+    return NextResponse.json({
+      received: true,
+      skipped: STAGING_DEGRADED_PAYMENT_UNAVAILABLE_CODE,
+    });
+  }
+
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret) {
     return NextResponse.json({ error: 'Missing webhook secret' }, { status: 500 });
@@ -119,6 +166,18 @@ export async function POST(request: NextRequest) {
     case 'refund.created':
       await handleRefundEvent(event.data.object as Stripe.Refund);
       break;
+    case 'customer.subscription.deleted':
+    case 'customer.subscription.updated': {
+      const sub = event.data.object as Stripe.Subscription;
+      console.log(`[stripe/webhook] ${event.type}:`, sub.id, 'status:', sub.status);
+      if (event.type === 'customer.subscription.deleted') {
+        await revokeEntitlement({ stripeSubscriptionId: sub.id });
+        await trackLoveFunnelEvent('love_subscription_cancelled', {
+          stripeSubscriptionId: sub.id,
+        });
+      }
+      break;
+    }
     default:
       break;
   }

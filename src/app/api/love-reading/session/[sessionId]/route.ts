@@ -26,6 +26,7 @@ export async function GET(
           actionableSuggestion: session.teaser.actionableSuggestion,
           patternTags: session.teaser.patternTags,
         },
+        freePreviewReport: session.freePreviewReport,
         lockedSections: session.teaser.lockedSections,
       },
     });

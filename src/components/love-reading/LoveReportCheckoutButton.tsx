@@ -68,8 +68,11 @@ export function LoveReportCheckoutButton({
         disabled={isLoading}
         className="inline-flex rounded-full bg-[rgb(212,175,119)] px-6 py-3 text-sm font-semibold text-black transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {isLoading ? 'Opening checkout...' : 'Unlock full report'}
+        {isLoading ? 'Opening checkout...' : 'Unlock complete relationship report'}
       </button>
+      <p className="max-w-md text-xs leading-5 text-white/48">
+        One-time premium report. Checkout opens only when the payment gate is configured.
+      </p>
       {error && <p className="text-sm text-rose-100">{error}</p>}
     </div>
   );

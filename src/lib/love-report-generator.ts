@@ -31,6 +31,37 @@ export interface LoveReport {
   generationMeta: LoveReportGenerationMeta;
 }
 
+// ────────────────────────────────────────────
+// Deep Love Report — 8-module premium structure
+// ────────────────────────────────────────────
+export interface DeepLoveReport {
+  /** Overall relationship energy signature and dominant themes */
+  relationshipEnergy: string;
+  /** What your partner's inner emotional world looks like from the inside */
+  partnerFeelings: string;
+  /** Hidden or unacknowledged patterns blocking forward movement */
+  blockages: string;
+  /** When conditions align for meaningful relationship milestones */
+  timingGuidance: string;
+  /** Concrete, grounded next step to move the relationship forward */
+  nextStep: string;
+  /** Numerically calibrated compatibility signal with narrative explanation */
+  compatibilityScore: string;
+  /** Recurring soul-level patterns playing out across this relationship */
+  karmicPattern: string;
+  /** Dominant communication style and how to adapt for clarity */
+  communicationStyle: string;
+  privateReportLink: string;
+  disclaimer: string;
+  generationMeta: LoveReportGenerationMeta;
+}
+
+export interface DeepLoveReportInput {
+  sessionId: string;
+  readingMode: 'solo' | 'compatibility';
+  userId?: string | null;
+}
+
 const loveReportSchema = z
   .object({
     summary: z.string().min(80).max(900),
@@ -153,6 +184,10 @@ export async function generateLoveReport(input: LoveReportInput): Promise<LoveRe
   assertSafeReport(fallback);
 
   try {
+    if (process.env.NODE_ENV === 'test' || process.env.VITEST) {
+      throw new Error('AI report generation disabled during automated tests');
+    }
+
     const { systemPrompt, userPrompt } = buildPrompts(input, fallback);
     const response = await generateReport({
       prompt: userPrompt,

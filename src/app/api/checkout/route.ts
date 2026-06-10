@@ -8,10 +8,8 @@ import {
 } from '@/lib/billing';
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
 import { requirePayPerUseEnabled } from '@/lib/pay-per-use';
+import { isUuidReadingId } from '@/lib/reading-id';
 import { getStripe } from '@/lib/stripe';
-
-const uuidPattern =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export async function POST(request: NextRequest) {
   const payPerUseGate = requirePayPerUseEnabled();
@@ -21,6 +19,8 @@ export async function POST(request: NextRequest) {
     const body = (await request.json()) as {
       productId?: string;
       readingSessionId?: string;
+      relationshipReadingId?: string;
+      source?: 'love_reading' | 'relationship';
       locale?: 'en' | 'zh-CN';
       email?: string;
     };
@@ -29,37 +29,58 @@ export async function POST(request: NextRequest) {
     if (!product) {
       return NextResponse.json({ error: 'Invalid productId' }, { status: 400 });
     }
-    if (!body.readingSessionId) {
-      return NextResponse.json({ error: 'Missing readingSessionId' }, { status: 400 });
+    const checkoutSource = body.source === 'relationship' ? 'relationship' : 'love_reading';
+    const checkoutReferenceId =
+      checkoutSource === 'relationship'
+        ? body.relationshipReadingId ?? body.readingSessionId
+        : body.readingSessionId;
+
+    if (checkoutSource === 'relationship' && product.productId !== 'compatibility_report') {
+      return NextResponse.json({ error: 'Invalid relationship product' }, { status: 400 });
     }
-    if (!uuidPattern.test(body.readingSessionId)) {
-      return NextResponse.json({ error: 'Invalid readingSessionId' }, { status: 400 });
+    const isSubscription = product.mode === 'subscription';
+    const hasValidRef = !isSubscription && checkoutReferenceId && isUuidReadingId(checkoutReferenceId);
+    if (!isSubscription && !hasValidRef) {
+      return NextResponse.json({ error: 'Missing readingSessionId' }, { status: 400 });
     }
 
     const session = await auth();
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000').replace(/\/$/, '');
     const locale = body.locale ?? 'en';
     const customerEmail = session?.user?.email ?? body.email ?? undefined;
     const metadata = {
       productId: product.productId,
-      readingSessionId: body.readingSessionId,
+      source: checkoutSource,
+      readingSessionId: checkoutReferenceId,
+      relationshipReadingId: checkoutSource === 'relationship' ? checkoutReferenceId : '',
       locale,
       userId: session?.user?.id ?? '',
     };
+    const resultPath =
+      checkoutSource === 'relationship'
+        ? `/relationship/result/${checkoutReferenceId}?lang=${locale === 'zh-CN' ? 'zh' : 'en'}`
+        : `/${locale}/love-reading/result/${checkoutReferenceId}`;
+
+    const successUrl = isSubscription
+      ? `${appUrl}/${locale}/pricing?checkout=success`
+      : `${appUrl}${resultPath}${resultPath.includes('?') ? '&' : '?'}checkout=success`;
+    const cancelUrl = isSubscription
+      ? `${appUrl}/${locale}/pricing?checkout=cancelled`
+      : `${appUrl}${resultPath}${resultPath.includes('?') ? '&' : '?'}checkout=cancelled`;
 
     const checkoutSession = await getStripe().checkout.sessions.create(
       {
-        mode: 'payment',
+        mode: product.mode as 'payment' | 'subscription',
         line_items: [buildLineItem(product)],
         customer_email: customerEmail,
-        client_reference_id: body.readingSessionId,
+        client_reference_id: isSubscription ? `subscription:${product.productId}` : checkoutReferenceId,
         metadata,
-        success_url: `${appUrl}/${locale}/love-reading/result/${body.readingSessionId}?checkout=success`,
-        cancel_url: `${appUrl}/${locale}/love-reading/result/${body.readingSessionId}?checkout=cancelled`,
+        success_url: successUrl,
+        cancel_url: cancelUrl,
         allow_promotion_codes: true,
       },
       {
-        idempotencyKey: `${product.productId}:${body.readingSessionId}:${session?.user?.id ?? body.email ?? 'guest'}`,
+        idempotencyKey: `${checkoutSource}:${product.productId}:${isSubscription ? 'subscription' : checkoutReferenceId}:${session?.user?.id ?? body.email ?? 'guest'}`,
       }
     );
 
@@ -67,12 +88,14 @@ export async function POST(request: NextRequest) {
       product,
       checkoutSessionId: checkoutSession.id,
       userId: session?.user?.id ?? null,
-      readingSessionId: body.readingSessionId,
+      readingSessionId: isSubscription ? null : checkoutReferenceId,
       customerEmail,
     });
     await trackLoveFunnelEvent('love_checkout_created', {
       productId: product.productId,
-      readingSessionId: body.readingSessionId,
+      source: checkoutSource,
+      readingSessionId: isSubscription ? null : checkoutReferenceId,
+      relationshipReadingId: checkoutSource === 'relationship' && !isSubscription ? checkoutReferenceId : null,
       checkoutSessionId: checkoutSession.id,
       amountTotal: product.unitAmount,
       currency: product.currency,

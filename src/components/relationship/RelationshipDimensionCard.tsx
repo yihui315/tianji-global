@@ -10,6 +10,7 @@ import type {
   RelationshipVariant,
   RelationshipType,
 } from '@/lib/analytics/relationship-events';
+import { usePretextTextLayout } from './usePretextTextLayout';
 
 const DIMENSION_META: Record<string, { icon: string; color: string; bgColor: string }> = {
   attraction:    { icon: '💫', color: '#F472B6', bgColor: 'rgba(244,114,182,0.08)' },
@@ -63,6 +64,12 @@ export function DimensionCard({
   const label = labels[dimensionKey] ?? dimensionKey;
 
   const scoreBarColor = data.score >= 70 ? '#34D399' : data.score >= 45 ? '#F59E0B' : '#F87171';
+  const summaryLayout = usePretextTextLayout<HTMLParagraphElement>({
+    text: data.summary,
+    font: '14px Inter, system-ui, sans-serif',
+    lineHeight: 28,
+    minHeight: 28,
+  });
 
   return (
     <GlassCard level="card" className="p-5 relative overflow-hidden">
@@ -92,7 +99,7 @@ export function DimensionCard({
         </div>
       </div>
 
-      <p className="text-sm mb-4 leading-relaxed" style={{ color: 'rgba(226,232,240,0.75)' }}>
+      <p ref={summaryLayout.ref} style={{ ...summaryLayout.style, color: 'rgba(226,232,240,0.75)' }} className="text-sm mb-4 leading-relaxed">
         {data.summary}
       </p>
 
@@ -188,6 +195,12 @@ export function ExpandableDimensionCard({
   const labels = DIMENSION_LABELS[lang] ?? DIMENSION_LABELS.zh;
   const label = labels[dimensionKey] ?? dimensionKey;
   const scoreBarColor = data.score >= 70 ? '#34D399' : data.score >= 45 ? '#F59E0B' : '#F87171';
+  const summaryLayout = usePretextTextLayout<HTMLParagraphElement>({
+    text: data.summary,
+    font: '14px Inter, system-ui, sans-serif',
+    lineHeight: 28,
+    minHeight: 28,
+  });
 
   return (
     <GlassCard level="card" className="p-5 relative overflow-hidden">
@@ -222,7 +235,7 @@ export function ExpandableDimensionCard({
           </div>
         </div>
 
-        <p className="text-sm leading-relaxed" style={{ color: 'rgba(226,232,240,0.75)' }}>
+        <p ref={summaryLayout.ref} style={{ ...summaryLayout.style, color: 'rgba(226,232,240,0.75)' }} className="text-sm leading-relaxed">
           {data.summary}
         </p>
 

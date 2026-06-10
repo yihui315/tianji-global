@@ -1,4 +1,4 @@
-type PrimitivePayloadValue = string | number | boolean | null;
+type PrimitivePayloadValue = string | number | boolean | null | string[];
 
 const guaranteedPredictionPatterns = [
   /\bwe predict your future\b/i,
@@ -19,14 +19,49 @@ const professionalAdvicePatterns = [
 ];
 
 const sensitiveKeyNames = new Set([
+  'answer',
+  'airesponse',
   'birthdate',
   'birthtime',
   'birthplace',
   'birthlocation',
+  'checkoutsessionid',
+  'email',
+  'fullanswer',
+  'fullreading',
+  'fullreport',
+  'fullresult',
+  'timezone',
+  'modeloutput',
+  'modelresponse',
+  'name',
+  'partnername',
+  'paymentid',
+  'paymentintentid',
+  'phone',
+  'prompt',
+  'provideroutput',
+  'providerresponse',
+  'providerraw',
+  'question',
+  'rawproviderresponse',
+  'rawquestion',
+  'rawresponse',
+  'rawresult',
+  'readingtext',
+  'rawkundlitext',
+  'kundlipdftext',
+  'response',
+  'resulttext',
   'relationshipanswer',
   'relationshipanswers',
   'rawrelationshipanswer',
   'rawrelationshipanswers',
+  'stripecheckoutsessionid',
+  'stripepaymentintentid',
+  'stripesessionid',
+  'supabaseid',
+  'supabaserowid',
 ]);
 
 export const forbiddenTrustClaims = [
@@ -80,7 +115,13 @@ export function sanitizeAnalyticsPayload(payload: Record<string, unknown>) {
 
   for (const [key, value] of Object.entries(payload)) {
     if (isSensitivePrivacyKey(key)) continue;
-    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value === null) {
+    if (
+      typeof value === 'string' ||
+      typeof value === 'number' ||
+      typeof value === 'boolean' ||
+      value === null ||
+      (Array.isArray(value) && value.every((item) => typeof item === 'string'))
+    ) {
       sanitized[key] = value;
     }
   }
