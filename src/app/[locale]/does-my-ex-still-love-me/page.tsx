@@ -142,8 +142,56 @@ export default async function DoesMyExStillLoveMePage({ params }: PageParams) {
         </section>
 
         <section className="mt-10 rounded-xl border border-white/10 bg-white/[0.04] p-6">
+          <h2 className="text-lg font-semibold text-white">Frequently Asked Questions</h2>
+          <div className="mt-5 space-y-4">
+            <div>
+              <h3 className="text-sm font-medium text-[#f5d8aa]">How accurate is this reading?</h3>
+              <p className="mt-1 text-sm text-white/60">
+                Our AI combines astrology, human design, and relationship psychology to provide personalized insights. Many users find the patterns and timing descriptions remarkably accurate for their situation.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-[#f5d8aa]">Is my information kept private?</h3>
+              <p className="mt-1 text-sm text-white/60">
+                Yes. Your birth data and relationship details are never shared with third parties. All readings are private and encrypted.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-[#f5d8aa]">Can I get a full report instead of just this preview?</h3>
+              <p className="mt-1 text-sm text-white/60">
+                Yes. Unlock the full Deep Love Report for $19.99 — with 8 complete modules covering your relationship energy, partner feelings, blockages, timing, and next steps.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10 rounded-xl border border-white/10 bg-white/[0.04] p-6">
           <h2 className="text-lg font-semibold text-white">Explore more</h2>
           <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href={getLocalizedPath(locale, '/will-my-ex-come-back')}
+              className="rounded-full border border-white/12 px-4 py-2 text-sm text-white/70 hover:text-white"
+            >
+              Will My Ex Come Back?
+            </Link>
+            <Link
+              href={getLocalizedPath(locale, '/is-my-ex-thinking-about-me')}
+              className="rounded-full border border-white/12 px-4 py-2 text-sm text-white/70 hover:text-white"
+            >
+              Is My Ex Thinking About Me?
+            </Link>
+            <Link
+              href={getLocalizedPath(locale, '/should-i-move-on')}
+              className="rounded-full border border-white/12 px-4 py-2 text-sm text-white/70 hover:text-white"
+            >
+              Should I Move On?
+            </Link>
+            <Link
+              href={getLocalizedPath(locale, '/how-to-make-my-ex-miss-me')}
+              className="rounded-full border border-white/12 px-4 py-2 text-sm text-white/70 hover:text-white"
+            >
+              How to Make My Ex Miss Me
+            </Link>
             <Link
               href={getLocalizedPath(locale, '/pricing')}
               className="rounded-full border border-white/12 px-4 py-2 text-sm text-white/70 hover:text-white"
