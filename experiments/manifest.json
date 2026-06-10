@@ -1,75 +1,44 @@
 {
-  "version": 1,
-  "module": "relationship",
-  "runs": [
+  "$schema": "./manifest.schema.json",
+  "version": "1.0",
+  "experiments": [
     {
-      "id": "rel-ab-001",
-      "timestamp": "2026-04-16T09:03:04.649Z",
-      "before": 85,
-      "after": 85,
-      "decision": "discard",
-      "focus": "hero_summary",
-      "winner": "A",
-      "notes": "Score improved by 0 pts (< 2pt threshold) - experiment discarded",
-      "notes": "Score improved by 0 pts (< 2pt threshold) — experiment discarded",
-      "scoreA": 126,
-      "scoreB": 125,
-      "margin": 0
-    },
-    {
-      "id": "rel-ab-002",
-      "timestamp": "2026-04-16T09:19:00.000Z",
-      "before": null,
-      "after": null,
-      "decision": "pipeline_failed",
-      "focus": "hero_summary",
-      "winner": null,
-      "notes": "Codex step failed: OPENAI_API_KEY secret not configured in GitHub Actions. Pipeline infrastructure validated: npm install passed, audits passed, manifest recording passed. Add OPENAI_API_KEY to repo settings to enable full run.",
-      "notes": "Codex step failed: OPENAI_API_KEY secret not configured in GitHub Actions. Pipeline infrastructure validated: npm install ✅, audits ✅, manifest recording ✅. Add OPENAI_API_KEY to repo settings to enable full run.",
-      "scoreA": null,
-      "scoreB": null,
-      "margin": null,
-      "infrastructure": {
-        "dependencies": "passed",
-        "baseline_score": "passed",
-        "audits": "passed",
-        "codex": "failed_missing_secret",
-        "compare": "skipped",
-        "decide": "skipped",
-        "report": "skipped",
-        "record": "skipped",
-        "pr": "skipped"
-      }
-    },
-    {
-      "id": "rel-ab-003",
-      "timestamp": "2026-04-17T02:12:11.638Z",
-      "before": 34,
-      "after": 42,
-      "decision": "accepted",
-      "focus": "hero_summary",
-      "winner": "B",
-      "notes": "Variant B won on clarity, pattern visibility, and next-step usefulness under an editorial rubric. Privacy-safe sharing remained unchanged.",
-      "scoreA": 38,
-      "scoreB": 42,
-      "margin": 4,
-      "evaluationMode": "editorial_rubric",
-      "implementedFiles": [
-        "src/lib/relationship-engine.ts"
-      ]
+      "id": "exp-001-hero-summary",
+      "name": "Hero Summary + Pattern Archetype Upgrade",
+      "surface": "hero_summary",
+      "surfaceArea": "hero_summary",
+      "createdAt": "2026-06-11T00:00:00Z",
+      "status": "variant_recorded",
+      "baselineScore": 47,
+      "variantScore": 57,
+      "delta": null,
+      "keepThreshold": 2,
+      "baseline": {
+        "file": "src/app/relationship/result/[id]/page.tsx",
+        "scoredAt": "2026-06-11T00:00:00Z",
+        "base": { "hasHeroSummary": 0, "hasPattern": 0, "hasFiveDimensions": 0, "hasCurrentWindow": 0, "hasPracticalGuidance": 10, "hasPremiumSection": 10, "shareModes": 0 },
+        "baseTotal": 20,
+        "copyQuality": { "headlineStrength": 5, "patternClarity": 5, "emotionalResonance": 5, "upgradeStrength": 12 },
+        "copyTotal": 27,
+        "grandTotal": 47
+      },
+      "variant": {
+        "file": "src/components/relationship/RelationshipResult.tsx",
+        "description": "Add relationship archetype label (Romantic Dreamers, Steady Companions) to hero section above the fold",
+        "improvements": ["hasPattern: +10pts", "headlineStrength: +5pts", "emotionalResonance: +5pts"],
+        "estimatedGrandTotal": 57
+      },
+      "results": { "abResultPath": null, "reportPath": null, "appliedTo": null },
+      "scoring": { "maxBase": 74, "maxCopyQuality": 66, "maxTotal": 140, "keepThreshold": 2 },
+      "decision": "pending",
+      "notes": "Scoring heuristics missed existing hero section. Manual review: hero section exists with nickname pair, score, headline, one-liner, keywords. Variant adds archetype label for emotional resonance. Decision pending user review."
     }
   ],
-  "experimentFaces": {
-    "A": "Hero Summary (headline, one-liner, CTA - upgrade conversion)",
-    "B": "Five Dimension Cards (clarity, human tone, specificity)",
-    "C": "Relationship Pattern (pattern naming, one-liner, tags - shareability)",
-    }
-  ],
-  "experimentFaces": {
-    "A": "Hero Summary (headline, one-liner, CTA — upgrade conversion)",
-    "B": "Five Dimension Cards (clarity, human tone, specificity)",
-    "C": "Relationship Pattern (pattern naming, one-liner, tags — shareability)",
-    "D": "Current Window (time expression, urgency, action guidance)",
-    "E": "Share Card (one-liner, visual style, emotional intensity)"
+  "meta": {
+    "created": "2026-06-11T00:00:00Z",
+    "updated": "2026-06-11T00:00:00Z",
+    "description": "TianJi Love relationship funnel AB experiment manifest. Single source of truth for all experiments.",
+    "owner": "tianji-ops",
+    "platform": "tianji.love"
   }
 }

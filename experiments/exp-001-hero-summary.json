@@ -1,0 +1,56 @@
+{
+  "id": "exp-001-hero-summary",
+  "name": "Hero Summary + Pattern Archetype Upgrade",
+  "surface": "hero_summary",
+  "surfaceArea": "hero_summary",
+  "createdAt": "2026-06-11T00:00:00Z",
+  "status": "variant_recorded",
+  "delta": null,
+  "keepThreshold": 2,
+  "baseline": {
+    "file": "src/app/relationship/result/[id]/page.tsx",
+    "scoredAt": "2026-06-11T00:00:00Z",
+    "base": {
+      "hasHeroSummary": 0,
+      "hasPattern": 0,
+      "hasFiveDimensions": 0,
+      "hasCurrentWindow": 0,
+      "hasPracticalGuidance": 10,
+      "hasPremiumSection": 10,
+      "shareModes": 0
+    },
+    "baseTotal": 20,
+    "copyQuality": {
+      "headlineStrength": 5,
+      "patternClarity": 5,
+      "emotionalResonance": 5,
+      "upgradeStrength": 12
+    },
+    "copyTotal": 27,
+    "grandTotal": 47,
+    "verdict": "47/140"
+  },
+  "variant": {
+    "file": "src/components/relationship/RelationshipResult.tsx",
+    "description": "Add relationship archetype label (e.g. 'Romantic Dreamers', 'Steady Companions') to hero section — displayed in free preview above the fold. Archetype derived from top/bottom dimension scores.",
+    "estimatedScore": 57,
+    "improvements": [
+      "Add hasPattern: 10pts (archetype label in hero)",
+      "Improve headlineStrength: +5pts (stronger archetype-based headline)",
+      "Improve emotionalResonance: +5pts (archetype language resonates)"
+    ]
+  },
+  "results": {
+    "abResultPath": null,
+    "reportPath": null,
+    "appliedTo": null
+  },
+  "scoring": {
+    "maxBase": 74,
+    "maxCopyQuality": 66,
+    "maxTotal": 140,
+    "keepThreshold": 2
+  },
+  "decision": "pending",
+  "notes": "Scoring script heuristics missed existing hero section. Manual review confirms: hero section exists with score/headline/one-liner/keywords. Variant adds archetype label. Decision pending manual review."
+}
