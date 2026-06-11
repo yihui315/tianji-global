@@ -89,7 +89,7 @@ export default async function PricingPage({ params }: PageParams) {
   const t = copy[locale];
 
   return (
-    <main className="min-h-screen bg-[#050508] px-5 py-10 text-white sm:px-8">
+    <main className="min-h-screen bg-[#1C1533] px-5 py-10 text-white sm:px-8">
       <div className="mx-auto max-w-6xl">
         <Link href={getLocalizedPath(locale, '/')} className="text-sm text-white/58 hover:text-white">
           TianJi Love

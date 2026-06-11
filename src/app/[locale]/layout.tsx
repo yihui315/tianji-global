@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
   return buildLocalizedMetadata({
     locale,
     path: '/',
-    title: locale === 'zh-CN' ? 'TianJi Love | 私密关系洞察' : 'TianJi Love | Private Cosmic Love Reading',
+    title: locale === 'zh-CN' ? 'Tianji Love | 私密关系洞察' : 'Tianji Love | Private Cosmic Love Reading',
     description:
       locale === 'zh-CN'
         ? '通过私密的天机关系洞察，理解你的情感模式、关系节奏与相遇时机。'
@@ -37,7 +37,7 @@ export default async function LocaleLayout({
   if (!isSupportedLocale(locale)) notFound();
 
   return (
-    <section lang={locale} data-locale={locale} className="min-h-screen bg-[#050508] text-white">
+    <section lang={locale} data-locale={locale} className="min-h-screen bg-[#1C1533] text-[#F7F1E8]">
       {children}
     </section>
   );

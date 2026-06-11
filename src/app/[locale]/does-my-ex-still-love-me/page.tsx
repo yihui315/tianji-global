@@ -33,7 +33,7 @@ export default async function DoesMyExStillLoveMePage({ params }: PageParams) {
   if (!isSupportedLocale(locale)) notFound();
 
   return (
-    <main className="min-h-screen bg-[#050508] px-5 py-10 text-white sm:px-8">
+    <main className="min-h-screen bg-[#1C1533] px-5 py-10 text-white sm:px-8">
       <div className="mx-auto max-w-4xl">
         <Link
           href={getLocalizedPath(locale, '/')}

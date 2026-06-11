@@ -38,7 +38,7 @@ const copy = {
   'zh-CN': {
     eyebrow: '私密的关系洞察',
     title: '爱，是唯一能改变命运的变量。',
-    description: '通过私密的 TianJi Love 关系报告，理解你的情感模式、关系节奏与相处选择。',
+    description: '通过私密的 Tianji Love 关系报告，理解你的情感模式、关系节奏与相处选择。',
     promise: ['发现情感模式。', '理解关系节奏。', '做出更清晰的相处选择。'],
     primaryCta: '开始免费关系洞察',
     secondaryCta: '查看价格',
@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   return buildLocalizedMetadata({
     locale,
     path: '/',
-    title: locale === 'zh-CN' ? 'TianJi Love | 私密关系洞察' : 'TianJi Love | Private Cosmic Love Reading',
+    title: locale === 'zh-CN' ? 'Tianji Love | 私密关系洞察' : 'Tianji Love | Private Cosmic Love Reading',
     description: copy[locale].description,
   });
 }
@@ -69,12 +69,12 @@ export default async function LocalizedHomePage({ params }: PageParams) {
   const t = copy[locale];
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050508] text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(244,114,182,0.24),transparent_30%),radial-gradient(circle_at_80%_0%,rgba(212,175,119,0.18),transparent_28%),linear-gradient(180deg,#050508,#120712_62%,#050508)]" />
+    <main className="relative min-h-screen overflow-hidden bg-[#1C1533] text-[#F7F1E8]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(216,183,123,0.22),transparent_30%),linear-gradient(90deg,rgba(28,21,51,0.98)_0%,rgba(28,21,51,0.82)_44%,rgba(28,21,51,0.48)_100%)]" />
       <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-6 sm:px-8">
         <nav className="flex items-center justify-between text-sm text-white/62">
           <Link href={getLocalizedPath(locale, '/')} className="font-semibold tracking-[0.18em] text-white">
-            TianJi Love
+            Tianji Love
           </Link>
           <div className="flex gap-3">
             {locales.map((item) => (
