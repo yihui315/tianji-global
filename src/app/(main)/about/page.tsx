@@ -170,7 +170,7 @@ export default function AboutPage() {
   )}&body=${encodeURIComponent(t.deletionMailtoBody)}`;
 
   return (
-    <main id="main-content" className="relative min-h-screen overflow-hidden bg-[#050508] text-white">
+    <main id="main-content" className="relative min-h-screen overflow-hidden bg-[#1C1533] text-[#F7F1E8]">
       <AboutCosmicLayers />
 
       <LanguageSwitch className="fixed right-6 top-6 z-30" />
@@ -251,7 +251,7 @@ export default function AboutPage() {
         <div className="mt-12">
           <GlassCard
             level="strong"
-            className="overflow-hidden rounded-[2rem] border border-[rgba(212,175,119,0.28)] bg-[radial-gradient(circle_at_15%_0%,rgba(212,175,119,0.12),transparent_55%),rgba(8,8,16,0.6)] p-8 sm:p-12"
+            className="overflow-hidden rounded-[2rem] border border-[rgba(216,183,123,0.28)] bg-[radial-gradient(circle_at_15%_0%,rgba(216,183,123,0.12),transparent_55%),rgba(28,21,51,0.6)] p-8 sm:p-12"
           >
             <div className="grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:items-center">
               <div>
@@ -272,7 +272,7 @@ export default function AboutPage() {
               <div className="flex flex-col gap-4">
                 <a
                   href={deletionMailto}
-                  className="inline-flex items-center justify-center gap-3 rounded-full border border-[rgba(212,175,119,0.5)] bg-gradient-to-br from-[#f8e7c2] to-white px-7 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-black shadow-[0_30px_80px_rgba(212,175,119,0.18)] transition hover:from-[#fff5dd] hover:to-white"
+                  className="inline-flex items-center justify-center gap-3 rounded-full border border-[rgba(216,183,123,0.5)] bg-gradient-to-br from-[#D8B77B] to-[#E8CFA0] px-7 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-[#1C1533] shadow-[0_30px_80px_rgba(216,183,123,0.18)] transition hover:from-[#E8CFA0] hover:to-[#F7F1E8]"
                 >
                   <span aria-hidden>✦</span>
                   {t.deletionCta}
@@ -295,9 +295,9 @@ export default function AboutPage() {
             <a
               key={item.label}
               href={`mailto:${item.value}`}
-              className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition hover:border-[rgba(212,175,119,0.4)] hover:bg-white/[0.04]"
+              className="group rounded-2xl border border-[rgba(216,183,123,0.12)] bg-[rgba(255,255,255,0.03)] p-6 transition hover:border-[rgba(216,183,123,0.4)] hover:bg-[rgba(255,255,255,0.05)]"
             >
-              <div className="mb-2 text-[0.66rem] uppercase tracking-[0.26em] text-white/40 group-hover:text-[rgba(212,175,119,0.78)]">
+              <div className="mb-2 text-[0.66rem] uppercase tracking-[0.26em] text-[rgba(205,191,173,0.4)] group-hover:text-[rgba(216,183,123,0.78)]">
                 {item.label}
               </div>
               <div className="font-mono text-sm text-white/85 group-hover:text-white">
