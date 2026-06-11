@@ -10,45 +10,53 @@
 
 // ────────────────────────────────────────────
 // 1. Brand Color Tokens
+// Theme: Moonlit Goldline / 月夜金线
 // ────────────────────────────────────────────
 export const colors = {
-  /** Core backgrounds — Taste Rule: deep space black + nebula */
-  bgPrimary: '#0a0a0a',
-  bgNebula: 'rgba(42, 10, 58, 0.5)',
-  bgSurface: 'rgba(255, 255, 255, 0.02)',
+  /** Core backgrounds — Moonlit Goldline: deep violet + moonlit surface */
+  bgPrimary: '#1C1533',
+  bgNebula: 'rgba(30, 20, 60, 0.5)',
+  bgSurface: 'rgba(255, 255, 255, 0.06)',
+  bgSurfaceStrong: 'rgba(255, 255, 255, 0.10)',
 
-  /** Brand accents — Taste Rule: Gold #D4AF37 / #F5C542, Purple #7C3AED / #A78BFA */
-  gold: '#D4AF37',
-  goldLight: '#F5C542',
-  goldDim: 'rgba(212, 175, 55, 0.15)',
+  /** Brand accents — Warm rose-gold + muted lavender (Moonlit Goldline) */
+  gold: '#D8B77B',
+  goldLight: '#E8CFA0',
+  goldDim: 'rgba(216, 183, 123, 0.15)',
 
-  purple: '#7C3AED',
-  purpleLight: '#A78BFA',
-  purpleDark: '#5B21B6',
-  purpleDim: 'rgba(124, 58, 237, 0.15)',
+  /** Rose blush accent — relationship/love warmth */
+  rose: '#D99B93',
+  roseLight: '#E8C4B8',
+  roseDim: 'rgba(217, 155, 147, 0.15)',
+
+  /** Muted lavender (replaces aggressive purple) */
+  purple: '#9B8DC8',
+  purpleLight: '#BDB0D8',
+  purpleDark: '#7A6FAE',
+  purpleDim: 'rgba(155, 141, 200, 0.15)',
 
   /** Functional palette */
-  dataCyan: '#06B6D4',
-  dataCyanDim: 'rgba(6, 182, 212, 0.15)',
-  riskRed: '#EF4444',
-  riskRedDim: 'rgba(239, 68, 68, 0.15)',
-  successGreen: '#10B981',
-  successGreenDim: 'rgba(16, 185, 129, 0.15)',
+  dataCyan: '#8BB8C8',
+  dataCyanDim: 'rgba(139, 184, 200, 0.15)',
+  riskRed: '#D99B93',
+  riskRedDim: 'rgba(217, 155, 147, 0.15)',
+  successGreen: '#9ED8C4',
+  successGreenDim: 'rgba(158, 216, 196, 0.15)',
 
-  /** Glow */
-  glowPurple: 'rgba(168, 130, 255, 0.3)',
-  glowGold: 'rgba(245, 158, 11, 0.4)',
+  /** Glow — warm gold (replaces purple glow) */
+  glowPurple: 'rgba(216, 183, 123, 0.3)',
+  glowGold: 'rgba(216, 183, 123, 0.4)',
 
-  /** Text hierarchy (on dark backgrounds) */
-  textPrimary: '#FFFFFF',
-  textSecondary: 'rgba(255, 255, 255, 0.7)',
-  textTertiary: 'rgba(255, 255, 255, 0.4)',
-  textMuted: 'rgba(255, 255, 255, 0.25)',
+  /** Text hierarchy — warm ivory tones (Moonlit Goldline) */
+  textPrimary: '#F7F1E8',
+  textSecondary: '#CDBFAD',
+  textTertiary: 'rgba(205, 191, 173, 0.5)',
+  textMuted: 'rgba(205, 191, 173, 0.3)',
 
-  /** Borders */
-  borderSubtle: 'rgba(255, 255, 255, 0.06)',
-  borderMedium: 'rgba(255, 255, 255, 0.12)',
-  borderStrong: 'rgba(255, 255, 255, 0.2)',
+  /** Borders — gold hairline (Moonlit Goldline) */
+  borderSubtle: 'rgba(216, 183, 123, 0.12)',
+  borderMedium: 'rgba(216, 183, 123, 0.20)',
+  borderStrong: 'rgba(216, 183, 123, 0.32)',
 } as const;
 
 // ────────────────────────────────────────────
@@ -150,16 +158,16 @@ export const radii = {
 // ────────────────────────────────────────────
 export const shadows = {
   softGlass:
-    'inset 0 1px 1px rgba(255, 255, 255, 0.1)',
+    'inset 0 1px 1px rgba(216, 183, 123, 0.08)',
   strongGlass:
-    '4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
-  glow: (color: string = colors.glowPurple) =>
+    '4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(216, 183, 123, 0.12)',
+  glow: (color: string = colors.glowGold) =>
     `0 0 40px ${color}`,
-  glowStrong: (color: string = colors.glowPurple) =>
+  glowStrong: (color: string = colors.glowGold) =>
     `0 0 60px ${color}, 0 0 120px ${color}`,
-  focusRing: `0 0 0 2px ${colors.purple}, 0 0 0 4px rgba(124, 58, 237, 0.3)`,
+  focusRing: `0 0 0 2px ${colors.purple}, 0 0 0 4px rgba(155, 141, 200, 0.3)`,
   cardHover:
-    '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+    '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(216, 183, 123, 0.15)',
 } as const;
 
 // ────────────────────────────────────────────
@@ -167,19 +175,19 @@ export const shadows = {
 // ────────────────────────────────────────────
 export const glass = {
   soft: {
-    background: 'rgba(255, 255, 255, 0.01)',
+    background: 'rgba(255, 255, 255, 0.03)',
     backdropFilter: 'blur(4px)',
     border: 'none',
     boxShadow: shadows.softGlass,
   },
   strong: {
-    background: 'rgba(255, 255, 255, 0.02)',
+    background: 'rgba(255, 255, 255, 0.05)',
     backdropFilter: 'blur(50px)',
     border: 'none',
     boxShadow: shadows.strongGlass,
   },
   card: {
-    background: 'rgba(255, 255, 255, 0.03)',
+    background: 'rgba(255, 255, 255, 0.06)',
     backdropFilter: 'blur(12px)',
     border: `1px solid ${colors.borderSubtle}`,
     boxShadow: shadows.softGlass,
