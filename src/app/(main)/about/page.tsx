@@ -279,7 +279,7 @@ export default function AboutPage() {
                 </a>
                 <Link
                   href={withLanguageParam('/legal/privacy', language)}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-6 py-3 text-xs uppercase tracking-[0.22em] text-white/65 transition hover:border-white/25 hover:text-white"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-6 py-3 text-xs uppercase tracking-[0.22em] text-white/65 transition hover:border-white/25 hover:text-[#F7F1E8]"
                 >
                   {t.deletionLearnMore}
                 </Link>
@@ -300,7 +300,7 @@ export default function AboutPage() {
               <div className="mb-2 text-[0.66rem] uppercase tracking-[0.26em] text-[rgba(205,191,173,0.4)] group-hover:text-[rgba(216,183,123,0.78)]">
                 {item.label}
               </div>
-              <div className="font-mono text-sm text-white/85 group-hover:text-white">
+              <div className="font-mono text-sm text-white/85 group-hover:text-[#F7F1E8]">
                 {item.value}
               </div>
             </a>

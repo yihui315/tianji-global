@@ -572,7 +572,7 @@ export default function PricingPage() {
           </Link>
           <Link
             href={withLanguageParam('/about', language)}
-            className="rounded-full border border-white/15 bg-white/[0.03] px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white/82 transition hover:border-white/30 hover:text-white"
+            className="rounded-full border border-white/15 bg-white/[0.03] px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white/82 transition hover:border-white/30 hover:text-[#F7F1E8]"
           >
             {copy.finalCta.secondary}
           </Link>

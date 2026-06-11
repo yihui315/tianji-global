@@ -449,7 +449,7 @@ function ApplicationModule({ title, icon, current, future, suggestions, accentCo
     <GlassCard level="card" className="p-5">
       <div className="flex items-center gap-3 mb-4">
         <span className="text-2xl">{icon}</span>
-        <h3 className="text-base font-serif font-bold text-white">{title}</h3>
+        <h3 className="text-base font-serif font-bold text-[#F7F1E8]">{title}</h3>
       </div>
       <div className="space-y-3">
         <div>
@@ -599,7 +599,7 @@ export default function WesternReportPage() {
   const summary = chartData ? (lang === 'zh' ? SIGN_SUMMARY[chartData.bigThree.sun.sign].zh : SIGN_SUMMARY[chartData.bigThree.sun.sign].en) : '';
 
   return (
-    <main className="min-h-screen bg-[#1C1533] text-white">
+    <main className="min-h-screen bg-[#1C1533] text-[#F7F1E8]">
       {/* ─── INPUT SECTION ─── */}
       {!showReport ? (
         <div className="min-h-screen flex items-center justify-center px-4 py-12">
@@ -739,7 +739,7 @@ export default function WesternReportPage() {
 
             {/* Element Bars */}
             <GlassCard level="card" className="p-5">
-              <h3 className="text-sm font-serif font-bold mb-4 text-white">{lang === 'zh' ? '五行能量分布' : 'Five Elements Energy Distribution'}</h3>
+              <h3 className="text-sm font-serif font-bold mb-4 text-[#F7F1E8]">{lang === 'zh' ? '五行能量分布' : 'Five Elements Energy Distribution'}</h3>
               <div className="space-y-3">
                 {ELEMENTS.map(el => (
                   <div key={el} className="flex items-center gap-3">
@@ -771,7 +771,7 @@ export default function WesternReportPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Energy Radar */}
               <GlassCard level="card" className="p-5">
-                <h3 className="text-sm font-serif font-bold mb-3 text-white">{lang === 'zh' ? '能量雷达图' : 'Energy Radar'}</h3>
+                <h3 className="text-sm font-serif font-bold mb-3 text-[#F7F1E8]">{lang === 'zh' ? '能量雷达图' : 'Energy Radar'}</h3>
                 <p className="text-xs mb-3" style={{ color: 'rgba(226,232,240,0.4)' }}>
                   {lang === 'zh' ? '你的五行能量结构' : 'Your elemental energy structure'}
                 </p>
@@ -780,7 +780,7 @@ export default function WesternReportPage() {
 
               {/* Life Timeline */}
               <GlassCard level="card" className="p-5">
-                <h3 className="text-sm font-serif font-bold mb-3 text-white">{lang === 'zh' ? '人生运势曲线' : 'Life Fortune Curve'}</h3>
+                <h3 className="text-sm font-serif font-bold mb-3 text-[#F7F1E8]">{lang === 'zh' ? '人生运势曲线' : 'Life Fortune Curve'}</h3>
                 <p className="text-xs mb-3" style={{ color: 'rgba(226,232,240,0.4)' }}>
                   {lang === 'zh' ? '20-75岁 · 综合/事业/感情/财富' : 'Age 20-75 · Overall/Career/Love/Wealth'}
                 </p>
@@ -790,7 +790,7 @@ export default function WesternReportPage() {
               {/* Signal Layers - full width */}
               <div className="md:col-span-2">
                 <GlassCard level="card" className="p-5">
-                  <h3 className="text-sm font-serif font-bold mb-3 text-white">{lang === 'zh' ? '多维信号叠加图' : 'Multi-Dimensional Signals'}</h3>
+                  <h3 className="text-sm font-serif font-bold mb-3 text-[#F7F1E8]">{lang === 'zh' ? '多维信号叠加图' : 'Multi-Dimensional Signals'}</h3>
                   <p className="text-xs mb-3" style={{ color: 'rgba(226,232,240,0.4)' }}>
                     {lang === 'zh' ? '各维度能量累积 · 事业/感情/财富/健康' : 'Energy accumulation across dimensions · Career/Love/Wealth/Health'}
                   </p>

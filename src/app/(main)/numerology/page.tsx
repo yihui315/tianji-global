@@ -258,7 +258,7 @@ export default function NumerologyPage() {
   }, [reading, t]);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden text-white">
+    <main className="relative min-h-screen overflow-x-hidden text-[#F7F1E8]">
       <PageChrome disableSpotlight />
 
       <div className="fixed right-4 top-4 z-50">

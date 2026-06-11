@@ -125,7 +125,7 @@ export default function EmbedPage() {
               }`}
             >
               <div className="text-purple-400 text-xs font-medium mb-1">{widget.nameZh}</div>
-              <div className="font-bold text-white">{widget.name}</div>
+              <div className="font-bold text-[#F7F1E8]">{widget.name}</div>
               <div className="text-slate-400 text-xs mt-1">{widget.description}</div>
             </button>
           ))}
@@ -295,7 +295,7 @@ export default function EmbedPage() {
               <div className="flex items-start gap-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-lg font-bold text-white">{widget.name}</h3>
+                    <h3 className="text-lg font-bold text-[#F7F1E8]">{widget.name}</h3>
                     <span className="text-purple-400 text-sm">·</span>
                     <span className="text-slate-400 text-sm">{widget.nameZh}</span>
                   </div>

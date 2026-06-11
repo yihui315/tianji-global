@@ -325,7 +325,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(124,58,237,0.2),_transparent_35%),linear-gradient(135deg,_#14091f,_#09090f_55%,_#0f172a)] text-white">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(124,58,237,0.2),_transparent_35%),linear-gradient(135deg,_#14091f,_#09090f_55%,_#0f172a)] text-[#F7F1E8]">
       <header className="border-b border-white/10 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-6">
           <div className="flex items-center gap-4">
@@ -573,7 +573,7 @@ export default function ProfilePage() {
                       <select
                         value={draft.profileType}
                         onChange={(event) => setDraft((current) => ({ ...current, profileType: event.target.value as 'self' | 'other' }))}
-                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                       >
                         <option value="self">{language === 'zh' ? '本人' : 'Self'}</option>
                         <option value="other">{language === 'zh' ? '他人' : 'Other'}</option>
@@ -584,7 +584,7 @@ export default function ProfilePage() {
                       <select
                         value={draft.language}
                         onChange={(event) => setDraft((current) => ({ ...current, language: event.target.value as 'en' | 'zh' }))}
-                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                       >
                         <option value="en">English</option>
                         <option value="zh">中文</option>
@@ -595,7 +595,7 @@ export default function ProfilePage() {
                       <input
                         value={draft.displayName}
                         onChange={(event) => setDraft((current) => ({ ...current, displayName: event.target.value }))}
-                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                       />
                     </label>
                     <label className="block">
@@ -604,7 +604,7 @@ export default function ProfilePage() {
                         type="date"
                         value={draft.birthDate}
                         onChange={(event) => setDraft((current) => ({ ...current, birthDate: event.target.value }))}
-                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                       />
                     </label>
                     <label className="block">
@@ -613,7 +613,7 @@ export default function ProfilePage() {
                         type="time"
                         value={draft.birthTime}
                         onChange={(event) => setDraft((current) => ({ ...current, birthTime: event.target.value }))}
-                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                       />
                     </label>
                     <label className="block md:col-span-2">
@@ -621,7 +621,7 @@ export default function ProfilePage() {
                       <input
                         value={draft.birthLocation}
                         onChange={(event) => setDraft((current) => ({ ...current, birthLocation: event.target.value }))}
-                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                        className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                       />
                     </label>
                   </div>
@@ -657,7 +657,7 @@ export default function ProfilePage() {
                   <select
                     value={newDraft.profileType}
                     onChange={(event) => setNewDraft((current) => ({ ...current, profileType: event.target.value as 'self' | 'other' }))}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                   >
                     <option value="self">{language === 'zh' ? '本人' : 'Self'}</option>
                     <option value="other">{language === 'zh' ? '他人' : 'Other'}</option>
@@ -668,7 +668,7 @@ export default function ProfilePage() {
                   <select
                     value={newDraft.language}
                     onChange={(event) => setNewDraft((current) => ({ ...current, language: event.target.value as 'en' | 'zh' }))}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                   >
                     <option value="en">English</option>
                     <option value="zh">中文</option>
@@ -679,7 +679,7 @@ export default function ProfilePage() {
                   <input
                     value={newDraft.displayName}
                     onChange={(event) => setNewDraft((current) => ({ ...current, displayName: event.target.value }))}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                   />
                 </label>
                 <label className="block">
@@ -688,7 +688,7 @@ export default function ProfilePage() {
                     type="date"
                     value={newDraft.birthDate}
                     onChange={(event) => setNewDraft((current) => ({ ...current, birthDate: event.target.value }))}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                   />
                 </label>
                 <label className="block">
@@ -697,7 +697,7 @@ export default function ProfilePage() {
                     type="time"
                     value={newDraft.birthTime}
                     onChange={(event) => setNewDraft((current) => ({ ...current, birthTime: event.target.value }))}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                   />
                 </label>
                 <label className="block md:col-span-2">
@@ -705,7 +705,7 @@ export default function ProfilePage() {
                   <input
                     value={newDraft.birthLocation}
                     onChange={(event) => setNewDraft((current) => ({ ...current, birthLocation: event.target.value }))}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white"
+                    className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-[#F7F1E8]"
                   />
                 </label>
               </div>

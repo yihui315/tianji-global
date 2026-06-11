@@ -275,7 +275,7 @@ export default function FortunePage() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#1C1533] text-white">
+    <main className="relative min-h-screen overflow-hidden bg-[#1C1533] text-[#F7F1E8]">
       <BackgroundVideoHero
         eyebrow={copy.hero.eyebrow}
         title={copy.hero.title}

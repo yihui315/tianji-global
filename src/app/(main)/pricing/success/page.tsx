@@ -19,7 +19,7 @@ function SuccessContent() {
           {/* Success Icon */}
           <div className="mb-8 inline-flex items-center justify-center w-24 h-24 rounded-full bg-purple-500/30 shadow-2xl shadow-purple-500/20">
             <svg
-              className="w-12 h-12 text-white"
+              className="w-12 h-12 text-[#F7F1E8]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

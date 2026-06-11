@@ -548,7 +548,7 @@ export default function ZiweiPage() {
   );
 
   return (
-    <div className="min-h-screen text-white" style={{ background: colors.bgPrimary }}>
+    <div className="min-h-screen text-[#F7F1E8]" style={{ background: colors.bgPrimary }}>
       <div className="fixed right-4 top-4 z-50">
         <LanguageSwitch />
       </div>

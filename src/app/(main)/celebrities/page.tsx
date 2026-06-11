@@ -284,7 +284,7 @@ export default function CelebritiesPage() {
             <div className="flex items-center gap-4 mb-6">
               <Avatar name={selected.name} size={64} />
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{selected.name}</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-[#F7F1E8]">{selected.name}</h2>
                 <p className="text-gray-500 text-sm">{selected.nationality} · {selected.occupation}</p>
                 <p className="text-xs text-gray-400 mt-0.5">🎂 {selected.birthDate} at {selected.birthTime}</p>
               </div>

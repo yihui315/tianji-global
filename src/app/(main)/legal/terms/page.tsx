@@ -222,7 +222,7 @@ export default function TermsPage() {
   const t = CONTENT[language];
 
   return (
-    <main id="main-content" className="relative min-h-screen overflow-hidden bg-[#1C1533] text-white">
+    <main id="main-content" className="relative min-h-screen overflow-hidden bg-[#1C1533] text-[#F7F1E8]">
       <LegalCosmicLayers />
 
       <LanguageSwitch className="fixed right-6 top-6 z-30" />
@@ -308,7 +308,7 @@ export default function TermsPage() {
           </a>
           <Link
             href={withLanguageParam('/legal/privacy', language)}
-            className="rounded-full border border-white/12 bg-white/[0.03] px-6 py-3 text-white/70 transition hover:border-white/30 hover:text-white"
+            className="rounded-full border border-white/12 bg-white/[0.03] px-6 py-3 text-white/70 transition hover:border-white/30 hover:text-[#F7F1E8]"
           >
             {language === 'zh' ? '隐私政策' : 'Privacy policy'}
           </Link>

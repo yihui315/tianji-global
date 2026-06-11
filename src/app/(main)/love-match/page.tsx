@@ -267,7 +267,7 @@ function PersonForm({
             className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-white/85 transition-all focus:border-purple-500/40 focus:outline-none"
           >
             {TIME_PERIODS.map((period) => (
-              <option key={period.value} value={period.value} className="bg-black text-white">
+              <option key={period.value} value={period.value} className="bg-black text-[#F7F1E8]">
                 {language === 'zh' ? period.label : period.labelEn}
               </option>
             ))}
@@ -526,7 +526,7 @@ export default function LoveMatchPage() {
   }, [result, COMPAT, t]);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden text-white">
+    <main className="relative min-h-screen overflow-x-hidden text-[#F7F1E8]">
       <PageChrome disableSpotlight />
 
       <div className="fixed right-4 top-4 z-50">

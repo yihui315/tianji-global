@@ -39,10 +39,10 @@ export default function PrivacyCenterPage() {
     <main className="min-h-screen bg-[#1C1533] px-5 py-10 text-white sm:px-8">
       <div className="mx-auto max-w-5xl">
         <nav className="flex items-center justify-between text-sm text-white/58">
-          <Link href="/" className="hover:text-white">
+          <Link href="/" className="hover:text-[#F7F1E8]">
             TianJi Global
           </Link>
-          <Link href="/legal/privacy" className="hover:text-white">
+          <Link href="/legal/privacy" className="hover:text-[#F7F1E8]">
             Privacy policy
           </Link>
         </nav>
