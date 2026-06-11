@@ -103,7 +103,7 @@ function PricingCard({ planKey, delay = 0 }: PricingCardProps) {
         <div
           className="absolute -inset-px rounded-3xl opacity-40"
           style={{
-            background: 'linear-gradient(135deg, rgba(212,175,55,0.3) 0%, rgba(124,58,237,0.2) 100%)',
+            background: 'linear-gradient(135deg, rgba(216,183,123,0.3) 0%, rgba(155,141,200,0.2) 100%)',
             filter: 'blur(20px)',
           }}
           aria-hidden="true"
@@ -114,20 +114,20 @@ function PricingCard({ planKey, delay = 0 }: PricingCardProps) {
         className="relative h-full rounded-3xl border overflow-hidden flex flex-col"
         style={{
           background: isHighlighted
-            ? 'linear-gradient(160deg, #0a0a0a 0%, #1a0a2e 100%)'
+            ? 'linear-gradient(160deg, #1C1533 0%, #231A3E 100%)'
             : isDark
-              ? 'linear-gradient(160deg, #0f0a1e 0%, #0a0a0a 100%)'
-              : '#0a0a0a',
-          borderColor: isHighlighted ? 'rgba(212,175,55,0.25)' : 'rgba(255,255,255,0.06)',
+              ? 'linear-gradient(160deg, #1A1430 0%, #1C1533 100%)'
+              : '#1C1533',
+          borderColor: isHighlighted ? 'rgba(216,183,123,0.25)' : 'rgba(216,183,123,0.12)',
           boxShadow: isHighlighted
-            ? '0 0 60px rgba(212,175,55,0.06), inset 0 1px 0 rgba(255,255,255,0.05)'
-            : 'inset 0 1px 0 rgba(255,255,255,0.03)',
+            ? '0 0 60px rgba(216,183,123,0.08), inset 0 1px 0 rgba(216,183,123,0.08)'
+            : 'inset 0 1px 0 rgba(216,183,123,0.04)',
         }}
       >
         {isHighlighted && (
           <div
             className="h-px w-full"
-            style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent)' }}
+            style={{ background: 'linear-gradient(90deg, transparent, rgba(216,183,123,0.6), transparent)' }}
           />
         )}
 
@@ -136,11 +136,11 @@ function PricingCard({ planKey, delay = 0 }: PricingCardProps) {
             <div>
               <p
                 className="text-[10px] tracking-[0.2em] uppercase mb-1"
-                style={{ color: isHighlighted ? 'rgba(212,175,55,0.7)' : 'rgba(255,255,255,0.3)' }}
+                style={{ color: isHighlighted ? 'rgba(216,183,123,0.7)' : 'rgba(205,191,173,0.3)' }}
               >
                 {plan.identity[lang]}
               </p>
-              <h3 className="text-xl font-serif" style={{ color: '#FFFFFFE6' }}>
+              <h3 className="text-xl font-serif" style={{ color: '#F7F1E8E6' }}>
                 {plan.name[lang]}
               </h3>
             </div>
@@ -149,9 +149,9 @@ function PricingCard({ planKey, delay = 0 }: PricingCardProps) {
               <div
                 className="flex items-center gap-1 text-[10px] px-2.5 py-1 rounded-full"
                 style={{
-                  background: 'rgba(212,175,55,0.1)',
-                  border: '1px solid rgba(212,175,55,0.2)',
-                  color: 'rgba(212,175,55,0.9)',
+                  background: 'rgba(216,183,123,0.1)',
+                  border: '1px solid rgba(216,183,123,0.2)',
+                  color: 'rgba(216,183,123,0.9)',
                 }}
               >
                 <SparkleIcon className="text-amber-400/80" />
@@ -162,27 +162,27 @@ function PricingCard({ planKey, delay = 0 }: PricingCardProps) {
 
           <div className="mb-7">
             <div className="flex items-end gap-1">
-              <span className="text-4xl font-serif tracking-tight" style={{ color: '#FFFFFFCC' }}>
+              <span className="text-4xl font-serif tracking-tight" style={{ color: '#F7F1E8CC' }}>
                 {plan.price}
               </span>
-              <span className="text-sm mb-1.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
+              <span className="text-sm mb-1.5" style={{ color: 'rgba(205,191,173,0.35)' }}>
                 {plan.period[lang]}
               </span>
             </div>
-            <p className="text-xs mt-1.5 leading-relaxed" style={{ color: 'rgba(255,255,255,0.35)' }}>
+            <p className="text-xs mt-1.5 leading-relaxed" style={{ color: 'rgba(205,191,173,0.35)' }}>
               {plan.tagline[lang]}
             </p>
           </div>
 
-          <div className="h-px mb-7" style={{ background: 'rgba(255,255,255,0.06)' }} />
+          <div className="h-px mb-7" style={{ background: 'rgba(216,183,123,0.12)' }} />
 
           <ul className="space-y-3.5 flex-1">
             {features.map((feature, index) => (
               <li key={`${planKey}-${index}`} className="flex items-start gap-2.5">
-                <span style={{ color: isHighlighted ? 'rgba(212,175,55,0.7)' : 'rgba(168,130,255,0.6)' }}>
+                <span style={{ color: isHighlighted ? 'rgba(216,183,123,0.7)' : 'rgba(155,141,200,0.6)' }}>
                   <CheckIcon />
                 </span>
-                <span className="text-sm leading-snug" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                <span className="text-sm leading-snug" style={{ color: 'rgba(205,191,173,0.6)' }}>
                   {feature[lang]}
                 </span>
               </li>
@@ -195,9 +195,9 @@ function PricingCard({ planKey, delay = 0 }: PricingCardProps) {
                 href="/western"
                 className="block w-full text-center py-3.5 rounded-xl text-sm font-medium transition-all duration-200"
                 style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: 'rgba(255,255,255,0.7)',
+                  background: 'rgba(216,183,123,0.08)',
+                  border: '1px solid rgba(216,183,123,0.2)',
+                  color: 'rgba(247,241,232,0.7)',
                 }}
               >
                 {ctaLabel}
@@ -209,11 +209,11 @@ function PricingCard({ planKey, delay = 0 }: PricingCardProps) {
                 className="w-full py-3.5 rounded-xl text-sm font-medium transition-all duration-200 disabled:opacity-60"
                 style={{
                   background: isHighlighted
-                    ? 'linear-gradient(135deg, rgba(212,175,55,0.9) 0%, rgba(196,145,40,0.9) 100%)'
-                    : 'rgba(124,58,237,0.2)',
-                  border: isHighlighted ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(124,58,237,0.3)',
-                  color: isHighlighted ? '#0a0a0a' : 'rgba(255,255,255,0.85)',
-                  boxShadow: isHighlighted ? '0 4px 24px rgba(212,175,55,0.15)' : '0 4px 24px rgba(124,58,237,0.1)',
+                    ? 'linear-gradient(135deg, rgba(216,183,123,0.9) 0%, rgba(199,175,145,0.9) 100%)'
+                    : 'rgba(155,141,200,0.2)',
+                  border: isHighlighted ? '1px solid rgba(216,183,123,0.4)' : '1px solid rgba(155,141,200,0.3)',
+                  color: isHighlighted ? '#1C1533' : 'rgba(247,241,232,0.85)',
+                  boxShadow: isHighlighted ? '0 4px 24px rgba(216,183,123,0.15)' : '0 4px 24px rgba(155,141,200,0.1)',
                 }}
               >
                 {loading ? (lang === 'zh' ? '跳转中...' : 'Redirecting...') : ctaLabel}
@@ -236,7 +236,7 @@ export default function PricingSection() {
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] rounded-full"
-          style={{ background: 'radial-gradient(ellipse at center, rgba(124,58,237,0.06) 0%, transparent 70%)' }}
+          style={{ background: 'radial-gradient(ellipse at center, rgba(155,141,200,0.06) 0%, transparent 70%)' }}
         />
         <div
           className="absolute bottom-0 left-1/4 w-[400px] h-[300px] rounded-full"
@@ -252,22 +252,22 @@ export default function PricingSection() {
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="text-center mb-16"
         >
-          <p className="text-[10px] tracking-[0.3em] uppercase mb-3" style={{ color: 'rgba(212,175,55,0.5)' }}>
+          <p className="text-[10px] tracking-[0.3em] uppercase mb-3" style={{ color: 'rgba(216,183,123,0.5)' }}>
             {lang === 'zh' ? '定价方案' : 'Pricing'}
           </p>
-          <h2 className="text-3xl sm:text-4xl font-serif mb-4" style={{ color: 'rgba(255,255,255,0.9)' }}>
+          <h2 className="text-3xl sm:text-4xl font-serif mb-4" style={{ color: '#F7F1E8E6' }}>
             {lang === 'zh' ? '解锁你的完整命运画像' : 'Unlock Your Complete Destiny'}
           </h2>
-          <p className="text-sm max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.4)' }}>
+          <p className="text-sm max-w-lg mx-auto" style={{ color: 'rgba(205,191,173,0.4)' }}>
             {lang === 'zh'
               ? '从探索到深度解读，选择适合你当前阶段的方案。'
               : 'Choose the level that fits your current stage, from discovery to deep insight.'}
           </p>
 
           <div className="mt-6 flex items-center justify-center gap-3">
-            <div className="h-px w-12" style={{ background: 'rgba(255,255,255,0.08)' }} />
-            <div className="w-1 h-1 rounded-full" style={{ background: 'rgba(212,175,55,0.4)' }} />
-            <div className="h-px w-12" style={{ background: 'rgba(255,255,255,0.08)' }} />
+            <div className="h-px w-12" style={{ background: 'rgba(216,183,123,0.08)' }} />
+            <div className="w-1 h-1 rounded-full" style={{ background: 'rgba(216,183,123,0.4)' }} />
+            <div className="h-px w-12" style={{ background: 'rgba(216,183,123,0.08)' }} />
           </div>
         </motion.div>
 
