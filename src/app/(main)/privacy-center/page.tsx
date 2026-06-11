@@ -36,7 +36,7 @@ export default function PrivacyCenterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#050508] px-5 py-10 text-white sm:px-8">
+    <main className="min-h-screen bg-[#1C1533] px-5 py-10 text-white sm:px-8">
       <div className="mx-auto max-w-5xl">
         <nav className="flex items-center justify-between text-sm text-white/58">
           <Link href="/" className="hover:text-white">

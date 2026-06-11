@@ -32,7 +32,7 @@ export default function LegalPage() {
   const t = content[language];
 
   return (
-    <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+    <main className="relative min-h-screen bg-[#1C1533] overflow-x-hidden">
       <div className="star-field" aria-hidden="true" />
 
       <div className="relative z-10">

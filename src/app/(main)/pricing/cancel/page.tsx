@@ -7,7 +7,7 @@ export default function CancelPage() {
   const [language, setLanguage] = useState<'zh' | 'en'>('zh');
 
   return (
-    <div className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+    <div className="relative min-h-screen bg-[#1C1533] overflow-x-hidden">
       <div className="star-field" aria-hidden="true" />
 
       {/* Content */}

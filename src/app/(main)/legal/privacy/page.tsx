@@ -176,7 +176,7 @@ export default function PrivacyPage() {
   )}`;
 
   return (
-    <main id="main-content" className="relative min-h-screen overflow-hidden bg-[#050508] text-white">
+    <main id="main-content" className="relative min-h-screen overflow-hidden bg-[#1C1533] text-white">
       <LegalCosmicLayers />
 
       <LanguageSwitch className="fixed right-6 top-6 z-30" />

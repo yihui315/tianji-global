@@ -95,7 +95,7 @@ export default function EmbedPage() {
   const npmCode = buildNpmCode(selectedType);
 
   return (
-    <main className="relative min-h-screen bg-[#0a0a0a] overflow-x-hidden">
+    <main className="relative min-h-screen bg-[#1C1533] overflow-x-hidden">
       <div className="star-field" aria-hidden="true" />
       <div className="relative z-10 text-white p-4">
         <div className="max-w-6xl mx-auto">

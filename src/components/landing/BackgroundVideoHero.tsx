@@ -89,7 +89,7 @@ export default function BackgroundVideoHero({
     <section
       ref={heroRef}
       className={cx(
-        'relative isolate overflow-hidden bg-[#050508]',
+        'relative isolate overflow-hidden bg-[#1C1533]',
         landingTokens.hero.minHeight,
         className
       )}

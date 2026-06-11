@@ -151,7 +151,7 @@ export default function CelebritiesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-[#1C1533]">
       <div className="max-w-7xl mx-auto px-4 py-10 space-y-10">
         {/* Header */}
         <div className="text-center space-y-3">
