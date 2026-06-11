@@ -11,7 +11,7 @@ export const runtime = 'edge';
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
 
-  const title = searchParams.get('title') || 'TianJi Global';
+  const title = searchParams.get('title') || 'Tianji Love';
   const subtitle = searchParams.get('subtitle') || '天机全球 · Premium AI Destiny';
   const moduleName = searchParams.get('module') || 'tianji';
 
@@ -178,7 +178,7 @@ export async function GET(req: NextRequest) {
             fontSize: 16,
           }}
         >
-          <span>tianji.global</span>
+          <span>tianji.love</span>
           <span style={{ color: c.accent }}>·</span>
           <span>Powered by AI</span>
         </div>

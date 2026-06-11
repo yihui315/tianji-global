@@ -104,8 +104,8 @@ const CONTENT = {
         title: '联系我们',
         content: `如对本服务条款有任何疑问，请联系我们：
 
-• 电子邮件：hello@tianji.global
-• 网站：https://tianji.global
+• 电子邮件：hello@tianji.love
+• 网站：https://tianji.love
 
 我们会尽快回复您的请求。`,
       },
@@ -116,13 +116,13 @@ const CONTENT = {
     title: 'The conditions for using TianJi.',
     lastUpdated: 'Last updated: December 2024',
     intro:
-      'Welcome to TianJi Global. These Terms govern your use of our services — please read them carefully before continuing.',
+      'Welcome to Tianji Love. These Terms govern your use of our services — please read them carefully before continuing.',
     backHome: 'Back to home',
     contactCta: 'Email us with questions',
     sections: [
       {
         title: 'Service Description',
-        content: `TianJi Global provides the following services:
+        content: `Tianji Love provides the following services:
 
 • Bazi Fortune Telling: AI-driven analysis based on the traditional Chinese BaZi system
 • Zi Wei Dou Shu: Fortune services based on Chinese imperial astrology
@@ -138,7 +138,7 @@ We reserve the right to modify, suspend, or terminate any service at any time.`,
         title: 'Entertainment Disclaimer',
         content: `Important Notice:
 
-• TianJi Global services are for entertainment and reference purposes only, and do not constitute professional financial, medical, legal, or any other professional advice.
+• Tianji Love services are for entertainment and reference purposes only, and do not constitute professional financial, medical, legal, or any other professional advice.
 • Readings combine traditional methods with AI interpretation. Results are not deterministic predictions and should not be treated as guaranteed outcomes.
 • You should make all decisions independently and take responsibility for your own actions.
 • We cannot guarantee the accuracy of any predictions, analysis, or divination results.
@@ -159,7 +159,7 @@ We reserve the right to modify, suspend, or terminate any service at any time.`,
       },
       {
         title: 'Intellectual Property',
-        content: `The TianJi Global website, designs, logos, content, AI algorithms, and all related intellectual property are the property of TianJi Global or its licensors.
+        content: `The Tianji Love website, designs, logos, content, AI algorithms, and all related intellectual property are the property of Tianji Love or its licensors.
 
 • User-generated content belongs to the user, but you grant us a limited license to use your content to provide services
 • Our AI-generated analysis results are for your personal use only. Commercial distribution without authorization is prohibited
@@ -170,7 +170,7 @@ We reserve the right to modify, suspend, or terminate any service at any time.`,
         title: 'Limitation of Liability',
         content: `To the maximum extent permitted by law:
 
-• TianJi Global shall not be liable for any indirect, incidental, special, consequential, or punitive damages
+• Tianji Love shall not be liable for any indirect, incidental, special, consequential, or punitive damages
 • We are not responsible for any decisions or actions taken based on the use of our services
 • We assume no liability for service interruptions, technical issues, or data loss
 • Our total liability shall not exceed the fees you paid to us for services in the past 12 months
@@ -207,8 +207,8 @@ Dispute Resolution:
         title: 'Contact Us',
         content: `If you have any questions about these Terms of Service, please contact us:
 
-• Email: hello@tianji.global
-• Website: https://tianji.global
+• Email: hello@tianji.love
+• Website: https://tianji.love
 
 We will respond to your requests as soon as possible.`,
       },
@@ -300,7 +300,7 @@ export default function TermsPage() {
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs uppercase tracking-[0.22em]">
           <a
-            href="mailto:hello@tianji.global"
+            href="mailto:hello@tianji.love"
             className="inline-flex items-center gap-2 rounded-full border border-[rgba(212,175,119,0.42)] bg-gradient-to-br from-[#f8e7c2] to-white px-6 py-3 font-semibold tracking-[0.2em] text-black transition hover:from-[#fff5dd]"
           >
             <span aria-hidden>✦</span>
@@ -317,12 +317,12 @@ export default function TermsPage() {
 
       <footer className="relative z-10 border-t border-white/10 px-6 py-10 text-center text-xs uppercase tracking-[0.24em] text-white/30">
         <Link href={withLanguageParam('/', language)} className="hover:text-white/65">
-          TianJi Global
+          Tianji Love
         </Link>
         <p className="mt-3 normal-case tracking-normal text-white/40">
           {language === 'zh'
-            ? '© 2026 TianJi Global · 不卖结果，不卖焦虑'
-            : '© 2026 TianJi Global · No outcome sales, no anxiety sales'}
+            ? '© 2026 Tianji Love · 不卖结果，不卖焦虑'
+            : '© 2026 Tianji Love · No outcome sales, no anxiety sales'}
         </p>
       </footer>
     </main>

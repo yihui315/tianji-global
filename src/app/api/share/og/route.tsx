@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
 
   const type = searchParams.get('type') || 'tianji'; // tianji | ziwei | bazi | tarot | yijing | western
-  const name = searchParams.get('name') || 'TianJi Global';
+  const name = searchParams.get('name') || 'Tianji Love';
   const subtitle = searchParams.get('subtitle') || 'AI Fortune Platform';
 
   // Theme colors
@@ -140,7 +140,7 @@ export async function GET(req: NextRequest) {
             fontSize: 18,
           }}
         >
-          <span>tianji.global</span>
+          <span>tianji.love</span>
           <span style={{ color: c.primary }}>·</span>
           <span>Powered by AI</span>
         </div>

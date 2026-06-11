@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Celebrity Match — TianJi Global
+ * Celebrity Match — Tianji Love
  *
  * Rewritten under the tianji-cinematic design skill (.claude/skills/tianji-cinematic/SKILL.md).
  * Recipe: §7.1 reading-input page (single-input, ranked-list output variant).
@@ -685,7 +685,7 @@ export default function CelebrityMatchPage() {
                 <SharePanel
                   serviceType="celebrity-match"
                   resultId={matches[0]?.celebrity.id ?? 'result'}
-                  shareUrl={`https://tianji.global/celebrity-match`}
+                  shareUrl={`https://tianji.love/celebrity-match`}
                 />
               </div>
             </GlassCard>

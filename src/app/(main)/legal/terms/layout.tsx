@@ -7,12 +7,12 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: 'https://tianji.global/legal/terms' },
+  alternates: { canonical: 'https://tianji.love/legal/terms' },
   robots: { index: true, follow: true },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    url: 'https://tianji.global/legal/terms',
+    url: 'https://tianji.love/legal/terms',
     type: 'article',
   },
   twitter: {

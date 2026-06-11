@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Love Match — TianJi Global
+ * Love Match — Tianji Love
  *
  * Rewritten under the tianji-cinematic design skill (.claude/skills/tianji-cinematic/SKILL.md).
  * Recipe: §7.1 reading-input page (two-person variant).
@@ -866,7 +866,7 @@ export default function LoveMatchPage() {
                 <SharePanel
                   serviceType="love-match"
                   resultId={`love-match-${person1Data.birthday}-${person2Data.birthday}`}
-                  shareUrl={`https://tianji.global/love-match?score=${COMPAT.score}`}
+                  shareUrl={`https://tianji.love/love-match?score=${COMPAT.score}`}
                 />
               </div>
             </GlassCard>

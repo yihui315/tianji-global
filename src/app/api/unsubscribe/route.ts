@@ -1,5 +1,5 @@
 /**
- * Unsubscribe Route — TianJi Global
+ * Unsubscribe Route — Tianji Love
  *
  * GET /api/unsubscribe?token=<user_id>
  * Disables daily fortune push notifications for the given user.
@@ -59,7 +59,7 @@ const HTML = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>退订成功 | TianJi Global</title>
+  <title>退订成功 | Tianji Love</title>
   <style>
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
     .card { background: #1e293b; border-radius: 16px; padding: 48px 40px; max-width: 480px; text-align: center; }
@@ -74,7 +74,7 @@ const HTML = {
     <div class="icon">✅</div>
     <h1>退订成功</h1>
     <p>您已成功退订天机全球每日运势推送。<br>感谢您的使用，期待再次相遇。</p>
-    <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.global'}" class="btn">返回首页</a>
+    <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.love'}" class="btn">返回首页</a>
   </div>
 </body>
 </html>`;
@@ -85,7 +85,7 @@ const HTML = {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Unsubscribe | TianJi Global</title>
+  <title>Unsubscribe | Tianji Love</title>
   <style>
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
     .card { background: #1e293b; border-radius: 16px; padding: 48px 40px; max-width: 480px; text-align: center; }
@@ -100,7 +100,7 @@ const HTML = {
     <div class="icon">⚠️</div>
     <h1>${message ? 'Error' : 'Not Found'}</h1>
     <p>${message || 'No active subscriptions were found for this link.'}</p>
-    <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.global'}" class="btn">Go to Homepage</a>
+    <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.love'}" class="btn">Go to Homepage</a>
   </div>
 </body>
 </html>`;

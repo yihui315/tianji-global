@@ -3,22 +3,22 @@ import './globals.css';
 import { SessionProvider } from 'next-auth/react';
 
 export const metadata: Metadata = {
-  title: 'TianJi Global | Premium AI Destiny Platform',
-  description: 'A premium AI destiny platform for timing, relationship insight, and shareable readings.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.global'),
+  title: 'Tianji Love | Premium Relationship & Fortune Insights',
+  description: 'Private, calm relationship guidance and fortune readings — designed for reflection, not predictions.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.love'),
   openGraph: {
-    title: 'TianJi Global | Premium AI Destiny Platform',
-    description: 'A premium AI destiny platform for timing, relationship insight, and shareable readings.',
+    title: 'Tianji Love | Premium Relationship & Fortune Insights',
+    description: 'Private, calm relationship guidance and fortune readings — designed for reflection, not predictions.',
     type: 'website',
     locale: 'en_US',
     alternateLocale: ['zh_CN'],
-    siteName: 'TianJi Global',
-    images: ['/api/og?title=TianJi+Global&subtitle=Premium+AI+Destiny+Platform'],
+    siteName: 'Tianji Love',
+    images: ['/api/og?title=Tianji+Love&subtitle=Premium+Relationship+Insights'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TianJi Global | Premium AI Destiny Platform',
-    description: 'A premium AI destiny platform for timing, relationship insight, and shareable readings.',
+    title: 'Tianji Love | Premium Relationship & Fortune Insights',
+    description: 'Private, calm relationship guidance and fortune readings — designed for reflection, not predictions.',
   },
   icons: {
     icon: [{ url: '/assets/favicon.svg', type: 'image/svg+xml' }],

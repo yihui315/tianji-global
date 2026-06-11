@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Solar Return — TianJi Global
+ * Solar Return — Tianji Love
  *
  * Rewritten under the tianji-cinematic design skill (.claude/skills/tianji-cinematic/SKILL.md).
  * Recipe: §7.1 reading-input page (single-input, single-result + chart variant).
@@ -707,7 +707,7 @@ export default function SolarReturnPage() {
                   <SharePanel
                     serviceType="solar-return"
                     resultId={`${chartData.birthDate}_${chartData.targetYear}`}
-                    shareUrl="https://tianji.global/solar-return"
+                    shareUrl="https://tianji.love/solar-return"
                   />
                 </div>
               </GlassCard>

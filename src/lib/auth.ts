@@ -1,5 +1,5 @@
 /**
- * Authentication — TianJi Global
+ * Authentication — Tianji Love
  *
  * NextAuth v5 with JWT sessions + Resend Magic Link + Google OAuth.
  *
@@ -27,10 +27,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   // TODO: Add Resend Magic Link provider once EMAIL_FROM domain is verified in Resend.
   // To re-enable: uncomment the Resend import and provider block below.
-  // Requires: (1) verify tianji.global domain in Resend, OR (2) use onboarding@resend.dev
+  // Requires: (1) verify tianji.love domain in Resend, OR (2) use onboarding@resend.dev
   // Resend({
   //   apiKey: process.env.RESEND_API_KEY,
-  //   from: process.env.EMAIL_FROM ?? 'TianJi Global <onboarding@resend.dev>',
+  //   from: process.env.EMAIL_FROM ?? 'Tianji Love <onboarding@resend.dev>',
   // }),
 
 

@@ -107,7 +107,7 @@ const pricingCopy = {
         {
           tag: '7d',
           title: '7-day refund',
-          body: 'Email billing@tianji.global within seven days of purchase for a full refund — no questions asked.',
+          body: 'Email billing@tianji.love within seven days of purchase for a full refund — no questions asked.',
         },
         {
           tag: '1✕',
@@ -138,7 +138,7 @@ const pricingCopy = {
         {
           question: 'Do you offer refunds?',
           answer:
-            'Within seven days of purchase, we issue a full refund without asking questions. Email billing@tianji.global with your purchase email and we will handle it.',
+            'Within seven days of purchase, we issue a full refund without asking questions. Email billing@tianji.love with your purchase email and we will handle it.',
         },
         {
           question: 'How does the AI interpretation actually work?',
@@ -256,7 +256,7 @@ const pricingCopy = {
         {
           tag: '7d',
           title: '7 天无理由退款',
-          body: '购买后 7 天内邮件 billing@tianji.global，全额退款，不问理由。',
+          body: '购买后 7 天内邮件 billing@tianji.love，全额退款，不问理由。',
         },
         {
           tag: '1✕',
@@ -287,7 +287,7 @@ const pricingCopy = {
         {
           question: '是否支持退款？',
           answer:
-            '购买后 7 天内全额退款，不问理由。把购买使用的邮箱发到 billing@tianji.global，我们处理。',
+            '购买后 7 天内全额退款，不问理由。把购买使用的邮箱发到 billing@tianji.love，我们处理。',
         },
         {
           question: 'AI 解读到底是怎么工作的？',
@@ -581,7 +581,7 @@ export default function PricingPage() {
 
       <footer className="border-t border-white/10 px-6 py-10 text-center text-xs uppercase tracking-[0.24em] text-white/30">
         <Link href={withLanguageParam('/', language)} className="hover:text-white/65">
-          TianJi Global
+          Tianji Love
         </Link>
       </footer>
     </main>

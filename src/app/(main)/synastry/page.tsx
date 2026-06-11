@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Synastry — TianJi Global
+ * Synastry — Tianji Love
  *
  * Rewritten under the tianji-cinematic design skill (.claude/skills/tianji-cinematic/SKILL.md).
  * Recipe: §7.1 reading-input page (two-chart input variant, single-result + chart wheel).
@@ -1031,7 +1031,7 @@ export default function SynastryPage() {
                   <SharePanel
                     serviceType="synastry"
                     resultId={`${person1Data.birthDate}_${person2Data.birthDate}_${synastryType}`}
-                    shareUrl="https://tianji.global/synastry"
+                    shareUrl="https://tianji.love/synastry"
                   />
                 </div>
               </GlassCard>

@@ -72,15 +72,15 @@ const CONTENT = {
 • 撤回同意权
 • 向监管机构投诉的权利
 
-如需行使这些权利，请联系：privacy@tianji.global`,
+如需行使这些权利，请联系：privacy@tianji.love`,
       },
       {
         title: '联系我们',
         content: `如果您对本隐私政策有任何疑问或疑虑，请联系我们：
 
-• 电子邮件：hello@tianji.global
-• 隐私事务：privacy@tianji.global
-• 网站：https://tianji.global
+• 电子邮件：hello@tianji.love
+• 隐私事务：privacy@tianji.love
+• 网站：https://tianji.love
 
 我们将尽快回复您的请求，并在 30 天内予以处理。`,
       },
@@ -91,7 +91,7 @@ const CONTENT = {
     title: 'Your data — how we handle it.',
     lastUpdated: 'Last updated: December 2024',
     intro:
-      'TianJi Global ("we", "our", or "TianJi") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information.',
+      'Tianji Love ("we", "our", or "TianJi") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal information.',
     backHome: 'Back to home',
     deletionCta: 'Request data deletion',
     sections: [
@@ -150,15 +150,15 @@ You can manage or disable cookies through your browser settings, but this may af
 • Withdraw consent
 • Lodge a complaint with a data protection authority
 
-To exercise these rights, please contact: privacy@tianji.global`,
+To exercise these rights, please contact: privacy@tianji.love`,
       },
       {
         title: 'Contact Us',
         content: `If you have any questions or concerns about this Privacy Policy, please contact us:
 
-• Email: hello@tianji.global
-• Privacy: privacy@tianji.global
-• Website: https://tianji.global
+• Email: hello@tianji.love
+• Privacy: privacy@tianji.love
+• Website: https://tianji.love
 
 We respond to data requests within 30 days, and usually much sooner.`,
       },
@@ -171,7 +171,7 @@ export default function PrivacyPage() {
   const [activeSection, setActiveSection] = useState<number | null>(0);
   const t = CONTENT[language];
 
-  const deletionMailto = `mailto:privacy@tianji.global?subject=${encodeURIComponent(
+  const deletionMailto = `mailto:privacy@tianji.love?subject=${encodeURIComponent(
     language === 'zh' ? '请求删除我的天机账号与数据' : 'Please delete my TianJi account and data',
   )}`;
 
@@ -271,12 +271,12 @@ export default function PrivacyPage() {
 
       <footer className="relative z-10 border-t border-white/10 px-6 py-10 text-center text-xs uppercase tracking-[0.24em] text-white/30">
         <Link href={withLanguageParam('/', language)} className="hover:text-white/65">
-          TianJi Global
+          Tianji Love
         </Link>
         <p className="mt-3 normal-case tracking-normal text-white/40">
           {language === 'zh'
-            ? '© 2026 TianJi Global · 你的数据，权利始终在你手里'
-            : '© 2026 TianJi Global · Your data, your rights, always'}
+            ? '© 2026 Tianji Love · 你的数据，权利始终在你手里'
+            : '© 2026 Tianji Love · Your data, your rights, always'}
         </p>
       </footer>
     </main>

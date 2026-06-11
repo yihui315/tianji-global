@@ -90,7 +90,7 @@ const faqLd = {
       name: 'Do you offer refunds?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Within seven days of purchase, we issue a full refund without asking questions. Email billing@tianji.global with your purchase email and we will handle it.',
+        text: 'Within seven days of purchase, we issue a full refund without asking questions. Email billing@tianji.love with your purchase email and we will handle it.',
       },
     },
     {

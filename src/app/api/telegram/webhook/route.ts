@@ -1,5 +1,5 @@
 /**
- * Telegram Webhook Handler — TianJi Global
+ * Telegram Webhook Handler — Tianji Love
  *
  * Receives inbound message updates from Telegram via webhook.
  * Validates the request with a Bearer token, parses commands,
@@ -63,7 +63,7 @@ async function setSubscription(chatId: string, subscribed: boolean): Promise<voi
 async function cmdStart(chatId: string): Promise<void> {
   await upsertTelegramUser(chatId);
   const text = [
-    '🌟 <b>欢迎来到天机全球 (TianJi Global)</b>',
+    '🌟 <b>欢迎来到天机全球 (Tianji Love)</b>',
     '',
     '我是您的智能玄学助手，帮助您探索八字、塔罗、每日运势等神秘学奥秘。',
     '',
@@ -207,7 +207,7 @@ async function cmdHelp(chatId: string): Promise<void> {
     '<code>/help</code> — 显示此帮助',
     '',
     '━━━━━━━━━━━━━━',
-    'TianJi Global · 玄学平台',
+    'Tianji Love · 玄学平台',
   ].join('\n');
   await sendMessage(chatId, text, 'HTML');
 }
@@ -311,5 +311,5 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
 // Telegram sends GET for webhook verification (not typically used but safe)
 export async function GET(): Promise<NextResponse> {
-  return NextResponse.json({ ok: true, message: 'TianJi Global Bot is running' });
+  return NextResponse.json({ ok: true, message: 'Tianji Love Bot is running' });
 }

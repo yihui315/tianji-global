@@ -3,47 +3,46 @@ import { LanguageProvider } from '@/hooks/useLanguage';
 import { JsonLd, SITE } from '@/components/seo/JsonLd';
 
 /**
- * Premium Homepage Metadata — TianJi Global
- * Taste Rule: deep space black + gold/purple nebula + Cinzel luxury
+ * Premium Homepage Metadata — Tianji Love
+ * Taste Rule: Moonlit Goldline dark + gold / rose accents
  */
 export const metadata: Metadata = {
-  title: 'TianJi Global | 天机全球 — Premium AI Destiny & Astrology Platform',
+  title: 'Tianji Love | Private Relationship & Fortune Insights',
   description:
-    'Discover your life path with TianJi — the premium AI-powered platform uniting BaZi, Zi Wei Dou Shu, Western astrology, tarot, and compatibility analysis. Bilingual reports. Trusted worldwide.',
+    'Private, calm relationship guidance and fortune readings — designed for reflection, not predictions. BaZi, Zi Wei, tarot, and compatibility analysis.',
   keywords: [
-    'AI astrology', 'BaZi reading', '八字命理', 'Zi Wei Dou Shu', '紫微斗数',
-    'life path insights', 'compatibility analysis', 'astrology platform',
-    'tarot reading', 'birth chart', 'horoscope', '易经', 'Yi Jing',
-    'synastry', 'feng shui', 'transit analysis', '天机全球', 'TianJi Global',
+    'relationship guidance', 'love reading', 'BaZi', '八字命理', 'Zi Wei Dou Shu', '紫微斗数',
+    'compatibility analysis', 'tarot reading', 'birth chart', '易经', 'Yi Jing',
+    'synastry', 'fortune reading', 'tianji love', 'love fortune',
     'premium fortune telling', 'AI destiny reading', 'bilingual astrology report',
-    'Chinese metaphysics', 'Western astrology',
+    'Chinese metaphysics', 'relationship advice',
   ],
   openGraph: {
-    title: 'TianJi Global | 天机全球 — Premium AI Destiny & Astrology',
+    title: 'Tianji Love | Private Relationship & Fortune Insights',
     description:
-      'Uncover your destiny with precision. BaZi, Zi Wei Dou Shu, Western astrology, tarot & compatibility — all in one AI-powered platform. Bilingual. Trusted by seekers worldwide.',
+      'Private, calm relationship guidance and fortune readings — designed for reflection, not predictions.',
     type: 'website',
     locale: 'en_US',
-    url: 'https://tianji.global',
-    siteName: 'TianJi Global',
+    url: 'https://tianji.love',
+    siteName: 'Tianji Love',
     images: [
       {
-        url: '/api/og?title=TianJi+Global&subtitle=Premium+AI+Destiny+Platform',
+        url: '/api/og?title=Tianji+Love&subtitle=Private+Relationship+Insights',
         width: 1200,
         height: 630,
-        alt: 'TianJi Global — Premium AI Destiny & Astrology Platform',
+        alt: 'Tianji Love — Private Relationship & Fortune Insights',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TianJi Global | 天机全球 — AI Destiny & Astrology',
+    title: 'Tianji Love | Private Relationship & Fortune Insights',
     description:
-      'BaZi, Zi Wei, astrology, tarot & compatibility — precision AI insights for your life path. Bilingual. Premium.',
-    images: ['/api/og?title=TianJi+Global&subtitle=Premium+AI+Destiny+Platform'],
+      'Relationship guidance and fortune readings — designed for reflection, not predictions.',
+    images: ['/api/og?title=Tianji+Love&subtitle=Private+Relationship+Insights'],
   },
   alternates: {
-    canonical: 'https://tianji.global',
+    canonical: 'https://tianji.love',
   },
   robots: {
     index: true,

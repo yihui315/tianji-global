@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Transit (Secondary Progressions) — TianJi Global
+ * Transit (Secondary Progressions) — Tianji Love
  *
  * Rewritten under the tianji-cinematic design skill (.claude/skills/tianji-cinematic/SKILL.md).
  * Recipe: §7.1 reading-input page (single-input, single-result + chart variant).
@@ -749,7 +749,7 @@ export default function TransitPage() {
                   <SharePanel
                     serviceType="transit"
                     resultId={`${result.birthDate}_${result.targetDate}`}
-                    shareUrl="https://tianji.global/transit"
+                    shareUrl="https://tianji.love/transit"
                   />
                 </div>
               </GlassCard>

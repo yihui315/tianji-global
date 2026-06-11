@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Numerology — TianJi Global
+ * Numerology — Tianji Love
  *
  * Rewritten under the tianji-cinematic design skill (.claude/skills/tianji-cinematic/SKILL.md).
  * Recipe: §7.1 reading-input page.
@@ -632,7 +632,7 @@ export default function NumerologyPage() {
                   <SharePanel
                     serviceType="numerology"
                     resultId={`numerology-${reading.name}-${reading.birthdate}`}
-                    shareUrl={`https://tianji.global/numerology?name=${encodeURIComponent(reading.name)}`}
+                    shareUrl={`https://tianji.love/numerology?name=${encodeURIComponent(reading.name)}`}
                   />
                 </div>
               </GlassCard>

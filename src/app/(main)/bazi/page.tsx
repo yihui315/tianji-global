@@ -669,7 +669,7 @@ function ResultBlock({
           <SharePanel
             serviceType="bazi"
             resultId="bazi-reading"
-            shareUrl="https://tianji.global/bazi"
+            shareUrl="https://tianji.love/bazi"
           />
         </div>
       </LandingSection>
@@ -866,7 +866,7 @@ export default function BaZiPage() {
 
       {!loading && (
         <div className="pb-12 text-center text-sm text-white/30">
-          <p>TianJi Global · Ba Zi reading</p>
+          <p>Tianji Love · Ba Zi reading</p>
           <p className="mt-1">Current time slot: {selectedTimePeriod.label}</p>
         </div>
       )}
