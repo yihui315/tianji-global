@@ -26,6 +26,7 @@ export const localizedPublicRoutes: Array<{
   { path: '/terms', changeFrequency: 'yearly', priority: 0.45 },
   { path: '/daily-oracle', changeFrequency: 'daily', priority: 0.8 },
   { path: '/love-reading', changeFrequency: 'weekly', priority: 0.85 },
+  { path: '/ask', changeFrequency: 'weekly', priority: 0.8 },
   // SEO pages — high priority relationship intent queries
   { path: '/does-my-ex-still-love-me', changeFrequency: 'weekly', priority: 0.85 },
   { path: '/will-my-ex-come-back', changeFrequency: 'weekly', priority: 0.85 },
