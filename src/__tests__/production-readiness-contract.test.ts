@@ -82,7 +82,7 @@ describe('production readiness contract', () => {
     expect(source).toContain('new ImageResponse');
     expect(source).not.toContain('data:image/png;base64');
     expect(source).not.toMatch(mojibakePattern);
-    expect(source).toContain('TianJi Global');
+    expect(source).toContain('Tianji Love');
     expect(source).toContain('Zi Wei Destiny');
     expect(source).toContain('Yi Jing Oracle');
   });
