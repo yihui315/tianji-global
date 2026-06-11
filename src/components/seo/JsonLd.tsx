@@ -30,14 +30,14 @@ export function JsonLd({ data }: JsonLdProps) {
  * canonical URL or brand name only need to change in one place.
  */
 export const SITE = {
-  url: 'https://tianji.global',
-  name: 'TianJi Global',
-  altName: '天机全球',
-  logo: 'https://tianji.global/assets/favicon.svg',
-  contactEmail: 'hello@tianji.global',
-  privacyEmail: 'privacy@tianji.global',
+  url: 'https://tianji.love',
+  name: 'Tianji Love',
+  altName: 'Tianji Love',
+  logo: 'https://tianji.love/assets/favicon.svg',
+  contactEmail: 'hello@tianji.love',
+  privacyEmail: 'privacy@tianji.love',
   description:
-    'A premium AI destiny platform offering BaZi, Zi Wei Dou Shu, I Ching, tarot, Western astrology, and compatibility analysis. Bilingual (zh / en).',
+    'Discover romantic patterns, emotional timing, and relationship compatibility through a private Tianji Love reading. AI-powered BaZi, astrology, and tarot for modern love.',
   sameAs: [] as string[], // social profiles can be added later
 };
 
