@@ -7,43 +7,43 @@ import { JsonLd, SITE } from '@/components/seo/JsonLd';
  * Taste Rule: deep space black + gold/purple nebula + Cinzel luxury
  */
 export const metadata: Metadata = {
-  title: 'TianJi Global | 天机全球 — Premium AI Destiny & Astrology Platform',
+  title: 'Tianji Love | Private Cosmic Relationship Reading',
   description:
-    'Discover your life path with TianJi — the premium AI-powered platform uniting BaZi, Zi Wei Dou Shu, Western astrology, tarot, and compatibility analysis. Bilingual reports. Trusted worldwide.',
+    'Discover romantic patterns, emotional timing, and relationship compatibility through a private Tianji Love reading.',
   keywords: [
     'AI astrology', 'BaZi reading', '八字命理', 'Zi Wei Dou Shu', '紫微斗数',
     'life path insights', 'compatibility analysis', 'astrology platform',
     'tarot reading', 'birth chart', 'horoscope', '易经', 'Yi Jing',
-    'synastry', 'feng shui', 'transit analysis', '天机全球', 'TianJi Global',
+    'synastry', 'feng shui', 'transit analysis', '天机乐爱', 'Tianji Love',
     'premium fortune telling', 'AI destiny reading', 'bilingual astrology report',
     'Chinese metaphysics', 'Western astrology',
   ],
   openGraph: {
-    title: 'TianJi Global | 天机全球 — Premium AI Destiny & Astrology',
+    title: 'Tianji Love | Private Cosmic Relationship Reading',
     description:
-      'Uncover your destiny with precision. BaZi, Zi Wei Dou Shu, Western astrology, tarot & compatibility — all in one AI-powered platform. Bilingual. Trusted by seekers worldwide.',
+      'Discover romantic patterns, emotional timing, and relationship compatibility through a private cosmic reading designed for modern love.',
     type: 'website',
     locale: 'en_US',
-    url: 'https://tianji.global',
-    siteName: 'TianJi Global',
+    url: 'https://tianji.love',
+    siteName: 'Tianji Love',
     images: [
       {
-        url: '/api/og?title=TianJi+Global&subtitle=Premium+AI+Destiny+Platform',
+        url: '/api/og?title=Tianji+Love&subtitle=Private+Cosmic+Relationship+Reading',
         width: 1200,
         height: 630,
-        alt: 'TianJi Global — Premium AI Destiny & Astrology Platform',
+        alt: 'Tianji Love — Private Cosmic Relationship Reading',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TianJi Global | 天机全球 — AI Destiny & Astrology',
+    title: 'Tianji Love | Private Cosmic Relationship Reading',
     description:
-      'BaZi, Zi Wei, astrology, tarot & compatibility — precision AI insights for your life path. Bilingual. Premium.',
-    images: ['/api/og?title=TianJi+Global&subtitle=Premium+AI+Destiny+Platform'],
+      'Discover romantic patterns, emotional timing, and compatibility through a private cosmic reading designed for modern love.',
+    images: ['/api/og?title=Tianji+Love&subtitle=Private+Cosmic+Relationship+Reading'],
   },
   alternates: {
-    canonical: 'https://tianji.global',
+    canonical: 'https://tianji.love',
   },
   robots: {
     index: true,
