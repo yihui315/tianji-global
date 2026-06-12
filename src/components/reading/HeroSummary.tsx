@@ -39,9 +39,9 @@ export function HeroSummary({
   };
 
   const handleShare = async () => {
-    const shareText = `${summary.headline}\n\n${summary.keywords.join(' · ')}\n\n🔮 TianJi Global - ${typeLabels[type as keyof typeof typeLabels] || type}`;
+    const shareText = `${summary.headline}\n\n${summary.keywords.join(' · ')}\n\n🔮 Tianji Love - ${typeLabels[type as keyof typeof typeLabels] || type}`;
     if (navigator.share) {
-      await navigator.share({ title: 'TianJi Global', text: shareText, url: window.location.href });
+      await navigator.share({ title: 'Tianji Love', text: shareText, url: window.location.href });
     } else {
       await navigator.clipboard.writeText(`${shareText}\n\n${window.location.href}`);
       alert(lang === 'zh' ? '已复制到剪贴板！' : 'Copied to clipboard!');

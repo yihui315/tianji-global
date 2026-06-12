@@ -182,8 +182,8 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
       en: 'From free exploration to expert-level deep readings, for every seeker of wisdom',
     },
     'pricing.urgency': {
-      zh: '大多数用户在首次解读后升级',
-      en: 'Most users upgrade after their first reading',
+      zh: '为深度探索而设计',
+      en: 'For those ready to explore deeper',
     },
 
     // Plan names (from content-tokens)

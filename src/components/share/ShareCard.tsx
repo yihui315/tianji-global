@@ -212,7 +212,7 @@ export default function ShareCard({
       ctx.font = '400 18px sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,0.3)';
       ctx.textAlign = 'right';
-      ctx.fillText('TianJi Global | 天机全球', 1140, 600);
+      ctx.fillText('Tianji Love', 1140, 600);
 
       // Convert to blob
       return new Promise((resolve) => {
@@ -312,7 +312,7 @@ export default function ShareCard({
               </div>
             )}
             <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '14px', marginTop: '40px' }}>
-              TianJi Global | 天机全球
+              Tianji Love
             </div>
           </div>
         )}

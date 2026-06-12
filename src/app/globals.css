@@ -48,38 +48,33 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ══════════════════════════════════════════════════════════════
-   Mystic Fortune-Telling Theme — CSS Custom Properties & Animations
+   Moonlit Goldline Design System — CSS Custom Properties
+   Theme: Moonlit Goldline / 月夜金线
    ══════════════════════════════════════════════════════════════ */
 
 :root {
-  --font-tianji-sans: "Segoe UI", "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
-  --font-tianji-display: var(--font-tianji-sans);
-  --font-tianji-body: var(--font-tianji-sans);
-  --font-cinzel: var(--font-tianji-display);
-  --font-instrument-serif: var(--font-tianji-display);
-  --font-barlow: var(--font-tianji-body);
+  /* Typography */
+  --font-tj-display: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+  --font-tj-body:    'Barlow', 'Inter', system-ui, sans-serif;
+  --font-tj-sans:    'Barlow', 'Inter', system-ui, sans-serif;
+  --font-cinzel:     var(--font-tj-display);
+  --font-instrument-serif: var(--font-tj-display);
+  --font-barlow:     var(--font-tj-body);
 
-  /*
-   * Core palette — synced with src/design-system/design-tokens.ts
-   * Taste Rule: 深空黑背景 #0a0a0a + 星云紫金渐变
-   * Gold: #D4AF37 / #F5C542, Purple: #7C3AED / #A78BFA
-   */
-  --mystic-bg-primary: #0a0a0a;          /* deep space black   */
-  --mystic-bg-nebula: rgba(42, 10, 58, 0.4); /* nebula purple */
-  --mystic-accent-gold: #D4AF37;         /* gold                */
-  --mystic-accent-gold-bright: #F5C542;  /* bright gold         */
-  --mystic-accent-purple: #7C3AED;       /* purple              */
-  --mystic-accent-purple-light: #A78BFA; /* light purple        */
-  --mystic-glow-color: rgba(167, 139, 250, 0.25); /* soft purple glow */
+  /* Moonlit Goldline — Core palette */
+  --tj-bg:           #1C1533;   /* main page background */
+  --tj-bg-deep:      #0E0A1F;   /* hero and footer depth */
+  --tj-surface:      rgba(255,255,255,0.06);   /* cards and panels */
+  --tj-surface-strong: rgba(255,255,255,0.10); /* active/hovered cards */
+  --tj-text:         #F7F1E8;   /* primary readable text */
+  --tj-muted:        #CDBFAD;   /* secondary text */
+  --tj-gold:         #D8B77B;   /* primary CTA, border glow, icons */
+  --tj-rose:         #D99B93;   /* warm emotional accent */
+  --tj-border:       rgba(216,183,123,0.28); /* hairline borders */
+  --tj-danger:       #F4A7A3;   /* error/warning copy */
+  --tj-success:      #9ED8C4;   /* success/confirmation */
 
-  /* Extended tokens */
-  --mystic-text-primary: rgba(255, 255, 255, 0.9);    /* text-white/90  */
-  --mystic-text-secondary: rgba(255, 255, 255, 0.5); /* text-white/50  */
-  --mystic-text-tertiary: rgba(255, 255, 255, 0.35);  /* text-white/35  */
-  --mystic-text-muted: rgba(255, 255, 255, 0.2);     /* text-white/20  */
-  --mystic-border-subtle: rgba(255, 255, 255, 0.06);
-
-  /* Tunable parameters (changed via ConfigPanel) */
+  /* Tunable parameters (kept from previous system) */
   --vignette-intensity: 0.8;
   --wobble-intensity: 0.6;
   --particle-density: 25;
@@ -97,11 +92,11 @@ body {
   font-family: inherit;
 }
 
-/* ── Global resets for mystic pages ── */
+/* ── Global resets for Moonlit Goldline pages ── */
 .mystic-page {
   background:
-    radial-gradient(ellipse at 20% 0%, #2a0a3a 0%, #1a0a2e 40%, #0a0a0a 80%) fixed,
-    var(--mystic-bg-primary);
+    radial-gradient(ellipse at 20% 0%, rgba(44,20,83,0.5) 0%, rgba(28,21,51,0.8) 40%, var(--tj-bg) 80%) fixed,
+    var(--tj-bg);
   overflow-x: hidden;
 }
 

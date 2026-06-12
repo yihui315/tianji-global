@@ -238,7 +238,7 @@ export default function DeepSpaceHero() {
           className="text-[10px] tracking-[0.3em] uppercase mb-6"
           style={{ color: 'rgba(245,158,11,0.6)' }}
         >
-          {lang === 'zh' ? '天机 · 全球命运解读' : 'TianJi Global · Cosmic Destiny'}
+          {lang === 'zh' ? '天机 · 全球命运解读' : 'Tianji Love · Cosmic Destiny'}
         </motion.p>
 
         <motion.h1
