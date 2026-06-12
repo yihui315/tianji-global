@@ -1,0 +1,40 @@
+package: tianji_love_hermes_skill_package
+version: 2026-06-11
+skill_name: tianji-love-premium-design-skill
+repo: yihui315/tianji-global
+suggested_branch: feat/tianji-love-premium-design-20260611
+execution_mode: safe_execution_no_production_deploy
+primary_goal: premium_design_and_conversion_upgrade
+source_research_summary:
+  default_visual_direction: Moonlit Goldline
+  recommended_palette:
+    background: '#1C1533'
+    background_deep: '#0E0A1F'
+    text_primary: '#F7F1E8'
+    text_secondary: '#CDBFAD'
+    gold: '#D8B77B'
+    rose: '#D99B93'
+  homepage_strategy:
+    - one_primary_promise
+    - max_two_hero_ctas
+    - trust_strip_near_first_action
+    - intent_selector
+    - free_preview
+    - evidence_cards
+    - pricing_snapshot
+    - safety_faq
+boundaries:
+  no_live_stripe: true
+  no_production_supabase_mutation: true
+  no_production_deploy: true
+  no_real_paid_smoke: true
+  no_fake_testimonials: true
+  no_guaranteed_prediction_claims: true
+required_reports:
+  - .ai/TIANJI_LOVE_PREMIUM_DESIGN_BASELINE.md
+  - .ai/TIANJI_LOVE_BRAND_CONSISTENCY_REPORT.md
+  - .ai/TIANJI_LOVE_DESIGN_TOKEN_REPORT.md
+  - .ai/TIANJI_LOVE_HOMEPAGE_IA_REPORT.md
+  - .ai/TIANJI_LOVE_PRICING_CLARITY_REPORT.md
+  - .ai/TIANJI_LOVE_TRUST_CENTER_REPORT.md
+  - .ai/TIANJI_LOVE_DESIGN_QA_GATE.md
