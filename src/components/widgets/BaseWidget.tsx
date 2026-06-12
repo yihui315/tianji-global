@@ -89,7 +89,7 @@ export default function BaseWidget({
           {params.birthDate ? `Date: ${params.birthDate}` : 'Draw your cards'}
         </div>
         <div style={{ fontSize: '10px', color: '#7C3AED', marginTop: '8px', opacity: 0.7 }}>
-          TianJi Global · 天机全球
+          Tianji Love
         </div>
       </div>
     );
@@ -129,7 +129,7 @@ export default function BaseWidget({
           {params.name || 'Synastry Chart'}
         </div>
         <div style={{ fontSize: '10px', color: '#7C3AED', marginTop: '4px', opacity: 0.7 }}>
-          TianJi Global · 天机全球
+          Tianji Love
         </div>
       </div>
     );

@@ -140,7 +140,7 @@ export function TianjiLoveHome() {
   }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#080713] text-white">
+    <main className="min-h-screen overflow-hidden bg-[#1C1533] text-[#F7F1E8]">
       <HeroLoveSection
         mode={mode}
         setMode={setMode}
@@ -407,7 +407,7 @@ function ReadingModeToggle({
 
 function InsightCards() {
   return (
-    <section className="border-y border-white/10 bg-[#0d1020] px-5 py-16 sm:px-8 lg:px-12">
+    <section className="border-y border-[rgba(216,183,123,0.28)] bg-[#0E0A1F] px-5 py-16 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-100/80">
@@ -436,7 +436,7 @@ function InsightCards() {
 
 function HowItWorks() {
   return (
-    <section className="bg-[#080713] px-5 py-16 sm:px-8 lg:px-12">
+    <section className="bg-[#0E0A1F] px-5 py-16 sm:px-8 lg:px-12">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.76fr_1fr] lg:items-start">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-rose-100/80">
@@ -470,7 +470,7 @@ function HowItWorks() {
 
 function Testimonials() {
   return (
-    <section className="bg-[#10111f] px-5 py-16 sm:px-8 lg:px-12">
+    <section className="bg-[#1C1533] px-5 py-16 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -509,7 +509,7 @@ function Testimonials() {
 
 function FinalCTA() {
   return (
-    <section className="relative isolate overflow-hidden bg-[#080713] px-5 py-16 sm:px-8 lg:px-12">
+    <section className="relative isolate overflow-hidden bg-[#0E0A1F] px-5 py-16 sm:px-8 lg:px-12">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_10%,rgba(252,211,77,0.16),transparent_38%)]" />
       <div className="mx-auto flex max-w-5xl flex-col items-start gap-7 text-left sm:items-center sm:text-center">
         <TimerReset className="h-8 w-8 text-amber-100" aria-hidden="true" />
