@@ -14,7 +14,7 @@ const COPY = {
       '我们把这件事写清楚：Tianji Love 提供什么样的解读、如何生成、你的隐私如何处理、以及为什么它是一份反思性的关系指引，而不是一份保证。',
     backHome: '返回首页',
     hello: '联系我们',
-    helloEmail: 'hello@tianji.global',
+    helloEmail: 'hello@tianji.love',
 
     // What it does
     doesEyebrow: '天机 Love 做什么',
@@ -169,11 +169,11 @@ const COPY = {
     contactEyebrow: '更多联系方式',
     contactTitle: '一切问题，都从这里开始。',
     contactItems: [
-      { label: '产品与功能', value: 'hello@tianji.global' },
-      { label: '会员与发票', value: 'billing@tianji.global' },
-      { label: '隐私与数据', value: 'privacy@tianji.global' },
+      { label: '产品与功能', value: 'hello@tianji.love' },
+      { label: '会员与发票', value: 'billing@tianji.love' },
+      { label: '隐私与数据', value: 'privacy@tianji.love' },
     ],
-    footerNote: '© 2026 TianJi Global · 反思性关系指引，不是保证',
+    footerNote: '© 2026 Tianji Love · 反思性关系指引，不是保证',
   },
   en: {
     eyebrow: 'Trust Center',
@@ -182,7 +182,7 @@ const COPY = {
       'We write this clearly: what Tianji Love delivers, how readings are generated, how your privacy is handled, and why results are reflective relationship guidance — not a guarantee.',
     backHome: 'Back to home',
     hello: 'Get in touch',
-    helloEmail: 'hello@tianji.global',
+    helloEmail: 'hello@tianji.love',
 
     // What it does
     doesEyebrow: 'What Tianji Love does',
@@ -337,11 +337,11 @@ const COPY = {
     contactEyebrow: 'More ways to reach us',
     contactTitle: 'Anything you need to ask — starts here.',
     contactItems: [
-      { label: 'Product & features', value: 'hello@tianji.global' },
-      { label: 'Billing & invoices', value: 'billing@tianji.global' },
-      { label: 'Privacy & data', value: 'privacy@tianji.global' },
+      { label: 'Product & features', value: 'hello@tianji.love' },
+      { label: 'Billing & invoices', value: 'billing@tianji.love' },
+      { label: 'Privacy & data', value: 'privacy@tianji.love' },
     ],
-    footerNote: '© 2026 TianJi Global · Reflective relationship guidance, not a guarantee',
+    footerNote: '© 2026 Tianji Love · Reflective relationship guidance, not a guarantee',
   },
 } as const;
 
@@ -349,7 +349,7 @@ export default function AboutPage() {
   const [language, setLanguage] = useSyncedLanguage();
   const t = COPY[language];
 
-  const deletionMailto = `mailto:privacy@tianji.global?subject=${encodeURIComponent(
+  const deletionMailto = `mailto:privacy@tianji.love?subject=${encodeURIComponent(
     t.deletionMailtoSubject,
   )}&body=${encodeURIComponent(t.deletionMailtoBody)}`;
 
@@ -557,7 +557,7 @@ export default function AboutPage() {
 
       <footer className="relative z-10 border-t border-white/10 px-6 py-10 text-center text-xs uppercase tracking-[0.24em] text-white/30">
         <Link href={withLanguageParam('/', language)} className="hover:text-white/65">
-          TianJi Global
+          Tianji Love
         </Link>
         <p className="mt-3 normal-case tracking-normal text-white/40">{t.footerNote}</p>
       </footer>

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: PAGE_URL,
     type: 'website',
-    images: [{ url: OG_URL, width: 1200, height: 630, alt: 'About TianJi Global' }],
+    images: [{ url: OG_URL, width: 1200, height: 630, alt: 'About Tianji Love' }],
   },
   twitter: {
     card: 'summary_large_image',
