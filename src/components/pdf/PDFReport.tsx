@@ -362,7 +362,7 @@ function CoverPage({ title, userName, date, language }: CoverPageProps) {
   return (
     <Page size="A4" style={styles.page}>
       <View style={styles.coverPage}>
-        <Text style={styles.logo}>天机全球 TianJi Global</Text>
+        <Text style={styles.logo}>Tianji Love</Text>
         <Text style={styles.logoSub}>AI Fortune Platform · AI命理平台</Text>
         <Text style={styles.coverTitle}>{title}</Text>
         {userName && (
@@ -373,7 +373,7 @@ function CoverPage({ title, userName, date, language }: CoverPageProps) {
         <Text style={styles.coverSubtitle}>
           {language === 'zh' ? '生成日期' : 'Generated'}: {date}
         </Text>
-        <Text style={styles.coverDate}>tianji.global</Text>
+        <Text style={styles.coverDate}>tianji.love</Text>
       </View>
       <View style={styles.footer}>
         <Text style={styles.disclaimer}>本报告仅供娱乐参考，不构成任何决策依据 | For entertainment only. Not financial or life advice.</Text>

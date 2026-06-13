@@ -34,7 +34,7 @@ interface DailyDigestEmailProps {
   language?: 'zh' | 'en';
 }
 
-const PLATFORM_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.global';
+const PLATFORM_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.love';
 const LOGO_URL = `${PLATFORM_URL}/logo.png`;
 
 function ServiceIcon({ service }: { service: string }) {
@@ -86,7 +86,7 @@ export function DailyDigestEmail({
     : 'This reading is for entertainment and self-reflection purposes only. It does not constitute medical, legal, or financial advice. Always consult a qualified professional for important life decisions.';
   const footerText = isZh
     ? '您收到此邮件是因为已订阅天机全球每日运势推送'
-    : 'You received this email because you subscribed to TianJi Global daily fortune updates.';
+    : 'You received this email because you subscribed to Tianji Love daily updates.';
 
   return (
     <Html>
@@ -99,11 +99,11 @@ export function DailyDigestEmail({
               src={LOGO_URL}
               width={48}
               height={48}
-              alt="TianJi Global"
+              alt="Tianji Love"
               style={{ margin: '0 auto', display: 'block' }}
             />
             <Text style={{ color: '#f8fafc', fontSize: 24, fontWeight: 700, marginTop: 12, marginBottom: 0 }}>
-              天机全球 TianJi Global
+              Tianji Love
             </Text>
             <Text style={{ color: '#94a3b8', fontSize: 13, marginTop: 4 }}>
               {isZh ? '每日运势 ·' : 'Daily Fortune ·'} {new Date().toLocaleDateString(isZh ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}

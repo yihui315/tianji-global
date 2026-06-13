@@ -57,7 +57,7 @@ export default function SharePanel({ serviceType, resultId, shareUrl }: SharePan
     img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
   }, [serviceType]);
 
-  const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent('我的' + getServiceName(serviceType) + '命理结果 - TianJi Global')}`;
+  const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent('我的' + getServiceName(serviceType) + '命理结果 - Tianji Love')}`;
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent('我的' + getServiceName(serviceType) + '命理结果: ' + shareUrl)}`;
 
   return (

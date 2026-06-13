@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { JsonLd, SITE, buildBreadcrumb } from '@/components/seo/JsonLd';
 
-const TITLE = 'About TianJi | 关于天机 — Premium AI Divination, Without the Anxiety Sales';
+const TITLE = 'Trust Center · Method & Data — Tianji Love | 关于天机';
 const DESCRIPTION =
-  'TianJi is a divination service for people who want a practice, not a one-time curiosity. Read our four commitments, how we handle your data, and how to delete it in 14 days.';
+  'What Tianji Love delivers, how readings are generated, how your privacy is handled, and why results are reflective relationship guidance — not a guarantee. Learn our method, your data rights, and how to delete everything.';
 const OG_URL = '/api/og?title=About+TianJi&subtitle=No+outcome+sales+%C2%B7+No+anxiety+sales&module=tianji';
 const PAGE_URL = `${SITE.url}/about`;
 
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: PAGE_URL,
     type: 'website',
-    images: [{ url: OG_URL, width: 1200, height: 630, alt: 'About TianJi Global' }],
+    images: [{ url: OG_URL, width: 1200, height: 630, alt: 'About Tianji Love' }],
   },
   twitter: {
     card: 'summary_large_image',
