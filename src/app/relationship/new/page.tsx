@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import RelationshipNewClient from './client';
 
 export const metadata: Metadata = {
-  title: 'Relationship Analysis | TianJi Global',
+  title: 'Relationship Analysis | Tianji Love',
   description: 'Analyze relationship compatibility with AI-powered astrology',
 };
 

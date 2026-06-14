@@ -141,7 +141,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   return buildLocalizedMetadata({
     locale,
     path: '/pricing',
-    title: locale === 'zh-CN' ? 'TianJi Love 价格' : 'TianJi Love Pricing',
+    title: locale === 'zh-CN' ? 'Tianji Love 价格' : 'Tianji Love Pricing',
     description: copy[locale].description,
   });
 }
@@ -155,7 +155,7 @@ export default async function PricingPage({ params }: PageParams) {
     <main className="min-h-screen bg-[#050508] px-5 py-10 text-white sm:px-8">
       <div className="mx-auto max-w-6xl">
         <Link href={getLocalizedPath(locale, '/')} className="text-sm text-white/58 hover:text-white">
-          TianJi Love
+          Tianji Love
         </Link>
         <section className="py-14">
           <h1 className="max-w-3xl font-serif text-4xl leading-tight sm:text-6xl">{t.title}</h1>

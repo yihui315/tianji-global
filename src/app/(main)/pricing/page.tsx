@@ -18,7 +18,7 @@ const PLAN_ORDER = ['PRO_MONTHLY', 'PRO_YEARLY'] as const;
 const pricingCopy = {
   en: {
     hero: {
-      eyebrow: 'TianJi Pro',
+      eyebrow: 'Tianji Love',
       title: 'Go deeper, when the reading starts to matter.',
       subtitle: 'Unlimited readings · Deeper AI interpretation · Long-lived history',
       description:
@@ -162,12 +162,12 @@ const pricingCopy = {
       title: 'The first reading is always free. Pro is for the next one.',
       description: 'Try a complete reading first. If the page wants to keep speaking, Pro is here.',
       primary: 'See plans again',
-      secondary: 'Read about TianJi',
+      secondary: 'Read about Tianji Love',
     },
   },
   zh: {
     hero: {
-      eyebrow: 'TianJi Pro',
+      eyebrow: 'Tianji Love',
       title: '当这次解读开始变得重要 · 进入更深一层。',
       subtitle: '不限次数解读 · 更深 AI 层 · 长期可回看的命理档案',
       description:
@@ -581,7 +581,7 @@ export default function PricingPage() {
 
       <footer className="border-t border-white/10 px-6 py-10 text-center text-xs uppercase tracking-[0.24em] text-white/30">
         <Link href={withLanguageParam('/', language)} className="hover:text-white/65">
-          TianJi Global
+          Tianji Love
         </Link>
       </footer>
     </main>

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { JsonLd, SITE, buildBreadcrumb } from '@/components/seo/JsonLd';
 
-const TITLE = 'TianJi Pro Pricing | 会员方案 — Unlimited Readings, Deeper AI, 7-Day Refund';
+const TITLE = 'Tianji Love Pricing | 会员方案 — Unlimited Readings, Deeper AI, 7-Day Refund';
 const DESCRIPTION =
-  'TianJi Pro unlocks unlimited readings across BaZi, Zi Wei, I Ching, Western astrology, and Tarot, with deeper AI interpretation, PDF export, and 30-day history. Cancel anytime, 7-day refund window.';
-const OG_URL = '/api/og?title=TianJi+Pro&subtitle=Unlimited+%C2%B7+Deeper+AI+%C2%B7+7-day+refund&module=tianji';
+  'Tianji Love unlocks unlimited readings across BaZi, Zi Wei, I Ching, Western astrology, and Tarot, with deeper AI interpretation, exportable PDF reports, and 30-day reading history. Cancel anytime, 7-day refund window.';
+const OG_URL = '/api/og?title=Tianji+Love+Pro&subtitle=Unlimited+%C2%B7+Deeper+AI+%C2%B7+7-day+refund&module=tianji';
 const PAGE_URL = `${SITE.url}/pricing`;
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: PAGE_URL,
     type: 'website',
-    images: [{ url: OG_URL, width: 1200, height: 630, alt: 'TianJi Pro Pricing' }],
+    images: [{ url: OG_URL, width: 1200, height: 630, alt: 'Tianji Love Pricing' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 const breadcrumbLd = buildBreadcrumb([
-  { name: 'TianJi · 首页', path: '/' },
+  { name: 'Tianji · 首页', path: '/' },
   { name: 'Pricing · 定价', path: '/pricing' },
 ]);
 
@@ -35,7 +35,7 @@ const productLd = {
   '@context': 'https://schema.org',
   '@type': 'Product',
   '@id': `${PAGE_URL}#product`,
-  name: 'TianJi Pro',
+  name: 'Tianji Love',
   description:
     'Unlimited readings across BaZi, Zi Wei Dou Shu, I Ching, Western astrology, and Tarot, with deeper AI interpretation, PDF export, and 30-day reading history.',
   brand: { '@type': 'Brand', name: SITE.name },
@@ -43,7 +43,7 @@ const productLd = {
   offers: [
     {
       '@type': 'Offer',
-      name: 'TianJi Pro Monthly',
+      name: 'Tianji Love Monthly',
       price: '9.99',
       priceCurrency: 'USD',
       url: PAGE_URL,
@@ -53,7 +53,7 @@ const productLd = {
     },
     {
       '@type': 'Offer',
-      name: 'TianJi Pro Yearly',
+      name: 'Tianji Love Yearly',
       price: '99.99',
       priceCurrency: 'USD',
       url: PAGE_URL,
