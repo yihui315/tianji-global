@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-06-19 - TianJi Love production baseline branch release readiness
+
+- Task ID: `20260619-tianji-love-production-baseline-release-readiness`
+- Files changed: `src/lib/love-reading/free-preview-generator.ts`, `src/lib/love-reading/love-archetypes.ts`, `src/lib/love-reading/love-dimensions.ts`, `src/lib/love-reading/love-timing.ts`, `src/lib/love-reading/premium-report-template.ts`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Summary: Repaired invalid UTF-8/mojibake-damaged TianJi Love reading copy modules that blocked TypeScript parsing and production release checks on branch `infra/tianji-love-production-baseline-20260531`. The repaired modules now use ASCII-safe English fallback copy for `en`, `zh`, and `zh-Hant` so the branch builds reliably while preserving the schema and non-payment runtime surfaces.
+- Scope control: No `.env` files were read, printed, modified, or staged. No Stripe live action, production Supabase action, paid smoke, production deploy, Vercel production deploy, main merge, or server push was performed.
+- Validation: `npm run release:check` passed end to end: typecheck, Next lint, Vitest coverage run with 81 files / 626 tests, production build, route audit, copy audit, share audit, and upgrade audit. `git diff --check HEAD` passed with line-ending warnings only.
+- Known noise: Next build still reports the existing `jose` Edge Runtime `CompressionStream` / `DecompressionStream` warnings and the standard `next lint` deprecation notice. These warnings did not fail the release gate.
+- Risks: Chinese and Traditional Chinese reading-copy modules currently fall back to English copy to recover buildability. Production deployment authorization remains separate from source release readiness, and revenue/payment execution remains No-Go without fresh masked evidence and explicit approval.
+
 ### 2026-05-26 - TianJi Love relationship Pretext layout merge readiness
 
 - Task ID: `20260526-tianji-love-pretext-layout-merge-readiness`

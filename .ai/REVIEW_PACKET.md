@@ -1,3 +1,93 @@
+# TianJi Love Production Baseline Release Readiness - Review Packet
+
+## 2026-06-19 production baseline branch release readiness
+
+Branch `infra/tianji-love-production-baseline-20260531` is source-release ready after repairing invalid UTF-8/mojibake-damaged TianJi Love reading copy modules.
+
+## Goal
+
+Make the current branch pass the project-defined release gate so it can be safely considered for deployment through the approved production path.
+
+## Changed Files
+
+```text
+src/lib/love-reading/free-preview-generator.ts
+src/lib/love-reading/love-archetypes.ts
+src/lib/love-reading/love-dimensions.ts
+src/lib/love-reading/love-timing.ts
+src/lib/love-reading/premium-report-template.ts
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Diff Summary
+
+- Repaired invalid UTF-8 / mojibake-damaged love-reading copy modules that caused `tsc` parse failures.
+- Removed UTF-8 BOMs introduced during recovery and kept the files valid UTF-8.
+- Preserved the existing love-reading schema and generator interfaces.
+- Used ASCII-safe English fallback copy for `en`, `zh`, and `zh-Hant` to restore buildability without introducing new dependencies.
+- Kept payment, Auth, Stripe, Supabase, API routes, middleware, deployment config, and environment files out of scope.
+
+## Validation
+
+```text
+git diff --check HEAD
+Passed with line-ending warnings only.
+
+npm run release:check
+Passed.
+
+release:check includes:
+- npm run typecheck
+- npm run lint
+- npm run test
+- npm run build
+- npm run audit:routes
+- npm run audit:copy
+- npm run audit:share
+- npm run audit:upgrade
+
+Vitest:
+81 files passed / 626 tests passed.
+
+Next build:
+Compiled successfully and generated 108 static pages.
+```
+
+## Safety Boundaries
+
+```text
+No .env file was read, printed, modified, or staged.
+No raw secret was printed.
+No live Stripe action was run.
+No production Supabase action was run.
+No paid smoke was run.
+No production deploy or Vercel production deploy was run.
+No main merge was performed.
+```
+
+## Known Noise
+
+```text
+Next build reports existing jose Edge Runtime warnings for CompressionStream and DecompressionStream.
+next lint reports the existing Next.js 16 deprecation notice.
+```
+
+## Risks And Follow-Up
+
+- Source-release readiness is Go for the checked branch, based on the local release gate.
+- Production deployment is still a separate approval-controlled action and was not performed.
+- Revenue/payment execution remains No-Go until fresh masked test/staging evidence and explicit approval are present.
+- Chinese and Traditional Chinese reading copy currently falls back to English copy; this restores buildability but should be followed by a proper localized copy pass.
+
+## Suggested Commit Message
+
+```text
+fix(love-reading): restore release-safe copy modules
+```
+
+---
+
 # TianJi Love Pretext Layout Merge Readiness - Review Packet
 
 ## 2026-05-26 relationship Pretext layout merge readiness
