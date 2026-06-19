@@ -102,9 +102,9 @@ describe('Tianji Love landing redesign contract', () => {
       'Pricing',
       'Get Started',
       'Free First, Deeper When Useful',
-      'PRIVATE LOVE REFLECTION. CLEARER NEXT STEPS.',
-      'Understand your love pattern',
-      'before you make the next move.',
+      'PRIVATE LOVE READING. ONE CLEAR NEXT STEP.',
+      'See the pattern between you',
+      'before the next message.',
       'Free Fate Match Test',
       'Not ready for a full reading? Test the signal first.',
       'Take Free Fate Match Test',
@@ -113,11 +113,12 @@ describe('Tianji Love landing redesign contract', () => {
       'Return tomorrow for one small relationship signal.',
       "Draw Today's Oracle",
       'homepage_daily_oracle_entry',
-      'Start Free Love Reading',
+      'Take Free Love Test',
+      'Start Love Reading',
       'Ask One Question',
       'Draw Timing Cards',
-      'View Sample Reading',
-      'About Tianji Love',
+      'Read Sample Result',
+      'Why It Feels Safe',
       'Private & Secure',
       'Personalized Insights',
       'Designed for Clarity',
@@ -142,9 +143,11 @@ describe('Tianji Love landing redesign contract', () => {
       'Sophie',
       'Olivia',
       'tianji-love-testimonial-avatar',
-      'Start with the free signal. Unlock depth only when it helps.',
+      'Start with the free signal. Keep private details private.',
       'Tianji Love first-viewport reference',
       'love-hero-reference-grid',
+      'love-hero-action-rail',
+      'love-hero-proof-grid',
       'love-hero-art-couple',
       'love-birth-chart-panel',
       'love-final-pavilion-cta',
@@ -241,17 +244,20 @@ describe('Tianji Love landing redesign contract', () => {
     expect(home).toContain('Tianji Love');
     expect(home).toContain('tianji.love');
     expect(home).toContain('天机爱');
-    expect(home).toContain('宇宙洞察，真实的爱之指引。');
-    expect(home).toContain('爱是唯一能让命运转弯的力量。');
+    expect(home).toContain('私密爱情解读，给下一步更清晰的方向。');
+    expect(home).toContain('先看清你们的爱情模式');
+    expect(home).toContain('先做爱情测试');
     expect(home).toContain('开始关系解读');
     expect(home).toContain('问一个问题');
-    expect(home).toContain('抽三张牌');
+    expect(home).toContain('抽时机牌');
+    expect(home).toContain('查看示例解读');
+    expect(home).toContain('为什么值得信任');
     expect(home).not.toContain('澶╂満');
     expect(home).not.toContain('涓栭棿');
     expect(home).not.toContain('鐖');
     expect(home).not.toContain('鍏崇郴');
-    expect(home).toContain('Understand your love pattern');
-    expect(home).toContain('before you make the next move.');
+    expect(home).toContain('See the pattern between you');
+    expect(home).toContain('before the next message.');
     expect(home).toContain('/relationship/new');
     expect(home).toContain('/ask');
     expect(home).toContain('/draw');
@@ -305,10 +311,10 @@ describe('Tianji Love landing redesign contract', () => {
     expect(askCta).toBeGreaterThan(primaryCta);
     expect(drawCta).toBeGreaterThan(askCta);
     expect(aboutCta).toBeGreaterThan(drawCta);
-    expect(home).toContain('Start Free Love Reading');
+    expect(home).toContain('Start Love Reading');
     expect(home).toContain('Ask One Question');
     expect(home).toContain('Draw Timing Cards');
-    expect(home).toContain('About Tianji Love');
+    expect(home).toContain('Why It Feels Safe');
   });
 
   it('keeps the core route and copy contract for English, Chinese, and pricing', () => {
@@ -321,14 +327,19 @@ describe('Tianji Love landing redesign contract', () => {
       expect(home).toContain(route);
     }
 
-    expect(englishCopy).toContain('private free relationship reading');
+    expect(englishCopy).toContain('private free love-test signal');
     expect(englishCopy).toContain('compatibility');
     expect(englishCopy).toContain('Reflection, not certainty');
+    expect(englishCopy).not.toContain('deterministic daily love insight');
     expect(englishCopy).not.toMatch(/[\u4e00-\u9fff]/);
     expect(chineseCopy).toContain('天机爱');
+    expect(chineseCopy).toContain('爱情测试');
+    expect(chineseCopy).toContain('先看清你们的爱情模式');
     expect(chineseCopy).toContain('开始关系解读');
     expect(chineseCopy).toContain('问一个问题');
-    expect(chineseCopy).toContain('抽三张牌');
+    expect(chineseCopy).toContain('抽时机牌');
+    expect(chineseCopy).toContain('反思而非断言');
+    expect(home).toContain('付费内容只增加细节，不制造确定性或压力。');
     expect(pricing).toContain('Paid plans unlock depth and history, not guaranteed predictions.');
   });
 
@@ -350,16 +361,15 @@ describe('Tianji Love landing redesign contract', () => {
     }
   });
 
-  it('keeps homepage language bootstrap one-shot to avoid render loops', () => {
+  it('keeps homepage language sourced from the global provider', () => {
     const home = read('src/components/home/TianjiLoveHome.tsx');
-    const languageBootstrapEffect = home.match(
-      /useEffect\(\(\) => \{[\s\S]*?resolveInitialLanguage\(\)[\s\S]*?\}, \[lang, setLang\]\);/
-    )?.[0] ?? '';
 
-    expect(home).toContain('initialLanguageSyncedRef');
-    expect(languageBootstrapEffect).toContain('if (initialLanguageSyncedRef.current) return;');
-    expect(languageBootstrapEffect).toContain('initialLanguageSyncedRef.current = true;');
-    expect(languageBootstrapEffect).toContain('setActiveLang((currentLang)');
+    expect(home).toContain('const { lang, setLang } = useLanguage();');
+    expect(home).toContain('const activeLang = lang;');
+    expect(home).not.toContain('resolveInitialLanguage');
+    expect(home).not.toContain('initialLanguageSyncedRef');
+    expect(home).not.toContain('setActiveLang');
+    expect(home).toContain("window.localStorage.setItem('tianji-lang', nextLang);");
   });
 
   it('keeps the visual system aligned to the supplied Tianji Love image', () => {
@@ -381,6 +391,8 @@ describe('Tianji Love landing redesign contract', () => {
       'Love Reading',
       'Ask One Question',
       'Draw Timing Cards',
+      'love-hero-action-rail',
+      'love-hero-proof-grid',
       'HowItWorks',
       'LoveTestimonials',
       'FinalCta',
@@ -392,8 +404,9 @@ describe('Tianji Love landing redesign contract', () => {
   it('keeps new homepage Chinese readable and free of known mojibake markers', () => {
     const home = read('src/components/home/TianjiLoveHome.tsx');
 
-    expect(home).toContain('在这里，我们以星轨、关系与时机');
+    expect(home).toContain('从一条免费的私密信号开始');
     expect(home).toContain('所有解读都用于自我理解与关系沟通');
+    expect(home).toContain('先看两个人的关系模式，再决定是否继续深入。');
     expect(home).not.toMatch(/娑搢|閸弢|锟|澶╂満|鍏崇郴/);
   });
 

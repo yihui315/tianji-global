@@ -1,4 +1,118 @@
-# TianJi Love Production Baseline Release Readiness - Review Packet
+# TianJi Love Homepage World-Class Hero Upgrade - Review Packet
+
+## 2026-06-19 homepage world-class hero upgrade
+
+Branch `feat/tianji-love-world-class-home-hero` upgrades the TianJi Love homepage first viewport and keeps the branch source-release ready.
+
+## Goal
+
+Improve the current local `tianji.love` homepage toward a premium, conversion-focused love product while preserving TianJi Love safety boundaries: no env access, no payment execution, no production deploy, no API/payment/auth/Supabase/Stripe logic changes.
+
+## Changed Files
+
+```text
+src/components/home/TianjiLoveHome.tsx
+src/__tests__/landing-design-contract.test.ts
+src/__tests__/revenue-funnel-polish-contract.test.ts
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Diff Summary
+
+- Reworked the homepage hero around two primary choices: Free Love Test and Love Reading.
+- Moved Ask, Draw Timing, Sample Result, and trust/about into a quieter secondary action rail.
+- Rewrote English and Chinese first-viewport copy toward privacy, relationship clarity, and non-deterministic guidance.
+- Localized Chinese proof cards and homepage trust language.
+- Simplified homepage language state to use `LanguageProvider` directly, restoring reliable `?lang=zh` rendering in local QA.
+- Updated landing and revenue funnel contract tests to lock the new copy, CTA hierarchy, privacy framing, and language behavior.
+
+## Validation
+
+```text
+npm run test -- --run src/__tests__/landing-design-contract.test.ts
+Passed: 15/15.
+
+npm run test -- --run src/__tests__/revenue-funnel-polish-contract.test.ts
+Passed: 14/14.
+
+npm run typecheck
+Passed.
+
+npm run lint
+Passed, with existing next lint deprecation notice.
+
+npm run release:check
+Passed.
+
+release:check includes:
+- npm run typecheck
+- npm run lint
+- npm run test
+- npm run build
+- npm run audit:routes
+- npm run audit:copy
+- npm run audit:share
+- npm run audit:upgrade
+
+Vitest:
+81 files passed / 626 tests passed.
+
+Next build:
+Compiled successfully and generated 108 static pages.
+```
+
+## Browser QA
+
+```text
+Local preview URL:
+http://127.0.0.1:3000
+
+Desktop English:
+H1: See the pattern between you before the next message.
+scrollWidth=1440
+clientWidth=1440
+Screenshot: .codex-home-worldclass-desktop-en.png
+
+Mobile Chinese:
+H1: 先看清你们的爱情模式 再决定下一步。
+language button: 中
+scrollWidth=390
+clientWidth=390
+Screenshot: .codex-home-worldclass-mobile-zh.png
+```
+
+## Safety Boundaries
+
+```text
+No .env file was opened or printed by Codex.
+No raw secret was printed.
+No API routes were changed.
+No Stripe, Supabase, Auth, billing, middleware, deployment config, or production config was changed.
+No live Stripe action was run.
+No production Supabase action was run.
+No real payment or paid smoke was run.
+No production deploy or Vercel production deploy was run.
+No main merge was performed.
+```
+
+## Known Noise
+
+```text
+next lint reports the existing Next.js 16 deprecation notice.
+next build reports .env.local as a loaded environment file, but no env contents were read or printed by Codex.
+Next build reports the existing Edge Runtime static-generation warning.
+```
+
+## Risks And Follow-Up
+
+- Source-release readiness is Go for this branch after `npm run release:check`.
+- Production deployment remains a separate approval-controlled action and was not performed.
+- Revenue/payment execution remains No-Go until fresh masked test/staging evidence and explicit approval are present.
+
+---
+
+# Previous Packet - TianJi Love Production Baseline Release Readiness
 
 ## 2026-06-19 production baseline branch release readiness
 

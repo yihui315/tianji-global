@@ -2,6 +2,19 @@
 
 ## Entries
 
+### 2026-06-19 - TianJi Love homepage world-class hero upgrade
+
+- Task ID: `20260619-tianji-love-world-class-home-hero`
+- Branch: `feat/tianji-love-world-class-home-hero`
+- Files changed: `src/components/home/TianjiLoveHome.tsx`, `src/__tests__/landing-design-contract.test.ts`, `src/__tests__/revenue-funnel-polish-contract.test.ts`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Summary: Upgraded the TianJi Love homepage first viewport into a clearer premium love funnel: primary path now emphasizes the free Love Test and Love Reading, secondary paths are Ask, Draw Timing, Sample Result, and trust/about, and the Chinese copy is localized around privacy, relationship clarity, and non-deterministic guidance.
+- Language fix: Simplified homepage language state to use the global `LanguageProvider` directly, restoring reliable `?lang=zh` Chinese rendering after local preview verification.
+- Scope control: No `.env` files were opened or printed. No API routes, Stripe/Supabase/Auth/payment logic, production config, deployment config, paid smoke, real payment, Vercel production deploy, production Supabase action, or main merge was changed or run.
+- Validation: Targeted landing and revenue funnel contract tests passed. Full `npm run release:check` passed end to end: typecheck, lint, 81 test files / 626 tests, production build, route audit, copy audit, share audit, and upgrade audit.
+- Visual QA: Local preview at `http://127.0.0.1:3000` passed desktop English and mobile Chinese browser checks with no horizontal overflow. Screenshots saved locally as `.codex-home-worldclass-desktop-en.png` and `.codex-home-worldclass-mobile-zh.png` and left untracked.
+- Known noise: `next lint` deprecation notice and the existing Edge Runtime static-generation warning remain. `next build` reports `.env.local` as a loaded environment file, but no env contents were read or printed by Codex.
+- Revenue status: Revenue/payment execution remains No-Go; this was a frontend source-readiness upgrade only.
+
 ### 2026-06-19 - TianJi Love production baseline branch release readiness
 
 - Task ID: `20260619-tianji-love-production-baseline-release-readiness`
