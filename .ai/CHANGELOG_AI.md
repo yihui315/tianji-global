@@ -1,3 +1,48 @@
+# 2026-06-20 - TianJi Love marketing content calendar refresh (autonomous cron)
+
+## What changed
+
+- Bootstrapped `assets/marketing/` directory and created the four contract files for the content-calendar skill.
+- `assets/marketing/content-calendar-7day.md` — coverage window 2026-06-21 (Sun) — 2026-06-27 (Sat); 7 future days; themes rotated across T1–T7 (he is thinking / should I initiate / will they come back / is it worth continuing / today's love energy / read actions not messages / stage before the next message). No emotional angle repeated on consecutive days.
+- `assets/marketing/love-test-next-30-hooks.md` — 30 hooks, tagged by theme, with rotation rules. Same theme may be used at most once every 3 days on the same platform.
+- `assets/marketing/love-test-next-20-video-scripts.md` — 20 video scripts (3-second hook + 20–40 second body + subtitle + visual + CTA + target route + risk note).
+- `assets/marketing/love-test-next-20-share-captions.md` — 20 short-form captions for XHS / 微博 / 朋友圈 / 视频号 short posts.
+- All CTAs point to one of the approved routes: `/relationship/new`, `/ask`, `/draw`, `/pricing`. No invented price points. No guaranteed-outcome language. No medical / legal / financial claims. No fake testimonials, fake user numbers, or fake KPI claims.
+- Preserved manual publishing + review steps: every day card carries a `Risk note` field and the manual publishing checklist at the bottom of the calendar file is explicitly required to be followed.
+
+## Validation
+
+```text
+npm run typecheck: Not run (out of scope for content-only change; no source code touched)
+npm run lint: Not run (out of scope for content-only change; no source code touched)
+git diff --check: Pass
+Targeted secret-shape scan over .ai/, assets/marketing/, data/: Pass (no token / key / secret shape introduced)
+Manual rotation check (7 calendar days vs 7 distinct theme tags, no two adjacent days share a theme): Pass
+Hook rotation check (30 hooks span T1–T7, no theme overrepresented): Pass
+No fake KPI / testimonial / price claim scan: Pass
+```
+
+## Gate status
+
+```text
+Seven-day content calendar: Go (7 future days)
+Hook pool: Go (30 entries)
+Video script pool: Go (20 entries)
+Share caption pool: Go (20 entries)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+Secrets printed: No
+```
+
+## Follow-up
+
+- Open a narrow PR with the four `assets/marketing/*` files plus this changelog entry.
+- Do NOT merge directly to main.
+- Do NOT auto-post any caption / hook / script to social platforms. Manual review and manual publishing only.
+- The next cron run should only top up missing days, not rewrite the entire pool.
+
 # 2026-06-08 - TianJi Love auth premium baseline mainline integration
 
 ## What changed
