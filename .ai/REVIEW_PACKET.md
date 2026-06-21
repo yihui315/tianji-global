@@ -1,3 +1,80 @@
+# TianJi Love Daily Growth Publishing Pack - Review Packet
+
+## 2026-06-21 day 002 daily growth publishing pack
+
+Branch `infra/tianji-love-production-baseline-20260531` received the Day 002 docs/assets/data-only publishing pack for `/love-test` manual distribution. Theme: 一直等对方先开口吗？先把主动权放回自己手里 (waiting posture).
+
+## Goal
+
+Continue the daily manual publishing rhythm without any code, schema, payment, env, or deploy changes. Add a Day 002 publishing pack, review checklist, and KPI entry scaffold that the operator can use after manual review.
+
+## Changed Files
+
+```text
+assets/marketing/daily/day-002-publishing-pack.md
+assets/marketing/daily/day-002-review-checklist.md
+data/love-test-day-002-kpi-entry.csv
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Diff Summary
+
+- New `day-002-publishing-pack.md` with 3 Xiaohongshu posts, 2 Douyin scripts, 1 Videohao script, 5 share-card captions, 2 KOL DM templates, and 3 SEO outlines, all under a single narrow theme (waiting posture).
+- New `day-002-review-checklist.md` with required checks, theme-specific checks (no "testing the other person" framing, no coercion language, no diagnosis), and channel-specific checks.
+- New `love-test-day-002-kpi-entry.csv` with zero/`not_run` placeholders only — no invented metrics.
+- CHANGELOG and this packet updated to record the run.
+
+## Validation
+
+```text
+git diff --check
+Pass: no whitespace errors on the staged + untracked files (assets/marketing/daily/day-002-*, data/love-test-day-002-kpi-entry.csv, .ai/CHANGELOG_AI.md, .ai/REVIEW_PACKET.md).
+
+Targeted secret-shape scan over .agents/skills/, .github/workflows/, .ai/, assets/marketing/, data/
+Clean for the newly created files. Pre-existing matches in .github/workflows/*.yml and .ai/* evidence docs were not introduced by this skill.
+
+npm run typecheck / npm run lint
+Not run in this cron environment (no node_modules); source code scope is zero for this skill, so typecheck/lint impact is nil.
+```
+
+## Safety Boundaries
+
+```text
+No .env file was read, printed, modified, or staged.
+No Stripe live action, test-mode checkout, webhook replay, paid smoke, production Supabase mutation, Vercel production deploy, server push, or main merge was performed.
+No account credentials, login cookies, browser sessions, or platform tokens were used.
+No social auto-posting was performed; publishing remains manual.
+No invented KPI values, testimonials, customer counts, or guaranteed relationship outcomes were added.
+```
+
+## Gate status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Reviewer focus
+
+- Confirm Day 002 copy avoids "testing" or provocation framings toward the partner.
+- Confirm CTA points users to `/love-test` first, with no live payment claim.
+- Confirm the KPI CSV contains only zero/`not_run` placeholders for manual entry.
+- Confirm no app source, env, deployment config, or runtime system was changed.
+
+## Suggested commit message
+
+```text
+chore(marketing): add love-test day 002 publishing pack
+```
+
+---
+
 # TianJi Love Production Baseline Release Readiness - Review Packet
 
 ## 2026-06-19 production baseline branch release readiness

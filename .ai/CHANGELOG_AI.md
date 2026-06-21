@@ -2,6 +2,15 @@
 
 ## Entries
 
+### 2026-06-21 - TianJi Love day 002 daily growth publishing pack
+
+- Task ID: `20260621-tianji-love-day-002-daily-growth-publishing-pack`
+- Files changed: `assets/marketing/daily/day-002-publishing-pack.md`, `assets/marketing/daily/day-002-review-checklist.md`, `data/love-test-day-002-kpi-entry.csv`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Summary: Executed the `tianji-github-daily-growth` cron skill on branch `infra/tianji-love-production-baseline-20260531`. Generated the Day 002 manual publishing pack for `/love-test` traffic under the narrow theme "一直等对方先开口吗？先把主动权放回自己手里" (waiting posture, distinct from Day 001). The pack includes 3 Xiaohongshu posts, 2 Douyin scripts, 1 Videohao script, 5 share-card captions, 2 KOL DM templates, and 3 SEO outlines. A separate review checklist and KPI entry scaffold were created with zero/empty placeholders only.
+- Scope control: Docs/assets/data-only. No `.env` files were read, printed, modified, or staged. No Stripe live action, production Supabase action, paid smoke, production deploy, Vercel production deploy, main merge, social auto-posting, account credential use, or server mutation was performed. All metrics in the KPI CSV are zero/`not_run` placeholders for manual entry.
+- Validation: `git diff --check` passed with no whitespace errors. Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, and `data/` returned clean for the newly created files; pre-existing matches in `.github/workflows/*.yml` (GitHub Actions `${{ secrets.* }}` placeholders) and `.ai/*` evidence docs (env names with masked values only) were not introduced by this skill and were not staged for commit. `npm run typecheck` and `npm run lint` were not run because no `node_modules` is installed in this cron environment; no source code was changed, so typecheck/lint scope is zero for this skill.
+- Risks: Day 002 KPI rows currently contain only zero placeholders, so no KPI analysis was attempted. Manual publishing requires operator review of the day-002 review checklist before any post is published. Production deploy, Stripe checkout, paid smoke, webhook replay, and Supabase mutation remain No-Go.
+
 ### 2026-06-19 - TianJi Love production baseline branch release readiness
 
 - Task ID: `20260619-tianji-love-production-baseline-release-readiness`
