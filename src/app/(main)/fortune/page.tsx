@@ -486,7 +486,7 @@ export default function FortunePage() {
               <SharePanel
                 serviceType="fortune"
                 resultId="life-chart"
-                shareUrl="https://tianji.global/fortune"
+                shareUrl={process.env.NEXT_PUBLIC_APP_URL + "/fortune"}
               />
             </div>
           </ShareSection>

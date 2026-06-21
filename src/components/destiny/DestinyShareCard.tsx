@@ -73,7 +73,7 @@ export function DestinyShareCard({
 
     context.fillStyle = 'rgba(255,255,255,0.68)';
     context.font = '400 18px sans-serif';
-    context.fillText('tianji-global.vercel.app', 44, height - 30);
+    context.fillText('tianji.love', 44, height - 30);
   }, [compatibilityScore, headline, oneLiner]);
 
   async function copyText() {

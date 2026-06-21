@@ -669,7 +669,7 @@ function ResultBlock({
           <SharePanel
             serviceType="bazi"
             resultId="bazi-reading"
-            shareUrl="https://tianji.global/bazi"
+            shareUrl={process.env.NEXT_PUBLIC_APP_URL + "/bazi"}
           />
         </div>
       </LandingSection>

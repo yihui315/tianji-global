@@ -493,7 +493,7 @@ export default function WesternPage() {
               <SharePanel
                 serviceType="western"
                 resultId="western-chart"
-                shareUrl="https://tianji.global/western"
+                shareUrl="https://tianji.love/western"
               />
             </div>
           </ShareSection>

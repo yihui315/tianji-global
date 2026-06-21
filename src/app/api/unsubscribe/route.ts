@@ -74,7 +74,7 @@ const HTML = {
     <div class="icon">✅</div>
     <h1>退订成功</h1>
     <p>您已成功退订天机全球每日运势推送。<br>感谢您的使用，期待再次相遇。</p>
-    <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.global'}" class="btn">返回首页</a>
+    <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.love'}" class="btn">返回首页</a>
   </div>
 </body>
 </html>`;
@@ -100,7 +100,7 @@ const HTML = {
     <div class="icon">⚠️</div>
     <h1>${message ? 'Error' : 'Not Found'}</h1>
     <p>${message || 'No active subscriptions were found for this link.'}</p>
-    <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.global'}" class="btn">Go to Homepage</a>
+    <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.love'}" class="btn">Go to Homepage</a>
   </div>
 </body>
 </html>`;

@@ -685,7 +685,7 @@ export default function CelebrityMatchPage() {
                 <SharePanel
                   serviceType="celebrity-match"
                   resultId={matches[0]?.celebrity.id ?? 'result'}
-                  shareUrl={`https://tianji.global/celebrity-match`}
+                  shareUrl={process.env.NEXT_PUBLIC_APP_URL + "/celebrity-match"}
                 />
               </div>
             </GlassCard>
