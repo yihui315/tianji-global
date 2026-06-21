@@ -2,6 +2,20 @@
 
 These hooks are for future manual publishing packs. Use them as starting points, not performance claims.
 
+Last refreshed: 2026-06-21 (TianJi GitHub content calendar skill). All 30 hooks preserved verbatim; refresh added a current rotation window and a refill signal only.
+
+## Current rotation window (2026-06-22 → 2026-06-28)
+
+- Day 9 (what is he thinking now): rotate hooks 1, 2, 9, 12, 17.
+- Day 10 (should I take the initiative in ambiguity): rotate hooks 3, 4, 10, 11, 23.
+- Day 11 (will they come back after no contact): rotate hooks 5, 8, 16, 22, 29.
+- Day 12 (is this relationship worth continuing): rotate hooks 7, 8, 11, 20, 30.
+- Day 13 (how to read push-pull): rotate hooks 6, 12, 19, 21, 24.
+- Day 14 (when to reach out): rotate hooks 4, 10, 18, 25, 27.
+- Day 15 (what am I really waiting for): rotate hooks 9, 13, 20, 25, 26.
+
+Refill signal: pool still ≥ 30 unused hooks across the week. No refill needed this run.
+
 ## Hooks
 
 1. 他现在到底在想什么？先别急着追问，先看你们的互动模式。

@@ -2,6 +2,20 @@
 
 Purpose: create a pool for Douyin, Videohao, and short-form manual publishing. Scripts should be reviewed before posting and should not use private user data.
 
+Last refreshed: 2026-06-21 (TianJi GitHub content calendar skill). All 20 scripts preserved verbatim; refresh added a current rotation window and a refill signal only.
+
+## Current rotation window (2026-06-22 → 2026-06-28)
+
+- Day 9 (what is he thinking now): script 12 — What They Think.
+- Day 10 (should I take the initiative in ambiguity): script 02 — Before You Text Them.
+- Day 11 (will they come back after no contact): script 03 — Silence Cost, plus script 08 — Post-Breakup Review.
+- Day 12 (is this relationship worth continuing): script 05 — Worth Continuing.
+- Day 13 (how to read push-pull): script 09 — Push-Pull Pattern.
+- Day 14 (when to reach out): script 11 — Timing Question.
+- Day 15 (what am I really waiting for): script 14 — No Reply, plus script 17 — Message Draft.
+
+Refill signal: pool still ≥ 20 unused scripts across the week. No refill needed this run.
+
 ## 01 Chat Reread Loop
 
 - channel: Douyin

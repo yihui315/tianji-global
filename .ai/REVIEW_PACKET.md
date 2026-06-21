@@ -1,5 +1,79 @@
 # TianJi Love Daily Growth Publishing Pack - Review Packet
 
+## 2026-06-21 7-day content calendar refresh (week of 2026-06-22)
+
+Branch `infra/tianji-love-production-baseline-20260531` received the docs/assets-only content calendar refresh from the `tianji-github-content-calendar` cron skill. The previous 7-day window (2026-05-25 → 2026-05-31) was already in the past, so the calendar was replaced with seven future publishing days (2026-06-22 → 2026-06-28, Days 9–15) and an explicit theme rotation. Hook, video-script, and share-caption pools were preserved verbatim and topped with a current rotation window plus refill-signal note.
+
+## Goal
+
+Keep at least seven future days of TianJi Love content ready for manual review, rotate the four core emotional angles so the calendar does not stack the same one twice, keep all copy helpful / grounded / non-guaranteed, and preserve the manual publishing boundary. No auto-post, no paid smoke, no Stripe checkout, no production deploy.
+
+## Changed Files
+
+```text
+assets/marketing/content-calendar-7day.md
+assets/marketing/love-test-next-30-hooks.md
+assets/marketing/love-test-next-20-video-scripts.md
+assets/marketing/love-test-next-20-share-captions.md
+.ai/CHANGELOG_AI.md
+.ai/REVIEW_PACKET.md
+```
+
+## Key Diff Summary
+
+- `content-calendar-7day.md` — replaced the seven stale 2026-05-25 → 2026-05-31 rows with seven fresh rows for 2026-06-22 → 2026-06-28 (Days 9–15). Added a "Theme rotation" section that explicitly lists the seven daily angles and notes the closing day re-centers on self-steadiness to avoid back-to-back *what is he thinking* days. Channel mix is spread across Xiaohongshu / Douyin / Videohao / share push / KOL DM batch / SEO draft / weekly recap.
+- `love-test-next-30-hooks.md` — all 30 hooks preserved verbatim. Added a "Current rotation window (2026-06-22 → 2026-06-28)" block that maps each calendar day to a subset of hook indices, plus a refill signal (pool ≥ 30 unused across the week; no refill needed this run).
+- `love-test-next-20-video-scripts.md` — all 20 scripts preserved verbatim. Added a "Current rotation window" block that maps each calendar day to a specific script (and a second script for Days 11 and 15), plus a refill signal.
+- `love-test-next-20-share-captions.md` — all 20 captions preserved verbatim. Added a "Current rotation window" block that maps each calendar day to a subset of caption indices, plus a refill signal.
+- CHANGELOG entry prepended to `.ai/CHANGELOG_AI.md` summarizing the run, validation, gate status, and risks.
+- This packet updated to summarize the run.
+
+## Validation
+
+```text
+git diff --check
+Pass: no whitespace errors on the modified files
+(assets/marketing/content-calendar-7day.md,
+assets/marketing/love-test-next-30-hooks.md,
+assets/marketing/love-test-next-20-video-scripts.md,
+assets/marketing/love-test-next-20-share-captions.md,
+.ai/CHANGELOG_AI.md, .ai/REVIEW_PACKET.md).
+
+Targeted secret-shape scan over .ai/, assets/marketing/, data/
+Clean for the new content. The new rotation-window notes contain only
+day numbers, theme labels, and pool indices — no credential patterns,
+no token shapes, no Stripe Price IDs, no webhook secrets, no .env
+references, no real customer data.
+
+npm run typecheck / npm run lint
+Not run in this cron environment (no node_modules); source code scope
+is zero for this skill, so typecheck/lint impact is nil.
+```
+
+## Out-of-Scope Confirmations
+
+- No `.env`, secrets, Stripe Price IDs, webhook secrets, or production configuration values were read, printed, copied, diffed, or inferred.
+- No Stripe checkout was executed.
+- No paid smoke was executed.
+- No production deploy, Vercel deploy, or production Supabase mutation was attempted.
+- No social auto-posting, account credential use, cookie use, or login session was performed.
+- No fake testimonials, fake user counts, fake revenue, or fake KPI claims were introduced.
+- No guaranteed relationship / reunion / medical / financial outcome claim was introduced.
+- No KPI row in `data/love-test-day-XXX-kpi-entry.csv` was modified.
+
+## Gate Status
+
+```text
+Seven-day content calendar: Go (2026-06-22 → 2026-06-28)
+Hook pool: Go (no refill)
+Video script pool: Go (no refill)
+Share caption pool: Go (no refill)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
 ## 2026-06-21 day 002 love-test KPI analysis run (placeholder-only)
 
 Branch `infra/tianji-love-production-baseline-20260531` received the Day-002 KPI-analysis artifacts from the `tianji-github-kpi-analysis` cron skill. Theme being measured: 一直等对方先开口吗？先把主动权放回自己手里 (waiting posture, Day 002). No new content was generated and no KPI rows were modified.

@@ -2,6 +2,22 @@
 
 Soft, mysterious, and non-deceptive captions for future share-card use.
 
+Last refreshed: 2026-06-21 (TianJi GitHub content calendar skill). All 20 captions preserved verbatim; refresh added a current rotation window and a refill signal only.
+
+## Current rotation window (2026-06-22 → 2026-06-28)
+
+- Day 9 (what is he thinking now): captions 2, 4, 8, 12, 16.
+- Day 10 (should I take the initiative in ambiguity): captions 5, 11, 15, 18, 19.
+- Day 11 (will they come back after no contact): captions 1, 6, 10, 14, 22.
+- Day 12 (is this relationship worth continuing): captions 3, 13, 17, 20, 23.
+- Day 13 (how to read push-pull): captions 4, 8, 12, 19, 24.
+- Day 14 (when to reach out): captions 5, 9, 15, 18, 27.
+- Day 15 (what am I really waiting for): captions 7, 11, 14, 20, 26.
+
+Refill signal: pool still ≥ 20 unused captions across the week. No refill needed this run.
+
+## Captions
+
 1. I did not get a final answer. I got a calmer way to look at the pattern: tianji.love/love-test
 2. Some relationships do not need a verdict tonight. They need a little more clarity.
 3. My Love Test result felt less like fortune-telling and more like a mirror.

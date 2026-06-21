@@ -2,6 +2,16 @@
 
 ## Entries
 
+### 2026-06-21 - TianJi Love 7-day content calendar refresh (week of 2026-06-22)
+
+- Task ID: `20260621-tianji-github-content-calendar`.
+- Files changed: `assets/marketing/content-calendar-7day.md`, `assets/marketing/love-test-next-30-hooks.md`, `assets/marketing/love-test-next-20-video-scripts.md`, `assets/marketing/love-test-next-20-share-captions.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Summary: Executed the `tianji-github-content-calendar` cron skill on branch `infra/tianji-love-production-baseline-20260531`. The previous 7-day window (2026-05-25 → 2026-05-31) was already in the past, so the calendar was replaced with seven fresh future publishing days (2026-06-22 → 2026-06-28, Days 9–15) and a theme rotation that walks through *what is he thinking now* → *should I take the initiative in ambiguity* → *will they come back after no contact* → *is this relationship worth continuing* → *how to read push-pull* → *when to reach out* → *what am I really waiting for*. The 30-hook, 20-video-script, and 20-share-caption pools were preserved verbatim and only a current rotation window plus refill-signal note was added to the top of each file. Pools remain ≥ 30 hooks, ≥ 20 scripts, ≥ 20 captions, so no refill is needed this run.
+- Scope control: Docs/assets/AI-records only. No `.env`, secrets, Stripe Price IDs, webhook secrets, or production configuration values were read, printed, copied, diffed, or inferred. No Stripe checkout was executed. No paid smoke was executed. No production deploy, Vercel deploy, production Supabase mutation, social auto-posting, or account/credential use was performed. No KPI row in `data/love-test-day-XXX-kpi-entry.csv` was modified.
+- Validation: `git diff --check` passed with no whitespace errors on the modified files. Targeted secret-shape scan over `.ai/`, `assets/marketing/`, and `data/` returned clean for the new content (the new rotation-window notes contain only day numbers, theme labels, and pool indices). `npm run typecheck` and `npm run lint` were not run because no `node_modules` is installed in this cron environment; the source code scope is zero for this skill, so typecheck/lint impact is nil.
+- Gate status: Seven-day content calendar: Go (2026-06-22 → 2026-06-28). Hook pool: Go (no refill). Video script pool: Go (no refill). Share caption pool: Go (no refill). Social auto-posting: No-Go (manual publishing only). Stripe checkout execution: Not run. Paid smoke: No-Go (awaiting explicit approval). Production deploy: No-Go.
+- Risks: Operator still has not published Day 001 / Day 002 packs and KPI rows remain zero placeholders, so no hook ranking, topic pruning, or Day 003 content direction can be produced by the KPI analysis skill yet. Calendar refresh is a planning surface only — the seven future days still require manual review and manual publishing. Production deploy, Stripe checkout, paid smoke, webhook replay, and Supabase mutation remain No-Go.
+
 ### 2026-06-21 - TianJi Love day 002 love-test KPI analysis (placeholder-only run)
 
 - Task ID: `20260621-tianji-love-day-002-kpi-analysis`.
