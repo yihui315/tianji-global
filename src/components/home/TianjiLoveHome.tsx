@@ -3,10 +3,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { Calendar, ChevronRight, Globe2, Sparkles, Star, User, Users } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
-import { type AppLanguage, isAppLanguage, withLanguageParam } from '@/lib/language-routing';
+import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 
 type SelectCopy = {
@@ -125,10 +125,10 @@ const homepageRelationshipProof = {
     { label: 'Unlock depth only when useful', body: 'Paid depth adds detail, not certainty or pressure.' },
   ],
   zh: [
-    { label: 'Free first signal', body: 'Start with the compatibility pattern before any paid choice.' },
-    { label: 'Birth data hidden', body: 'Public sharing keeps private inputs out of the card and URL.' },
-    { label: 'Share-ready result', body: 'The result can become a social card for the first growth loop.' },
-    { label: 'Unlock depth only when useful', body: 'Paid depth adds detail, not certainty or pressure.' },
+    { label: '免费先看信号', body: '先看两个人的关系模式，再决定是否继续深入。' },
+    { label: '生日信息隐藏', body: '公开分享不会展示生日、时间、地点或时区。' },
+    { label: '适合安心分享', body: '只分享关系洞察，不泄露私密输入。' },
+    { label: '有帮助再深入', body: '付费内容只增加细节，不制造确定性或压力。' },
   ],
 } satisfies Record<AppLanguage, Array<{ label: string; body: string }>>;
 
@@ -145,17 +145,17 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
       { label: 'Login', href: '/login' },
     ],
     hero: {
-      eyebrow: 'PRIVATE LOVE REFLECTION. CLEARER NEXT STEPS.',
-      titleLead: 'Understand your love pattern',
-      titleAccent: 'before you make the next move.',
+      eyebrow: 'PRIVATE LOVE READING. ONE CLEAR NEXT STEP.',
+      titleLead: 'See the pattern between you',
+      titleAccent: 'before the next message.',
       description:
-        'Start with a private free relationship reading. Ask one question, check romantic timing, or unlock a deeper report only when the preview feels useful.',
-      loveTestCta: 'Take Love Test',
-      primaryCta: 'Start Free Love Reading',
+        'Start with a private free love-test signal. Then choose a relationship reading, one question, or timing spread only when the preview feels useful.',
+      loveTestCta: 'Take Free Love Test',
+      primaryCta: 'Start Love Reading',
       secondaryCta: 'Ask One Question',
       tertiaryCta: 'Draw Timing Cards',
-      trustCta: 'About Tianji Love',
-      sampleCta: 'View Sample Reading',
+      trustCta: 'Why It Feels Safe',
+      sampleCta: 'Read Sample Result',
       getStarted: 'Get Started',
       trust: [
         { label: 'Private & Secure', iconAsset: ICONS.privateLock },
@@ -188,7 +188,7 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
       eyebrow: 'Daily Love Oracle',
       title: 'Return tomorrow for one small relationship signal.',
       body:
-        'Draw a deterministic daily love insight by mood, then choose whether to take the Free Fate Match Test or open the full Love Reading flow.',
+        'Draw a privacy-safe daily love reflection by mood, then choose whether to take the Free Fate Match Test or open the full Love Reading flow.',
       cta: "Draw Today's Oracle",
       proof: ['No login', 'No payment', 'Privacy-safe share text'],
     },
@@ -254,8 +254,8 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
       ],
     },
     cta: {
-      title: 'Start with the free signal. Unlock depth only when it helps.',
-      button: 'Start Free Love Reading',
+      title: 'Start with the free signal. Keep private details private.',
+      button: 'Start Love Reading',
     },
     footer: {
       tagline: 'Decode the pattern. Meet love with clearer eyes.',
@@ -276,6 +276,7 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
   zh: {
     brand: '天机爱',
     nav: [
+      { label: '爱情测试', href: '/love-test' },
       { label: '关系解读', href: '/relationship/new' },
       { label: '提问', href: '/ask' },
       { label: '抽牌', href: '/draw' },
@@ -284,19 +285,21 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
       { label: '登录', href: '/login' },
     ],
     hero: {
-      eyebrow: '宇宙洞察，真实的爱之指引。',
-      titleLead: '爱是唯一能让命运转弯的力量。',
-      titleAccent: '',
-      description: '在这里，我们以星轨、关系与时机，解读你灵魂深处的情感命题。',
+      eyebrow: '私密爱情解读，给下一步更清晰的方向。',
+      titleLead: '先看清你们的爱情模式',
+      titleAccent: '再决定下一步。',
+      description: '从一条免费的私密信号开始：先测试吸引与相处模式，再选择关系解读、提问或时机牌。',
+      loveTestCta: '先做爱情测试',
       primaryCta: '开始关系解读',
       secondaryCta: '问一个问题',
-      tertiaryCta: '抽三张牌',
-      trustCta: '了解 Tianji Love',
+      tertiaryCta: '抽时机牌',
+      trustCta: '为什么值得信任',
+      sampleCta: '查看示例解读',
       getStarted: '开始',
       trust: [
-        { label: '隐私安全', iconAsset: ICONS.privateLock },
-        { label: '专属洞察', iconAsset: ICONS.personalized },
-        { label: '清晰指引', iconAsset: ICONS.clarityCompass },
+        { label: '默认保护隐私', iconAsset: ICONS.privateLock },
+        { label: '围绕真实问题', iconAsset: ICONS.personalized },
+        { label: '只给清晰选择', iconAsset: ICONS.clarityCompass },
       ],
     },
     form: {
@@ -313,10 +316,10 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
       helper: '你的第一条洞察将保持私密，并用于自我理解与关系沟通。',
     },
     freeFateTest: {
-      eyebrow: '免费缘分测试',
-      title: '还不确定要做完整解读？先测一条缘分信号。',
-      body: '只用两个昵称、关系状态和一个问题，先得到一份私密的缘分速测结果，不进入任何支付路径。',
-      cta: '免费测缘分',
+      eyebrow: '免费爱情测试',
+      title: '还不确定要做完整解读？先看一条关系信号。',
+      body: '只用两个昵称、关系状态和一个问题，先得到一份私密的爱情速测结果，不进入任何支付路径。',
+      cta: '开始免费测试',
       proof: ['不进入支付', '不需要出生资料', '分享不暴露输入'],
     },
     dailyOracle: {
@@ -328,69 +331,70 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
     },
     cards: [
       {
-        title: '宿缘模式',
-        body: '为什么你总会被同一种人吸引？',
+        title: '关系解读',
+        body: '先看相处模式、吸引点和沟通盲区，再决定要不要深入。',
         iconAsset: ICONS.karmicOrbit,
       },
       {
-        title: '关系动力',
-        body: '这段连接是一份礼物、一堂课，还是两者皆有？',
+        title: '问一个问题',
+        body: '把最困扰你的关系问题说清楚，得到更可执行的下一步。',
         iconAsset: ICONS.relationshipRings,
       },
       {
-        title: '未来时机',
-        body: '下一个重要的情感转折点会在何时靠近？',
+        title: '抽时机牌',
+        body: '看看此刻更适合靠近、等待，还是先照顾自己。',
         iconAsset: ICONS.futureHourglass,
       },
     ],
     features: [
-      { title: '深度解析', body: '以星象与心理线索提供真实清晰感。', iconAsset: ICONS.deepScroll },
-      { title: '情感契合', body: '理解你们在更深层如何连接。', iconAsset: ICONS.emotionalRings },
-      { title: '隐私优先', body: '你的数据受到保护，不会被公开分享。', iconAsset: ICONS.privateLock },
-      { title: '可行动指引', body: '把洞察转化成更好的选择。', iconAsset: ICONS.clarityCompass },
+      { title: '默认私密', body: '生日、问题和关系细节不会出现在公开分享里。', iconAsset: ICONS.privateLock },
+      { title: '反思而非断言', body: '解读关注模式、选择和沟通，不保证任何结果。', iconAsset: ICONS.emotionalRings },
+      { title: '不制造焦虑', body: '先免费预览，有帮助再选择更深内容。', iconAsset: ICONS.deepScroll },
+      { title: '清晰下一步', body: '把复杂情绪整理成可以讨论、可以行动的提示。', iconAsset: ICONS.clarityCompass },
     ],
     process: {
-      title: '如何开始',
+      title: '先免费，再深入',
       steps: [
-        { number: '1', title: '输入你的信息', body: '分享出生信息，开启第一段解读。' },
-        { number: '2', title: '映射关系模式', body: '系统分析你的星轨与关系指标。' },
-        { number: '3', title: '收到清晰建议', body: '把洞察转化为更稳定的行动。' },
+        { number: '1', title: '先看免费信号', body: '不用付费，先得到一条关系模式提示。' },
+        { number: '2', title: '选择深入路径', body: '关系解读、单题提问或时机牌，按当下需要进入。' },
+        { number: '3', title: '带着结果回来', body: '把洞察用于沟通、复盘和下一次更清晰的选择。' },
       ],
     },
     testimonials: {
-      title: '她们在命运转折处读懂了爱',
+      title: '她们用天机爱获得更清晰的关系语言',
       cards: [
         {
-          name: '林小姐',
+          name: 'Emma',
           tag: '情感清晰',
-          quote: '它准确说出了我反复进入同一种关系的原因，我终于明白自己在等待什么。',
+          quote: '预览帮我把一直说不清的关系模式讲出来了。',
           avatar: '/assets/images/avatars/tianji-love-emma.png',
           tone: 'avatar-a',
         },
         {
-          name: '苏小姐',
+          name: 'Sophie',
           tag: '时机洞察',
-          quote: '那段时机判断很准，我在真正准备好的时候遇见了新的人。',
+          quote: '时机牌让我知道今天更适合靠近，还是先停一下。',
           avatar: '/assets/images/avatars/tianji-love-sophie.png',
           tone: 'avatar-b',
         },
         {
-          name: '陈小姐',
+          name: 'Olivia',
           tag: '关系成长',
-          quote: '这次解读让我在爱里更清醒，也更温柔。',
+          quote: '它没有替我做决定，但让我更清醒地说出需求。',
           avatar: '/assets/images/avatars/tianji-love-olivia.png',
           tone: 'avatar-c',
         },
       ],
     },
     cta: {
-      title: '你的下一章，也许早已写在星光里。',
-      button: '进入天机爱',
+      title: '先看一条免费信号，把私密细节留给自己。',
+      button: '开始关系解读',
     },
     footer: {
       tagline: '看懂关系的模式，带着更清晰的眼睛去爱。',
       disclaimer: '所有解读都用于自我理解与关系沟通，不替代医疗、法律或财务建议。',
       links: [
+        { label: '爱情测试', href: '/love-test' },
         { label: '关系解读', href: '/relationship/new' },
         { label: '提问', href: '/ask' },
         { label: '抽牌', href: '/draw' },
@@ -406,15 +410,6 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
 
 function cx(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(' ');
-}
-
-function resolveInitialLanguage(): AppLanguage {
-  if (typeof window === 'undefined') return 'en';
-  const queryLang = new URLSearchParams(window.location.search).get('lang');
-  if (isAppLanguage(queryLang)) return queryLang;
-  const storedLang = window.localStorage.getItem('tianji-lang');
-  if (isAppLanguage(storedLang)) return storedLang;
-  return 'en';
 }
 
 function TianjiLoveIcon({
@@ -439,19 +434,9 @@ function TianjiLoveIcon({
 export default function TianjiLoveHome() {
   const router = useRouter();
   const { lang, setLang } = useLanguage();
-  const initialLanguageSyncedRef = useRef(false);
-  const [activeLang, setActiveLang] = useState<AppLanguage>('en');
+  const activeLang = lang;
   const [mode, setMode] = useState<'solo' | 'relationship'>('solo');
   const copy = loveCopy[activeLang];
-
-  useEffect(() => {
-    if (initialLanguageSyncedRef.current) return;
-    initialLanguageSyncedRef.current = true;
-
-    const nextLang = resolveInitialLanguage();
-    setActiveLang((currentLang) => (currentLang === nextLang ? currentLang : nextLang));
-    if (nextLang !== lang) setLang(nextLang);
-  }, [lang, setLang]);
 
   const yearOptions = useMemo(() => YEARS, []);
   const href = (path: string) => (path.startsWith('#') ? path : withLanguageParam(path, activeLang));
@@ -459,7 +444,6 @@ export default function TianjiLoveHome() {
 
   const toggleLanguage = () => {
     const nextLang = activeLang === 'zh' ? 'en' : 'zh';
-    setActiveLang(nextLang);
     setLang(nextLang);
     if (typeof window !== 'undefined') {
       window.localStorage.setItem('tianji-lang', nextLang);
@@ -522,21 +506,22 @@ export default function TianjiLoveHome() {
 
       <Header copy={copy} activeLang={activeLang} href={href} onToggleLanguage={toggleLanguage} />
 
-      <section className="love-hero-reference-grid tianji-love-hero relative z-10 mx-auto grid w-full max-w-7xl gap-8 px-5 pb-8 pt-24 sm:px-8 lg:min-h-[690px] lg:grid-cols-[minmax(560px,0.98fr)_minmax(520px,1.02fr)] lg:items-center lg:pt-28">
+      <section className="love-hero-reference-grid tianji-love-hero relative z-10 mx-auto grid w-full max-w-7xl gap-8 px-5 pb-10 pt-24 sm:px-8 lg:min-h-[730px] lg:grid-cols-[minmax(560px,0.98fr)_minmax(520px,1.02fr)] lg:items-center lg:pt-28">
         <div className="tianji-love-hero-copy relative z-20 flex max-w-3xl flex-col items-start">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.42em] text-[#d7a86c]/80">
+          <p className="mb-5 max-w-xl text-xs font-semibold uppercase tracking-[0.32em] text-[#d7a86c]/80">
             {copy.hero.eyebrow}
           </p>
-          <h1 className="tianji-love-hero-title max-w-[720px] font-serif text-[2.7rem] font-semibold leading-[1.06] text-[#ffe1b2] drop-shadow-[0_0_28px_rgba(255,99,107,0.12)] sm:text-[4.2rem] lg:text-[4.7rem]">
+          <h1 className="tianji-love-hero-title max-w-[760px] text-balance font-serif text-[2.65rem] font-semibold leading-[1.04] text-[#ffe1b2] drop-shadow-[0_0_28px_rgba(255,99,107,0.12)] sm:text-[4.2rem] lg:text-[4.9rem]">
             <span>{copy.hero.titleLead}</span>{' '}
             <em className="font-serif italic text-[#ff8f87]">{copy.hero.titleAccent}</em>
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-8 text-[#f5d8aa]/86 sm:text-lg">{copy.hero.description}</p>
-          <div className="mt-8 flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:flex-wrap">
+          <p className="mt-6 max-w-2xl text-pretty text-base leading-8 text-[#f5d8aa]/86 sm:text-lg">{copy.hero.description}</p>
+
+          <div className="mt-8 grid w-full gap-3 sm:max-w-[680px] sm:grid-cols-2">
             <Link
               href={href('/love-test')}
               onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_hero', lang: activeLang, cta: 'love_test' })}
-              className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition hover:border-[#ffd6ab] hover:text-white"
+              className="tianji-love-primary inline-flex min-h-16 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition hover:border-[#ffd6ab] hover:text-white"
             >
               {copy.hero.loveTestCta ?? 'Take Love Test'}
               <ChevronRight className="ml-3 h-4 w-4" aria-hidden />
@@ -544,35 +529,38 @@ export default function TianjiLoveHome() {
             <Link
               href={href('/relationship/new')}
               onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_hero', lang: activeLang, cta: 'relationship' })}
-              className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#d9b47c]/65 bg-black/28 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10"
+              className="inline-flex min-h-16 items-center justify-center rounded-lg border border-[#d9b47c]/65 bg-[#070b16]/58 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10"
             >
               {copy.hero.primaryCta}
             </Link>
+          </div>
+
+          <div className="love-hero-action-rail mt-4 grid w-full gap-2 text-sm font-semibold text-[#f5d8aa]/84 sm:max-w-[680px] sm:grid-cols-2">
             <Link
               href={href('/ask')}
               onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_hero', lang: activeLang, cta: 'ask_preview' })}
-              className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#d9b47c]/65 bg-black/28 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10"
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[#d9b47c]/28 bg-black/18 px-4 transition hover:border-[#ffe1a6]/62 hover:bg-[#d9b47c]/10 hover:text-[#ffe3b4]"
             >
               {copy.hero.secondaryCta}
             </Link>
             <Link
               href={href('/draw')}
               onClick={() => void trackRevenueFunnelEvent('home_cta_click', { surface: 'homepage_hero', lang: activeLang, cta: 'draw_preview' })}
-              className="inline-flex min-h-14 items-center justify-center rounded-lg border border-[#d9b47c]/50 bg-black/18 px-8 text-base font-semibold text-[#f7ddb2] backdrop-blur transition hover:border-[#ffe1a6] hover:bg-[#d9b47c]/10"
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[#d9b47c]/28 bg-black/18 px-4 transition hover:border-[#ffe1a6]/62 hover:bg-[#d9b47c]/10 hover:text-[#ffe3b4]"
             >
               {copy.hero.tertiaryCta}
             </Link>
-            <Link href={href('/about')} className="inline-flex min-h-14 items-center justify-center rounded-lg px-2 text-base font-semibold text-[#f5d8aa]/82 transition hover:text-[#ffe3b4] sm:px-4">
+            <Link
+              href={sampleHref}
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[#d9b47c]/28 bg-black/18 px-4 transition hover:border-[#ffe1a6]/62 hover:bg-[#d9b47c]/10 hover:text-[#ffe3b4]"
+            >
+              {copy.hero.sampleCta ?? 'View Sample Reading'}
+            </Link>
+            <Link href={href('/about')} className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[#d9b47c]/28 bg-black/18 px-4 transition hover:border-[#ffe1a6]/62 hover:bg-[#d9b47c]/10 hover:text-[#ffe3b4]">
               {copy.hero.trustCta}
             </Link>
           </div>
-          <Link
-            href={sampleHref}
-            className="mt-4 inline-flex items-center text-sm font-semibold text-[#d8b77b] underline-offset-4 transition hover:text-[#ffe3b4] hover:underline"
-          >
-            {'sampleCta' in copy.hero ? copy.hero.sampleCta : 'View Sample Reading'}
-            <ChevronRight className="ml-1 h-4 w-4" aria-hidden />
-          </Link>
+
           <div className="mt-7 flex flex-wrap gap-x-7 gap-y-3 text-sm text-[#f5d8aa]/76">
             {copy.hero.trust.map((item) => (
               <span key={item.label} className="inline-flex items-center gap-2">
@@ -581,9 +569,9 @@ export default function TianjiLoveHome() {
               </span>
             ))}
           </div>
-          <div className="mt-6 grid w-full max-w-2xl gap-3 sm:grid-cols-2">
+          <div className="love-hero-proof-grid mt-6 grid w-full max-w-2xl gap-3 sm:grid-cols-2">
             {homepageRelationshipProof[activeLang].map((item) => (
-              <div key={item.label} className="rounded-lg border border-[#b57248]/22 bg-black/20 p-3 backdrop-blur">
+              <div key={item.label} className="rounded-lg border border-[#b57248]/24 bg-[#060b16]/48 p-3 backdrop-blur">
                 <p className="text-sm font-semibold text-[#ffe3b4]">{item.label}</p>
                 <p className="mt-1 text-xs leading-5 text-[#f4d7a3]/58">{item.body}</p>
               </div>
