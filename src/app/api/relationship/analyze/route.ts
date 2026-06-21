@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
       timeline: gatewayReading.timeline ?? dbData.timeline,
     };
 
-    // Try to persist to Supabase if configured
+    // Try to persist to Supabase if configured (isolated — never fails the request)
     if (isSupabaseConfigured()) {
       try {
         const supabase = getSupabaseAdmin();
@@ -144,7 +144,8 @@ export async function POST(req: NextRequest) {
           gatewayReading.id = data.id;
         }
       } catch (dbErr) {
-        console.warn('[relationship] Supabase write failed, continuing with in-memory result:', dbErr);
+        // Isolated — non-fatal
+        console.warn('[relationship] Supabase write failed, continuing in-memory:', dbErr);
       }
     }
 
@@ -153,10 +154,11 @@ export async function POST(req: NextRequest) {
       data: gatewayReading,
     });
   } catch (err) {
-    console.error('[relationship/analyze]', err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('[relationship/analyze]', message);
     return NextResponse.json<ApiResponse<null>>({
       success: false,
-      error: 'Analysis failed. Please check input data.',
+      error: `Analysis failed: ${message}`,
     }, { status: 500 });
   }
 }
