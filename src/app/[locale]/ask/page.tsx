@@ -17,9 +17,9 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   const { locale } = await params;
   if (!isSupportedLocale(locale)) return {};
 
-  const title = locale === 'zh' ? '提问 — Tianji Love' : 'Ask — Tianji Love';
+  const title = locale === 'zh-CN' ? '提问 — Tianji Love' : 'Ask — Tianji Love';
   const description =
-    locale === 'zh'
+    locale === 'zh-CN'
       ? '向 AI 占卜师提问任何关于爱情、关系和时机的问题。$1.99/次，3分钟内获得深度解答。'
       : 'Ask the AI divination master anything about love, relationships, and timing. $1.99 per question, deep answers in 3 minutes.';
 
@@ -82,9 +82,10 @@ export default async function AskPage({ params }: PageParams) {
   const { locale } = await params;
   if (!isSupportedLocale(locale)) notFound();
 
-  const t = features[locale] ?? features.en;
-  const p = pricing[locale] ?? pricing.en;
-  const isZh = locale === 'zh';
+  const isZh = locale === 'zh-CN';
+  const copyLocale = isZh ? 'zh' : 'en';
+  const t = features[copyLocale];
+  const p = pricing[copyLocale];
 
   return (
     <main className="min-h-screen bg-[#050508] px-5 py-10 text-white sm:px-8">
