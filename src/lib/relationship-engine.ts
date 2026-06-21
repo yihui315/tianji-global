@@ -399,6 +399,8 @@ function heroHeadline(
   lang: 'zh' | 'en',
 ): string {
   const band = overallAvg > 70 ? 'strong' : overallAvg > 50 ? 'mixed' : 'fragile';
+  // Normalize relationType so 'couple' maps to 'romantic'
+  const rt = relationType === 'couple' ? 'romantic' : relationType;
 
   const copy = {
     zh: {
@@ -437,7 +439,7 @@ function heroHeadline(
     },
   } as const;
 
-  return copy[lang][relationType][band];
+  return copy[lang][rt][band];
 }
 
 function heroOneLiner(
