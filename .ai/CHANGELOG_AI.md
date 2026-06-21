@@ -2,6 +2,15 @@
 
 ## Entries
 
+### 2026-06-21 - TianJi Love day 002 love-test KPI analysis (placeholder-only run)
+
+- Task ID: `20260621-tianji-love-day-002-kpi-analysis`.
+- Files changed: `.ai/reports/love-test-growth-report-2026-06-21.md`, `assets/marketing/daily/day-002-optimization-notes.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Summary: Executed the `tianji-github-kpi-analysis` cron skill on branch `infra/tianji-love-production-baseline-20260531`. Every KPI source file under `data/` (`love-test-day-001-kpi-entry.csv`, `love-test-day-002-kpi-entry.csv`, `love-test-marketing-kpi.csv`, `love-test-funnel-metrics.csv`, `love-test-kpi-tracking.csv`, `love-test-event-tracking.csv`) still contains only zero placeholders, `paid_smoke_result=not_run`, and instructional notes such as `manual entry after publish` / `template row`. Per skill workflow step 2, real analysis was skipped and a No-Go report was written instead of fabricated hook rankings, topic prunings, or funnel CTA changes.
+- Scope control: Docs/assets/data-only. No `.env`, secrets, Stripe Price IDs, webhook secrets, or production configuration values were read, printed, copied, diffed, or inferred. No Stripe checkout was executed. No paid smoke was executed. No production deploy, Vercel deploy, or production Supabase mutation was attempted. No KPI row in `data/love-test-day-XXX-kpi-entry.csv` was modified — the placeholder CSVs were preserved verbatim for the operator to overwrite manually.
+- Validation: `git diff --check` passed with no whitespace errors. Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, and `data/` returned clean for the newly created files. Pre-existing matches in `.github/workflows/*.yml` (`${{ secrets.* }}`) and `.ai/*` evidence docs (env names with masked values only) were not introduced by this skill. `npm run typecheck` and `npm run lint` were not run because no `node_modules` is installed in this cron environment; the source code scope is zero for this skill.
+- Risks: Day 001 and Day 002 KPI rows still contain only zero placeholders, so no hook ranking, topic pruning, share-card prioritization, KOL DM effectiveness comparison, SEO outline ranking, or paid-intent funnel change can be recommended yet. Operator must publish Day 001 + Day 002 assets, then overwrite the placeholder KPI rows with real values from the platform dashboards before the next cron run can produce a real Day 003 content direction. Production deploy, Stripe checkout, paid smoke, webhook replay, and Supabase mutation remain No-Go.
+
 ### 2026-06-21 - TianJi Love day 002 daily growth publishing pack
 
 - Task ID: `20260621-tianji-love-day-002-daily-growth-publishing-pack`
