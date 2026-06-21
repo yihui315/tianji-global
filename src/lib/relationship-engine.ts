@@ -393,7 +393,7 @@ function getDimensionPriority(dimensions: RelationshipDimensions) {
 }
 
 function heroHeadline(
-  relationType: RelationshipType,
+  relationType: RelationshipType | 'couple',
   pattern: string,
   overallAvg: number,
   lang: 'zh' | 'en',

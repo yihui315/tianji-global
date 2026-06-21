@@ -17,9 +17,9 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   const { locale } = await params;
   if (!isSupportedLocale(locale)) return {};
 
-  const title = locale === 'zh' ? '关系解读 — Tianji Love' : 'Love Reading — Tianji Love';
+  const title = locale === 'zh-CN' ? '关系解读 — Tianji Love' : 'Love Reading — Tianji Love';
   const description =
-    locale === 'zh'
+    locale === 'zh-CN'
       ? '探索你的情感命运。输入你和对方的生日，获取深度的关系兼容性解读。免费预览完整报告。'
       : 'Explore your love destiny. Enter you and your partner\'s birth dates for deep compatibility insights. Free preview available.';
 
@@ -90,9 +90,10 @@ export default async function LoveReadingPage({ params }: PageParams) {
   const { locale } = await params;
   if (!isSupportedLocale(locale)) notFound();
 
-  const t = features[locale] ?? features.en;
-  const c = ctas[locale] ?? ctas.en;
-  const isZh = locale === 'zh';
+  const isZh = locale === 'zh-CN';
+  const copyLocale = isZh ? 'zh' : 'en';
+  const t = features[copyLocale];
+  const c = ctas[copyLocale];
 
   return (
     <main className="min-h-screen bg-[#050508] px-5 py-10 text-white sm:px-8">
