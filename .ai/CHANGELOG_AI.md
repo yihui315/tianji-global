@@ -2,6 +2,17 @@
 
 ## Entries
 
+### 2026-06-21 - tianji-github-paid-gate auto run (cron)
+
+- Skill: `tianji-github-paid-gate` (AUTO mode, 0 6 * * *).
+- Branch: `infra/tianji-love-production-baseline-20260531` @ 704afdb.
+- Inspected (read-only, non-secret): approval packet 2026-05-24, Lane N3 paid smoke evidence 2026-05-20, Lane S staging deploy ready 2026-05-21, AUTOPILOT_REPORT / STATUS / TASKS, current REVIEW_PACKET.
+- Validation: `git diff --check` clean. Secret-shape scan over `.ai/`, `.agents/skills/`, `.github/workflows/` clean (0 matches for sk_live_*, sk_test_*, whsec_*, price_*, AIza*, ghp_*, BEGIN PRIVATE KEY, SUPABASE_SERVICE_ROLE_KEY=).
+- Gate verdict: Checkout readiness audit Conditional Go; Test-mode smoke readiness No-Go; Stripe test-mode boundary Verified; overall CONDITIONAL-GO.
+- Commit: `docs(revenue): auto gate status — 2026-06-21` (pushed to `origin/infra/tianji-love-production-baseline-20260531`).
+- Narrow test-mode smoke task draft recorded in the gate status report; not executed in AUTO mode.
+- Explicit non-actions: no live Stripe checkout, no webhook replay, no Supabase mutation, no production deploy, no `.env` / secret / Price ID / webhook secret read or print, no provider live AI call, no email send, no Vedic paid public exposure.
+
 ### 2026-06-21 - TianJi Love 7-day content calendar refresh (week of 2026-06-22)
 
 - Task ID: `20260621-tianji-github-content-calendar`.

@@ -1,5 +1,57 @@
 # TianJi Love Daily Growth Publishing Pack - Review Packet
 
+## 2026-06-21 tianji-github-paid-gate auto run (cron)
+
+Branch `infra/tianji-love-production-baseline-20260531` received the AUTO-mode gate-status commit from the `tianji-github-paid-gate` cron skill. No code, env, secrets, Stripe, Supabase, deployment, or paid-side change was introduced. The skill is read-only against `.ai/` evidence, performs a secret-shape scan, and produces a gate status report plus a narrow test-mode smoke task draft.
+
+### Goal
+
+Monitor Stripe checkout readiness, validate test-mode paid-smoke readiness, and commit a gate status report on the daily 06:00 UTC cron schedule - no human approval required, no live-Stripe touch.
+
+### Changed Files
+
+```text
+.ai/TIANJI_LOVE_GATE_STATUS_2026-06-21.md  (new)
+.ai/CHANGELOG_AI.md                        (entry prepended)
+.ai/REVIEW_PACKET.md                       (this section prepended)
+```
+
+### Key Diff Summary
+
+- New `.ai/TIANJI_LOVE_GATE_STATUS_2026-06-21.md` records the gate verdict (`Checkout readiness audit: Conditional Go`, `Test-mode smoke readiness: No-Go`, `Stripe test-mode boundary: Verified`, `Gate status: CONDITIONAL-GO`), lists every evidence file inspected, shows the `git diff --check` and secret-shape scan results, and includes the narrow test-mode smoke task draft.
+- CHANGELOG entry prepended to `.ai/CHANGELOG_AI.md` summarizing the AUTO run.
+- This packet updated to summarize the run.
+
+### Validation
+
+```text
+git diff --check
+  -> exit 0, no whitespace errors
+
+Targeted secret-shape scan over .ai/, .agents/skills/, .github/workflows/
+  -> 0 matches for sk_live_*, sk_test_*, whsec_*, price_*, AIza*, ghp_*,
+     -----BEGIN *PRIVATE KEY-----, SUPABASE_SERVICE_ROLE_KEY=<value>
+```
+
+### Out-of-Scope Confirmations
+
+- No `.env`, secrets, Stripe Price IDs, webhook secrets, or production configuration values were read, printed, copied, diffed, or inferred.
+- No Stripe checkout was executed.
+- No paid smoke was executed.
+- No production deploy, Vercel deploy, or production Supabase mutation was attempted.
+- No provider live AI call, no email send, no webhook replay, no Supabase mutation, no Vedic paid public exposure.
+
+### Gate Status
+
+```text
+Checkout readiness audit: Conditional Go
+Test-mode smoke readiness: No-Go
+Stripe test-mode boundary: Verified
+Gate status: CONDITIONAL-GO
+Next scheduled run: 0 6 * * * (tomorrow 06:00 UTC)
+Production paid launch: No-Go
+```
+
 ## 2026-06-21 7-day content calendar refresh (week of 2026-06-22)
 
 Branch `infra/tianji-love-production-baseline-20260531` received the docs/assets-only content calendar refresh from the `tianji-github-content-calendar` cron skill. The previous 7-day window (2026-05-25 → 2026-05-31) was already in the past, so the calendar was replaced with seven future publishing days (2026-06-22 → 2026-06-28, Days 9–15) and an explicit theme rotation. Hook, video-script, and share-caption pools were preserved verbatim and topped with a current rotation window plus refill-signal note.
