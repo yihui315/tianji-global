@@ -1,0 +1,6 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-26,youtube_shorts,day009-yt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Private result; manual entry after publish"
+2026-06-26,youtube_shorts,day009-yt-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Not public evidence; manual entry after publish"
+2026-06-26,instagram_reels,day009-ig-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Privacy is trust; manual entry after publish"
+2026-06-26,trust_note,day009-trust-01,trust_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Trust note; manual entry after publish"
+2026-06-26,caption_set,day009-cap-01,caption_set,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Caption set; manual entry after publish"

@@ -1,0 +1,6 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-21,tiktok,day004-tt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"When they go quiet; manual entry after publish"
+2026-06-21,tiktok,day004-tt-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Three-column pause; manual entry after publish"
+2026-06-21,instagram_reels,day004-ig-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"One silence is not a verdict; manual entry after publish"
+2026-06-21,youtube_shorts,day004-yt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Evidence versus anxiety story; manual entry after publish"
+2026-06-21,seo,day004-seo-01,keyword_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"When they go quiet SEO outline; outline only"

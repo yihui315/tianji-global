@@ -1,0 +1,6 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-22,tiktok,day005-tt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Prediction pause; manual entry after publish"
+2026-06-22,tiktok,day005-tt-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Calmer not dependent; manual entry after publish"
+2026-06-22,instagram_carousel,day005-ig-01,carousel,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Reflection not mind reading; manual entry after publish"
+2026-06-22,youtube_shorts,day005-yt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"If answer makes panic; manual entry after publish"
+2026-06-22,trust_note,day005-trust-01,trust_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Trust note; manual entry after publish"

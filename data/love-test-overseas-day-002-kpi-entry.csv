@@ -1,0 +1,8 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-10,tiktok,day002-tt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"He went cold; manual entry after publish"
+2026-06-10,tiktok,day002-tt-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Stop rereading the chat; manual entry after publish"
+2026-06-10,tiktok,day002-tt-03,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Should I text them; manual entry after publish"
+2026-06-10,instagram_reels,day002-ig-01,short_video_repost,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Repost TikTok 01; manual entry after publish"
+2026-06-10,youtube_shorts,day002-yt-01,short_video_repost,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Repost TikTok 02; manual entry after publish"
+2026-06-10,seo,day002-seo-01,keyword_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"why did he go cold; outline only"
+2026-06-10,creator_outreach,day002-kol-01,dm_template,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Up to five feedback DMs; manual entry after outreach"

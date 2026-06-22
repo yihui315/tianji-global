@@ -1,0 +1,6 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-27,tiktok,day010-tt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Pattern first optimization second; manual entry after publish"
+2026-06-27,tiktok,day010-tt-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Keep collecting; manual entry after publish"
+2026-06-27,instagram_reels,day010-ig-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Calm pattern; manual entry after publish"
+2026-06-27,weekly_recap,day010-recap-01,weekly_recap,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Weekly recap; manual entry after publish"
+2026-06-27,kpi_review_note,day010-kpi-01,kpi_note,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"KPI note; analysis blocked until real metrics"
