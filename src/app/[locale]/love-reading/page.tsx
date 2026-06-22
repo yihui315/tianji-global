@@ -1,15 +1,10 @@
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { buildLocalizedMetadata } from '@/lib/i18n-metadata';
 import { getLocalizedPath, isSupportedLocale, locales, type Locale } from '@/lib/i18n';
 import { MessageCircleHeart, Sparkles, Timer, ShieldCheck } from 'lucide-react';
-
-const LeadCaptureForm = dynamic(
-  () => import('@/components/marketing/LeadCaptureForm').then(m => m.LeadCaptureForm),
-  { ssr: false }
-);
+import { LeadCaptureFormWrapper } from '@/components/marketing/LeadCaptureFormWrapper';
 
 type PageParams = {
   params: Promise<{ locale: string }>;
@@ -172,7 +167,7 @@ export default async function LoveReadingPage({ params }: PageParams) {
 
         {/* Lead Capture */}
         <div className="mt-10">
-          <LeadCaptureForm sourcePage="love-reading" variant="inline" />
+          <LeadCaptureFormWrapper sourcePage="love-reading" variant="inline" />
         </div>
 
         {/* Trust footer */}
