@@ -17,6 +17,7 @@ import {
   TimerReset,
 } from 'lucide-react';
 import { trackClientEvent } from '@/lib/analytics/client';
+import { LeadCaptureForm } from '@/components/marketing/LeadCaptureForm';
 
 type ReadingMode = 'solo' | 'compatibility';
 
@@ -526,6 +527,9 @@ function FinalCTA() {
           Start free love reading
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </a>
+        <div className="mt-6 w-full max-w-md">
+          <LeadCaptureForm sourcePage="home" variant="inline" />
+        </div>
       </div>
     </section>
   );
