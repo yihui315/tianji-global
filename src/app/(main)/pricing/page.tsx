@@ -12,6 +12,7 @@ import {
 import { FAQAccordion, GlassCard } from '@/components/ui';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
+import { LeadCaptureForm } from '@/components/marketing/LeadCaptureForm';
 
 const PLAN_ORDER = ['PRO_MONTHLY', 'PRO_YEARLY'] as const;
 
@@ -578,6 +579,10 @@ export default function PricingPage() {
           </Link>
         </div>
       </LandingSection>
+
+      <section className="relative z-10 mx-auto w-full max-w-3xl px-5 pb-8 sm:max-w-4xl sm:px-8">
+        <LeadCaptureForm sourcePage="pricing" variant="inline" />
+      </section>
 
       <footer className="border-t border-white/10 px-6 py-10 text-center text-xs uppercase tracking-[0.24em] text-white/30">
         <Link href={withLanguageParam('/', language)} className="hover:text-white/65">
