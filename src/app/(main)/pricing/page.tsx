@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Check, CreditCard, FileText, History, Lock, Sparkles, Star, Zap } from 'lucide-react';
 
 import { PLANS, type PlanId } from '@/lib/stripe';
+import { LeadCaptureForm } from '@/components/marketing/LeadCaptureForm';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
@@ -432,6 +433,10 @@ export default function PricingPage() {
       </section>
 
       <TianjiLoveFinalCta imageSrc={FINAL_PAVILION} title={copy.final.title} buttonLabel={copy.final.button} href={href('/relationship/new')} />
+
+      <section className="relative z-10 mx-auto w-full max-w-md px-5 pb-10 sm:px-8">
+        <LeadCaptureForm sourcePage="pricing" variant="inline" />
+      </section>
 
       <TianjiLoveFooter
         homeHref={href('/')}

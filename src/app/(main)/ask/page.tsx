@@ -16,6 +16,8 @@ import {
   Star,
 } from 'lucide-react';
 
+import { LeadCaptureForm } from '@/components/marketing/LeadCaptureForm';
+
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
@@ -696,6 +698,10 @@ function AskPageContent() {
             {copy.finalCta.button}
           </a>
         </div>
+      </section>
+
+      <section className="relative z-10 mx-auto w-full max-w-md px-5 pb-10 sm:px-8">
+        <LeadCaptureForm sourcePage="ask" variant="inline" />
       </section>
 
       <footer className="relative z-10 border-t border-[#b57248]/24 bg-[#02040c]/94 px-5 py-8 text-[#f4d7a3]/68 sm:px-8">

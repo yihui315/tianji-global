@@ -1,9 +1,15 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { buildLocalizedMetadata } from '@/lib/i18n-metadata';
 import { getLocalizedPath, isSupportedLocale, locales, type Locale } from '@/lib/i18n';
 import { MessageCircleHeart, Sparkles, Timer, ShieldCheck } from 'lucide-react';
+
+const LeadCaptureFormWrapper = dynamic(
+  () => import('@/components/marketing/LeadCaptureFormWrapper').then((m) => m.LeadCaptureFormWrapper),
+  { ssr: false }
+);
 
 type PageParams = {
   params: Promise<{ locale: string }>;
@@ -176,6 +182,9 @@ export default async function LoveReadingPage({ params }: PageParams) {
               : 'We use only birth dates for analysis. No birth times, locations, or private questions stored. All data encrypted at rest, deletable on request.'}
           </p>
         </div>
+
+        {/* Lead capture — client-only, no SSR (useSearchParams) */}
+        <LeadCaptureFormWrapper sourcePage="love-reading" variant="section" />
       </div>
     </main>
   );

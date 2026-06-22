@@ -8,6 +8,7 @@ import { Calendar, ChevronRight, Globe2, Sparkles, Star, User, Users } from 'luc
 import { useLanguage } from '@/hooks/useLanguage';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
+import { LeadCaptureForm } from '@/components/marketing/LeadCaptureForm';
 
 type SelectCopy = {
   label: string;
@@ -605,6 +606,7 @@ export default function TianjiLoveHome() {
       <HowItWorks process={copy.process} />
       <LoveTestimonials testimonials={copy.testimonials} />
       <FinalCta copy={copy} href={href} />
+      <LeadCaptureForm sourcePage="home" variant="section" />
       <TianjiLoveFooter copy={copy} href={href} />
     </main>
   );
