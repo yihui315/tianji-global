@@ -154,6 +154,15 @@ export function LeadCaptureFormInner({ sourcePage, variant = 'default' }: LeadCa
 
       <div className="space-y-3">
         <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Your name (optional)"
+          disabled={status === 'loading'}
+          className="w-full rounded border border-[#b57248]/42 bg-[#0d0707]/82 px-4 py-2.5 text-sm text-[#f4d7a3] placeholder-[#d8b77b]/52 outline-none focus:border-[#b57248]/82 focus:ring-1 focus:ring-[#b57248]/42 disabled:opacity-50"
+        />
+
+        <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
