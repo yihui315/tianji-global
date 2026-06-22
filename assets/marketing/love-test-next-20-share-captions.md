@@ -2,19 +2,29 @@
 
 Soft, mysterious, and non-deceptive captions for future share-card use.
 
-Last refreshed: 2026-06-21 (TianJi GitHub content calendar skill). All 20 captions preserved verbatim; refresh added a current rotation window and a refill signal only.
+Last refreshed: 2026-06-22 (TianJi GitHub content calendar skill). All 20 captions preserved verbatim; refresh added a current rotation window and a refill signal only.
 
-## Current rotation window (2026-06-22 → 2026-06-28)
+## Current rotation window (2026-06-22 → 2026-06-28, Days 1-7)
 
-- Day 9 (what is he thinking now): captions 2, 4, 8, 12, 16.
-- Day 10 (should I take the initiative in ambiguity): captions 5, 11, 15, 18, 19.
-- Day 11 (will they come back after no contact): captions 1, 6, 10, 14, 22.
-- Day 12 (is this relationship worth continuing): captions 3, 13, 17, 20, 23.
-- Day 13 (how to read push-pull): captions 4, 8, 12, 19, 24.
-- Day 14 (when to reach out): captions 5, 9, 15, 18, 27.
-- Day 15 (what am I really waiting for): captions 7, 11, 14, 20, 26.
+- Day 1 (what is he thinking now): captions 2, 4, 8, 12, 16.
+- Day 2 (should I take the initiative in ambiguity): captions 5, 11, 15, 18, 19.
+- Day 3 (will they come back after no contact): captions 1, 6, 10, 14, 22.
+- Day 4 (is this relationship worth continuing): captions 3, 13, 17, 20, 23.
+- Day 5 (how to read push-pull): captions 4, 8, 12, 19, 24.
+- Day 6 (when to reach out): captions 5, 9, 15, 18, 27.
+- Day 7 (what am I really waiting for): captions 7, 11, 14, 20, 26.
 
-Refill signal: pool still ≥ 20 unused captions across the week. No refill needed this run.
+## Next-week preview (2026-06-29 → 2026-07-05, Days 8-14)
+
+- Day 8 (how to close ambiguity): captions 2, 6, 12, 16, 19.
+- Day 9 (familiar patterns pulling you back): captions 1, 3, 8, 17, 20.
+- Day 10 (will asking scare them off): captions 4, 9, 13, 18, 19.
+- Day 11 (chronic conflict avoidance): captions 7, 11, 15, 18, 20.
+- Day 12 (am I too sensitive): captions 5, 10, 14, 17, 20.
+- Day 13 (what holds distance together): captions 2, 6, 12, 16, 19.
+- Day 14 (how to notice growth): captions 3, 8, 13, 18, 19.
+
+Refill signal: pool still ≥ 20 unused captions across both weeks. No refill needed this run.
 
 ## Captions
 

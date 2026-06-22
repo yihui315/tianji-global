@@ -1,5 +1,75 @@
 # TianJi Love Daily Growth Publishing Pack - Review Packet
 
+## 2026-06-22 tianji-github-content-calendar auto run (cron)
+
+Branch `infra/tianji-love-production-baseline-20260531` received the rolling-window refresh from the `tianji-github-content-calendar` cron skill. No code, env, secrets, Stripe, Supabase, deployment, or paid-side change was introduced. The skill is docs/assets/AI-records-only and produces a refreshed 7-day window plus a planned next-week preview.
+
+### Goal
+
+Keep at least seven future days of TianJi Love publishing content, refresh the active Days 1-7 window starting today (2026-06-22) with themes, hooks, scripts, captions, channel mix, CTAs, and risk-safe notes preserved verbatim from the previous Days 9-15 window, and add a Days 8-14 preview so the next cron refresh has planned continuity.
+
+### Changed Files
+
+```text
+assets/marketing/content-calendar-7day.md            (refreshed: Days 1-7 + new Days 8-14 preview)
+assets/marketing/love-test-next-30-hooks.md         (refreshed rotation window + Days 8-14 preview)
+assets/marketing/love-test-next-20-video-scripts.md  (refreshed rotation window + Days 8-14 preview)
+assets/marketing/love-test-next-20-share-captions.md (refreshed rotation window + Days 8-14 preview)
+.ai/CHANGELOG_AI.md                                  (entry prepended)
+.ai/REVIEW_PACKET.md                                 (this section prepended)
+```
+
+### Key Diff Summary
+
+- `assets/marketing/content-calendar-7day.md` — renumbered Days 9-15 to Days 1-7 (identical content, only the Day column changed). Added a "Next-week preview" table for Days 8-14 (2026-06-29 → 2026-07-05) with seven supporting themes: closing ambiguity, familiar patterns, asking without scaring, conflict avoidance, sensitivity, long-distance rhythm, growth signals. All new copy keeps the safety baseline (no fake numbers, no guaranteed outcomes, no diagnosis, no live payment claims).
+- `assets/marketing/love-test-next-30-hooks.md` — refreshed the rotation window header from Days 9-15 to Days 1-7 (same hook indices). Added a Days 8-14 preview using only existing hook indices (no new hook copy invented).
+- `assets/marketing/love-test-next-20-video-scripts.md` — refreshed the rotation window header from Days 9-15 to Days 1-7 (same script picks). Added a Days 8-14 preview using only existing scripts (no new script copy invented).
+- `assets/marketing/love-test-next-20-share-captions.md` — refreshed the rotation window header from Days 9-15 to Days 1-7 (same caption indices). Added a Days 8-14 preview using only existing caption indices 1-20 (no new caption copy invented).
+- CHANGELOG entry prepended to `.ai/CHANGELOG_AI.md` summarizing the run.
+- This packet updated to summarize the run.
+
+### Validation
+
+```text
+git diff --check
+  -> exit 0, no whitespace errors
+
+Targeted secret-shape scan over .ai/, assets/marketing/, data/
+  -> 0 matches for sk_live_*, sk_test_*, whsec_*, price_*, AIza*, ghp_*,
+     -----BEGIN *PRIVATE KEY-----, SUPABASE_SERVICE_ROLE_KEY=<value>
+     (new content contains only day numbers, theme labels, and pool indices)
+
+npm run typecheck
+  -> not run; no node_modules in this cron environment; source code scope is zero
+
+npm run lint
+  -> not run; same reason; source code scope is zero
+```
+
+### Out-of-Scope Confirmations
+
+- No `.env`, secrets, Stripe Price IDs, webhook secrets, or production configuration values were read, printed, copied, diffed, or inferred.
+- No Stripe checkout was executed.
+- No paid smoke was executed.
+- No production deploy, Vercel deploy, or production Supabase mutation was attempted.
+- No social auto-posting, account credential use, or browser session was used.
+- No KPI row was modified with invented values.
+- No pool copy was invented; only the rotation-window headers and Days 8-14 preview blocks were touched.
+
+### Gate Status
+
+```text
+Seven-day content calendar: Go (Days 1-7, 2026-06-22 → 2026-06-28)
+Next-week preview (Days 8-14): planned (2026-06-29 → 2026-07-05)
+Hook pool: Go (no refill)
+Video script pool: Go (no refill)
+Share caption pool: Go (no refill)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
 ## 2026-06-22 tianji-github-daily-growth auto run (cron)
 
 Branch `infra/tianji-love-production-baseline-20260531` received the Day 003 publishing pack from the `tianji-github-daily-growth` cron skill. No code, env, secrets, Stripe, Supabase, deployment, or paid-side change was introduced. The skill is docs/assets/data-only and produces one narrow publishing pack, one review checklist, and one KPI CSV scaffold per day, plus the AI-record updates.

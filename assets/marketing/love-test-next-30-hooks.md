@@ -2,19 +2,29 @@
 
 These hooks are for future manual publishing packs. Use them as starting points, not performance claims.
 
-Last refreshed: 2026-06-21 (TianJi GitHub content calendar skill). All 30 hooks preserved verbatim; refresh added a current rotation window and a refill signal only.
+Last refreshed: 2026-06-22 (TianJi GitHub content calendar skill). All 30 hooks preserved verbatim; refresh added a current rotation window and a refill signal only.
 
-## Current rotation window (2026-06-22 → 2026-06-28)
+## Current rotation window (2026-06-22 → 2026-06-28, Days 1-7)
 
-- Day 9 (what is he thinking now): rotate hooks 1, 2, 9, 12, 17.
-- Day 10 (should I take the initiative in ambiguity): rotate hooks 3, 4, 10, 11, 23.
-- Day 11 (will they come back after no contact): rotate hooks 5, 8, 16, 22, 29.
-- Day 12 (is this relationship worth continuing): rotate hooks 7, 8, 11, 20, 30.
-- Day 13 (how to read push-pull): rotate hooks 6, 12, 19, 21, 24.
-- Day 14 (when to reach out): rotate hooks 4, 10, 18, 25, 27.
-- Day 15 (what am I really waiting for): rotate hooks 9, 13, 20, 25, 26.
+- Day 1 (what is he thinking now): rotate hooks 1, 2, 9, 12, 17.
+- Day 2 (should I take the initiative in ambiguity): rotate hooks 3, 4, 10, 11, 23.
+- Day 3 (will they come back after no contact): rotate hooks 5, 8, 16, 22, 29.
+- Day 4 (is this relationship worth continuing): rotate hooks 7, 8, 11, 20, 30.
+- Day 5 (how to read push-pull): rotate hooks 6, 12, 19, 21, 24.
+- Day 6 (when to reach out): rotate hooks 4, 10, 18, 25, 27.
+- Day 7 (what am I really waiting for): rotate hooks 9, 13, 20, 25, 26.
 
-Refill signal: pool still ≥ 30 unused hooks across the week. No refill needed this run.
+## Next-week preview (2026-06-29 → 2026-07-05, Days 8-14)
+
+- Day 8 (how to close ambiguity): rotate hooks 3, 6, 10, 13, 28.
+- Day 9 (familiar patterns pulling you back): rotate hooks 7, 8, 11, 16, 22.
+- Day 10 (will asking scare them off): rotate hooks 1, 4, 14, 18, 23.
+- Day 11 (chronic conflict avoidance): rotate hooks 6, 15, 19, 21, 28.
+- Day 12 (am I too sensitive): rotate hooks 9, 12, 13, 20, 27.
+- Day 13 (what holds distance together): rotate hooks 5, 14, 17, 19, 24.
+- Day 14 (how to notice growth): rotate hooks 8, 11, 16, 25, 30.
+
+Refill signal: pool still ≥ 30 unused hooks across both weeks. No refill needed this run.
 
 ## Hooks
 
