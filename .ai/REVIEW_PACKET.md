@@ -1,5 +1,57 @@
 # TianJi Love Daily Growth Publishing Pack - Review Packet
 
+## 2026-06-22 tianji-github-daily-growth auto run (cron)
+
+Branch `infra/tianji-love-production-baseline-20260531` received the Day 003 publishing pack from the `tianji-github-daily-growth` cron skill. No code, env, secrets, Stripe, Supabase, deployment, or paid-side change was introduced. The skill is docs/assets/data-only and produces one narrow publishing pack, one review checklist, and one KPI CSV scaffold per day, plus the AI-record updates.
+
+### Goal
+
+Ship the Day 003 manual publishing pack for `/love-test` traffic under the theme "他现在到底在想什么？先别急着追问，先看你们的互动模式", with a separate manual review checklist and a zero/empty KPI entry scaffold. No social auto-posting, no live payment, no production deploy.
+
+### Changed Files
+
+```text
+assets/marketing/daily/day-003-publishing-pack.md  (new)
+assets/marketing/daily/day-003-review-checklist.md  (new)
+data/love-test-day-003-kpi-entry.csv                (new)
+.ai/CHANGELOG_AI.md                                 (entry prepended)
+.ai/REVIEW_PACKET.md                                (this section prepended)
+```
+
+### Key Diff Summary
+
+- New `assets/marketing/daily/day-003-publishing-pack.md` records the Day 003 theme (mind-reading loop, distinct from Day 001 ambiguity and Day 002 waiting posture), the safety baseline, 3 Xiaohongshu posts, 2 Douyin scripts, 1 Videohao script, 5 share-card captions, 2 KOL DM templates, 3 SEO outlines, the Day 3 posting order, and the manual metric to watch.
+- New `assets/marketing/daily/day-003-review-checklist.md` enumerates required safety checks, theme-specific checks (no mind-reading claims, no coercion, no impulsive outreach framing), channel-specific checks for Xiaohongshu, Douyin, Videohao, and KOL outreach, and a Go / No-Go summary that keeps Stripe checkout, paid smoke, and production deploy as No-Go.
+- New `data/love-test-day-003-kpi-entry.csv` contains 16 placeholder rows (Xiaohongshu, Douyin, Videohao, share_card, KOL, SEO) with all numeric columns at `0` and `paid_smoke_result=not_run`. No invented numbers.
+- CHANGELOG entry prepended to `.ai/CHANGELOG_AI.md` summarizing the run.
+- This packet updated to summarize the run.
+
+### Validation
+
+```text
+git diff --check
+  -> exit 0, no whitespace errors
+
+Targeted secret-shape scan over .agents/skills/, .github/workflows/, .ai/, assets/marketing/, data/
+  -> 0 matches for sk_live_*, sk_test_*, whsec_*, price_*, AIza*, ghp_*,
+     -----BEGIN *PRIVATE KEY-----, SUPABASE_SERVICE_ROLE_KEY=<value>
+
+npm run typecheck
+  -> not run; no node_modules in this cron environment; source code scope is zero
+
+npm run lint
+  -> not run; same reason; source code scope is zero
+```
+
+### Out-of-Scope Confirmations
+
+- No `.env`, secrets, Stripe Price IDs, webhook secrets, or production configuration values were read, printed, copied, diffed, or inferred.
+- No Stripe checkout was executed.
+- No paid smoke was executed.
+- No production deploy, Vercel deploy, or production Supabase mutation was attempted.
+- No social auto-posting, account credential use, or browser session was used.
+- No KPI row was modified with invented values.
+
 ## 2026-06-21 tianji-github-paid-gate auto run (cron)
 
 Branch `infra/tianji-love-production-baseline-20260531` received the AUTO-mode gate-status commit from the `tianji-github-paid-gate` cron skill. No code, env, secrets, Stripe, Supabase, deployment, or paid-side change was introduced. The skill is read-only against `.ai/` evidence, performs a secret-shape scan, and produces a gate status report plus a narrow test-mode smoke task draft.
