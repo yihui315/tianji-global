@@ -1,0 +1,6 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-23,instagram_reels,day006-ig-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Compatibility not one number; manual entry after publish"
+2026-06-23,instagram_reels,day006-ig-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Pattern over panic score; manual entry after publish"
+2026-06-23,tiktok,day006-tt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"After friction; manual entry after publish"
+2026-06-23,seo,day006-seo-01,keyword_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Compatibility rhythm SEO outline; outline only"
+2026-06-23,caption_set,day006-cap-01,caption_set,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Caption set; manual entry after publish"

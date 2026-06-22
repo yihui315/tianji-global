@@ -1,0 +1,6 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-20,tiktok,day003-tt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Bad texter, bad sign, or missing context; manual entry after publish"
+2026-06-20,tiktok,day003-tt-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Typing indicator mood; manual entry after publish"
+2026-06-20,instagram_reels,day003-ig-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Mixed signals are the middle; manual entry after publish"
+2026-06-20,youtube_shorts,day003-yt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Safest next text; manual entry after publish"
+2026-06-20,seo,day003-seo-01,keyword_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Compatibility is not a photo score; outline only"

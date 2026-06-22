@@ -1,0 +1,117 @@
+[
+  {
+    "publish_date": "2026-06-20",
+    "publish_window": "morning",
+    "channel": "tiktok",
+    "content_id": "day003-tt-01",
+    "content_type": "short_video",
+    "title": "Bad texter, bad sign, or missing context?",
+    "hook": "Bad texter, bad sign, or just missing context?",
+    "body_or_script": "A slow reply can feel like rejection, but one message rarely carries the whole truth. Before you decide what it means, look at the pattern: timing, consistency, repair, and how you feel after the exchange.",
+    "caption": "Bad texter, bad sign, or missing context? Pattern first. Private Love Test in bio.",
+    "hashtags": ["relationshipadvice", "textinganxiety", "mixedsignals", "lovetest", "relationshipclarity"],
+    "cta_url": "https://tianji.love/love-test",
+    "asset_note": "Use synthetic or abstract phone UI only. Do not show real messages.",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "published_url": null,
+    "metrics": {
+      "impressions": 0,
+      "clicks": 0,
+      "love_test_starts": 0
+    },
+    "notes": "Manual publish only after Day 003 checklist is clear."
+  },
+  {
+    "publish_date": "2026-06-20",
+    "publish_window": "noon",
+    "channel": "tiktok",
+    "content_id": "day003-tt-02",
+    "content_type": "short_video",
+    "title": "Do not let a typing indicator run your mood",
+    "hook": "Do not let a typing indicator become your whole mood.",
+    "body_or_script": "Typing dots, read receipts, and short replies can make your brain fill in the blanks. Pause before you turn uncertainty into a verdict. Ask what evidence you actually have.",
+    "caption": "If one indicator changes your whole mood, pause before action.",
+    "hashtags": ["textinganxiety", "overthinking", "datingadvice", "lovetest", "privatetest"],
+    "cta_url": "https://tianji.love/love-test",
+    "asset_note": "Use abstract typing dots. Do not show real chats.",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "published_url": null,
+    "metrics": {
+      "impressions": 0,
+      "clicks": 0,
+      "love_test_starts": 0
+    },
+    "notes": "Manual publish only after Day 003 checklist is clear."
+  },
+  {
+    "publish_date": "2026-06-20",
+    "publish_window": "afternoon",
+    "channel": "instagram_reels",
+    "content_id": "day003-ig-01",
+    "content_type": "short_video",
+    "title": "Mixed signals are the middle",
+    "hook": "Mixed signals are usually the middle of the story, not the final page.",
+    "body_or_script": "Mixed signals can be frustrating without meaning you have to panic or chase. The useful question is not just what they feel. It is what this pattern is asking you to protect.",
+    "caption": "Ambiguity needs a boundary, not a spiral.",
+    "hashtags": ["mixedsignals", "relationshipclarity", "relationshipboundaries", "lovetest"],
+    "cta_url": "https://tianji.love/love-test",
+    "asset_note": "Use text cards only. Do not imply a real user story.",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "published_url": null,
+    "metrics": {
+      "impressions": 0,
+      "clicks": 0,
+      "love_test_starts": 0
+    },
+    "notes": "Manual publish only after Day 003 checklist is clear."
+  },
+  {
+    "publish_date": "2026-06-20",
+    "publish_window": "evening",
+    "channel": "youtube_shorts",
+    "content_id": "day003-yt-01",
+    "content_type": "short_video",
+    "title": "The safest next text",
+    "hook": "The safest next text starts with knowing what you actually need.",
+    "body_or_script": "Before you press send, ask this: am I expressing something real, asking for clarity, or trying to calm anxiety? The same message can land differently depending on the need behind it.",
+    "caption": "Know the need before the next text.",
+    "hashtags": ["shoulditextthem", "textinganxiety", "datingadvice", "lovetest"],
+    "cta_url": "https://tianji.love/love-test",
+    "asset_note": "Use typed-and-deleted synthetic message animation. Do not show real chats.",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "published_url": null,
+    "metrics": {
+      "impressions": 0,
+      "clicks": 0,
+      "love_test_starts": 0
+    },
+    "notes": "Manual publish only after Day 003 checklist is clear."
+  },
+  {
+    "publish_date": "2026-06-20",
+    "publish_window": "late_evening",
+    "channel": "seo",
+    "content_id": "day003-seo-01",
+    "content_type": "keyword_outline",
+    "title": "Compatibility Is Not a Photo Score",
+    "hook": "Compatibility is not a photo score. Look at rhythm, effort, and repair.",
+    "body_or_script": "Draft outline only: why scores feel tempting, why photos and single signals cannot carry the whole relationship, and what to look at instead.",
+    "caption": "Private Love Test: pattern first, no photo score.",
+    "hashtags": ["airelationship", "compatibilitytest", "lovetest", "relationshipclarity"],
+    "cta_url": "https://tianji.love/love-test",
+    "asset_note": "SEO draft outline only. Do not publish without review.",
+    "review_status": "pending_manual_review",
+    "publish_status": "not_published",
+    "published_url": null,
+    "metrics": {
+      "impressions": 0,
+      "clicks": 0,
+      "love_test_starts": 0
+    },
+    "notes": "Manual SEO review only."
+  }
+]
