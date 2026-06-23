@@ -1,3 +1,87 @@
+# TianJi Love 7-Day Content Calendar Refresh + Hook/Script/Caption Pools - Review Packet
+
+## 2026-06-23 docs/assets-only
+
+Extended the TianJi Love 7-day content calendar from 5 future days to 7 future days, added Day 011 (matching the existing publishing pack) and Day 012 (fresh angle), and created three rolling pools (30 hooks, 20 video scripts, 20 share captions) on a new feature branch. All changes are scoped to marketing assets and AI records.
+
+## Branch
+
+```text
+Branch: chore/marketing-content-calendar-refresh-20260623
+Base: chore/marketing-love-test-day-011-publishing-pack-20260623 at 424b891
+Scope: docs/assets-only
+```
+
+## Goal
+
+Move the marketing asset layer from a stale 5-day future window to a healthy 7-day future window (Jun 23–Jun 29) and stand up the three rolling content pools the calendar depends on, without auto-posting, without inventing metrics, and without claiming real performance.
+
+## Files Added / Updated
+
+- Updated `assets/marketing/content-calendar-7day.md` (extended Day 011 + Day 012, added Theme Rotation Notes)
+- Added `assets/marketing/love-test-next-30-hooks.md`
+- Added `assets/marketing/love-test-next-20-video-scripts.md`
+- Added `assets/marketing/love-test-next-20-share-captions.md`
+- Updated `.ai/CHANGELOG_AI.md` (new top entry recording this refresh)
+
+## Calendar extension
+
+```text
+Existing future days (kept): Jun 23 Day 006, Jun 24 Day 007, Jun 25 Day 008, Jun 26 Day 009, Jun 27 Day 010
+Added: Jun 28 Day 011 - "Understanding is not the same as acting" (matches existing publishing pack)
+Added: Jun 29 Day 012 - "Repair over replay" (fresh angle, distinct from the Day 004-Day 011 series)
+Total future days: 7 (Jun 23 - Jun 29)
+```
+
+## Pools
+
+```text
+Hooks: 30 entries, rotation across the four core themes + baseline safety (reflection, privacy, repair, calmer-not-dependent)
+Scripts: 20 entries, 15-45s each, shared template (Hook, Beat 1, Beat 2, CTA, Caption, Risk note), all end on /love-test
+Captions: 20 entries, under 280 chars when trimmed, rotation across the four core themes + baseline safety
+```
+
+## Key Safety Reminders Specific To This Refresh
+
+```text
+- All copy is grounded: no fake testimonials, fake numbers, fake revenue, fake accuracy, guaranteed outcomes, reunion promises, mind-reading claims, "act tonight" framing, "send this exact text" patterns, or identifying detail.
+- Privacy non-negotiables preserved: no birth data, no chat screenshots, no names, no photos, no identifying detail.
+- CTAs point to /love-test; result pages stay private by default.
+- Pools exist for the manual operator to select from, not for any auto-posting.
+- Pool entries are replaced (not re-used) to keep rotation fresh.
+```
+
+## Validation
+
+```text
+git diff --check: Pass
+Targeted secret-shape scan over changed files (.ai/, assets/marketing/, data/): Pass (no sk_, pk_, AKIA, ghp_, xox, private key, or password-shape matches)
+npm run typecheck: Not runnable in partial-install environment (tsc not on PATH); no TS source modified
+npm run lint: Not runnable in partial-install environment (next not on PATH); no JS/TS source modified
+```
+
+## Gate Status
+
+```text
+Seven-day content calendar: Go - 7 future days (Jun 23 - Jun 29)
+Hook pool: Go
+Video script pool: Go
+Share caption pool: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+Production Supabase / API mutation: No-Go
+Secret / .env / token / credential access: No-Go - not performed
+```
+
+## Follow-up
+
+- Manual operator selects one hook, one script, and one caption per publishing day from the pools, then clears the matching review checklist before publishing.
+- Real KPI metrics are entered by the human operator after publish; analysis stays blocked until non-placeholder rows exist.
+- Pool entries should be replaced (not re-used) to keep rotation fresh.
+- PR should be opened from this branch, not merged directly to main.
+
 # TianJi Love Day 011 Marketing Publishing Pack - Review Packet
 
 ## 2026-06-23 docs/assets/data-only

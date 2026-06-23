@@ -1,3 +1,46 @@
+# 2026-06-23 - TianJi Love 7-day content calendar refresh + hook/script/caption pools (docs/assets-only)
+
+## What changed
+
+- Extended `assets/marketing/content-calendar-7day.md` from 5 future days (Jun 23–Jun 27) to 7 future days (Jun 23–Jun 29). Added Day 011 (Jun 28, "Understanding is not the same as acting", derived from the existing Day 011 publishing pack) and Day 012 (Jun 29, "Repair over replay", a fresh angle distinct from the Day 004–Day 011 series).
+- Added a "Theme Rotation Notes" block to the calendar documenting how rotation avoids repeating one emotional angle (anxiety, urgency, chase) more than twice in any five-day window.
+- Created `assets/marketing/love-test-next-30-hooks.md` (30 fresh hooks) covering the four core themes (what is he thinking, initiative in ambiguity, no-contact return, is it worth continuing) plus baseline safety (reflection, privacy, repair, calmer-not-dependent).
+- Created `assets/marketing/love-test-next-20-video-scripts.md` (20 short-form video scripts, 15–45s each) using a shared template (Hook, Beat 1, Beat 2, CTA, Caption, Risk note) and ending on `/love-test`.
+- Created `assets/marketing/love-test-next-20-share-captions.md` (20 share captions, ≤280 chars when trimmed) covering the same rotation.
+- All copy stays grounded: no fake testimonials, fake numbers, fake revenue, fake accuracy, guaranteed outcomes, reunion promises, mind-reading claims, "act tonight" framing, "send this exact text" patterns, or identifying detail.
+- No source code, no API route, no auth, no billing, no production deploy, no env, no secret, no platform account, no credentials touched.
+
+## Validation
+
+```text
+git diff --check: Pass
+git diff --cached --name-only: assets/marketing/content-calendar-7day.md, assets/marketing/love-test-next-30-hooks.md, assets/marketing/love-test-next-20-video-scripts.md, assets/marketing/love-test-next-20-share-captions.md
+npm run typecheck: Not runnable in this partial-install environment (tsc not on PATH); changes are docs/assets-only (markdown), no TS source modified
+npm run lint: Not runnable in this partial-install environment (next not on PATH); changes are docs/assets-only, no JS/TS source modified
+Targeted secret-shape scan over changed files (.ai/, assets/marketing/, data/): Pass (no sk_, pk_, AKIA, ghp_, xox, private key, or password-shape matches)
+```
+
+## Gate status
+
+```text
+Seven-day content calendar: Go - 7 future days (Jun 23 - Jun 29)
+Hook pool: Go - 30 hooks, rotation across 4 themes + baseline safety
+Video script pool: Go - 20 scripts, 15-45s each, all end on /love-test
+Share caption pool: Go - 20 captions, rotation across 4 themes + baseline safety
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+Production Supabase / API mutation: No-Go
+Secret / .env / token / credential access: No-Go - not performed
+```
+
+## Follow-up
+
+- Manual operator selects one hook, one script, and one caption per publishing day from the pools, then clears the matching review checklist before publishing.
+- Replace used entries from each pool rather than re-using to keep rotation fresh.
+- Real KPI metrics are entered by the human operator after publish; analysis stays blocked until non-placeholder rows exist.
+
 # 2026-06-23 - TianJi Love Day 011 marketing publishing pack (docs/assets/data-only)
 
 ## What changed
