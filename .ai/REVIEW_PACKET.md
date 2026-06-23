@@ -1,350 +1,136 @@
-# TianJi Love Production Baseline Release Readiness - Review Packet
+# TianJi Love Revenue OS v1 P0 / PR #113 CI Repair - Review Packet
 
-## 2026-06-19 production baseline branch release readiness
+## Background
 
-Branch `infra/tianji-love-production-baseline-20260531` is source-release ready after repairing invalid UTF-8/mojibake-damaged TianJi Love reading copy modules.
+PR #113 restores `LeadCaptureForm`, love-reading pages, and a marketing leads API. Its CI/typecheck failed because localized love-reading copy used `zh` while the app `Locale` type is `en | zh-CN`, and `LeadCaptureForm` passed the full `useLanguage()` context object into analytics payloads.
 
-## Goal
+## Task Goal
 
-Make the current branch pass the project-defined release gate so it can be safely considered for deployment through the approved production path.
+Fix the PR #113 typecheck blocker and add source-only Revenue OS P0 assets in an isolated local worktree. Do not push, deploy, run Stripe smoke, mutate production Supabase, replay webhooks, read `.env*`, mutate servers, or auto-post to social platforms.
 
 ## Changed Files
 
 ```text
-src/lib/love-reading/free-preview-generator.ts
-src/lib/love-reading/love-archetypes.ts
-src/lib/love-reading/love-dimensions.ts
-src/lib/love-reading/love-timing.ts
-src/lib/love-reading/premium-report-template.ts
+progress.md
+.ai/AUTOPILOT_REPORT.md
+.ai/AUTOPILOT_STATUS.json
 .ai/CHANGELOG_AI.md
 .ai/REVIEW_PACKET.md
+.ai/TASKS.md
+assets/marketing/publishing-queue/README.md
+assets/marketing/publishing-queue/schema.json
+assets/marketing/publishing-queue/sample-queue.csv
+data/growth-events-contract.csv
+scripts/growth-daily-report.ts
+src/__tests__/api/marketing-leads.test.ts
+src/app/[locale]/love-reading/page.tsx
+src/app/api/marketing/leads/route.ts
+src/components/marketing/LeadCaptureForm.tsx
+supabase/migrations/20260624_marketing_leads.sql
+```
+
+Removed:
+
+```text
+src/app/api/marketing/leads/leads-route.ts
 ```
 
 ## Key Diff Summary
 
-- Repaired invalid UTF-8 / mojibake-damaged love-reading copy modules that caused `tsc` parse failures.
-- Removed UTF-8 BOMs introduced during recovery and kept the files valid UTF-8.
-- Preserved the existing love-reading schema and generator interfaces.
-- Used ASCII-safe English fallback copy for `en`, `zh`, and `zh-Hant` to restore buildability without introducing new dependencies.
-- Kept payment, Auth, Stripe, Supabase, API routes, middleware, deployment config, and environment files out of scope.
+- Moved `/api/marketing/leads` to `route.ts` so Next.js App Router exposes `POST /api/marketing/leads`.
+- Added `variant` to the API contract and migration.
+- Kept degraded mode at `202 skipped` with no DB write.
+- Stored only a SHA-256 IP hash and truncated `user_agent`.
+- Returned `400 invalid_payload` without Zod detail leakage and `500 internal_error` without DB detail leakage.
+- Fixed `LeadCaptureForm` to destructure `{ lang }`, use `zh/en` only for UI copy, and send `en | zh-CN` locale to API/analytics.
+- Rebuilt the localized love-reading page around `Record<Locale, ...>` typed copy maps.
+- Added focused API tests covering valid insert, invalid email, missing `source_page`, false/missing consent, degraded skip, and DB failure.
+- Added source-only `marketing_leads` SQL migration with RLS and service-role access.
+- Added `growth-events-contract.csv`, manual publishing queue schema/sample, and a local daily growth report script that reports `no real data yet` when metrics are absent.
 
-## Validation
+## Commands Run
 
 ```text
-git diff --check HEAD
-Passed with line-ending warnings only.
-
-npm run release:check
-Passed.
-
-release:check includes:
-- npm run typecheck
-- npm run lint
-- npm run test
-- npm run build
-- npm run audit:routes
-- npm run audit:copy
-- npm run audit:share
-- npm run audit:upgrade
-
-Vitest:
-81 files passed / 626 tests passed.
-
-Next build:
-Compiled successfully and generated 108 static pages.
+git fetch --no-tags origin main
+git fetch --no-tags origin feature/marketing-rebuild-20260623
+git worktree add -b codex/pr113-revenue-os-p0-20260624 C:\Users\Administrator\codex-worktrees\tianji-pr113-revenue-os-p0-20260624 origin/feature/marketing-rebuild-20260623
+git status --short --branch
+npm ci --ignore-scripts --no-audit --fund=false
+npm run typecheck -- --pretty false
+npm run lint
+npm run test -- src/__tests__/api/marketing-leads.test.ts
+npm run test
+npm run build:staging:degraded
+git diff --check
 ```
+
+## Validation Result
+
+- Initial `npm run typecheck -- --pretty false`: failed as expected on the PR #113 type mismatch.
+- Final `npm run typecheck -- --pretty false`: passed.
+- `npm run lint`: passed.
+- `npm run test -- src/__tests__/api/marketing-leads.test.ts`: passed, 1 file / 7 tests.
+- `npm run test`: passed, 82 files / 633 tests.
+- `npm run build:staging:degraded`: passed.
+- `git diff --check`: passed with LF/CRLF warnings only.
+
+Continuation verification on 2026-06-24:
+
+- `git status --short --branch`: clean worktree before record updates; branch ahead 1.
+- `npm run typecheck -- --pretty false`: passed.
+- `npm run lint`: passed.
+- `npm run test -- src/__tests__/api/marketing-leads.test.ts`: passed, 1 file / 7 tests.
+- `npm run test`: passed, 82 files / 633 tests.
+- `npm run build:staging:degraded`: passed.
+- `git diff --check`: passed.
+- Source repair required during continuation: none.
+
+## Known Noise
+
+- `next lint` reports the existing Next.js deprecation notice.
+- `build:staging:degraded` reports existing `jose` Edge Runtime warnings.
+- Git prints LF/CRLF normalization warnings for some edited files.
 
 ## Safety Boundaries
 
 ```text
-No .env file was read, printed, modified, or staged.
+No .env or .env.* file was read, printed, copied, uploaded, or modified.
 No raw secret was printed.
-No live Stripe action was run.
-No production Supabase action was run.
-No paid smoke was run.
-No production deploy or Vercel production deploy was run.
-No main merge was performed.
+No push was performed.
+No production deploy was performed.
+No Stripe test/live paid smoke or real payment was performed.
+No webhook replay was performed.
+No Supabase production mutation was performed.
+No PM2/Nginx/certbot/server mutation was performed.
+No social account auto-posting was performed.
+No fake testimonials, fake user numbers, guaranteed relationship outcomes, or 100% accuracy claims were added.
 ```
 
-## Known Noise
-
-```text
-Next build reports existing jose Edge Runtime warnings for CompressionStream and DecompressionStream.
-next lint reports the existing Next.js 16 deprecation notice.
-```
-
-## Risks And Follow-Up
-
-- Source-release readiness is Go for the checked branch, based on the local release gate.
-- Production deployment is still a separate approval-controlled action and was not performed.
-- Revenue/payment execution remains No-Go until fresh masked test/staging evidence and explicit approval are present.
-- Chinese and Traditional Chinese reading copy currently falls back to English copy; this restores buildability but should be followed by a proper localized copy pass.
-
-## Suggested Commit Message
-
-```text
-fix(love-reading): restore release-safe copy modules
-```
-
----
-
-# TianJi Love Pretext Layout Merge Readiness - Review Packet
-
-## 2026-05-26 relationship Pretext layout merge readiness
-
-Prepared a small relationship-only Pretext integration for a narrow PR.
-
-## Goal
-
-Use `@chenglou/pretext` to make TianJi Love relationship result text more layout-stable without changing payment, Auth, API, privacy, Ask/Draw, deployment, Stripe, Supabase, or workflow surfaces.
-
-## Changed Files
-
-```text
-package.json
-package-lock.json
-src/components/relationship/usePretextTextLayout.ts
-src/components/relationship/RelationshipResult.tsx
-src/components/relationship/RelationshipDimensionCard.tsx
-src/__tests__/relationship-flow-contract.test.ts
-.ai/TIANJI_LOVE_PRETEXT_LAYOUT_QA_20260526.md
-.ai/CHANGELOG_AI.md
-.ai/REVIEW_PACKET.md
-```
-
-## Key Diff Summary
-
-- Added `@chenglou/pretext@0.0.7`.
-- Added `usePretextTextLayout`, a client-only hook that observes element width, measures text with Pretext, and applies stable `minHeight`.
-- Wired the hook into relationship result headline, summary, next move, locked report body, and dimension summaries.
-- Kept the hook privacy-agnostic: it receives display text only and does not know about birth dates, birth times, locations, timezones, Stripe, Supabase, or analytics payloads.
-- Kept payment closed-loop work out of this PR line.
-
-## Validation
-
-```text
-npm run test -- --run src/__tests__/relationship-flow-contract.test.ts
-Passed, 11/11.
-
-npm run typecheck -- --pretty false
-Passed.
-
-npm run lint
-Passed. Existing Next lint deprecation notice only.
-
-npm run build
-Passed.
-
-npm run test
-Passed, 74 files / 596 tests.
-
-npm run audit:routes
-Passed.
-
-npm run audit:copy
-Passed.
-
-npm run audit:share
-Passed.
-
-npm run audit:upgrade
-Passed.
-
-git diff --check
-Passed with existing LF/CRLF warnings only.
-```
-
-## Visual QA
-
-```text
-Desktop:
-- scrollWidth: 1365
-- clientWidth: 1365
-- horizontal overflow: No
-- min-height: headline 56px, summary 56px, next move 56px, locked body 56px
-
-Mobile:
-- scrollWidth: 390
-- clientWidth: 390
-- horizontal overflow: No
-- min-height: headline 140px, summary 112px, next move 56px, locked body 112px
-
-Known noise:
-- Existing /api/analytics/relationship 503 appeared during local smoke.
-- No pageerror was observed.
-```
-
-## Risks And Follow-Up
-
-- Bundle size increases slightly on the relationship route.
-- Analytics 503 is existing local noise and should remain a separate follow-up.
-- Payment closed loop remains out of scope and should continue on a separate branch/PR.
-- Production deploy and paid smoke remain No-Go.
-
-## Suggested Commit Message
-
-```text
-feat(relationship): stabilize result text layout with pretext
-```
-
-## 2026-05-25 PR #60 merge and paid smoke gate
-
-PR #60 remains open and should not be merged yet.
-
-```text
-PR: https://github.com/yihui315/tianji-global/pull/60
-Branch: feat/tianji-divination-evidence-layer-20260525
-Source commit: 7333e68fbd3e0891051deb8cd2b420d2557f4dda
-Merge commit: N/A
-```
-
-Gate review:
-
-```text
-CI/CD: No-Go - no GitHub Actions workflow runs found for the source commit.
-Vercel: Fail - GitHub combined status reports Vercel failure.
-Conflicts: Blocked/unknown detail - GitHub reports mergeable=false.
-Mergeable: No.
-PR diff risk: No-Go - 53 commits / 325 files, broader than the evidence-layer scope.
-PR merge: No-Go / Pending.
-Production deploy: Not run.
-```
-
-Paid smoke readiness:
-
-```text
-npm run smoke:stripe:test-readiness
-overall: conditional-go
-stripeKeysLookTestMode: unknown
-
-npm run audit:ask-revenue-contract
-overall: conditional-go
-
-npm run audit:draw-revenue-contract
-overall: conditional-go
-```
-
-Paid checkout smoke was not run because safe Stripe test-mode env evidence is not available in the current shell and explicit test-mode paid-smoke approval remains required. Analytics privacy remains source/test verified, but the paid unlock and feedback events were not runtime-verified through checkout in this gate pass.
-
-## What changed
-
-Implemented a safe evidence and accuracy-feeling layer across Ask, Draw, and Relationship.
-
-- Ask preview and paid unlock now return structured evidence.
-- Draw preview and paid unlock now return structured tarot/timing evidence.
-- Relationship readings now attach or derive structured evidence from score, dimensions, summary, and timeline.
-- Added shared evidence UI with confidence, signals, timing, verification points, action advice, feedback, and paid unlock CTA.
-- Added privacy-safe analytics events for evidence viewed, expanded, feedback submitted, and unlock clicked from evidence.
-
-## Files changed
-
-```text
-.ai/CHANGELOG_AI.md
-.ai/REVIEW_PACKET.md
-.ai/TIANJI_LOVE_DIVINATION_EVIDENCE_LAYER_20260525.md
-.ai/TIANJI_LOVE_SKILL_MATCH_MATRIX_20260525.md
-src/__tests__/api/ask-paid-gateway.test.ts
-src/__tests__/api/draw-gateway.test.ts
-src/__tests__/lib/divination-evidence.test.ts
-src/__tests__/relationship-flow-contract.test.ts
-src/__tests__/revenue-funnel-polish-contract.test.ts
-src/app/(main)/ask/page.tsx
-src/app/(main)/draw/page.tsx
-src/app/api/analytics/track/route.ts
-src/app/api/ask/preview/route.ts
-src/app/api/ask/unlock/route.ts
-src/app/api/draw/preview/route.ts
-src/app/api/draw/unlock/route.ts
-src/app/api/relationship/analyze/route.ts
-src/app/relationship/result/[id]/page.tsx
-src/components/divination/DivinationEvidenceCard.tsx
-src/components/relationship/RelationshipResult.tsx
-src/lib/analytics/client.ts
-src/lib/analytics/divination-events.ts
-src/lib/divination/evidence.ts
-src/lib/relationship-engine.ts
-src/lib/trust-copy-guard.ts
-src/types/divination.ts
-src/types/relationship.ts
-```
-
-## Safety review
-
-- No secrets, env files, private keys, tokens, cookies, or production logs were read or staged.
-- No production deploy, server mutation, DNS, Nginx, PM2, live DB mutation, live Stripe payment, or paid smoke was performed.
-- Analytics payloads are restricted to safe fields: `route`, `paid`, `confidence`, `evidenceSignalCount`, `sourceTypes`, and optional feedback.
-- Evidence builders redact private values and deterministic/professional/fear-based claims.
-- The feature is additive and does not remove existing divination safety disclaimers.
-
-## Validation
-
-```text
-npm run test -- --run src/__tests__/lib/divination-evidence.test.ts
-Pass: 1 file, 7 tests.
-
-npm run test -- --run src/__tests__/lib/divination-evidence.test.ts src/__tests__/api/ask-paid-gateway.test.ts src/__tests__/api/draw-gateway.test.ts src/__tests__/relationship-flow-contract.test.ts src/__tests__/revenue-funnel-polish-contract.test.ts
-Pass: 5 files, 41 tests.
-
-npm run typecheck
-Pass.
-
-npm run lint
-Pass.
-
-npm run test
-Pass: 74 files, 595 tests.
-
-npm run build
-Pass with existing jose Edge Runtime warnings.
-
-npm run audit:routes
-Pass.
-
-npm run audit:copy
-Pass.
-
-npm run audit:share
-Pass.
-
-npm run audit:upgrade
-Pass.
-
-npm run audit:ask-revenue-contract
-Conditional Go.
-
-npm run audit:draw-revenue-contract
-Conditional Go.
-
-git diff --check
-Pass with existing CRLF warnings only.
-
-Chrome headless local route QA
-Pass: /ask?lang=en, /draw?lang=en, /relationship/new?lang=en.
-```
-
-## Gate status
+## Gate Status
 
 | Gate | Status |
 |---|---|
-| Skill matching | Go |
-| Implementation | Go |
-| Typecheck | Go |
-| Lint | Go |
-| Tests | Go |
-| Build | Go |
-| Non-paid local QA | Go |
-| Paid smoke | No-Go unless explicitly tested in safe Stripe test mode |
+| PR #113 CI/typecheck | Go |
+| Lead Capture Source | Go |
+| Marketing Leads Migration | Go |
+| API Tests | Go |
+| Growth Events Contract | Go |
+| Publishing Queue | Go |
+| Daily Growth Report | Go for source readiness |
+| Revenue Execution | No-Go |
+| Stripe paid smoke | No-Go |
 | Production deploy | No-Go |
+| Supabase production mutation | No-Go |
 
-## Reviewer focus
+## Reviewer Focus
 
-- Confirm free preview depth is compelling but not over-generous.
-- Confirm the evidence card CTA is not too aggressive for relationship/divination safety.
-- Confirm analytics payloads remain non-sensitive if future builders add fields.
-- Confirm Relationship full unlock should show more evidence after an approved paid smoke.
+- Confirm PR #113 should accept the localized love-reading copy rewrite as part of CI repair.
+- Confirm `marketing_leads` RLS/service-role-only policy matches the intended deployment model.
+- Confirm `lead_capture_failed` analytics payload remains privacy-safe.
+- Confirm daily report script output path is acceptable before scheduling it.
 
-## Suggested commit message
+## Suggested Commit Message
 
 ```text
-feat(tianji-love): add divination evidence layer
+feat(marketing): restore lead capture revenue os p0
 ```

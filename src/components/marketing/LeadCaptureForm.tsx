@@ -46,9 +46,10 @@ const COPY = {
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 export function LeadCaptureForm({ sourcePage, variant = 'default' }: LeadCaptureFormProps) {
-  const lang = useLanguage();
+  const { lang } = useLanguage();
   const searchParams = useSearchParams();
   const copy = lang === 'zh' ? COPY.zh : COPY.en;
+  const locale = lang === 'zh' ? 'zh-CN' : 'en';
   const viewedRef = useRef(false);
 
   const [name, setName] = useState('');
@@ -63,9 +64,9 @@ export function LeadCaptureForm({ sourcePage, variant = 'default' }: LeadCapture
     void trackClientEvent({
       event: 'lead_capture_viewed',
       moduleType: 'marketing',
-      payload: { source_page: sourcePage, variant, locale: lang },
+      payload: { source_page: sourcePage, variant, locale },
     });
-  }, [sourcePage, variant, lang]);
+  }, [sourcePage, variant, locale]);
 
   const [emailError, setEmailError] = useState('');
   const [consentError, setConsentError] = useState('');
@@ -73,6 +74,8 @@ export function LeadCaptureForm({ sourcePage, variant = 'default' }: LeadCapture
   const utmSource = searchParams.get('utm_source') ?? '';
   const utmMedium = searchParams.get('utm_medium') ?? '';
   const utmCampaign = searchParams.get('utm_campaign') ?? '';
+  const utmContent = searchParams.get('utm_content') ?? '';
+  const utmTerm = searchParams.get('utm_term') ?? '';
 
   function validateEmail(value: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -101,12 +104,14 @@ export function LeadCaptureForm({ sourcePage, variant = 'default' }: LeadCapture
         body: JSON.stringify({
           email,
           name: name || undefined,
-          locale: lang,
+          locale,
           source_page: sourcePage,
           variant,
           utm_source: utmSource || undefined,
           utm_medium: utmMedium || undefined,
           utm_campaign: utmCampaign || undefined,
+          utm_content: utmContent || undefined,
+          utm_term: utmTerm || undefined,
           consent: true,
         }),
       });
@@ -118,7 +123,7 @@ export function LeadCaptureForm({ sourcePage, variant = 'default' }: LeadCapture
         void trackClientEvent({
           event: 'lead_capture_failed',
           moduleType: 'marketing',
-          payload: { source_page: sourcePage, variant, locale: lang, reason: 'api_error' },
+          payload: { source_page: sourcePage, variant, locale, reason: 'api_error' },
         });
         return;
       }
@@ -127,14 +132,14 @@ export function LeadCaptureForm({ sourcePage, variant = 'default' }: LeadCapture
       void trackClientEvent({
         event: 'lead_capture_submitted',
         moduleType: 'marketing',
-        payload: { source_page: sourcePage, variant, locale: lang },
+        payload: { source_page: sourcePage, variant, locale },
       });
     } catch {
       setStatus('error');
       void trackClientEvent({
         event: 'lead_capture_failed',
         moduleType: 'marketing',
-        payload: { source_page: sourcePage, variant, locale: lang, reason: 'network_error' },
+        payload: { source_page: sourcePage, variant, locale, reason: 'network_error' },
       });
     }
   }

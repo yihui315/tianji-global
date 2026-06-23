@@ -1,12 +1,128 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { MessageCircleHeart, ShieldCheck, Sparkles, Timer, type LucideIcon } from 'lucide-react';
 import { buildLocalizedMetadata } from '@/lib/i18n-metadata';
 import { getLocalizedPath, isSupportedLocale, locales, type Locale } from '@/lib/i18n';
-import { MessageCircleHeart, Sparkles, Timer, ShieldCheck } from 'lucide-react';
 
 type PageParams = {
   params: Promise<{ locale: string }>;
+};
+
+type LoveReadingFeature = {
+  icon: LucideIcon;
+  title: string;
+  desc: string;
+};
+
+type LoveReadingCta = {
+  primary: string;
+  secondary: string;
+  note: string;
+};
+
+type LoveReadingPageCopy = {
+  metadataTitle: string;
+  metadataDescription: string;
+  back: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  cardTitle: string;
+  samplePrompt: string;
+  privacyLabel: string;
+  privacyBody: string;
+};
+
+const pageCopy: Record<Locale, LoveReadingPageCopy> = {
+  en: {
+    metadataTitle: 'Love Reading - Tianji Love',
+    metadataDescription:
+      "Explore your love patterns with a private relationship reading. Enter both birth dates for a free self-reflection preview.",
+    back: 'Back to home',
+    eyebrow: 'Love Reading',
+    title: 'Explore Your Relationship Pattern',
+    description: 'Enter both birth dates for a private compatibility and timing preview.',
+    cardTitle: 'Start Your Love Reading',
+    samplePrompt: 'Want to see what a report looks like first?',
+    privacyLabel: 'Privacy',
+    privacyBody:
+      'We use only birth dates for analysis. No birth times, locations, or private questions are stored by this preview flow.',
+  },
+  'zh-CN': {
+    metadataTitle: '关系解读 - Tianji Love',
+    metadataDescription:
+      '通过私密关系解读探索你们的情感模式。输入双方生日，先获得一份用于自我反思的免费预览。',
+    back: '返回首页',
+    eyebrow: '关系解读',
+    title: '探索你们的关系模式',
+    description: '输入双方生日，获得一份私密的兼容性与时机预览。',
+    cardTitle: '开始关系解读',
+    samplePrompt: '想先看看报告的样子？',
+    privacyLabel: '隐私',
+    privacyBody:
+      '本预览流程仅使用出生日期进行分析，不存储出生时间、出生地点或私人问题。',
+  },
+};
+
+const features: Record<Locale, LoveReadingFeature[]> = {
+  en: [
+    {
+      icon: MessageCircleHeart,
+      title: 'Compatibility Themes',
+      desc: 'Five relationship dimensions: attraction, communication, conflict, rhythm, and long-term alignment.',
+    },
+    {
+      icon: Sparkles,
+      title: 'Relationship Archetype',
+      desc: 'Discover a reflective pattern for the relationship without treating it as a fixed outcome.',
+    },
+    {
+      icon: Timer,
+      title: 'Timing Preview',
+      desc: 'See a gentle 30-day timing lens for connection, communication, and clearer choices.',
+    },
+    {
+      icon: ShieldCheck,
+      title: 'Privacy Protected',
+      desc: 'Birth dates only. No names, locations, birth times, or private questions are required here.',
+    },
+  ],
+  'zh-CN': [
+    {
+      icon: MessageCircleHeart,
+      title: '兼容主题',
+      desc: '从吸引、沟通、冲突、节奏和长期契合五个维度理解关系。',
+    },
+    {
+      icon: Sparkles,
+      title: '关系原型',
+      desc: '用反思视角理解你们的关系模式，而不是把它当成固定结论。',
+    },
+    {
+      icon: Timer,
+      title: '时机预览',
+      desc: '用温和的 30 天视角观察连接、沟通与选择时机。',
+    },
+    {
+      icon: ShieldCheck,
+      title: '隐私保护',
+      desc: '这里只需要出生日期，不要求姓名、地点、出生时间或私人问题。',
+    },
+  ],
+};
+
+const ctas: Record<Locale, LoveReadingCta> = {
+  en: {
+    primary: 'Start Your Free Reading',
+    secondary: 'See sample report',
+    note: 'Free preview includes: overall score, archetype, top 2 dimensions, and shareable summary.',
+  },
+  'zh-CN': {
+    primary: '开始免费解读',
+    secondary: '查看示例报告',
+    note: '免费预览包括：综合评分、关系原型、两个核心维度和可分享摘要。',
+  },
 };
 
 export function generateStaticParams() {
@@ -17,127 +133,58 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   const { locale } = await params;
   if (!isSupportedLocale(locale)) return {};
 
-  const title = locale === 'zh' ? '关系解读 — Tianji Love' : 'Love Reading — Tianji Love';
-  const description =
-    locale === 'zh'
-      ? '探索你的情感命运。输入你和对方的生日，获取深度的关系兼容性解读。免费预览完整报告。'
-      : 'Explore your love destiny. Enter you and your partner\'s birth dates for deep compatibility insights. Free preview available.';
+  const copy = pageCopy[locale];
 
-  return buildLocalizedMetadata({ locale, path: '/love-reading', title, description });
+  return buildLocalizedMetadata({
+    locale,
+    path: '/love-reading',
+    title: copy.metadataTitle,
+    description: copy.metadataDescription,
+  });
 }
-
-const features = {
-  en: [
-    {
-      icon: MessageCircleHeart,
-      title: 'Deep Compatibility Analysis',
-      desc: 'Five dimensions: attraction, communication, conflict, rhythm, and long-term alignment.',
-    },
-    {
-      icon: Sparkles,
-      title: 'Relationship Archetype',
-      desc: 'Discover your relationship pattern — from Romantic Dreamers to Steady Companions.',
-    },
-    {
-      icon: Timer,
-      title: '30-Day Timing Forecast',
-      desc: 'Know the optimal windows for connection, communication, and key decisions.',
-    },
-    {
-      icon: ShieldCheck,
-      title: 'Privacy Protected',
-      desc: 'Birth dates only. No names, locations, or personal questions stored.',
-    },
-  ],
-  zh: [
-    {
-      icon: MessageCircleHeart,
-      title: '深度兼容性分析',
-      desc: '五个维度：吸引力、沟通、冲突、节奏和长期契合。',
-    },
-    {
-      icon: Sparkles,
-      title: '关系原型',
-      desc: '发现你们的关系模式 — 从浪漫梦想家到稳定伙伴。',
-    },
-    {
-      icon: Timer,
-      title: '30天时机预测',
-      desc: '了解连接、沟通和关键决策的最佳窗口期。',
-    },
-    {
-      icon: ShieldCheck,
-      title: '隐私保护',
-      desc: '仅使用生日信息。不存储姓名、位置或个人问题。',
-    },
-  ],
-};
-
-const ctas = {
-  en: {
-    primary: 'Start Your Free Reading',
-    secondary: 'See sample report',
-    note: 'Free preview includes: overall score, archetype, top 2 dimensions, and shareable summary.',
-  },
-  zh: {
-    primary: '开始免费解读',
-    secondary: '查看示例报告',
-    note: '免费预览包含：综合评分、原型、两个核心维度、以及可分享摘要。',
-  },
-};
 
 export default async function LoveReadingPage({ params }: PageParams) {
   const { locale } = await params;
   if (!isSupportedLocale(locale)) notFound();
 
-  const t = features[locale] ?? features.en;
-  const c = ctas[locale] ?? ctas.en;
-  const isZh = locale === 'zh';
+  const copy = pageCopy[locale];
+  const featureItems = features[locale];
+  const cta = ctas[locale];
 
   return (
     <main className="min-h-screen bg-[#050508] px-5 py-10 text-white sm:px-8">
       <div className="mx-auto max-w-3xl">
-        {/* Back */}
         <Link
           href={getLocalizedPath(locale, '/')}
           className="mb-8 inline-flex items-center gap-2 text-sm text-white/58 hover:text-white"
         >
-          ← {isZh ? '返回首页' : 'Back to home'}
+          &lt;- {copy.back}
         </Link>
 
-        {/* Hero */}
         <div className="mb-10 text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b77b]/24 bg-[#d8b77b]/8 px-4 py-2 text-sm text-[#f4d7a3]">
             <Sparkles className="h-4 w-4" />
-            {isZh ? '关系解读' : 'Love Reading'}
+            {copy.eyebrow}
           </div>
           <h1 className="mb-4 text-4xl font-bold tracking-tight text-[#ffe3b4] sm:text-5xl">
-            {isZh ? '探索你们的关系命运' : 'Explore Your Relationship Destiny'}
+            {copy.title}
           </h1>
-          <p className="text-lg text-[#f4d7a3]/70">
-            {isZh
-              ? '输入你们双方的生日，获取深度的关系兼容性和时机分析。'
-              : 'Enter both birth dates for deep compatibility and timing insights.'}
-          </p>
+          <p className="text-lg text-[#f4d7a3]/70">{copy.description}</p>
         </div>
 
-        {/* CTA Card */}
         <div className="mb-10 rounded-2xl border border-[#d8b77b]/24 bg-gradient-to-b from-[#1a1209] to-[#0d0b07] p-8 text-center">
-          <h2 className="mb-2 text-2xl font-semibold text-[#ffe3b4]">
-            {isZh ? '开始你们的关系解读' : 'Start Your Love Reading'}
-          </h2>
-          <p className="mb-6 text-sm text-[#f4d7a3]/60">{c.note}</p>
+          <h2 className="mb-2 text-2xl font-semibold text-[#ffe3b4]">{copy.cardTitle}</h2>
+          <p className="mb-6 text-sm text-[#f4d7a3]/60">{cta.note}</p>
           <Link
             href={getLocalizedPath(locale, '/relationship')}
             className="inline-block rounded-full bg-[#ff6c73] px-8 py-4 text-base font-semibold text-white transition hover:bg-[#ff6c73]/90"
           >
-            {c.primary}
+            {cta.primary}
           </Link>
         </div>
 
-        {/* Features */}
         <div className="mb-10 grid gap-6 sm:grid-cols-2">
-          {t.map(({ icon: Icon, title, desc }) => (
+          {featureItems.map(({ icon: Icon, title, desc }) => (
             <div
               key={title}
               className="rounded-xl border border-[#d8b77b]/16 bg-[#ffffff]/04 p-5"
@@ -151,29 +198,21 @@ export default async function LoveReadingPage({ params }: PageParams) {
           ))}
         </div>
 
-        {/* Sample Report Link */}
         <div className="text-center">
-          <p className="mb-4 text-sm text-[#f4d7a3]/50">
-            {isZh ? '想先看看报告的样子？' : 'Want to see what a report looks like first?'}
-          </p>
+          <p className="mb-4 text-sm text-[#f4d7a3]/50">{copy.samplePrompt}</p>
           <Link
             href={getLocalizedPath(locale, '/relationship')}
             className="text-sm text-[#d8b77b] underline hover:text-[#f4d7a3]"
           >
-            {c.secondary} →
+            {cta.secondary} -&gt;
           </Link>
         </div>
 
-        {/* Trust footer */}
         <div className="mt-12 rounded-xl border border-[#d8b77b]/12 bg-[#ffffff]/03 p-5">
           <p className="mb-2 text-center text-xs uppercase tracking-widest text-[#d8b77b]/60">
-            {isZh ? '隐私声明' : 'Privacy'}
+            {copy.privacyLabel}
           </p>
-          <p className="text-center text-xs text-[#f4d7a3]/40">
-            {isZh
-              ? '我们仅使用出生日期进行分析。不存储出生时辰、出生地点或具体问题。所有数据加密存储，可随时删除。'
-              : 'We use only birth dates for analysis. No birth times, locations, or private questions stored. All data encrypted at rest, deletable on request.'}
-          </p>
+          <p className="text-center text-xs text-[#f4d7a3]/40">{copy.privacyBody}</p>
         </div>
       </div>
     </main>

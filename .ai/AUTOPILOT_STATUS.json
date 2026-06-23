@@ -1,6 +1,9 @@
 {
-  "status": "done",
-  "summary": "Pretext Relationship layout merge-readiness evidence is prepared with validation gates passing and payment/deploy work explicitly out of scope.",
-  "next_step": "Open a narrow PR for the Pretext layout commit; continue payment closed-loop work on a separate branch.",
-  "needs_user": false
+  "status": "done-with-codex-executor",
+  "summary": "PR #113 lead-capture analytics/i18n typecheck blockers are repaired, Revenue OS P0 source-only assets are added, and continuation verification passed in the isolated local worktree.",
+  "next_step": "Review the local commit, then explicitly approve any push/PR update. Keep payment, deploy, webhook, production Supabase, env, server mutation, and social auto-post gates closed.",
+  "needs_user": false,
+  "branch": "codex/pr113-revenue-os-p0-20260624",
+  "worktree": "C:\\Users\\Administrator\\codex-worktrees\\tianji-pr113-revenue-os-p0-20260624",
+  "revenue_execution": "no-go"
 }
