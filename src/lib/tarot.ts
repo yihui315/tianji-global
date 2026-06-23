@@ -199,11 +199,63 @@ export function drawCards(shuffle: TarotCard[], count: number): { cards: TarotCa
   return { cards, isReversed };
 }
 
-export function interpretCard(card: TarotCard, isReversed: boolean, language: 'en' | 'zh' = 'en'): string {
+const POSITION_GUIDANCE_EN: Record<string, string[]> = {
+  1: ['Looking back at', 'The foundation of', 'What has shaped this so far is'],
+  2: ['Currently,', 'Right now,', 'At this moment,'],
+  3: ['Moving toward', 'Looking ahead,', 'The direction emerging is'],
+};
+
+const POSITION_GUIDANCE_ZH: Record<string, string[]> = {
+  1: ['回顾过往，', '这段关系的基础是', '至今塑造你们的是'],
+  2: ['此刻，', '现在的状态是，', '当前的核心在于'],
+  3: ['展望未来，', '接下来的走向是，', '即将展开的是'],
+};
+
+function sentenceJoin(parts: string[]): string {
+  return parts.filter(Boolean).join('。') + '。';
+}
+
+function keywordsToSentence(keywords: string, card: TarotCard, position: number, isReversed: boolean, language: 'en' | 'zh'): string {
+  const kwList = keywords.split(',').map((k: string) => k.trim()).filter(Boolean);
+  if (kwList.length === 0) return '';
+
+  const pos = String(position);
+  const guidance = language === 'zh'
+    ? POSITION_GUIDANCE_ZH[pos] || ['总体来看，']
+    : POSITION_GUIDANCE_EN[pos] || ['Overall,'];
+
+  const intro = guidance[Math.floor(Math.random() * guidance.length)];
+
   if (language === 'zh') {
-    return isReversed ? card.reversedMeaningChinese : card.meaningChinese;
+    const arcanaNote = card.arcana === 'major'
+      ? '（核心牌）'
+      : card.suitChinese
+      ? `（${card.suitChinese}元素）`
+      : '';
+    const reversedNote = isReversed ? '，但呈现反向能量' : '';
+    const core = kwList.slice(0, 3).join('、');
+    return sentenceJoin([intro, `牌面关键词指向${core}${arcanaNote}${reversedNote}`]);
+  } else {
+    const arcanaNote = card.arcana === 'major' ? ' (Major Arcana — life theme)' : '';
+    const reversedNote = isReversed ? ', but the energy is inverted or resisted' : '';
+    const core = kwList.slice(0, 3).join(', ');
+    return `${intro} this card points to ${core}${arcanaNote}${reversedNote}`;
   }
-  return isReversed ? card.reversedMeaning : card.meaning;
+}
+
+export function interpretCard(card: TarotCard, isReversed: boolean, language: 'en' | 'zh' = 'en', position: number = 2): string {
+  const raw = language === 'zh'
+    ? (isReversed ? card.reversedMeaningChinese : card.meaningChinese)
+    : (isReversed ? card.reversedMeaning : card.meaning);
+
+  if (!raw || raw.trim() === '') return '';
+
+  // If raw text is already a sentence (not just comma-separated keywords), return as-is
+  if (raw.includes('.') || raw.includes('。') || raw.split(',').length <= 1) {
+    return raw;
+  }
+
+  return keywordsToSentence(raw, card, position, isReversed, language);
 }
 
 export function getRandomCard(): { card: TarotCard; isReversed: boolean } {

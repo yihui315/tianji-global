@@ -749,7 +749,7 @@ export default function TransitPage() {
                   <SharePanel
                     serviceType="transit"
                     resultId={`${result.birthDate}_${result.targetDate}`}
-                    shareUrl="https://tianji.global/transit"
+                    shareUrl={process.env.NEXT_PUBLIC_APP_URL + "/transit"}
                   />
                 </div>
               </GlassCard>

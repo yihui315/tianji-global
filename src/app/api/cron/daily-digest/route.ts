@@ -19,8 +19,8 @@ import yijing from '@/lib/yijing';
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_EMAIL = process.env.FROM_EMAIL || 'TianJi Global <noreply@tianji.global>';
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.global';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'TianJi Love <noreply@tianji.love>';
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.love';
 
 const LUCKY_ELEMENTS_ZH = ['木', '火', '土', '金', '水'];
 const LUCKY_ELEMENTS_EN = ['Wood', 'Fire', 'Earth', 'Metal', 'Water'];

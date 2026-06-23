@@ -707,7 +707,7 @@ export default function SolarReturnPage() {
                   <SharePanel
                     serviceType="solar-return"
                     resultId={`${chartData.birthDate}_${chartData.targetYear}`}
-                    shareUrl="https://tianji.global/solar-return"
+                    shareUrl={process.env.NEXT_PUBLIC_APP_URL + "/solar-return"}
                   />
                 </div>
               </GlassCard>
