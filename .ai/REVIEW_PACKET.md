@@ -1,3 +1,55 @@
+# TianJi Love Auto Gate Status 20260623 - Review Packet (paid funnel, test-mode only)
+
+## 2026-06-23 scheduled gate run
+
+`tianji-github-paid-gate` ran in AUTO mode against `origin/main` 4d2f6d8 on branch `chore/marketing-content-calendar-refresh-20260623`. Inspected source-level checkout readiness only; no live Stripe call, no `.env` access, no Supabase mutation, no production deploy.
+
+## Source-level checkout readiness (app-side)
+
+- Ask unlock: Go (`/api/ask/unlock` creates Stripe Checkout Session, completion verifies paid/complete).
+- Draw unlock: Go (`/api/draw/unlock` mirrors Ask).
+- Relationship checkout: Go for static / source path (`/api/checkout` gated by `ENABLE_PAY_PER_USE`, posts `compatibility_report`, UUID guard present, `rel_*` fallback blocked before checkout).
+- Webhook metadata validation: Go.
+- `checkout_start_from_free_preview` event: present in analytics sources.
+- Typecheck / Lint / Tests / Build: last verified Go on 20260525.
+
+## Test-mode execution readiness
+
+- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `ENABLE_PAY_PER_USE`, `NEXT_PUBLIC_APP_URL`: missing.
+- Supabase staging persistence: unproven.
+- `LOVE_TEST_PAID_INTENT_TEST_MODE_READY`, `LOVE_TEST_PAID_SMOKE_APPROVED`: missing.
+- `npm run smoke:stripe:test-readiness` (non-strict): Pass, reports `Blocked` with the same masked classification as 20260525.
+
+## Stripe test-mode boundary
+
+- Live key shapes (`sk_live_`/`rk_live_`/`pk_live_`) detected in `.ai/`, `.agents/skills/`, `.github/workflows/`, `scripts/`: 0 hits (detection patterns only).
+- Live Stripe call: Not run.
+- Webhook replay on live: Not run.
+- Production deploy: Not run.
+- Secret values printed: No.
+
+## Gate Status
+
+```text
+Checkout readiness audit: Conditional Go
+Test-mode smoke readiness: No-Go
+Stripe test-mode boundary: Verified
+Gate status: NO-GO
+Next scheduled run: 2026-06-24 06:00 UTC
+```
+
+## Blockers
+
+1. Stripe test-mode env still not supplied to this scheduled run.
+2. Supabase staging persistence not proven.
+3. No pre-approved test-mode smoke task can run without the env above.
+
+## Follow-up
+
+- Supply masked Stripe test env and Supabase staging env to the next scheduled run.
+- On Go, execute the narrow test-mode smoke task draft recorded in `.ai/TIANJI_LOVE_GATE_STATUS_20260623.md` §5.
+- Re-emit this gate status daily until Gate = AUTO-GO.
+
 # TianJi Love 7-Day Content Calendar Refresh + Hook/Script/Caption Pools - Review Packet
 
 ## 2026-06-23 docs/assets-only

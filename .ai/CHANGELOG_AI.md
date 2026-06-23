@@ -1,3 +1,37 @@
+# 2026-06-23 - TianJi Love auto gate status (paid funnel, test-mode only)
+
+## What changed
+
+- Ran the `tianji-github-paid-gate` skill in AUTO mode against `origin/main` 4d2f6d8 on branch `chore/marketing-content-calendar-refresh-20260623`.
+- Inspected checkout-readiness evidence at the source level only (no live Stripe, no `.env`, no secrets).
+- Re-ran `node scripts/smoke-stripe-test-readiness.mjs` (non-strict). Exit 0; reports `Blocked` because masked Stripe test-mode env and Supabase staging env are still not supplied to this scheduled run.
+- Classified Stripe / Supabase env presence without printing values; verified no `sk_live_` / `rk_live_` / `pk_live_` shape appears in `.ai/`, `.agents/skills/`, `.github/workflows/`, or `scripts/`.
+- Generated `.ai/TIANJI_LOVE_GATE_STATUS_20260623.md` (NO-GO, with narrow test-mode smoke task draft prepared but not executed).
+- No production deploy, no live Stripe call, no webhook replay, no Supabase mutation, no secret value printed.
+
+## Validation
+
+```text
+git diff --check: Pass
+node --check scripts/smoke-stripe-test-readiness.mjs: Pass
+node scripts/smoke-stripe-test-readiness.mjs (non-strict): Pass, exit 0, Blocked
+Targeted secret-shape scan over .ai/ .agents/skills/ .github/workflows/ scripts/: 0 hits (detection patterns only)
+Live Stripe call: Not run
+Production deploy: Not run
+Supabase mutation: Not run
+.env read/print: No
+```
+
+## Gate status
+
+```text
+Checkout readiness audit: Conditional Go
+Test-mode smoke readiness: No-Go
+Stripe test-mode boundary: Verified
+Gate status: NO-GO
+Next scheduled run: 2026-06-24 06:00 UTC
+```
+
 # 2026-06-23 - TianJi Love 7-day content calendar refresh + hook/script/caption pools (docs/assets-only)
 
 ## What changed
