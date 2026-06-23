@@ -139,7 +139,7 @@ export async function POST(req: NextRequest) {
         position: index + 1,
         positionName: position.name,
         positionNameChinese: position.nameChinese,
-        interpretation: interpretCard(card, isReversed[index], language),
+        interpretation: interpretCard(card, isReversed[index], language, index + 1),
       };
     });
 
@@ -191,7 +191,7 @@ export async function GET(req: NextRequest) {
     const enhanceWithAI = searchParams.get('enhanceWithAI') === 'true';
 
     const { card, isReversed } = getRandomCard();
-    const interpretation = interpretCard(card, isReversed, language);
+    const interpretation = interpretCard(card, isReversed, language, 2);
 
     const response: Record<string, unknown> = {
       card: {

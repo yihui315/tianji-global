@@ -20,7 +20,8 @@ describe('Tianji Love revenue funnel polish', () => {
   it('homepage contains the primary free CTA and three product cards', () => {
     const home = read('src/components/home/TianjiLoveHome.tsx');
 
-    expect(home).toContain('Start Free Love Reading');
+    expect(home).toContain('Take Free Love Test');
+    expect(home).toContain('Start Love Reading');
     expect(home).toContain('Love Reading');
     expect(home).toContain('Ask One Question');
     expect(home).toContain('Draw Timing Cards');
@@ -38,8 +39,9 @@ describe('Tianji Love revenue funnel polish', () => {
     const home = read('src/components/home/TianjiLoveHome.tsx');
 
     expect(home).toContain('Ask One Question');
-    expect(home).toContain('Understand your love pattern');
-    expect(home).toContain('View Sample Reading');
+    expect(home).toContain('See the pattern between you');
+    expect(home).toContain('Read Sample Result');
+    expect(home).toContain('Why It Feels Safe');
     expect(home).toContain("href('/ask')");
     expect(home).toContain('Private by default');
     expect(home).toContain('Reflection, not certainty');

@@ -16,6 +16,8 @@ import {
   Star,
 } from 'lucide-react';
 
+import { LeadCaptureForm } from '@/components/marketing/LeadCaptureForm';
+
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { DivinationEvidenceCard } from '@/components/divination/DivinationEvidenceCard';
 import { type AppLanguage, withLanguageParam } from '@/lib/language-routing';
@@ -277,6 +279,7 @@ function AskPageContent() {
   const [unlocked, setUnlocked] = useState<UnlockedState | null>(null);
   const [loading, setLoading] = useState(false);
   const [unlocking, setUnlocking] = useState(false);
+  const [checkoutReady, setCheckoutReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const verifyAttempted = useRef(false);
   const paidIntentViewTrackedRef = useRef(false);
@@ -308,6 +311,16 @@ function AskPageContent() {
       intent: attributionIntent,
       checkout_readiness: 'blocked',
     });
+  }, [paidIntentMeta, attributionIntent]);
+
+  useEffect(() => {
+    if (!paidIntentMeta) return;
+    (async () => {
+      try {
+        const res = await fetch('/api/ask/checkout-status?intent=' + encodeURIComponent(attributionIntent || ''));
+        if (res.ok) setCheckoutReady(true);
+      } catch (_) {}
+    })();
   }, [paidIntentMeta, attributionIntent]);
 
   useEffect(() => {
@@ -553,8 +566,8 @@ function AskPageContent() {
                 <p className="mt-2 text-sm text-[#f4d7a3]/76">{getLoveTestPaidIntentBody(attributionIntent)}</p>
                 <p className="mt-2 text-sm text-[#f4d7a3]/62">{paidIntentMeta.previewPromise}</p>
                 <div className="mt-3 flex flex-col gap-2 text-xs uppercase tracking-[0.16em] text-[#f4d7a3]/58 sm:flex-row sm:items-center sm:justify-between">
-                  <span>{LOVE_TEST_CHECKOUT_READINESS_LABEL}</span>
-                  <span>Next gate: {LOVE_TEST_TEST_MODE_READY_LABEL}</span>
+                  <span>{checkoutReady ? '✓ Checkout ready' : LOVE_TEST_CHECKOUT_READINESS_LABEL}</span>
+                  {checkoutReady ? null : <span>Next: {LOVE_TEST_TEST_MODE_READY_LABEL}</span>}
                 </div>
               </div>
             ) : null}
@@ -644,10 +657,10 @@ function AskPageContent() {
               {paidIntentMeta ? 'Test-mode checkout is approval-gated. No payment button is shown.' : copy.preview.assurance}
             </span>
             <button type="button" onClick={onUnlock} disabled={unlocking} className="tianji-love-primary inline-flex min-h-14 items-center justify-center rounded-lg border border-[#ffb49e]/60 px-8 text-base font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-55">
-              {paidIntentMeta
-                ? LOVE_TEST_CHECKOUT_READINESS_LABEL
-                : unlocking
-                  ? copy.preview.unlocking
+              {unlocking
+                ? copy.preview.unlocking
+                : paidIntentMeta && !checkoutReady
+                  ? LOVE_TEST_CHECKOUT_READINESS_LABEL
                   : copy.preview.unlockCta.replace('{price}', preview.price)}
             </button>
           </div>
@@ -685,6 +698,10 @@ function AskPageContent() {
             {copy.finalCta.button}
           </a>
         </div>
+      </section>
+
+      <section className="relative z-10 mx-auto w-full max-w-md px-5 pb-10 sm:px-8">
+        <LeadCaptureForm sourcePage="ask" variant="inline" />
       </section>
 
       <footer className="relative z-10 border-t border-[#b57248]/24 bg-[#02040c]/94 px-5 py-8 text-[#f4d7a3]/68 sm:px-8">

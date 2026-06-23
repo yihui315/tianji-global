@@ -373,7 +373,7 @@ function CoverPage({ title, userName, date, language }: CoverPageProps) {
         <Text style={styles.coverSubtitle}>
           {language === 'zh' ? '生成日期' : 'Generated'}: {date}
         </Text>
-        <Text style={styles.coverDate}>tianji.global</Text>
+        <Text style={styles.coverDate}>tianji.love</Text>
       </View>
       <View style={styles.footer}>
         <Text style={styles.disclaimer}>本报告仅供娱乐参考，不构成任何决策依据 | For entertainment only. Not financial or life advice.</Text>

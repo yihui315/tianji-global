@@ -632,7 +632,7 @@ export default function NumerologyPage() {
                   <SharePanel
                     serviceType="numerology"
                     resultId={`numerology-${reading.name}-${reading.birthdate}`}
-                    shareUrl={`https://tianji.global/numerology?name=${encodeURIComponent(reading.name)}`}
+                    shareUrl={` + process.env.NEXT_PUBLIC_APP_URL + "/numerology?name=${encodeURIComponent(reading.name)}`}
                   />
                 </div>
               </GlassCard>

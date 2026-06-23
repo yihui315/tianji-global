@@ -140,7 +140,7 @@ export async function GET(req: NextRequest) {
             fontSize: 18,
           }}
         >
-          <span>tianji.global</span>
+          <span>tianji.love</span>
           <span style={{ color: c.primary }}>·</span>
           <span>Powered by AI</span>
         </div>

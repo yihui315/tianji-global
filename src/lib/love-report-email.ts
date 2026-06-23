@@ -47,7 +47,7 @@ export async function sendReportReadyEmailForCheckoutSession(input: {
     sessionId: order.readingSessionId,
   });
   const email = buildReportReadyEmail({ reportUrl });
-  const from = process.env.EMAIL_FROM || process.env.FROM_EMAIL || 'TianJi Global <noreply@tianji.global>';
+  const from = process.env.EMAIL_FROM || process.env.FROM_EMAIL || 'TianJi Love <noreply@tianji.love>';
 
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({

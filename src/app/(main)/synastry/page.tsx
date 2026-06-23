@@ -1031,7 +1031,7 @@ export default function SynastryPage() {
                   <SharePanel
                     serviceType="synastry"
                     resultId={`${person1Data.birthDate}_${person2Data.birthDate}_${synastryType}`}
-                    shareUrl="https://tianji.global/synastry"
+                    shareUrl={process.env.NEXT_PUBLIC_APP_URL + "/synastry"}
                   />
                 </div>
               </GlassCard>
