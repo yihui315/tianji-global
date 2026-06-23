@@ -1,0 +1,21 @@
+# ==============================================================================
+# Tianji Love 核心页面保护 - CODEOWNERS
+# 任何修改主页、hero图片、核心路由的PR都需要 yihui315 审批
+# ==============================================================================
+
+# 主页和核心路由
+src/app/\(main\)/page.tsx       @yihui315
+src/components/home/           @yihui315
+src/app/\(main\)/love-reading/ @yihui315
+src/app/\(main\)/ask/          @yihui315
+src/app/\(main\)/pricing/      @yihui315
+
+# Hero 图片资源
+public/assets/images/hero/     @yihui315
+
+# 全局布局
+src/app/layout.tsx             @yihui315
+src/app/\(main\)/layout.tsx    @yihui315
+
+# Next.js 配置
+next.config.ts                 @yihui315
