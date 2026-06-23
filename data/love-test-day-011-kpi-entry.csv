@@ -1,0 +1,6 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-28,tiktok,day011-tt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Understanding vs acting; manual entry after publish"
+2026-06-28,instagram_reels,day011-ig-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Two-step framing; manual entry after publish"
+2026-06-28,youtube_shorts,day011-yt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Choose to wait; manual entry after publish"
+2026-06-28,reflection_carousel,day011-caro-01,carousel,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Three questions; manual entry after publish"
+2026-06-28,trust_note,day011-trust-01,trust_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Trust pillar; manual entry after publish"

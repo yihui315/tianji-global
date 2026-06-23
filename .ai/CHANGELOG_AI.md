@@ -1,3 +1,43 @@
+# 2026-06-23 - TianJi Love Day 011 marketing publishing pack (docs/assets/data-only)
+
+## What changed
+
+- Added `assets/marketing/daily/day-011-publishing-pack.md` for publishing date 2026-06-28.
+- Theme: "Understanding a pattern is not the same as acting on it tonight." This adds a fresh angle distinct from the Day 004-Day 010 series, separating pattern recognition from immediate action and reusing the AI-as-reflection positioning from the 2026-06-19 demand-mining brief.
+- Added `assets/marketing/daily/day-011-review-checklist.md` covering content safety, publishing gate, and KPI/revenue gate, with extra reminders to reject "text them now", "act tonight", or pressure framing.
+- Added `data/love-test-day-011-kpi-entry.csv` with placeholder zero rows for the five planned posts (TikTok, Instagram Reels, YouTube Shorts, reflection carousel, trust note).
+- No source code, no API route, no auth, no billing, no production deploy, no env, no secret, no platform account, no credentials touched.
+
+## Validation
+
+```text
+git diff --check: Pass
+git diff --cached --name-only: assets/marketing/daily/day-011-publishing-pack.md, assets/marketing/daily/day-011-review-checklist.md, data/love-test-day-011-kpi-entry.csv
+npm run typecheck: Not runnable in this partial-install environment; changes are docs/assets/data-only (markdown + CSV), no TS source modified
+npm run lint: Not runnable in this partial-install environment; changes are docs/assets/data-only, no JS/TS source modified
+Targeted secret-shape scan over new files: Pass (no sk_, pk_, AKIA, ghp_, xox, private key, or password-shape matches)
+```
+
+## Gate status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+Production Supabase / API mutation: No-Go
+Secret / .env / token / credential access: No-Go - not performed
+```
+
+## Follow-up
+
+- Manual operator publishes Day 011 pack only after clearing the Day 011 review checklist.
+- Real KPI metrics are entered by the human operator after publish; analysis stays blocked until non-placeholder rows exist.
+- A publishing queue CSV/JSON for Day 011 can be added in a separate docs/assets-only commit if needed.
+
 # 2026-06-08 - TianJi Love auth premium baseline mainline integration
 
 ## What changed

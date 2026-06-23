@@ -1,3 +1,76 @@
+# TianJi Love Day 011 Marketing Publishing Pack - Review Packet
+
+## 2026-06-23 docs/assets/data-only
+
+Added the next daily TianJi Love publishing pack on a feature branch, kept the change scoped to marketing assets and the KPI entry scaffold.
+
+## Branch
+
+```text
+Branch: chore/marketing-love-test-day-011-publishing-pack-20260623
+Base: fix/love-reading-lead-capture-ssr at a3298fe
+Scope: docs/assets/data-only
+```
+
+## Goal
+
+Move TianJi Love marketing from Day 010 (publishing date 2026-06-27) to Day 011 (publishing date 2026-06-28) by adding a fresh manual-publishing angle: separating understanding a pattern from acting on it impulsively. The pack reuses existing safety baseline and copy bank, never invents metrics, and never claims real performance.
+
+## Files Added
+
+- `assets/marketing/daily/day-011-publishing-pack.md`
+- `assets/marketing/daily/day-011-review-checklist.md`
+- `data/love-test-day-011-kpi-entry.csv`
+
+## Theme
+
+```text
+Theme: Understanding a pattern is not the same as acting on it tonight.
+Channel mix: TikTok, Instagram Reels, YouTube Shorts, reflection carousel, trust note
+Primary CTA: /love-test
+Secondary observation: avoid pressure, urgency, "act tonight", "text them now", or chase framing
+```
+
+## Key Safety Reminders Specific To Day 011
+
+```text
+- Reject any copy that pressures the reader to act tonight.
+- Reject "send this exact text" instruction patterns.
+- Reject "you are running out of time" or "do not wait" framing.
+- Maintain privacy non-negotiables: no birth data, no chat screenshots, no identifying details.
+- Trust pillar copy in COPY_BANK.md is the only authority claimed.
+```
+
+## Validation
+
+```text
+git diff --check: Pass
+Targeted secret-shape scan over new files: Pass
+npm run typecheck: Not runnable in partial-install environment; no TS source modified
+npm run lint: Not runnable in partial-install environment; no JS/TS source modified
+```
+
+## Gate Status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+Production Supabase / API mutation: No-Go
+Secret / .env / token / credential access: No-Go - not performed
+```
+
+## Follow-up
+
+- Manual operator clears Day 011 review checklist before any publish.
+- Real KPI metrics are entered by the human operator after publish; analysis stays blocked until non-placeholder rows exist.
+- A Day 011 publishing queue CSV/JSON can be added in a separate docs/assets-only commit if needed.
+- PR should be opened from this branch, not merged directly to main.
+
 # TianJi Love Auth Premium Mainline Integration - Review Packet
 
 ## 2026-06-08 mainline branch
