@@ -2,7 +2,7 @@
 
 Purpose: keep a rolling pool of 30 fresh, grounded hooks for short-form video, carousel, and caption work. Hooks rotate across the four core themes and avoid fake urgency, fake certainty, mind-reading, or guaranteed outcomes.
 
-Pool refreshed: 2026-06-23.
+Pool refreshed: 2026-06-24.
 Each hook is reviewed against the safety baseline before publishing. Replace used hooks rather than re-using to keep rotation fresh.
 
 ## Safety baseline
@@ -24,7 +24,7 @@ T4 - Is this relationship worth continuing?
 T5 - Baseline safety: reflection, privacy, repair, calmer-not-dependent
 ```
 
-## Hooks
+## Hooks (rotating pool of 30 — used hooks are swapped out, not re-used within the same calendar week)
 
 1. T1 — When the group chat goes quiet, your brain starts writing the script.
 2. T2 — Initiative is not the same as urgency. Pause before you reply.
@@ -42,20 +42,20 @@ T5 - Baseline safety: reflection, privacy, repair, calmer-not-dependent
 14. T4 — Compatibility is not one number. Look for rhythm, effort, and repair.
 15. T5 — A reading that tells you what to do is shorter than one that helps you decide.
 16. T1 — Their silence has many explanations. None of them are yours to assume.
-17. T2 — Initiative without clarity is just reaction. Name the question first.
+17. T2 — Initiative without a name for the need is just motion. Name the need first.
 18. T3 — "Will they come back" rewards a calm look at who you were without them.
 19. T4 — The relationship you keep is the one you can describe without defending it.
 20. T5 — Reflection beats fortune telling. A useful tool returns the choice to you.
 21. T1 — Checking their profile is not data. It is a feeling wearing a data costume.
 22. T2 — The safest next text starts with knowing what you actually need from it.
 23. T3 — No contact ends when one of you decides. Your job is to decide for yourself.
-24. T4 — Worth continuing is a felt sense, not a score. Notice the felt sense.
+24. T4 — A relationship worth continuing leaves room for an awkward Tuesday.
 25. T5 — A private result is useful only if it protects the person reading it.
 26. T1 — "What is he thinking" rarely changes anything. "What am I avoiding" usually does.
 27. T2 — Initiative without self-knowledge looks like effort and feels like chasing.
 28. T3 — You cannot plan around a return you cannot predict. Plan around your own week.
 29. T4 — A relationship worth continuing tolerates the awkward conversation.
-30. T5 — Do not optimize the funnel until real numbers exist. Build trust first.
+30. T5 — The right reflection gives you something to think about, not something to refresh.
 
 ## Rotation notes
 

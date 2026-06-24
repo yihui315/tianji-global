@@ -2,7 +2,7 @@
 
 Purpose: keep a rolling pool of 20 short-form video scripts (15–45 seconds) ready for manual publishing. Scripts cover TikTok, Instagram Reels, and YouTube Shorts and stay grounded in the safety baseline.
 
-Pool refreshed: 2026-06-23.
+Pool refreshed: 2026-06-24.
 Each script is for human review and manual publishing only. Replace used scripts rather than re-recording identical reads.
 
 ## Safety baseline
@@ -98,13 +98,13 @@ Risk note: what to cut if it sounds like a guarantee.
 - Caption: Edit the conversation you actually have, not the one you imagine.
 - Risk note: Do not promise that repair changes the other person's behavior.
 
-### S10 — Calmer, not more dependent
-- Hook: A useful love test should make you calmer, not more dependent.
-- Beat 1: If a tool makes you check your phone more, it is not helping.
-- Beat 2: The right tool gives you something to think about, not something to refresh.
-- CTA: `/love-test` is a one-time reflection. You stay in charge of what comes next.
-- Caption: Calm is a feature. Dependency is a side effect.
-- Risk note: Do not invite daily re-checks or comparison loops.
+### S10 — Calm is a feature, not a side effect
+- Hook: The right reflection gives you something to think about, not something to refresh.
+- Beat 1: A tool that rewards re-checking trains a small anxiety loop. You can feel it as a habit.
+- Beat 2: Try one calm read, one quiet day, then notice whether you needed to return.
+- CTA: `/love-test` is a one-time reflection. You stay in charge of how often you return.
+- Caption: Calm is a feature. Re-checking is a habit. Choose the feature.
+- Risk note: Do not invite daily re-checks, "check tomorrow" framing, or comparison loops.
 
 ### S11 — Reading their last seen
 - Hook: Their last seen is not a message.
@@ -170,13 +170,13 @@ Risk note: what to cut if it sounds like a guarantee.
 - Caption: Boring explanations are still explanations.
 - Risk note: Cut any line that implies you know the reason.
 
-### S19 — The story you tell yourself
-- Hook: No contact becomes a story. The story is yours to edit.
-- Beat 1: A story you wrote at midnight reads different at noon.
-- Beat 2: Edit the story before you make a decision from it.
-- CTA: `/love-test` is a private place to edit the story.
-- Caption: The story you write at midnight is rarely the one you keep.
-- Risk note: Do not promise the story will change the outcome.
+### S19 — Awkward Tuesday
+- Hook: A relationship worth continuing leaves room for an awkward Tuesday.
+- Beat 1: Worth continuing is not a smooth feed. It is a week that survives a quiet disagreement.
+- Beat 2: Notice which Tuesdays you would still describe without defending them.
+- CTA: Reflect at `/love-test` on a calm afternoon, not on the Tuesday itself.
+- Caption: Awkward days are part of the description, not evidence against it.
+- Risk note: Do not label a single bad day as a dealbreaker; do not promise the Tuesday gets easier.
 
 ### S20 — The awkward conversation
 - Hook: A relationship worth continuing tolerates the awkward conversation.

@@ -15,6 +15,7 @@ Safety baseline: no fake testimonials, no fake numbers, no guaranteed outcomes, 
 | 2026-06-27 | Day 010 | 2 TikTok, 1 Reels, 1 weekly recap, 1 KPI review note | Pattern first, optimization second | Do not optimize the funnel until real numbers exist. | `/love-test` | clicks, love_test_starts, real KPI completeness | KPI analysis stays blocked until human-entered metrics exist. |
 | 2026-06-28 | Day 011 | 1 TikTok, 1 Reels, 1 Shorts, 1 carousel, 1 trust note | Understanding is not the same as acting | A clear pattern is not an instruction to act on it tonight. | `/love-test` | clicks, love_test_starts, preview_submits | Reject "act tonight", "text them now", and chase framing. |
 | 2026-06-29 | Day 012 | 2 TikTok, 1 Reels, 1 carousel, 1 SEO outline | Repair over replay | Stop rehearsing the same conversation. Notice what you keep editing instead. | `/love-test` | result_views, ask_next_clicks | Do not present repair as guaranteed; avoid framing replay as red flag. |
+| 2026-06-30 | Day 013 | 1 TikTok, 1 Shorts, 1 Reels, 1 carousel, 1 trust note | Calm is a feature, not a side effect | The right reflection gives you something to think about, not something to refresh. | `/love-test` | clicks, love_test_starts, result_views | Reject daily re-check and dependency-loop framing; no "check again tomorrow" tone. |
 
 ## Daily Publishing Rhythm
 
@@ -38,6 +39,7 @@ Day 009 - privacy is the product
 Day 010 - pattern before optimization
 Day 011 - understanding vs acting
 Day 012 - repair over replay
+Day 013 - calm as a feature, not a side effect
 ```
 
 Rotation avoids repeating one emotional angle (anxiety, urgency, chase) more than twice in any five-day window. Privacy, trust, and "calmer, not more dependent" angles recur by design because they are baseline safety messages, not hype.

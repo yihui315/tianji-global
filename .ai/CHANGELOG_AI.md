@@ -1,3 +1,55 @@
+# 2026-06-24 - TianJi Love 7-day content calendar refresh + hook/script/caption pool rotation (docs/assets-only)
+
+## What changed
+
+- Extended `assets/marketing/content-calendar-7day.md` by adding Day 013 (2026-06-30, "Calm is a feature, not a side effect"). The calendar now has 7 future days from today (2026-06-24 through 2026-06-30).
+- Updated the "Theme Rotation Notes" block to record Day 013 alongside Day 004–Day 012.
+- Refreshed `assets/marketing/love-test-next-30-hooks.md` rotation date to 2026-06-24 and rotated 4 hooks in-place (entries 17, 24, 30, plus header normalization). Pool count stays at 30; theme distribution across T1–T5 stays balanced; no hook promises reunion, prediction accuracy, "act tonight", or "send this exact text" framing.
+- Refreshed `assets/marketing/love-test-next-20-video-scripts.md` rotation date to 2026-06-24 and rotated 2 scripts (S10 "Calm is a feature, not a side effect"; S19 "Awkward Tuesday") to keep the next 7-day window distinct from Days 004–011. Pool count stays at 20; each script still ends on `/love-test`.
+- Refreshed `assets/marketing/love-test-next-20-share-captions.md` rotation date to 2026-06-24 and rotated 2 captions (entries 9 and 18) to match the script/calendar rotation. Pool count stays at 20; each caption still ends on `/love-test`.
+- All copy stays grounded: no fake testimonials, fake numbers, fake revenue, fake accuracy, guaranteed outcomes, reunion promises, mind-reading claims, "act tonight" framing, "send this exact text" patterns, or identifying detail.
+- No source code, no API route, no auth, no billing, no production deploy, no env, no secret, no platform account, no credentials touched.
+
+## Validation
+
+```text
+git diff --check: Pass
+git diff --stat: 4 files changed, 28 insertions(+), 26 deletions(-)
+  assets/marketing/content-calendar-7day.md
+  assets/marketing/love-test-next-20-share-captions.md
+  assets/marketing/love-test-next-20-video-scripts.md
+  assets/marketing/love-test-next-30-hooks.md
+npm run typecheck: Not runnable in this partial-install environment (lib.dom.d.ts missing); changes are docs/assets-only (markdown), no TS source modified
+npm run lint: Not runnable in this partial-install environment (next not on PATH); changes are docs/assets-only, no JS/TS source modified
+Targeted secret-shape scan over changed files (.ai/, assets/marketing/, data/): Pass (only detection-pattern references appear inside existing AI records; no real sk_, pk_, AKIA, ghp_, xox, private-key, or password-shape matches)
+Live Stripe call: Not run
+Production deploy: Not run
+Supabase mutation: Not run
+.env read/print: No
+```
+
+## Gate status
+
+```text
+Seven-day content calendar: Go - 7 future days (2026-06-24 to 2026-06-30)
+Hook pool: Go - 30 hooks, 4 rotated on 2026-06-24, rotation across 4 themes + baseline safety
+Video script pool: Go - 20 scripts, 2 rotated on 2026-06-24, all end on /love-test
+Share caption pool: Go - 20 captions, 2 rotated on 2026-06-24, rotation across 4 themes + baseline safety
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+Production Supabase / API mutation: No-Go
+Secret / .env / token / credential access: No-Go - not performed
+```
+
+## Follow-up
+
+- Manual operator selects one hook, one script, and one caption per publishing day from the pools, then clears the matching review checklist before publishing.
+- Replace used entries from each pool rather than re-using to keep rotation fresh.
+- Real KPI metrics are entered by the human operator after publish; analysis stays blocked until non-placeholder rows exist.
+- Next content calendar refresh scheduled by the recurring `tianji-github-content-calendar` cron.
+
 # 2026-06-23 - TianJi Love auto gate status (paid funnel, test-mode only)
 
 ## What changed

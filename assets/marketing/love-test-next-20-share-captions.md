@@ -2,7 +2,7 @@
 
 Purpose: keep a rolling pool of 20 grounded share captions for TikTok, Instagram, LinkedIn-style text posts, and short-form caption boxes. Captions stay helpful, calm, and non-guaranteed.
 
-Pool refreshed: 2026-06-23.
+Pool refreshed: 2026-06-24.
 Each caption is reviewed against the safety baseline before publishing. Replace used captions rather than re-using to keep rotation fresh.
 
 ## Safety baseline
@@ -56,9 +56,9 @@ Optional safety line (1 line).
    `/love-test` can name the pattern. Repair is up to you.
    Repair happens in the actual conversation.
 
-9. A useful love test should make you calmer, not more dependent.
+9. The right reflection gives you something to think about, not something to refresh.
    `/love-test` is a one-time reflection.
-   If a tool makes you check more, it is not helping.
+   If a tool trains you to re-check, it is not a reflection tool.
 
 10. Their last seen is not a message.
     Notice the feeling before you read the timestamp.
@@ -92,9 +92,9 @@ Optional safety line (1 line).
     Silence has many. The boring one is often the kindest.
     Reflect at `/love-test` before you decide.
 
-18. A story you wrote at midnight reads different at noon.
-    Edit the story before you make a decision from it.
-    `/love-test` is a private place to edit.
+18. A relationship worth continuing leaves room for an awkward Tuesday.
+    The weeks that survive a quiet disagreement are usually the ones worth describing.
+    Reflect at `/love-test` on a calm afternoon, not on the Tuesday itself.
 
 19. Awkward is information. So is avoidance.
     A relationship worth continuing tolerates the awkward conversation.

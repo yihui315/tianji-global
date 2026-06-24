@@ -1,3 +1,63 @@
+# TianJi Love 7-Day Content Calendar Refresh + Hook/Script/Caption Pool Rotation - Review Packet (2026-06-24)
+
+## 2026-06-24 docs/assets-only
+
+`tianji-github-content-calendar` ran on 2026-06-24 on branch `chore/marketing-content-calendar-refresh-20260623` against `origin/main` (with prior worktree content). Added Day 013 (2026-06-30) to `assets/marketing/content-calendar-7day.md` so the calendar now covers 7 future days from today (2026-06-24 → 2026-06-30). Refreshed the rotation date on the three pool files (`love-test-next-30-hooks.md`, `love-test-next-20-video-scripts.md`, `love-test-next-20-share-captions.md`) and rotated 4 hooks, 2 scripts, and 2 captions in-place to keep the next 7-day window distinct from Days 004–011.
+
+## Branch
+
+- Working branch: `chore/marketing-content-calendar-refresh-20260623`
+- Base: `origin/main`
+- Commit shape: `chore(marketing): refresh love-test content calendar`
+- Path-scoped commit: only `assets/marketing/content-calendar-7day.md`, `assets/marketing/love-test-next-30-hooks.md`, `assets/marketing/love-test-next-20-video-scripts.md`, `assets/marketing/love-test-next-20-share-captions.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+
+## Diff
+
+```text
+assets/marketing/content-calendar-7day.md          |  2 ++
+assets/marketing/love-test-next-20-share-captions.md | 12 ++++-----
+assets/marketing/love-test-next-20-video-scripts.md  | 30 +++++++++++-----------
+assets/marketing/love-test-next-30-hooks.md         | 10 ++++----
+.ai/CHANGELOG_AI.md                                  | 52 +++++++++++++++++++++
+.ai/REVIEW_PACKET.md                                 | (this packet)
+```
+
+## Source readiness vs execution readiness
+
+- Calendar content refresh: source readiness Go.
+- Hook / script / caption pools: source readiness Go.
+- Auto-posting: No-Go (manual publishing only).
+- Stripe / checkout / webhook: No-Go for this skill.
+- Paid smoke / production deploy / production Supabase mutation: No-Go.
+- `.env` / secret / token / credential access: No-Go - not performed.
+
+## Gate status
+
+```text
+Seven-day content calendar: Go - 7 future days (2026-06-24 to 2026-06-30)
+Hook pool: Go - 30 hooks, 4 rotated on 2026-06-24
+Video script pool: Go - 20 scripts, 2 rotated on 2026-06-24
+Share caption pool: Go - 20 captions, 2 rotated on 2026-06-24
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+Secret / .env / token / credential access: No-Go - not performed
+```
+
+## Blockers
+
+1. Stripe test-mode env still not supplied to this scheduled run (carried from prior gate status).
+2. Supabase staging persistence not proven (carried from prior gate status).
+3. No pre-approved test-mode smoke task can run without the env above.
+
+## Follow-up
+
+- Manual operator selects one hook, one script, and one caption per publishing day from the pools, then clears the matching review checklist before publishing.
+- Replace used entries from each pool rather than re-using to keep rotation fresh.
+- Real KPI metrics are entered by the human operator after publish; analysis stays blocked until non-placeholder rows exist.
+- Next `tianji-github-content-calendar` cron run continues the rolling refresh.
+
 # TianJi Love Auto Gate Status 20260623 - Review Packet (paid funnel, test-mode only)
 
 ## 2026-06-23 scheduled gate run
