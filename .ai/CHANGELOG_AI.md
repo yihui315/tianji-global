@@ -2,6 +2,20 @@
 
 ## Entries
 
+### 2026-06-24 - TianJi Love Revenue OS v1 P0 / PR #113 CI repair
+
+- Task ID: `20260624-pr113-revenue-os-p0-ci-repair`
+- Branch/worktree: `codex/pr113-revenue-os-p0-20260624` in `C:\Users\Administrator\codex-worktrees\tianji-pr113-revenue-os-p0-20260624`.
+- Source base: `origin/feature/marketing-rebuild-20260623@1570053`.
+- Files changed: `src/components/marketing/LeadCaptureForm.tsx`, `src/app/[locale]/love-reading/page.tsx`, `src/app/api/marketing/leads/route.ts`, removed `src/app/api/marketing/leads/leads-route.ts`, `src/__tests__/api/marketing-leads.test.ts`, `supabase/migrations/20260624_marketing_leads.sql`, `data/growth-events-contract.csv`, `assets/marketing/publishing-queue/README.md`, `assets/marketing/publishing-queue/schema.json`, `assets/marketing/publishing-queue/sample-queue.csv`, `scripts/growth-daily-report.ts`, `progress.md`, `.ai/TASKS.md`, `.ai/AUTOPILOT_REPORT.md`, `.ai/AUTOPILOT_STATUS.json`, `.ai/REVIEW_PACKET.md`, `.ai/CHANGELOG_AI.md`.
+- Summary: Reproduced PR #113 typecheck failures, fixed the LeadCaptureForm `useLanguage()` analytics payload mismatch, repaired localized love-reading `Locale` typing, moved the marketing leads API to App Router `route.ts`, hardened the API contract, and added source-only Revenue OS P0 assets.
+- Validation: `npm ci --ignore-scripts --no-audit --fund=false` passed; initial `npm run typecheck -- --pretty false` failed as expected; final `npm run typecheck -- --pretty false`, `npm run lint`, `npm run test -- src/__tests__/api/marketing-leads.test.ts`, full `npm run test`, `npm run build:staging:degraded`, and `git diff --check` passed.
+- Continuation verification: Reran `git status --short --branch`, `npm run typecheck -- --pretty false`, `npm run lint`, `npm run test -- src/__tests__/api/marketing-leads.test.ts`, `npm run test`, `npm run build:staging:degraded`, and `git diff --check`; all passed, with no source repair required.
+- Known noise: `next lint` prints the existing deprecation notice. `build:staging:degraded` prints existing `jose` Edge Runtime warnings. `git diff --check` prints LF/CRLF warnings only.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No push, deploy, Stripe test/live paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed.
+- Gate status: Source Go for PR #113 CI/typecheck and lead-capture P0 source readiness. Revenue Execution, Stripe paid smoke, production deploy, and Supabase production mutation remain No-Go.
+- Suggested commit message: `feat(marketing): restore lead capture revenue os p0`
+
 ### 2026-06-19 - TianJi Love production baseline branch release readiness
 
 - Task ID: `20260619-tianji-love-production-baseline-release-readiness`

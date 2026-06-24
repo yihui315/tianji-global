@@ -1,0 +1,8 @@
+event_name,module,trigger,payload_required,payload_optional,primary_kpi,owner,risk_level
+lead_capture_viewed,marketing,LeadCaptureForm mounted,source_page,variant|locale,lead_capture_view_rate,growth,low
+lead_capture_submitted,marketing,LeadCaptureForm valid API success,source_page,variant|locale|utm_source|utm_medium|utm_campaign,lead_submit_rate,growth,low
+lead_capture_failed,marketing,LeadCaptureForm validation/network/API failure,source_page|reason,variant|locale,lead_error_rate,growth,low
+love_reading_start,love_reading,User starts free love reading,locale,source_page|variant,love_reading_start_rate,product,low
+relationship_preview_generated,relationship,Free relationship preview generated,locale,source_page|variant,preview_completion_rate,product,medium
+checkout_started,revenue,User starts checkout from eligible paid surface,product_id|price_mode,source_page|variant|locale,checkout_start_rate,revenue,high
+paid_completion,revenue,Payment entitlement completed in approved test/live scope,product_id|price_mode,source_page|variant|locale,paid_conversion_rate,revenue,high

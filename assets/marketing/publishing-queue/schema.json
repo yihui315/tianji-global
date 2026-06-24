@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TianJi Love Manual Publishing Queue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "date",
+    "channel",
+    "content_type",
+    "title",
+    "hook",
+    "body",
+    "cta",
+    "cta_url",
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "review_status",
+    "publish_status",
+    "published_url",
+    "impressions",
+    "clicks",
+    "leads",
+    "paid_conversions",
+    "revenue",
+    "notes"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "format": "date" },
+    "channel": { "type": "string", "minLength": 1 },
+    "content_type": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "hook": { "type": "string", "minLength": 1 },
+    "body": { "type": "string", "minLength": 1 },
+    "cta": { "type": "string", "minLength": 1 },
+    "cta_url": { "type": "string", "minLength": 1 },
+    "utm_source": { "type": "string" },
+    "utm_medium": { "type": "string" },
+    "utm_campaign": { "type": "string" },
+    "review_status": {
+      "type": "string",
+      "enum": ["pending_manual_review", "approved_for_manual_publish", "needs_edit", "rejected"]
+    },
+    "publish_status": {
+      "type": "string",
+      "enum": ["not_published", "published_manually", "scheduled_in_approved_tool", "skipped"]
+    },
+    "published_url": { "type": "string" },
+    "impressions": { "type": "number", "minimum": 0 },
+    "clicks": { "type": "number", "minimum": 0 },
+    "leads": { "type": "number", "minimum": 0 },
+    "paid_conversions": { "type": "number", "minimum": 0 },
+    "revenue": { "type": "number", "minimum": 0 },
+    "notes": { "type": "string" }
+  }
+}
