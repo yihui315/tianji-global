@@ -38,11 +38,11 @@ const pageCopy: Record<Locale, LoveReadingPageCopy> = {
   en: {
     metadataTitle: 'Love Reading - Tianji Love',
     metadataDescription:
-      "Explore your love patterns with a private relationship reading. Enter both birth dates for a free self-reflection preview.",
+      "Get clarity on the question you can't stop replaying with a private relationship reading.",
     back: 'Back to home',
     eyebrow: 'Love Reading',
-    title: 'Explore Your Relationship Pattern',
-    description: 'Enter both birth dates for a private compatibility and timing preview.',
+    title: "Get clarity on the question you can't stop replaying.",
+    description: 'Enter both birth dates for a private compatibility and timing preview before you decide the next step.',
     cardTitle: 'Start Your Love Reading',
     samplePrompt: 'Want to see what a report looks like first?',
     privacyLabel: 'Privacy',
@@ -52,11 +52,11 @@ const pageCopy: Record<Locale, LoveReadingPageCopy> = {
   'zh-CN': {
     metadataTitle: '关系解读 - Tianji Love',
     metadataDescription:
-      '通过私密关系解读探索你们的情感模式。输入双方生日，先获得一份用于自我反思的免费预览。',
+      '把你反复想不明白的那段关系，交给天机解读一次。',
     back: '返回首页',
     eyebrow: '关系解读',
-    title: '探索你们的关系模式',
-    description: '输入双方生日，获得一份私密的兼容性与时机预览。',
+    title: '把你反复想不明白的那段关系，交给天机解读一次。',
+    description: '输入双方生日，先获得一份私密的兼容性与时机预览，再决定下一步。',
     cardTitle: '开始关系解读',
     samplePrompt: '想先看看报告的样子？',
     privacyLabel: '隐私',
@@ -114,12 +114,12 @@ const features: Record<Locale, LoveReadingFeature[]> = {
 
 const ctas: Record<Locale, LoveReadingCta> = {
   en: {
-    primary: 'Start Your Free Reading',
+    primary: 'Get clarity now',
     secondary: 'See sample report',
     note: 'Free preview includes: overall score, archetype, top 2 dimensions, and shareable summary.',
   },
   'zh-CN': {
-    primary: '开始免费解读',
+    primary: '交给天机解读一次',
     secondary: '查看示例报告',
     note: '免费预览包括：综合评分、关系原型、两个核心维度和可分享摘要。',
   },

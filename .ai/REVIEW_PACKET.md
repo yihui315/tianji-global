@@ -1,3 +1,91 @@
+﻿# TianJi Love Revenue OS 7-Day Automation - Day 1 Review Packet
+
+## Current Task
+
+Start the TianJi Love Revenue OS v1 7-day automation branch after PR #113 merged and the operator reported cloud server deploy/prod smoke as Go. Day 1 focuses on source-only marketing/lead-capture readiness, manual queue generation, growth reporting, CTA copy, email templates, and Stripe test-mode approval artifacts.
+
+## Day 1 Summary
+
+- Added `.ai/TIANJI_LOVE_REVENUE_OS_7DAY_PLAN_20260624.md` for the 7-day operating plan and safety gates.
+- Reviewed `supabase/migrations/20260624_marketing_leads.sql`, `src/app/api/marketing/leads/route.ts`, and `src/components/marketing/LeadCaptureForm.tsx`.
+- Added migration preflight and rollback plan in `.ai/TIANJI_LOVE_MARKETING_LEADS_MIGRATION_PREFLIGHT_20260624.md`.
+- Added local API tests for optional-field null storage, IP hash fallback, and user-agent truncation.
+- Added lead capture live smoke plan; production DB write verification remains blocked until the migration is human-applied.
+- Generated the 2026-06-24 manual publishing queue in CSV/JSON/Markdown with every item `pending_manual_review` and `not_published`.
+- Improved `scripts/growth-daily-report.ts` so a date can be selected and absent metrics produce `no real data yet`.
+- Generated `.ai/reports/growth-report-2026-06-24.md`; it contains no fabricated metrics.
+- Updated homepage, `/love-reading`, `/relationship/new`, and `/ask` CTA copy around the approved clarity message.
+- Added three email templates as drafts only; no sending automation.
+- Added Stripe test-mode approval packet; no paid smoke was executed.
+
+## Day 1 Validation
+
+```text
+npm ci --ignore-scripts --no-audit --fund=false
+Passed.
+
+npx tsx scripts/growth-daily-report.ts 2026-06-24
+Passed.
+
+npm run typecheck -- --pretty false
+Passed.
+
+npm run lint
+Passed with the existing next lint deprecation notice.
+
+npm run test -- src/__tests__/api/marketing-leads.test.ts
+Passed: 1 file / 9 tests.
+
+npm run test
+Passed: 82 files / 635 tests.
+```
+
+Build blocker:
+
+```text
+npm run build:staging:degraded
+No-Go locally. Next.js build worker exits with code 3221225477 before source diagnostics.
+Reproduced after clearing .next, with npx next build --debug, and with temporary Node 22.23.1.
+```
+
+## Day 1 Gates
+
+| Gate | Status |
+|---|---|
+| Source/Test | Go |
+| Local staging degraded build | No-Go: local Next worker native crash |
+| Lead Capture Source | Go |
+| Lead Capture Production DB Write | No-Go until migration is human-applied |
+| Marketing Leads Migration | Source Go; production execution pending human approval |
+| Publishing Queue | Go for manual review only |
+| Growth Daily Report | Go for source/report generation; No-Go for performance conclusions |
+| Email Funnel Templates | Go for drafts only |
+| Stripe Test-mode Gate | Pending Human Approval |
+| Stripe Live Gate | No-Go |
+| Revenue Execution | No-Go |
+| Supabase production mutation | No-Go |
+| Social auto-posting | No-Go |
+
+## Supabase Migration Command - Pending Human Approval
+
+```bash
+psql "$DATABASE_URL" -f supabase/migrations/20260624_marketing_leads.sql
+```
+
+Rollback: `drop policy if exists "Service role can manage marketing leads" on public.marketing_leads; drop table if exists public.marketing_leads;`
+
+## Safety Boundary
+
+No `.env*` files were read or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed. No fake testimonials, fake user numbers, fake revenue, fake conversion rates, guaranteed relationship outcomes, or 100% accuracy claims were added.
+
+## Reviewer Focus
+
+- Confirm the local build blocker should be rerun in CI/server build environment before merge.
+- Confirm the migration preflight and rollback are acceptable for a separate human-approved Supabase production migration task.
+- Confirm content queue items remain draft/manual-only and suitable for human review.
+- Confirm CTA copy remains reflective and avoids deterministic relationship claims.
+
+---
 # TianJi Love Revenue OS v1 P0 / PR #113 CI Repair - Review Packet
 
 ## Background

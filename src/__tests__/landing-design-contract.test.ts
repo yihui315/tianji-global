@@ -242,8 +242,8 @@ describe('Tianji Love landing redesign contract', () => {
     expect(home).toContain('tianji.love');
     expect(home).toContain('天机爱');
     expect(home).toContain('宇宙洞察，真实的爱之指引。');
-    expect(home).toContain('爱是唯一能让命运转弯的力量。');
-    expect(home).toContain('开始关系解读');
+    expect(home).toContain('把你反复想不明白的那段关系，交给天机解读一次。');
+    expect(home).toContain('交给天机解读一次');
     expect(home).toContain('问一个问题');
     expect(home).toContain('抽三张牌');
     expect(home).not.toContain('澶╂満');
@@ -252,6 +252,7 @@ describe('Tianji Love landing redesign contract', () => {
     expect(home).not.toContain('鍏崇郴');
     expect(home).toContain('Understand your love pattern');
     expect(home).toContain('before you make the next move.');
+    expect(home).toContain("Get clarity on the question you can't stop replaying.");
     expect(home).toContain('/relationship/new');
     expect(home).toContain('/ask');
     expect(home).toContain('/draw');
@@ -322,11 +323,13 @@ describe('Tianji Love landing redesign contract', () => {
     }
 
     expect(englishCopy).toContain('private free relationship reading');
+    expect(englishCopy).toContain("Get clarity on the question you can't stop replaying.");
     expect(englishCopy).toContain('compatibility');
     expect(englishCopy).toContain('Reflection, not certainty');
     expect(englishCopy).not.toMatch(/[\u4e00-\u9fff]/);
     expect(chineseCopy).toContain('天机爱');
-    expect(chineseCopy).toContain('开始关系解读');
+    expect(chineseCopy).toContain('把你反复想不明白的那段关系，交给天机解读一次。');
+    expect(chineseCopy).toContain('交给天机解读一次');
     expect(chineseCopy).toContain('问一个问题');
     expect(chineseCopy).toContain('抽三张牌');
     expect(pricing).toContain('Paid plans unlock depth and history, not guaranteed predictions.');
@@ -392,8 +395,8 @@ describe('Tianji Love landing redesign contract', () => {
   it('keeps new homepage Chinese readable and free of known mojibake markers', () => {
     const home = read('src/components/home/TianjiLoveHome.tsx');
 
-    expect(home).toContain('在这里，我们以星轨、关系与时机');
-    expect(home).toContain('所有解读都用于自我理解与关系沟通');
+    expect(home).toContain('把你反复想不明白的那段关系，交给天机解读一次。');
+    expect(home).toContain('所有解读都用于自我理解与关系沟通，不替代医疗、法律或财务建议。');
     expect(home).not.toMatch(/娑搢|閸弢|锟|澶╂満|鍏崇郴/);
   });
 

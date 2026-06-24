@@ -7,6 +7,7 @@ const repoRoot = process.cwd();
 const queueDir = path.join(repoRoot, 'assets', 'marketing', 'publishing-queue');
 const dataDir = path.join(repoRoot, 'data');
 const reportDir = path.join(repoRoot, '.ai', 'reports');
+const reportDate = process.env.GROWTH_REPORT_DATE || process.argv[2] || new Date().toISOString().slice(0, 10);
 
 function parseCsvLine(line: string): string[] {
   const values: string[] = [];
@@ -90,6 +91,15 @@ function sum(rows: CsvRow[], field: string): number {
   return rows.reduce((total, row) => total + toNumber(row[field]), 0);
 }
 
+function sumAny(rows: CsvRow[], fields: string[]): number {
+  return fields.reduce((total, field) => total + sum(rows, field), 0);
+}
+
+function rowMatchesDate(row: CsvRow, date: string): boolean {
+  const rowDate = row.date || row.publish_date || '';
+  return rowDate === date;
+}
+
 function rankedBy(rows: CsvRow[], field: string, labelField: string): string {
   const ranked = rows
     .map((row) => ({
@@ -122,34 +132,43 @@ function bestChannel(rows: CsvRow[]): string {
 }
 
 async function main() {
-  const today = new Date().toISOString().slice(0, 10);
   const queueRows = await readPublishingQueueRows();
   const kpiRows = await readCsvIfExists(path.join(dataDir, 'love-test-marketing-kpi.csv'));
+  const todayQueueRows = queueRows.filter((row) => rowMatchesDate(row, reportDate));
+  const todayKpiRows = kpiRows.filter((row) => rowMatchesDate(row, reportDate));
 
-  const clicks = sum(queueRows, 'clicks') + sum(kpiRows, 'clicks');
-  const leadCount = sum(queueRows, 'leads') + sum(kpiRows, 'love_test_starts');
-  const paidConversions = sum(queueRows, 'paid_conversions');
-  const revenue = sum(queueRows, 'revenue');
+  const clicks = sumAny(todayQueueRows, ['clicks']) + sumAny(todayKpiRows, ['clicks']);
+  const leadCount =
+    sumAny(todayQueueRows, ['leads', 'love_test_starts']) +
+    sumAny(todayKpiRows, ['leads', 'love_test_starts']);
+  const paidConversions =
+    sumAny(todayQueueRows, ['paid_conversions']) +
+    sumAny(todayKpiRows, ['paid_conversions']);
+  const revenue = sumAny(todayQueueRows, ['revenue']) + sumAny(todayKpiRows, ['revenue']);
   const hasRealData = clicks > 0 || leadCount > 0 || paidConversions > 0 || revenue > 0;
   const noDataLine = hasRealData ? '' : '\n> no real data yet\n';
 
-  const report = `# TianJi Love Growth Daily Report - ${today}
+  const weakHookRows = todayQueueRows.filter(
+    (row) => toNumber(row.impressions) > 0 && toNumber(row.clicks) === 0,
+  );
+
+  const report = `# TianJi Love Growth Daily Report - ${reportDate}
 ${noDataLine}
 ## Metrics
 
-- Lead count: ${hasRealData ? leadCount : 'no real data yet'}
+- Today's lead count: ${hasRealData ? leadCount : 'no real data yet'}
 - Clicks: ${hasRealData ? clicks : 'no real data yet'}
 - Paid conversions: ${hasRealData ? paidConversions : 'no real data yet'}
 - Revenue: ${hasRealData ? revenue : 'no real data yet'}
 
 ## Hooks
 
-- Top hooks: ${rankedBy(queueRows, 'clicks', 'hook')}
-- Weak hooks: ${hasRealData ? rankedBy(queueRows.filter((row) => toNumber(row.clicks) === 0), 'impressions', 'hook') : 'no real data yet'}
+- Top hooks: ${rankedBy(todayQueueRows, 'clicks', 'hook')}
+- Weak hooks: ${hasRealData ? rankedBy(weakHookRows, 'impressions', 'hook') : 'no real data yet'}
 
 ## Channel
 
-- Best channel: ${bestChannel(queueRows)}
+- Best channel: ${bestChannel(todayQueueRows)}
 
 ## Tomorrow Recommendation
 
@@ -160,13 +179,14 @@ ${hasRealData
 ## Go/No-Go
 
 - Growth reporting: ${hasRealData ? 'Go for manual analysis' : 'No-Go for performance conclusions'}
+- Lead Capture Gate: ${hasRealData ? 'Go for observed local/manual data' : 'No-Go until real lead data exists'}
 - Revenue execution: No-Go
 - Paid smoke: No-Go
 - Production deploy: No-Go
 `;
 
   await mkdir(reportDir, { recursive: true });
-  await writeFile(path.join(reportDir, `growth-report-${today}.md`), report, 'utf8');
+  await writeFile(path.join(reportDir, `growth-report-${reportDate}.md`), report, 'utf8');
 }
 
 main().catch((error) => {

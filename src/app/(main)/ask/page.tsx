@@ -107,11 +107,11 @@ const askCopy = {
     },
     hero: {
       eyebrow: 'Tianji Love / One Question',
-      title: 'Ask about the pattern your heart keeps returning to.',
+      title: "Get clarity on the question you can't stop replaying.",
       accent: 'Read the signal before you move.',
       body:
         'Bring one real love question: attraction, silence, timing, a choice, or the loop you cannot quite name. Tianji Love gives a private preview first, then lets you unlock the deeper reading only if it helps.',
-      primary: 'Decode my love question',
+      primary: 'Get clarity now',
       secondary: 'Start relationship reading',
     },
     form: {

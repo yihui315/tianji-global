@@ -1,9 +1,9 @@
 {
-  "status": "done-with-codex-executor",
-  "summary": "PR #113 lead-capture analytics/i18n typecheck blockers are repaired, Revenue OS P0 source-only assets are added, and continuation verification passed in the isolated local worktree.",
-  "next_step": "Review the local commit, then explicitly approve any push/PR update. Keep payment, deploy, webhook, production Supabase, env, server mutation, and social auto-post gates closed.",
+  "status": "in-review-with-build-blocker",
+  "summary": "TianJi Love Revenue OS 7-day Day 1 source/test work is implemented: migration preflight, lead-capture test coverage, manual publishing queue, no-real-data growth report, email templates, CTA copy updates, and Stripe test-mode approval packet. Local staging build is blocked by Next.js worker exit code 3221225477.",
+  "next_step": "Run diff/secret checks, commit to the Day 1 PR branch if acceptable with the build blocker recorded, and rerun staging build in CI/server environment or root-cause the local Next worker crash. Keep payment, deploy, webhook, production Supabase, env, server mutation, and social auto-post gates closed.",
   "needs_user": false,
-  "branch": "codex/pr113-revenue-os-p0-20260624",
-  "worktree": "C:\\Users\\Administrator\\codex-worktrees\\tianji-pr113-revenue-os-p0-20260624",
+  "branch": "codex/revenue-os-7day-day1-20260624",
+  "worktree": "C:\\Users\\Administrator\\codex-worktrees\\tianji-revenue-os-7day-day1-20260624",
   "revenue_execution": "no-go"
 }

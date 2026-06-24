@@ -1,3 +1,83 @@
+# TianJi Love Revenue OS 7-Day Automation Progress
+
+Date: 2026-06-24
+Worktree: `C:\Users\Administrator\codex-worktrees\tianji-revenue-os-7day-day1-20260624`
+Branch: `codex/revenue-os-7day-day1-20260624`
+Base: `origin/main@59a7ffbc5f2790ee789137835b38e7ef5ad0683b`
+
+## Day 1 - Launch Closure And Lead Capture Readiness
+
+- Current production state recorded from operator: PR #113 merged, cloud server deploy successful, `https://tianji.love` returned 200 OK, Source Go, Cloud Deploy Go, Production Smoke Go.
+- Supabase production migration remains No-Go for Codex and pending human approval.
+- Stripe/payment execution remains No-Go.
+- Reviewed `supabase/migrations/20260624_marketing_leads.sql`, `src/app/api/marketing/leads/route.ts`, and `src/components/marketing/LeadCaptureForm.tsx`.
+- Added local API mock coverage for optional-field null storage, IP hash fallback from `x-real-ip`, and user-agent truncation.
+- Added `.ai/TIANJI_LOVE_MARKETING_LEADS_MIGRATION_PREFLIGHT_20260624.md` with the pending production migration command and rollback plan.
+- Added `docs/marketing-lead-capture-live-smoke-plan.md`; production DB write verification remains blocked until Hermes/human applies the migration.
+- Generated `assets/marketing/publishing-queue/2026-06-24.{csv,json,md}` with every item set to `pending_manual_review` and `not_published`.
+- Added `assets/marketing/email/email-sequence-2026-06-24.md` with Day 0, Day 1, and Day 3 templates only; no sending automation.
+- Added `.ai/TIANJI_LOVE_STRIPE_TEST_MODE_APPROVAL_PACKET_20260624.md`; Stripe Test-mode Gate is Pending Human Approval and Stripe Live Gate is No-Go.
+- Updated CTA copy across homepage, `/love-reading`, `/relationship/new`, and `/ask` around: `Get clarity on the question you can't stop replaying.`
+- Generated `.ai/reports/growth-report-2026-06-24.md`; it reports `no real data yet` and does not fabricate leads, clicks, paid conversions, revenue, or hook performance.
+
+## Day 1 Validation
+
+```text
+npm ci --ignore-scripts --no-audit --fund=false
+Passed.
+
+npx tsx scripts/growth-daily-report.ts 2026-06-24
+Passed; wrote .ai/reports/growth-report-2026-06-24.md.
+
+npm run typecheck -- --pretty false
+Passed.
+
+npm run lint
+Passed with the existing next lint deprecation notice.
+
+npm run test -- src/__tests__/api/marketing-leads.test.ts
+Passed: 1 file / 9 tests.
+
+npm run test
+Passed: 82 files / 635 tests.
+
+npm run build:staging:degraded
+No-Go in this local Windows worktree: Next.js build worker exits with code 3221225477 before emitting a source diagnostic. Reproduced after clearing .next and with temporary Node 22.23.1.
+```
+
+## Day 1 Gate Status
+
+- Source/Test Gate: Go.
+- Local Staging Build Gate: No-Go pending rerun on CI/server build environment or root-cause of local Next worker native crash.
+- Lead Capture Source: Go.
+- Lead Capture Production DB Write: No-Go until marketing leads migration is human-applied.
+- Marketing Leads Migration: Source Go; production execution pending human approval.
+- Publishing Queue: Go for manual review only.
+- Growth Daily Report: Go for source/report generation; No-Go for performance conclusions because no real data exists yet.
+- Email Funnel Templates: Go for templates only; sending remains No-Go.
+- Stripe Test-mode Gate: Pending Human Approval.
+- Stripe Live Gate: No-Go.
+- Revenue Execution: No-Go.
+- Supabase production mutation by Codex: No-Go.
+- Social auto-posting: No-Go.
+
+## Supabase Migration Command - Pending Human Approval
+
+```bash
+psql "$DATABASE_URL" -f supabase/migrations/20260624_marketing_leads.sql
+```
+
+Rollback plan:
+
+```sql
+begin;
+drop policy if exists "Service role can manage marketing leads" on public.marketing_leads;
+drop table if exists public.marketing_leads;
+commit;
+```
+
+---
+
 # TianJi Love Revenue OS v1 P0 / PR #113 CI Repair Progress
 
 Date: 2026-06-24

@@ -1,3 +1,77 @@
+﻿# Autopilot Report - TianJi Love Revenue OS 7-Day Automation Day 1
+
+Status: in-review-with-build-blocker
+
+## Goal
+
+Start the TianJi Love Revenue OS v1 7-day automation system safely after PR #113 merged and the operator reported cloud server deploy/prod smoke as Go. Keep production deploy, Supabase production mutation, Stripe paid smoke, `.env*` access, webhook replay, server mutation, and social auto-posting blocked.
+
+## Result
+
+- Added the 7-day Revenue OS plan for 2026-06-24 through 2026-06-30.
+- Reviewed the marketing leads migration, leads API route, and lead capture form source.
+- Added the migration preflight and rollback plan with production command marked pending human approval.
+- Added lead-capture live smoke plan; DB write smoke remains blocked until migration is human-applied.
+- Expanded local marketing leads API tests to 9 cases.
+- Generated the 2026-06-24 manual publishing queue in CSV/JSON/Markdown, all pending manual review and not published.
+- Added Day 0/Day 1/Day 3 email nurture templates as drafts only.
+- Improved the growth daily report script and generated `.ai/reports/growth-report-2026-06-24.md` with `no real data yet`.
+- Updated CTA copy on homepage, `/love-reading`, `/relationship/new`, and `/ask`.
+- Added Stripe test-mode approval packet; Stripe live and paid smoke remain No-Go.
+
+## Validation
+
+```text
+npm ci --ignore-scripts --no-audit --fund=false
+Passed.
+
+npx tsx scripts/growth-daily-report.ts 2026-06-24
+Passed.
+
+npm run typecheck -- --pretty false
+Passed.
+
+npm run lint
+Passed.
+
+npm run test -- src/__tests__/api/marketing-leads.test.ts
+Passed: 1 file / 9 tests.
+
+npm run test
+Passed: 82 files / 635 tests.
+
+npm run build:staging:degraded
+No-Go locally: Next.js build worker exits with code 3221225477 before source diagnostics.
+```
+
+Build blocker notes:
+
+- Reproduced after clearing `.next`.
+- Reproduced with `npx next build --debug`.
+- Reproduced with temporary Node `22.23.1`.
+- No source stack or route-specific diagnostic was emitted.
+
+## Gate Status
+
+- Source/Test: Go.
+- Local staging degraded build: No-Go, pending CI/server rerun or local Next worker crash root cause.
+- Lead Capture Source: Go.
+- Lead Capture Production DB Write: No-Go until migration is human-applied.
+- Marketing Leads Migration: Source Go; production execution pending human approval.
+- Publishing Queue: Go for manual review only.
+- Daily Growth Report: Go for source/report generation; No-Go for performance conclusions.
+- Email Funnel Templates: Go for drafts only.
+- Stripe Test-mode Gate: Pending Human Approval.
+- Stripe Live Gate: No-Go.
+- Revenue Execution: No-Go.
+- Supabase production mutation: No-Go.
+- Social auto-posting: No-Go.
+
+## Safety Boundary
+
+No `.env*` files were read or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed.
+
+---
 # Autopilot Report - TianJi Love Revenue OS v1 P0 / PR #113 CI Repair
 
 Status: done-with-codex-executor
