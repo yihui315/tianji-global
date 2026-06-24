@@ -1,3 +1,53 @@
+# 2026-06-24 - TianJi Love safe publisher bridge export (Phase 1, credential-free, manual-review only)
+
+## What changed
+
+- Created the aggregate credential-free publisher bridge at `assets/marketing/publishing-queue.json` and `assets/marketing/publishing-queue.csv` (top-level of `assets/marketing/`). The bridge consolidates the 11 per-day queue files (day-002-overseas through day-012) into a single 55-item export that future automation tools (n8n / Postiz / Mixpost) can later consume — but only after an explicit human approval that is outside the scope of this skill.
+- Generated the missing per-day queue files for Day 011 (`day-011-publishing-queue.{json,csv}`) and Day 012 (`day-012-publishing-queue.{json,csv}`) so the bridge has a complete source for the calendar's current 7-day window. Each day queue follows the same schema as Day 010 (publish_date, publish_window, channel, content_id, content_type, title, hook, body_or_script, caption, hashtags, cta_url, asset_note, review_status, publish_status, published_url, metrics, notes). Day 011 theme: "Understanding is not the same as acting". Day 012 theme: "Repair over replay". All copy stays grounded: no fake metrics, no guaranteed outcomes, no chase framing, no mind-reading, no identifying details.
+- Created `.ai/TIANJI_LOVE_SAFE_PUBLISHER_BRIDGE.md` documenting the bridge contract (per-item shape, file layout), how to inspect the bridge without executing it, how to quarantine the bridge if needed, the explicit allow/forbid lists for the skill, the five-step gate any future platform-safe adapter must pass, the current state, and the gate status block.
+- Every item in the aggregate bridge carries `manual_review_required: true`. The bridge declares `credential_free: true` and `auto_posting_enabled: false`. The credential-related fields (access_token, api_key, client_id, client_secret, cookie, session, bearer, password, username) are explicitly listed as intentionally absent — not blank placeholders.
+- No source code, no API route, no auth, no billing, no production deploy, no env, no secret, no platform account, no credentials touched. No posting, no automation, no scheduling, no Stripe call.
+
+## Validation
+
+```text
+git status: clean worktree before write, 7 new files staged explicitly
+git diff --check: Pass
+Targeted secret-shape scan over .ai/ assets/marketing/ data/:
+  - searched for sk_live, sk_test, pk_live, pk_test, AKIA, ghp_, xox[baprs]-, bearer , access_token, api_key, client_secret
+  - 0 hits in new files; existing AI records contain only detection-pattern references
+JSON parse check on aggregate bridge: Pass (valid JSON, 55 items, 11 days)
+CSV row count check: 56 lines (1 header + 55 items), matches JSON
+Per-day queue schema check (Day 010 vs Day 011 vs Day 012): same fields, same status values
+npm run typecheck: not run (docs/assets/data-only change, no TS source touched)
+npm run lint: not run (no .ts/.tsx/.js source touched)
+Auto-posting: Not run
+Live Stripe call: Not run
+Production deploy: Not run
+Supabase mutation: Not run
+.env read/print: No
+```
+
+## Gate status
+
+```text
+Publisher bridge export: Go
+Publishing queue JSON: Go (55 items, 11 days)
+Publishing queue CSV: Go (55 rows, 1 header)
+Per-day queue files: Go (Day 011 + Day 012 added; Day 002–010 unchanged)
+Credentials: No-Go - not used or stored
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Follow-up
+
+- A human operator must inspect `assets/marketing/publishing-queue.json` and any day-XXX queue before posting. The bridge is intentionally inert.
+- A future platform-safe adapter (n8n / Postiz / Mixpost) requires a separate, named, auditable approval and must keep credentials outside the repo. The bridge file is the contract that adapter would read from; this skill does not enable the adapter.
+- Next scheduled run will refresh the bridge if the underlying daily queues or calendar change.
+
 # 2026-06-24 - TianJi Love 7-day content calendar refresh + hook/script/caption pool rotation (docs/assets-only)
 
 ## What changed

@@ -1,3 +1,68 @@
+# TianJi Love Safe Publisher Bridge - Review Packet (2026-06-24)
+
+## 2026-06-24 docs/assets/data-only
+
+`tianji-github-safe-publisher-bridge` ran on 2026-06-24 on branch `chore/marketing-content-calendar-refresh-20260623` against `origin/main` (with prior worktree content). Built a credential-free, manual-review-only publisher bridge that future tools (n8n, Postiz, Mixpost) can read from after a separate, named, auditable approval. Phase 1 keeps the bridge inert: no credentials, no auto-posting, no platform account, no scheduling.
+
+## Bridge files
+
+- `assets/marketing/publishing-queue.json` — aggregate bridge (55 items, 11 days, schema 1.0.0)
+- `assets/marketing/publishing-queue.csv` — flat CSV of the same 55 items
+- `assets/marketing/publishing-queue/day-011-publishing-queue.{json,csv}` — newly generated from `day-011-publishing-pack.md`
+- `assets/marketing/publishing-queue/day-012-publishing-queue.{json,csv}` — newly generated from `day-012-publishing-pack.md`
+- `.ai/TIANJI_LOVE_SAFE_PUBLISHER_BRIDGE.md` — bridge contract, allow/forbid lists, inspection, quarantine, and the five-step gate for any future platform-safe adapter
+
+## Branch
+
+- Working branch: `chore/marketing-content-calendar-refresh-20260623`
+- Base: `origin/main`
+- Commit shape: `chore(marketing): add safe publisher bridge queue`
+- Path-scoped commit: only `assets/marketing/publishing-queue.json`, `assets/marketing/publishing-queue.csv`, `assets/marketing/publishing-queue/day-011-*`, `assets/marketing/publishing-queue/day-012-*`, `.ai/TIANJI_LOVE_SAFE_PUBLISHER_BRIDGE.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+
+## Diff scope
+
+```text
+assets/marketing/publishing-queue.json                            | (new, 55 items)
+assets/marketing/publishing-queue.csv                             | (new, 55 rows)
+assets/marketing/publishing-queue/day-011-publishing-queue.json   | (new)
+assets/marketing/publishing-queue/day-011-publishing-queue.csv    | (new)
+assets/marketing/publishing-queue/day-012-publishing-queue.json   | (new)
+assets/marketing/publishing-queue/day-012-publishing-queue.csv    | (new)
+.ai/TIANJI_LOVE_SAFE_PUBLISHER_BRIDGE.md                          | (new)
+.ai/CHANGELOG_AI.md                                               | (prepended entry)
+.ai/REVIEW_PACKET.md                                              | (prepended entry)
+```
+
+## Source readiness vs execution readiness
+
+- Bridge export: source readiness Go.
+- Per-day queues (Day 011, Day 012): source readiness Go.
+- Auto-posting: No-Go (manual publishing only).
+- Platform account / cookies / tokens / credentials: No-Go - not present, not used.
+- Stripe / checkout / webhook: No-Go for this skill.
+- Paid smoke / production deploy / production Supabase mutation: No-Go.
+- `.env` / secret / token / credential access: No-Go - not performed.
+
+## Gate status
+
+```text
+Publisher bridge export: Go
+Publishing queue JSON: Go
+Publishing queue CSV: Go
+Credentials: No-Go - not used or stored
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+Secret / .env / token / credential access: No-Go - not performed
+```
+
+## Blockers
+
+1. None for the bridge itself. A future platform-safe adapter is intentionally not enabled by this skill and requires a separate, human-approved change.
+
+---
+
 # TianJi Love 7-Day Content Calendar Refresh + Hook/Script/Caption Pool Rotation - Review Packet (2026-06-24)
 
 ## 2026-06-24 docs/assets-only
