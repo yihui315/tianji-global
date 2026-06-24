@@ -1,0 +1,6 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-29,tiktok,day012-tt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Repair over replay; manual entry after publish"
+2026-06-29,tiktok,day012-tt-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Rewrites the question; manual entry after publish"
+2026-06-29,instagram_reels,day012-ig-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Not the text; manual entry after publish"
+2026-06-29,reflection_carousel,day012-caro-01,carousel,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Three edits; manual entry after publish"
+2026-06-29,seo_outline,day012-seo-01,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Repair vs replay; manual entry after publish"

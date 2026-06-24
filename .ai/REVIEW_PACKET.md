@@ -1871,3 +1871,47 @@ Secrets printed: No
 - Merge this workflow to `main`.
 - Manually run `MiniMax API Smoke` on `main`.
 - If it returns `MiniMax API smoke: PASS`, run only `TianJi Love KPI Analysis` next.
+
+# 2026-06-24 - TianJi Love Day 012 daily growth publishing pack
+
+Added Day 012 manual content assets on branch `chore/marketing-content-calendar-refresh-20260623`. Docs/assets/data-only. No auto-posting, no live Stripe, no Supabase mutation, no production deploy, no `.env` access.
+
+```text
+Pack: assets/marketing/daily/day-012-publishing-pack.md
+Checklist: assets/marketing/daily/day-012-review-checklist.md
+KPI scaffold: data/love-test-day-012-kpi-entry.csv
+Theme: Repair over replay
+Publishing date: 2026-06-29
+```
+
+## Validation
+
+```text
+git status before write: clean worktree
+git diff --check: Pass
+Targeted secret-shape scan over .agents/skills/ .github/workflows/ .ai/ assets/marketing/ data/: 0 hits
+npm run typecheck: not run (no TS source touched)
+npm run lint: not run (no .ts/.tsx/.js source touched)
+Auto-posting: Not run
+Live Stripe call: Not run
+Production deploy: Not run
+Supabase mutation: Not run
+.env read/print: No
+```
+
+## Gate Status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Follow-up
+
+- Human operator reviews `day-012-review-checklist.md` before posting.
+- Real KPI rows are entered by the human after the publish window; analysis stays blocked until those exist.
