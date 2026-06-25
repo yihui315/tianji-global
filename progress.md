@@ -321,3 +321,70 @@ Passed: 0 hits. .env* files were not read.
 - Revenue Execution: No-Go.
 - Supabase production mutation: No-Go.
 - Production deploy/server mutation/webhook replay/social auto-posting: No-Go.
+
+## Day 4 - Coldness Context Queue And Strong UTF-8 Verification
+
+Date: 2026-06-27
+Branch: `codex/revenue-os-7day-day1-20260624`
+Worktree during execution: `C:\Users\Administrator\codex-worktrees\tianji-revenue-os-7day-day1-20260624`
+Next worktree target: `D:\BrainSystem\💼 工作专项\ai占卜\codex-worktrees\tianji-revenue-os-7day-day1-droot-20260625`
+
+- Generated the 2026-06-27 manual publishing queue in CSV, JSON, and Markdown.
+- Queue size: 23 draft items: 5 Xiaohongshu Chinese posts, 5 TikTok/Reels English short video scripts, 5 X/Twitter English short posts, 3 Reddit/Quora English answer drafts, 2 KOL DM drafts, and 3 SEO outlines.
+- Every queue item remains `review_status=pending_manual_review` and `publish_status=not_published`.
+- Added `assets/marketing/daily/day-004-publishing-pack.md` and `assets/marketing/daily/day-004-review-checklist.md` for manual review handoff.
+- Added `data/love-test-day-004-kpi-entry.csv` as a zeroed KPI scaffold; it does not claim real leads, clicks, conversions, or revenue.
+- Generated `.ai/reports/growth-report-2026-06-27.md`; it reports `no real data yet` and does not fabricate performance conclusions.
+- Rewrote Day 2 and Day 3 generated Chinese assets with an ASCII-only Unicode-escape generator, replacing display-level mojibake with readable UTF-8 Chinese.
+- Upgraded content-readability validation from CJK-count checks to explicit phrase assertions over Day 2, Day 3, and Day 4 packs.
+- Refreshed `assets/marketing/content-calendar-7day.md` so seven future publishing days remain ready from 2026-06-27 through 2026-07-03.
+- Attempted to move the active C: worktree into the writable D: workspace to reduce sandbox permission prompts; Windows denied the cross-volume worktree move. Fallback is to commit/push Day 4, then create a new D: local worktree on a separate local branch that pushes to the same PR branch.
+- No social post was published, no platform credential was used, and no real user/revenue/conversion metric was invented.
+
+## Day 4 Validation
+
+```text
+Day 2/Day 3/Day 4 queue JSON status check
+Passed: all three days have 23 items with pending_manual_review / not_published.
+
+Strong UTF-8 phrase assertions
+Passed: Day 2 includes the expected ambiguous-relationship phrase, Day 3 includes the expected no-contact phrase, and Day 4 includes the expected cold-reply phrase. replacement=0 and mojibake_probe=0.
+
+npx tsx scripts/growth-daily-report.ts 2026-06-27
+Passed; wrote .ai/reports/growth-report-2026-06-27.md.
+
+npm run typecheck -- --pretty false
+Passed.
+
+npm run lint
+Passed with the existing Next lint deprecation notice.
+
+npm run test
+Passed: 82 files / 635 tests.
+
+npm run build:staging:degraded
+Passed. Existing jose Edge Runtime warnings only.
+
+git diff --check
+Passed before commit.
+
+Targeted secret-shape scan over changed source/docs/data/assets/scripts/.ai/progress files
+Passed: 0 hits. .env* files were not read.
+```
+
+## Day 4 Gate Status
+
+- Source/Test Gate: Go.
+- Local Staging Degraded Build Gate: Go.
+- Publishing Queue Day 4: Go for manual review only.
+- Growth Daily Report Day 4: Go for generation; No-Go for performance conclusions because no real data exists yet.
+- Content UTF-8 usability: Go for Day 2, Day 3, and Day 4 assets with strong phrase assertions.
+- Seven-day content calendar: Go.
+- Lead Capture Source: Go.
+- Lead Capture Production DB Write: No-Go until marketing leads migration is human-applied.
+- Marketing Leads Migration: Source Go; production execution pending human approval.
+- Stripe Test-mode Gate: Pending Human Approval.
+- Stripe Live Gate: No-Go.
+- Revenue Execution: No-Go.
+- Supabase production mutation: No-Go.
+- Production deploy/server mutation/webhook replay/social auto-posting: No-Go.

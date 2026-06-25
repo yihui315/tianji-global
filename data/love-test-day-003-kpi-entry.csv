@@ -1,24 +1,24 @@
 date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
 2026-06-26,xiaohongshu,20260626-xhs-01,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 断联后最先要看的不是对方会不会回来
-2026-06-26,xiaohongshu,20260626-xhs-02,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 想联系 TA 前，先给自己 24 小时
+2026-06-26,xiaohongshu,20260626-xhs-02,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 想联系TA前，先给自己24小时
 2026-06-26,xiaohongshu,20260626-xhs-03,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 断联不是惩罚，也不一定是答案
 2026-06-26,xiaohongshu,20260626-xhs-04,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 真正让你难受的，可能不是没联系
 2026-06-26,xiaohongshu,20260626-xhs-05,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 别把每一次忍住都当成失败
 2026-06-26,tiktok_reels,20260626-reels-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; The chat reread loop
-2026-06-26,tiktok_reels,20260626-reels-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Before you send it
-2026-06-26,tiktok_reels,20260626-reels-03,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Cold reply zoom out
-2026-06-26,tiktok_reels,20260626-reels-04,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Maybe is exhausting
-2026-06-26,tiktok_reels,20260626-reels-05,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; One calmer question
-2026-06-26,twitter_x,20260626-x-01,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Pattern over panic
-2026-06-26,twitter_x,20260626-x-02,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; The unsent message test
-2026-06-26,twitter_x,20260626-x-03,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Protect your pace
-2026-06-26,twitter_x,20260626-x-04,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; When waiting gets loud
-2026-06-26,twitter_x,20260626-x-05,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Clarity is not control
-2026-06-26,reddit_quora,20260626-rq-01,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Should I text after no contact?
-2026-06-26,reddit_quora,20260626-rq-02,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; How do I know if silence means they moved on?
-2026-06-26,reddit_quora,20260626-rq-03,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; I want closure but do not want to chase
-2026-06-26,kol_dm,20260626-kol-01,dm_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Creator feedback request - relationship clarity
-2026-06-26,kol_dm,20260626-kol-02,dm_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Creator feedback request - ask-one-question
-2026-06-26,seo_outline,20260626-seo-01,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Should I text them after no contact?
-2026-06-26,seo_outline,20260626-seo-02,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; What no contact really means in a relationship
-2026-06-26,seo_outline,20260626-seo-03,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; How to stop replaying a relationship question
+2026-06-26,tiktok_reels,20260626-reels-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Before you react
+2026-06-26,tiktok_reels,20260626-reels-03,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Look for repair
+2026-06-26,tiktok_reels,20260626-reels-04,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; The mood swing trap
+2026-06-26,tiktok_reels,20260626-reels-05,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Context before conclusion
+2026-06-26,twitter_x,20260626-x-01,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; A cold reply is data
+2026-06-26,twitter_x,20260626-x-02,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Separate fact from story
+2026-06-26,twitter_x,20260626-x-03,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Repair is the signal
+2026-06-26,twitter_x,20260626-x-04,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Your nervous system is not a dashboard
+2026-06-26,twitter_x,20260626-x-05,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Do not chase the weather
+2026-06-26,reddit_quora,20260626-rq-01,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Why did they suddenly become cold?
+2026-06-26,reddit_quora,20260626-rq-02,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Does a short reply mean they lost interest?
+2026-06-26,reddit_quora,20260626-rq-03,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; How should I respond to cold texting?
+2026-06-26,kol_dm,20260626-kol-01,dm_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Creator feedback request - cold reply framing
+2026-06-26,kol_dm,20260626-kol-02,dm_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Creator feedback request - context before conclusion
+2026-06-26,seo_outline,20260626-seo-01,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; What does a cold reply mean in a relationship?
+2026-06-26,seo_outline,20260626-seo-02,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; How to respond when someone becomes distant
+2026-06-26,seo_outline,20260626-seo-03,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Why one message should not decide your relationship

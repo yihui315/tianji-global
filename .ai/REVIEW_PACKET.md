@@ -1,3 +1,87 @@
+# TianJi Love Revenue OS 7-Day Automation - Day 4 Review Packet
+
+## Current Task
+
+Continue PR #114 as a source-only Revenue OS branch. Day 4 focuses on coldness-context content, manual review handoff, KPI scaffolding, no-real-data growth reporting, and strong generated-asset UTF-8 validation. Revenue execution remains closed.
+
+## Day 4 Summary
+
+- Generated `assets/marketing/publishing-queue/2026-06-27.csv`, `.json`, and `.md`.
+- Queue size: 23 draft items across Xiaohongshu, TikTok/Reels, X/Twitter, Reddit/Quora, KOL DM, and SEO outline formats.
+- Added `assets/marketing/daily/day-004-publishing-pack.md` and `assets/marketing/daily/day-004-review-checklist.md`.
+- Added `data/love-test-day-004-kpi-entry.csv` with zeroed metrics and explicit no-real-data status.
+- Generated `.ai/reports/growth-report-2026-06-27.md`, which states `no real data yet` and does not fabricate performance numbers.
+- Rewrote Day 2 and Day 3 generated Chinese assets using an ASCII-only Unicode-escape generator to remove display-level mojibake risk.
+- Replaced weak CJK-count readability checks with explicit expected-phrase assertions across Day 2, Day 3, and Day 4 packs.
+- Refreshed `assets/marketing/content-calendar-7day.md` for 2026-06-27 through 2026-07-03.
+- Kept all content at `pending_manual_review` and `not_published`.
+
+## Day 4 Validation
+
+```text
+Day 2/Day 3/Day 4 queue JSON status check
+Passed.
+
+Strong UTF-8 phrase assertions
+Passed: replacement=0, mojibake_probe=0, expected phrases present.
+
+npx tsx scripts/growth-daily-report.ts 2026-06-27
+Passed.
+
+npm run typecheck -- --pretty false
+Passed.
+
+npm run lint
+Passed.
+
+npm run test
+Passed: 82 files / 635 tests.
+
+npm run build:staging:degraded
+Passed. Existing jose Edge Runtime warnings only.
+
+git diff --check
+Passed.
+
+Targeted secret-shape scan over changed source/docs/data/assets/scripts/.ai/progress files
+Passed: 0 hits. .env* files were excluded and not read.
+```
+
+## Day 4 Gates
+
+| Gate | Status |
+|---|---|
+| Source/Test | Go |
+| Local staging degraded build | Go |
+| Publishing Queue Day 4 | Go for manual review only |
+| Growth Daily Report Day 4 | Go for generation; No-Go for performance conclusions |
+| Content UTF-8 usability | Go with expected-phrase assertions |
+| Seven-day content calendar | Go |
+| Lead Capture Production DB Write | No-Go until migration is human-applied |
+| Marketing Leads Migration | Source Go; production execution pending human approval |
+| Stripe Test-mode Gate | Pending Human Approval |
+| Stripe Live Gate | No-Go |
+| Revenue Execution | No-Go |
+| Supabase production mutation | No-Go |
+| Production deploy/server mutation | No-Go |
+| Social auto-posting | No-Go |
+
+## Worktree Prompt Mitigation
+
+`git worktree move` from C: to D: was attempted to reduce sandbox permission prompts, but Windows denied the cross-volume worktree move. Fallback: after Day 4 commit/push, create a new D: worktree on a separate local branch that pushes to the same PR branch for Day 5-7.
+
+## Safety Boundary
+
+No `.env*` files were read or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed. No fake testimonials, fake user numbers, fake revenue, fake conversion rates, guaranteed relationship outcomes, or 100% accuracy claims were added.
+
+## Reviewer Focus
+
+- Confirm Day 2/Day 3 Chinese asset repair is acceptable in the Day 4 commit.
+- Confirm Day 4 coldness-context copy avoids mind-reading, pressure tactics, and outcome guarantees.
+- Confirm the KPI scaffold and growth report correctly avoid fabricated metrics.
+
+---
+
 # TianJi Love Revenue OS 7-Day Automation - Day 3 Review Packet
 
 ## Current Task

@@ -69,23 +69,23 @@ Purpose: run the second manual publishing loop around ambiguous relationship cla
 - hook: If one chat decides your mood, zoom out first.
 - CTA: Start a private reading
 - URL: https://tianji.love/love-reading?utm_source=tiktok_reels&utm_medium=organic&utm_campaign=revenue_os_day2
-- safety note: Manual publishing only; no private chat screenshot
-
-### 20260625-reels-02 - Before you send it
-
-- channel: tiktok_reels
-- hook: Pause before anxiety writes the message.
-- CTA: Ask one focused question
-- URL: https://tianji.love/ask?source=love_test&intent=timing&utm_source=tiktok_reels&utm_medium=organic&utm_campaign=revenue_os_day2
-- safety note: Manual publishing only; no manipulative advice
-
-### 20260625-reels-03 - Cold reply zoom out
-
-- channel: tiktok_reels
-- hook: A cold reply is data, not a verdict.
-- CTA: Read the pattern first
-- URL: https://tianji.love/relationship/new?utm_source=tiktok_reels&utm_medium=organic&utm_campaign=revenue_os_day2
 - safety note: Manual publishing only; no certainty claim
+
+### 20260625-reels-02 - Before you react
+
+- channel: tiktok_reels
+- hook: Do not let one cold sentence choose your whole next move.
+- CTA: Ask one focused question
+- URL: https://tianji.love/ask?source=love_test&intent=context&utm_source=tiktok_reels&utm_medium=organic&utm_campaign=revenue_os_day2
+- safety note: Manual publishing only; no pressure tactic
+
+### 20260625-reels-03 - Look for repair
+
+- channel: tiktok_reels
+- hook: Coldness matters most when repair never follows.
+- CTA: Map the pattern
+- URL: https://tianji.love/relationship/new?utm_source=tiktok_reels&utm_medium=organic&utm_campaign=revenue_os_day2
+- safety note: Manual publishing only; no mind-reading claim
 
 ## Metrics to collect manually
 
