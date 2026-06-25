@@ -1,3 +1,44 @@
+# 2026-06-25 - TianJi Love Day 013 publishing pack (calm is a feature, not a side effect)
+
+## What changed
+
+- Created `assets/marketing/daily/day-013-publishing-pack.md` for publishing date 2026-06-30. Theme: "Calm is a feature, not a side effect." Channel mix: 1 TikTok, 1 YouTube Shorts, 1 Instagram Reels, 1 reflection carousel, 1 trust note. All hooks stay grounded; no fake metrics, no guaranteed outcomes, no chase framing, no mind-reading, no dependency-loop / "check again tomorrow" tone.
+- Created `assets/marketing/daily/day-013-review-checklist.md` matching the Day 011 / Day 012 pattern: Content Safety, Publishing Gate, KPI And Revenue Gate, and pack-specific risk reminders. Manual review is the only path to publication.
+- Created `data/love-test-day-013-kpi-entry.csv` with the same 18-column schema as Day 012, five rows (one per content piece), every numeric field zero, paid_smoke_result set to `not_run`, notes flagging "manual entry after publish". No real metrics are invented.
+- Theme source: `assets/marketing/content-calendar-7day.md` row for Day 013 (2026-06-30) and `assets/marketing/love-test-next-30-hooks.md` T5 — "A useful love test should make you calmer, not more dependent." Hook pool anchor documented inside the pack under "Hook Source".
+- No source code, no API route, no auth, no billing, no production deploy, no env, no secret, no platform account, no credentials touched. No posting, no automation, no scheduling, no Stripe call.
+
+## Validation
+
+```text
+git status before write: clean worktree (one prior commit already pushed to chore/marketing-content-calendar-refresh-20260623)
+git diff --check: Pass
+Targeted secret-shape scan over .agents/skills/ .github/workflows/ .ai/ assets/marketing/ data/:
+  - searched for sk_live, sk_test, pk_live, pk_test, AKIA, ghp_, xox[baprs]-, bearer , access_token, api_key, client_secret
+  - 0 hits in new files; existing AI records contain only detection-pattern references
+CSV column count check (Day 013 vs Day 012): 18 columns, identical order
+CSV row count check: 6 lines (1 header + 5 items), matches the 5 content rows in the pack
+npm run typecheck: not run (docs/assets/data-only change, no TS source touched)
+npm run lint: not run (no .ts/.tsx/.js source touched)
+Auto-posting: Not run
+Live Stripe call: Not run
+Production deploy: Not run
+Supabase mutation: Not run
+.env read/print: No
+```
+
+## Gate status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
 # 2026-06-24 - TianJi Love safe publisher bridge export (Phase 1, credential-free, manual-review only)
 
 ## What changed

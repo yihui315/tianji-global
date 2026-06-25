@@ -1,0 +1,6 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-30,tiktok,day013-tt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Calm as a feature; manual entry after publish"
+2026-06-30,youtube_shorts,day013-yt-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Slow down signal; manual entry after publish"
+2026-06-30,instagram_reels,day013-ig-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Sit with it; manual entry after publish"
+2026-06-30,reflection_carousel,day013-caro-01,carousel,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Three signs of useful; manual entry after publish"
+2026-06-30,trust_note,day013-trust-01,trust_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,"Not designed for tomorrow; manual entry after publish"

@@ -1,3 +1,87 @@
+# TianJi Love Day 013 Publishing Pack - Review Packet (2026-06-25)
+
+## 2026-06-25 docs/assets/data-only
+
+`tianji-github-daily-growth` ran on 2026-06-25 on branch `chore/marketing-content-calendar-refresh-20260623` against `origin/main` (with prior worktree content). Generated Day 013 marketing artifacts for the next publishing date (2026-06-30). All artifacts stay docs/assets/data-only; no auto-posting, no account access, no Stripe call, no production mutation.
+
+## Pack files
+
+- `assets/marketing/daily/day-013-publishing-pack.md` — publishing date 2026-06-30, theme "Calm is a feature, not a side effect", 5 content items (TikTok, YouTube Shorts, Instagram Reels, reflection carousel, trust note)
+- `assets/marketing/daily/day-013-review-checklist.md` — manual safety checklist matching Day 011 / Day 012 shape (Content Safety, Publishing Gate, KPI And Revenue Gate, risk-specific reminders)
+- `data/love-test-day-013-kpi-entry.csv` — 18-column KPI scaffold with zero placeholders and `paid_smoke_result=not_run`
+
+## Theme source
+
+- Calendar row: `assets/marketing/content-calendar-7day.md` Day 013 (2026-06-30)
+- Hook pool anchor: `assets/marketing/love-test-next-30-hooks.md` T5 — "A useful love test should make you calmer, not more dependent."
+
+## Branch
+
+- Working branch: `chore/marketing-content-calendar-refresh-20260623`
+- Base: `origin/main`
+- Commit shape: `chore(marketing): add love-test day 013 publishing pack`
+- Path-scoped commit: only `assets/marketing/daily/day-013-*`, `data/love-test-day-013-kpi-entry.csv`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+
+## Diff scope
+
+```text
+assets/marketing/daily/day-013-publishing-pack.md                    | (new)
+assets/marketing/daily/day-013-review-checklist.md                  | (new)
+data/love-test-day-013-kpi-entry.csv                                | (new)
+.ai/CHANGELOG_AI.md                                                 | (prepended entry)
+.ai/REVIEW_PACKET.md                                                | (prepended entry)
+```
+
+## Source readiness vs execution readiness
+
+- Publishing pack: source readiness Go.
+- Manual review checklist: source readiness Go.
+- KPI entry scaffold: source readiness Go.
+- Auto-posting: No-Go (manual publishing only).
+- Stripe checkout execution: Not run.
+- Paid smoke: No-Go (awaiting explicit approval).
+- Production deploy: No-Go.
+
+```text
+Pack: assets/marketing/daily/day-013-publishing-pack.md
+Checklist: assets/marketing/daily/day-013-review-checklist.md
+KPI scaffold: data/love-test-day-013-kpi-entry.csv
+Theme: Calm is a feature, not a side effect
+Publishing date: 2026-06-30
+```
+
+## Validation
+
+```text
+git status before write: clean worktree
+git diff --check: Pass
+Targeted secret-shape scan over .agents/skills/ .github/workflows/ .ai/ assets/marketing/ data/: 0 hits
+npm run typecheck: not run (no TS source touched)
+npm run lint: not run (no .ts/.tsx/.js source touched)
+Auto-posting: Not run
+Live Stripe call: Not run
+Production deploy: Not run
+Supabase mutation: Not run
+.env read/print: No
+```
+
+## Gate Status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Follow-up
+
+- Human operator reviews `day-013-review-checklist.md` before posting.
+- Real KPI rows are entered by the human after the publish window; analysis stays blocked until those exist.
+
 # TianJi Love Safe Publisher Bridge - Review Packet (2026-06-24)
 
 ## 2026-06-24 docs/assets/data-only
