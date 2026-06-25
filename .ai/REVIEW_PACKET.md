@@ -1,149 +1,78 @@
-# TianJi Love Revenue OS v1 P0 / PR #113 CI Repair - Review Packet
+# TianJi Love Revenue OS v1 Final Review Packet
 
-## Background
+## Current Task
 
-PR #113 restores `LeadCaptureForm`, love-reading pages, and a marketing leads API. Its CI/typecheck failed because localized love-reading copy used `zh` while the app `Locale` type is `en | zh-CN`, and `LeadCaptureForm` passed the full `useLanguage()` context object into analytics payloads.
+Close the source-only seven-day TianJi Love Revenue OS v1 loop on draft PR #114 and provide the final gate report. Revenue execution remains closed.
 
-## Task Goal
+## Summary
 
-Fix the PR #113 typecheck blocker and add source-only Revenue OS P0 assets in an isolated local worktree. Do not push, deploy, run Stripe smoke, mutate production Supabase, replay webhooks, read `.env*`, mutate servers, or auto-post to social platforms.
+- Added `.ai/TIANJI_LOVE_REVENUE_OS_V1_FINAL_GATE_REPORT_20260630.md`.
+- Confirmed seven daily queues, publishing packs, review checklists, KPI scaffolds, and no-real-data growth reports exist for 2026-06-24 through 2026-06-30.
+- Confirmed source-side lead capture readiness, email templates, growth event contract, CTA/source funnel work, and Stripe test-mode approval packet are present.
+- Latest PR #114 observed head before this final report: `4f924e04142433730b5622467a8bd3c72c2742bf`.
+- Latest observed GitHub Actions Build & Test: pass. External Vercel remains canceled/failing but Not Applicable because this project deploys to a cloud server.
 
-## Changed Files
-
-```text
-progress.md
-.ai/AUTOPILOT_REPORT.md
-.ai/AUTOPILOT_STATUS.json
-.ai/CHANGELOG_AI.md
-.ai/REVIEW_PACKET.md
-.ai/TASKS.md
-assets/marketing/publishing-queue/README.md
-assets/marketing/publishing-queue/schema.json
-assets/marketing/publishing-queue/sample-queue.csv
-data/growth-events-contract.csv
-scripts/growth-daily-report.ts
-src/__tests__/api/marketing-leads.test.ts
-src/app/[locale]/love-reading/page.tsx
-src/app/api/marketing/leads/route.ts
-src/components/marketing/LeadCaptureForm.tsx
-supabase/migrations/20260624_marketing_leads.sql
-```
-
-Removed:
+## Latest Local Validation
 
 ```text
-src/app/api/marketing/leads/leads-route.ts
-```
-
-## Key Diff Summary
-
-- Moved `/api/marketing/leads` to `route.ts` so Next.js App Router exposes `POST /api/marketing/leads`.
-- Added `variant` to the API contract and migration.
-- Kept degraded mode at `202 skipped` with no DB write.
-- Stored only a SHA-256 IP hash and truncated `user_agent`.
-- Returned `400 invalid_payload` without Zod detail leakage and `500 internal_error` without DB detail leakage.
-- Fixed `LeadCaptureForm` to destructure `{ lang }`, use `zh/en` only for UI copy, and send `en | zh-CN` locale to API/analytics.
-- Rebuilt the localized love-reading page around `Record<Locale, ...>` typed copy maps.
-- Added focused API tests covering valid insert, invalid email, missing `source_page`, false/missing consent, degraded skip, and DB failure.
-- Added source-only `marketing_leads` SQL migration with RLS and service-role access.
-- Added `growth-events-contract.csv`, manual publishing queue schema/sample, and a local daily growth report script that reports `no real data yet` when metrics are absent.
-
-## Commands Run
-
-```text
-git fetch --no-tags origin main
-git fetch --no-tags origin feature/marketing-rebuild-20260623
-git worktree add -b codex/pr113-revenue-os-p0-20260624 C:\Users\Administrator\codex-worktrees\tianji-pr113-revenue-os-p0-20260624 origin/feature/marketing-rebuild-20260623
-git status --short --branch
-npm ci --ignore-scripts --no-audit --fund=false
 npm run typecheck -- --pretty false
+Passed.
+
 npm run lint
-npm run test -- src/__tests__/api/marketing-leads.test.ts
+Passed.
+
 npm run test
+Passed: 82 files / 635 tests.
+
 npm run build:staging:degraded
+Passed.
+
 git diff --check
+Passed with LF/CRLF warnings only.
+
+Targeted changed-file secret-shape scan
+Passed: 0 hits; .env* files were not read.
 ```
-
-## Validation Result
-
-- Initial `npm run typecheck -- --pretty false`: failed as expected on the PR #113 type mismatch.
-- Final `npm run typecheck -- --pretty false`: passed.
-- `npm run lint`: passed.
-- `npm run test -- src/__tests__/api/marketing-leads.test.ts`: passed, 1 file / 7 tests.
-- `npm run test`: passed, 82 files / 633 tests.
-- `npm run build:staging:degraded`: passed.
-- `git diff --check`: passed with LF/CRLF warnings only.
-
-Continuation verification on 2026-06-24:
-
-- `git status --short --branch`: clean worktree before record updates; branch ahead 1.
-- `npm run typecheck -- --pretty false`: passed.
-- `npm run lint`: passed.
-- `npm run test -- src/__tests__/api/marketing-leads.test.ts`: passed, 1 file / 7 tests.
-- `npm run test`: passed, 82 files / 633 tests.
-- `npm run build:staging:degraded`: passed.
-- `git diff --check`: passed.
-- Source repair required during continuation: none.
-
-## PR #113 Merge Gate Observation
-
-- Source Go: local validation and GitHub Actions source checks passed for head commit `eb293d1e0fc4189edf19d0ff96ae408699c5a998`.
-- GitHub Actions Go: `CI/CD / Build & Test` passed on PR #113.
-- Vercel status ignored: TianJi Global deploy target is a cloud server, not Vercel. The external Vercel status failure was reported as `Canceled from the Vercel Dashboard` and is not treated as a source failure.
-- Cloud deploy gate: pending manual approval. No production deploy, server mutation, or Vercel rerun was performed.
-- Review Required: PR #113 still requires human review before merge.
-
-## Known Noise
-
-- `next lint` reports the existing Next.js deprecation notice.
-- `build:staging:degraded` reports existing `jose` Edge Runtime warnings.
-- Git prints LF/CRLF normalization warnings for some edited files.
 
 ## Safety Boundaries
 
 ```text
 No .env or .env.* file was read, printed, copied, uploaded, or modified.
 No raw secret was printed.
-No push was performed.
 No production deploy was performed.
 No Stripe test/live paid smoke or real payment was performed.
 No webhook replay was performed.
 No Supabase production mutation was performed.
 No PM2/Nginx/certbot/server mutation was performed.
 No social account auto-posting was performed.
-No fake testimonials, fake user numbers, guaranteed relationship outcomes, or 100% accuracy claims were added.
+No fake testimonials, fake user numbers, fake revenue, fake conversion rates, guaranteed relationship outcomes, or 100% accuracy claims were added.
 ```
 
 ## Gate Status
 
 | Gate | Status |
 |---|---|
-| PR #113 CI/typecheck | Go |
-| Source | Go |
-| GitHub Actions | Go |
-| Vercel external status | Ignored because project deploy target is cloud server |
-| Cloud deploy gate | Pending manual approval |
-| Review | Required |
+| Source/Test Gate | Go |
+| PR #114 Build & Test | Go at observed head `4f924e0`; rerun expected after this docs-only final report commit |
+| Vercel | Not Applicable |
+| PR review | Required |
+| Draft status | Draft |
 | Lead Capture Source | Go |
-| Marketing Leads Migration | Go |
-| API Tests | Go |
-| Growth Events Contract | Go |
-| Publishing Queue | Go |
-| Daily Growth Report | Go for source readiness |
+| Marketing Leads Migration | Source Go; production execution pending human approval |
+| Lead Capture Production DB Write | No-Go until migration is human-applied |
+| Daily Marketing Queues | Go for manual review only |
+| Daily Growth Reports | Go; no fabricated metrics |
+| Email Funnel Templates | Go for templates only |
+| CTA Improvement PR | Go |
+| Stripe Test-mode Gate | Pending Human Approval |
+| Stripe Live Gate | No-Go |
 | Revenue Execution | No-Go |
-| Stripe paid smoke | No-Go |
-| Production deploy | No-Go |
 | Supabase production mutation | No-Go |
-
-## Reviewer Focus
-
-- Confirm PR #113 should accept the localized love-reading copy rewrite as part of CI repair.
-- Confirm `marketing_leads` RLS/service-role-only policy matches the intended deployment model.
-- Confirm `lead_capture_failed` analytics payload remains privacy-safe.
-- Confirm daily report script output path is acceptable before scheduling it.
+| Production deploy/server mutation | No-Go |
+| Social auto-posting | No-Go |
 
 ## Suggested Commit Message
 
 ```text
-feat(marketing): restore lead capture revenue os p0
+docs(ai): add revenue os v1 final gate report
 ```

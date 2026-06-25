@@ -2,6 +2,96 @@
 
 ## Entries
 
+
+
+
+### 2026-06-30 - TianJi Love Revenue OS v1 final gate report
+
+- Task ID: `20260630-tianji-love-revenue-os-v1-final-gate`
+- Branch/worktree: `codex/revenue-os-7day-day1-20260624` in `C:\Users\Administrator\codex-worktrees\tianji-revenue-os-7day-day1-20260624`.
+- Files changed: `.ai/TIANJI_LOVE_REVENUE_OS_V1_FINAL_GATE_REPORT_20260630.md`, `progress.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `.ai/AUTOPILOT_REPORT.md`, `.ai/AUTOPILOT_STATUS.json`, and `.ai/TASKS.md`.
+- Summary: Added the final source-only Revenue OS v1 gate report covering lead capture readiness, seven daily queues/reports, email templates, CTA/source funnel work, Stripe test-mode approval packet, local validation, PR status, and remaining No-Go gates.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed.
+- Gate status: Source Go for PR #114 review; Revenue Execution No-Go; Stripe test-mode Pending Human Approval; Stripe live No-Go; Supabase production mutation No-Go; production deploy/server mutation/social auto-posting No-Go.
+- Suggested commit message: `docs(ai): add revenue os v1 final gate report`
+
+### 2026-06-30 - TianJi Love Revenue OS 7-day automation Day 7
+
+- Task ID: `20260630-tianji-love-revenue-os-7day-day7`
+- Branch/worktree: `codex/revenue-os-7day-day1-20260624` in `C:\Users\Administrator\codex-worktrees\tianji-revenue-os-7day-day1-20260624`.
+- Files changed: `progress.md`, `.ai/AUTOPILOT_REPORT.md`, `.ai/AUTOPILOT_STATUS.json`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `.ai/TASKS.md`, `.ai/reports/growth-report-2026-06-30.md`, `assets/marketing/content-calendar-7day.md`, Day 7 publishing queue assets, Day 7 daily pack/checklist, and Day 7 KPI scaffold.
+- Summary: Added the Day 7 replay-loop clarity manual publishing queue, daily publishing pack, review checklist, zeroed KPI scaffold, and no-real-data growth report. Refreshed the seven-day calendar through 2026-07-06 and verified the Day 7 Chinese copy with Unicode-escape expected-phrase assertions.
+- Validation: Day 7 queue JSON status check passed; strong UTF-8 phrase assertions passed; `node scripts\growth-daily-report.ts 2026-06-30`, `npm run typecheck -- --pretty false`, `npm run lint`, full `npm run test`, `npm run build:staging:degraded`, `git diff --check`, and targeted changed-file secret-shape scan passed.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed. No fake users, revenue, conversion rates, testimonials, guaranteed outcomes, or 100% accuracy claims were added.
+- Gate status: Source/Test Go; local staging degraded build Go; Day 7 Publishing Queue Go for manual review only; Growth Daily Report Go for generation with `no real data yet`; Content UTF-8 usability Go; Seven-day content calendar Go; Revenue Execution No-Go; Stripe test-mode Pending Human Approval; Stripe live No-Go; Supabase production mutation No-Go; production deploy/server mutation/social auto-posting No-Go.
+- Suggested commit message: `chore(marketing): add revenue os day seven queue`
+
+### 2026-06-29 - TianJi Love Revenue OS 7-day automation Day 6
+
+- Task ID: `20260629-tianji-love-revenue-os-7day-day6`
+- Branch/worktree: `codex/revenue-os-7day-day1-20260624` in `C:\Users\Administrator\codex-worktrees\tianji-revenue-os-7day-day1-20260624`.
+- Files changed: `progress.md`, `.ai/AUTOPILOT_REPORT.md`, `.ai/AUTOPILOT_STATUS.json`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `.ai/TASKS.md`, `.ai/reports/growth-report-2026-06-29.md`, `assets/marketing/content-calendar-7day.md`, Day 6 publishing queue assets, Day 6 daily pack/checklist, and Day 6 KPI scaffold.
+- Summary: Added the Day 6 is-this-worth-continuing manual publishing queue, daily publishing pack, review checklist, zeroed KPI scaffold, and no-real-data growth report. Refreshed the seven-day calendar through 2026-07-05 and verified the Day 6 Chinese copy with Unicode-escape expected-phrase assertions.
+- Validation: Day 6 queue JSON status check passed; strong UTF-8 phrase assertions passed; `node scripts\growth-daily-report.ts 2026-06-29`, `npm run typecheck -- --pretty false`, `npm run lint`, full `npm run test`, `npm run build:staging:degraded`, `git diff --check`, and targeted changed-file secret-shape scan passed.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed. No fake users, revenue, conversion rates, testimonials, guaranteed outcomes, or 100% accuracy claims were added.
+- Gate status: Source/Test Go; local staging degraded build Go; Day 6 Publishing Queue Go for manual review only; Growth Daily Report Go for generation with `no real data yet`; Content UTF-8 usability Go; Seven-day content calendar Go; Revenue Execution No-Go; Stripe test-mode Pending Human Approval; Stripe live No-Go; Supabase production mutation No-Go; production deploy/server mutation/social auto-posting No-Go.
+- Suggested commit message: `chore(marketing): add revenue os day six queue`
+
+### 2026-06-28 - TianJi Love Revenue OS 7-day automation Day 5
+
+- Task ID: `20260628-tianji-love-revenue-os-7day-day5`
+- Branch/worktree: `codex/revenue-os-7day-day1-20260624`; final validation/commit boundary is `C:\Users\Administrator\codex-worktrees\tianji-revenue-os-7day-day1-20260624`.
+- Files changed: `progress.md`, `.ai/AUTOPILOT_REPORT.md`, `.ai/AUTOPILOT_STATUS.json`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `.ai/TASKS.md`, `.ai/reports/growth-report-2026-06-28.md`, `assets/marketing/content-calendar-7day.md`, Day 5 publishing queue assets, Day 5 daily pack/checklist, and Day 5 KPI scaffold.
+- Summary: Added the Day 5 boundary-before-action manual publishing queue, daily publishing pack, review checklist, zeroed KPI scaffold, and no-real-data growth report. Refreshed the seven-day calendar through 2026-07-04 and verified the Day 5 Chinese copy with Unicode-escape expected-phrase assertions.
+- Validation: Day 5 queue JSON status check passed; strong UTF-8 phrase assertions passed; `node scripts\growth-daily-report.ts 2026-06-28`, `npm run typecheck -- --pretty false`, `npm run lint`, full `npm run test`, `npm run build:staging:degraded`, `git diff --check`, and targeted changed-file secret-shape scan passed in the C: validation worktree.
+- Environment note: the D: generation worktree was not used for final build because local dependency install hit native `sweph` build tooling limits; this did not affect source/content validation.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed. No fake users, revenue, conversion rates, testimonials, guaranteed outcomes, or 100% accuracy claims were added.
+- Gate status: Source/Test Go; local staging degraded build Go; Day 5 Publishing Queue Go for manual review only; Growth Daily Report Go for generation with `no real data yet`; Content UTF-8 usability Go; Seven-day content calendar Go; Revenue Execution No-Go; Stripe test-mode Pending Human Approval; Stripe live No-Go; Supabase production mutation No-Go; production deploy/server mutation/social auto-posting No-Go.
+- Suggested commit message: `chore(marketing): add revenue os day five queue`
+
+### 2026-06-27 - TianJi Love Revenue OS 7-day automation Day 4
+
+- Task ID: `20260627-tianji-love-revenue-os-7day-day4`
+- Branch/worktree: `codex/revenue-os-7day-day1-20260624` in `C:\Users\Administrator\codex-worktrees\tianji-revenue-os-7day-day1-20260624` during execution; follow-up worktree target is under `D:\BrainSystem\💼 工作专项\ai占卜\codex-worktrees\` to reduce sandbox prompts.
+- Files changed: `progress.md`, `.ai/AUTOPILOT_REPORT.md`, `.ai/AUTOPILOT_STATUS.json`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `.ai/TASKS.md`, `.ai/reports/growth-report-2026-06-27.md`, `assets/marketing/content-calendar-7day.md`, Day 2/Day 3 UTF-8-fixed publishing assets, Day 4 publishing queue assets, Day 4 daily pack/checklist, and Day 4 KPI scaffold.
+- Summary: Added the Day 4 coldness-context manual publishing queue, daily publishing pack, review checklist, zeroed KPI scaffold, and no-real-data growth report. Rewrote Day 2/Day 3 Chinese generated assets using an ASCII-only Unicode-escape generator and upgraded validation to explicit expected-phrase assertions.
+- Validation: Day 2/Day 3/Day 4 queue JSON status checks passed; strong UTF-8 phrase assertions passed; `npx tsx scripts/growth-daily-report.ts 2026-06-27`, `npm run typecheck -- --pretty false`, `npm run lint`, full `npm run test`, `npm run build:staging:degraded`, `git diff --check`, and targeted changed-file secret-shape scan passed.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed. No fake users, revenue, conversion rates, testimonials, guaranteed outcomes, or 100% accuracy claims were added.
+- Gate status: Source/Test Go; local staging degraded build Go; Day 4 Publishing Queue Go for manual review only; Growth Daily Report Go for generation with `no real data yet`; Content UTF-8 usability Go; Seven-day content calendar Go; Revenue Execution No-Go; Stripe test-mode Pending Human Approval; Stripe live No-Go; Supabase production mutation No-Go; production deploy/server mutation/social auto-posting No-Go.
+- Suggested commit message: `chore(marketing): add revenue os day four queue`
+### 2026-06-26 - TianJi Love Revenue OS 7-day automation Day 3
+
+- Task ID: `20260626-tianji-love-revenue-os-7day-day3`
+- Branch/worktree: `codex/revenue-os-7day-day1-20260624` in `C:\Users\Administrator\codex-worktrees\tianji-revenue-os-7day-day1-20260624`.
+- Files changed: `progress.md`, `.ai/AUTOPILOT_REPORT.md`, `.ai/AUTOPILOT_STATUS.json`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `.ai/TASKS.md`, `.ai/reports/growth-report-2026-06-26.md`, `assets/marketing/content-calendar-7day.md`, Day 2/Day 3 publishing queue assets, Day 2/Day 3 daily packs/checklists, and Day 2/Day 3 KPI scaffolds.
+- Summary: Added the Day 3 no-contact timing manual publishing queue, daily publishing pack, review checklist, zeroed KPI scaffold, and no-real-data growth report. Stabilized Day 2 and Day 3 generated Chinese marketing assets to readable UTF-8 and refreshed the seven-day content calendar through 2026-07-02.
+- Validation: Day 2/Day 3 queue JSON status checks passed; `npx tsx scripts/growth-daily-report.ts 2026-06-26`, UTF-8/mojibake inspection, `npm run typecheck -- --pretty false`, `npm run lint`, full `npm run test`, `npm run build:staging:degraded`, `git diff --check`, and targeted changed-file secret-shape scan passed.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed. No fake users, revenue, conversion rates, testimonials, guaranteed outcomes, or 100% accuracy claims were added.
+- Gate status: Source/Test Go; local staging degraded build Go; Day 3 Publishing Queue Go for manual review only; Growth Daily Report Go for generation with `no real data yet`; Content UTF-8 usability Go; Revenue Execution No-Go; Stripe test-mode Pending Human Approval; Stripe live No-Go; Supabase production mutation No-Go; production deploy/server mutation/social auto-posting No-Go.
+- Suggested commit message: `chore(marketing): add revenue os day three queue`
+### 2026-06-25 - TianJi Love Revenue OS 7-day automation Day 2
+
+- Task ID: `20260625-tianji-love-revenue-os-7day-day2`
+- Branch/worktree: `codex/revenue-os-7day-day1-20260624` in `C:\Users\Administrator\codex-worktrees\tianji-revenue-os-7day-day1-20260624`.
+- Files changed: `progress.md`, `.ai/AUTOPILOT_REPORT.md`, `.ai/AUTOPILOT_STATUS.json`, `.ai/REVIEW_PACKET.md`, `.ai/TASKS.md`, `.ai/reports/growth-report-2026-06-25.md`, `assets/marketing/content-calendar-7day.md`, `assets/marketing/daily/day-002-publishing-pack.md`, `assets/marketing/daily/day-002-review-checklist.md`, `assets/marketing/publishing-queue/2026-06-25.csv`, `assets/marketing/publishing-queue/2026-06-25.json`, `assets/marketing/publishing-queue/2026-06-25.md`, and `data/love-test-day-002-kpi-entry.csv`.
+- Summary: Added Day 2 manual marketing queue assets, daily publishing pack, review checklist, zeroed KPI scaffold, refreshed the seven-day content calendar, and generated the 2026-06-25 no-real-data growth report. All publishing assets remain manual-review only and not published.
+- Validation: Day 2 queue JSON parsed successfully; `npx tsx scripts/growth-daily-report.ts 2026-06-25`, `npm run typecheck -- --pretty false`, `npm run lint`, full `npm run test`, `npm run build:staging:degraded`, `git diff --check`, and targeted changed-file secret-shape scan passed. The local staging degraded build now passes, so the Day 1 local Next worker crash is not reproducing.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed. No fake users, revenue, conversion rates, testimonials, guaranteed outcomes, or 100% accuracy claims were added.
+- Gate status: Source/Test Go; local staging degraded build Go; Day 2 Publishing Queue Go for manual review only; Growth Daily Report Go for generation with `no real data yet`; Revenue Execution No-Go; Stripe test-mode Pending Human Approval; Stripe live No-Go; Supabase production mutation No-Go; production deploy/server mutation/social auto-posting No-Go.
+- Suggested commit message: `chore(marketing): add revenue os day two publishing pack`
+### 2026-06-24 - TianJi Love Revenue OS 7-day automation Day 1
+
+- Task ID: `20260624-tianji-love-revenue-os-7day-day1`
+- Branch/worktree: `codex/revenue-os-7day-day1-20260624` in `C:\Users\Administrator\codex-worktrees\tianji-revenue-os-7day-day1-20260624`.
+- Source base: `origin/main@59a7ffbc5f2790ee789137835b38e7ef5ad0683b`.
+- Files changed: `progress.md`, `.ai/AUTOPILOT_REPORT.md`, `.ai/AUTOPILOT_STATUS.json`, `.ai/REVIEW_PACKET.md`, `.ai/TASKS.md`, `.ai/TIANJI_LOVE_REVENUE_OS_7DAY_PLAN_20260624.md`, `.ai/TIANJI_LOVE_MARKETING_LEADS_MIGRATION_PREFLIGHT_20260624.md`, `.ai/TIANJI_LOVE_STRIPE_TEST_MODE_APPROVAL_PACKET_20260624.md`, `.ai/reports/growth-report-2026-06-24.md`, `docs/marketing-lead-capture-live-smoke-plan.md`, `assets/marketing/email/email-sequence-2026-06-24.md`, `assets/marketing/publishing-queue/2026-06-24.csv`, `assets/marketing/publishing-queue/2026-06-24.json`, `assets/marketing/publishing-queue/2026-06-24.md`, `scripts/growth-daily-report.ts`, `src/__tests__/api/marketing-leads.test.ts`, `src/__tests__/ask-love-reading-design-contract.test.ts`, `src/__tests__/landing-design-contract.test.ts`, `src/__tests__/relationship-flow-contract.test.ts`, `src/app/(main)/ask/page.tsx`, `src/app/[locale]/love-reading/page.tsx`, `src/app/relationship/new/client.tsx`, `src/components/home/TianjiLoveHome.tsx`.
+- Summary: Started the 7-day TianJi Love Revenue OS automation branch after PR #113 merged and cloud deploy/prod smoke were operator-reported as Go. Added Day 1 planning, migration preflight and rollback plan, lead-capture live smoke plan, no-real-data growth report generation, manual-only publishing queue, email nurture templates, Stripe test-mode approval packet, CTA copy updates, and focused test coverage updates.
+- Validation: `npm ci --ignore-scripts --no-audit --fund=false`, `npx tsx scripts/growth-daily-report.ts 2026-06-24`, `npm run typecheck -- --pretty false`, `npm run lint`, `npm run test -- src/__tests__/api/marketing-leads.test.ts`, and full `npm run test` passed. Targeted design contract tests passed after updating them to the new CTA copy.
+- Build blocker: `npm run build:staging:degraded` is local No-Go in this Windows worktree because Next.js build worker exits with code `3221225477` before source diagnostics. Reproduced after clearing `.next`, with `npx next build --debug`, and with temporary Node `22.23.1`.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No production deploy, Stripe paid smoke, real payment, webhook replay, Supabase production mutation, PM2/Nginx/certbot/server mutation, or social auto-posting was performed. No fake users, revenue, conversion rates, testimonials, guaranteed outcomes, or 100% accuracy claims were added.
+- Gate status: Source/Test Go; local staging build No-Go pending CI/server rerun or local Next worker crash root cause; Lead Capture Source Go; Marketing Leads Migration Source Go but production execution pending human approval; Publishing Queue manual-only Go; Daily Growth Report source Go with `no real data yet`; Revenue Execution No-Go; Stripe test-mode Pending Human Approval; Stripe live No-Go; Supabase production mutation No-Go.
+- Suggested commit message: `feat(marketing): add revenue os day one automation`
+
 ### 2026-06-24 - TianJi Love Revenue OS v1 P0 / PR #113 CI repair
 
 - Task ID: `20260624-pr113-revenue-os-p0-ci-repair`

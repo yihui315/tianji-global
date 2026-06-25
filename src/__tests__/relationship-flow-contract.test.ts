@@ -54,7 +54,8 @@ describe('Tianji Love relationship flow contract', () => {
     expect(client).toContain('Tianji Love relationship shell');
     expect(client).toContain('把两个人的星轨，读成一段关系场。');
     expect(client).toContain('Reveal the hidden pattern between two people.');
-    expect(client).toContain('Start Free Compatibility Reading');
+    expect(client).toContain("Get clarity on the question you can't stop replaying.");
+    expect(client).toContain('Get clarity now');
     expect(client).toContain('Take Free Fate Match Test');
     expect(client).toContain('Not sure yet? Test the signal first without birth data or checkout.');
     expect(client).toContain('growth_fate_test_cta_click');

@@ -79,7 +79,7 @@ const relationshipCopy = {
     hero: {
       eyebrow: 'Tianji Love / Relationship Orbit',
       title: '把两个人的星轨，读成一段关系场。',
-      line: 'Love is not a verdict. It is a pattern you can learn to hold.',
+      line: "Get clarity on the question you can't stop replaying.",
       body: '输入双方的出生日期与可选时辰，先看吸引、沟通、冲突、节奏与长期稳定性，再决定是否进入更深的关系报告。',
       primary: '填写双方信息',
       fateTestCta: '先免费测缘分',
@@ -138,7 +138,7 @@ const relationshipCopy = {
       title: 'Reveal the hidden pattern between two people.',
       line: 'Private by default · No public birth data · First signal is free',
       body: 'Enter two birth dates to receive a private relationship reading across attraction, communication, conflict, timing, and long-term potential.',
-      primary: 'Start Free Compatibility Reading',
+      primary: 'Get clarity now',
       fateTestCta: 'Take Free Fate Match Test',
       fateTestHint: 'Not sure yet? Test the signal first without birth data or checkout.',
       secondary: 'Back home',

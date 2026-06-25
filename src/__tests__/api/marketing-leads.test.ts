@@ -76,6 +76,54 @@ describe('/api/marketing/leads', () => {
     expect(JSON.stringify(values)).not.toContain('203.0.113.10');
   });
 
+  it('writes optional fields as null and hashes x-real-ip when forwarded IP is absent', async () => {
+    mocks.query.mockResolvedValue({ rowCount: 1 });
+
+    const { POST } = await import('@/app/api/marketing/leads/route');
+    const response = await POST(postRequest({
+      email: 'minimal@example.com',
+      source_page: 'ask',
+      consent: true,
+    }, {
+      'x-real-ip': '198.51.100.42',
+    }));
+    const json = await response.json();
+
+    expect(response.status).toBe(201);
+    expect(json).toEqual({ success: true });
+
+    const [, values] = mocks.query.mock.calls[0];
+    expect(values).toEqual([
+      'minimal@example.com',
+      null,
+      'ask',
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      expect.stringMatching(/^[a-f0-9]{64}$/),
+      'vitest-marketing-leads',
+    ]);
+    expect(JSON.stringify(values)).not.toContain('198.51.100.42');
+  });
+
+  it('truncates user_agent before storage', async () => {
+    mocks.query.mockResolvedValue({ rowCount: 1 });
+    const longUserAgent = 'a'.repeat(700);
+
+    const { POST } = await import('@/app/api/marketing/leads/route');
+    const response = await POST(postRequest(validPayload, {
+      'user-agent': longUserAgent,
+    }));
+
+    expect(response.status).toBe(201);
+    const [, values] = mocks.query.mock.calls[0];
+    expect(values[11]).toHaveLength(512);
+  });
+
   it('rejects invalid email with invalid_payload', async () => {
     const { POST } = await import('@/app/api/marketing/leads/route');
     const response = await POST(postRequest({ ...validPayload, email: 'not-an-email' }));
