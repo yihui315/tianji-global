@@ -8,13 +8,13 @@ Safety baseline: no fake testimonials, no fake numbers, no guaranteed outcomes, 
 
 | Date | Day | Channel mix | Core theme | Primary hook | CTA | Metric to watch | Risk-safe note |
 |---|---|---|---|---|---|---|---|
-| 2026-06-29 | Day 6 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Is this worth continuing? | A relationship should not make you smaller every day. | /love-reading | leads, shares | Do not decide for the user. |
 | 2026-06-30 | Day 7 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Replay-loop SEO | Get clarity on the question you cannot stop replaying. | /love-reading | organic clicks, leads | No perfect accuracy claims. |
 | 2026-07-01 | Day 8 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Weekly learning loop | Keep what created calm clicks; drop what sells fear. | /love-reading | clicks, leads | Use real metrics only. |
 | 2026-07-02 | Day 9 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | After the answer | Clarity is not control; it is a calmer next step. | /relationship/new | relationship starts, leads | No certainty or outcome guarantees. |
 | 2026-07-03 | Day 10 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Reply or release | The clearest answer may be what you choose next. | /ask | clicks, leads | No forced closure or outcome promise. |
 | 2026-07-04 | Day 11 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Calm recap | The best hook is the one that helps without selling fear. | /love-reading | clicks, leads | Use real metrics only. |
 | 2026-07-05 | Day 12 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Boundary follow-up | A calm boundary is not a threat; it is information. | /ask | clicks, leads | No pressure or chase tactics. |
+| 2026-07-06 | Day 13 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Clarity recap | Certainty is not always available; clarity often is. | /love-reading | organic clicks, leads | No guaranteed outcomes. |
 
 ## Daily publishing rhythm
 
