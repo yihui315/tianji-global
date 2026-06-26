@@ -1,6 +1,19 @@
 # AI Execution Changelog
-
 ## Entries
+
+### 2026-07-01 - TianJi Love daily growth Day 008 publishing pack (cron 17 1 * * *)
+
+- Task ID: `20260701-tianji-love-daily-growth-day-008`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: `main`, fast-forwarded from stale `fc7650b` to `origin/main` `5eeaf7b` so this run begins from the current shared truth. The 2 local auto-gate commits (`fc7650b`, `adc8ce9`) were already superseded by the `5eeaf7b` merge of PR #114 on origin and are documented in the prior changelog entry, so resetting to `origin/main` was a no-loss alignment.
+- Theme: "为什么总是被这段关系牵动 — naming the pattern that pulls you back, gently" (from the 7-day content calendar Day 8 row).
+- Files created: `assets/marketing/daily/day-008-publishing-pack.md`, `assets/marketing/daily/day-008-review-checklist.md`, `data/love-test-day-008-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 TikTok/Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL feedback DMs, 3 SEO outlines, 5 share-card captions, all pointing to reflective surfaces (`/relationship/new`, `/love-reading`, `/ask?source=love_test`). All CTAs stay preview/reflective. No live payment claim, no fake testimonial, no diagnosis language, no "you are broken" framing.
+- Validation: changes are limited to `assets/marketing/daily/`, `data/`, and `.ai/`. `git diff --check` clean. Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits. `npm run typecheck` and `npm run lint` not run on docs/assets/data-only delta because the change set is markdown and CSV with no TypeScript or ESLint surface; if a future run needs them they should pass given the absence of source edits.
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go — manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): add love-test day 008 publishing pack`.
 
 
 
