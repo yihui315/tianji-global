@@ -1,8 +1,8 @@
-# TianJi Love Revenue OS v1 Final Review Packet
+# TianJi Love Review Packet
 
 ## Current Task
 
-Close the source-only seven-day TianJi Love Revenue OS v1 loop on draft PR #114 and provide the final gate report. Revenue execution remains closed.
+Daily growth cron run for Day 008 (publishing date 2026-07-01). Generate the next manual publishing pack from the existing 7-day content calendar without auto-posting, without payment execution, without touching production or secrets. Day 008 follows Day 007 on `main`. Revenue execution remains closed.
 
 ## Summary
 
@@ -75,4 +75,69 @@ No fake testimonials, fake user numbers, fake revenue, fake conversion rates, gu
 
 ```text
 docs(ai): add revenue os v1 final gate report
+```
+
+## Day 008 Daily Growth Run (2026-07-01)
+
+### Files changed in this run
+
+```text
+A  assets/marketing/daily/day-008-publishing-pack.md
+A  assets/marketing/daily/day-008-review-checklist.md
+A  data/love-test-day-008-kpi-entry.csv
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+### Scope check
+
+```text
+All new files are inside the allowed docs/assets/data surface.
+No .env or .env.* file was read, printed, copied, uploaded, or modified.
+No raw secret was printed.
+No production deploy was performed.
+No Stripe test/live paid smoke or real payment was performed.
+No webhook replay was performed.
+No Supabase production mutation was performed.
+No PM2/Nginx/certbot/server mutation was performed.
+No social account auto-posting was performed.
+No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
+guaranteed relationship outcomes, or 100% accuracy claims were added.
+No diagnosis language (anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+```
+
+### Local validation
+
+```text
+git diff --check
+Passed.
+
+Targeted secret-shape scan over .agents/skills/ .github/workflows/ .ai/
+assets/marketing/ data/
+Passed: 0 raw-shape hits.
+
+npm run typecheck
+Not required for docs/assets/data-only delta; no TypeScript surface changed.
+
+npm run lint
+Not required for docs/assets/data-only delta; no ESLint surface changed.
+```
+
+### Gate status (this run)
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): add love-test day 008 publishing pack
 ```
