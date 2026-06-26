@@ -2,36 +2,31 @@
 
 ## Current Task
 
-Daily growth cron run for Day 008 (publishing date 2026-07-01). Generate the next manual publishing pack from the existing 7-day content calendar without auto-posting, without payment execution, without touching production or secrets. Day 008 follows Day 007 on `main`. Revenue execution remains closed.
+Content calendar cron run for 2026-06-26 (cron 37 2 * * *). Refresh the seven-day marketing content calendar and the next-batch hook/script/caption pools so the rolling future-day count stays at seven or more, without auto-posting, without payment execution, without touching production or secrets. Revenue execution remains closed.
 
 ## Summary
 
-- Added `.ai/TIANJI_LOVE_REVENUE_OS_V1_FINAL_GATE_REPORT_20260630.md`.
-- Confirmed seven daily queues, publishing packs, review checklists, KPI scaffolds, and no-real-data growth reports exist for 2026-06-24 through 2026-06-30.
-- Confirmed source-side lead capture readiness, email templates, growth event contract, CTA/source funnel work, and Stripe test-mode approval packet are present.
-- Latest PR #114 observed head before this final report: `4f924e04142433730b5622467a8bd3c72c2742bf`.
-- Latest observed GitHub Actions Build & Test: pass. External Vercel remains canceled/failing but Not Applicable because this project deploys to a cloud server.
+- Added seven new future days (Day 14 through Day 20, 2026-07-07 through 2026-07-13) to `assets/marketing/content-calendar-7day.md`, rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the supporting pattern/clarity/recap angles.
+- Added a refresh batch of 10 new hooks (entries 31-40) to `assets/marketing/love-test-next-30-hooks.md`.
+- Added a refresh batch of 5 new video scripts (entries 21-25) to `assets/marketing/love-test-next-20-video-scripts.md`.
+- Added a refresh batch of 5 new share-card captions (entries 21-25) to `assets/marketing/love-test-next-20-share-captions.md`.
+- All copy remains helpful, grounded, and non-guaranteed. No fake testimonials, no fake metrics, no guaranteed outcomes, no diagnosis language, no perfect-accuracy claim.
+- Manual publishing and review steps preserved. No social auto-posting. No Stripe or paid smoke. No production deploy. No Supabase production mutation.
+- Confirmed prior day-008 publishing pack assets, daily publishing packs, review checklists, KPI scaffolds, and no-real-data growth reports remain intact.
 
 ## Latest Local Validation
 
 ```text
-npm run typecheck -- --pretty false
-Passed.
-
-npm run lint
-Passed.
-
-npm run test
-Passed: 82 files / 635 tests.
-
-npm run build:staging:degraded
-Passed.
-
 git diff --check
-Passed with LF/CRLF warnings only.
+Passed (no whitespace errors on the markdown delta).
 
-Targeted changed-file secret-shape scan
-Passed: 0 hits; .env* files were not read.
+Targeted changed-file secret-shape scan over .ai/, assets/marketing/, data/
+Passed: 0 raw-shape hits; .env* files were not read, copied, or printed.
+
+npm run typecheck and npm run lint
+Not run on this docs/markdown-only delta because the change set has no
+TypeScript or ESLint surface (consistent with the 2026-07-01 content-only
+skill run precedent). Re-run only if a future run adds source edits.
 ```
 
 ## Safety Boundaries
@@ -140,4 +135,70 @@ Production deploy: No-Go
 
 ```text
 chore(marketing): add love-test day 008 publishing pack
+```
+
+## 2026-06-26 Content Calendar Refresh Run (cron 37 2 * * *)
+
+### Files changed in this run
+
+```text
+M  assets/marketing/content-calendar-7day.md
+M  assets/marketing/love-test-next-30-hooks.md
+M  assets/marketing/love-test-next-20-video-scripts.md
+M  assets/marketing/love-test-next-20-share-captions.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+### Scope check
+
+```text
+All edits are inside the allowed docs/assets/data surface.
+No .env or .env.* file was read, printed, copied, uploaded, or modified.
+No raw secret was printed.
+No production deploy was performed.
+No Stripe test/live paid smoke or real payment was performed.
+No webhook replay was performed.
+No Supabase production mutation was performed.
+No PM2/Nginx/certbot/server mutation was performed.
+No social account auto-posting was performed.
+No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
+guaranteed relationship outcomes, or 100% accuracy claims were added.
+No diagnosis language (anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+```
+
+### Local validation
+
+```text
+git diff --check
+Passed (no whitespace errors on the markdown delta).
+
+Targeted secret-shape scan over .ai/ assets/marketing/ data/
+Passed: 0 raw-shape hits.
+
+npm run typecheck
+Not required for docs/markdown-only delta; no TypeScript surface changed.
+
+npm run lint
+Not required for docs/markdown-only delta; no ESLint surface changed.
+```
+
+### Gate status (this run)
+
+```text
+Seven-day content calendar: Go
+Hook pool: Go
+Video script pool: Go
+Share caption pool: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
 ```

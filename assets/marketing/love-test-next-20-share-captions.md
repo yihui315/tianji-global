@@ -23,6 +23,16 @@ Soft, mysterious, and non-deceptive captions for future share-card use.
 19. Try it if you need a relationship map, not a relationship verdict.
 20. I kept the result because it made me feel more like myself.
 
+## Refresh 2026-06-26 - Next batch of 5 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-06-26 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). None are certainty claims.
+
+21. I almost pressed send on a message I would have regretted. The free Love Test made me pause first: tianji.love/love-test
+22. If you keep writing the reply they never sent, this card is a quieter mirror: tianji.love/relationship/new
+23. No contact is not a strategy. It is a small reset to hear your own voice: tianji.love/love-reading
+24. Wanting them back is normal. Treating it as data is steadier: tianji.love/ask
+25. A relationship worth continuing often looks like one you can describe calmly: tianji.love/relationship/new
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.

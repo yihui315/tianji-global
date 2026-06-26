@@ -1,6 +1,23 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-06-26 - TianJi Love content calendar refresh (cron 37 2 * * *)
+
+- Task ID: `20260626-tianji-love-content-calendar-refresh`.
+- Skill: `tianji-github-content-calendar`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260626`, branched from the prior `chore/marketing-love-test-day-008-publishing-pack-20260701` head.
+- Goal: maintain at least seven future days of TianJi Love content and keep hook/script/caption pools fresh without auto-posting, without payment execution, and without claiming certainty.
+- Files changed: `assets/marketing/content-calendar-7day.md`, `assets/marketing/love-test-next-30-hooks.md`, `assets/marketing/love-test-next-20-video-scripts.md`, `assets/marketing/love-test-next-20-share-captions.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Calendar: extended the seven-day content calendar from Day 13 (2026-07-06) to Day 20 (2026-07-13), adding seven new future days that rotate through the four anchor themes ("What is he thinking now?", "Should I take the initiative in ambiguity?", "Will they come back after no contact?", "Is this relationship worth continuing?") and the supporting pattern/clarity/recap angles. All fourteen future days now in the rolling calendar are future-relative to 2026-06-26.
+- Hook pool: appended a refresh batch of 10 new hooks (entries 31-40) covering motive-before-send, silence translation, no-contact week one, will-they-come-back, and worth-continuing. Pool now has 40 hooks. All hooks keep `Love Test` framed as a mirror, never a verdict.
+- Script pool: appended a refresh batch of 5 new video scripts (entries 21-25) covering motive-before-send, silence translator, no-contact week one, will-they-come-back, and worth-continuing. Pool now has 25 scripts. All scripts keep CTAs reflective (no payment claim).
+- Caption pool: appended a refresh batch of 5 new share-card captions (entries 21-25) covering pause-before-send, silence translation, no-contact reset, return-as-data, and worth-continuing rhythm. Pool now has 25 captions. All captions stay on `/love-test`, `/relationship/new`, `/love-reading`, or `/ask` as the first action.
+- Safety: no fake testimonials, no fake metrics, no fake user counts, no guaranteed reunion/reply/commitment/relationship-repair claims, no diagnosis language, no perfect-accuracy claim, no Stripe/payment claims, no `.env*` read, no social auto-posting, no production deploy, no Supabase production mutation.
+- Validation: `git diff --check` passed; targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/` returned 0 hits. `npm run typecheck` and `npm run lint` were not run because the change set is markdown-only with no TypeScript or ESLint surface, consistent with the prior 2026-07-01 content-only skill run precedent.
+- Gate status: `Seven-day content calendar: Go`; `Hook pool: Go`; `Video script pool: Go`; `Share caption pool: Go`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): refresh love-test content calendar`.
+
+
 ### 2026-07-01 - TianJi Love daily growth Day 008 publishing pack (cron 17 1 * * *)
 
 - Task ID: `20260701-tianji-love-daily-growth-day-008`.

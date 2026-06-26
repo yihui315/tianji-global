@@ -35,6 +35,21 @@ These hooks are for future manual publishing packs. Use them as starting points,
 29. 如果结果让你更害怕，它就不是好结果。
 30. Love Test 是一面镜子，不是命令。
 
+## Refresh 2026-06-26 - Next batch of 10 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-06-26 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the pattern/clarity supporting angles. None are certainty claims.
+
+31. 想发消息之前，先看你是不是在替对方补台词。
+32. 暧昧最贵的地方，是你一直在替对方翻译沉默。
+33. 不发不等于没想，发了不等于表达。两条线不是同一条线。
+34. 主动一次不丢人，丢掉判断力的主动才是消耗。
+35. 断联一周，最先回来的是你给自己写的那段剧本。
+36. 他没有回复，不一定是在犹豫，也可能只是没有在想。
+37. 复合的念头里，常藏着一个没被回答的小问题。
+38. 值不值得，不只看心动，也看你在关系里越来越像不像自己。
+39. 留下来不是因为不能走，是因为你选得清楚。
+40. 一段能继续的关系，常常看起来像一件你能冷静描述的事。
+
 ## CTA pairings
 
 ```text
