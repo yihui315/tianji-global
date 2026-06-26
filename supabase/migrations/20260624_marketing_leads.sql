@@ -40,11 +40,35 @@ create index if not exists marketing_leads_created_at_idx
 
 alter table public.marketing_leads enable row level security;
 
-create policy "Service role can manage marketing leads"
-  on public.marketing_leads
-  for all
-  to service_role
-  using (true)
-  with check (true);
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'service_role')
+    and not exists (
+      select 1
+      from pg_policies
+      where schemaname = 'public'
+        and tablename = 'marketing_leads'
+        and policyname = 'Service role can manage marketing leads'
+    )
+  then
+    execute 'create policy "Service role can manage marketing leads" on public.marketing_leads for all to service_role using (true) with check (true)';
+  end if;
+
+  if exists (select 1 from pg_roles where rolname = 'tianji_app')
+    and not exists (
+      select 1
+      from pg_policies
+      where schemaname = 'public'
+        and tablename = 'marketing_leads'
+        and policyname = 'Backend app can manage marketing leads'
+    )
+  then
+    execute 'create policy "Backend app can manage marketing leads" on public.marketing_leads for all to tianji_app using (true) with check (true)';
+  end if;
+
+  if not exists (select 1 from pg_roles where rolname in ('service_role', 'tianji_app')) then
+    raise notice 'No marketing_leads backend role found; create service_role or tianji_app, then apply 20260626_marketing_leads_local_pg_policy.sql.';
+  end if;
+end $$;
 
 commit;

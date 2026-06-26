@@ -5,6 +5,18 @@
 
 
 
+### 2026-06-26 - Marketing leads local PostgreSQL policy reconciliation
+
+- Task ID: `20260626-marketing-leads-local-pg-policy-reconciliation`
+- Branch/worktree: `codex/marketing-leads-local-pg-policy-20260626` in `C:\Users\Administrator\codex-worktrees\tianji-marketing-leads-local-pg-policy-20260626`.
+- Files changed: `supabase/migrations/20260624_marketing_leads.sql`, `supabase/migrations/20260626_marketing_leads_local_pg_policy.sql`, `docs/marketing-leads-local-postgres-policy.md`, `src/__tests__/marketing-leads-migration-policy.test.ts`, `.ai/TIANJI_LOVE_MARKETING_LEADS_LOCAL_PG_POLICY_RECONCILIATION_20260626.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`, `.ai/AUTOPILOT_REPORT.md`.
+- Summary: Reconciled the `marketing_leads` migration policy source with the production local PostgreSQL role model. The original migration now creates `service_role` or `tianji_app` policies only when those roles exist, and the follow-up migration adds the local `tianji_app` backend policy for existing tables without dropping the table or mutating rows.
+- Production context: Hermes already completed the B1-localized production repair via `sudo -u postgres psql -d tianji_global`; this PR is source reconciliation only and does not run production SQL.
+- Validation: Added a focused migration-policy contract test covering hosted/local role behavior, no table drops, no row deletes, documentation, and No-Go gates. `npm run test -- src/__tests__/marketing-leads-migration-policy.test.ts`, `npm run typecheck -- --pretty false`, `npm run lint`, `npm run test`, `npm run build:staging:degraded`, `git diff --check`, and targeted changed-file secret-shape scan passed.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No production DB mutation, deploy, Stripe/payment, webhook replay, PM2/Nginx/certbot/server mutation, or social auto-posting was performed.
+- Gate status: Source reconciliation Go; Production DB mutation No-Go; Revenue Execution No-Go; Stripe/payment No-Go.
+- Suggested commit message: `fix(db): reconcile marketing leads local postgres policy`
+
 ### 2026-06-30 - TianJi Love Revenue OS v1 final gate report
 
 - Task ID: `20260630-tianji-love-revenue-os-v1-final-gate`
