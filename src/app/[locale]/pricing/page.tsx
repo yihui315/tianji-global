@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { buildLocalizedMetadata } from '@/lib/i18n-metadata';
 import { getLocalizedPath, isSupportedLocale, locales, type Locale } from '@/lib/i18n';
+import { LOVE_PREMIUM_REPORT_PRICE } from '@/lib/love-reading/revenue-contract';
 
 type PageParams = {
   params: Promise<{ locale: string }>;
@@ -19,49 +20,63 @@ type PricingCopy = {
   }>;
 };
 
+const LOVE_PREMIUM_DISPLAY_PRICE = `${LOVE_PREMIUM_REPORT_PRICE.display} CNY`;
+
 const copy = {
   en: {
-    title: 'Simple one-time pricing for modern love readings',
+    title: 'Simple pricing for private love readings',
     description:
-      'Start free, then unlock deeper self-reflection and relationship guidance only when it feels useful.',
+      'Start free, then unlock deeper self-reflection only when the reading feels useful. Paid access adds depth, not certainty.',
     cta: 'Begin free',
     plans: [
       {
-        name: 'Solo love report',
-        price: '$4.99',
-        description: 'A private reflection on romantic patterns, emotional timing, and relationship choices.',
+        name: 'Free preview',
+        price: '$0',
+        description: 'A private first signal before any checkout, payment, or subscription decision.',
       },
       {
-        name: 'Compatibility report',
-        price: '$12.99',
-        description: 'A two-person relationship reading focused on patterns, tension, and repair.',
+        name: 'Ask one-question unlock',
+        price: '$1.99 USD',
+        description: 'A one-time deeper answer for one focused relationship question after a private preview.',
       },
       {
-        name: 'Gift report',
-        price: '$9.99',
-        description: 'A one-time report credit you can send to someone who wants thoughtful relationship insight.',
+        name: 'Draw Timing unlock',
+        price: '$2.99 USD',
+        description: 'A one-time three-card timing reading for reflection, not guaranteed prediction.',
+      },
+      {
+        name: 'Love Premium Relationship Report',
+        price: LOVE_PREMIUM_DISPLAY_PRICE,
+        description:
+          'The canonical one-time premium report for saved Love Reading and Relationship results. Checkout remains gated until test-mode smoke passes.',
       },
     ],
   },
   'zh-CN': {
-    title: '面向现代关系洞察的一次性价格',
-    description: '先免费体验，在真正需要时再解锁更深层的自我反思与关系建议。',
+    title: '现代关系解读的清晰价格',
+    description: '先免费预览；当一份解读真的值得深入时，再选择单次解锁。付费增加的是深度，不是确定结果。',
     cta: '先免费开始',
     plans: [
       {
-        name: '个人爱情报告',
-        price: '$4.99',
-        description: '围绕情感模式、关系节奏与相处选择的私密报告。',
+        name: '免费预览',
+        price: '$0',
+        description: '先获得一段私密关系信号，再决定是否进入任何结账、付费或订阅路径。',
       },
       {
-        name: '关系合盘报告',
-        price: '$12.99',
-        description: '面向两个人的关系模式、张力与修复建议。',
+        name: 'Ask 单题解锁',
+        price: '$1.99 USD',
+        description: '在私密预览之后，单次解锁一个更深入的关系问题回答。',
       },
       {
-        name: '礼物报告',
-        price: '$9.99',
-        description: '一次性报告额度，适合送给想认真理解关系的人。',
+        name: '时机抽牌解锁',
+        price: '$2.99 USD',
+        description: '单次解锁三张时机牌的完整解读，用于反思，不用于保证预测。',
+      },
+      {
+        name: 'Love Premium 关系报告',
+        price: LOVE_PREMIUM_DISPLAY_PRICE,
+        description:
+          '面向已保存 Love Reading 或 Relationship 结果的 canonical 单次付费报告。test-mode smoke 通过前，结账仍保持门禁。',
       },
     ],
   },
@@ -104,7 +119,7 @@ export default async function PricingPage({ params }: PageParams) {
             {t.cta}
           </Link>
         </section>
-        <section className="grid gap-4 md:grid-cols-3">
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {t.plans.map(({ name, price, description }) => (
             <article key={name} className="rounded-3xl border border-white/10 bg-white/[0.055] p-6">
               <h2 className="text-xl font-semibold text-white">{name}</h2>
