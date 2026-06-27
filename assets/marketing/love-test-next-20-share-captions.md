@@ -33,6 +33,16 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 24. Wanting them back is normal. Treating it as data is steadier: tianji.love/ask
 25. A relationship worth continuing often looks like one you can describe calmly: tianji.love/relationship/new
 
+## Refresh 2026-06-27 - Next batch of 5 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-06-27 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). None are certainty claims.
+
+26. I almost sent a message just to feel caught. The free Love Test made me check my motive first: tianji.love/love-test
+27. A familiar rhythm returning is information, not a verdict: tianji.love/love-reading
+28. Wanting them back is one question. Naming what needs to change is another: tianji.love/relationship/new
+29. Worth continuing is a rhythm, not a verdict. The Love Test helped me notice the difference: tianji.love/love-test
+30. I saved my result like a snapshot, not a forecast. The next week felt steadier for it: tianji.love/love-test
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.

@@ -1,6 +1,24 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-06-27 - TianJi Love content calendar refresh (cron 37 2 * * *)
+
+- Task ID: `20260627-tianji-love-content-calendar-refresh`.
+- Skill: `tianji-github-content-calendar`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260626`, local HEAD `675f39d` (post Day 009 publishing-pack commit), in sync with origin before this run.
+- Goal: maintain at least seven future days of TianJi Love content and keep hook/script/caption pools fresh without auto-posting, without payment execution, and without claiming certainty.
+- Pre-run count: calendar held 14 future days (Day 7 through Day 20, ending 2026-07-13). 14 ≥ 7, so no minimum-fill trigger was required; this run was a rotation-and-refresh pass to keep themes from repeating too soon and to keep the pools fed.
+- Files changed: `assets/marketing/content-calendar-7day.md`, `assets/marketing/love-test-next-30-hooks.md`, `assets/marketing/love-test-next-20-video-scripts.md`, `assets/marketing/love-test-next-20-share-captions.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Calendar: extended from Day 20 (2026-07-13) to Day 27 (2026-07-20), adding seven new future days that rotate through the four anchor themes ("What is he thinking now?", "Should I take the initiative in ambiguity?", "Will they come back after no contact?", "Is this relationship worth continuing?") and the supporting pattern/clarity/recap angles. As of run timestamp 2026-06-27 02:38 UTC, the rolling calendar now has 21 future days (Day 7 through Day 27, ending 2026-07-20), well above the seven-day minimum.
+- Hook pool: appended a refresh batch of 10 new hooks (entries 41-50) covering motive-check, ambiguity without writing the ending, repetition vs. expression, no-contact day two, return-as-data, repair vs. return, worth-continuing rhythm, the "habit" trap, and describable relationships. Pool now has 50 hooks. All hooks keep `Love Test` framed as a mirror, never a verdict.
+- Script pool: appended a refresh batch of 5 new video scripts (entries 26-30) covering expressing-or-seeking, pattern-return, repair-question, worth-continuing rhythm, and snapshot-saving. Pool now has 30 scripts. All scripts keep CTAs reflective (no payment claim).
+- Caption pool: appended a refresh batch of 5 new share-card captions (entries 26-30) covering motive check, rhythm-as-information, repair-question naming, worth-continuing rhythm, and snapshot-saving. Pool now has 30 captions. All captions stay on `/love-test`, `/relationship/new`, or `/love-reading` as the first action.
+- Safety: no fake testimonials, no fake metrics, no fake user counts, no guaranteed reunion/reply/commitment/relationship-repair claims, no diagnosis language, no perfect-accuracy claim, no Stripe/payment claims, no `.env*` read, no social auto-posting, no production deploy, no Supabase production mutation.
+- Validation: `git diff --check` passed; targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits. `npm run typecheck` and `npm run lint` were not run because the change set is markdown-only with no TypeScript or ESLint surface, consistent with the prior 2026-06-26 content-only skill run precedent.
+- Gate status: `Seven-day content calendar: Go (21 future days)`; `Hook pool: Go (50)`; `Video script pool: Go (30)`; `Share caption pool: Go (30)`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): refresh love-test content calendar`.
+
+
 ### 2026-07-02 - TianJi Love daily growth Day 009 publishing pack (cron 17 1 * * *)
 
 - Task ID: `20260702-tianji-love-daily-growth-day-009`.

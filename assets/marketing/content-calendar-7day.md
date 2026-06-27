@@ -22,6 +22,13 @@ Safety baseline: no fake testimonials, no fake numbers, no guaranteed outcomes, 
 | 2026-07-11 | Day 18 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Worth continuing | Worth is not only what you feel; it is also what the rhythm allows. | /love-test | clicks, leads | No decision made for the user. |
 | 2026-07-12 | Day 19 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Honest audit | A relationship worth continuing often looks like one you can name clearly. | /relationship/new | relationship starts, leads | No diagnosis language or shame reversal. |
 | 2026-07-13 | Day 20 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Rolling recap | The best calendar entry is the one that helps without selling fear. | /love-reading | organic clicks, leads | Use real metrics only. |
+| 2026-07-14 | Day 21 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Initiation in ambiguity | Wanting to reach out is not the same as being ready to send. | /love-test | clicks, leads | No pressure or chase tactics. |
+| 2026-07-15 | Day 22 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Pause before you send | Check your motive before you check their reply. | /ask | clicks, leads | No certainty or outcome guarantees. |
+| 2026-07-16 | Day 23 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | No-contact week one | Silence is information; what you do with it is yours. | /relationship/new | relationship starts, leads | No reunion promise or mind-reading claim. |
+| 2026-07-17 | Day 24 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Will they come back | Patterns return, but a returned pattern is not the same as a returned person. | /love-reading | organic clicks, leads | No guaranteed return or closure. |
+| 2026-07-18 | Day 25 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Worth continuing | Worth is not only what you feel; it is also what the rhythm allows. | /love-test | clicks, leads | No decision made for the user. |
+| 2026-07-19 | Day 26 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Honest audit | A relationship worth continuing often looks like one you can name clearly. | /relationship/new | relationship starts, leads | No diagnosis language or shame reversal. |
+| 2026-07-20 | Day 27 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Rolling recap | The best calendar entry is the one that helps without selling fear. | /love-reading | organic clicks, leads | Use real metrics only. |
 
 ## Daily publishing rhythm
 

@@ -1,7 +1,84 @@
 # TianJi Love Review Packet
 ## Current Task
 
-Daily growth publishing pack for 2026-07-02 (cron `17 1 * * *`). Day 9 from the 7-day content calendar — "After the answer: clarity is not control; it is a calmer next step." Manual publishing only. No payment execution. No `.env*` access. No production mutation.
+Daily content calendar refresh for 2026-06-27 (cron `37 2 * * *`). Extend the rolling seven-day content calendar with another week of future days and rotate theme distribution in the hook/script/caption pools without auto-posting, without payment execution, without touching production or secrets. Revenue execution remains closed.
+
+## 2026-06-27 Content Calendar Refresh Run (cron 37 2 * * *)
+
+### Files changed in this run
+
+```text
+M  assets/marketing/content-calendar-7day.md
+M  assets/marketing/love-test-next-30-hooks.md
+M  assets/marketing/love-test-next-20-video-scripts.md
+M  assets/marketing/love-test-next-20-share-captions.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+### Scope check
+
+```text
+All edits are inside the allowed docs/assets/data surface plus the .ai/ record pair.
+No .env or .env.* file was read, printed, copied, uploaded, or modified.
+No raw secret was printed.
+No production deploy was performed.
+No Stripe test/live paid smoke or real payment was performed.
+No webhook replay was performed.
+No Supabase production mutation was performed.
+No PM2/Nginx/certbot/server mutation was performed.
+No social account auto-posting was performed.
+No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
+guaranteed relationship outcomes, or 100% accuracy claims were added.
+No diagnosis language (anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+```
+
+### Local validation
+
+```text
+git diff --check
+Passed (no whitespace errors on the markdown delta).
+
+Targeted secret-shape scan over .ai/ assets/marketing/ data/
+Passed: 0 raw-shape hits.
+
+npm run typecheck
+Not required for docs/markdown-only delta; no TypeScript surface changed.
+
+npm run lint
+Not required for docs/markdown-only delta; no ESLint surface changed.
+```
+
+### Pre-run state vs. post-run state
+
+```text
+Content calendar future days: 14 (Day 7..Day 20, ending 2026-07-13) -> 21 (Day 7..Day 27, ending 2026-07-20).
+Hook pool size: 40 -> 50 (+10 entries).
+Video script pool size: 25 -> 30 (+5 entries).
+Share caption pool size: 25 -> 30 (+5 entries).
+Theme rotation: anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and supporting pattern/clarity/recap angles distributed across the new week.
+Minimum 7-day gate: satisfied with a 14-day buffer beyond the floor.
+```
+
+### Gate status (this run)
+
+```text
+Seven-day content calendar: Go (21 future days)
+Hook pool: Go (50)
+Video script pool: Go (30)
+Share caption pool: Go (30)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
+```
 
 ## 2026-07-02 Daily Growth Day 009 Publishing Pack Run
 

@@ -50,6 +50,21 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 39. 留下来不是因为不能走，是因为你选得清楚。
 40. 一段能继续的关系，常常看起来像一件你能冷静描述的事。
 
+## Refresh 2026-06-27 - Next batch of 10 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-06-27 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the pattern/clarity supporting angles. None are certainty claims.
+
+41. 想发消息的时候，先看你想表达，还是想被接住。两件事是不同的需求。
+42. 暧昧里最累的，是你不确定对方是真忙，还是只对你忙。
+43. 没有回复之前，先别写结局。先把观察期放长一点。
+44. 主动一次是表达，重复主动是消耗。看看你落在哪一段。
+45. 断联的第二天最难，因为你会替对方把回复写得比现实更温柔。
+46. 他会不会回来，看的是节奏，不是一句承诺。承诺常在，节奏难改。
+47. 复合之前，先看你想要的是回到从前，还是回到一个被修过的版本。
+48. 值不值得继续，看你在关系里能不能保留自己的节奏。
+49. 留下来的理由里如果只剩"习惯了"，先停下来看看还有什么。
+50. 一段关系能继续，常常不是因为它完美，而是因为你还能描述清楚。
+
 ## CTA pairings
 
 ```text

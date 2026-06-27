@@ -202,6 +202,60 @@ Purpose: create a pool for Douyin, Videohao, and short-form manual publishing. S
 - CTA: `/love-test`.
 - risk-safe check: No private input exposure.
 
+## Refresh 2026-06-27 - Next batch of 5 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-06-27 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).
+
+## 26 Expressing Or Seeking
+
+- channel: Xiaohongshu video
+- 3-second hook: Want to send it? Ask if you want to express or to be caught.
+- scene: Two split screens — one writes freely, one waits for a reaction.
+- spoken copy: Wanting to send is fine. Wanting to be caught is a different need. Love Test helps you see which one you are in, before the message goes out.
+- caption: 表达和被接住，是两种需求。
+- CTA: `/love-test`.
+- risk-safe check: No chase tactics, no pressure, no guaranteed reply.
+
+## 27 Pattern Return
+
+- channel: Douyin
+- 3-second hook: A returning pattern is not the same as a returning person.
+- scene: Repeating waveform, then a still frame of a person standing alone.
+- spoken copy: Some habits do come back. A familiar rhythm returning is information, not a verdict. Love Test helps you see whether what returned is the pattern or the person.
+- caption: 模式回来不等于人回来。
+- CTA: `/love-reading`.
+- risk-safe check: No reunion promise, no certainty claim.
+
+## 28 The Repair Question
+
+- channel: Videohao
+- 3-second hook: Wanting them back is one question. Repair is another.
+- scene: A teacup mended with gold, held up to the light.
+- spoken copy: Before deciding to try again, name what needs to change. Love Test does not promise a fix. It helps you write the question clearly before you act.
+- caption: 复合之前，先看清要修的是什么。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No guarantee the other person will engage, no pressure to return.
+
+## 29 Worth Continuing Rhythm
+
+- channel: Xiaohongshu video
+- 3-second hook: Worth continuing is a rhythm, not a verdict.
+- scene: Two metronomes slowly syncing, then a soft result card.
+- spoken copy: A relationship can be worth continuing even when it is hard, and it can be hard to continue even when it is good. Love Test helps you notice the rhythm before you decide.
+- caption: 值得是一种节奏，不是心情。
+- CTA: `/love-test`.
+- risk-safe check: No decision made for the user, no certainty claim.
+
+## 30 Save The Snapshot
+
+- channel: Douyin
+- 3-second hook: Save the snapshot before your mood rewrites the story.
+- scene: A photo being slid into a drawer, then reopened a week later.
+- spoken copy: Your result is a snapshot, not a forecast. Save it, return to it later, and notice what stays the same and what shifts. TianJi Love is built so the snapshot is yours.
+- caption: 保存当下，留给以后的你看。
+- CTA: `/love-test`.
+- risk-safe check: No private input exposed, no perfect-accuracy claim.
+
 ## Refresh 2026-06-26 - Next batch of 5 video scripts
 
 These scripts were added by the `tianji-github-content-calendar` cron job on 2026-06-26 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).
