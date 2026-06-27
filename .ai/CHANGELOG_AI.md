@@ -1,6 +1,21 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-02 - TianJi Love daily growth Day 009 publishing pack (cron 17 1 * * *)
+
+- Task ID: `20260702-tianji-love-daily-growth-day-009`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260626`, local HEAD `675f39d`, in sync with origin.
+- Theme: "After the answer — clarity is not control; it is a calmer next step" (from the 7-day content calendar Day 9 row, 2026-07-02).
+- Files created: `assets/marketing/daily/day-009-publishing-pack.md`, `assets/marketing/daily/day-009-review-checklist.md`, `data/love-test-day-009-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 TikTok/Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL feedback DMs, 3 SEO outlines, 5 share-card captions, all pointing to reflective surfaces (`/relationship/new`, `/love-reading`, `/ask?source=love_test`). All CTAs stay preview/reflective. No live payment claim, no fake testimonial, no diagnosis language, no "you are broken" framing, no "act now" or "go send it" framing paired with the Day 9 angle.
+- Validation: changes are limited to `assets/marketing/daily/`, `data/`, and `.ai/`. `git diff --check` clean (no whitespace errors on the new files). Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits on the new files (the single match in `.ai/TIANJI_LOVE_STAGING_SMOKE_READINESS_EVIDENCE_20260516.md` is a prior changelog comment describing past scan results, not a real secret). `npm run typecheck` and `npm run lint` not run on docs/assets/data-only delta because the change set is markdown and CSV with no TypeScript or ESLint surface.
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go — manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): add love-test day 009 publishing pack`.
+
+
 ### 2026-06-26 - TianJi Love auto paid-gate status run (cron 0 6 * * *)
 
 - Task ID: `20260626-tianji-love-auto-paid-gate`.
