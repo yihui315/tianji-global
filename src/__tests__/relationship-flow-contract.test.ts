@@ -87,7 +87,7 @@ describe('Tianji Love relationship flow contract', () => {
     expect(result).toContain("shareMode: 'summary'");
     expect(result).toContain("source: 'relationship'");
     expect(result).toContain('relationshipReadingId: reading.id');
-    expect(result).toContain('Unlock the Full Relationship Pattern');
+    expect(result).toContain('Unlock the Full Relationship Report - ¥19.9');
     expect(result).toContain('Share link could not be created. Please save your reading first.');
     expect(result).toContain('Symbolic compatibility engine + guided interpretation');
     expect(result).toContain('分享内容默认不包含出生日期、出生时辰、出生地点或时区。');

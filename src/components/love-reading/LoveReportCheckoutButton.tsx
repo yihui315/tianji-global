@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { trackClientEvent } from '@/lib/analytics/client';
 import type { BillingProductId } from '@/lib/billing';
 import type { Locale } from '@/lib/i18n';
+import { LOVE_PREMIUM_REPORT_PRICE } from '@/lib/love-reading/revenue-contract';
 
 export function LoveReportCheckoutButton({
   sessionId,
@@ -68,10 +69,12 @@ export function LoveReportCheckoutButton({
         disabled={isLoading}
         className="inline-flex rounded-full bg-[rgb(212,175,119)] px-6 py-3 text-sm font-semibold text-black transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {isLoading ? 'Opening checkout...' : 'Unlock complete relationship report'}
+        {isLoading
+          ? 'Opening checkout...'
+          : `Unlock complete relationship report - ${LOVE_PREMIUM_REPORT_PRICE.display}`}
       </button>
       <p className="max-w-md text-xs leading-5 text-white/48">
-        One-time premium report. Checkout opens only when the payment gate is configured.
+        One-time Love Premium report. Checkout opens only when the payment gate is configured.
       </p>
       {error && <p className="text-sm text-rose-100">{error}</p>}
     </div>

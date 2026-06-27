@@ -496,6 +496,14 @@
 - Risks: A dependency-ready lane and explicit staging target are still required before deploy execution can be attempted. Production-shaped self-hosted docs exist and must not be used as staging.
 - Next step: Restore dependencies in an approved dependency-ready worktree, provide a concrete non-production staging target, rerun the degraded gates, then deploy and run non-paid smoke only if all gates pass.
 
+# 2026-06-27 - Stripe approval packet and paid launch copy cleanup
+
+- Task ID: 20260627-stripe-packet-paid-launch-copy-cleanup
+- Files changed: `.ai/TIANJI_LOVE_STRIPE_TEST_MODE_APPROVAL_PACKET_20260626.md`, `.ai/REVIEW_PACKET.md`, pricing pages/layout, Love/Relationship checkout CTA copy, and paid-launch copy contract tests.
+- Summary: Prepared the Stripe test-mode approval packet for PR submission and cleaned paid launch pricing copy to align customer-facing surfaces with the canonical `love_premium_report` contract: `¥19.9`, `cny`, `1990` minor amount. Removed old `$4.99` / `$12.99` Love report pricing from pricing surfaces and replaced `Relationship Destiny Report` pricing copy with `Love Premium Report`.
+- Safety: No `.env*` files were read, printed, copied, or modified. No Stripe test/live payment, checkout session creation, webhook replay, Supabase mutation, production deploy, PM2/Nginx/server mutation, or social auto-posting was performed.
+- Gate: Source/Test pending validation. Stripe Test-mode Paid Smoke remains No-Go until explicit approval. Stripe Live remains No-Go. Revenue Execution remains No-Go.
+
 ### 2026-05-16 - TianJi Love latest server redeploy check
 
 - Task ID: 20260516-tianji-love-latest-server-redeploy-check

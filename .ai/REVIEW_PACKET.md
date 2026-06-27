@@ -1,5 +1,50 @@
 # TianJi Love Revenue OS v1 Final Review Packet
 
+## 2026-06-26 Stripe Test-Mode Paid Smoke Approval Packet
+
+- Added `.ai/TIANJI_LOVE_STRIPE_TEST_MODE_APPROVAL_PACKET_20260626.md`.
+- Scope: approval packet only; no Stripe test/live payment, webhook replay, Supabase mutation, deploy, server mutation, social posting, or `.env*` access.
+- Reviewed source paths:
+  - `src/app/api/checkout/route.ts`
+  - `src/app/api/stripe/checkout/route.ts`
+  - `src/app/api/stripe/webhook/route.ts`
+  - `src/app/api/ask/unlock/route.ts`
+  - `src/app/api/draw/unlock/route.ts`
+  - `src/lib/billing.ts`
+  - `src/lib/stripe.ts`
+  - `src/lib/pay-per-use.ts`
+  - `src/lib/love-reading/revenue-contract.ts`
+  - `src/components/love-reading/LoveReportCheckoutButton.tsx`
+  - `src/components/relationship/RelationshipResult.tsx`
+  - pricing success/cancel pages and related Stripe tests/runbooks.
+- Gate result:
+  - Stripe Test-mode Approval Packet: Go.
+  - Ready for human approval: Go.
+  - Stripe Test-mode Paid Smoke: No-Go until explicit approval.
+  - Stripe Live: No-Go.
+  - Revenue Execution: No-Go until test-mode passes and a separate launch approval exists.
+- Non-blocking source/copy risk recorded: Love premium display and some Chinese pricing copy needed paid-launch review; the 2026-06-27 cleanup below addresses the customer-facing pricing surfaces before paid smoke.
+
+## 2026-06-27 Paid Launch Pricing Copy Cleanup
+
+- Scope: source/docs/tests only. No `.env*` access, Stripe payment, checkout session creation, webhook replay, Supabase mutation, deploy, server mutation, or social auto-posting.
+- Updated paid launch pricing surfaces to the canonical Love Premium contract:
+  - `love_premium_report`
+  - `¥19.9`
+  - `cny`
+  - `1990` minor amount
+- Replaced old Love report pricing copy:
+  - `/pricing` no longer presents the Love report as `$4.99`, `$12.99`, or `Relationship Destiny Report`.
+  - `/[locale]/pricing` now lists Free preview, Love Premium report, Ask one-question unlock, and Draw Timing unlock.
+  - Relationship checkout CTA now says `Unlock the Full Relationship Report - ¥19.9`.
+  - Love Reading checkout CTA now uses `LOVE_PREMIUM_REPORT_PRICE.display`.
+- Added `src/__tests__/paid-launch-pricing-copy-contract.test.ts` to guard paid launch surfaces against known mojibake signatures and old Love report prices.
+- Gate result:
+  - Paid launch copy: Go pending final validation.
+  - Stripe Test-mode Paid Smoke: No-Go until explicit approval.
+  - Stripe Live: No-Go.
+  - Revenue Execution: No-Go until test-mode passes and a separate launch approval exists.
+
 ## Current Task
 
 Close the source-only seven-day TianJi Love Revenue OS v1 loop on draft PR #114 and provide the final gate report. Revenue execution remains closed.

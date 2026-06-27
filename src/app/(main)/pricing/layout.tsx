@@ -3,7 +3,7 @@ import { JsonLd, SITE, buildBreadcrumb } from '@/components/seo/JsonLd';
 
 const TITLE = 'Tianji Love Pricing | Deeper Love Readings & Compatibility Reports';
 const DESCRIPTION =
-  'Tianji Love pricing explains free previews, one-time Ask and Draw Timing unlocks, subscription history, and private report-ready pages without promising guaranteed predictions.';
+  'Tianji Love pricing explains free previews, the Love Premium report, one-time Ask and Draw Timing unlocks, subscription history, and private report-ready pages without promising guaranteed predictions.';
 const OG_URL = '/api/og?title=Tianji+Love+Pricing&subtitle=Love+readings+%C2%B7+Compatibility+%C2%B7+Timing&module=tianji';
 const PAGE_URL = `${SITE.url}/pricing`;
 
@@ -40,6 +40,15 @@ const productLd = {
   brand: { '@type': 'Brand', name: SITE.name },
   url: PAGE_URL,
   offers: [
+    {
+      '@type': 'Offer',
+      name: 'Love Premium Report',
+      price: '19.90',
+      priceCurrency: 'CNY',
+      url: PAGE_URL,
+      availability: 'https://schema.org/InStock',
+      category: 'one-time',
+    },
     {
       '@type': 'Offer',
       name: 'Ask One Question Unlock',
@@ -91,7 +100,7 @@ const faqLd = {
       name: 'Can I start for free?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. The free path gives a usable first reading before any upgrade. Paid plans unlock depth, history, and report surfaces.',
+        text: 'Yes. The free path gives a usable first reading before any upgrade. Paid unlocks add depth, history, and report surfaces.',
       },
     },
     {

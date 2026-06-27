@@ -9,7 +9,25 @@ function read(relativePath: string) {
 }
 
 function expectNoKnownMojibake(source: string) {
-  expect(source).not.toMatch(/[�]|鈥|鈫|馃|锟|閳|娴|涓|鍏|瑙ｈ|闅愮|鏃舵|浼氬|璺宠|姝ｅ|杩斿|缁熶|鍛界|濉旂|漏/);
+  const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const knownMojibakeTokens = [
+    '\uFFFD',
+    '\u9225',
+    '\u922B',
+    '\u9993',
+    '\u951F',
+    '\u95B3',
+    '\u6D93\u5D8F',
+    '\u9365\u754C',
+    '\u7479\uFF48',
+    '\u95C5\u6117',
+    '\u93C3\u8235',
+    '\u7F02\u4F7A',
+    '\u93C3\u8235',
+    '\u6F0F',
+  ];
+
+  expect(source).not.toMatch(new RegExp(knownMojibakeTokens.map(escapeRegExp).join('|')));
 }
 
 function firstHeaderBlock(source: string) {
@@ -86,11 +104,15 @@ describe('Tianji Love P0/P1 page visual contract', () => {
     expect(page).toContain('TianjiLoveFinalCta');
     expect(page).toContain('Go deeper only when the reading earns it.');
     expect(page).toContain('One-time unlocks before subscriptions');
-    expect(page).toContain('Relationship Destiny Report');
+    expect(page).toContain('Love Premium Report');
+    expect(page).toContain('¥19.9');
     expect(page).toContain('What happens after unlocking');
     expect(page).toContain('当一次解读真的有帮助，再进入更深一层。');
     expect(page).toContain('Paid plans unlock depth and history, not guaranteed predictions.');
     expect(page).toContain('出生资料默认保持私密，公开分享不展示生日、时间、地点或时区。');
+    expect(page).not.toContain('Relationship Destiny Report');
+    expect(page).not.toContain('$4.99');
+    expect(page).not.toContain('$12.99');
     expect(page).not.toContain('bg-gradient-to-br from-purple');
     expectNoKnownMojibake(page);
   });

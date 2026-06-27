@@ -70,7 +70,8 @@ describe('localized SEO routing contract', () => {
     expect(pages).toContain('Discover patterns.');
     expect(pages).toContain('Make clearer relationship choices.');
     expect(pages).toContain('爱，是唯一能改变命运的变量。');
-    expect(pages).toContain('个人爱情报告');
+    expect(pages).toContain('Love Premium 完整报告');
+    expect(pages).toContain('¥19.9');
     expect(pages).not.toContain('TianJi Plus monthly');
     expect(pages).not.toMatch(/涓|鐖|绉|鍏崇郴|瑙ｈ/);
     expect(pages).not.toMatch(/We predict your future|Find your soulmate|Know exactly when love will arrive/i);
