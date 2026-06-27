@@ -113,8 +113,9 @@ describe('love reading session funnel', () => {
     expect(resultPage).toContain('premiumReport.premiumSections');
     expect(resultPage).toContain('LoveReportCheckoutButton');
     expect(resultPage).toContain('ReportJobPoller');
-    expect(checkoutButton).toContain('Unlock complete relationship report');
-    expect(checkoutButton).toContain('Checkout opens only when the payment gate is configured.');
+    expect(checkoutButton).toContain('Unlock premium relationship report');
+    expect(checkoutButton).toContain('¥19.9 CNY');
+    expect(checkoutButton).toContain('Checkout opens only when the test-mode payment gate is configured.');
     expect(analytics).toContain("event: 'checkout_cancel'");
     expect(analytics).toContain("event: 'premium_report_view'");
     expect(resultPage).not.toMatch(/birth(Date|Time|Place)/);

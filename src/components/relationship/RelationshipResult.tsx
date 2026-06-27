@@ -36,6 +36,7 @@ const DIMENSION_KEYS = ['attraction', 'communication', 'conflict', 'rhythm', 'lo
 
 const EXPERIMENT_ID = 'relationship-p0-sales-loop';
 const VARIANT = 'A';
+const LOVE_PREMIUM_REPORT_DISPLAY = '¥19.9 CNY';
 
 const resultCopy = {
   zh: {
@@ -44,9 +45,9 @@ const resultCopy = {
     radar: '关系雷达',
     dimensions: '五维详情',
     nextMove: '你的下一步',
-    lockedTitle: '解锁完整关系模式 - $4.99',
-    lockedBody: '完整报告会解锁五个维度、未来 30 天时机、冲突修复、沟通建议、可保存报告和历史记录。',
-    unlock: '解锁完整关系模式 - $4.99',
+    lockedTitle: `解锁完整关系报告 - ${LOVE_PREMIUM_REPORT_DISPLAY}`,
+    lockedBody: '完整报告会解锁五个维度、未来 30 天时机、冲突修复、沟通建议、可保存报告和历史记录。付费只增加深度，不承诺确定结果。',
+    unlock: `解锁完整关系报告 - ${LOVE_PREMIUM_REPORT_DISPLAY}`,
     unlockDisabled: '完整报告结账尚未开启。请先保存本次解读，稍后再回来查看。',
     unlockFailed: '暂时无法开始结账。请先保存本次解读。',
     currentPhase: '当前阶段',
@@ -70,9 +71,9 @@ const resultCopy = {
     radar: 'Relationship radar',
     dimensions: 'Five dimensions',
     nextMove: 'Your next best move',
-    lockedTitle: 'Unlock the Full Relationship Pattern — $4.99',
-    lockedBody: 'Full report unlocks all five dimensions, 30-day timing, conflict repair, conversation guidance, PDF-ready report, and saved history.',
-    unlock: 'Unlock the Full Relationship Pattern — $4.99',
+    lockedTitle: `Unlock the Premium Relationship Report - ${LOVE_PREMIUM_REPORT_DISPLAY}`,
+    lockedBody: 'Premium report unlocks all five dimensions, 30-day timing, conflict repair, conversation guidance, PDF-ready report, and saved history. Paid access adds depth, not certainty.',
+    unlock: `Unlock the Premium Relationship Report - ${LOVE_PREMIUM_REPORT_DISPLAY}`,
     unlockDisabled: 'Full report checkout is not enabled yet. Please save this reading and check back soon.',
     unlockFailed: 'Checkout could not be started. Please save your reading first.',
     currentPhase: 'Current phase',

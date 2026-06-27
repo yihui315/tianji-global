@@ -2,6 +2,17 @@
 
 ## Entries
 
+### 2026-06-27 - Codex Revenue Acceleration Loop cycle 1
+
+- Task ID: `20260627-codex-revenue-acceleration-loop-cycle1`
+- Branch/worktree: `codex/revenue-acceleration-loop-20260627` in `C:\Users\Administrator\codex-worktrees\tianji-revenue-acceleration-loop-20260627`.
+- Files changed: paid launch pricing/copy source and tests; `.ai/TIANJI_LOVE_STRIPE_TEST_MODE_APPROVAL_PACKET_20260626.md`; `.ai/TIANJI_LOVE_STRIPE_TEST_MODE_PAID_SMOKE_OPERATOR_CHECKLIST_20260627.md`; Day 2 manual launch pack; Day 1/Day 2 metrics ingestion template; revenue dashboard Markdown/CSV scaffold; `.ai/CHANGELOG_AI.md`; `.ai/REVIEW_PACKET.md`.
+- Summary: Unified Love Premium customer-facing copy on the canonical `love_premium_report` contract (`¥19.9 CNY`, `1990`, `cny`), removed stale `$4.99` / `$12.99` Love report pricing from launch-visible surfaces, added paid-launch copy regression coverage, submitted the 2026-06-26 Stripe test-mode approval packet, generated an operator-only paid smoke checklist, and created manual launch/metrics/dashboard assets with `no real data yet`.
+- Validation: `npm run typecheck -- --pretty false`, `npm run lint`, `npm run test` (83 files / 637 tests), `npm run build:staging:degraded`, `git diff --check`, and targeted changed-file secret-shape scan passed. Build retained existing jose Edge Runtime warnings; diff check retained LF/CRLF warnings only.
+- Safety: No `.env*` files were read, printed, copied, uploaded, or modified. No checkout session was created. No Stripe test/live payment, webhook replay, Supabase production mutation, production deploy, PM2/Nginx/server mutation, or social auto-posting was performed. No fake users, revenue, conversion rates, testimonials, guaranteed outcomes, or 100% accuracy claims were added.
+- Gate status: Source/Test Go; Paid Launch Copy Go; Stripe Approval Packet Go; Stripe Test-mode Paid Smoke No-Go pending human execution; Stripe Live No-Go; Revenue Execution No-Go; Social Auto-posting No-Go.
+- Suggested commit message: `feat(marketing): tighten paid launch copy and revenue checklist`
+
 
 
 
