@@ -27,19 +27,24 @@ const copy = {
     cta: 'Begin free',
     plans: [
       {
-        name: 'Solo love report',
-        price: '$4.99',
-        description: 'A private reflection on romantic patterns, emotional timing, and relationship choices.',
+        name: 'Free preview',
+        price: '$0',
+        description: 'Start with a private relationship signal before any payment.',
       },
       {
-        name: 'Compatibility report',
-        price: '$12.99',
-        description: 'A two-person relationship reading focused on patterns, tension, and repair.',
+        name: 'Love Premium report',
+        price: '¥19.9',
+        description: 'Unlock the complete Love Reading report as a one-time private upgrade.',
       },
       {
-        name: 'Gift report',
-        price: '$9.99',
-        description: 'A one-time report credit you can send to someone who wants thoughtful relationship insight.',
+        name: 'Ask one-question unlock',
+        price: '$1.99',
+        description: 'Unlock one deeper relationship answer with practical next steps.',
+      },
+      {
+        name: 'Draw Timing unlock',
+        price: '$2.99',
+        description: 'Unlock the full three-card timing reading as reflection, not certainty.',
       },
     ],
   },
@@ -49,19 +54,24 @@ const copy = {
     cta: '先免费开始',
     plans: [
       {
-        name: '个人爱情报告',
-        price: '$4.99',
-        description: '围绕情感模式、关系节奏与相处选择的私密报告。',
+        name: '免费预览',
+        price: '$0',
+        description: '先获得一段私密关系信号，再决定是否继续。',
       },
       {
-        name: '关系合盘报告',
-        price: '$12.99',
-        description: '面向两个人的关系模式、张力与修复建议。',
+        name: 'Love Premium 完整报告',
+        price: '¥19.9',
+        description: '单次解锁完整爱情报告，保留更深入的关系模式、时机和下一步建议。',
       },
       {
-        name: '礼物报告',
-        price: '$9.99',
-        description: '一次性报告额度，适合送给想认真理解关系的人。',
+        name: 'Ask 单题解锁',
+        price: '$1.99',
+        description: '解锁一个更深入的爱情问题回答，包含可执行的下一步。',
+      },
+      {
+        name: '时机抽牌解锁',
+        price: '$2.99',
+        description: '解锁完整三张时机牌解读，用作关系反思，而不是确定预言。',
       },
     ],
   },
@@ -104,7 +114,7 @@ export default async function PricingPage({ params }: PageParams) {
             {t.cta}
           </Link>
         </section>
-        <section className="grid gap-4 md:grid-cols-3">
+        <section className="grid gap-4 md:grid-cols-4">
           {t.plans.map(({ name, price, description }) => (
             <article key={name} className="rounded-3xl border border-white/10 bg-white/[0.055] p-6">
               <h2 className="text-xl font-semibold text-white">{name}</h2>

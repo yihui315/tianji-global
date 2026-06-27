@@ -77,7 +77,8 @@ describe('Tianji Love revenue funnel polish', () => {
     expect(pricing).toContain('Free preview');
     expect(pricing).toContain('One-time Ask unlock');
     expect(pricing).toContain('Draw Timing Reading');
-    expect(pricing).toContain('Relationship Destiny Report');
+    expect(pricing).toContain('Love Premium Report');
+    expect(pricing).toContain('¥19.9');
     expect(pricing).toContain('What happens after unlocking');
     expect(pricing).toContain('A deeper private reading');
     expect(pricing).toContain('Love Monthly');
@@ -86,6 +87,9 @@ describe('Tianji Love revenue funnel polish', () => {
     expect(pricing).toContain('pricing_viewed');
     expect(pricing).toContain('unlock_click');
     expect(pricing).toContain('login_started');
+    expect(pricing).not.toContain('Relationship Destiny Report');
+    expect(pricing).not.toContain('$4.99');
+    expect(pricing).not.toContain('$12.99');
   });
 
   it('Login fallback shows useful static sign-in copy instead of a bare loading state', () => {
