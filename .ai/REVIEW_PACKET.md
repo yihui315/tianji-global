@@ -1,7 +1,62 @@
 # TianJi Love Review Packet
 ## Current Task
 
-Daily content calendar refresh for 2026-06-27 (cron `37 2 * * *`). Extend the rolling seven-day content calendar with another week of future days and rotate theme distribution in the hook/script/caption pools without auto-posting, without payment execution, without touching production or secrets. Revenue execution remains closed.
+TianJi Love daily growth Day 010 publishing pack for 2026-06-28 (cron `17 1 * * *`). Generate a docs/assets/data-only publishing pack with platform-specific copy, captions, manual posting notes, a manual review checklist, and an empty/zero KPI entry scaffold. No auto-posting, no payment execution, no production mutation, no secret read. Revenue execution remains closed.
+
+## 2026-06-28 Daily Growth Day 010 Publishing Pack Run (cron 17 1 * * *)
+
+### Files changed in this run
+
+```text
+A  assets/marketing/daily/day-010-publishing-pack.md
+A  assets/marketing/daily/day-010-review-checklist.md
+A  data/love-test-day-010-kpi-entry.csv
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+### Scope check
+
+```text
+All edits are inside the allowed docs/assets/data surface plus the .ai/ record pair.
+No .env or .env.* file was read, printed, copied, uploaded, or modified.
+No raw secret was printed.
+No production deploy was performed.
+No Stripe test/live paid smoke or real payment was performed.
+No webhook replay was performed.
+No Supabase production mutation was performed.
+No PM2/Nginx/certbot/server mutation was performed.
+No social account auto-posting was performed.
+No account credential, login cookie, browser session, or platform token was used.
+No KPI value, testimonial, customer count, or guaranteed relationship outcome was invented.
+```
+
+### Pack shape (Day 010)
+
+```text
+Theme: Reading the room vs reading the person — pattern literacy is not prediction.
+Date: 2026-06-28 (rotation sub-angle ahead of the dated Day 7 row on 2026-06-30).
+Channel mix: 5 Xiaohongshu + 5 TikTok/Reels + 5 X + 3 Reddit/Quora + 2 KOL DM + 3 SEO + 5 share-card captions.
+CTAs point to reflective surfaces only: /love-test, /relationship/new, /love-reading, /ask?source=love_test.
+```
+
+### Gate status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): add love-test day 010 publishing pack
+```
 
 ## 2026-06-27 Content Calendar Refresh Run (cron 37 2 * * *)
 

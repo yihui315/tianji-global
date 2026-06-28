@@ -1,6 +1,21 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-06-28 - TianJi Love daily growth Day 010 publishing pack (cron 17 1 * * *)
+
+- Task ID: `20260628-tianji-love-daily-growth-day-010`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260626`, local HEAD `790fad1` (post Day 009 publishing-pack commit and 2026-06-27 content-calendar refresh), in sync with origin before this run.
+- Theme: "Reading the room vs reading the person — pattern literacy is not prediction" (rotation sub-angle drawn from the hook pool rather than a dated calendar row, because today 2026-06-28 is intentionally ahead of the dated Day 7 row on 2026-06-30 and the next dated calendar slot remains Day 7).
+- Files created: `assets/marketing/daily/day-010-publishing-pack.md`, `assets/marketing/daily/day-010-review-checklist.md`, `data/love-test-day-010-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 TikTok/Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL feedback DMs, 3 SEO outlines, 5 share-card captions, all pointing to reflective surfaces (`/relationship/new`, `/love-reading`, `/ask?source=love_test`). All CTAs stay preview/reflective. No live payment claim, no fake testimonial, no diagnosis language, no "you are broken" framing, no "act now" or "you can already read the next beat" framing paired with the Day 10 angle.
+- Validation: changes are limited to `assets/marketing/daily/`, `data/`, and `.ai/`. `git diff --check` clean. Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits on the new files. `npm run typecheck` and `npm run lint` not run: the change set is markdown and CSV only with no TypeScript or ESLint surface, and `node_modules/` is not present in this docs-only cron runner, so a typecheck/lint invocation would only signal environment state, not delta correctness.
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go — manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): add love-test day 010 publishing pack`.
+
+
 ### 2026-06-27 - TianJi Love content calendar refresh (cron 37 2 * * *)
 
 - Task ID: `20260627-tianji-love-content-calendar-refresh`.
