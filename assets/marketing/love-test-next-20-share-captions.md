@@ -43,6 +43,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 29. Worth continuing is a rhythm, not a verdict. The Love Test helped me notice the difference: tianji.love/love-test
 30. I saved my result like a snapshot, not a forecast. The next week felt steadier for it: tianji.love/love-test
 
+## Refresh 2026-06-28 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-06-28 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). None are certainty claims.
+
+31. I wrote down what I was afraid of before I sent the message. The free Love Test gave me the pause: tianji.love/love-test
+32. A weekly review of the pattern is steadier than a daily check-in: tianji.love/relationship/new
+33. The result is a snapshot of what I noticed, not a forecast of what comes next: tianji.love/love-test
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.

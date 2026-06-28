@@ -1,6 +1,23 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-06-28 - TianJi Love content calendar refresh (cron 37 2 * * *)
+
+- Task ID: `20260628-tianji-love-content-calendar-refresh`.
+- Skill: `tianji-github-content-calendar`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260626`, local HEAD `0a9e1a8` (post Day 010 KPI-analysis commit), in sync with origin before this run.
+- Goal: maintain at least seven future days of TianJi Love content and keep hook/script/caption pools fresh without auto-posting, without payment execution, and without claiming certainty.
+- Pre-run count: calendar held 21 future days (Day 7 through Day 27, ending 2026-07-20). 21 ≥ 7, so no minimum-fill trigger was required; this run was a rotation-and-refresh pass to keep themes from repeating too soon and to keep the pools fed.
+- Files changed: `assets/marketing/content-calendar-7day.md`, `assets/marketing/love-test-next-30-hooks.md`, `assets/marketing/love-test-next-20-video-scripts.md`, `assets/marketing/love-test-next-20-share-captions.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Calendar: extended from Day 27 (2026-07-20) to Day 34 (2026-07-27), adding seven new future days that rotate through the four anchor themes ("What is he thinking now?", "Should I take the initiative in ambiguity?", "Will they come back after no contact?", "Is this relationship worth continuing?") and the supporting pattern/clarity/recap angles. As of run timestamp 2026-06-28 02:38 UTC, the rolling calendar now has 28 future days (Day 7 through Day 34, ending 2026-07-27), well above the seven-day minimum. Theme distribution check: every anchor theme (worth continuing, will they come back, initiative pause, no-contact, recap, honest audit, what is he thinking) appears at most twice in the first 28 future days; rotation is healthy.
+- Hook pool: appended a refresh batch of 5 new hooks (entries 51-55) covering fear-naming before sending, week-two no-contact, self-reliance on answers, worth-continuing as familiar rhythms, and weekly review steadier than daily check. Pool now has 55 hooks. All hooks keep `Love Test` framed as a mirror, never a verdict.
+- Script pool: appended a refresh batch of 2 new video scripts (entries 31-32) covering "writing down the fear before sending" and "weekly review of the pattern". Pool now has 32 scripts. All scripts keep CTAs reflective (no payment claim).
+- Caption pool: appended a refresh batch of 3 new share-card captions (entries 31-33) covering fear-naming pause, weekly review of pattern, and snapshot-vs-forecast framing. Pool now has 33 captions. All captions stay on `/love-test`, `/relationship/new`, or `/love-reading` as the first action.
+- Safety: no fake testimonials, no fake metrics, no fake user counts, no guaranteed reunion/reply/commitment/relationship-repair claims, no diagnosis language, no perfect-accuracy claim, no Stripe/payment claims, no `.env*` read, no social auto-posting, no production deploy, no Supabase production mutation.
+- Validation: `git diff --check` passed. Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits. `npm run typecheck` passed (`tsc -p tsconfig.typecheck.json --noEmit`, exit 0). `npm run lint` passed (`next lint`, exit 0 — "No ESLint warnings or errors"). The change set is markdown-only with no TypeScript or ESLint surface, so the typecheck and lint results reflect the pre-existing clean baseline rather than any new code surface; consistent with the prior 2026-06-26 and 2026-06-27 content-only skill run precedent.
+- Gate status: `Seven-day content calendar: Go (28 future days)`; `Hook pool: Go (55)`; `Video script pool: Go (32)`; `Share caption pool: Go (33)`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): refresh love-test content calendar`.
+
 ### 2026-06-28 - TianJi Love weekly KPI analysis (cron 0 2 * * 0)
 
 - Task ID: `20260628-tianji-love-kpi-analysis-day-010`.

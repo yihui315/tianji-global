@@ -65,6 +65,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 49. 留下来的理由里如果只剩"习惯了"，先停下来看看还有什么。
 50. 一段关系能继续，常常不是因为它完美，而是因为你还能描述清楚。
 
+## Refresh 2026-06-28 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-06-28 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the pattern/clarity supporting angles. None are certainty claims.
+
+51. 想要不焦虑地行动，先把"我在怕什么"写下来，再决定要不要发。
+52. 断联第二周最难的不是等待，是发现自己已经能慢慢说出自己的状态。
+53. 他会不会回来是一件事，你能不能慢慢不靠他回答是另一件事。
+54. 关系值不值得继续，常常看你是不是能继续做自己熟悉的事。
+55. 每周留一个晚上看看这个星期的记录，比每天追问更稳。
+
 ## CTA pairings
 
 ```text

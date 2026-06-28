@@ -202,6 +202,30 @@ Purpose: create a pool for Douyin, Videohao, and short-form manual publishing. S
 - CTA: `/love-test`.
 - risk-safe check: No private input exposure.
 
+## Refresh 2026-06-28 - Next batch of 2 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-06-28 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).
+
+## 31 Writing Down The Fear
+
+- channel: Xiaohongshu video
+- 3-second hook: Before you press send, write down what you are afraid of.
+- scene: Notebook on a desk, a draft message fading behind it.
+- spoken copy: Anxiety often disguises itself as a "now or never" urge. Naming the fear does not make it disappear, but it can keep the message honest. Love Test can help you notice the pattern before you act.
+- caption: 先写下怕什么，再决定发不发。
+- CTA: `/love-test`.
+- risk-safe check: No pressure, no chase tactics, no certainty claim about the other person's reaction.
+
+## 32 Weekly Review Of The Pattern
+
+- channel: Videohao
+- 3-second hook: A weekly review is steadier than a daily check.
+- scene: Calendar page turning, a quiet cup, a small list of patterns.
+- spoken copy: Patterns are easier to see after a week has passed. A small weekly review of what keeps repeating is a calmer way to answer "what is he thinking" or "should I stay". Love Test is one way to capture that snapshot.
+- caption: 一周一次看整体，比每天追问稳。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No guarantee of insight, no diagnostic language, no prediction about outcomes.
+
 ## Refresh 2026-06-27 - Next batch of 5 video scripts
 
 These scripts were added by the `tianji-github-content-calendar` cron job on 2026-06-27 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).

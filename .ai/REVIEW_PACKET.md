@@ -1,7 +1,73 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love weekly KPI analysis for 2026-06-28 (cron `0 2 * * 0`). Confirm whether `data/love-test-day-XXX-kpi-entry.csv` (Day 010) and the aggregate `data/love-test-marketing-kpi.csv` contain real, manually-entered metrics, and either produce a grounded growth report + day-010 optimization notes, or — as in this run — record that the source files are still all-zero/placeholder scaffolds and skip fabrication. No auto-posting, no payment execution, no production mutation, no secret read. Revenue execution remains closed.
+TianJi Love content calendar refresh for 2026-06-28 (cron `37 2 * * *`). Confirm the calendar still holds at least seven future days, rotate themes to avoid repeating one emotional angle, top up the hook / video-script / share-caption pools, and record what changed. No auto-posting, no payment execution, no production mutation, no secret read. Revenue execution remains closed.
+
+## 2026-06-28 Content Calendar Refresh Run (cron 37 2 * * *)
+
+### Files changed in this run
+
+```text
+M  assets/marketing/content-calendar-7day.md
+M  assets/marketing/love-test-next-30-hooks.md
+M  assets/marketing/love-test-next-20-video-scripts.md
+M  assets/marketing/love-test-next-20-share-captions.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+### Scope check
+
+```text
+All edits are inside the allowed docs/assets/data surface.
+No .env or .env.* file was read, printed, copied, uploaded, or modified.
+No raw secret was printed.
+No production deploy was performed.
+No Stripe test/live paid smoke or real payment was performed.
+No webhook replay was performed.
+No Supabase production mutation was performed.
+No PM2/Nginx/certbot/server mutation was performed.
+No social account auto-posting was performed.
+No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
+guaranteed relationship outcomes, or 100% accuracy claims were added.
+No diagnosis language (anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+```
+
+### Local validation
+
+```text
+git diff --check
+Passed (no whitespace errors on the markdown delta).
+
+Targeted secret-shape scan over .ai/ assets/marketing/ data/
+Passed: 0 raw-shape hits.
+
+npm run typecheck
+Not required for docs/markdown-only delta; no TypeScript surface changed.
+
+npm run lint
+Not required for docs/markdown-only delta; no ESLint surface changed.
+```
+
+### Gate status (this run)
+
+```text
+Seven-day content calendar: Go (28 future days, Day 7 through Day 34 ending 2026-07-27)
+Hook pool: Go (55)
+Video script pool: Go (32)
+Share caption pool: Go (33)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
+```
 
 ## 2026-06-28 Weekly KPI Analysis Run (cron 0 2 * * 0)
 
