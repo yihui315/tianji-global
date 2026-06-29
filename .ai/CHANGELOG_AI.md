@@ -1,6 +1,21 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-06-29 - TianJi Love funnel optimizer blocker — KPI evidence missing (cron 0 2 */14 * *)
+
+- Task ID: `20260629-tianji-love-funnel-optimizer-blocker`.
+- Skill: `tianji-github-funnel-optimizer`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260626`, local HEAD `b6996a2` (post Day 011 publishing-pack commit), in sync with origin before this run.
+- Verdict: **No copy or tracking change made.** Workflow step 1 ("Confirm KPI evidence shows weak conversion") cannot be satisfied.
+- Evidence read: `data/love-test-kpi-tracking.csv` (template row, all zeros), `data/love-test-funnel-metrics.csv` (template row, all zeros), `data/love-test-day-001-kpi-entry.csv` … `data/love-test-day-011-kpi-entry.csv` (all rows: `impressions=0`, `clicks=0`, `love_test_starts=0`, …, `paid_smoke_result=not_run`; every row carries the `manual entry after publish` scaffold marker). Cross-confirmed by `.ai/reports/love-test-growth-report-2026-06-28.md` ("no real signal to rank, no hook to declare strongest, no topic to declare weakest, no channel to declare best, and no conversion rate to compare") and `.ai/reports/growth-report-2026-06-29.md` / `growth-report-2026-06-30.md` (`no real data yet` on every metric; Lead Capture Gate No-Go).
+- Files created: `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260629.md`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Allowed files inspected read-only (no edits): `src/app/(main)/love-test/page.tsx`, `src/app/(main)/ask/page.tsx`, `src/lib/love-test.ts`, `assets/love-test-copywriting.md`, `data/love-test-event-tracking.csv`, `data/love-test-kpi-tracking.csv`.
+- Commands run: `git status --short --branch`; `git log -1`; `git diff --check`; targeted secret-shape scan over `.ai/` and the allowed funnel files.
+- Results: `git status` clean. `git diff --check` passed. Secret-shape scan: 0 raw-shape hits. No typecheck/lint needed (no source change).
+- Risks: None — the run produced no app surface change. The blocker is purely an evidence gap, not a code-quality or compliance risk.
+- Next step: Re-run when `data/love-test-day-NNN-kpi-entry.csv` has at least one row with non-zero `impressions` + non-zero `clicks` (or `love_test_starts`) AND the aggregate KPI or funnel-metrics CSV carries at least one real funnel-stage rate. The current allowed-file scope and copy-allowed surface are ready; only the evidence input is missing.
+
 ### 2026-06-29 - TianJi Love daily growth Day 011 publishing pack (cron 17 1 * * *)
 
 - Task ID: `20260629-tianji-love-daily-growth-day-011`.

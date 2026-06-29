@@ -1,7 +1,84 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love daily growth Day 011 publishing pack for 2026-06-29 (cron `17 1 * * *`). Generate the next publishing pack, manual review checklist, and KPI entry scaffold from existing marketing assets. No auto-posting, no payment execution, no `.env*` read, no production deploy, no production Supabase mutation, no webhook replay. Revenue execution remains closed.
+TianJi Love funnel optimizer blocker for 2026-06-29 (cron `0 2 */14 * *`). No copy or tracking change made — KPI evidence is missing real weak-conversion signal. Allowed funnel files were inspected read-only only. The Day 011 daily growth publishing pack (cron `17 1 * * *`) generated earlier in the day remains the most recent authored pack and is documented immediately below.
+
+## 2026-06-29 Funnel Optimizer Blocker Run (cron 0 2 */14 * *)
+
+### Files changed in this run
+
+```text
+A  .ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260629.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+### Verdict
+
+```text
+Funnel copy optimization: Not run - blocked on KPI evidence
+KPI evidence: No-Go - missing real weak-conversion signal
+Stripe checkout logic: Not changed
+Supabase mutation: Not changed
+Provider live call: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Evidence (Non-Secret Only)
+
+- `data/love-test-kpi-tracking.csv` — single 2026-05 template row, every numeric field `0`.
+- `data/love-test-funnel-metrics.csv` — single 2026-05-24 template row, every rate `0`, `notes="template baseline; paid conversion remains not measured until approved smoke/live gate"`.
+- `data/love-test-day-001-kpi-entry.csv` … `data/love-test-day-011-kpi-entry.csv` — every row: `impressions=0`, `clicks=0`, `love_test_starts=0`, `result_views=0`, `share_card_clicks=0`, `share_card_downloads=0`, `ask_next_clicks=0`, `paid_intent_views=0`, `preview_submits=0`, `unlock_clicks=0`, `checkout_blocked=0`, `checkout_ready=0`, `paid_smoke_result=not_run`. Every `notes` cell contains `manual entry after publish`.
+- `.ai/reports/love-test-growth-report-2026-06-28.md` — analysis skipped per skill rule; "no real signal to rank".
+- `.ai/reports/growth-report-2026-06-29.md` and `growth-report-2026-06-30.md` — `no real data yet`; Lead Capture Gate No-Go; Revenue execution No-Go.
+- `.ai/AUTOPILOT_STATUS.json` — `source-go-revenue-execution-no-go`; `revenue_execution=no-go`, `paid_smoke=no-go`, `production_deploy=no-go`.
+
+### Stripe / Production / Secret Boundary Validation
+
+```text
+Test-mode only: Verified (no touch this run)
+Live Stripe key shape: 0 raw-shape hits in .ai/ and the allowed funnel files
+Production callback URL: not observed
+.env* read/print/diff/copy: none
+Production deploy: not performed
+Webhook replay: not performed
+Supabase production mutation: not performed
+PM2/Nginx/certbot/server mutation: not performed
+Social auto-posting: not performed
+Credential / browser session / platform token use: none
+```
+
+### Validation
+
+- `git status` before run: working tree clean, branch `chore/marketing-content-calendar-refresh-20260626`, local HEAD `b6996a2`, in sync with origin.
+- Files created in this run: `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260629.md`, plus updates to `.ai/CHANGELOG_AI.md` and `.ai/REVIEW_PACKET.md`.
+- `git diff --check`: passed (no whitespace errors).
+- `npm run typecheck` / `npm run lint` / `npm run test` / `npm run audit:routes` / `npm run audit:share` / `npm run build:staging:degraded`: **not applicable** — change set is `.ai/` markdown-only with no TypeScript/ESLint surface touched. Skill validation rule for source changes does not fire on a docs-only blocker run.
+- Targeted secret-shape scan over `.ai/` and the allowed funnel files: 0 raw-shape hits.
+
+### Safety Boundary
+
+- No `.env*` files were read, printed, copied, uploaded, or modified.
+- No raw secret was printed.
+- No production deploy was performed.
+- No Stripe live-mode touch.
+- No Stripe test-mode paid smoke was executed (requires explicit human approval).
+- No webhook replay was performed.
+- No Supabase production mutation was performed.
+- No PM2/Nginx/certbot/server mutation was performed.
+- No social account auto-posting was performed.
+- No KPI value, funnel-stage rate, weak-step claim, conversion rate, or guaranteed relationship outcome was invented.
+
+### Suggested Commit Message
+
+```text
+chore(marketing): funnel optimizer blocker — KPI evidence missing (2026-06-29)
+```
+
+### Next Step (For Human or Future Run)
+
+Re-run the `tianji-github-funnel-optimizer` skill when `data/love-test-day-NNN-kpi-entry.csv` has at least one row with non-zero `impressions` + non-zero `clicks` (or `love_test_starts`) AND the aggregate KPI or funnel-metrics CSV carries at least one real funnel-stage rate. The current allowed-file scope and copy-allowed surface are ready; only the evidence input is missing.
 
 ## 2026-06-29 Daily Growth Day 011 Run (cron 17 1 * * *)
 
