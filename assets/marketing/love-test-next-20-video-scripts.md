@@ -201,3 +201,165 @@ Purpose: create a pool for Douyin, Videohao, and short-form manual publishing. S
 - caption: 保存，不是定论，是提醒。
 - CTA: `/love-test`.
 - risk-safe check: No private input exposure.
+
+## Refresh 2026-06-28 - Next batch of 2 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-06-28 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).
+
+## 31 Writing Down The Fear
+
+- channel: Xiaohongshu video
+- 3-second hook: Before you press send, write down what you are afraid of.
+- scene: Notebook on a desk, a draft message fading behind it.
+- spoken copy: Anxiety often disguises itself as a "now or never" urge. Naming the fear does not make it disappear, but it can keep the message honest. Love Test can help you notice the pattern before you act.
+- caption: 先写下怕什么，再决定发不发。
+- CTA: `/love-test`.
+- risk-safe check: No pressure, no chase tactics, no certainty claim about the other person's reaction.
+
+## 32 Weekly Review Of The Pattern
+
+- channel: Videohao
+- 3-second hook: A weekly review is steadier than a daily check.
+- scene: Calendar page turning, a quiet cup, a small list of patterns.
+- spoken copy: Patterns are easier to see after a week has passed. A small weekly review of what keeps repeating is a calmer way to answer "what is he thinking" or "should I stay". Love Test is one way to capture that snapshot.
+- caption: 一周一次看整体，比每天追问稳。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No guarantee of insight, no diagnostic language, no prediction about outcomes.
+
+## Refresh 2026-06-27 - Next batch of 5 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-06-27 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).
+
+## 26 Expressing Or Seeking
+
+- channel: Xiaohongshu video
+- 3-second hook: Want to send it? Ask if you want to express or to be caught.
+- scene: Two split screens — one writes freely, one waits for a reaction.
+- spoken copy: Wanting to send is fine. Wanting to be caught is a different need. Love Test helps you see which one you are in, before the message goes out.
+- caption: 表达和被接住，是两种需求。
+- CTA: `/love-test`.
+- risk-safe check: No chase tactics, no pressure, no guaranteed reply.
+
+## 27 Pattern Return
+
+- channel: Douyin
+- 3-second hook: A returning pattern is not the same as a returning person.
+- scene: Repeating waveform, then a still frame of a person standing alone.
+- spoken copy: Some habits do come back. A familiar rhythm returning is information, not a verdict. Love Test helps you see whether what returned is the pattern or the person.
+- caption: 模式回来不等于人回来。
+- CTA: `/love-reading`.
+- risk-safe check: No reunion promise, no certainty claim.
+
+## 28 The Repair Question
+
+- channel: Videohao
+- 3-second hook: Wanting them back is one question. Repair is another.
+- scene: A teacup mended with gold, held up to the light.
+- spoken copy: Before deciding to try again, name what needs to change. Love Test does not promise a fix. It helps you write the question clearly before you act.
+- caption: 复合之前，先看清要修的是什么。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No guarantee the other person will engage, no pressure to return.
+
+## 29 Worth Continuing Rhythm
+
+- channel: Xiaohongshu video
+- 3-second hook: Worth continuing is a rhythm, not a verdict.
+- scene: Two metronomes slowly syncing, then a soft result card.
+- spoken copy: A relationship can be worth continuing even when it is hard, and it can be hard to continue even when it is good. Love Test helps you notice the rhythm before you decide.
+- caption: 值得是一种节奏，不是心情。
+- CTA: `/love-test`.
+- risk-safe check: No decision made for the user, no certainty claim.
+
+## 30 Save The Snapshot
+
+- channel: Douyin
+- 3-second hook: Save the snapshot before your mood rewrites the story.
+- scene: A photo being slid into a drawer, then reopened a week later.
+- spoken copy: Your result is a snapshot, not a forecast. Save it, return to it later, and notice what stays the same and what shifts. TianJi Love is built so the snapshot is yours.
+- caption: 保存当下，留给以后的你看。
+- CTA: `/love-test`.
+- risk-safe check: No private input exposed, no perfect-accuracy claim.
+
+## Refresh 2026-06-26 - Next batch of 5 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-06-26 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).
+
+## 21 Motive Before Send
+
+- channel: Douyin
+- 3-second hook: Want to send that message? Check the motive first.
+- scene: Text typed in a draft, then a mirror card that asks "expressing or seeking".
+- spoken copy: Sending can be honest. It can also be a way to calm your own anxiety. Love Test does not decide which one you are doing; it helps you notice before you press send.
+- caption: 看动机，再决定要不要发。
+- CTA: `/love-test` then `/ask?source=love_test&intent=should_i_initiate`.
+- risk-safe check: No pressure, no chase tactics, no guaranteed outcome from sending.
+
+## 22 Silence Translator
+
+- channel: Videohao
+- 3-second hook: Silence is not always an answer. Sometimes it is just a pause.
+- scene: Quiet room, phone on the table, hand hovering.
+- spoken copy: When you do not hear back, your mind often writes the reply. Love Test does not read theirs. It helps you stop writing for them.
+- caption: 别替对方写台词。
+- CTA: `/relationship/new`.
+- risk-safe check: No mind-reading claim, no promise they will reply.
+
+## 23 No-Contact Week One
+
+- channel: Douyin
+- 3-second hook: The first week of no contact is mostly about you, not them.
+- scene: Calendar with a quiet week, a notebook filling up.
+- spoken copy: No contact is not a strategy. It is a small reset to hear your own voice again. Love Test can be a gentle check-in during the pause.
+- caption: 断联是先安静下来。
+- CTA: `/love-test` then `/ask?source=love_test&intent=no_contact`.
+- risk-safe check: No reunion guarantee, no diagnosis language.
+
+## 24 Will They Come Back
+
+- channel: Xiaohongshu video
+- 3-second hook: Wanting them back is normal. Treating it as data is steadier.
+- scene: Empty chair, then a steady result card.
+- spoken copy: Some patterns do return. A returning pattern is not the same as a returning person. Love Test helps you see which one you are looking at.
+- caption: 模式会回来，人不一定。
+- CTA: `/love-reading`.
+- risk-safe check: No reunion promise, no closure guarantee.
+
+## 25 Worth Continuing
+
+- channel: Douyin
+- 3-second hook: Worth continuing is not only about feelings. It is also about the rhythm.
+- scene: Two people walking at a steady pace, then a quiet mirror card.
+- spoken copy: A relationship can be worth continuing even when it is hard, and it can be hard to continue even when it is good. Love Test helps you notice which one you are in.
+- caption: 值得是一种节奏，不是心情。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No decision made for the user, no certainty claim.
+
+## 26 Pattern Naming
+
+- channel: Douyin
+- 3-second hook: Give the pattern a name; the noise usually gets smaller.
+- scene: A blank card where a single calm word is written, then a result card.
+- spoken copy: When you can name a pattern, you spend less energy guessing what it is. Love Test helps you describe the rhythm, the safety, and the one steadier next step.
+- caption: 模式有名字，脑子才安静。
+- CTA: Try `/love-test`.
+- risk-safe check: No diagnosis language, no certainty claim.
+
+## 27 Decision Pacing
+
+- channel: Xiaohongshu video
+- 3-second hook: A real decision can wait one more day.
+- scene: A note pinned on a wall with the words "decide tomorrow" in soft handwriting.
+- spoken copy: If the message is coming from panic, it can usually wait. A real decision does not lose quality from a one-day pause. Love Test gives you that pause.
+- caption: 等一天的决定，通常比今天更稳。
+- CTA: `/ask` after `/love-test`.
+- risk-safe check: No pressure or chase tactics, no certainty claim.
+
+## 28 Quiet Return
+
+- channel: Videohao
+- 3-second hook: Returning silence is information, not always an invitation.
+- scene: A phone screen lighting up briefly, then going back to a steady still life.
+- spoken copy: If silence returns, it is still data. It does not always mean the door is open. Love Test helps you read the rhythm without making it mean more than it does.
+- caption: 回来的沉默，也要看清楚。
+- CTA: `/love-reading`.
+- risk-safe check: No reunion promise, no closure guarantee.

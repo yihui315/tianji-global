@@ -1,0 +1,29 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-07-02,xiaohongshu,20260702-xhs-01,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 看清之后不是让你立刻行动，而是先停下来
+2026-07-02,xiaohongshu,20260702-xhs-02,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 答案不是行动指令，它是一面镜子
+2026-07-02,xiaohongshu,20260702-xhs-03,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 你以为想清楚了，其实只是敢发消息了
+2026-07-02,xiaohongshu,20260702-xhs-04,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 冷静的答案不是冷漠，是你重新拿回了节奏
+2026-07-02,xiaohongshu,20260702-xhs-05,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 看懂一段关系比改写一段关系更难
+2026-07-02,tiktok_reels,20260702-reels-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Clarity is not a green light
+2026-07-02,tiktok_reels,20260702-reels-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; After the answer, slow down
+2026-07-02,tiktok_reels,20260702-reels-03,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Reading the room, not rewriting it
+2026-07-02,tiktok_reels,20260702-reels-04,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Knowing is not the same as acting
+2026-07-02,tiktok_reels,20260702-reels-05,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; A calmer next step is still a next step
+2026-07-02,twitter_x,20260702-x-01,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Clarity is not control
+2026-07-02,twitter_x,20260702-x-02,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; The calm after the answer
+2026-07-02,twitter_x,20260702-x-03,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Knowing is not the same as acting
+2026-07-02,twitter_x,20260702-x-04,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; A mirror is not a script
+2026-07-02,twitter_x,20260702-x-05,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Quiet is not passive
+2026-07-02,reddit_quora,20260702-rq-01,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; After getting clarity, how do I stop myself from acting on it too fast
+2026-07-02,reddit_quora,20260702-rq-02,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Is a calm relationship reading actually useful, or just a fancy way to delay
+2026-07-02,reddit_quora,20260702-rq-03,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; After a reading, how do I know if I should send the message or wait
+2026-07-02,kol_dm,20260702-kol-01,dm_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Creator feedback request - clarity vs green light
+2026-07-02,kol_dm,20260702-kol-02,dm_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Creator feedback request - quiet as a next step
+2026-07-02,seo_outline,20260702-seo-01,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; What to do after a relationship reading gives you clarity
+2026-07-02,seo_outline,20260702-seo-02,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Why a calm answer can feel harder than a dramatic one
+2026-07-02,seo_outline,20260702-seo-03,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Knowing the pattern vs acting on the pattern
+2026-07-02,share_card,20260702-share-01,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 多一个选项
+2026-07-02,share_card,20260702-share-02,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 证据不是许可证
+2026-07-02,share_card,20260702-share-03,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 敢做和该做
+2026-07-02,share_card,20260702-share-04,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 拿回节奏
+2026-07-02,share_card,20260702-share-05,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 看清已经是动作

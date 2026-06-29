@@ -35,6 +35,56 @@ These hooks are for future manual publishing packs. Use them as starting points,
 29. 如果结果让你更害怕，它就不是好结果。
 30. Love Test 是一面镜子，不是命令。
 
+## Refresh 2026-06-26 - Next batch of 10 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-06-26 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the pattern/clarity supporting angles. None are certainty claims.
+
+31. 想发消息之前，先看你是不是在替对方补台词。
+32. 暧昧最贵的地方，是你一直在替对方翻译沉默。
+33. 不发不等于没想，发了不等于表达。两条线不是同一条线。
+34. 主动一次不丢人，丢掉判断力的主动才是消耗。
+35. 断联一周，最先回来的是你给自己写的那段剧本。
+36. 他没有回复，不一定是在犹豫，也可能只是没有在想。
+37. 复合的念头里，常藏着一个没被回答的小问题。
+38. 值不值得，不只看心动，也看你在关系里越来越像不像自己。
+39. 留下来不是因为不能走，是因为你选得清楚。
+40. 一段能继续的关系，常常看起来像一件你能冷静描述的事。
+
+## Refresh 2026-06-27 - Next batch of 10 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-06-27 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the pattern/clarity supporting angles. None are certainty claims.
+
+41. 想发消息的时候，先看你想表达，还是想被接住。两件事是不同的需求。
+42. 暧昧里最累的，是你不确定对方是真忙，还是只对你忙。
+43. 没有回复之前，先别写结局。先把观察期放长一点。
+44. 主动一次是表达，重复主动是消耗。看看你落在哪一段。
+45. 断联的第二天最难，因为你会替对方把回复写得比现实更温柔。
+46. 他会不会回来，看的是节奏，不是一句承诺。承诺常在，节奏难改。
+47. 复合之前，先看你想要的是回到从前，还是回到一个被修过的版本。
+48. 值不值得继续，看你在关系里能不能保留自己的节奏。
+49. 留下来的理由里如果只剩"习惯了"，先停下来看看还有什么。
+50. 一段关系能继续，常常不是因为它完美，而是因为你还能描述清楚。
+
+## Refresh 2026-06-28 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-06-28 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the pattern/clarity supporting angles. None are certainty claims.
+
+51. 想要不焦虑地行动，先把"我在怕什么"写下来，再决定要不要发。
+52. 断联第二周最难的不是等待，是发现自己已经能慢慢说出自己的状态。
+53. 他会不会回来是一件事，你能不能慢慢不靠他回答是另一件事。
+54. 关系值不值得继续，常常看你是不是能继续做自己熟悉的事。
+55. 每周留一个晚上看看这个星期的记录，比每天追问更稳。
+
+## Refresh 2026-06-29 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-06-29 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the pattern/clarity supporting angles. None are certainty claims.
+
+56. 模式有名字以后，脑子里的杂音会变小一点。
+57. 真正的决定可以再等一天，慌着的消息不能发。
+58. 重新出现的沉默是一种信息，不一定是一种邀请。
+59. 你能描述的节奏，才是你能选择的节奏。
+60. 最稳的下一步，往往不靠对方回复也能完成。
+
 ## CTA pairings
 
 ```text

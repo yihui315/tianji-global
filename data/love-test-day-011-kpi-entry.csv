@@ -1,0 +1,29 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-29,xiaohongshu,20260629-xhs-01,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 写下来不等于要发出去
+2026-06-29,xiaohongshu,20260629-xhs-02,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 你在怕的不是已读不回
+2026-06-29,xiaohongshu,20260629-xhs-03,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 草稿保存三天再看一次
+2026-06-29,xiaohongshu,20260629-xhs-04,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 别把没发当作失败
+2026-06-29,xiaohongshu,20260629-xhs-05,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 想发不代表准备好发
+2026-06-29,tiktok_reels,20260629-reels-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Naming the fear is not the same as sending the message
+2026-06-29,tiktok_reels,20260629-reels-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; The draft is not a ticket to send
+2026-06-29,tiktok_reels,20260629-reels-03,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Fear-naming is not a green light
+2026-06-29,tiktok_reels,20260629-reels-04,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Not sending is still a choice
+2026-06-29,tiktok_reels,20260629-reels-05,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Want draft ready three separate states
+2026-06-29,twitter_x,20260629-x-01,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Name the fear before you send
+2026-06-29,twitter_x,20260629-x-02,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; The draft is not a ticket to send
+2026-06-29,twitter_x,20260629-x-03,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Fear-naming is not a green light
+2026-06-29,twitter_x,20260629-x-04,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Not sending is still a choice
+2026-06-29,twitter_x,20260629-x-05,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Want draft ready three separate states
+2026-06-29,reddit_quora,20260629-rq-01,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; I keep drafting a message to my ex and not sending it
+2026-06-29,reddit_quora,20260629-rq-02,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Should not send this vs scared to send it
+2026-06-29,reddit_quora,20260629-rq-03,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Healthier alternative to draft and never send
+2026-06-29,kol_dm,20260629-kol-01,dm_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Creator feedback request - naming the fear before sending
+2026-06-29,kol_dm,20260629-kol-02,dm_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Creator feedback request - want draft ready framing
+2026-06-29,seo_outline,20260629-seo-01,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Naming the fear before you send a message
+2026-06-29,seo_outline,20260629-seo-02,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Why a saved draft can be more informative than the message you almost sent
+2026-06-29,seo_outline,20260629-seo-03,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Wanting drafting and ready to send are three different steps
+2026-06-29,share_card,20260629-share-01,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 写下来不等于要发出去
+2026-06-29,share_card,20260629-share-02,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 写下来是给自己的
+2026-06-29,share_card,20260629-share-03,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 想发不代表准备好发
+2026-06-29,share_card,20260629-share-04,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 不发也是一种动作
+2026-06-29,share_card,20260629-share-05,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 想要不焦虑地行动
