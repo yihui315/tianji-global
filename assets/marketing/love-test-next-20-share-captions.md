@@ -51,6 +51,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 32. A weekly review of the pattern is steadier than a daily check-in: tianji.love/relationship/new
 33. The result is a snapshot of what I noticed, not a forecast of what comes next: tianji.love/love-test
 
+## Refresh 2026-06-29 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-06-29 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). None are certainty claims.
+
+34. Naming the pattern is what made my head quieter. The free Love Test helped: tianji.love/love-test
+35. I let one decision sit for a day. The next morning was clearer than the night before: tianji.love/ask
+36. A returning silence is still data, not always an invitation: tianji.love/love-reading
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.

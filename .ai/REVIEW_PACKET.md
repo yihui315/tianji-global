@@ -806,3 +806,75 @@ Production deploy: No-Go
 ```text
 chore(marketing): refresh love-test content calendar
 ```
+
+## 2026-06-29 - tianji-github-content-calendar refresh
+
+### What changed
+
+```text
+assets/marketing/content-calendar-7day.md
+  + 7 new rows (Day 35–41, 2026-07-28 → 2026-08-03)
+  + Themes rotated across pattern naming, decision pacing, quiet return, worth continuing, honest reframe, mid-cycle recap, steadiness checkpoint
+
+assets/marketing/love-test-next-30-hooks.md
+  + 5 new hooks (entries 56–60) under "Refresh 2026-06-29"
+  + Themes: pattern naming, decision pacing, quiet return, rhythm choice, self-sufficient next step
+
+assets/marketing/love-test-next-20-video-scripts.md
+  + 3 new scripts (entries 26–28) — Pattern Naming, Decision Pacing, Quiet Return
+  + Channels: Douyin, Xiaohongshu video, Videohao
+  + All scripts include a risk-safe check line
+
+assets/marketing/love-test-next-20-share-captions.md
+  + 3 new captions (entries 34–36) under "Refresh 2026-06-29"
+  + All end with the `/love-test` first-action rule or a related free entry
+```
+
+### Copy review (this run)
+
+```text
+No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
+guaranteed relationship outcomes, or 100% accuracy claims were added.
+No diagnosis language (anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+CTAs follow the established ladder: /love-test first, then /ask or /love-reading.
+```
+
+### Local validation
+
+```text
+git diff --check
+Passed (no whitespace errors on the markdown delta).
+
+Targeted secret-shape scan over .ai/ assets/marketing/ data/
+Passed: 0 raw-shape hits. The only matched lines are descriptive mentions
+in prior audit reports (CHANGELOG_AI.md, TIANJI_LOVE_AUTO_GATE_STATUS_20260627.md,
+TIANJI_LOVE_AUTO_GATE_STATUS_20260628.md, and
+TIANJI_LOVE_STAGING_SMOKE_READINESS_EVIDENCE_20260516.md) that describe the
+scan detector strings, not real credentials.
+
+npm run typecheck
+Passed (tsc -p tsconfig.typecheck.json --noEmit, exit 0).
+
+npm run lint
+Passed (next lint, exit 0 — "No ESLint warnings or errors").
+```
+
+### Gate status (this run)
+
+```text
+Seven-day content calendar: Go
+Hook pool: Go
+Video script pool: Go
+Share caption pool: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
+```

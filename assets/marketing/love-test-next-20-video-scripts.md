@@ -333,3 +333,33 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 值得是一种节奏，不是心情。
 - CTA: `/love-test` then `/relationship/new`.
 - risk-safe check: No decision made for the user, no certainty claim.
+
+## 26 Pattern Naming
+
+- channel: Douyin
+- 3-second hook: Give the pattern a name; the noise usually gets smaller.
+- scene: A blank card where a single calm word is written, then a result card.
+- spoken copy: When you can name a pattern, you spend less energy guessing what it is. Love Test helps you describe the rhythm, the safety, and the one steadier next step.
+- caption: 模式有名字，脑子才安静。
+- CTA: Try `/love-test`.
+- risk-safe check: No diagnosis language, no certainty claim.
+
+## 27 Decision Pacing
+
+- channel: Xiaohongshu video
+- 3-second hook: A real decision can wait one more day.
+- scene: A note pinned on a wall with the words "decide tomorrow" in soft handwriting.
+- spoken copy: If the message is coming from panic, it can usually wait. A real decision does not lose quality from a one-day pause. Love Test gives you that pause.
+- caption: 等一天的决定，通常比今天更稳。
+- CTA: `/ask` after `/love-test`.
+- risk-safe check: No pressure or chase tactics, no certainty claim.
+
+## 28 Quiet Return
+
+- channel: Videohao
+- 3-second hook: Returning silence is information, not always an invitation.
+- scene: A phone screen lighting up briefly, then going back to a steady still life.
+- spoken copy: If silence returns, it is still data. It does not always mean the door is open. Love Test helps you read the rhythm without making it mean more than it does.
+- caption: 回来的沉默，也要看清楚。
+- CTA: `/love-reading`.
+- risk-safe check: No reunion promise, no closure guarantee.

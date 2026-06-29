@@ -75,6 +75,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 54. 关系值不值得继续，常常看你是不是能继续做自己熟悉的事。
 55. 每周留一个晚上看看这个星期的记录，比每天追问更稳。
 
+## Refresh 2026-06-29 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-06-29 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the pattern/clarity supporting angles. None are certainty claims.
+
+56. 模式有名字以后，脑子里的杂音会变小一点。
+57. 真正的决定可以再等一天，慌着的消息不能发。
+58. 重新出现的沉默是一种信息，不一定是一种邀请。
+59. 你能描述的节奏，才是你能选择的节奏。
+60. 最稳的下一步，往往不靠对方回复也能完成。
+
 ## CTA pairings
 
 ```text

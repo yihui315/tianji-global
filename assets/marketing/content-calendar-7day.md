@@ -36,6 +36,13 @@ Safety baseline: no fake testimonials, no fake numbers, no guaranteed outcomes, 
 | 2026-07-25 | Day 32 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Will they come back | A pattern can return without a person; notice which one you are observing. | /love-reading | organic clicks, leads | No guaranteed return or closure. |
 | 2026-07-26 | Day 33 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Worth continuing | Worth is a rhythm you can describe, not a verdict you inherit. | /relationship/new | relationship starts, leads | No decision made for the user. |
 | 2026-07-27 | Day 34 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Gentle weekly recap | Help without selling fear; clarity without certainty. | /love-reading | organic clicks, leads | Use real metrics only. |
+| 2026-07-28 | Day 35 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Pattern naming | The right name for the pattern can lower the noise in your head. | /love-test | clicks, leads | No diagnosis language. |
+| 2026-07-29 | Day 36 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Decision pacing | A real decision can wait one more day; panic cannot drive the message. | /ask | clicks, leads | No pressure or chase tactics. |
+| 2026-07-30 | Day 37 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Quiet return | Returning silence is information; it is not always an invitation. | /love-reading | organic clicks, leads | No reunion promise. |
+| 2026-07-31 | Day 38 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Worth continuing | A rhythm you can describe is a rhythm you can choose. | /relationship/new | relationship starts, leads | No decision made for the user. |
+| 2026-08-01 | Day 39 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Honest reframe | The clearest next step is often the one that does not require their reply. | /love-test | clicks, leads | No certainty or outcome guarantees. |
+| 2026-08-02 | Day 40 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Mid-cycle recap | A short weekly review beats a daily chase for new signals. | /love-reading | organic clicks, leads | Use real metrics only. |
+| 2026-08-03 | Day 41 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Steadiness checkpoint | Calm hooks help; fear hooks cost. Choose which one you publish. | /love-reading | organic clicks, leads | No fear-based CTA or guaranteed outcomes. |
 
 ## Daily publishing rhythm
 
