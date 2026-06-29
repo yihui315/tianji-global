@@ -23,6 +23,42 @@ Soft, mysterious, and non-deceptive captions for future share-card use.
 19. Try it if you need a relationship map, not a relationship verdict.
 20. I kept the result because it made me feel more like myself.
 
+## Refresh 2026-06-26 - Next batch of 5 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-06-26 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). None are certainty claims.
+
+21. I almost pressed send on a message I would have regretted. The free Love Test made me pause first: tianji.love/love-test
+22. If you keep writing the reply they never sent, this card is a quieter mirror: tianji.love/relationship/new
+23. No contact is not a strategy. It is a small reset to hear your own voice: tianji.love/love-reading
+24. Wanting them back is normal. Treating it as data is steadier: tianji.love/ask
+25. A relationship worth continuing often looks like one you can describe calmly: tianji.love/relationship/new
+
+## Refresh 2026-06-27 - Next batch of 5 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-06-27 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). None are certainty claims.
+
+26. I almost sent a message just to feel caught. The free Love Test made me check my motive first: tianji.love/love-test
+27. A familiar rhythm returning is information, not a verdict: tianji.love/love-reading
+28. Wanting them back is one question. Naming what needs to change is another: tianji.love/relationship/new
+29. Worth continuing is a rhythm, not a verdict. The Love Test helped me notice the difference: tianji.love/love-test
+30. I saved my result like a snapshot, not a forecast. The next week felt steadier for it: tianji.love/love-test
+
+## Refresh 2026-06-28 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-06-28 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). None are certainty claims.
+
+31. I wrote down what I was afraid of before I sent the message. The free Love Test gave me the pause: tianji.love/love-test
+32. A weekly review of the pattern is steadier than a daily check-in: tianji.love/relationship/new
+33. The result is a snapshot of what I noticed, not a forecast of what comes next: tianji.love/love-test
+
+## Refresh 2026-06-29 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-06-29 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). None are certainty claims.
+
+34. Naming the pattern is what made my head quieter. The free Love Test helped: tianji.love/love-test
+35. I let one decision sit for a day. The next morning was clearer than the night before: tianji.love/ask
+36. A returning silence is still data, not always an invitation: tianji.love/love-reading
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.

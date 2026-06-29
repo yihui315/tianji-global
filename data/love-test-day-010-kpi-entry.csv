@@ -1,0 +1,29 @@
+date,channel,content_id,content_type,impressions,clicks,love_test_starts,result_views,share_card_clicks,share_card_downloads,ask_next_clicks,paid_intent_views,preview_submits,unlock_clicks,checkout_blocked,checkout_ready,paid_smoke_result,notes
+2026-06-28,xiaohongshu,20260628-xhs-01,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 看懂节奏不等于看透对方
+2026-06-28,xiaohongshu,20260628-xhs-02,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 沉默不是答案但你也不必把它写成一封信
+2026-06-28,xiaohongshu,20260628-xhs-03,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 你很懂他的模式但你没问过自己为什么懂
+2026-06-28,xiaohongshu,20260628-xhs-04,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 别把能猜到他要做什么当成安全感
+2026-06-28,xiaohongshu,20260628-xhs-05,post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; 看清节奏之后最难的是别用它写台词
+2026-06-28,tiktok_reels,20260628-reels-01,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Reading the room is not reading the person
+2026-06-28,tiktok_reels,20260628-reels-02,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Silence is data not a script
+2026-06-28,tiktok_reels,20260628-reels-03,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Familiar is not the same as safe
+2026-06-28,tiktok_reels,20260628-reels-04,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Do not audition with the script you wrote
+2026-06-28,tiktok_reels,20260628-reels-05,short_video,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Pattern literacy not pattern prediction
+2026-06-28,twitter_x,20260628-x-01,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Reading the room is not mind reading
+2026-06-28,twitter_x,20260628-x-02,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Silence is a signal not a script
+2026-06-28,twitter_x,20260628-x-03,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Familiar is not the same as safe
+2026-06-28,twitter_x,20260628-x-04,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Do not audition with the script you wrote
+2026-06-28,twitter_x,20260628-x-05,short_post,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Pattern literacy not pattern prediction
+2026-06-28,reddit_quora,20260628-rq-01,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; How do I stop turning pattern recognition into prediction about my ex
+2026-06-28,reddit_quora,20260628-rq-02,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Is reading his pattern actually helping me or just making me feel in control
+2026-06-28,reddit_quora,20260628-rq-03,answer_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Why does a calm non-reply feel harder to sit with than a dramatic one
+2026-06-28,kol_dm,20260628-kol-01,dm_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Creator feedback request - pattern literacy vs prediction
+2026-06-28,kol_dm,20260628-kol-02,dm_draft,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Creator feedback request - familiarity vs safety
+2026-06-28,seo_outline,20260628-seo-01,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Pattern literacy vs prediction in a relationship
+2026-06-28,seo_outline,20260628-seo-02,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; Why knowing someone's pattern can feel like control
+2026-06-28,seo_outline,20260628-seo-03,seo_outline,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry after publish; How to hold a non-reply as observation not evidence
+2026-06-28,share_card,20260628-share-01,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 模式可以观察
+2026-06-28,share_card,20260628-share-02,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 沉默不是答案
+2026-06-28,share_card,20260628-share-03,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 熟悉不等于健康
+2026-06-28,share_card,20260628-share-04,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 可预测不等于稳定
+2026-06-28,share_card,20260628-share-05,caption,0,0,0,0,0,0,0,0,0,0,0,0,not_run,manual entry if used; 别用它写台词
