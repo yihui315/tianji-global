@@ -1,6 +1,22 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-06-29 - TianJi Love daily growth Day 011 publishing pack (cron 17 1 * * *)
+
+- Task ID: `20260629-tianji-love-daily-growth-day-011`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260626`, local HEAD `d74b5ec` (post Day 010 publishing-pack commit and 2026-06-28 content calendar refresh), in sync with origin before this run.
+- Theme: "Naming the fear before you send — writing it down is not the same as hitting send" (rotation sub-angle drawn from hook pool entry 51 added 2026-06-28, rather than a dated calendar row, because today 2026-06-29 is intentionally one day ahead of the dated Day 7 row on 2026-06-30).
+- Files created: `assets/marketing/daily/day-011-publishing-pack.md`, `assets/marketing/daily/day-011-review-checklist.md`, `data/love-test-day-011-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Publishing pack structure mirrors Day 010: 5 Xiaohongshu posts, 5 Reels, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL DM drafts, 3 SEO outlines, 5 share-card captions, and 2 KOL DM templates — all CTAs routed to reflective surfaces first (`/love-test`, `/relationship/new`, `/love-reading`, or `/ask?source=love_test`), no paid-intent path is forced.
+- KPI entry CSV uses the same header schema as `love-test-day-010-kpi-entry.csv` (verified via header diff) and ships with zero/placeholder rows only — no real user metrics are entered before the observation window elapses.
+- Day 11 explicitly does not collapse into Day 10's "pattern literacy ≠ prediction" framing. Day 10 = observation without prediction; Day 11 = pause before sending. The two angles share a calendar week but must not be merged into a single sales message.
+- Validation: `git diff --check` passed. `npm run typecheck` passed (`tsc -p tsconfig.typecheck.json --noEmit`, exit 0). `npm run lint` passed (`next lint`, exit 0 — "No ESLint warnings or errors"). The change set is markdown+CSV-only with no TypeScript or ESLint surface, so the typecheck and lint results reflect the pre-existing clean baseline rather than any new code surface; consistent with prior content-only skill runs. Targeted secret-shape scan over the new files and over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits (`sk_live_*`, `pk_live_*`, `whsec_*`, `rk_live_*`, `AKIA*`, `-----BEGIN *PRIVATE KEY-----`).
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No webhook replay. No `.env*` read, copy, diff, or print. No PM2/Nginx/certbot/server mutation. No social account auto-posting. No fabrication of metrics, conversions, testimonials, users, or revenue. No diagnosis language. No guaranteed relationship outcome or accuracy claim. No copy-paste message scripts. No "send after X days" rules. No "you should send it" framing.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): add love-test day 011 publishing pack`.
+
 ### 2026-06-28 - TianJi Love auto paid-gate status run (cron 0 6 * * *)
 
 - Task ID: `20260628-tianji-love-auto-paid-gate`.
