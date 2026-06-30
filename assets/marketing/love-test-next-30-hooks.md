@@ -85,6 +85,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 59. 你能描述的节奏，才是你能选择的节奏。
 60. 最稳的下一步，往往不靠对方回复也能完成。
 
+## Refresh 2026-06-30 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-06-30 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the pattern/clarity supporting angles. None are certainty claims.
+
+61. 想看清楚他在想什么的时候，先看清楚你在循环什么。
+62. 主动不丢判断力，盲目的主动才是消耗。先看清楚再决定发不发。
+63. 重新出现的联系是一种数据，它不一定是一种邀请。
+64. 一段值得继续的关系，常常看起来像一件你能用正常语气描述的事。
+65. 每周留出一晚回看记录，比每天追问一次新信号更稳。
+
 ## CTA pairings
 
 ```text

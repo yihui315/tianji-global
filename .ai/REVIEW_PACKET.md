@@ -1,7 +1,99 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love funnel optimizer blocker for 2026-06-29 (cron `0 2 */14 * *`). No copy or tracking change made — KPI evidence is missing real weak-conversion signal. Allowed funnel files were inspected read-only only. The Day 011 daily growth publishing pack (cron `17 1 * * *`) generated earlier in the day remains the most recent authored pack and is documented immediately below.
+TianJi Love content calendar refresh for 2026-06-30 (cron `37 2 * * *`). The rolling 7-day+ future calendar already holds 35 days (Day 7 through Day 41, ending 2026-08-03), well above the seven-day minimum. This run is a pool-refresh-and-rotation pass only — 5 new hooks, 2 new video scripts, 3 new share captions added; no new calendar rows needed.
+
+## 2026-06-30 Content Calendar Refresh Run (cron 37 2 * * *)
+
+### Files changed in this run
+
+```text
+M  assets/marketing/love-test-next-30-hooks.md
+M  assets/marketing/love-test-next-20-video-scripts.md
+M  assets/marketing/love-test-next-20-share-captions.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+### Scope check
+
+- Calendar pre-run count: 35 future days (Day 7 through Day 41, ending 2026-08-03). 35 ≥ 7 → no minimum-fill trigger. Calendar file `assets/marketing/content-calendar-7day.md` not modified this run.
+- Theme rotation: existing 35 future days already cycle through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus pattern-naming, decision-pacing, recap, and honest-audit supporting angles. No anchor theme appears more than three times in any rolling 14-day window; rotation is healthy and no rebalancing was needed.
+- Hook pool pre-run count: 60 (last batch +5 on 2026-06-29). Post-run count: 65 (this batch +5).
+- Script pool pre-run count: 32 (last batch +2 on 2026-06-28, +5 on 2026-06-27, +5 on 2026-06-26). Post-run count: 34 (this batch +2).
+- Caption pool pre-run count: 36 (last batch +3 on 2026-06-29, +3 on 2026-06-28, +5 on 2026-06-27, +5 on 2026-06-26). Post-run count: 39 (this batch +3).
+
+### Hook batch details (entries 61-65)
+
+```text
+61. 想看清楚他在想什么的时候，先看清楚你在循环什么。
+62. 主动不丢判断力，盲目的主动才是消耗。先看清楚再决定发不发。
+63. 重新出现的联系是一种数据，它不一定是一种邀请。
+64. 一段值得继续的关系，常常看起来像一件你能用正常语气描述的事。
+65. 每周留出一晚回看记录，比每天追问一次新信号更稳。
+```
+
+- Hook 61: anchor theme "what is he thinking now?", supporting angle "pattern-not-mind-reading".
+- Hook 62: anchor theme "should I take the initiative in ambiguity?", supporting angle "judgment-preserving-initiation".
+- Hook 63: anchor theme "will they come back after no contact?", supporting angle "data-not-invitation".
+- Hook 64: anchor theme "is this relationship worth continuing?", supporting angle "calm-describability".
+- Hook 65: supporting angle "weekly-review-steadier-than-daily".
+
+### Video script batch details (entries 33-34)
+
+```text
+33 What Is He Thinking Today — Douyin — observation-first, no mind-reading claim.
+34 Worth Continuing In Plain Words — Xiaohongshu video — rhythm, not verdict, no decision for the user.
+```
+
+### Share caption batch details (entries 37-39)
+
+```text
+37. Observation-before-asking hook, CTA /love-test.
+38. Pause-vs-panic-send hook, CTA /love-test.
+39. Describable-relationships hook, CTA /relationship/new.
+```
+
+### Local validation
+
+- `git status --short --branch` before run: working tree clean, branch `main`, local HEAD `89bb389`, in sync with origin.
+- After the calendar refresh branch switch: branch `chore/marketing-content-calendar-refresh-20260630` created off `main` at `89bb389` for this run's edits (per AGENTS.md "Never merge directly to main"; the W26 squash on main remains the most recent merged commit before this run).
+- Files modified in this run: 5 (3 marketing asset files + 2 `.ai/` record files).
+- `git diff --check`: pending — will run before commit.
+- Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/`: pending — will run before commit. Expectation: 0 raw-shape hits (`sk_live_*`, `pk_live_*`, `whsec_*`, `rk_live_*`, `AKIA*`, `-----BEGIN *PRIVATE KEY-----`).
+- `npm run typecheck`: not run — change set is markdown-only with no TypeScript surface, so a typecheck invocation would only reflect the pre-existing baseline. `node_modules/` is present in this runner but the docs-only surface rule applies.
+- `npm run lint`: not run — same rationale as typecheck; markdown change set has no ESLint surface.
+
+### Gate status (this run)
+
+```text
+Seven-day content calendar: Go (35 future days, no addition required)
+Hook pool: Go (65)
+Video script pool: Go (34)
+Share caption pool: Go (39)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Blockers (No-Go conditions logged)
+
+- KPI evidence for funnel-optimizer copy change is still missing (see 2026-06-29 funnel-optimizer blocker entry above).
+- Stripe test-mode paid smoke approval phrase still not received.
+- Production deploy / Supabase production mutation / server mutation / webhook replay / social auto-posting remain No-Go.
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
+```
+
+### Next step (for human or future run)
+
+- No calendar-row additions required this run. The next required calendar refresh is the standard pool-rotation maintenance cron (also cron `37 2 * * *`) on 2026-07-01.
+- Manual publishing team: continue picking from the refreshed hook/script/caption pools, and prefer hooks 61-65 and captions 37-39 for the first three slots of the 2026-07-01 to 2026-07-03 publish window to keep the new batch in active rotation.
+- Reminder: social auto-posting remains manual-only. Stripe checkout, paid smoke, production deploy, and Supabase production mutation all remain No-Go.
 
 ## 2026-06-29 Funnel Optimizer Blocker Run (cron 0 2 */14 * *)
 
