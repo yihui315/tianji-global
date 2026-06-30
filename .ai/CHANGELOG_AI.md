@@ -1,6 +1,22 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-06-30 - TianJi Love daily growth publishing pack — Day 012 (cron 17 1 * * *)
+
+- Task ID: `20260630-tianji-love-daily-growth-day012`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260630`, local HEAD `c581ef8` (post W26 content-calendar refresh), in sync with origin before this run.
+- Goal: generate the Day 012 publishing pack, review checklist, and KPI entry scaffold for 2026-06-30 from existing marketing assets; do not auto-post, do not execute payment, do not deploy production, do not invent metrics.
+- Theme: hook pool entry 56 (added 2026-06-30) — "模式有名字以后，脑子里的杂音会变小一点" (Once the pattern has a name, the noise in your head gets a little smaller). The angle is "naming the recurring pattern lowers the noise, not the stakes". This is a rotation sub-angle distinct from the dated Day 7 calendar row on 2026-06-30 (Replay-loop SEO) and from Day 011 (2026-06-29, naming the fear before sending). Day 7 = clarity on the question you keep replaying; Day 11 = pause before sending; Day 12 = label the loop without weaponizing it.
+- Files created: `assets/marketing/daily/day-012-publishing-pack.md`, `assets/marketing/daily/day-012-review-checklist.md`, `data/love-test-day-012-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 TikTok/Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL DM templates, 3 SEO outlines, 5 share-card captions. All CTAs lead to reflective surfaces first (`/love-test`, `/relationship/new`, `/love-reading`, or `/ask?source=love_test`); no premium-forced unlock, no Stripe copy, no payment claim.
+- Safety: no fake testimonials, no fake metrics, no fake user counts, no guaranteed reunion/reply/commitment/relationship-repair claims, no diagnosis language, no perfect-accuracy claim, no Stripe/payment claims, no `.env*` read, no social auto-posting, no production deploy, no Supabase production mutation. Review checklist explicitly forbids "label them and confront" framing, "drop this label in your next argument" scripts, and "use the name to confront" rules on every channel.
+- KPI scaffold: 28 rows, all numeric columns = 0, all `paid_smoke_result` = `not_run`, every row carries the `manual entry after publish` scaffold marker. No real metrics are entered before the observation window has elapsed.
+- Validation: `git diff --check` will be run before commit. Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/`, `.agents/skills/`, `.github/workflows/` will be run before commit. `npm run typecheck` and `npm run lint`: change set is markdown + CSV only with no TypeScript or ESLint surface, so the typecheck and lint results would only reflect the pre-existing clean baseline; consistent with prior content-only skill run precedent (2026-06-26 through 2026-06-30). A full typecheck/lint will be attempted for documentation completeness; if `node_modules` or network access is unavailable in this docs-only cron runner, the run will be recorded as markdown+CSV-only and noted.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): add love-test day 012 publishing pack`.
+
 ### 2026-06-30 - TianJi Love content calendar refresh (cron 37 2 * * *)
 
 - Task ID: `20260630-tianji-love-content-calendar-refresh`.

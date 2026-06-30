@@ -1,7 +1,65 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love content calendar refresh for 2026-06-30 (cron `37 2 * * *`). The rolling 7-day+ future calendar already holds 35 days (Day 7 through Day 41, ending 2026-08-03), well above the seven-day minimum. This run is a pool-refresh-and-rotation pass only — 5 new hooks, 2 new video scripts, 3 new share captions added; no new calendar rows needed.
+TianJi Love daily growth publishing pack — Day 012 for 2026-06-30 (cron `17 1 * * *`). Theme: hook pool entry 56 — "模式有名字以后，脑子里的杂音会变小一点" (naming the recurring pattern lowers the noise, not the stakes). The pack uses a rotation sub-angle distinct from the dated Day 7 calendar row on 2026-06-30 (Replay-loop SEO) and from Day 011 (2026-06-29, naming the fear before sending). Day 7 = clarity on the question you keep replaying; Day 11 = pause before sending; Day 12 = label the loop without weaponizing it.
+
+## Files created this run
+
+- `assets/marketing/daily/day-012-publishing-pack.md`
+- `assets/marketing/daily/day-012-review-checklist.md`
+- `data/love-test-day-012-kpi-entry.csv`
+
+## Files updated this run
+
+- `.ai/CHANGELOG_AI.md`
+- `.ai/REVIEW_PACKET.md`
+
+## Allowed files inspected read-only (no edits)
+
+- `assets/marketing/love-test-next-30-hooks.md` (hook pool entry 56)
+- `assets/marketing/love-test-next-20-share-captions.md` (caption pool)
+- `assets/marketing/love-test-next-20-video-scripts.md` (script pool)
+- `assets/marketing/content-calendar-7day.md` (Day 7 row 2026-06-30)
+- `assets/marketing/daily/day-011-publishing-pack.md` (precedent)
+- `assets/marketing/daily/day-011-review-checklist.md` (precedent)
+- `data/love-test-day-011-kpi-entry.csv` (KPI schema)
+- `data/love-test-day-007-kpi-entry.csv` (already scaffolded 2026-06-30 KPI rows; not modified)
+
+## Validation evidence
+
+### git diff --check
+
+Pending. Will be run before commit.
+
+### Targeted secret-shape scan
+
+Pending. Will be run before commit over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/`.
+
+### npm run typecheck
+
+Change set is markdown + CSV only with no TypeScript or ESLint surface. Consistent with prior content-only skill run precedent (2026-06-26 through 2026-06-30). A full typecheck/lint will be attempted for documentation completeness; if `node_modules` or network access is unavailable in this docs-only cron runner, the run will be recorded as markdown+CSV-only and noted in CHANGELOG_AI.md.
+
+### npm run lint
+
+Same as typecheck above.
+
+## Gate status (this run)
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Suggested commit message for this run
+
+```text
+chore(marketing): add love-test day 012 publishing pack
+```
 
 ## 2026-06-30 Content Calendar Refresh Run (cron 37 2 * * *)
 
