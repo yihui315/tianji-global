@@ -1,6 +1,22 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-01 - TianJi Love daily growth publishing pack — Day 014 (cron 17 1 * * *)
+
+- Task ID: `20260701-tianji-love-daily-growth-day-014`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260630`, clean before this run, in sync with `origin`.
+- Theme: "Initiation in ambiguity — wanting to reach out is not the same as being ready to send" (from the 7-day content calendar Day 14 row, 2026-07-07).
+- Files created: `assets/marketing/daily/day-014-publishing-pack.md`, `assets/marketing/daily/day-014-review-checklist.md`, `data/love-test-day-014-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL feedback DMs (1 DM template + 1 post draft), 3 SEO article outlines, all pointing to the preview/reflective surface `/love-test`. All CTAs stay preview/reflective. No live payment claim, no fake testimonial, no diagnosis language, no "you are broken" framing, no "act now" urgency language, no "wanting to reach out = should send" coercion, no "if you don't send you don't care" shame reversal.
+- Validation: changes are limited to `assets/marketing/daily/`, `data/`, and `.ai/`. `git diff --check` clean. Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits. `npm run typecheck` passed (`tsc -p tsconfig.typecheck.json --noEmit`, exit 0). `npm run lint` passed (`next lint`, exit 0 — "No ESLint warnings or errors").
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go — manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Push result: pending — see the commit-and-push step.
+- Suggested commit message: `chore(marketing): add love-test day 014 publishing pack`.
+
+
 ### 2026-06-30 - TianJi Love daily growth publishing pack — Day 012 (cron 17 1 * * *)
 
 - Task ID: `20260630-tianji-love-daily-growth-day012`.

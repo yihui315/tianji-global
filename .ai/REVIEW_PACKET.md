@@ -1,13 +1,13 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love daily growth publishing pack — Day 012 for 2026-06-30 (cron `17 1 * * *`). Theme: hook pool entry 56 — "模式有名字以后，脑子里的杂音会变小一点" (naming the recurring pattern lowers the noise, not the stakes). The pack uses a rotation sub-angle distinct from the dated Day 7 calendar row on 2026-06-30 (Replay-loop SEO) and from Day 011 (2026-06-29, naming the fear before sending). Day 7 = clarity on the question you keep replaying; Day 11 = pause before sending; Day 12 = label the loop without weaponizing it.
+TianJi Love daily growth publishing pack — Day 014 for 2026-07-01 (cron `17 1 * * *`). Theme: "Initiation in ambiguity — wanting to reach out is not the same as being ready to send", taken from the 7-day content calendar Day 14 row (2026-07-07). CTA: `/love-test`. Day 13 = weekly learning loop; Day 14 = initiation in ambiguity; the rotation continues the calm-hooks-only discipline from the Day 13 "keep what created calm clicks; drop what sells fear" line.
 
 ## Files created this run
 
-- `assets/marketing/daily/day-012-publishing-pack.md`
-- `assets/marketing/daily/day-012-review-checklist.md`
-- `data/love-test-day-012-kpi-entry.csv`
+- `assets/marketing/daily/day-014-publishing-pack.md`
+- `assets/marketing/daily/day-014-review-checklist.md`
+- `data/love-test-day-014-kpi-entry.csv`
 
 ## Files updated this run
 
@@ -16,8 +16,12 @@ TianJi Love daily growth publishing pack — Day 012 for 2026-06-30 (cron `17 1 
 
 ## Allowed files inspected read-only (no edits)
 
-- `assets/marketing/love-test-next-30-hooks.md` (hook pool entry 56)
+- `assets/marketing/love-test-next-30-hooks.md` (hook pool entries 31, 41, 44, 51, 56, 61, 62, 63, 64, 65)
 - `assets/marketing/love-test-next-20-share-captions.md` (caption pool)
+- `assets/marketing/content-calendar-7day.md` (Day 14 row, 2026-07-07)
+- `assets/marketing/daily/day-013-publishing-pack.md` (prior pack reference)
+- `data/love-test-day-013-kpi-entry.csv` (prior KPI scaffold reference)
+- `.ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260630.md` (gate context, no edits)
 - `assets/marketing/love-test-next-20-video-scripts.md` (script pool)
 - `assets/marketing/content-calendar-7day.md` (Day 7 row 2026-06-30)
 - `assets/marketing/daily/day-011-publishing-pack.md` (precedent)
@@ -1027,4 +1031,53 @@ Production deploy: No-Go
 
 ```text
 chore(marketing): refresh love-test content calendar
+```
+
+## 2026-07-01 - TianJi Love daily growth Day 014 run (cron 17 1 * * *)
+
+### Copy review (this run)
+
+```text
+No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
+guaranteed relationship outcomes, or 100% accuracy claims were added.
+No diagnosis language (anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+No "act now", "last chance", or fear-based urgency language was used.
+No "wanting to reach out = should send" coercion or
+"if you don't send you don't care" shame reversal was introduced.
+CTAs follow the established ladder: /love-test first, then /ask or /love-reading.
+```
+
+### Local validation
+
+```text
+git diff --check
+Passed (no whitespace errors on the markdown delta).
+
+Targeted secret-shape scan over .agents/skills/ .github/workflows/ .ai/ assets/marketing/ data/
+Passed: 0 raw-shape hits. No real credentials present.
+
+npm run typecheck
+Passed (tsc -p tsconfig.typecheck.json --noEmit, exit 0).
+
+npm run lint
+Passed (next lint, exit 0 — "No ESLint warnings or errors").
+```
+
+### Gate status (this run)
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): add love-test day 014 publishing pack
 ```
