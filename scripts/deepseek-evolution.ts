@@ -153,14 +153,20 @@ Rules:
   console.log(`  Calling DeepSeek for Variant ${label}...`);
   const raw = await callDeepSeek(messages);
   writeFileSync(`${TMP_DIR}/variant-${variant}-raw.txt`, raw);
+  console.log(`  Raw response (first 200 chars): ${raw.slice(0, 200).replace(/\n/g, " ")}`);
 
   const cleaned = cleanJSON(raw);
+  console.log(`  Cleaned JSON (first 100 chars): ${cleaned.slice(0, 100).replace(/\n/g, " ")}`);
   try {
     return JSON.parse(cleaned);
-  } catch {
+  } catch (e: unknown) {
+    const err = e as Error;
     const jsonMatch = cleaned.match(/\{[\s\S]+\}/);
-    if (jsonMatch) return JSON.parse(jsonMatch[0]);
-    throw new Error(`Variant ${label} JSON parse failed.\nRaw preview: ${raw.slice(0, 300)}`);
+    if (jsonMatch) {
+      console.log(`  Fallback JSON match succeeded`);
+      return JSON.parse(jsonMatch[0]);
+    }
+    throw new Error(`Variant ${label} JSON parse failed: ${err.message}\nCleaned preview: ${cleaned.slice(0, 300)}`);
   }
 }
 
