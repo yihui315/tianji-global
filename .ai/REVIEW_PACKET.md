@@ -1,6 +1,28 @@
 # TianJi Love Review Packet
 ## Current Task
 
+TianJi Love funnel copy optimizer blocker — 2026-07-01 (cron `0 2 */14 * *`, skill `tianji-github-funnel-optimizer`). **No copy edit was made.** KPI evidence is still missing: `data/love-test-kpi-tracking.csv`, `data/love-test-funnel-metrics.csv`, and `data/love-test-day-001..014-kpi-entry.csv` all carry only `0` / `manual entry after publish` scaffold markers. The same blocker was raised in the 2026-06-29 prior run and remains in effect. See `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260701.md` for full evidence and gate status.
+
+## Files created this run
+
+- `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260701.md`
+
+## Files updated this run
+
+- `.ai/CHANGELOG_AI.md`
+- `.ai/REVIEW_PACKET.md` (this file)
+
+## Allowed files inspected read-only (no edits)
+
+- `src/app/(main)/love-test/page.tsx` (607 lines, unchanged since 2026-06-29 read)
+- `src/app/(main)/ask/page.tsx` (808 lines, unchanged since 2026-06-29 read)
+- `src/lib/love-test.ts` (379 lines, unchanged since 2026-06-29 read)
+- `assets/love-test-copywriting.md` (74 lines, unchanged since 2026-06-29 read)
+- `data/love-test-event-tracking.csv` (19 lines, unchanged since 2026-06-29 read)
+- `data/love-test-kpi-tracking.csv` (2 lines, unchanged since 2026-06-29 read — all zeros)
+
+## Prior run (2026-07-01 daily growth Day 014)
+
 TianJi Love daily growth publishing pack — Day 014 for 2026-07-01 (cron `17 1 * * *`). Theme: "Initiation in ambiguity — wanting to reach out is not the same as being ready to send", taken from the 7-day content calendar Day 14 row (2026-07-07). CTA: `/love-test`. Day 13 = weekly learning loop; Day 14 = initiation in ambiguity; the rotation continues the calm-hooks-only discipline from the Day 13 "keep what created calm clicks; drop what sells fear" line.
 
 ## Files created this run
