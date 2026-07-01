@@ -82,8 +82,8 @@ const beforeScore =
   ?? ((currentScore as Record<string, number>)?.score ?? 0);
 
 const afterScore =
-  ((scoreData as Record<string, {score?:number}>).score ?? 0)
-  ?? (abResult.scoreA as number)
+  (abResult.scoreA as number)
+  ?? (abResult.scoreB as number)
   ?? 0;
 const margin = afterScore - beforeScore;
 const winner = abResult.winner ?? decision?.decision === "keep" ? "A" : "B";
