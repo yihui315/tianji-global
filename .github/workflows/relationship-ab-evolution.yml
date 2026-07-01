@@ -85,6 +85,9 @@ jobs:
       # ── Commit + PR ───────────────────────────────────────────────────────
       - name: Commit and create PR
         run: |
+          # Create a new branch for this experiment
+          git checkout -b codex/relationship-ab
+
           git config user.name "Codex Agent"
           git config user.email "codex@tianji.global"
 
