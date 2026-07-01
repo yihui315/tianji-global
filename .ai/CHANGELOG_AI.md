@@ -1,6 +1,69 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-01 - TianJi Love funnel copy optimizer blocker (cron 0 2 */14 * *)
+
+- Task ID: `20260701-tianji-github-funnel-optimizer-blocker`.
+- Skill: `tianji-github-funnel-optimizer`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260630`, clean before this run, in sync with `origin` at `5ed17c8`.
+- Verdict: **No copy edit.** KPI evidence missing — `data/love-test-kpi-tracking.csv`, `data/love-test-funnel-metrics.csv`, and `data/love-test-day-001..014-kpi-entry.csv` all carry only `0` / `manual entry after publish` scaffold markers. There is no real funnel-stage rate, no real conversion rate, and therefore no defensible weak-step to optimize. The same blocker was raised in the 2026-06-29 prior run and remains in effect.
+- Files created: `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260701.md`, this changelog entry, and a corresponding review-packet entry.
+- Allowed files inspected read-only (no edits): `src/app/(main)/love-test/page.tsx` (607 lines), `src/app/(main)/ask/page.tsx` (808 lines), `src/lib/love-test.ts` (379 lines), `assets/love-test-copywriting.md` (74 lines), `data/love-test-event-tracking.csv` (19 lines), `data/love-test-kpi-tracking.csv` (2 lines).
+- Validation: `git status --short` clean; `git log -1` = `5ed17c8`; `git log origin/...` matches local HEAD; `git diff --check` passed (no in-progress diffs); targeted secret-shape scan over `.ai/` and the allowed funnel files returned 0 raw-shape hits.
+- Safety: No `.env*` read/print/diff; no Stripe live or test-mode touch; no Supabase mutation; no provider live call; no production deploy; no auto-posting; no fake KPI / weak-step / conversion-rate / guaranteed-outcome claim.
+- Gate status: `Funnel copy optimization: Not run — blocked on KPI evidence`; `KPI evidence: No-Go — missing real weak-conversion signal`; `Stripe checkout logic: Not changed`; `Supabase mutation: Not changed`; `Provider live call: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Push result: pending — see the commit-and-push step.
+- Suggested commit message: `chore(marketing): funnel optimizer blocker — KPI evidence missing (2026-07-01)`.
+
+### 2026-07-01 - TianJi Love daily growth publishing pack — Day 014 (cron 17 1 * * *)
+
+- Task ID: `20260701-tianji-love-daily-growth-day-014`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260630`, clean before this run, in sync with `origin`.
+- Theme: "Initiation in ambiguity — wanting to reach out is not the same as being ready to send" (from the 7-day content calendar Day 14 row, 2026-07-07).
+- Files created: `assets/marketing/daily/day-014-publishing-pack.md`, `assets/marketing/daily/day-014-review-checklist.md`, `data/love-test-day-014-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL feedback DMs (1 DM template + 1 post draft), 3 SEO article outlines, all pointing to the preview/reflective surface `/love-test`. All CTAs stay preview/reflective. No live payment claim, no fake testimonial, no diagnosis language, no "you are broken" framing, no "act now" urgency language, no "wanting to reach out = should send" coercion, no "if you don't send you don't care" shame reversal.
+- Validation: changes are limited to `assets/marketing/daily/`, `data/`, and `.ai/`. `git diff --check` clean. Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits. `npm run typecheck` passed (`tsc -p tsconfig.typecheck.json --noEmit`, exit 0). `npm run lint` passed (`next lint`, exit 0 — "No ESLint warnings or errors").
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go — manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Push result: pending — see the commit-and-push step.
+- Suggested commit message: `chore(marketing): add love-test day 014 publishing pack`.
+
+
+### 2026-06-30 - TianJi Love daily growth publishing pack — Day 012 (cron 17 1 * * *)
+
+- Task ID: `20260630-tianji-love-daily-growth-day012`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260630`, local HEAD `c581ef8` (post W26 content-calendar refresh), in sync with origin before this run.
+- Goal: generate the Day 012 publishing pack, review checklist, and KPI entry scaffold for 2026-06-30 from existing marketing assets; do not auto-post, do not execute payment, do not deploy production, do not invent metrics.
+- Theme: hook pool entry 56 (added 2026-06-30) — "模式有名字以后，脑子里的杂音会变小一点" (Once the pattern has a name, the noise in your head gets a little smaller). The angle is "naming the recurring pattern lowers the noise, not the stakes". This is a rotation sub-angle distinct from the dated Day 7 calendar row on 2026-06-30 (Replay-loop SEO) and from Day 011 (2026-06-29, naming the fear before sending). Day 7 = clarity on the question you keep replaying; Day 11 = pause before sending; Day 12 = label the loop without weaponizing it.
+- Files created: `assets/marketing/daily/day-012-publishing-pack.md`, `assets/marketing/daily/day-012-review-checklist.md`, `data/love-test-day-012-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 TikTok/Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL DM templates, 3 SEO outlines, 5 share-card captions. All CTAs lead to reflective surfaces first (`/love-test`, `/relationship/new`, `/love-reading`, or `/ask?source=love_test`); no premium-forced unlock, no Stripe copy, no payment claim.
+- Safety: no fake testimonials, no fake metrics, no fake user counts, no guaranteed reunion/reply/commitment/relationship-repair claims, no diagnosis language, no perfect-accuracy claim, no Stripe/payment claims, no `.env*` read, no social auto-posting, no production deploy, no Supabase production mutation. Review checklist explicitly forbids "label them and confront" framing, "drop this label in your next argument" scripts, and "use the name to confront" rules on every channel.
+- KPI scaffold: 28 rows, all numeric columns = 0, all `paid_smoke_result` = `not_run`, every row carries the `manual entry after publish` scaffold marker. No real metrics are entered before the observation window has elapsed.
+- Validation: `git diff --check` will be run before commit. Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/`, `.agents/skills/`, `.github/workflows/` will be run before commit. `npm run typecheck` and `npm run lint`: change set is markdown + CSV only with no TypeScript or ESLint surface, so the typecheck and lint results would only reflect the pre-existing clean baseline; consistent with prior content-only skill run precedent (2026-06-26 through 2026-06-30). A full typecheck/lint will be attempted for documentation completeness; if `node_modules` or network access is unavailable in this docs-only cron runner, the run will be recorded as markdown+CSV-only and noted.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): add love-test day 012 publishing pack`.
+
+### 2026-06-30 - TianJi Love content calendar refresh (cron 37 2 * * *)
+
+- Task ID: `20260630-tianji-love-content-calendar-refresh`.
+- Skill: `tianji-github-content-calendar`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260630`, local HEAD `89bb389` (post W26 full-marketing squash), in sync with origin before this run.
+- Goal: maintain at least seven future days of TianJi Love content and keep hook/script/caption pools fresh without auto-posting, without payment execution, and without claiming certainty.
+- Pre-run count: calendar held 35 future days (Day 7 through Day 41, ending 2026-08-03). 35 ≥ 7, so no minimum-fill trigger was required; this run is a pool-refresh-and-rotation pass only — no new calendar rows were added because the skill rule says "If fewer than seven future days exist, add only the missing number of days", and 35 already exceeds the seven-day minimum by a wide margin.
+- Files changed: `assets/marketing/love-test-next-30-hooks.md`, `assets/marketing/love-test-next-20-video-scripts.md`, `assets/marketing/love-test-next-20-share-captions.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Calendar: unchanged this run. The 35 future days already in `assets/marketing/content-calendar-7day.md` (2026-06-30 through 2026-08-03) rotate through the four anchor themes ("What is he thinking now?", "Should I take the initiative in ambiguity?", "Will they come back after no contact?", "Is this relationship worth continuing?") and the supporting pattern-naming, decision-pacing, recap, and honest-audit angles. Theme distribution check across the existing 35 future days: no anchor theme repeats more than three times in any rolling 14-day window; rotation remains healthy.
+- Hook pool: appended a refresh batch of 5 new hooks (entries 61-65) covering pattern-over-mine-reading, initiative-keeps-judgment, returning-contact-as-data, describable-relationships, and weekly-review-steadier-than-daily. Pool now has 65 hooks. All hooks keep `Love Test` framed as a mirror, never a verdict.
+- Script pool: appended a refresh batch of 2 new video scripts (entries 33-34) covering "what is he thinking today" (no mind-reading claim, observation-first framing) and "worth continuing in plain words" (rhythm, not verdict). Pool now has 34 scripts. All scripts keep CTAs reflective (no payment claim).
+- Caption pool: appended a refresh batch of 3 new share-card captions (entries 37-39) covering observation-before-asking, pause-vs-panic-send, and describable-relationships framing. Pool now has 39 captions. All captions stay on `/love-test`, `/relationship/new`, or `/love-reading` as the first action.
+- Safety: no fake testimonials, no fake metrics, no fake user counts, no guaranteed reunion/reply/commitment/relationship-repair claims, no diagnosis language, no perfect-accuracy claim, no Stripe/payment claims, no `.env*` read, no social auto-posting, no production deploy, no Supabase production mutation.
+- Validation: `git diff --check` pending (will run before commit). Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/` pending (will run before commit). `npm run typecheck` and `npm run lint`: change set is markdown-only with no TypeScript or ESLint surface, so the typecheck and lint results would only reflect the pre-existing clean baseline rather than any new code surface; consistent with prior content-only skill run precedent (2026-06-26, 2026-06-27, 2026-06-28, 2026-06-29). A full typecheck/lint will be attempted for documentation completeness; if `node_modules` or network access is unavailable in this docs-only cron runner, the run will be recorded as markdown-only and noted.
+- Gate status: `Seven-day content calendar: Go (35 future days, no addition required)`; `Hook pool: Go (65)`; `Video script pool: Go (34)`; `Share caption pool: Go (39)`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): refresh love-test content calendar`.
+
 ### 2026-06-29 - TianJi Love funnel optimizer blocker — KPI evidence missing (cron 0 2 */14 * *)
 
 - Task ID: `20260629-tianji-love-funnel-optimizer-blocker`.

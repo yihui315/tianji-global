@@ -22,76 +22,24 @@ jobs:
 
       - run: npm ci
 
-      # 1️⃣ Record current Relationship score
-      - name: Score BEFORE
+      - name: Run DeepSeek evolution script
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: npx tsx scripts/deepseek-evolution.ts
+
+      - name: Commit and create PR
         run: |
-          npx tsx scripts/calculate-relationship-score.ts
-          cp relationship-score.json relationship-score-before.json
+          git config user.name "DeepSeek Codex"
+          git config user.email "codex@tianji.global"
 
-      # 2️⃣ Codex — Relationship module only
-      - name: Codex Run
-        uses: openai/codex-action@v1
-        with:
-          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
-          prompt: |
-            Read program.md.
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
 
-            ONLY improve the Relationship module.
-            Focus on: clarity, emotional resonance, shareability, upgrade conversion.
+          REPORT_TITLE=$(grep "^# Codex" codex-upgrade-report.md 2>/dev/null | head -1 | sed "s/^# //" || echo "DeepSeek evolution run")
+          git commit -m "$REPORT_TITLE"
 
-            Improve ONE of these per run:
-            A) Hero summary (headline, one-liner, CTA copy)
-            B) Five dimension card descriptions (make them human, specific)
-            C) Relationship pattern naming (make it sharable, memorable)
-            D) Current window copy (urgency, action guidance)
-            E) Share card copy (emotional punch, visual intent)
+          git push origin HEAD:refs/heads/codex/deepseek-evolution ||             git push origin codex/deepseek-evolution --force
 
-            Do NOT change other modules (auth, billing, other pages, etc.)
-
-            Keep changes small. Max 5 files.
-
-            Then run:
-            npm run audit:share
-            npm run audit:copy
-
-            If failing, repair once.
-
-            Output codex-relationship-report.md.
-
-      # 3️⃣ Score AFTER
-      - name: Score AFTER
-        run: |
-          npx tsx scripts/calculate-relationship-score.ts
-          cp relationship-score.json relationship-score-after.json
-
-      # 4️⃣ Decision gate
-      - name: Decide keep or discard
-        run: npx tsx scripts/decide-keep-or-discard.ts
-
-      # 5️⃣ Record experiment run
-      - name: Record experiment
-        run: |
-          node -e "
-          const fs = require('fs');
-          const manifest = JSON.parse(fs.readFileSync('experiments/manifest.json','utf8'));
-          const before = JSON.parse(fs.readFileSync('relationship-score-before.json','utf8')).score;
-          const after = JSON.parse(fs.readFileSync('relationship-score-after.json','utf8')).score;
-          const decision = after > before + 1 ? 'keep' : 'discard';
-          const run = {
-            id: 'rel-' + String(Date.now()).slice(-6),
-            before, after, decision,
-            timestamp: new Date().toISOString()
-          };
-          manifest.runs.push(run);
-          fs.writeFileSync('experiments/manifest.json', JSON.stringify(manifest, null, 2));
-          console.log('Recorded:', run);
-          "
-
-      # 6️⃣ Only PR on improvement
-      - name: Create PR
-        if: success()
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: codex/relationship-evolution
-          title: "Codex Relationship Evolution"
-          body-path: codex-relationship-report.md
+          gh pr create             --base main             --head codex/deepseek-evolution             --title "$REPORT_TITLE"             --body-file codex-upgrade-report.md             2>/dev/null || echo "PR creation attempted"

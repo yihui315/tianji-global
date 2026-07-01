@@ -202,6 +202,30 @@ Purpose: create a pool for Douyin, Videohao, and short-form manual publishing. S
 - CTA: `/love-test`.
 - risk-safe check: No private input exposure.
 
+## Refresh 2026-06-30 - Next batch of 2 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-06-30 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).
+
+## 33 What Is He Thinking Today
+
+- channel: Douyin
+- 3-second hook: Before you ask what he is thinking, ask what you keep noticing.
+- scene: A still phone screen, then a slow zoom-out to a pattern map.
+- spoken copy: Love Test will not read his mind. It helps you name the rhythm you have been noticing, so the question you bring in becomes clearer and easier to answer.
+- caption: 不读心，先看你看见的模式。
+- CTA: `/love-test`.
+- risk-safe check: No mind-reading claim, no certainty about his thoughts, no prediction.
+
+## 34 Worth Continuing In Plain Words
+
+- channel: Xiaohongshu video
+- 3-second hook: A relationship worth continuing usually sounds like something you can describe calmly.
+- scene: A quiet kitchen table, a small notebook, a calm result card.
+- spoken copy: Worth continuing is not only about how you feel today. It is also about whether the rhythm still fits. Love Test helps you describe it in plain words, so the decision stays yours.
+- caption: 能说清楚，才选得清楚。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No decision made for the user, no certainty claim, no shame reversal.
+
 ## Refresh 2026-06-28 - Next batch of 2 video scripts
 
 These scripts were added by the `tianji-github-content-calendar` cron job on 2026-06-28 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).

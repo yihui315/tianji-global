@@ -1,7 +1,183 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love funnel optimizer blocker for 2026-06-29 (cron `0 2 */14 * *`). No copy or tracking change made — KPI evidence is missing real weak-conversion signal. Allowed funnel files were inspected read-only only. The Day 011 daily growth publishing pack (cron `17 1 * * *`) generated earlier in the day remains the most recent authored pack and is documented immediately below.
+TianJi Love funnel copy optimizer blocker — 2026-07-01 (cron `0 2 */14 * *`, skill `tianji-github-funnel-optimizer`). **No copy edit was made.** KPI evidence is still missing: `data/love-test-kpi-tracking.csv`, `data/love-test-funnel-metrics.csv`, and `data/love-test-day-001..014-kpi-entry.csv` all carry only `0` / `manual entry after publish` scaffold markers. The same blocker was raised in the 2026-06-29 prior run and remains in effect. See `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260701.md` for full evidence and gate status.
+
+## Files created this run
+
+- `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260701.md`
+
+## Files updated this run
+
+- `.ai/CHANGELOG_AI.md`
+- `.ai/REVIEW_PACKET.md` (this file)
+
+## Allowed files inspected read-only (no edits)
+
+- `src/app/(main)/love-test/page.tsx` (607 lines, unchanged since 2026-06-29 read)
+- `src/app/(main)/ask/page.tsx` (808 lines, unchanged since 2026-06-29 read)
+- `src/lib/love-test.ts` (379 lines, unchanged since 2026-06-29 read)
+- `assets/love-test-copywriting.md` (74 lines, unchanged since 2026-06-29 read)
+- `data/love-test-event-tracking.csv` (19 lines, unchanged since 2026-06-29 read)
+- `data/love-test-kpi-tracking.csv` (2 lines, unchanged since 2026-06-29 read — all zeros)
+
+## Prior run (2026-07-01 daily growth Day 014)
+
+TianJi Love daily growth publishing pack — Day 014 for 2026-07-01 (cron `17 1 * * *`). Theme: "Initiation in ambiguity — wanting to reach out is not the same as being ready to send", taken from the 7-day content calendar Day 14 row (2026-07-07). CTA: `/love-test`. Day 13 = weekly learning loop; Day 14 = initiation in ambiguity; the rotation continues the calm-hooks-only discipline from the Day 13 "keep what created calm clicks; drop what sells fear" line.
+
+## Files created this run
+
+- `assets/marketing/daily/day-014-publishing-pack.md`
+- `assets/marketing/daily/day-014-review-checklist.md`
+- `data/love-test-day-014-kpi-entry.csv`
+
+## Files updated this run
+
+- `.ai/CHANGELOG_AI.md`
+- `.ai/REVIEW_PACKET.md`
+
+## Allowed files inspected read-only (no edits)
+
+- `assets/marketing/love-test-next-30-hooks.md` (hook pool entries 31, 41, 44, 51, 56, 61, 62, 63, 64, 65)
+- `assets/marketing/love-test-next-20-share-captions.md` (caption pool)
+- `assets/marketing/content-calendar-7day.md` (Day 14 row, 2026-07-07)
+- `assets/marketing/daily/day-013-publishing-pack.md` (prior pack reference)
+- `data/love-test-day-013-kpi-entry.csv` (prior KPI scaffold reference)
+- `.ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260630.md` (gate context, no edits)
+- `assets/marketing/love-test-next-20-video-scripts.md` (script pool)
+- `assets/marketing/content-calendar-7day.md` (Day 7 row 2026-06-30)
+- `assets/marketing/daily/day-011-publishing-pack.md` (precedent)
+- `assets/marketing/daily/day-011-review-checklist.md` (precedent)
+- `data/love-test-day-011-kpi-entry.csv` (KPI schema)
+- `data/love-test-day-007-kpi-entry.csv` (already scaffolded 2026-06-30 KPI rows; not modified)
+
+## Validation evidence
+
+### git diff --check
+
+Pending. Will be run before commit.
+
+### Targeted secret-shape scan
+
+Pending. Will be run before commit over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/`.
+
+### npm run typecheck
+
+Change set is markdown + CSV only with no TypeScript or ESLint surface. Consistent with prior content-only skill run precedent (2026-06-26 through 2026-06-30). A full typecheck/lint will be attempted for documentation completeness; if `node_modules` or network access is unavailable in this docs-only cron runner, the run will be recorded as markdown+CSV-only and noted in CHANGELOG_AI.md.
+
+### npm run lint
+
+Same as typecheck above.
+
+## Gate status (this run)
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Suggested commit message for this run
+
+```text
+chore(marketing): add love-test day 012 publishing pack
+```
+
+## 2026-06-30 Content Calendar Refresh Run (cron 37 2 * * *)
+
+### Files changed in this run
+
+```text
+M  assets/marketing/love-test-next-30-hooks.md
+M  assets/marketing/love-test-next-20-video-scripts.md
+M  assets/marketing/love-test-next-20-share-captions.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+### Scope check
+
+- Calendar pre-run count: 35 future days (Day 7 through Day 41, ending 2026-08-03). 35 ≥ 7 → no minimum-fill trigger. Calendar file `assets/marketing/content-calendar-7day.md` not modified this run.
+- Theme rotation: existing 35 future days already cycle through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus pattern-naming, decision-pacing, recap, and honest-audit supporting angles. No anchor theme appears more than three times in any rolling 14-day window; rotation is healthy and no rebalancing was needed.
+- Hook pool pre-run count: 60 (last batch +5 on 2026-06-29). Post-run count: 65 (this batch +5).
+- Script pool pre-run count: 32 (last batch +2 on 2026-06-28, +5 on 2026-06-27, +5 on 2026-06-26). Post-run count: 34 (this batch +2).
+- Caption pool pre-run count: 36 (last batch +3 on 2026-06-29, +3 on 2026-06-28, +5 on 2026-06-27, +5 on 2026-06-26). Post-run count: 39 (this batch +3).
+
+### Hook batch details (entries 61-65)
+
+```text
+61. 想看清楚他在想什么的时候，先看清楚你在循环什么。
+62. 主动不丢判断力，盲目的主动才是消耗。先看清楚再决定发不发。
+63. 重新出现的联系是一种数据，它不一定是一种邀请。
+64. 一段值得继续的关系，常常看起来像一件你能用正常语气描述的事。
+65. 每周留出一晚回看记录，比每天追问一次新信号更稳。
+```
+
+- Hook 61: anchor theme "what is he thinking now?", supporting angle "pattern-not-mind-reading".
+- Hook 62: anchor theme "should I take the initiative in ambiguity?", supporting angle "judgment-preserving-initiation".
+- Hook 63: anchor theme "will they come back after no contact?", supporting angle "data-not-invitation".
+- Hook 64: anchor theme "is this relationship worth continuing?", supporting angle "calm-describability".
+- Hook 65: supporting angle "weekly-review-steadier-than-daily".
+
+### Video script batch details (entries 33-34)
+
+```text
+33 What Is He Thinking Today — Douyin — observation-first, no mind-reading claim.
+34 Worth Continuing In Plain Words — Xiaohongshu video — rhythm, not verdict, no decision for the user.
+```
+
+### Share caption batch details (entries 37-39)
+
+```text
+37. Observation-before-asking hook, CTA /love-test.
+38. Pause-vs-panic-send hook, CTA /love-test.
+39. Describable-relationships hook, CTA /relationship/new.
+```
+
+### Local validation
+
+- `git status --short --branch` before run: working tree clean, branch `main`, local HEAD `89bb389`, in sync with origin.
+- After the calendar refresh branch switch: branch `chore/marketing-content-calendar-refresh-20260630` created off `main` at `89bb389` for this run's edits (per AGENTS.md "Never merge directly to main"; the W26 squash on main remains the most recent merged commit before this run).
+- Files modified in this run: 5 (3 marketing asset files + 2 `.ai/` record files).
+- `git diff --check`: pending — will run before commit.
+- Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/`: pending — will run before commit. Expectation: 0 raw-shape hits (`sk_live_*`, `pk_live_*`, `whsec_*`, `rk_live_*`, `AKIA*`, `-----BEGIN *PRIVATE KEY-----`).
+- `npm run typecheck`: not run — change set is markdown-only with no TypeScript surface, so a typecheck invocation would only reflect the pre-existing baseline. `node_modules/` is present in this runner but the docs-only surface rule applies.
+- `npm run lint`: not run — same rationale as typecheck; markdown change set has no ESLint surface.
+
+### Gate status (this run)
+
+```text
+Seven-day content calendar: Go (35 future days, no addition required)
+Hook pool: Go (65)
+Video script pool: Go (34)
+Share caption pool: Go (39)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Blockers (No-Go conditions logged)
+
+- KPI evidence for funnel-optimizer copy change is still missing (see 2026-06-29 funnel-optimizer blocker entry above).
+- Stripe test-mode paid smoke approval phrase still not received.
+- Production deploy / Supabase production mutation / server mutation / webhook replay / social auto-posting remain No-Go.
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
+```
+
+### Next step (for human or future run)
+
+- No calendar-row additions required this run. The next required calendar refresh is the standard pool-rotation maintenance cron (also cron `37 2 * * *`) on 2026-07-01.
+- Manual publishing team: continue picking from the refreshed hook/script/caption pools, and prefer hooks 61-65 and captions 37-39 for the first three slots of the 2026-07-01 to 2026-07-03 publish window to keep the new batch in active rotation.
+- Reminder: social auto-posting remains manual-only. Stripe checkout, paid smoke, production deploy, and Supabase production mutation all remain No-Go.
 
 ## 2026-06-29 Funnel Optimizer Blocker Run (cron 0 2 */14 * *)
 
@@ -877,4 +1053,53 @@ Production deploy: No-Go
 
 ```text
 chore(marketing): refresh love-test content calendar
+```
+
+## 2026-07-01 - TianJi Love daily growth Day 014 run (cron 17 1 * * *)
+
+### Copy review (this run)
+
+```text
+No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
+guaranteed relationship outcomes, or 100% accuracy claims were added.
+No diagnosis language (anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+No "act now", "last chance", or fear-based urgency language was used.
+No "wanting to reach out = should send" coercion or
+"if you don't send you don't care" shame reversal was introduced.
+CTAs follow the established ladder: /love-test first, then /ask or /love-reading.
+```
+
+### Local validation
+
+```text
+git diff --check
+Passed (no whitespace errors on the markdown delta).
+
+Targeted secret-shape scan over .agents/skills/ .github/workflows/ .ai/ assets/marketing/ data/
+Passed: 0 raw-shape hits. No real credentials present.
+
+npm run typecheck
+Passed (tsc -p tsconfig.typecheck.json --noEmit, exit 0).
+
+npm run lint
+Passed (next lint, exit 0 — "No ESLint warnings or errors").
+```
+
+### Gate status (this run)
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): add love-test day 014 publishing pack
 ```

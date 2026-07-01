@@ -59,6 +59,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 35. I let one decision sit for a day. The next morning was clearer than the night before: tianji.love/ask
 36. A returning silence is still data, not always an invitation: tianji.love/love-reading
 
+## Refresh 2026-06-30 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-06-30 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). None are certainty claims.
+
+37. Before I asked what he was thinking, the free Love Test asked what I had been noticing: tianji.love/love-test
+38. I almost sent a message just to feel less anxious. The pause from the test saved me from a panic-send: tianji.love/love-test
+39. A relationship worth continuing usually sounds like one I can describe in a normal voice: tianji.love/relationship/new
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.
