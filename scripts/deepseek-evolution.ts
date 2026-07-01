@@ -67,7 +67,14 @@ function runCmd(cmd: string, cwd = "."): void {
 }
 
 function cleanJSON(text: string): string {
-  return text.replace(/```(?:json)?\s*/g, "").replace(/```\s*/g, "").trim();
+  // Remove code fences
+  let cleaned = text.replace(/```(?:json)?\s*/g, "").replace(/```\s*/g, "").trim();
+  // Convert single-quoted keys/values to double-quoted (common LLM mistake)
+  cleaned = cleaned.replace(/([{,]\s*)'([^'{}]+)'(\s*:)/g, '$1"$2"$3');   // keys
+  cleaned = cleaned.replace(/:(\s*)'([^']*)'(?=[,\s\}])/g, ': "$2"');      // values
+  // Remove trailing commas (illegal in JSON)
+  cleaned = cleaned.replace(/,(\s*[}\]])/g, '$1');
+  return cleaned;
 }
 
 function getSurfaceDescription(surface: string): string {
