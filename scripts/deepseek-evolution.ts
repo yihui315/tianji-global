@@ -43,17 +43,26 @@ const SURFACE = getNextSurface();
 async function callDeepSeek(messages: { role: string; content: string }[]): Promise<string> {
   const url = `${BASE_URL}/chat/completions`;
   const body = JSON.stringify({ model: MODEL, messages, temperature: 0.7 });
-  const resp = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-    body,
-  });
-  if (!resp.ok) {
-    const text = await resp.text();
-    throw new Error(`DeepSeek API error ${resp.status}: ${text}`);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 90000); // 90s timeout
+  try {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+      body,
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+    if (!resp.ok) {
+      const text = await resp.text();
+      throw new Error(`DeepSeek API error ${resp.status}: ${text}`);
+    }
+    const json = await resp.json() as { choices: { message: { content: string } }[] };
+    return json.choices[0]?.message?.content ?? "";
+  } catch (e: unknown) {
+    clearTimeout(timeout);
+    throw e;
   }
-  const json = await resp.json() as { choices: { message: { content: string } }[] };
-  return json.choices[0]?.message?.content ?? "";
 }
 
 function runCmd(cmd: string, cwd = "."): void {
