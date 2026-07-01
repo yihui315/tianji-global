@@ -1,6 +1,26 @@
 # TianJi Love Review Packet
 ## Current Task
 
+TianJi Love auto paid-gate status — 2026-07-01 (cron `0 6 * * *`, skill `tianji-github-paid-gate`, AUTO mode). Branch `chore/marketing-content-calendar-refresh-20260630` at local HEAD `83694c8`, working tree clean, in sync with origin. Inspects checkout-readiness evidence (non-secret only), validates test-mode paid-smoke readiness, generates gate status, and commits the report. No payment, env, webhook, deploy, or Supabase production surface was touched. Verdict: `CONDITIONAL-GO` — source-level ready, execution remains blocked on missing human approval phrase and stale masked Stripe test-mode env evidence. See `.ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260701.md` for full evidence and gate status.
+
+## Files changed in this run
+
+```text
+A  .ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260701.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+## Files NOT changed in this run
+
+- `.env*` — not read, not opened, not printed, not diffed.
+- `src/`, `supabase/`, `.github/`, `vercel.json`, `data/`, `scripts/` — untouched.
+- `assets/marketing/` — untouched (today's 02:37 content calendar refresh and 03:00 safe publisher bridge were earlier this morning and already committed).
+- `package.json`, `package-lock.json`, `tsconfig*.json` — untouched.
+- Stripe / webhook / checkout / `.env*` / Supabase production / deploy surface — untouched.
+
+## Previous task
+
 TianJi Love safe publisher bridge export — 2026-07-01 (cron `0 3 * * 3`, skill `tianji-github-safe-publisher-bridge`). Source pack: `assets/marketing/daily/day-014-publishing-pack.md` (theme: "Initiation in ambiguity — wanting to reach out is not the same as being ready to send", publishing date 2026-07-01). Bridge export produced 23 items across 6 channels (5 Xiaohongshu posts, 5 Reels short_video scripts, 5 X short_post, 3 Reddit/Quora answer drafts, 2 KOL drafts, 3 SEO outlines), matching the Day 014 channel mix exactly. Every item defaults to `review_status=pending_manual_review` and `publish_status=not_published`; credential fields are absent; no `.env*` was read; no auto-posting, no payment, no production deploy. A future n8n/Postiz/Mixpost adapter is **not enabled** by this run — that requires a separate, explicit gate.
 
 ## Files changed in this run
