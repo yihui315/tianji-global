@@ -1,6 +1,75 @@
 # TianJi Love Review Packet
 ## Current Task
 
+TianJi Love safe publisher bridge export — 2026-07-01 (cron `0 3 * * 3`, skill `tianji-github-safe-publisher-bridge`). Source pack: `assets/marketing/daily/day-014-publishing-pack.md` (theme: "Initiation in ambiguity — wanting to reach out is not the same as being ready to send", publishing date 2026-07-01). Bridge export produced 23 items across 6 channels (5 Xiaohongshu posts, 5 Reels short_video scripts, 5 X short_post, 3 Reddit/Quora answer drafts, 2 KOL drafts, 3 SEO outlines), matching the Day 014 channel mix exactly. Every item defaults to `review_status=pending_manual_review` and `publish_status=not_published`; credential fields are absent; no `.env*` was read; no auto-posting, no payment, no production deploy. A future n8n/Postiz/Mixpost adapter is **not enabled** by this run — that requires a separate, explicit gate.
+
+## Files changed in this run
+
+```text
+A  assets/marketing/publishing-queue.json
+A  assets/marketing/publishing-queue.csv
+A  .ai/TIANJI_LOVE_SAFE_PUBLISHER_BRIDGE.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+A  scripts/build_publisher_bridge.py
+```
+
+## Files NOT changed in this run
+
+- `assets/marketing/publishing-queue/` (per-day queue files, schema.json, README.md, `2026-06-*.{json,csv,md}`) — untouched. The new top-level `publishing-queue.{json,csv}` are the bridge export only; the per-day loop keeps working independently.
+- `.env*` — not read, not opened, not printed, not diffed.
+- `assets/marketing/love-test-*.md`, `assets/marketing/content-calendar-7day.md` — untouched.
+- `data/`, `src/`, `supabase/`, `.github/`, `vercel.json` — untouched.
+
+## Bridge export contract (per item)
+
+```text
+id, batch_id, date, channel, content_type, title, hook, body, cta, cta_url,
+utm_source, utm_medium, utm_campaign, source_pack,
+review_status (default: pending_manual_review),
+publish_status (default: not_published),
+manual_review_required (true),
+auto_post_eligible (false),
+credentials_present (false),
+published_url (""), impressions (0), clicks (0), leads (0),
+paid_conversions (0), revenue (0), notes
+```
+
+## Channel counts
+
+```text
+xiaohongshu  = 5
+tiktok_reels = 5
+twitter_x    = 5
+reddit_quora = 3
+kol_dm       = 2
+seo_outline  = 3
+total        = 23
+```
+
+## How a reviewer inspects the bridge export
+
+1. Open `assets/marketing/publishing-queue.json` (or `.csv` in a spreadsheet).
+2. Confirm every row has `review_status=pending_manual_review` and `publish_status=not_published`.
+3. Confirm `credentials_present` is `false` on every row and that no row contains a `token`, `cookie`, `api_key`, `password`, `webhook_secret`, or `.env`-style value.
+4. Spot-check 2-3 rows for tone, theme fit, CTA path (`/love-test` or another reflective surface), and absence of payment / fake-metric / guaranteed-outcome language.
+5. Decide whether to approve items by mutating `review_status` to `approved_for_manual_publish` (manual edit only) before any future adapter is approved.
+
+## Manual review checklist for this bridge export
+
+- [x] All 23 items default to `pending_manual_review` / `not_published`.
+- [x] No credential fields present on any item.
+- [x] No payment, Stripe, checkout, or "buy now" copy on any item.
+- [x] No fake testimonials, fake metrics, fake user counts, or guaranteed outcomes.
+- [x] No diagnosis language, "you are broken" framing, or shame reversal.
+- [x] No "act now" / "last chance" / "limited time" urgency language.
+- [x] No `.env*` read, copy, diff, or print anywhere in the build.
+- [x] No social auto-posting, no headless browser, no captcha/2FA bypass.
+- [x] No production deploy, no Supabase production mutation, no server mutation.
+- [x] No captcha, 2FA, or platform limit bypass; no account-risk-control bypass.
+
+## Previous task
+
 TianJi Love content calendar refresh — 2026-07-01 (cron `37 2 * * *`, skill `tianji-github-content-calendar`). Calendar pre-run count: 34 future days (2026-07-01 through 2026-08-03, Day 8 through Day 41). 34 ≥ 7 → no minimum-fill trigger; calendar file `assets/marketing/content-calendar-7day.md` not modified this run. Pools refreshed: hooks 60 → 70 (+5, entries 66-70), scripts 34 → 36 (+2, entries 35-36), captions 39 → 42 (+3, entries 40-42). Theme rotation across the 34 future days remains healthy (max anchor count in any rolling 7-day window = 1 anchor; "Worth continuing" appears 4× across 34 days but well-spaced). The refresh batch leans toward observation / pause / weekly-review angles so the rotation does not over-rely on silence and return.
 
 ## Files changed in this run
@@ -41,6 +110,7 @@ M  .ai/REVIEW_PACKET.md
 41. The pause between wanting to send and actually sending is where most of my better messages came from: tianji.love/love-test
 42. A weekly review of the pattern did more for me than a daily check on his last reply: tianji.love/relationship/new
 ```
+
 
 ## Theme rotation check (2026-07-01 → 2026-08-03, 34 future days)
 

@@ -1,6 +1,23 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-01 - TianJi Love safe publisher bridge export (cron 0 3 * * 3)
+
+- Task ID: `20260701-tianji-github-safe-publisher-bridge`.
+- Skill: `tianji-github-safe-publisher-bridge`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260630`, clean before this run, in sync with `origin` at `66db395` (post W27 content-calendar refresh).
+- Goal: convert the latest Day 014 publishing pack (`assets/marketing/daily/day-014-publishing-pack.md`, theme "Initiation in ambiguity — wanting to reach out is not the same as being ready to send") into a structured, manual-review-only queue export that a future n8n/Postiz/Mixpost adapter could consume. No auto-posting. No credentials stored or used. No payment execution. No production deploy.
+- Files created: `assets/marketing/publishing-queue.json`, `assets/marketing/publishing-queue.csv`, `.ai/TIANJI_LOVE_SAFE_PUBLISHER_BRIDGE.md`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Build script: `scripts/build_publisher_bridge.py` (deterministic, runs `python3 scripts/build_publisher_bridge.py`, writes the two queue files, no network).
+- Queue contents: 23 items — 5 Xiaohongshu posts, 5 Reels short_video scripts, 5 X / Twitter short_post, 3 Reddit/Quora answer drafts, 2 KOL drafts (1 DM + 1 post), 3 SEO outlines. Channel mix matches the Day 014 pack exactly (5/5/5/3/2/3). Campaign tag `revenue_os_bridge_day14` is unique to this export so a future adapter can filter its own input.
+- Defaults applied to every item: `review_status=pending_manual_review`, `publish_status=not_published`, `manual_review_required=true`, `auto_post_eligible=false`, `credentials_present=false`, `published_url=""`, all numeric metric columns = 0. Credential fields are absent, not blank placeholders.
+- The existing per-day `assets/marketing/publishing-queue/` (schema.json, README.md, 2026-06-*.json|csv|md) is untouched. The new top-level `publishing-queue.{json,csv}` are the bridge export only; the per-day loop continues to own daily publishing state.
+- Safety: no fake testimonials, no fake metrics, no fake user counts, no guaranteed reunion/reply/commitment/relationship-repair claims, no diagnosis language, no perfect-accuracy claim, no Stripe/payment claims, no `.env*` read/copy/diff/print, no social auto-posting, no production deploy, no Supabase production mutation, no captcha/2FA bypass, no platform automation script.
+- Validation: `git diff --check` will be run before commit. Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/` will be run before commit. `npm run typecheck` and `npm run lint`: change set is markdown + JSON + CSV only with no TypeScript or ESLint surface; consistent with prior content-only skill run precedent (2026-06-26 through 2026-07-01). A full typecheck/lint will be attempted for documentation completeness; if `node_modules` or network access is unavailable in this docs-only cron runner, the run will be recorded as markdown+JSON+CSV-only and noted.
+- Gate status: `Publisher bridge export: Go`; `Publishing queue JSON: Go`; `Publishing queue CSV: Go`; `Credentials: No-Go - not used or stored`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): add safe publisher bridge queue`.
+
 ### 2026-07-01 - TianJi Love content calendar refresh (cron 37 2 * * *)
 
 - Task ID: `20260701-tianji-love-content-calendar-refresh`.
