@@ -1,12 +1,15 @@
 /**
  * scripts/deepseek-evolution.ts
- * Calls DeepSeek Chat API (OpenAI-compatible endpoint) to run one AB experiment
- * surface for the Relationship module.
+ * DeepSeek-powered AB experiment runner for Relationship module.
+ * Uses DeepSeek Chat API to generate A/B variants, writes them to disk,
+ * then runs the comparison pipeline.
  *
- * Usage: DEEPSEEK_API_KEY=sk-... npx tsx scripts/deepseek-evolution.ts
+ * Usage: DEEPSEEK_API_KEY=*** npx tsx scripts/deepseek-evolution.ts
  */
 
-import { readFileSync, writeFileSync, existsSync } from "fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
+import { execSync } from "child_process";
+import { resolve } from "path";
 
 const API_KEY = process.env.DEEPSEEK_API_KEY;
 if (!API_KEY) {
@@ -16,6 +19,8 @@ if (!API_KEY) {
 
 const BASE_URL = process.env.DEEPSEEK_API_URL || "https://api.deepseek.com";
 const MODEL = process.env.MODEL || "deepseek-chat";
+const TMP_DIR = "/tmp/deepseek-evolution";
+mkdirSync(TMP_DIR, { recursive: true });
 
 const surfaces = ["hero_summary", "dimension_cards", "pattern_naming", "current_window", "share_card"];
 
@@ -33,34 +38,7 @@ function getNextSurface(): string {
 
 const SURFACE = getNextSurface();
 
-const USER_PROMPT = `Read AGENTS.md and program.md.
-
-Run one A/B experiment for the Relationship module.
-
-## Your task
-Improve the "${SURFACE}" surface in the Relationship module.
-
-## Instructions
-1. Read src/lib/relationship-engine.ts
-2. Create TWO variants:
-   - experiments/relationship/variant-a.json
-   - experiments/relationship/variant-b.json
-   Each with { name, focus, metrics, copy, reasoning }
-
-3. Run: npx tsx scripts/compare-ab-variants.ts experiments/relationship/variant-a.json experiments/relationship/variant-b.json
-
-4. Run: npx tsx scripts/decide-keep-or-discard.ts
-
-5. If decision === "keep": run npx tsx scripts/apply-winning-copy.ts
-
-6. Run: npx tsx scripts/generate-upgrade-report.ts
-
-## Rules
-- Do NOT touch auth, billing, .env, or deployment configs
-- Keep changes small, max 5 files
-- Run npm run audit:share && npm run audit:copy after changes
-- Output ALL required files even if experiment is discarded
-`;
+// ── Helpers ──────────────────────────────────────────────────────────────────
 
 async function callDeepSeek(messages: { role: string; content: string }[]): Promise<string> {
   const url = `${BASE_URL}/chat/completions`;
@@ -70,31 +48,208 @@ async function callDeepSeek(messages: { role: string; content: string }[]): Prom
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
     body,
   });
-  if (!resp.ok) throw new Error(`DeepSeek API error ${resp.status}: ${await resp.text()}`);
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`DeepSeek API error ${resp.status}: ${text}`);
+  }
   const json = await resp.json() as { choices: { message: { content: string } }[] };
   return json.choices[0]?.message?.content ?? "";
 }
 
-async function main() {
-  console.log(`Starting DeepSeek evolution run for surface: ${SURFACE}`);
+function runCmd(cmd: string, cwd = "."): void {
+  console.log(`  $ ${cmd}`);
+  try {
+    execSync(cmd, { cwd, stdio: "inherit" });
+  } catch (e: any) {
+    console.warn(`  ⚠ Command exited with code ${e.status}`);
+  }
+}
+
+function extractJSON(text: string, field: string): object {
+  // Try to find a JSON code block first
+  const codeBlockMatch = text.match(/```(?:json)?\s*\n?([\s\S]+?)\n?```/);
+  if (codeBlockMatch) {
+    try {
+      return JSON.parse(codeBlockMatch[1].trim());
+    } catch {}
+  }
+  // Fallback: find the field in the text
+  const idx = text.indexOf(`"${field}"`);
+  if (idx === -1) throw new Error(`Could not find "${field}" in response`);
+  const start = text.indexOf("{", idx);
+  let depth = 0;
+  for (let i = start; i < text.length; i++) {
+    if (text[i] === "{") depth++;
+    else if (text[i] === "}") { depth--; if (depth === 0) return JSON.parse(text.slice(start, i + 1)); }
+  }
+  throw new Error(`Could not parse JSON for "${field}"`);
+}
+
+function cleanJSON(text: string): string {
+  // Remove markdown code blocks, trim
+  return text.replace(/```(?:json)?\s*/g, "").replace(/```\s*/g, "").trim();
+}
+
+// ── Variant generation ───────────────────────────────────────────────────────
+
+async function generateVariant(
+  variant: "a" | "b",
+  focus: string,
+  engineContent: string,
+): Promise<object> {
+  const label = variant.toUpperCase();
+  const framing = variant === "A"
+    ? "emotional framing — speaks to the heart, uses evocative language"
+    : "functional framing — analytical, practical, outcome-oriented";
+
+  const systemPrompt = readFileSync("AGENTS.md", "utf8");
+
+  const userPrompt = `You are running an AB experiment for the TianJi Relationship module.
+
+## Current engine state (src/lib/relationship-engine.ts)
+\`\`\`
+${engineContent.slice(0, 4000)}
+\`\`\`
+
+## Experiment surface: ${focus}
+${getSurfaceDescription(focus)}
+
+## Your task
+Generate a ${label} variant with ${framing}.
+
+## Output format
+Return ONLY a valid JSON object like this (no markdown, no explanation):
+{
+  "name": "Variant A: Emotional Hero Summary",
+  "focus": "${focus}",
+  "metrics": {
+    "headlineStrength": 0-20,
+    "patternClarity": 0-15,
+    "emotionalResonance": 0-15,
+    "upgradeStrength": 0-15
+  },
+  "copy": {
+    "headline": "...",
+    "oneLiner": "...",
+    "cta": "...",
+    "patternLabel": "...",
+    "dimensionTitles": ["...", "..."],
+    "dimensionDescriptions": ["...", "..."],
+    "currentWindowText": "...",
+    "shareCardText": "..."
+  },
+  "reasoning": "Why this variant wins on this surface"
+}
+
+Rules:
+- Focus ONLY on the ${focus} surface
+- Do NOT expose birthDate, birthTime, birthLocation, or timezone
+- Copy must be in the same language as the engine content
+- Output ONLY the JSON object, no code fences, no extra text`;
+
   const messages = [
-    { role: "system", content: readFileSync("AGENTS.md", "utf8") },
-    { role: "user", content: USER_PROMPT },
+    { role: "system", content: systemPrompt },
+    { role: "user", content: userPrompt },
   ];
-  console.log("Calling DeepSeek API...");
-  const response = await callDeepSeek(messages);
-  console.log("Response received, length:", response.length);
-  writeFileSync("/tmp/deepseek-response.txt", response);
-  console.log("Response saved to /tmp/deepseek-response.txt");
+
+  console.log(`  Calling DeepSeek for Variant ${label}...`);
+  const raw = await callDeepSeek(messages);
+  const cleaned = cleanJSON(raw);
+  writeFileSync(`${TMP_DIR}/variant-${variant}-raw.txt`, raw);
+
+  try {
+    return JSON.parse(cleaned);
+  } catch (e) {
+    // Try extracting from the text
+    const jsonMatch = cleaned.match(/\{[\s\S]+\}/);
+    if (jsonMatch) return JSON.parse(jsonMatch[0]);
+    throw new Error(`Variant ${label} JSON parse failed: ${e.message}\nRaw: ${raw.slice(0, 500)}`);
+  }
+}
+
+function getSurfaceDescription(surface: string): string {
+  const descriptions: Record<string, string> = {
+    hero_summary: "Hero Summary: headline, one-liner, and CTA button copy. Max impact, drives upgrade click.",
+    dimension_cards: "Five Dimension Cards: titles and descriptions for each dimension. Clarity and tone.",
+    pattern_naming: "Pattern Naming: relationship archetype label, one-liner, and tags. Shareability focus.",
+    current_window: "Current Window: time expression, urgency, and action guidance. Drives immediate action.",
+    share_card: "Share Card: one-liner for social sharing, visual style guidance, emotional intensity.",
+  };
+  return descriptions[surface] || surface;
+}
+
+// ── Main ─────────────────────────────────────────────────────────────────────
+
+async function main() {
+  console.log(`\n========================================`);
+  console.log(`DeepSeek Evolution Run | Surface: ${SURFACE}`);
+  console.log(`========================================\n`);
+
+  // 1. Read current engine state
+  const enginePath = resolve("src/lib/relationship-engine.ts");
+  const engineContent = readFileSync(enginePath, "utf8");
+  console.log(`Engine loaded: ${engineContent.length} chars\n`);
+
+  // 2. Ensure output dir exists
+  mkdirSync("experiments/relationship", { recursive: true });
+
+  // 3. Generate both variants
+  console.log(`[1/5] Generating Variant A (emotional)...`);
+  const variantA = await generateVariant("a", SURFACE, engineContent);
+  writeFileSync("experiments/relationship/variant-a.json", JSON.stringify(variantA, null, 2));
+  console.log(`  ✓ Variant A saved\n`);
+
+  console.log(`[2/5] Generating Variant B (functional)...`);
+  const variantB = await generateVariant("b", SURFACE, engineContent);
+  writeFileSync("experiments/relationship/variant-b.json", JSON.stringify(variantB, null, 2));
+  console.log(`  ✓ Variant B saved\n`);
+
+  // 4. Run comparison
+  console.log(`[3/5] Running comparison...`);
+  runCmd(`npx tsx scripts/compare-ab-variants.ts experiments/relationship/variant-a.json experiments/relationship/variant-b.json`);
+
+  // 5. Decide
+  console.log(`[4/5] Running decision...`);
+  runCmd(`npx tsx scripts/decide-keep-or-discard.ts`);
+
+  // 6. Apply winning copy if keep
+  const decisionFile = "relationship-decision.json";
+  if (existsSync(decisionFile)) {
+    try {
+      const decision = JSON.parse(readFileSync(decisionFile, "utf8"));
+      if (decision.decision === "keep") {
+        console.log(`[5/5] Applying winning copy...`);
+        runCmd(`npx tsx scripts/apply-winning-copy.ts`);
+      } else {
+        console.log(`[5/5] Decision = discard, skipping apply.`);
+      }
+    } catch (e: any) {
+      console.warn(`  Could not read decision file: ${e.message}`);
+    }
+  } else {
+    console.log(`[5/5] Decision file not found, skipping apply.`);
+  }
+
+  // 7. Generate report
+  console.log(`\n[Final] Generating upgrade report...`);
+  runCmd(`npx tsx scripts/generate-upgrade-report.ts`);
+
+  // Verify outputs
+  console.log(`\n========================================`);
+  console.log(`Output check:`);
   const outputs = [
     "experiments/relationship/variant-a.json",
     "experiments/relationship/variant-b.json",
     "codex-upgrade-report.md",
   ];
   for (const f of outputs) {
-    console.log(`  ${existsSync(f) ? "OK" : "MISSING"} ${f}`);
+    console.log(`  ${existsSync(f) ? "✓" : "✗"} ${f}`);
   }
-  console.log("Done.");
+  console.log(`========================================\n`);
+  console.log(`Done.`);
 }
 
-main().catch((err) => { console.error("Fatal:", err.message); process.exit(1); });
+main().catch((err) => {
+  console.error(`\n❌ Fatal: ${err.message}`);
+  process.exit(1);
+});
