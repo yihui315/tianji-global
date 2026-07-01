@@ -121,10 +121,17 @@ Return ONLY a valid JSON object like this (no markdown, no explanation):
   "name": "Variant A: Emotional Hero Summary",
   "focus": "${focus}",
   "metrics": {
-    "headlineStrength": 0-20,
-    "patternClarity": 0-15,
-    "emotionalResonance": 0-15,
-    "upgradeStrength": 0-15
+    "hasHeroSummary": true,
+    "hasPattern": true,
+    "hasFiveDimensions": true,
+    "hasCurrentWindow": true,
+    "hasPracticalGuidance": true,
+    "hasPremiumSection": true,
+    "shareModes": 2,
+    "headlineStrength": 18,
+    "patternClarity": 14,
+    "emotionalResonance": 12,
+    "upgradeStrength": 10
   },
   "copy": {
     "headline": "...",
