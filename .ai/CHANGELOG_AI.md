@@ -1,6 +1,23 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-01 - TianJi Love content calendar refresh (cron 37 2 * * *)
+
+- Task ID: `20260701-tianji-love-content-calendar-refresh`.
+- Skill: `tianji-github-content-calendar`.
+- Working tree: `chore/marketing-content-calendar-refresh-20260630`, clean before this run, in sync with `origin` before this run.
+- Goal: maintain at least seven future days of TianJi Love content and keep hook/script/caption pools fresh without auto-posting, without payment execution, and without claiming certainty.
+- Pre-run count: calendar held 34 future days (2026-07-01 through 2026-08-03, Day 8 through Day 41). 34 ≥ 7, so no minimum-fill trigger was required; this run is a pool-refresh-and-rotation pass only — no new calendar rows were added because the skill rule says "If fewer than seven future days exist, add only the missing number of days", and 34 already exceeds the seven-day minimum by a wide margin.
+- Files changed: `assets/marketing/love-test-next-30-hooks.md`, `assets/marketing/love-test-next-20-video-scripts.md`, `assets/marketing/love-test-next-20-share-captions.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Calendar: unchanged this run. The 34 future days already in `assets/marketing/content-calendar-7day.md` rotate through the four anchor themes ("What is he thinking now?", "Should I take the initiative in ambiguity?", "Will they come back after no contact?", "Is this relationship worth continuing?") and the supporting pattern-naming, decision-pacing, recap, honest-audit, no-contact-week, and pause angles. Theme distribution check across the 34 future days: max anchor count in any rolling 7-day window = 1 anchor; "Worth continuing" is the most repeated anchor at 4× across 34 days but is well-spaced (07-11, 07-18, 07-26, 07-31). Rotation is healthy and no rebalancing was needed.
+- Hook pool: appended a refresh batch of 5 new hooks (entries 66-70) covering observation-before-asking, pause-returns-judgment, describable-rhythm, send-vs-no-reply framing, and weekly-review-steadier-than-daily. The batch is intentionally lighter on "no-contact" and "will they come back" and heavier on observation / rhythm / weekly-review so the rotation does not over-rely on silence or return. Pool now has 70 hooks. All hooks keep `Love Test` framed as a mirror, never a verdict.
+- Script pool: appended a refresh batch of 2 new video scripts (entries 35-36) covering "observation before asking" (no mind-reading claim, observation-first framing, leading to `/love-test`) and "pause returns judgment" (no pressure / chase tactics, no certainty claim about the other person's reaction, leading to `/love-test` then `/ask`). Pool now has 36 scripts. All scripts keep CTAs reflective (no payment claim).
+- Caption pool: appended a refresh batch of 3 new share-card captions (entries 40-42) covering observation-before-guessing, pause-vs-panic-send, and weekly-review-over-daily-check framing. Pool now has 42 captions. All captions stay on `/love-test` or `/relationship/new` as the first action.
+- Safety: no fake testimonials, no fake metrics, no fake user counts, no guaranteed reunion/reply/commitment/relationship-repair claims, no diagnosis language, no perfect-accuracy claim, no Stripe/payment claims, no `.env*` read, no social auto-posting, no production deploy, no Supabase production mutation.
+- Validation: `git diff --check` will be run before commit. Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/` will be run before commit. `npm run typecheck` and `npm run lint`: change set is markdown-only with no TypeScript or ESLint surface, so the typecheck and lint results would only reflect the pre-existing clean baseline rather than any new code surface; consistent with prior content-only skill run precedent (2026-06-26, 2026-06-27, 2026-06-28, 2026-06-29, 2026-06-30). A full typecheck/lint will be attempted for documentation completeness; if `node_modules` or network access is unavailable in this docs-only cron runner, the run will be recorded as markdown-only and noted.
+- Gate status: `Seven-day content calendar: Go (34 future days, no addition required)`; `Hook pool: Go (70)`; `Video script pool: Go (36)`; `Share caption pool: Go (42)`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): refresh love-test content calendar`.
+
 ### 2026-07-01 - TianJi Love funnel copy optimizer blocker (cron 0 2 */14 * *)
 
 - Task ID: `20260701-tianji-github-funnel-optimizer-blocker`.

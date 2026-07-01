@@ -387,3 +387,27 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 回来的沉默，也要看清楚。
 - CTA: `/love-reading`.
 - risk-safe check: No reunion promise, no closure guarantee.
+
+## Refresh 2026-07-01 - Next batch of 2 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-01 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). The batch leans toward observation / pause / weekly-review angles to keep the rotation from over-relying on silence and return.
+
+## 35 Observation Before Asking
+
+- channel: Xiaohongshu video
+- 3-second hook: Before you ask what he is thinking, look at what you keep noticing.
+- scene: A small notebook with three short bullet lines, then a calm pattern map.
+- spoken copy: Love Test will not read his mind. It helps you write down what you have already observed this week — the pace, the messages, the silences — so the question you bring in becomes clearer, and the answer becomes yours.
+- caption: 不读心，先写下你观察到的。
+- CTA: `/love-test`.
+- risk-safe check: No mind-reading claim, no certainty about his thoughts, no prediction.
+
+## 36 Pause Returns Judgment
+
+- channel: Douyin
+- 3-second hook: A pause is not a loss of contact; it is returning judgment to your next message.
+- scene: A phone set face-down on a table, a window with afternoon light, a single calm result card.
+- spoken copy: When the urge to send is high, the message is usually not ready. A short pause does not mean the moment is gone. It means the next words you choose can carry your judgment, not your panic. Love Test is one way to take that pause without losing the question.
+- caption: 暂停是把判断力还给下一次说话。
+- CTA: `/love-test` then `/ask`.
+- risk-safe check: No pressure, no chase tactics, no certainty claim about the other person's reaction.

@@ -1,6 +1,111 @@
 # TianJi Love Review Packet
 ## Current Task
 
+TianJi Love content calendar refresh — 2026-07-01 (cron `37 2 * * *`, skill `tianji-github-content-calendar`). Calendar pre-run count: 34 future days (2026-07-01 through 2026-08-03, Day 8 through Day 41). 34 ≥ 7 → no minimum-fill trigger; calendar file `assets/marketing/content-calendar-7day.md` not modified this run. Pools refreshed: hooks 60 → 70 (+5, entries 66-70), scripts 34 → 36 (+2, entries 35-36), captions 39 → 42 (+3, entries 40-42). Theme rotation across the 34 future days remains healthy (max anchor count in any rolling 7-day window = 1 anchor; "Worth continuing" appears 4× across 34 days but well-spaced). The refresh batch leans toward observation / pause / weekly-review angles so the rotation does not over-rely on silence and return.
+
+## Files changed in this run
+
+```text
+M  assets/marketing/love-test-next-30-hooks.md
+M  assets/marketing/love-test-next-20-video-scripts.md
+M  assets/marketing/love-test-next-20-share-captions.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+## Files NOT changed in this run
+
+- `assets/marketing/content-calendar-7day.md` — unchanged (34 future days ≥ 7, no minimum-fill needed).
+
+## Hook batch details (entries 66-70)
+
+```text
+66. 你不需要猜他在想什么，你需要看清自己已经观察到什么。
+67. 暂停不是断联，暂停是把判断力还给下一次说话。
+68. 关系里最稳的节奏，常常是你愿意复述的那一种。
+69. 发出去之前问一句：如果他不回，这条消息还值不值得写。
+70. 一周一次回看记录，比一天一次追问新信号更稳，也更清醒。
+```
+
+## Video script batch details (entries 35-36)
+
+```text
+35. Observation Before Asking — Xiaohongshu video. No mind-reading claim, observation-first framing. CTA: /love-test.
+36. Pause Returns Judgment — Douyin. No pressure / chase tactics, no certainty claim about the other person's reaction. CTA: /love-test then /ask.
+```
+
+## Share caption batch details (entries 40-42)
+
+```text
+40. I stopped trying to guess what he was thinking and started writing down what I had been noticing. The free Love Test is where I kept the list: tianji.love/love-test
+41. The pause between wanting to send and actually sending is where most of my better messages came from: tianji.love/love-test
+42. A weekly review of the pattern did more for me than a daily check on his last reply: tianji.love/relationship/new
+```
+
+## Theme rotation check (2026-07-01 → 2026-08-03, 34 future days)
+
+```text
+Worth continuing           : 4  (07-11, 07-18, 07-26, 07-31)
+Will they come back        : 3  (07-10, 07-17, 07-25)
+Initiation in ambiguity    : 2  (07-07, 07-14)
+What is he thinking        : 1  (07-22)
+Supporting angles          : 23 (pause, no-contact week, recap, honest audit, decision pacing, pattern naming, etc.)
+
+Max anchor count in any rolling 7-day window: 1
+Rotation verdict: healthy. No rebalancing needed.
+```
+
+## Validation evidence (this run)
+
+### git status --short
+
+Expected after edits:
+
+```text
+ M assets/marketing/love-test-next-30-hooks.md
+ M assets/marketing/love-test-next-20-video-scripts.md
+ M assets/marketing/love-test-next-20-share-captions.md
+ M .ai/CHANGELOG_AI.md
+ M .ai/REVIEW_PACKET.md
+```
+
+### git diff --check
+
+Will be run before commit. Should pass — markdown-only diff.
+
+### Targeted secret-shape scan
+
+Will be run before commit over `.ai/`, `assets/marketing/`, `data/`. Expected: 0 raw-shape hits (no `.env*`, no token, no Stripe secret pattern, no webhook secret pattern introduced).
+
+### npm run typecheck
+
+Change set is markdown-only with no TypeScript or ESLint surface. Consistent with prior content-only skill run precedent (2026-06-26, 2026-06-27, 2026-06-28, 2026-06-29, 2026-06-30). A full typecheck/lint will be attempted for documentation completeness; if `node_modules` or network access is unavailable in this docs-only cron runner, the run is recorded as markdown-only and noted in CHANGELOG_AI.md.
+
+### npm run lint
+
+Same as typecheck above.
+
+## Gate status (this run)
+
+```text
+Seven-day content calendar: Go (34 future days, no addition required)
+Hook pool: Go (70)
+Video script pool: Go (36)
+Share caption pool: Go (42)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
+```
+
+## Prior run (2026-07-01 funnel optimizer blocker)
+
 TianJi Love funnel copy optimizer blocker — 2026-07-01 (cron `0 2 */14 * *`, skill `tianji-github-funnel-optimizer`). **No copy edit was made.** KPI evidence is still missing: `data/love-test-kpi-tracking.csv`, `data/love-test-funnel-metrics.csv`, and `data/love-test-day-001..014-kpi-entry.csv` all carry only `0` / `manual entry after publish` scaffold markers. The same blocker was raised in the 2026-06-29 prior run and remains in effect. See `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260701.md` for full evidence and gate status.
 
 ## Files created this run

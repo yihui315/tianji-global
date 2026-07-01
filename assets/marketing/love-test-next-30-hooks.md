@@ -95,6 +95,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 64. 一段值得继续的关系，常常看起来像一件你能用正常语气描述的事。
 65. 每周留出一晚回看记录，比每天追问一次新信号更稳。
 
+## Refresh 2026-07-01 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-01 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the supporting pattern / pause / weekly-review angles. None are certainty claims. This batch is intentionally lighter on "no-contact" and "will they come back" and heavier on observation / rhythm / weekly-review so the rotation does not over-rely on silence or return.
+
+66. 你不需要猜他在想什么，你需要看清自己已经观察到什么。
+67. 暂停不是断联，暂停是把判断力还给下一次说话。
+68. 关系里最稳的节奏，常常是你愿意复述的那一种。
+69. 发出去之前问一句：如果他不回，这条消息还值不值得写。
+70. 一周一次回看记录，比一天一次追问新信号更稳，也更清醒。
+
 ## CTA pairings
 
 ```text

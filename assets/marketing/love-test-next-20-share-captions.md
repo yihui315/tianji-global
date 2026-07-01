@@ -67,6 +67,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 38. I almost sent a message just to feel less anxious. The pause from the test saved me from a panic-send: tianji.love/love-test
 39. A relationship worth continuing usually sounds like one I can describe in a normal voice: tianji.love/relationship/new
 
+## Refresh 2026-07-01 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-01 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing). This batch is intentionally heavier on observation / pause / weekly-review angles to keep the rotation from over-relying on silence and return. None are certainty claims.
+
+40. I stopped trying to guess what he was thinking and started writing down what I had been noticing. The free Love Test is where I kept the list: tianji.love/love-test
+41. The pause between wanting to send and actually sending is where most of my better messages came from: tianji.love/love-test
+42. A weekly review of the pattern did more for me than a daily check on his last reply: tianji.love/relationship/new
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.
