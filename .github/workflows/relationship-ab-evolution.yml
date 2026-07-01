@@ -41,36 +41,13 @@ jobs:
           npm run audit:share
           npm run audit:upgrade
 
-      # ── Codex generates A/B variants ─────────────────────────────────────
-      - name: Run Codex A/B experiment
-        uses: openai/codex-action@v1
-        with:
-          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
-          prompt: |
-            Read program.md and AGENTS.md before doing anything.
+      # ── DeepSeek generates A/B variants ─────────────────────────────────
+      - name: Run DeepSeek A/B experiment
+        run: npx tsx scripts/deepseek-evolution.ts
+        env:
+          DEEPSEEK_API_KEY: \${{ secrets.DEEPSEEK_API_KEY }}
 
-            Run one A/B experiment for the Relationship module.
-            Focus on ONE surface: Hero Summary (headline, one-liner, CTA copy).
-
-            Create two variants and WRITE BOTH to disk:
-            - experiments/relationship/variant-a.json
-            - experiments/relationship/variant-b.json
-
-            Each must include { name, focus, metrics }.
-            Variant A = emotional framing ("You feel something real, but...")
-            Variant B = functional framing ("This connection has long-term potential, but...")
-
-            Then run: npx tsx scripts/compare-ab-variants.ts
-
-            Then IMMEDIATELY run: npx tsx scripts/decide-keep-or-discard.ts
-
-            The decide script will produce relationship-decision.json.
-            If decision === "keep": ALSO run: npx tsx scripts/apply-winning-copy.ts
-            to write the winning copy into src/lib/relationship-engine.ts
-
-            Do NOT skip any of these steps.
-
-      # ── Compare A/B ───────────────────────────────────────────────────────
+      # ── Compare A/B ────────────────────────────────────────────────────
       - name: Compare A/B variants
         run: |
           npx tsx scripts/compare-ab-variants.ts \
@@ -82,7 +59,7 @@ jobs:
         run: npx tsx scripts/decide-keep-or-discard.ts
         continue-on-error: true
 
-      # ── Apply winning copy to engine ───────────────────────────────────────
+      # ── Apply winning copy to engine ────────────────────────────────────────
       - name: Apply winning copy
         run: npx tsx scripts/apply-winning-copy.ts
         continue-on-error: true
