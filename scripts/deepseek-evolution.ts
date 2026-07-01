@@ -159,7 +159,14 @@ Rules:
   ];
 
   console.log(`  Calling DeepSeek for Variant ${label}...`);
-  const raw = await callDeepSeek(messages);
+  let raw: string;
+  try {
+    raw = await callDeepSeek(messages);
+  } catch (e: unknown) {
+    const err = e as Error;
+    console.error(`  ❌ DeepSeek call failed: ${err.message}`);
+    throw e;
+  }
   writeFileSync(`${TMP_DIR}/variant-${variant}-raw.txt`, raw);
   console.log(`  Raw response (first 200 chars): ${raw.slice(0, 200).replace(/\n/g, " ")}`);
 
