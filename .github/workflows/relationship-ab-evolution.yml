@@ -84,6 +84,9 @@ jobs:
 
       # ── Commit + PR ───────────────────────────────────────────────────────
       - name: Commit and create PR
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Create a new branch for this experiment
           git checkout -b codex/relationship-ab
@@ -106,12 +109,27 @@ jobs:
           # Commit with report title
           REPORT_TITLE=$(grep "^# Codex" codex-upgrade-report.md | head -1 | sed 's/^# //')
           git commit -m "$REPORT_TITLE"
-          git push origin codex/relationship-ab || git push origin codex/relationship-ab --force
 
-          # Create PR
-          npx tsx scripts/create-pr.ts || gh pr create \
-            --base main \
-            --head codex/relationship-ab \
-            --title "$REPORT_TITLE" \
-            --body-file codex-upgrade-report.md \
-            2>/dev/null || echo "PR creation attempted"
+          # Push — use GH_TOKEN for HTTPS auth
+          GIT_USER=git GH_TOKEN="$GH_TOKEN" git push \
+            https://git@github.com/yihui315/tianji-global.git \
+            codex/relationship-ab 2>&1 | tee /tmp/push-output.txt || true
+
+          if grep -q "error\|fatal" /tmp/push-output.txt; then
+            echo "⚠️ Push failed — attempting force-push..."
+            GIT_USER=git GH_TOKEN="$GH_TOKEN" git push \
+              https://git@github.com/yihui315/tianji-global.git \
+              codex/relationship-ab --force 2>&1 || true
+          fi
+
+          # Create PR using GH_TOKEN env (gh reads it automatically)
+          npx tsx scripts/create-pr.ts 2>&1 || {
+            echo "⚠️ create-pr.ts failed — trying gh CLI directly..."
+            gh pr create \
+              --base main \
+              --head codex/relationship-ab \
+              --title "$REPORT_TITLE" \
+              --body-file codex-upgrade-report.md \
+              --repo yihui315/tianji-global \
+              2>&1 || echo "⚠️ Both PR creation methods failed — check permissions"
+          }
