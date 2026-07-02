@@ -1,11 +1,13 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love funnel copy optimizer blocker — 2026-07-01 (cron `0 2 */14 * *`, skill `tianji-github-funnel-optimizer`). **No copy edit was made.** KPI evidence is still missing: `data/love-test-kpi-tracking.csv`, `data/love-test-funnel-metrics.csv`, and `data/love-test-day-001..014-kpi-entry.csv` all carry only `0` / `manual entry after publish` scaffold markers. The same blocker was raised in the 2026-06-29 prior run and remains in effect. See `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260701.md` for full evidence and gate status.
+TianJi Love daily growth publishing pack — Day 015 for 2026-07-02 (cron `17 1 * * *`, skill `tianji-github-daily-growth`). Theme: "Pause before you send — check your motive before you check their reply", taken from the 7-day content calendar Day 15 row (2026-07-08). CTA: `/ask`. Day 14 = initiation in ambiguity (want vs. ready); Day 15 = pause before send (motive vs. reply expectation); the rotation continues the calm-hooks-only discipline.
 
 ## Files created this run
 
-- `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260701.md`
+- `assets/marketing/daily/day-015-publishing-pack.md`
+- `assets/marketing/daily/day-015-review-checklist.md`
+- `data/love-test-day-015-kpi-entry.csv`
 
 ## Files updated this run
 
@@ -14,12 +16,13 @@ TianJi Love funnel copy optimizer blocker — 2026-07-01 (cron `0 2 */14 * *`, s
 
 ## Allowed files inspected read-only (no edits)
 
-- `src/app/(main)/love-test/page.tsx` (607 lines, unchanged since 2026-06-29 read)
-- `src/app/(main)/ask/page.tsx` (808 lines, unchanged since 2026-06-29 read)
-- `src/lib/love-test.ts` (379 lines, unchanged since 2026-06-29 read)
-- `assets/love-test-copywriting.md` (74 lines, unchanged since 2026-06-29 read)
-- `data/love-test-event-tracking.csv` (19 lines, unchanged since 2026-06-29 read)
-- `data/love-test-kpi-tracking.csv` (2 lines, unchanged since 2026-06-29 read — all zeros)
+- `assets/marketing/content-calendar-7day.md` (Day 15 row, 2026-07-08)
+- `assets/marketing/daily/day-014-publishing-pack.md` (prior pack precedent)
+- `assets/marketing/daily/day-014-review-checklist.md` (prior checklist precedent)
+- `data/love-test-day-014-kpi-entry.csv` (prior KPI scaffold precedent)
+- `assets/marketing/love-test-next-30-hooks.md` (hook pool)
+- `assets/marketing/love-test-next-20-video-scripts.md` (script pool)
+- `assets/marketing/love-test-next-20-share-captions.md` (caption pool)
 
 ## Prior run (2026-07-01 daily growth Day 014)
 
