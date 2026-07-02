@@ -1106,3 +1106,60 @@ Production deploy: No-Go
 ```text
 chore(marketing): add love-test day 014 publishing pack
 ```
+
+## 2026-07-02 - TianJi Love content calendar refresh (cron)
+
+### Files changed
+
+- `assets/marketing/content-calendar-7day.md` — extended future calendar by 7 rows (Days 42–48, 2026-08-04 → 2026-08-10).
+- `assets/marketing/love-test-next-30-hooks.md` — added a "Refresh 2026-07-02" batch of 5 hooks (numbers 66–70).
+- `assets/marketing/love-test-next-20-video-scripts.md` — added a "Refresh 2026-07-02" batch of 3 scripts (numbered 35 / 36 / 37).
+- `assets/marketing/love-test-next-20-share-captions.md` — added a "Refresh 2026-07-02" batch of 3 captions (numbers 40–42).
+
+### Safety baseline (re-checked)
+
+```text
+No fake testimonials, fake numbers, or fake user counts were introduced.
+No guaranteed reunion, reply, commitment, or relationship repair claims were introduced.
+No "diagnostic" language (e.g. anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+No "act now", "last chance", or fear-based urgency language was used.
+No "wanting to reach out = should send" coercion or
+"if you don't send you don't care" shame reversal was introduced.
+CTAs follow the established ladder: /love-test first, then /ask or /love-reading or /relationship/new.
+```
+
+### Local validation
+
+```text
+git diff --check
+Passed (no whitespace errors on the markdown delta).
+
+Targeted secret-shape scan over .ai/ assets/marketing/ data/
+Passed: 0 raw-shape hits. No real credentials present.
+
+npm run typecheck
+Passed (tsc -p tsconfig.typecheck.json --noEmit, exit 0).
+
+npm run lint
+Passed (next lint, exit 0 — "No ESLint warnings or errors").
+```
+
+### Gate status (this run)
+
+```text
+Seven-day content calendar: Go - 40 future days (Days 9–48, 2026-07-02 → 2026-08-10)
+Hook pool: Go - 70 hooks
+Video script pool: Go - 37 scripts
+Share caption pool: Go - 42 captions
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
+```
