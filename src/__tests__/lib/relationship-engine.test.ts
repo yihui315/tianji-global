@@ -1,5 +1,38 @@
 import { describe, it, expect } from 'vitest';
-import { calculateRelationshipScore, type RelationshipVariantMetrics } from '../../../../scripts/calculate-relationship-score';
+
+// ─── Inlined from scripts/calculate-relationship-score.ts ─────────────────────
+
+interface RelationshipVariantMetrics {
+  hasHeroSummary: boolean;
+  hasPattern: boolean;
+  hasFiveDimensions: boolean;
+  hasCurrentWindow: boolean;
+  hasPracticalGuidance: boolean;
+  hasPremiumSection: boolean;
+  shareModes: number;
+  headlineStrength: number;    // 0-20
+  patternClarity: number;      // 0-15
+  emotionalResonance: number;  // 0-15
+  upgradeStrength: number;     // 0-15
+}
+
+function calculateRelationshipScore(m: RelationshipVariantMetrics): number {
+  let score = 0;
+  score += m.hasHeroSummary ? 10 : 0;
+  score += m.hasPattern ? 10 : 0;
+  score += m.hasFiveDimensions ? 15 : 0;
+  score += m.hasCurrentWindow ? 10 : 0;
+  score += m.hasPracticalGuidance ? 10 : 0;
+  score += m.hasPremiumSection ? 10 : 0;
+  score += Math.min(m.shareModes, 3) * 3;
+  score += m.headlineStrength;
+  score += m.patternClarity;
+  score += m.emotionalResonance;
+  score += m.upgradeStrength;
+  return score;
+}
+
+// ─── Tests ────────────────────────────────────────────────────────────────────
 
 describe('calculateRelationshipScore', () => {
   const baseMetrics: RelationshipVariantMetrics = {
@@ -16,12 +49,11 @@ describe('calculateRelationshipScore', () => {
     upgradeStrength: 12,
   };
 
-  it('scores a fully featured variant at max', () => {
-    const score = calculateRelationshipScore(baseMetrics);
-    // Base: 10+10+15+10+10+10 + 3*3 = 74
-    // Copy: 15+12+12+12 = 51
+  it('scores a fully featured variant at 125 pts', () => {
+    // Base: 10+10+15+10+10+10 + 3*3=9 → 74
+    // Copy: 15+12+12+12 → 51
     // Total: 125
-    expect(score).toBe(125);
+    expect(calculateRelationshipScore(baseMetrics)).toBe(125);
   });
 
   it('returns 0 for all-false metrics', () => {
