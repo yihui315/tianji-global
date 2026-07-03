@@ -144,7 +144,10 @@ export default function HeroCanvas() {
   }, []);
 
   // Split heading text into blur-word spans
-  const headingText = lang === 'zh' ? '命运 已书写' : 'Destiny Awaits';
+  const scanHref = `/destiny/scan?lang=${lang}`;
+  const headingText = lang === 'zh'
+    ? '一份命运画像 六大系统验证'
+    : 'One Destiny Profile, Verified by Six Systems';
   const words = headingText.split(' ');
 
   return (
@@ -205,7 +208,7 @@ export default function HeroCanvas() {
         {/* Badge */}
         <div className="hero-badge">
           <span className="hero-badge-new">{lang === 'zh' ? '全新' : 'New'}</span>
-          <span>{lang === 'zh' ? 'AI驱动命运解读' : 'AI-Powered Fortune Telling'}</span>
+          <span>{lang === 'zh' ? 'TianJi Destiny OS' : 'TianJi Destiny OS'}</span>
         </div>
 
         {/* Heading with BlurText animation */}
@@ -226,26 +229,26 @@ export default function HeroCanvas() {
         <p className="hero-subtitle">
           {lang === 'zh' ? (
             <>
-              紫微 · 八字 · 星盘 · 塔罗<br />
-              中西命理全覆盖<br />
-              AI赋能 · 精准解读
+              免费查看 Identity 与 Timing 预览<br />
+              Premium 解锁 Relationship · Career · Wealth · Action · Risk<br />
+              六大占卜系统交叉验证
             </>
           ) : (
             <>
-              Zi Wei · BaZi · Western Chart · Tarot<br />
-              East meets West divination<br />
-              AI-powered precision readings
+              Start with your Identity and Timing preview<br />
+              Unlock Relationship · Career · Wealth · Action · Risk<br />
+              One profile backed by six divination systems
             </>
           )}
         </p>
 
         {/* CTA Buttons */}
         <div className="hero-cta">
-          <a href="/birth-data" className="btn-glass btn-glass-solid">
-            {lang === 'zh' ? '开始探索' : 'Get Started'} <ArrowUpRight size={16} strokeWidth={2} />
+          <a href={scanHref} className="btn-glass btn-glass-solid">
+            {lang === 'zh' ? '开始命运扫描' : 'Start Destiny Scan'} <ArrowUpRight size={16} strokeWidth={2} />
           </a>
-          <a href="/dashboard" className="btn-glass btn-glass-outline">
-            {lang === 'zh' ? '观看演示' : 'Watch Demo'} <Play size={14} strokeWidth={2} />
+          <a href="#modules" className="btn-glass btn-glass-outline">
+            {lang === 'zh' ? '查看六大镜头' : 'See Six Lenses'} <Play size={14} strokeWidth={2} />
           </a>
         </div>
       </div>
@@ -253,12 +256,12 @@ export default function HeroCanvas() {
       {/* ── Partners Bar ── */}
       <div className="hero-partners">
         <div className="hero-partners-badge">
-          {lang === 'zh' ? '全球命运探索者信赖' : 'Trusted by fortune seekers worldwide'}
+          {lang === 'zh' ? '统一画像 · 六系统交叉验证' : 'One profile · six-system verification'}
         </div>
         <div className="hero-partners-names">
           {(lang === 'zh'
-            ? ['紫微斗数', '八字命理', '易经', '西方星盘', '塔罗']
-            : ['Zi Wei', 'BaZi', 'Yi Jing', 'Western Chart', 'Tarot']
+            ? ['八字', '紫微', '易经', '西方占星', '塔罗', '关系合盘']
+            : ['BaZi', 'Zi Wei', 'Yi Jing', 'Western Astrology', 'Tarot', 'Synastry']
           ).map((name) => (
             <span key={name} className="hero-partner-name">{name}</span>
           ))}

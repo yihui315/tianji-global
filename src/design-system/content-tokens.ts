@@ -13,18 +13,18 @@
 // ────────────────────────────────────────────
 export const heroHeadlines = {
   zh: [
-    '从命盘结构理解自己',
-    '星辰指引，理性解读',
-    '三分钟获得双引擎解读',
-    '天机已显 · 结构已明',
-    '穿越千年智慧 · 预见当下格局',
+    '一份命运画像，六大系统验证',
+    '用六个镜头看清同一个人生模式',
+    '三分钟生成你的 TianJi Destiny OS',
+    'Identity 与 Timing 先显现',
+    '把占卜工具升级为统一画像',
   ],
   en: [
-    'Understand yourself through your chart',
-    'Stellar guidance, grounded insight',
-    'Dual-engine reading in 3 minutes',
-    'Your chart, decoded',
-    'Ancient wisdom meets modern clarity',
+    'One Destiny Profile, Verified by Six Systems',
+    'Six lenses, one practical life pattern',
+    'Build your TianJi Destiny OS in 3 minutes',
+    'Identity and Timing first, deeper layers next',
+    'Not a toolbox. A unified destiny profile',
   ],
 } as const;
 
@@ -33,14 +33,14 @@ export const heroHeadlines = {
 // ────────────────────────────────────────────
 export const heroSubtitles = {
   zh: [
-    '紫微 · 八字 · 星盘 · 塔罗 — 中西命理全覆盖',
-    '从命盘结构、关系模式和时间节律理解自己',
-    '精准星体计算 · 深度命理解读',
+    '八字 · 紫微 · 易经 · 西方占星 · 塔罗 · 关系合盘共同验证一份命运画像',
+    '先看 Identity 与 Timing，再解锁 Relationship、Career、Wealth、Action 与 Risk',
+    '精准星体计算 · 经典算法 · AI解释，不编造',
   ],
   en: [
-    'Zi Wei · BaZi · Western Chart · Tarot — East meets West',
-    'Understand yourself through chart structure, relationship patterns, and life rhythms',
-    'Arc-second precision · deep interpretive analysis',
+    'BaZi · Zi Wei · Yi Jing · Western astrology · Tarot · Synastry verify one profile',
+    'Start with Identity and Timing, then unlock Relationship, Career, Wealth, Action, and Risk',
+    'Precision calculations · classical algorithms · AI explains, not invents',
   ],
 } as const;
 
@@ -49,8 +49,8 @@ export const heroSubtitles = {
 // ────────────────────────────────────────────
 export const ctaLabels = {
   primary: {
-    zh: '开始你的命运探索',
-    en: 'Begin Your Journey',
+    zh: '开始命运扫描',
+    en: 'Start Destiny Scan',
   },
   secondary: {
     zh: '查看今日运势',
@@ -71,8 +71,8 @@ export const ctaLabels = {
 // ────────────────────────────────────────────
 export const sectionHeadings = {
   services: {
-    zh: '十二天机法门',
-    en: 'All Divination Paths',
+    zh: '六大验证镜头',
+    en: 'Six Verification Lenses',
   },
   howItWorks: {
     zh: '天机如何运转',
@@ -87,16 +87,16 @@ export const sectionHeadings = {
     en: 'Real Insights, Real Stories',
   },
   pricing: {
-    zh: '选择你的方案',
-    en: 'Choose Your Plan',
+    zh: '解锁完整命运画像',
+    en: 'Unlock Your Full Destiny Profile',
   },
   faq: {
     zh: '常见问题',
     en: 'FAQ',
   },
   finalCta: {
-    zh: '天机已为你准备好答案',
-    en: 'Your chart is ready',
+    zh: '你的命运画像已经准备好',
+    en: 'Your destiny profile is ready',
   },
 } as const;
 
@@ -125,21 +125,21 @@ export const pricingPlans = {
   free: {
     name: { zh: '探索', en: 'Explore' },
     identity: { zh: '免费体验', en: 'Free' },
-    tagline: { zh: '先体验命盘结构，了解你的星辰基因', en: 'Discover your chart structure and cosmic blueprint' },
+    tagline: { zh: '免费查看 Identity 与 Timing 预览', en: 'Preview Identity and Timing for free' },
     price: '$0',
     period: { zh: '永久免费', en: 'Free forever' },
   },
   premium: {
     name: { zh: '星辰', en: 'Stellar' },
     identity: { zh: '最受欢迎', en: 'Most Popular' },
-    tagline: { zh: '解锁完整命盘、运势模式与长周期洞察', en: 'Unlock your full chart, patterns, and long-term insights' },
+    tagline: { zh: '解锁完整统一画像与六系统验证洞察', en: 'Unlock the unified profile and deeper verified insight' },
     price: '$9.9',
     period: { zh: '/月', en: '/mo' },
   },
   deep: {
     name: { zh: '天机', en: 'TianJi Pro' },
     identity: { zh: '深度洞察', en: 'For Deep Insight' },
-    tagline: { zh: '针对你当前人生阶段的个性化深度解读', en: 'Personalized interpretation for your specific life phase' },
+    tagline: { zh: '多档案、关系、长周期与顾问式工作流', en: 'Multi-profile, relationship, long-cycle, and advisor workflows' },
     price: '$29.9',
     period: { zh: '/月', en: '/mo' },
   },

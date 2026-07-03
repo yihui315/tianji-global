@@ -9,7 +9,7 @@ import { useLanguage } from '@/hooks/useLanguage';
  *
  * Taste Rule: 深空黑背景、大留白、克制金紫光效
  *
- * Cards: 紫微斗数、八字、易经、塔罗、西方占星、人生K线
+ * Cards: 八字、紫微斗数、易经、塔罗、西方占星、关系合盘
  * Each card: hover glow (gold/purple), subtle video-preview animation
  * Parallax: cards move at slightly different speeds on scroll
  */
@@ -108,7 +108,7 @@ function ModuleCard({ index, title, subtitle, icon, accentColor, href, descripti
                 border: `1px solid ${glowColor}0.15)`,
               }}
             >
-              {lang === 'zh' ? '立即体验' : 'Explore'}
+              {lang === 'zh' ? '验证镜头' : 'Lens'}
             </span>
           </div>
 
@@ -224,69 +224,69 @@ function ConstellationPreview({ accentColor, cardIndex }: { accentColor: string;
 
 const MODULES = [
   {
-    title: { zh: '紫微斗数', en: 'Zi Wei Dou Shu' },
-    subtitle: { zh: '东方宫廷命运体系', en: 'Eastern Imperial Chart' },
-    icon: '☁️',
-    accentColor: 'purple',
-    href: '/ziwei',
-    description: {
-      zh: '源自宋代的皇家星象学，通过14颗主星与12宫位，解读命宫、事业、感情、财富的完整格局。',
-      en: 'Song-dynasty royal astrology. 14 main stars × 12 palaces decode your complete life architecture.',
-    },
-  },
-  {
     title: { zh: '八字四柱', en: 'BaZi Four Pillars' },
-    subtitle: { zh: '天干地支命运结构', en: 'Heavenly Stems & Earthly Branches' },
+    subtitle: { zh: '长期结构与五行倾向', en: 'Long-range structure' },
     icon: '🌿',
     accentColor: 'gold',
     href: '/bazi',
     description: {
-      zh: '以出生年柱、月柱、日柱、时柱为核心，分析日元强弱、大运流转、十神关系，定位命运主轴。',
-      en: 'Year/Month/Day/Hour pillars reveal your Day Master strength, decade cycles, and ten gods framework.',
+      zh: '判断你的底层能量、五行平衡、长期节奏和适合持续投入的方向。',
+      en: 'Reads elemental balance, long-cycle structure, and the direction that can compound over time.',
+    },
+  },
+  {
+    title: { zh: '紫微斗数', en: 'Zi Wei Dou Shu' },
+    subtitle: { zh: '宫位与人生剧本', en: 'Palaces and life roles' },
+    icon: '☁️',
+    accentColor: 'purple',
+    href: '/ziwei',
+    description: {
+      zh: '用命宫、事业、财富和关系宫位验证你在不同人生领域里的角色与剧本。',
+      en: 'Uses palaces and stars to verify life roles across career, wealth, relationships, and identity.',
     },
   },
   {
     title: { zh: '易经六爻', en: 'Yi Jing Hexagrams' },
-    subtitle: { zh: '变化中的宇宙智慧', en: 'Wisdom Through Change' },
+    subtitle: { zh: '当前问题与变化趋势', en: 'Current change pattern' },
     icon: '⚙️',
     accentColor: 'cyan',
     href: '/yijing',
     description: {
-      zh: '基于铜钱卜卦的六爻体系，通过世应关系、六亲配合、神煞介入，解读问题的当下时机与变化趋势。',
-      en: 'Ancient coin-based hexagram system. Decode timing, relational dynamics, and emerging shifts.',
+      zh: '当你面对具体选择时，易经负责判断当下形势、变化方向和行动窗口。',
+      en: 'For a specific question, Yi Jing checks the current situation, change direction, and timing window.',
     },
   },
   {
     title: { zh: '塔罗牌阵', en: 'Tarot Card Spread' },
-    subtitle: { zh: '78张牌的宇宙镜像', en: '78-Card Cosmic Mirror' },
+    subtitle: { zh: '即时情绪与行动提示', en: 'Choice and action signal' },
     icon: '🌙',
     accentColor: 'rose',
     href: '/tarot',
     description: {
-      zh: '从韦特体系到凯尔特十字，78张牌构成完整象征语言网络，针对具体问题提供精准卡位解读。',
-      en: 'From Rider-Waite to Celtic Cross: 78 cards form a complete symbolic language for focused questions.',
+      zh: '补足当下情绪、犹豫点和下一步动作，让命运画像不只停留在结构。',
+      en: 'Adds the immediate emotional state, choice tension, and practical next action to the profile.',
     },
   },
   {
     title: { zh: '西方占星', en: 'Western Astrology' },
-    subtitle: { zh: '行星运行与出生星盘', en: 'Planetary Birth Chart' },
+    subtitle: { zh: '心理模式与行运窗口', en: 'Psychology and transits' },
     icon: '🪐',
     accentColor: 'emerald',
     href: '/western',
     description: {
-      zh: '基于Swiss Ephemeris角秒级精度星历表，计算十大行星、十二星座、十大相位，呈现完整星盘能量图。',
-      en: 'Swiss Ephemeris arc-second precision: 10 planets × 12 signs × 10 aspects = complete birth chart.',
+      zh: '用出生星盘与行运验证你的心理需求、关系模式和当前生命阶段。',
+      en: 'Uses natal psychology and transits to verify needs, relationship patterns, and current life phase.',
     },
   },
   {
-    title: { zh: '人生K线', en: 'Life K-Line' },
-    subtitle: { zh: '命运曲线的周期预测', en: 'Fortune Cycle Projections' },
-    icon: '📈',
+    title: { zh: '关系合盘', en: 'Relationship Synastry' },
+    subtitle: { zh: '匹配、冲突与关系时机', en: 'Match, conflict, timing' },
+    icon: '∞',
     accentColor: 'orange',
-    href: '/western',
+    href: '/relationship/new',
     description: {
-      zh: '将命运量化可视化——从童年到暮年的七大人生周期，标注高峰、低谷、转折点，预演未来十年走向。',
-      en: 'Quantify destiny across 7 life cycles. Map peaks, valleys, and turning points. Project the next decade.',
+      zh: '作为分享裂变入口，验证两个人的吸引、冲突、成长空间和适合推进的时机。',
+      en: 'The shareable relationship lens verifies attraction, conflict, growth space, and timing between two people.',
     },
   },
 ];
@@ -318,7 +318,7 @@ export default function ModuleGrid() {
             className="text-[10px] tracking-[0.3em] uppercase mb-4"
             style={{ color: 'rgba(245,158,11,0.5)' }}
           >
-            {lang === 'zh' ? '六大命运解读体系' : 'Six Cosmic Divination Systems'}
+            {lang === 'zh' ? '六大验证镜头' : 'Six Verification Lenses'}
           </p>
           <h2
             className="text-center leading-tight mb-4"
@@ -329,15 +329,15 @@ export default function ModuleGrid() {
               color: 'rgba(255,255,255,0.9)',
             }}
           >
-            {lang === 'zh' ? '一命二运三风水，四积阴德五读书' : 'One Destiny, Two Luck, Three Feng Shui'}
+            {lang === 'zh' ? '一份命运画像，六套系统交叉验证' : 'Six lenses, one destiny profile'}
           </h2>
           <p
             className="text-sm max-w-lg mx-auto"
             style={{ color: 'rgba(255,255,255,0.35)', letterSpacing: '0.02em' }}
           >
             {lang === 'zh'
-              ? '东方千年智慧与西方星象学融合，六个维度完整覆盖你的人生格局'
-              : 'Six dimensions of Eastern wisdom and Western astrology, fully covering your life architecture'}
+              ? '八字、紫微、易经、西方占星、塔罗与关系合盘不再互相竞争，而是共同验证 Identity、Timing、Relationship、Career、Wealth、Action 与 Risk。'
+              : 'BaZi, Zi Wei, Yi Jing, Western astrology, Tarot, and Synastry stop competing as tools and become evidence for one profile.'}
           </p>
         </motion.div>
 
@@ -356,11 +356,11 @@ export default function ModuleGrid() {
           className="flex justify-center mt-14"
         >
           <a
-            href="/western"
+            href={`/destiny/scan?lang=${lang}`}
             className="flex items-center gap-2 text-sm transition-colors duration-200"
             style={{ color: 'rgba(245,158,11,0.5)' }}
           >
-            <span>{lang === 'zh' ? '探索全部工具' : 'Explore all tools'}</span>
+            <span>{lang === 'zh' ? '开始命运扫描' : 'Start Destiny Scan'}</span>
             <span className="text-base">→</span>
           </a>
         </motion.div>

@@ -38,7 +38,8 @@ describe('traffic-evolution', () => {
 
     expect(context.source).toBe('tiktok');
     expect(context.strategy).toBe(selectTrafficStrategy('tiktok'));
-    expect(experience.scan.cta).toBe('Reveal My Hidden Shift');
-    expect(experience.result.lockHeadline).toContain('hidden');
+    expect(experience.scan.cta).toBe('Start My Destiny Scan');
+    expect(experience.scan.headline).toContain('six systems');
+    expect(experience.result.lockHeadline).toContain('six-system profile');
   });
 });

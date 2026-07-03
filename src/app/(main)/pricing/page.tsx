@@ -8,6 +8,61 @@ import { PLANS } from '@/lib/stripe';
 
 const PLAN_ORDER = ['PRO_MONTHLY', 'PRO_YEARLY'] as const;
 
+const PLAN_DISPLAY_COPY = {
+  PRO_MONTHLY: {
+    zh: {
+      name: 'Destiny OS 月度',
+      description: '完整统一命运画像，按月更新你的验证洞察',
+      features: [
+        '完整统一命运画像',
+        '六系统交叉验证摘要',
+        'Relationship、Career、Wealth、Action、Risk 解锁',
+        '关系合盘与分享图卡',
+        'PDF报告与双语输出',
+        '优先AI深度生成',
+      ],
+    },
+    en: {
+      name: 'Destiny OS Monthly',
+      description: 'Full unified destiny profile with monthly verified insight',
+      features: [
+        'Full unified destiny profile',
+        'Six-system verification summary',
+        'Relationship, Career, Wealth, Action, and Risk unlocks',
+        'Relationship synastry and share cards',
+        'PDF reports and bilingual output',
+        'Priority AI deep generation',
+      ],
+    },
+  },
+  PRO_YEARLY: {
+    zh: {
+      name: 'Destiny OS 年度',
+      description: '最适合持续追踪关系、事业、财富与时间窗口',
+      features: [
+        '包含月度方案全部能力',
+        '比月付节省17%',
+        '长周期趋势观察',
+        '多档案与关系画像管理',
+        '年度复盘与导出工作流',
+        '优先客户支持',
+      ],
+    },
+    en: {
+      name: 'Destiny OS Yearly',
+      description: 'Best for tracking relationship, career, wealth, and timing windows',
+      features: [
+        'Everything in Monthly',
+        'Save 17% vs monthly',
+        'Long-cycle trend visibility',
+        'Multi-profile and relationship profile management',
+        'Annual review and export workflow',
+        'Priority customer support',
+      ],
+    },
+  },
+} as const;
+
 export default function PricingPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -49,17 +104,17 @@ export default function PricingPage() {
   };
 
   const t = {
-    title: language === 'zh' ? '选择您的方案' : 'Choose Your Plan',
+    title: language === 'zh' ? '解锁完整命运画像' : 'Unlock Your Full Destiny Profile',
     subtitle: language === 'zh'
-      ? '解锁全部命理功能，解锁命运的奥秘'
-      : 'Unlock all fortune features and discover the mysteries of fate',
+      ? '免费扫描建立 Identity 与 Timing，订阅解锁六系统验证后的深度层。'
+      : 'Start with Identity and Timing, then subscribe for deeper six-system verified layers.',
     perMonth: language === 'zh' ? '/月' : '/month',
     perYear: language === 'zh' ? '/年' : '/year',
     save: language === 'zh' ? '省17%' : 'Save 17%',
     recommended: language === 'zh' ? '推荐' : 'Best Value',
     getStarted: language === 'zh' ? '立即开始' : 'Get Started',
     manage: language === 'zh' ? '管理订阅' : 'Manage Subscription',
-    features: language === 'zh' ? '功能特点' : 'Features',
+    features: language === 'zh' ? '六大验证镜头' : 'Six Verification Lenses',
     loginPrompt: language === 'zh' ? '登录后即可订阅' : 'Sign in to subscribe',
     error,
   };
@@ -151,6 +206,7 @@ export default function PricingPage() {
               const plan = PLANS[planId];
               const isYearly = planId === 'PRO_YEARLY';
               const isLoading = loadingPlan === planId;
+              const display = PLAN_DISPLAY_COPY[planId][language];
 
               return (
                 <div
@@ -172,10 +228,10 @@ export default function PricingPage() {
                     {/* Plan Name */}
                     <div className="mb-6">
                       <h3 className="text-2xl font-serif text-white/90 mb-1">
-                        {language === 'zh' ? plan.nameZh : plan.name}
+                        {display.name}
                       </h3>
                       <p className="text-white/50 text-sm">
-                        {language === 'zh' ? plan.descriptionZh : plan.description}
+                        {display.description}
                       </p>
                     </div>
 
@@ -201,26 +257,24 @@ export default function PricingPage() {
 
                     {/* Features */}
                     <ul className="space-y-3 mb-8">
-                      {(language === 'zh' ? plan.features.zh : plan.features.en).map(
-                        (feature, i) => (
-                          <li key={i} className="flex items-start gap-3 text-white/60 text-sm">
-                            <svg
-                              className="w-5 h-5 text-[#A78BFA] flex-shrink-0 mt-0.5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                            {feature}
-                          </li>
-                        )
-                      )}
+                      {display.features.map((feature, i) => (
+                        <li key={i} className="flex items-start gap-3 text-white/60 text-sm">
+                          <svg
+                            className="w-5 h-5 text-[#A78BFA] flex-shrink-0 mt-0.5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          {feature}
+                        </li>
+                      ))}
                     </ul>
 
                     {/* CTA Button */}
@@ -248,13 +302,14 @@ export default function PricingPage() {
           {/* Features Overview */}
           <div className="mt-20 text-center">
             <h3 className="text-xl font-serif text-white/80 mb-8">{t.features}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
-                { icon: '🌟', label: '紫微斗数', labelEn: 'Zi Wei' },
-                { icon: '📊', label: '八字命理', labelEn: 'Ba Zi' },
-                { icon: '🔥', label: '易经占卜', labelEn: 'Yi Jing' },
+                { icon: '📊', label: '八字', labelEn: 'BaZi' },
+                { icon: '🌟', label: '紫微', labelEn: 'Zi Wei' },
+                { icon: '🔥', label: '易经', labelEn: 'Yi Jing' },
                 { icon: '✨', label: '西方占星', labelEn: 'Western' },
-                { icon: '🎴', label: '塔罗牌', labelEn: 'Tarot' },
+                { icon: '🎴', label: '塔罗', labelEn: 'Tarot' },
+                { icon: '∞', label: '关系合盘', labelEn: 'Synastry' },
               ].map((item) => (
                 <div
                   key={item.labelEn}

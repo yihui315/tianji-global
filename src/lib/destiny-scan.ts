@@ -63,8 +63,10 @@ export interface DestinyScanPreview {
   };
   teaser: {
     relationship: string;
+    career: string;
     wealth: string;
     actions: string;
+    risk: string;
   };
   share: {
     title: string;
@@ -75,8 +77,10 @@ export interface DestinyScanPreview {
 
 export interface DestinyScanResult extends DestinyScanPreview {
   relationship: DestinySection;
+  career: DestinySection;
   wealth: DestinySection;
   actions: DestinySection;
+  risk: DestinySection;
 }
 
 interface EncryptedPayload {
@@ -124,11 +128,25 @@ const WEALTH_HEADLINES = [
   'Your best financial periods follow simplification, not expansion at any cost.',
 ];
 
+const CAREER_HEADLINES = [
+  'Your work grows fastest when depth becomes visible.',
+  'You are built for selective momentum, not constant motion.',
+  'Career clarity arrives when one role finally fits the whole pattern.',
+  'Your next career edge is judgment, timing, and cleaner positioning.',
+];
+
 const ACTION_HEADLINES = [
   'Your next breakthrough is operational, not mystical.',
   'The fastest upgrade is to narrow your focus and hold it longer.',
   'You do not need more ideas right now. You need one committed move.',
   'The right action plan is smaller and more repeatable than you think.',
+];
+
+const RISK_HEADLINES = [
+  'The main risk is scattering your energy across too many openings.',
+  'Your pressure point is timing anxiety, not lack of potential.',
+  'The wrong move is forcing certainty before the signal matures.',
+  'Your biggest leak is reacting to noise instead of reading the pattern.',
 ];
 
 const TIKTOK_ONE_LINERS = [
@@ -190,6 +208,13 @@ const WEALTH_BULLETS = [
   'Reduce noise so the profitable pattern becomes obvious.',
 ];
 
+const CAREER_BULLETS = [
+  'Choose the role where pattern recognition is rewarded.',
+  'Make one visible proof of depth before chasing a broader audience.',
+  'Use timing windows to pitch, launch, or reposition with cleaner leverage.',
+  'Let your long-range judgment become the product, not just a private habit.',
+];
+
 const ACTION_BULLETS = [
   'Pick one 30-day priority and let the rest become background.',
   'Track progress weekly, not emotionally.',
@@ -197,8 +222,15 @@ const ACTION_BULLETS = [
   'Say no faster to tasks that do not move timing, money, or relationships.',
 ];
 
+const RISK_BULLETS = [
+  'Do not mistake intensity for confirmation.',
+  'Avoid locking into commitments while the timing curve is still resetting.',
+  'Watch for over-reading one signal and ignoring the other five lenses.',
+  'Keep private birth data out of public share outputs.',
+];
+
 const TREND_LABELS = ['Now', '2W', '1M', '2M', '3M', '4M', '6M'];
-const ENERGY_LABELS = ['Identity', 'Love', 'Wealth', 'Timing'];
+const ENERGY_LABELS = ['Identity', 'Timing', 'Relationship', 'Wealth'];
 
 function getSecretKey() {
   const secret =
@@ -352,7 +384,9 @@ export function buildDestinyScan(input: DestinyScanInput, id = encodeDestinyScan
   const timelineHeadline = pick(TRAFFIC_TIMELINES[source] ?? WINDOW_LINES, seed, 5);
   const relationshipHeadline = pick(RELATIONSHIP_HEADLINES, seed, 7);
   const wealthHeadline = pick(WEALTH_HEADLINES, seed, 11);
+  const careerHeadline = pick(CAREER_HEADLINES, seed, 12);
   const actionsHeadline = pick(ACTION_HEADLINES, seed, 13);
+  const riskHeadline = pick(RISK_HEADLINES, seed, 14);
 
   return {
     id,
@@ -373,14 +407,22 @@ export function buildDestinyScan(input: DestinyScanInput, id = encodeDestinyScan
     },
     teaser: {
       relationship: `${relationshipHeadline} ${experience.result.teaserSuffix}`,
+      career: `${careerHeadline} The career layer is still locked behind the full profile.`,
       wealth: `${wealthHeadline} ${source === 'seo' ? 'The concrete explanation is still locked.' : 'Your strongest money window is still locked.'}`,
       actions: `${actionsHeadline} ${source === 'direct' ? 'The premium move is still hidden.' : 'The concrete 30-day move is still locked.'}`,
+      risk: `${riskHeadline} The risk map needs the full six-system profile.`,
     },
     relationship: buildSection(
       relationshipHeadline,
       `${relationshipHeadline} Your emotional life works best when pace and trust rise together instead of being forced to peak at the start.`,
       RELATIONSHIP_BULLETS,
       seed
+    ),
+    career: buildSection(
+      careerHeadline,
+      `${careerHeadline} Your strongest work direction appears when BaZi structure, Zi Wei roles, astrology psychology, and near-term timing point to the same next move.`,
+      CAREER_BULLETS,
+      seed + 3
     ),
     wealth: buildSection(
       wealthHeadline,
@@ -394,10 +436,16 @@ export function buildDestinyScan(input: DestinyScanInput, id = encodeDestinyScan
       ACTION_BULLETS,
       seed + 2
     ),
+    risk: buildSection(
+      riskHeadline,
+      `${riskHeadline} The full profile highlights where the six systems disagree, because disagreement is often where practical caution belongs.`,
+      RISK_BULLETS,
+      seed + 4
+    ),
     share: {
       title: summaryHeadline,
       oneLiner,
-      caption: `${experience.result.shareCaptionPrefix} Compatibility signal: ${compatibilityScore}%`,
+      caption: `${experience.result.shareCaptionPrefix} Compatibility signal: ${compatibilityScore}% · six-system verified`,
     },
   };
 }
@@ -443,6 +491,11 @@ export function buildDestinyScanNormalizedPayload(result: DestinyScanResult): No
       summary: result.relationship.summary,
       strengths: result.relationship.bullets,
     },
+    career: {
+      headline: result.career.headline,
+      summary: result.career.summary,
+      opportunities: result.career.bullets,
+    },
     wealth: {
       headline: result.wealth.headline,
       summary: result.wealth.summary,
@@ -464,9 +517,14 @@ export function buildDestinyScanNormalizedPayload(result: DestinyScanResult): No
       advice: result.actions.bullets,
     },
     risk: {
+      headline: result.risk.headline,
+      summary: result.risk.summary,
       risks: [
+        ...result.risk.bullets,
         result.teaser.relationship,
+        result.teaser.career,
         result.teaser.wealth,
+        result.teaser.risk,
       ],
     },
     timeline: {

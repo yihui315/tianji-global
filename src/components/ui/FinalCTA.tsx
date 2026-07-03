@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { colors, variants, scrollReveal } from '@/design-system';
-import { sectionHeadings, ctaLabels, disclaimers } from '@/design-system/content-tokens';
+import { sectionHeadings, ctaLabels } from '@/design-system/content-tokens';
 import { useLanguage } from '@/hooks/useLanguage';
 import { MysticButton } from './MysticButton';
 
@@ -24,7 +24,7 @@ export interface FinalCTAProps {
  * Consumes content-tokens for headline, CTA label, and subtitle.
  */
 export function FinalCTA({
-  href = '/western',
+  href,
   subtitle,
   helperText,
   className = '',
@@ -40,6 +40,7 @@ export function FinalCTA({
   const resolvedSubtitle = subtitle ?? t('cta.subtitle');
   const ctaLabel = ctaLabels.primary[lang];
   const resolvedHelper = helperText ?? t('hero.helper');
+  const resolvedHref = href ?? `/destiny/scan?lang=${lang}`;
 
   return (
     <section
@@ -71,7 +72,7 @@ export function FinalCTA({
             className="text-xs tracking-[0.3em] uppercase mb-6"
             style={{ color: colors.goldDim }}
           >
-            Destiny Awaits
+            TianJi Destiny OS
           </p>
           <h2
             className="text-3xl sm:text-5xl font-serif mb-6"
@@ -86,7 +87,7 @@ export function FinalCTA({
             {resolvedSubtitle}
           </p>
           <div className="text-center">
-            <MysticButton variant="solid" size="lg" href={href}>
+            <MysticButton variant="solid" size="lg" href={resolvedHref}>
               {ctaLabel}
             </MysticButton>
             {resolvedHelper && (
