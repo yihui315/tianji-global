@@ -1,6 +1,7 @@
 'use client';
 
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { trackAffiliateClick, type AffiliateNetwork, type AdMonetizedPage } from '@/lib/analytics/monetization-events';
 
 export interface AffiliateProduct {
   /** Display name */
@@ -11,7 +12,7 @@ export interface AffiliateProduct {
   /** Amazon product image URL (optional for custom) */
   imageUrl?: string;
   /** Tag: 'amazon' | 'astrology' | 'book' | 'course' | 'crystal' */
-  tag: 'amazon' | 'astrology' | 'book' | 'course' | 'crystal';
+  tag: AffiliateNetwork;
   /** Price in USD for display */
   price?: string;
   /** Star rating 1-5 */
@@ -96,12 +97,15 @@ export interface AffiliateProductGridProps {
   products?: AffiliateProduct[];
   title?: string;
   className?: string;
+  /** Canonical page name for analytics */
+  page?: string;
 }
 
 export function AffiliateProductGrid({
   products = PRODUCTS,
   title,
   className = '',
+  page = 'unknown',
 }: AffiliateProductGridProps) {
   const { language } = useSyncedLanguage();
   const isZh = language === 'zh';
@@ -126,6 +130,14 @@ export function AffiliateProductGrid({
             href={product.link}
             target="_blank"
             rel="noopener noreferrer sponsored"
+            onClick={() =>
+              trackAffiliateClick({
+                network: product.tag,
+                product_name: isZh ? product.nameZh : product.nameEn,
+                page: (page || 'unknown') as 'homepage' | 'blog' | AdMonetizedPage,
+                link_url: product.link,
+              })
+            }
             className="group flex flex-col gap-2 rounded-xl border border-[#d8b77b]/12 bg-[#0f0f18] p-3 transition hover:border-[#d8b77b]/36 hover:bg-[#14142a]"
           >
             {product.imageUrl ? (

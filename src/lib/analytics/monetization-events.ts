@@ -33,7 +33,9 @@ export type AdMonetizedPage =
   | 'guide'
   | 'tarot-love-reading-online'
   | 'free-ai-love-reading'
-  | 'bazi-relationship-analysis-free';
+  | 'bazi-relationship-analysis-free'
+  | 'he-loves-you-signs'
+  | 'tarot-spread-meanings';
 
 /** Ad format shown */
 export type AdFormat = 'display' | 'in-article' | 'in-feed' | 'multiflex';
