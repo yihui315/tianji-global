@@ -105,6 +105,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 69. 一周回看一次，比一天追问七次更能帮你拿回主动权。
 70. 边界清楚一点的人，关系里更容易温柔，也更容易自由。
 
+## Refresh 2026-07-03 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-03 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the emotional-vocabulary, self-trust, contact-calibration, and dynamic-readjustment supporting angles. None are certainty claims.
+
+71. 把感觉先叫出名字，再决定要不要动。能命名就能暂停。
+72. 内在的那个声音，往往比对方的回复更值得记录。先听自己，再看信号。
+73. 慢下来的一周不是浪费，是给观察留空间。赶出来的新信号常常不是新信号。
+74. 主动联系的速度本身也是信息，节奏稳了，下一步才看得清。
+75. 人会变，固定剧本会过期。留一点弹性，比守住旧故事更清楚。
+
 ## CTA pairings
 
 ```text

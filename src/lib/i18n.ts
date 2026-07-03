@@ -26,8 +26,18 @@ export const localizedPublicRoutes: Array<{
   { path: '/relationship/new', changeFrequency: 'weekly', priority: 0.9 },
   { path: '/pricing', changeFrequency: 'weekly', priority: 0.9 },
   { path: '/about', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/guide', changeFrequency: 'weekly', priority: 0.7 },
+  { path: '/services', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/relationship-patterns-guide', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/free-ai-love-reading', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/privacy', changeFrequency: 'yearly', priority: 0.45 },
   { path: '/terms', changeFrequency: 'yearly', priority: 0.45 },
+  { path: '/free-relationship-compatibility-test', changeFrequency: 'weekly', priority: 0.85 },
+  { path: '/daily-love-oracle-guide', changeFrequency: 'weekly', priority: 0.75 },
+  { path: '/love-timing-insights', changeFrequency: 'weekly', priority: 0.75 },
+  { path: '/bazi-relationship-analysis-free', changeFrequency: 'weekly', priority: 0.8 },
+  { path: '/tarot-love-reading-online', changeFrequency: 'weekly', priority: 0.8 },
+  { path: '/how-to-get-clarity-in-relationship', changeFrequency: 'monthly', priority: 0.7 },
 ];
 
 export function isSupportedLocale(locale: string): locale is Locale {

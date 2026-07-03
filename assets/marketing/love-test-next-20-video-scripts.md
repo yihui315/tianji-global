@@ -421,3 +421,37 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 回来的沉默，也要看清楚。
 - CTA: `/love-reading`.
 - risk-safe check: No reunion promise, no closure guarantee.
+
+## Refresh 2026-07-03 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-03 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the emotional-vocabulary, self-trust, and contact-calibration supporting angles.
+
+## 35 Name The Feeling First
+
+- channel: Xiaohongshu video
+- 3-second hook: Name the feeling before you name the next step.
+- scene: A handwritten card with a single feeling word, then a calm result card.
+- spoken copy: When you can put a feeling into words, the next move becomes clearer. Love Test does not decide for you. It helps you name what you are noticing before you act.
+- caption: 先命名，再决定。
+- CTA: `/love-test`.
+- risk-safe check: No diagnosis language, no certainty claim.
+
+## 36 The Voice Inside
+
+- channel: Douyin
+- 3-second hook: The voice inside is often clearer than the signal outside.
+- scene: A person pausing at a window, listening inward, then a steady mirror card.
+- spoken copy: Before you ask what they are thinking, it can help to hear what you have been noticing. Love Test frames the pattern so your own voice can come through first.
+- caption: 先听见自己，再看信号。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No mind-reading claim, no outcome guarantee.
+
+## 37 Pace Before Press
+
+- channel: Videohao
+- 3-second hook: How fast you send is also information.
+- scene: A finger hovering over a send button, then pulling back to a steady note.
+- spoken copy: The pace of reaching out is part of the message. Love Test gives you a pause to notice the rhythm before the message goes out, not after.
+- caption: 速度也是信息。
+- CTA: `/love-test` then `/ask?source=love_test&intent=should_i_initiate`.
+- risk-safe check: No pressure or chase tactics, no guaranteed reply.
