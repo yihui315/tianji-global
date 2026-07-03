@@ -1175,3 +1175,64 @@ Production deploy: No-Go
 ```text
 chore(marketing): refresh love-test content calendar
 ```
+
+## 2026-07-03 - TianJi Love content calendar refresh (cron)
+
+### Files changed
+
+- `assets/marketing/content-calendar-7day.md` — extended future calendar by 7 rows (Days 49–55, 2026-08-11 → 2026-08-17).
+- `assets/marketing/love-test-next-30-hooks.md` — added a "Refresh 2026-07-03" batch of 5 hooks (numbers 71–75).
+- `assets/marketing/love-test-next-20-video-scripts.md` — added a "Refresh 2026-07-03" batch of 3 scripts (numbered 35 / 36 / 37: "Name The Feeling First", "The Voice Inside", "Pace Before Press").
+- `assets/marketing/love-test-next-20-share-captions.md` — added a "Refresh 2026-07-03" batch of 3 captions (numbers 43–45).
+
+### Safety baseline (re-checked)
+
+```text
+No fake testimonials, fake numbers, or fake user counts were introduced.
+No guaranteed reunion, reply, commitment, or relationship repair claims were introduced.
+No "diagnostic" language (e.g. anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+No "act now", "last chance", or fear-based urgency language was used.
+No "wanting to reach out = should send" coercion or
+"if you don't send you don't care" shame reversal was introduced.
+CTAs follow the established ladder: /love-test first, then /ask or /love-reading or /relationship/new.
+```
+
+### Local validation
+
+```text
+git diff --check
+Returned 0 warnings on the markdown delta from this run. The 3 trailing-whitespace
+warnings flagged by `git diff --check` are pre-existing in `data/love-test-funnel-metrics.csv`
+and outside the scope of this content-calendar skill run.
+
+Targeted secret-shape scan over .ai/ assets/marketing/ data/
+Returned 0 raw-shape hits over the new edits. Matches in .ai/CHANGELOG_AI.md,
+.ai/REVIEW_PACKET.md, and prior .ai/TIANJI_LOVE_AUTO_GATE_STATUS_*.md are descriptive
+mentions of the scan detector strings in audit reports, not real secrets.
+
+npm run typecheck
+Passed (tsc -p tsconfig.typecheck.json --noEmit, exit 0).
+
+npm run lint
+Passed (next lint, exit 0 — "No ESLint warnings or errors").
+```
+
+### Gate status (this run)
+
+```text
+Seven-day content calendar: Go - 45 future days (Days 10–55, 2026-07-03 → 2026-08-17)
+Hook pool: Go - 75 hooks
+Video script pool: Go - 40 scripts
+Share caption pool: Go - 45 captions
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
+```
