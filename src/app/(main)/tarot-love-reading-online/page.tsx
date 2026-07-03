@@ -303,10 +303,7 @@ export default function TarotLoveReadingOnlinePage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div
-        id="tarot-love-reading-ads"
-        className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8"
-      />
+      <AdSenseSlot slot="TAROT_READING_BOTTOM_SLOT" format="display" page="tarot-love-reading-online" />
 
       {/* Privacy */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 py-8 sm:px-8">
@@ -365,10 +362,7 @@ export default function TarotLoveReadingOnlinePage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div
-        id="tarot-love-reading-ads-2"
-        className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8"
-      />
+      <AdSenseSlot slot="TAROT_READING_SLOT" format="in-article" page="tarot-love-reading-online" />
 
       {/* FAQ */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 pb-8 sm:px-8">
@@ -402,6 +396,11 @@ export default function TarotLoveReadingOnlinePage() {
           </Link>
         ))}
       </nav>
+
+            {/* Affiliate Products */}
+      <section className="relative z-10 mx-auto max-w-6xl px-5 py-10 sm:px-8">
+        <AffiliateProductGrid />
+      </section>
 
       <TianjiLoveFooter
         disclaimer={t(DISCLAIMER_EN, DISCLAIMER_ZH)}

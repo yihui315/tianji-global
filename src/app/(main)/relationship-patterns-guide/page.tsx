@@ -26,6 +26,8 @@ import {
 } from '@/components/tianji-love';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
+import { AdSenseSlot } from '@/components/ads/AdSenseSlot';
+import { AffiliateProductGrid } from '@/components/affiliate/AffiliateProductGrid';
 
 const INTERNAL_LINKS = [
   { href: '/guide', labelEn: 'Guides', labelZh: '指南' },
@@ -259,7 +261,9 @@ export default function RelationshipPatternsGuidePage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div id="patterns-guide-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
+      <div id="patterns-guide-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8">
+        <AdSenseSlot slot="PATTERNS_GUIDE_SLOT" format="in-article" page="relationship-patterns-guide" />
+      </div>
 
       {/* How Astrology Reveals Patterns */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 py-8 sm:px-8">
@@ -399,7 +403,9 @@ export default function RelationshipPatternsGuidePage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div id="patterns-guide-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
+      <div id="patterns-guide-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8">
+        <AdSenseSlot slot="PATTERNS_GUIDE_BOTTOM_SLOT" format="display" page="relationship-patterns-guide" />
+      </div>
 
       {/* FAQ */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 pb-8 sm:px-8">
@@ -429,6 +435,11 @@ export default function RelationshipPatternsGuidePage() {
           </Link>
         ))}
       </nav>
+
+            {/* Affiliate Products */}
+      <section className="relative z-10 mx-auto max-w-6xl px-5 py-10 sm:px-8">
+        <AffiliateProductGrid />
+      </section>
 
       <TianjiLoveFooter
         disclaimer={t(DISCLAIMER_EN, DISCLAIMER_ZH)}

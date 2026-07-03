@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
+import { AdSenseSlot } from '@/components/ads/AdSenseSlot';
 import {
   TianjiLoveButton,
   TianjiLoveFooter,
@@ -304,7 +305,7 @@ export default function BaziRelationshipAnalysisFreePage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div id="bazi-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
+      <AdSenseSlot slot="BAZI_FREE_BOTTOM_SLOT" format="display" page="bazi-relationship-analysis-free" />
 
       {/* CTA */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 pb-16 sm:px-8">
@@ -412,8 +413,8 @@ export default function BaziRelationshipAnalysisFreePage() {
         ))}
       </nav>
 
-      {/* AdSense placeholder after CTA */}
-      <div id="bazi-ads" className="relative z-10 mx-auto max-w-7xl px-5 pb-12 sm:px-8" />
+      {/* AdSense placeholder */}
+      <AdSenseSlot slot="BAZI_FREE_SLOT" format="in-article" page="bazi-relationship-analysis-free" />
 
       <TianjiLoveFooter
         disclaimer={t(DISCLAIMER_EN, DISCLAIMER_ZH)}

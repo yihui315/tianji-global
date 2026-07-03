@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
+import { AdSenseSlot } from '@/components/ads/AdSenseSlot';
 import {
   TianjiLoveButton,
   TianjiLoveFooter,
@@ -253,7 +254,7 @@ export default function LoveTimingInsightsPage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div id="timing-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
+      <AdSenseSlot slot="TIMING_INSIGHT_BOTTOM_SLOT" format="display" page="love-timing-insights" />
 
       {/* CTA */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 pb-16 sm:px-8">
@@ -340,8 +341,8 @@ export default function LoveTimingInsightsPage() {
         ))}
       </nav>
 
-      {/* AdSense placeholder after CTA */}
-      <div id="timing-ads" className="relative z-10 mx-auto max-w-7xl px-5 pb-12 sm:px-8" />
+      {/* AdSense placeholder */}
+      <AdSenseSlot slot="TIMING_INSIGHT_SLOT" format="in-article" page="love-timing-insights" />
 
       <TianjiLoveFooter
         disclaimer={t(DISCLAIMER_EN, DISCLAIMER_ZH)}

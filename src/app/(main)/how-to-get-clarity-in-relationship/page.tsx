@@ -25,6 +25,7 @@ import {
 } from '@/components/tianji-love';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
+import { AdSenseSlot } from '@/components/ads/AdSenseSlot';
 
 const INTERNAL_LINKS = [
   { href: '/guide', labelEn: 'Guides', labelZh: '指南' },
@@ -313,7 +314,7 @@ export default function HowToGetClarityInRelationshipPage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div id="clarity-relationship-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
+      <AdSenseSlot slot="CLARITY_GUIDE_SLOT" format="in-article" page="how-to-get-clarity-in-relationship" />
 
       {/* How to Gain Clarity */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 py-8 sm:px-8">
