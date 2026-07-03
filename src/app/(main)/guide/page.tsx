@@ -244,7 +244,7 @@ export default function GuidePage() {
 
             {/* Affiliate Products */}
       <section className="relative z-10 mx-auto max-w-6xl px-5 py-10 sm:px-8">
-        <AffiliateProductGrid />
+        <AffiliateProductGrid page="guide" />
       </section>
 
       <TianjiLoveFooter

@@ -20,11 +20,26 @@ export function LoveReportCheckoutButton({
   async function handleCheckout() {
     setIsLoading(true);
     setError(null);
+    const amountMap: Record<BillingProductId, number> = {
+      solo_love_report: 4.99,
+      compatibility_report: 12.99,
+      deep_love_report: 29.99,
+      love_monthly: 9.99,
+      love_yearly: 79.99,
+      gift_report: 9.99,
+    };
     void trackClientEvent({
-      event: 'love_unlock_click',
+      event: 'stripe_checkout_start',
       experimentId: 'love-v1',
-      moduleType: 'love-reading',
-      payload: { sessionId, productId, locale },
+      moduleType: 'stripe',
+      payload: {
+        product_type: (productId === 'compatibility_report' ? 'compatibility' : 'solo_report') as
+          | 'solo_report'
+          | 'compatibility',
+        amount_usd: amountMap[productId] ?? 4.99,
+        currency: 'usd',
+        mode: 'payment',
+      },
     });
 
     try {

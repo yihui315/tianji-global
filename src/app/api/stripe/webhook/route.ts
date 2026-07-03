@@ -18,6 +18,7 @@ import {
   isStripePaymentAvailable,
 } from '@/lib/staging-degraded-mode';
 import { getStripe } from '@/lib/stripe';
+import { trackClientEvent } from '@/lib/analytics/client';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -60,6 +61,25 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     checkoutSessionId: session.id,
     amountTotal: session.amount_total ?? null,
     currency: session.currency ?? null,
+  });
+  // Monetization analytics — normalized product type
+  const productTypeMap: Record<BillingProductId, 'solo_report' | 'compatibility' | 'deep_report' | 'gift_report'> = {
+    solo_love_report: 'solo_report',
+    compatibility_report: 'compatibility',
+    deep_love_report: 'deep_report',
+    love_monthly: 'monthly_pass',
+    love_yearly: 'yearly_pass',
+    gift_report: 'gift_report',
+  };
+  void trackClientEvent({
+    event: 'stripe_checkout_success',
+    moduleType: 'stripe',
+    payload: {
+      product_type: productTypeMap[productId] ?? 'solo_report',
+      amount_usd: (session.amount_total ?? 0) / 100,
+      currency: session.currency ?? 'usd',
+      mode: 'payment',
+    },
   });
 
   if (source === 'relationship') {

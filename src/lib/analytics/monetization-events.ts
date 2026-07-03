@@ -37,7 +37,8 @@ export type AdMonetizedPage =
   | 'he-loves-you-signs'
   | 'tarot-spread-meanings'
   | 'love-compatibility-zodiac-2024'
-  | 'love-calculator';
+  | 'love-calculator'
+  | 'how-to-read-tarot-cards-for-beginners';
 
 /** Ad format shown */
 export type AdFormat = 'display' | 'in-article' | 'in-feed' | 'multiflex';

@@ -438,7 +438,7 @@ export default function RelationshipPatternsGuidePage() {
 
             {/* Affiliate Products */}
       <section className="relative z-10 mx-auto max-w-6xl px-5 py-10 sm:px-8">
-        <AffiliateProductGrid />
+        <AffiliateProductGrid page="relationship-patterns-guide" />
       </section>
 
       <TianjiLoveFooter
