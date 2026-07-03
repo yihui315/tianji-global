@@ -1,6 +1,21 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-03 - TianJi Love daily growth publishing pack — Day 016 (cron 17 1 * * *)
+
+- Task ID: `20260703-tianji-love-daily-growth-day-016`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: feature branch `fix/deepseek-debug`, diverged 3/3 with `origin/main` (pre-existing divergence from prior run, not introduced by this skill), untracked `relationship-decision.json` from prior run carried over. No tracked file changes before this run.
+- Theme: "No-contact week one — silence is information; what you do with it is yours" (from the 7-day content calendar Day 16 row, 2026-07-09). CTA: `/relationship/new`. Day 15 = pause before send (motive vs. reply expectation); Day 16 = no-contact week one (silence as information, not verdict); the rotation continues the calm-hooks-only discipline.
+- Files created: `assets/marketing/daily/day-016-publishing-pack.md`, `assets/marketing/daily/day-016-review-checklist.md`, `data/love-test-day-016-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL feedback DMs (1 DM template + 1 post draft), 3 SEO article outlines, all pointing to the reflective surface `/relationship/new`. No live payment claim, no fake testimonial, no diagnosis language, no "you are broken" framing, no "act now" urgency language, no mind-reading claim ("he is thinking X"), no reunion promise, no "if you wait perfectly they'll definitely return" guarantee, no "if they don't come back it means you never mattered" shame reversal.
+- Validation: changes are limited to `assets/marketing/daily/`, `data/`, and `.ai/`. `git diff --check` clean. Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits. `npm run typecheck` skipped (markdown+CSV-only change set, no TypeScript surface). `npm run lint` skipped (markdown+CSV-only change set, no ESLint surface).
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go — manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Push result: pending — see the commit-and-push step.
+- Suggested commit message: `chore(marketing): add love-test day 016 publishing pack`.
+
 ### 2026-07-02 - TianJi Love daily growth publishing pack — Day 015 (cron 17 1 * * *)
 
 - Task ID: `20260702-tianji-love-daily-growth-day-015`.
