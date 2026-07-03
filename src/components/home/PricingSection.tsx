@@ -191,7 +191,7 @@ function PricingCard({ planKey, delay = 0 }: PricingCardProps) {
           <div className="mt-8">
             {planKey === 'free' ? (
               <a
-                href="/western"
+                href={`/destiny/scan?lang=${lang}`}
                 className="block w-full text-center py-3.5 rounded-xl text-sm font-medium transition-all duration-200"
                 style={{
                   background: 'rgba(255,255,255,0.05)',
@@ -255,7 +255,7 @@ export default function PricingSection() {
             {lang === 'zh' ? '定价方案' : 'Pricing'}
           </p>
           <h2 className="text-3xl sm:text-4xl font-serif mb-4" style={{ color: 'rgba(255,255,255,0.9)' }}>
-            {lang === 'zh' ? '解锁你的完整命运画像' : 'Unlock Your Complete Destiny'}
+            {lang === 'zh' ? '解锁你的完整命运画像' : 'Unlock Your Complete Destiny Profile'}
           </h2>
           <p className="text-sm max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.4)' }}>
             {lang === 'zh'

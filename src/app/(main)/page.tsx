@@ -106,10 +106,11 @@ function ParallaxSection({
 /* ═══════════════════════════════════════════
    Unified CTA Button — uses MysticButton from design system
    ═══════════════════════════════════════════ */
-function PrimaryCTA({ href = '/western', className = '' }: { href?: string; className?: string }) {
+function PrimaryCTA({ href, className = '' }: { href?: string; className?: string }) {
   const { lang } = useLanguage();
+  const resolvedHref = href ?? `/destiny/scan?lang=${lang}`;
   return (
-    <MysticButton variant="solid" size="lg" href={href} className={className}>
+    <MysticButton variant="solid" size="lg" href={resolvedHref} className={className}>
       {ctaLabels.primary[lang]}
     </MysticButton>
   );
@@ -1106,21 +1107,21 @@ function PricingSection() {
   const plans = [
     {
       key: 'free' as const,
-      features: ['feature.daily', 'feature.basic', 'feature.tarot', 'feature.community'],
-      cta: lang === 'zh' ? '免费开始' : 'Start Free',
-      href: '/western',
+      features: ['feature.identityPreview', 'feature.timingPreview', 'feature.sharePreview', 'feature.basicPrivacy'],
+      cta: lang === 'zh' ? '免费扫描' : 'Start Free Scan',
+      href: `/destiny/scan?lang=${lang}`,
       highlighted: false,
     },
     {
       key: 'premium' as const,
-      features: ['feature.all12', 'feature.ai', 'feature.three', 'feature.synastry', 'feature.pdf', 'feature.bilingual'],
+      features: ['feature.unifiedProfile', 'feature.verifiedSix', 'feature.premiumLayers', 'feature.synastry', 'feature.pdf', 'feature.bilingual'],
       cta: lang === 'zh' ? '立即升级' : 'Upgrade Now',
       href: '/pricing',
       highlighted: true,
     },
     {
       key: 'deep' as const,
-      features: ['feature.premium', 'feature.celebrity', 'feature.annual', 'feature.priority', 'feature.personal', 'feature.revisions'],
+      features: ['feature.premium', 'feature.multiProfile', 'feature.annual', 'feature.priority', 'feature.personal', 'feature.revisions'],
       cta: lang === 'zh' ? '预约深度解读' : 'Book Deep Reading',
       href: '/pricing',
       highlighted: false,
@@ -1219,7 +1220,7 @@ function ToolsSection() {
       <div className="max-w-5xl mx-auto px-6 sm:px-8">
         {/* Section label — secondary exploration */}
         <p className="text-center text-[10px] tracking-[0.25em] uppercase mb-2" style={{ color: colors.textMuted }}>
-          {lang === 'zh' ? '探索更多工具' : 'Explore More Tools'}
+          {lang === 'zh' ? '支持镜头' : 'Supporting Lenses'}
         </p>
         <p className="text-center text-xs mb-8" style={{ color: colors.textTertiary }}>
           {t('tools.subtitle')}
@@ -1258,7 +1259,7 @@ function ToolsSection() {
           <MysticButton variant="outline" size="md" onClick={() => setExpanded(!expanded)}>
             {expanded
               ? (lang === 'zh' ? '收起' : 'Show Less')
-              : (lang === 'zh' ? '查看全部工具' : 'View All Tools')
+              : (lang === 'zh' ? '查看全部镜头' : 'View All Lenses')
             } {expanded ? '↑' : '→'}
           </MysticButton>
         </div>
@@ -1460,7 +1461,7 @@ function Home() {
               <GlassCard level="card" className="p-5 sm:p-8">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
                   <h3 className="text-base font-serif" style={{ color: colors.textPrimary }}>{t('charts.report.title')}</h3>
-                  <a href="/western" className="text-xs flex items-center gap-1 transition-colors duration-200" style={{ color: colors.goldDim }}>
+                  <a href={`/destiny/scan?lang=${lang}`} className="text-xs flex items-center gap-1 transition-colors duration-200" style={{ color: colors.goldDim }}>
                     {t('charts.report.cta')} <span className="inline-block">→</span>
                   </a>
                 </div>

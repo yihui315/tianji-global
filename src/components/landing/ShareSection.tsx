@@ -6,7 +6,7 @@ import { GlassCard } from '@/components/ui';
 import AnimatedShareButton from '@/components/AnimatedShareButton';
 
 interface ShareSectionProps {
-  type: 'ziwei' | 'bazi' | 'yijing' | 'tarot' | 'western' | 'fortune';
+  type: 'ziwei' | 'bazi' | 'tarot' | 'synastry';
   resultData: Record<string, unknown>;
   ogBgSrc?: string;
   accentColor?: string;

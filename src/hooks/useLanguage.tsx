@@ -57,34 +57,34 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
 
     // ── Storytelling section ───────────────────
     'story.heading': {
-      zh: '穿越千年的智慧 · 遇见前沿AI',
-      en: 'Ancient Wisdom Meets Modern AI',
+      zh: '六个系统，不是六个孤立工具',
+      en: 'Six systems, one unified profile',
     },
-    'story.badge.chart': { zh: '命盘结构', en: 'Chart Structure' },
+    'story.badge.chart': { zh: 'Identity · 结构层', en: 'Identity · Structure' },
     'story.badge.relationship': { zh: '关系洞察', en: 'Relationship Insight' },
-    'story.badge.rhythm': { zh: '生命节律', en: 'Life Rhythms' },
-    'story.title.chart': { zh: '精密的命盘架构', en: 'Precision Chart Architecture' },
-    'story.title.relationship': { zh: '深层关系解读', en: 'Deep Relationship Analysis' },
-    'story.title.rhythm': { zh: '长周期运势节律', en: 'Long-Cycle Fortune Rhythms' },
+    'story.badge.rhythm': { zh: 'Timing · 时间窗口', en: 'Timing · Windows' },
+    'story.title.chart': { zh: '先建立统一命运画像', en: 'Start with one destiny profile' },
+    'story.title.relationship': { zh: '关系是分享裂变入口', en: 'Relationship is the shareable wedge' },
+    'story.title.rhythm': { zh: '时间窗口决定行动顺序', en: 'Timing decides the action order' },
     'story.cta.relationship': { zh: '🔮 尝试关系合盘 →', en: '🔮 Try Relationship Analysis →' },
     'story.body.chart': {
-      zh: '从紫微十二宫到西方黄道十二宫，每一颗星曜的位置都经过瑞士星历表（Swiss Ephemeris）精确到角秒级别的计算。',
-      en: 'From Zi Wei\'s twelve palaces to the Western zodiac, every stellar position is calculated to arc-second precision via Swiss Ephemeris.',
+      zh: '八字负责长期结构，紫微负责人生宫位，西方占星负责心理与行运。三者先共同建立 Identity 与 Timing。',
+      en: 'BaZi reads long-range structure, Zi Wei reads life palaces, and Western astrology reads psychology and transits. Together they build Identity and Timing.',
     },
     'story.body.relationship': {
-      zh: '合盘分析、复合盘与戴维森盘，多维度揭示两人之间的能量互动与成长契机。',
-      en: 'Synastry, composite, and Davison charts reveal the multi-dimensional energy exchange and growth opportunities between two people.',
+      zh: '关系合盘把两个人的吸引、冲突、成长空间和时机变成可分享的结果，是 TianJi 最适合传播的场景。',
+      en: 'Synastry turns attraction, conflict, growth space, and timing between two people into the result users naturally share.',
     },
     'story.body.rhythm': {
-      zh: '大运流年、Transit推运与太阳返照，精准追踪人生各阶段的能量高峰与转折点。',
-      en: 'Decade pillars, transits, and solar returns track life-phase energy peaks and turning points with precision.',
+      zh: '易经与塔罗补足当下问题、选择张力和 30 天行动建议，让完整画像从理解自己走向下一步行动。',
+      en: 'Yi Jing and Tarot add the current question, choice tension, and 30-day action guidance so the profile becomes useful now.',
     },
 
     // ── Stats ──────────────────────────────────
     'stats.users': { zh: '用户信赖', en: 'Trusted Users' },
     'stats.charts': { zh: '命盘已排', en: 'Charts Cast' },
     'stats.accuracy': { zh: '星历精度', en: 'Ephemeris Precision' },
-    'stats.tools': { zh: '命理法门', en: 'Divination Tools' },
+    'stats.tools': { zh: '验证镜头', en: 'Verification Lenses' },
 
     // ── Services / Tools ───────────────────────
     'tools.heading': {
@@ -92,10 +92,10 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
       en: sectionHeadings.services.en,
     },
     'tools.subtitle': {
-      zh: '涵盖中国传统命理与西方占星术，东西方智慧全覆盖',
-      en: 'Covering Chinese classical systems and Western astrology — East meets West',
+      zh: '这些入口是支持统一命运画像的验证镜头，不再是彼此竞争的工具列表',
+      en: 'These entrances are verification lenses for one destiny profile, not competing tools',
     },
-    'tools.cta': { zh: '查看全部12种工具', en: 'Explore All 12 Tools' },
+    'tools.cta': { zh: '查看全部验证镜头', en: 'Explore verification lenses' },
     'tools.start': { zh: '开始排盘', en: 'Begin' },
 
     // ── Section headings (from content-tokens) ─
@@ -140,7 +140,7 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
     'charts.insights': { zh: 'AI洞察标签', en: 'AI Insight Tags' },
     'charts.sample': { zh: '示例', en: 'Sample' },
     'charts.report.title': { zh: 'AI深度分析报告示例', en: 'AI Deep Analysis Report Sample' },
-    'charts.report.cta': { zh: '试试我的星盘', en: 'Try My Chart' },
+    'charts.report.cta': { zh: '开始命运扫描', en: 'Start Destiny Scan' },
     'charts.daymaster': { zh: '日主分析', en: 'Day Master Analysis' },
     'charts.ascendant': { zh: '上升星座', en: 'Ascendant' },
     'charts.primarystar': { zh: '紫微主星', en: 'Primary Star' },
@@ -177,12 +177,12 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
       en: sectionHeadings.pricing.en,
     },
     'pricing.subtitle': {
-      zh: '从免费探索到专家级深度解读，满足每一位命理探索者',
-      en: 'From free exploration to expert-level deep readings, for every seeker of wisdom',
+      zh: '免费获得 Identity 与 Timing 预览，付费解锁 Relationship、Career、Wealth、Action 与 Risk。',
+      en: 'Preview Identity and Timing for free, then unlock Relationship, Career, Wealth, Action, and Risk.',
     },
     'pricing.urgency': {
-      zh: '大多数用户在首次解读后升级',
-      en: 'Most users upgrade after their first reading',
+      zh: '主路径：Destiny Scan → Unified Preview → Premium Deep Profile',
+      en: 'Main path: Destiny Scan -> Unified Preview -> Premium Deep Profile',
     },
 
     // Plan names (from content-tokens)
@@ -196,22 +196,22 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
     'plan.deep.copy': { zh: pricingPlans.deep.tagline.zh, en: pricingPlans.deep.tagline.en },
 
     // Pricing features
-    'feature.daily': { zh: '每日星座运势', en: 'Daily horoscope' },
-    'feature.basic': { zh: '基础星盘查看', en: 'Basic chart viewing' },
-    'feature.tarot': { zh: '单次塔罗占卜', en: 'Single tarot reading' },
-    'feature.community': { zh: '社区讨论', en: 'Community access' },
-    'feature.all12': { zh: '全部12种命理工具', en: 'All 12 divination tools' },
-    'feature.ai': { zh: 'AI深度分析报告', en: 'AI deep analysis reports' },
-    'feature.three': { zh: '紫微 + 八字 + 星盘', en: 'Zi Wei + BaZi + Chart' },
-    'feature.synastry': { zh: '合盘 & 推运分析', en: 'Synastry & transit analysis' },
+    'feature.identityPreview': { zh: 'Identity 画像预览', en: 'Identity profile preview' },
+    'feature.timingPreview': { zh: 'Timing 时间窗口预览', en: 'Timing window preview' },
+    'feature.sharePreview': { zh: '可分享的一句话结果', en: 'Shareable one-line result' },
+    'feature.basicPrivacy': { zh: '分享默认隐藏出生隐私', en: 'Birth privacy hidden on shares by default' },
+    'feature.unifiedProfile': { zh: '完整统一命运画像', en: 'Full unified destiny profile' },
+    'feature.verifiedSix': { zh: '六系统交叉验证摘要', en: 'Six-system verification summary' },
+    'feature.premiumLayers': { zh: 'Relationship、Career、Wealth、Action、Risk 解锁', en: 'Relationship, Career, Wealth, Action, and Risk unlocks' },
+    'feature.synastry': { zh: '关系合盘与分享图卡', en: 'Relationship synastry and share cards' },
     'feature.pdf': { zh: 'PDF报告导出', en: 'PDF report export' },
     'feature.bilingual': { zh: '双语报告生成', en: 'Bilingual report generation' },
     'feature.premium': { zh: '高级版全部功能', en: 'All Premium features' },
-    'feature.celebrity': { zh: '名人命盘对照分析', en: 'Celebrity chart comparison' },
-    'feature.annual': { zh: '流年大运完整推演', en: 'Full annual transit analysis' },
+    'feature.multiProfile': { zh: '多档案与关系画像管理', en: 'Multi-profile and relationship profile management' },
+    'feature.annual': { zh: '长周期趋势观察', en: 'Long-cycle trend visibility' },
     'feature.priority': { zh: '优先AI深度队列', en: 'Priority AI analysis queue' },
-    'feature.personal': { zh: '个性化命理建议', en: 'Personalized guidance report' },
-    'feature.revisions': { zh: '30天内无限次修正', en: '30-day unlimited revisions' },
+    'feature.personal': { zh: '顾问式深度建议', en: 'Advisor-style deep guidance' },
+    'feature.revisions': { zh: '导出与复盘工作流', en: 'Export and review workflow' },
 
     // ── FAQ ────────────────────────────────────
     'faq.heading': {
@@ -225,8 +225,8 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
     },
     'faq.q2': { zh: '占卜是免费的吗？', en: 'Is the reading free?' },
     'faq.a2': {
-      zh: '我们提供免费的基础功能，包括每日星座运势、基础星盘查看和单次塔罗占卜。更深度的AI分析报告、全部12种命理工具和PDF导出等高级功能包含在付费方案中。',
-      en: 'We offer free basics — daily horoscope, basic chart viewing, and a single tarot reading. Deeper AI reports, all 12 divination tools, and PDF exports are part of our paid plans.',
+      zh: '免费层展示 Identity 与 Timing 预览，让你先判断画像是否有用。Premium 解锁 Relationship、Career、Wealth、Action、Risk 和更深的六系统验证。',
+      en: 'The free layer shows Identity and Timing so you can judge whether the profile is useful. Premium unlocks Relationship, Career, Wealth, Action, Risk, and deeper six-system verification.',
     },
     'faq.q3': { zh: '分析结果有多准确？', en: 'How accurate is the result?' },
     'faq.a3': {
@@ -240,8 +240,8 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
     },
     'faq.q5': { zh: '高级版包含什么？', en: 'What is included in premium?' },
     'faq.a5': {
-      zh: '高级版解锁全部12种命理工具（紫微斗数、八字、西方星盘、塔罗、易经等），AI深度分析报告、合盘与推运分析、PDF报告导出，以及双语报告生成功能。',
-      en: 'Premium unlocks all 12 divination tools (Zi Wei, BaZi, Western chart, tarot, Yi Jing, etc.), AI deep analysis reports, synastry & transit analysis, PDF export, and bilingual report generation.',
+      zh: '高级版解锁完整统一命运画像、六系统交叉验证摘要、关系合盘、职业与财富节奏、30天行动建议、风险提示、PDF导出与双语报告。',
+      en: 'Premium unlocks the full unified destiny profile, six-system verification summary, relationship synastry, career and wealth timing, 30-day action guidance, risk cues, PDF export, and bilingual reports.',
     },
     'faq.q6': { zh: '这只是娱乐吗？', en: 'Is this for entertainment only?' },
     'faq.a6': {
@@ -255,8 +255,8 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
       en: sectionHeadings.finalCta.en,
     },
     'cta.subtitle': {
-      zh: '从紫微斗数到西方占星，从八字命理到塔罗牌，开启你的命运探索之旅',
-      en: 'From Zi Wei to Western astrology, from BaZi to Tarot — begin your journey of self-discovery',
+      zh: '先看 Identity 与 Timing，再决定是否解锁完整六系统验证画像。',
+      en: 'Start with Identity and Timing, then decide whether to unlock the full six-system profile.',
     },
 
     // ── Footer ─────────────────────────────────
@@ -265,8 +265,8 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
       en: disclaimers.responsible.en,
     },
     'footer.brand.desc': {
-      zh: '融合东方经典命理与西方占星智慧，以AI科技重新定义命运探索。',
-      en: 'Bridging Eastern classical systems and Western astrology with AI-powered insight.',
+      zh: '把八字、紫微、易经、西方占星、塔罗与关系合盘整合成一份统一命运画像。',
+      en: 'TianJi turns BaZi, Zi Wei, Yi Jing, Western astrology, Tarot, and Synastry into one unified destiny profile.',
     },
     'footer.products': { zh: '产品', en: 'Products' },
     'footer.advanced': { zh: '高级工具', en: 'Advanced' },

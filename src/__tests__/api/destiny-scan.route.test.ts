@@ -249,6 +249,13 @@ describe('/api/destiny/scan', () => {
     expect(response.status).toBe(200);
     expect(body.success).toBe(true);
     expect(body.preview.meta.trafficSource).toBe('tiktok');
+    expect(body.preview.teaser).toHaveProperty('career');
+    expect(body.preview.teaser).toHaveProperty('risk');
+    expect(body.preview).not.toHaveProperty('relationship');
+    expect(body.preview).not.toHaveProperty('career');
+    expect(body.preview).not.toHaveProperty('wealth');
+    expect(body.preview).not.toHaveProperty('actions');
+    expect(body.preview).not.toHaveProperty('risk');
     expect(supabase.captured.insertedProfile).toMatchObject({
       birth_date: '1994-07-12',
       birth_time: '08:30',
@@ -293,8 +300,10 @@ describe('/api/destiny/scan', () => {
       },
       teaser: {
         relationship: 'Persisted relationship teaser',
+        career: 'Persisted career teaser',
         wealth: 'Persisted wealth teaser',
         actions: 'Persisted action teaser',
+        risk: 'Persisted risk teaser',
       },
       share: {
         title: 'Persisted headline',
@@ -311,10 +320,20 @@ describe('/api/destiny/scan', () => {
         summary: 'Persisted wealth summary',
         bullets: ['b'],
       },
+      career: {
+        headline: 'Persisted career',
+        summary: 'Persisted career summary',
+        bullets: ['c'],
+      },
       actions: {
         headline: 'Persisted actions',
         summary: 'Persisted actions summary',
-        bullets: ['c'],
+        bullets: ['d'],
+      },
+      risk: {
+        headline: 'Persisted risk',
+        summary: 'Persisted risk summary',
+        bullets: ['e'],
       },
     };
 
@@ -359,5 +378,9 @@ describe('/api/destiny/scan', () => {
     expect(response.status).toBe(200);
     expect(body.summary.headline).toBe('Persisted headline');
     expect(body.meta.trafficSource).toBe('seo');
+    expect(body.teaser.career).toBe('Persisted career teaser');
+    expect(body.teaser.risk).toBe('Persisted risk teaser');
+    expect(body).not.toHaveProperty('career');
+    expect(body).not.toHaveProperty('risk');
   });
 });

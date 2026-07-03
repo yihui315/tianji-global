@@ -8,6 +8,15 @@ import { trackClientEvent } from '@/lib/analytics/client';
 import type { DestinyScanPreview, DestinyScanResult } from '@/lib/destiny-scan';
 import { getTrafficExperience } from '@/lib/traffic-evolution';
 
+const SIX_LENSES = [
+  { name: 'BaZi', role: 'long-range structure' },
+  { name: 'Zi Wei', role: 'life roles and palaces' },
+  { name: 'Western astrology', role: 'psychology and transits' },
+  { name: 'Yi Jing', role: 'current change pattern' },
+  { name: 'Tarot', role: 'choice and action signal' },
+  { name: 'Synastry', role: 'relationship timing' },
+];
+
 export default function DestinyResultPage() {
   return (
     <Suspense
@@ -153,24 +162,42 @@ function DestinyResultContent() {
     );
   }
 
+  const lockedLayers = [
+    { label: 'Relationship pattern', content: display.teaser.relationship },
+    { label: 'Career direction', content: display.teaser.career },
+    { label: 'Wealth cycle', content: display.teaser.wealth },
+    { label: 'Action plan', content: display.teaser.actions },
+    { label: 'Risk map', content: display.teaser.risk },
+  ];
+
+  const unlockedSections = result
+    ? [
+        { title: 'Relationship Pattern', section: result.relationship },
+        { title: 'Career Direction', section: result.career },
+        { title: 'Wealth Cycle', section: result.wealth },
+        { title: 'Action Plan', section: result.actions },
+        { title: 'Risk Map', section: result.risk },
+      ]
+    : [];
+
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(124,58,237,0.22),_transparent_35%),linear-gradient(135deg,_#060609,_#0f0b1f_52%,_#160f24)] px-6 py-10 text-white">
       <div className="mx-auto max-w-6xl space-y-8">
         <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="rounded-[32px] border border-white/10 bg-white/5 p-8 backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.32em] text-amber-300/80">AI destiny scan</p>
+            <p className="text-xs uppercase tracking-[0.32em] text-amber-300/80">TianJi Destiny OS</p>
             <h1 className="mt-4 text-4xl font-semibold leading-tight md:text-5xl">{display.summary.headline}</h1>
             <p className="mt-5 max-w-2xl text-lg text-white/70">{display.summary.oneLiner}</p>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              <StatCard label="Energy" value={`${display.energy.overall}%`} />
-              <StatCard label="Relationship signal" value={`${display.summary.compatibilityScore}%`} />
-              <StatCard label="Current window" value={display.timeline.currentWindow} compact />
+              <StatCard label="Identity preview" value={`${display.energy.overall}%`} />
+              <StatCard label="Six-system signal" value={`${display.summary.compatibilityScore}%`} />
+              <StatCard label="Timing preview" value={display.timeline.currentWindow} compact />
             </div>
           </div>
 
           <div className="rounded-[32px] border border-white/10 bg-black/35 p-8 backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Energy radar</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Identity and timing preview</p>
             <div className="mt-6 grid gap-3">
               {display.energy.points.map((point) => (
                 <div key={point.label}>
@@ -187,6 +214,26 @@ function DestinyResultContent() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="rounded-[32px] border border-white/10 bg-black/25 p-6 backdrop-blur">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-amber-300/75">Verified by six lenses</p>
+              <h2 className="mt-3 text-2xl font-semibold text-white">One profile, six ways to check the pattern</h2>
+            </div>
+            <p className="max-w-xl text-sm text-white/60">
+              Free shows Identity and Timing. Premium unlocks the practical layers where the systems converge or disagree.
+            </p>
+          </div>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {SIX_LENSES.map((lens) => (
+              <div key={lens.name} className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-4">
+                <p className="text-sm font-semibold text-white/85">{lens.name}</p>
+                <p className="mt-1 text-xs text-white/45">{lens.role}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -213,9 +260,9 @@ function DestinyResultContent() {
 
               <div className="rounded-3xl border border-amber-300/20 bg-amber-500/10 p-6">
                 <div className="space-y-3 text-sm text-white/80">
-                  <LockedLine label="Relationship pattern" content={display.teaser.relationship} />
-                  <LockedLine label="Wealth cycle" content={display.teaser.wealth} />
-                  <LockedLine label="Action plan" content={display.teaser.actions} />
+                  {lockedLayers.map((layer) => (
+                    <LockedLine key={layer.label} label={layer.label} content={layer.content} />
+                  ))}
                 </div>
 
                 <button
@@ -240,10 +287,10 @@ function DestinyResultContent() {
             </div>
           </section>
         ) : (
-          <section className="grid gap-6 lg:grid-cols-3">
-            <ResultSection title="Relationship Pattern" section={result.relationship} />
-            <ResultSection title="Wealth Cycle" section={result.wealth} />
-            <ResultSection title="Action Plan" section={result.actions} />
+          <section className="grid gap-6 lg:grid-cols-2">
+            {unlockedSections.map((item) => (
+              <ResultSection key={item.title} title={item.title} section={item.section} />
+            ))}
           </section>
         )}
       </div>

@@ -39,9 +39,22 @@ describe('destiny-scan', () => {
     expect(result.energy.points).toHaveLength(4);
     expect(result.timeline.trend).toHaveLength(7);
     expect(result.relationship.bullets.length).toBeGreaterThan(0);
+    expect(result.career.bullets.length).toBeGreaterThan(0);
+    expect(result.wealth.bullets.length).toBeGreaterThan(0);
+    expect(result.actions.bullets.length).toBeGreaterThan(0);
+    expect(result.risk.bullets.length).toBeGreaterThan(0);
     expect(preview).not.toHaveProperty('relationship');
+    expect(preview).not.toHaveProperty('career');
     expect(preview).not.toHaveProperty('wealth');
     expect(preview).not.toHaveProperty('actions');
+    expect(preview).not.toHaveProperty('risk');
+    expect(Object.keys(preview.teaser).sort()).toEqual([
+      'actions',
+      'career',
+      'relationship',
+      'risk',
+      'wealth',
+    ]);
     expect(preview.summary.compatibilityScore).toBe(result.summary.compatibilityScore);
   });
 
@@ -54,6 +67,7 @@ describe('destiny-scan', () => {
     expect(result.meta.trafficSource).toBe('tiktok');
     expect(result.meta.strategy).toBe('emotional_intense');
     expect(result.share.caption).toContain('Compatibility signal');
+    expect(result.share.caption).toContain('six-system verified');
     expect(result.teaser.relationship).toContain('hidden');
   });
 });
