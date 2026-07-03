@@ -36,11 +36,12 @@ const copy = {
     sections: [
       ['Information we collect', 'We may collect account details, language preference, birth details you enter, relationship questions, reading outputs, checkout status, and technical logs needed to keep the service secure.'],
       ['How we use data', 'We use data to provide readings, save history, manage accounts, process checkout through Stripe, protect the service from abuse, and respond to support or privacy requests.'],
-      ['Payments', 'Payments are handled by Stripe. Tianji Love does not store complete card numbers. Billing events are used to unlock the paid surfaces already implemented in the product.'],
+      ['Payments', 'Payments are handled by Stripe. Tianji Love does not store complete card numbers. Billing events are used to unlock the paid surfaces already implemented in the product. AdSense revenue helps support the availability of free tools.'],
       ['Public sharing', 'Public relationship share pages hide birth date, birth time, birth location, and timezone by default. This is a product rule as well as a privacy rule.'],
       ['Retention and deletion', 'Account and reading data are kept while needed for the service unless deletion is requested or the law requires a different retention period. Contact privacy@tianji.love for deletion requests.'],
       ['Your rights', 'Depending on where you live, you may request access, correction, deletion, export, restriction, objection, or withdrawal of consent. We respond through the privacy contact below.'],
       ['Cookies and security', 'We use essential cookies and technical logs for authentication, preferences, security, and reliability. We use reasonable safeguards for data in transit and at rest.'],
+      ['Advertising and third-party cookies', 'We use Google AdSense for display advertising. Google may use cookies and device identifiers to serve personalized ads. You can opt out of personalized ads at your Google Ad Settings. Tianji Love does not control third-party ad content.'],
       ['Contact', 'For privacy questions, email privacy@tianji.love. For billing questions, email billing@tianji.love.'],
     ],
     trust: [
@@ -67,11 +68,12 @@ const copy = {
     sections: [
       ['我们收集的信息', '我们可能收集账号资料、语言偏好、你输入的出生资料、关系问题、解读输出、结账状态，以及维护服务安全所需的技术日志。'],
       ['数据如何使用', '数据用于提供解读、保存历史、管理账号、通过 Stripe 处理结账、防止滥用，以及回应支持或隐私请求。'],
-      ['支付信息', '支付由 Stripe 处理。Tianji Love 不保存完整银行卡号。账单事件用于解锁产品中已经实现的付费页面和权益。'],
+      ['支付信息', '支付由 Stripe 处理。Tianji Love 不保存完整银行卡号。账单事件用于解锁产品中已经实现的付费页面和权益。AdSense 收入有助于支持免费工具的可用性。'],
       ['公开分享', '公开关系分享页默认隐藏出生日期、出生时间、出生地点和时区。这既是产品规则，也是隐私规则。'],
       ['保留与删除', '账号和解读数据会在服务需要时保留，除非你请求删除，或法律要求不同的保留期限。删除请求请联系 privacy@tianji.love。'],
       ['你的权利', '根据你的所在地，你可以请求访问、更正、删除、导出、限制处理、反对处理或撤回同意。我们会通过隐私邮箱回应。'],
       ['Cookies 与安全', '我们使用必要 cookies 和技术日志来支持登录、偏好、安全与稳定性，并对传输和存储中的数据采取合理保护。'],
+      ['广告与第三方Cookies', '我们使用 Google AdSense 进行展示广告。Google 可能使用 cookies 和设备标识符来提供个性化广告。你可以在 Google 广告设置中选择退出个性化广告。Tianji Love 不控制第三方广告内容。'],
       ['联系我们', '隐私问题请发邮件至 privacy@tianji.love。账单问题请发邮件至 billing@tianji.love。'],
     ],
     trust: [

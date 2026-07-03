@@ -1,6 +1,6 @@
 'use client';
 
-import { Brain, HeartHandshake, Lock, Mail, ShieldCheck, Sparkles, TimerReset } from 'lucide-react';
+import { Award, Brain, BookOpen, HeartHandshake, Lock, Mail, ShieldCheck, Sparkles, TimerReset, Users } from 'lucide-react';
 
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
@@ -60,6 +60,69 @@ const copy = {
     finalTitle: 'The next chapter deserves clarity without pressure.',
     footer:
       'Tianji Love readings are for reflection and relationship communication, not medical, legal, financial, or crisis advice.',
+    // E-E-A-T Section
+    eeatTitle: 'Why trust Tianji Love',
+    eeatSubtitle: 'Credentials & methodology',
+    eeat: [
+      {
+        icon: Award,
+        title: 'Traditional foundation',
+        body: 'Built on centuries of astrological relationship wisdom — synastry, composite charts, and timing signals refined by practitioners worldwide.',
+      },
+      {
+        icon: Brain,
+        title: 'AI-assisted clarity',
+        body: 'Modern large-language models synthesize structured astrological data into readable, actionable reflection — not fortune-telling.',
+      },
+      {
+        icon: BookOpen,
+        title: 'Transparent methodology',
+        body: 'Every reading explains its signals. We show the what and why, not just the what-next. Users can learn as they read.',
+      },
+      {
+        icon: ShieldCheck,
+        title: 'Privacy by design',
+        body: 'Birth data never appears in share outputs. You control what you share, and with whom, at every step.',
+      },
+    ],
+    // Team Story Section
+    teamTitle: 'Our story',
+    teamStory: `Tianji Love started because we kept seeing the same pattern: people turning to astrology out of fear, not curiosity — and products that fed that fear with vague predictions and hidden upsells.
+
+We believed relationship guidance could be different. Calm, honest, and genuinely useful. So we built Tianji Love to give people a clearer mirror — one that respects their intelligence and doesn't trade in anxiety.
+
+The name Tianji (天机) means "heaven\'s pattern" in Chinese — the idea that timing and connection have natural rhythms worth understanding, not manipulating.`,
+    teamValues: [
+      { title: 'Curiosity over fear', body: 'We design for questions, not threats.' },
+      { title: 'Clarity without pressure', body: 'Guidance that informs, not coerces.' },
+      { title: 'Privacy as default', body: 'Your data stays yours unless you choose otherwise.' },
+    ],
+    // Three-Pathway Monetization
+    monetizationTitle: 'How Tianji Love sustains itself',
+    monetizationSubtitle: 'Three ways to engage',
+    pathways: [
+      {
+        icon: Sparkles,
+        label: 'Free Preview',
+        title: 'Start with a taste',
+        body: 'Generate a free relationship preview with basic synastry signals and pattern overview at no cost. No account required.',
+        cta: 'Try free preview',
+      },
+      {
+        icon: HeartHandshake,
+        label: 'Paid Report',
+        title: 'Full relationship deep-dive',
+        body: 'Unlock the complete premium report with all five dimensions, current timing windows, and personalized guidance. One-time purchase.',
+        cta: 'Unlock full report',
+      },
+      {
+        icon: Users,
+        label: 'Subscription',
+        title: 'Ongoing relationship insight',
+        body: 'Monthly subscription for continuous access — new timing updates, multiple relationship readings, and priority processing.',
+        cta: 'Explore subscription',
+      },
+    ],
   },
   zh: {
     nav: {
@@ -102,6 +165,69 @@ const copy = {
     ],
     finalTitle: '下一章值得更清晰，也不需要被催促。',
     footer: 'Tianji Love 解读仅用于反思与关系沟通参考，不构成医疗、法律、财务或危机建议。',
+    // E-E-A-T Section
+    eeatTitle: '为什么信赖 Tianji Love',
+    eeatSubtitle: '资质与方法论',
+    eeat: [
+      {
+        icon: Award,
+        title: '传统基础',
+        body: '基于数百年的占星关系智慧构建——合盘、组合盘和时机信号经全球从业者不断完善。',
+      },
+      {
+        icon: Brain,
+        title: 'AI 辅助清晰化',
+        body: '现代大语言模型将结构化占星数据合成为可读、可操作的反思内容——而非算命。',
+      },
+      {
+        icon: BookOpen,
+        title: '透明方法论',
+        body: '每份解读都解释其信号来源。展示是什么和为什么，而非仅仅告诉你接下来会怎样。用户可以在阅读中学习。',
+      },
+      {
+        icon: ShieldCheck,
+        title: '隐私设计',
+        body: '出生数据绝不会出现在分享内容中。每一步都由你控制分享内容和分享对象。',
+      },
+    ],
+    // Team Story Section
+    teamTitle: '我们的故事',
+    teamStory: `Tianji Love 的诞生源于我们反复看到的同一个模式：人们出于恐惧而非好奇转向占星——而市面上的产品用模糊的预测和隐藏的追加销售来喂养这种恐惧。
+
+我们相信，关系指引可以有所不同。更冷静、更诚实、更真正有用。于是我们构建了 Tianji Love，为人们提供一面更清晰的镜子——尊重用户的智商，不以焦虑为交易。
+
+Tianji（天机）这个名字意为"天机"——时机与连接自有其节律，值得理解而非操控。`,
+    teamValues: [
+      { title: '好奇胜于恐惧', body: '我们为问题而设计，不为威胁而设计。' },
+      { title: '清晰而不施压', body: '指引用于告知，不用于强迫。' },
+      { title: '隐私默认开启', body: '你的数据归你所有，除非你选择分享。' },
+    ],
+    // Three-Pathway Monetization
+    monetizationTitle: 'Tianji Love 如何维持自身发展',
+    monetizationSubtitle: '三种参与方式',
+    pathways: [
+      {
+        icon: Sparkles,
+        label: '免费预览',
+        title: '先尝一口',
+        body: '免费生成关系预览，包含基础合盘信号和模式概览。无需注册账户。',
+        cta: '尝试免费预览',
+      },
+      {
+        icon: HeartHandshake,
+        label: '付费报告',
+        title: '完整关系深度解读',
+        body: '解锁完整 premium 报告，包含五大维度、当前时机窗口和个性化指引。一次性购买。',
+        cta: '解锁完整报告',
+      },
+      {
+        icon: Users,
+        label: '订阅',
+        title: '持续的关系洞察',
+        body: '月度订阅，持续访问——新的时机更新、多次关系解读和优先处理。',
+        cta: '探索订阅方案',
+      },
+    ],
   },
 } as const;
 
@@ -153,6 +279,60 @@ export default function AboutPage() {
         <div className="grid gap-5 md:grid-cols-4">
           {t.principles.map((item) => (
             <TianjiLoveTrustCard key={item.title} icon={item.icon} title={item.title} body={item.body} />
+          ))}
+        </div>
+      </section>
+
+      {/* E-E-A-T Section */}
+      <section className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8">
+        <div className="mb-4 text-center">
+          <p className="text-xs uppercase tracking-[0.32em] text-[#d8b77b]/70">{t.eeatSubtitle}</p>
+          <h2 className="mt-3 font-serif text-3xl text-[#ffe3b4] sm:text-4xl">{t.eeatTitle}</h2>
+        </div>
+        <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {t.eeat.map((item) => (
+            <TianjiLoveTrustCard key={item.title} icon={item.icon} title={item.title} body={item.body} />
+          ))}
+        </div>
+      </section>
+
+      {/* Team Story Section */}
+      <section className="relative z-10 mx-auto grid w-full max-w-7xl gap-8 px-5 py-10 sm:px-8 lg:grid-cols-[1fr_1fr] lg:items-start">
+        <TianjiLovePanel className="p-7">
+          <Users className="mb-4 h-8 w-8 text-[#d8b77b]" aria-hidden />
+          <h2 className="font-serif text-3xl text-[#ffe3b4]">{t.teamTitle}</h2>
+          <div className="mt-5 space-y-4 text-base leading-8 text-[#f4d7a3]/70">
+            {t.teamStory.split('\n\n').map((paragraph, i) => (
+              <p key={i}>{paragraph}</p>
+            ))}
+          </div>
+        </TianjiLovePanel>
+
+        <div className="space-y-5">
+          <h3 className="font-serif text-2xl text-[#ffe3b4]">Our values</h3>
+          {t.teamValues.map((value) => (
+            <TianjiLoveTrustCard key={value.title} icon={Sparkles} title={value.title} body={value.body} />
+          ))}
+        </div>
+      </section>
+
+      {/* Three-Pathway Monetization Section */}
+      <section className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8">
+        <div className="mb-4 text-center">
+          <p className="text-xs uppercase tracking-[0.32em] text-[#d8b77b]/70">{t.monetizationSubtitle}</p>
+          <h2 className="mt-3 font-serif text-3xl text-[#ffe3b4] sm:text-4xl">{t.monetizationTitle}</h2>
+        </div>
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          {t.pathways.map((pathway) => (
+            <TianjiLovePanel key={pathway.label} className="flex flex-col p-6">
+              <pathway.icon className="mb-4 h-8 w-8 text-[#d8b77b]" aria-hidden />
+              <span className="mb-2 text-xs uppercase tracking-[0.22em] text-[#d8b77b]/62">{pathway.label}</span>
+              <h3 className="font-serif text-xl text-[#ffe3b4]">{pathway.title}</h3>
+              <p className="mt-3 flex-1 text-sm leading-7 text-[#f4d7a3]/66">{pathway.body}</p>
+              <TianjiLoveButton href={href('/relationship/new')} variant="secondary" className="mt-5">
+                {pathway.cta}
+              </TianjiLoveButton>
+            </TianjiLovePanel>
           ))}
         </div>
       </section>
