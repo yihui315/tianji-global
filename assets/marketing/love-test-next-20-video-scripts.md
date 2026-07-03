@@ -202,6 +202,40 @@ Purpose: create a pool for Douyin, Videohao, and short-form manual publishing. S
 - CTA: `/love-test`.
 - risk-safe check: No private input exposure.
 
+## Refresh 2026-07-02 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-02 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).
+
+## 35 Sweet Online Steady Offline
+
+- channel: Xiaohongshu video
+- 3-second hook: Sweet online and steady offline are not always the same signal.
+- scene: Split screen — a lively chat on one side, an empty chair on the other.
+- spoken copy: Words and actions are different data sets. Love Test does not judge either side. It helps you see where the gap is, so the question you bring in becomes clearer.
+- caption: 甜是一种温度，节奏是一种证据。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No shaming of either side, no certainty claim, no diagnosis language.
+
+## 36 Repair Or Return
+
+- channel: Videohao
+- 3-second hook: Wanting them back is one question. Naming what to repair is another.
+- scene: A teacup mended with gold, then a notebook titled "what needs to change".
+- spoken copy: Before deciding to return, name what would have to be different this time. Love Test does not promise a fix. It helps you write the question clearly.
+- caption: 复合之前，先看要修的是什么。
+- CTA: `/love-test` then `/ask?source=love_test&intent=should_we_return`.
+- risk-safe check: No reunion promise, no pressure to return, no guarantee they will engage.
+
+## 37 Sunday Review
+
+- channel: Douyin
+- 3-second hook: One quiet review on Sunday beats seven small checks all week.
+- scene: A calendar page turning, a small cup, three short notes.
+- spoken copy: Patterns are easier to see after a week has passed. A small weekly review is a calmer way to answer "what is he thinking" or "should I stay". Love Test is one way to capture that snapshot.
+- caption: 一周回看一次，比每天追问七次稳。
+- CTA: `/love-test` then `/love-reading`.
+- risk-safe check: No guarantee of insight, no diagnostic language, no prediction.
+
 ## Refresh 2026-06-30 - Next batch of 2 video scripts
 
 These scripts were added by the `tianji-github-content-calendar` cron job on 2026-06-30 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing).

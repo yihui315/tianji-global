@@ -95,6 +95,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 64. 一段值得继续的关系，常常看起来像一件你能用正常语气描述的事。
 65. 每周留出一晚回看记录，比每天追问一次新信号更稳。
 
+## Refresh 2026-07-02 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-02 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the pattern/clarity supporting angles. None are certainty claims.
+
+66. 线上甜不等于节奏稳，先看清楚两件事是不是同一件事。
+67. 你一直盯着的地方，常常比他的回复更值得记录。
+68. 想复合是一种冲动，看清楚要修的是什么才是一个问题。
+69. 一周回看一次，比一天追问七次更能帮你拿回主动权。
+70. 边界清楚一点的人，关系里更容易温柔，也更容易自由。
+
 ## CTA pairings
 
 ```text

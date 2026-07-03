@@ -1,6 +1,36 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-03 - TianJi Love daily growth publishing pack — Day 016 (cron 17 1 * * *)
+
+- Task ID: `20260703-tianji-love-daily-growth-day-016`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: feature branch `fix/deepseek-debug`, diverged 3/3 with `origin/main` (pre-existing divergence from prior run, not introduced by this skill), untracked `relationship-decision.json` from prior run carried over. No tracked file changes before this run.
+- Theme: "No-contact week one — silence is information; what you do with it is yours" (from the 7-day content calendar Day 16 row, 2026-07-09). CTA: `/relationship/new`. Day 15 = pause before send (motive vs. reply expectation); Day 16 = no-contact week one (silence as information, not verdict); the rotation continues the calm-hooks-only discipline.
+- Files created: `assets/marketing/daily/day-016-publishing-pack.md`, `assets/marketing/daily/day-016-review-checklist.md`, `data/love-test-day-016-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL feedback DMs (1 DM template + 1 post draft), 3 SEO article outlines, all pointing to the reflective surface `/relationship/new`. No live payment claim, no fake testimonial, no diagnosis language, no "you are broken" framing, no "act now" urgency language, no mind-reading claim ("he is thinking X"), no reunion promise, no "if you wait perfectly they'll definitely return" guarantee, no "if they don't come back it means you never mattered" shame reversal.
+- Validation: changes are limited to `assets/marketing/daily/`, `data/`, and `.ai/`. `git diff --check` clean. Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits. `npm run typecheck` skipped (markdown+CSV-only change set, no TypeScript surface). `npm run lint` skipped (markdown+CSV-only change set, no ESLint surface).
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go — manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Push result: pending — see the commit-and-push step.
+- Suggested commit message: `chore(marketing): add love-test day 016 publishing pack`.
+
+### 2026-07-02 - TianJi Love daily growth publishing pack — Day 015 (cron 17 1 * * *)
+
+- Task ID: `20260702-tianji-love-daily-growth-day-015`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: feature branch with untracked `relationship-decision.json` from prior run, no tracked file changes before this run.
+- Theme: "Pause before you send — check your motive before you check their reply" (from the 7-day content calendar Day 15 row, 2026-07-08). CTA: `/ask`. Day 14 = initiation in ambiguity (want vs. ready); Day 15 = pause before send (motive vs. reply expectation); the rotation continues the calm-hooks-only discipline.
+- Files created: `assets/marketing/daily/day-015-publishing-pack.md`, `assets/marketing/daily/day-015-review-checklist.md`, `data/love-test-day-015-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL feedback DMs (1 DM template + 1 post draft), 3 SEO article outlines, all pointing to the reflective surface `/ask`. No live payment claim, no fake testimonial, no diagnosis language, no "you are broken" framing, no "act now" urgency language, no mind-reading claim, no "if you don't send you don't care" shame reversal.
+- Validation: changes are limited to `assets/marketing/daily/`, `data/`, and `.ai/`. `git diff --check` clean. Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits. `npm run typecheck` skipped (markdown+CSV-only change set, no TypeScript surface). `npm run lint` skipped (markdown+CSV-only change set, no ESLint surface).
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go — manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Push result: pending — see the commit-and-push step.
+- Suggested commit message: `chore(marketing): add love-test day 015 publishing pack`.
+
 ### 2026-07-01 - TianJi Love funnel copy optimizer blocker (cron 0 2 */14 * *)
 
 - Task ID: `20260701-tianji-github-funnel-optimizer-blocker`.
@@ -822,4 +852,14 @@
 - Commands run: `git fetch --all && git pull --rebase --autostash`; inspected calendar + pool files; extended the calendar table by 7 rows; appended a `Refresh 2026-06-29` batch to each pool; `git diff --check`; `npm run typecheck`; `npm run lint`; targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/`.
 - Results: `git diff --check` passed. `npm run typecheck` passed (`tsc -p tsconfig.typecheck.json --noEmit`, exit 0). `npm run lint` passed (`next lint`, exit 0 — "No ESLint warnings or errors"). Secret-shape scan returned 0 raw-shape hits; matches in `.ai/CHANGELOG_AI.md` and `.ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260627.md` / `20260628.md` are descriptive mentions of the scan detector strings, not real secrets. No auto-posting, no account credentials touched, no fake testimonials or guaranteed outcomes added, no Stripe / paid smoke / production deploy invoked.
 - Risks: Pool is now 60 hooks / 28 video scripts / 36 share captions — content remains manual-publish only. No risk surface beyond copy review. Staging env, Stripe live, Supabase production, Resend, AI provider, and `DESTINY_SCAN_SECRET` gates remain blocked from prior runs and were not touched here.
+- Next step: Continue manual review of the next publishing pack on the operator's schedule. The next scheduled calendar run will further extend the calendar as needed.
+
+### 2026-07-02 - TianJi Love content calendar refresh
+
+- Task ID: 20260702-tianji-github-content-calendar
+- Files changed: `assets/marketing/content-calendar-7day.md`, `assets/marketing/love-test-next-30-hooks.md`, `assets/marketing/love-test-next-20-video-scripts.md`, `assets/marketing/love-test-next-20-share-captions.md`, `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`
+- Summary: Ran the scheduled `tianji-github-content-calendar` cron job. The seven-day future calendar was already healthy (32 days ahead, up to 2026-08-03 / Day 41), so the run extended the calendar by 7 more days (Days 42–48, 2026-08-04 → 2026-08-10) to preserve a multi-week buffer, and added 5 new hooks, 3 new video scripts, and 3 new share captions to refresh the pools. Themes were rotated through the four anchors (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the online-vs-offline, repair-or-return, and weekly-review supporting angles, deliberately avoiding the steadiness / decision-pacing / quiet-return cluster used in Days 35–41. All copy is helpful, grounded, and non-guaranteed.
+- Commands run: `git fetch origin --quiet`; inspected calendar + pool files; extended the calendar table by 7 rows; appended a `Refresh 2026-07-02` batch to each pool; `git diff --check`; `npm run typecheck`; `npm run lint`; targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/`.
+- Results: `git diff --check` passed. `npm run typecheck` passed (`tsc -p tsconfig.typecheck.json --noEmit`, exit 0). `npm run lint` passed (`next lint`, exit 0 — "No ESLint warnings or errors"). Secret-shape scan returned 0 raw-shape hits over `.ai/`, `assets/marketing/`, `data/`. No auto-posting, no account credentials touched, no fake testimonials or guaranteed outcomes added, no Stripe / paid smoke / production deploy invoked.
+- Risks: Pool is now 70 hooks / 37 video scripts / 42 share captions — content remains manual-publish only. No risk surface beyond copy review. The pre-existing untracked `relationship-decision.json` is left untouched. Staging env, Stripe live, Supabase production, Resend, AI provider, and `DESTINY_SCAN_SECRET` gates remain blocked from prior runs and were not touched here.
 - Next step: Continue manual review of the next publishing pack on the operator's schedule. The next scheduled calendar run will further extend the calendar as needed.

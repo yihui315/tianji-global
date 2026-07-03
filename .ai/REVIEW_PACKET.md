@@ -1,11 +1,13 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love funnel copy optimizer blocker — 2026-07-01 (cron `0 2 */14 * *`, skill `tianji-github-funnel-optimizer`). **No copy edit was made.** KPI evidence is still missing: `data/love-test-kpi-tracking.csv`, `data/love-test-funnel-metrics.csv`, and `data/love-test-day-001..014-kpi-entry.csv` all carry only `0` / `manual entry after publish` scaffold markers. The same blocker was raised in the 2026-06-29 prior run and remains in effect. See `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260701.md` for full evidence and gate status.
+TianJi Love daily growth publishing pack — Day 016 for 2026-07-03 (cron `17 1 * * *`, skill `tianji-github-daily-growth`). Theme: "No-contact week one — silence is information; what you do with it is yours", taken from the 7-day content calendar Day 16 row (2026-07-09). CTA: `/relationship/new`. Day 15 = pause before send (motive vs. reply expectation); Day 16 = no-contact week one (silence as information, not verdict); the rotation continues the calm-hooks-only discipline.
 
 ## Files created this run
 
-- `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260701.md`
+- `assets/marketing/daily/day-016-publishing-pack.md`
+- `assets/marketing/daily/day-016-review-checklist.md`
+- `data/love-test-day-016-kpi-entry.csv`
 
 ## Files updated this run
 
@@ -14,16 +16,29 @@ TianJi Love funnel copy optimizer blocker — 2026-07-01 (cron `0 2 */14 * *`, s
 
 ## Allowed files inspected read-only (no edits)
 
-- `src/app/(main)/love-test/page.tsx` (607 lines, unchanged since 2026-06-29 read)
-- `src/app/(main)/ask/page.tsx` (808 lines, unchanged since 2026-06-29 read)
-- `src/lib/love-test.ts` (379 lines, unchanged since 2026-06-29 read)
-- `assets/love-test-copywriting.md` (74 lines, unchanged since 2026-06-29 read)
-- `data/love-test-event-tracking.csv` (19 lines, unchanged since 2026-06-29 read)
-- `data/love-test-kpi-tracking.csv` (2 lines, unchanged since 2026-06-29 read — all zeros)
+- `assets/marketing/content-calendar-7day.md` (Day 16 row, 2026-07-09)
+- `assets/marketing/daily/day-015-publishing-pack.md` (prior pack precedent)
+- `assets/marketing/daily/day-015-review-checklist.md` (prior checklist precedent)
+- `data/love-test-day-015-kpi-entry.csv` (prior KPI scaffold precedent)
+- `assets/marketing/love-test-next-30-hooks.md` (hook pool)
+- `assets/marketing/love-test-next-20-video-scripts.md` (script pool)
+- `assets/marketing/love-test-next-20-share-captions.md` (caption pool)
 
-## Prior run (2026-07-01 daily growth Day 014)
+## Gate status
 
-TianJi Love daily growth publishing pack — Day 014 for 2026-07-01 (cron `17 1 * * *`). Theme: "Initiation in ambiguity — wanting to reach out is not the same as being ready to send", taken from the 7-day content calendar Day 14 row (2026-07-07). CTA: `/love-test`. Day 13 = weekly learning loop; Day 14 = initiation in ambiguity; the rotation continues the calm-hooks-only discipline from the Day 13 "keep what created calm clicks; drop what sells fear" line.
+```
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Prior run (2026-07-02 daily growth Day 015)
+
+TianJi Love daily growth publishing pack — Day 015 for 2026-07-02 (cron `17 1 * * *`). Theme: "Pause before you send — check your motive before you check their reply", taken from the 7-day content calendar Day 15 row (2026-07-08). CTA: `/ask`. Day 14 = initiation in ambiguity (want vs. ready); Day 15 = pause before send (motive vs. reply expectation); the rotation continues the calm-hooks-only discipline.
 
 ## Files created this run
 
@@ -1102,4 +1117,61 @@ Production deploy: No-Go
 
 ```text
 chore(marketing): add love-test day 014 publishing pack
+```
+
+## 2026-07-02 - TianJi Love content calendar refresh (cron)
+
+### Files changed
+
+- `assets/marketing/content-calendar-7day.md` — extended future calendar by 7 rows (Days 42–48, 2026-08-04 → 2026-08-10).
+- `assets/marketing/love-test-next-30-hooks.md` — added a "Refresh 2026-07-02" batch of 5 hooks (numbers 66–70).
+- `assets/marketing/love-test-next-20-video-scripts.md` — added a "Refresh 2026-07-02" batch of 3 scripts (numbered 35 / 36 / 37).
+- `assets/marketing/love-test-next-20-share-captions.md` — added a "Refresh 2026-07-02" batch of 3 captions (numbers 40–42).
+
+### Safety baseline (re-checked)
+
+```text
+No fake testimonials, fake numbers, or fake user counts were introduced.
+No guaranteed reunion, reply, commitment, or relationship repair claims were introduced.
+No "diagnostic" language (e.g. anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+No "act now", "last chance", or fear-based urgency language was used.
+No "wanting to reach out = should send" coercion or
+"if you don't send you don't care" shame reversal was introduced.
+CTAs follow the established ladder: /love-test first, then /ask or /love-reading or /relationship/new.
+```
+
+### Local validation
+
+```text
+git diff --check
+Passed (no whitespace errors on the markdown delta).
+
+Targeted secret-shape scan over .ai/ assets/marketing/ data/
+Passed: 0 raw-shape hits. No real credentials present.
+
+npm run typecheck
+Passed (tsc -p tsconfig.typecheck.json --noEmit, exit 0).
+
+npm run lint
+Passed (next lint, exit 0 — "No ESLint warnings or errors").
+```
+
+### Gate status (this run)
+
+```text
+Seven-day content calendar: Go - 40 future days (Days 9–48, 2026-07-02 → 2026-08-10)
+Hook pool: Go - 70 hooks
+Video script pool: Go - 37 scripts
+Share caption pool: Go - 42 captions
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
 ```
