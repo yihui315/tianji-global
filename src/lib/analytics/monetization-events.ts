@@ -17,10 +17,12 @@ export const AD_MONETIZATION_EVENTS = [
   'stripe_checkout_success',
   'stripe_checkout_cancel',
   'stripe_subscription_active',
+  'experiment_assigned',  // A:B test assignment
 ] as const;
 
 export const AD_MONETIZATION_ALLOWLIST = [
   ...AD_MONETIZATION_EVENTS,
+  'experiment_assigned',
 ] as const;
 
 export type AdMonetizationEventName = (typeof AD_MONETIZATION_EVENTS)[number];
@@ -38,7 +40,8 @@ export type AdMonetizedPage =
   | 'tarot-spread-meanings'
   | 'love-compatibility-zodiac-2024'
   | 'love-calculator'
-  | 'how-to-read-tarot-cards-for-beginners';
+  | 'how-to-read-tarot-cards-for-beginners'
+  | 'compatibility-zodiac-signs';
 
 /** Ad format shown */
 export type AdFormat = 'display' | 'in-article' | 'in-feed' | 'multiflex';

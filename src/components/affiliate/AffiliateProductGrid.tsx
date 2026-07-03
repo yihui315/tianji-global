@@ -3,6 +3,8 @@
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { trackAffiliateClick, type AffiliateNetwork, type AdMonetizedPage } from '@/lib/analytics/monetization-events';
 
+export type AffiliateNetwork = 'amazon' | 'astrology' | 'book' | 'course' | 'crystal' | 'cj_affiliate';
+
 export interface AffiliateProduct {
   /** Display name */
   nameEn: string;
@@ -11,7 +13,7 @@ export interface AffiliateProduct {
   link: string;
   /** Amazon product image URL (optional for custom) */
   imageUrl?: string;
-  /** Tag: 'amazon' | 'astrology' | 'book' | 'course' | 'crystal' */
+  /** Affiliate network */
   tag: AffiliateNetwork;
   /** Price in USD for display */
   price?: string;

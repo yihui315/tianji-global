@@ -43,6 +43,7 @@ export const localizedPublicRoutes: Array<{
   { path: '/love-compatibility-zodiac-2024', changeFrequency: 'weekly', priority: 0.85 },
   { path: '/resources/love-calculator', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/how-to-read-tarot-cards-for-beginners', changeFrequency: 'weekly', priority: 0.85 },
+  { path: '/compatibility-zodiac-signs', changeFrequency: 'weekly', priority: 0.85 },
 ];
 
 export function isSupportedLocale(locale: string): locale is Locale {
