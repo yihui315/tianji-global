@@ -35,7 +35,9 @@ export type AdMonetizedPage =
   | 'free-ai-love-reading'
   | 'bazi-relationship-analysis-free'
   | 'he-loves-you-signs'
-  | 'tarot-spread-meanings';
+  | 'tarot-spread-meanings'
+  | 'love-compatibility-zodiac-2024'
+  | 'love-calculator';
 
 /** Ad format shown */
 export type AdFormat = 'display' | 'in-article' | 'in-feed' | 'multiflex';

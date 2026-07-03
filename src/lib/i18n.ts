@@ -40,6 +40,8 @@ export const localizedPublicRoutes: Array<{
   { path: '/how-to-get-clarity-in-relationship', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/he-loves-you-signs', changeFrequency: 'weekly', priority: 0.85 },
   { path: '/tarot-spread-meanings', changeFrequency: 'weekly', priority: 0.85 },
+  { path: '/love-compatibility-zodiac-2024', changeFrequency: 'weekly', priority: 0.85 },
+  { path: '/resources/love-calculator', changeFrequency: 'monthly', priority: 0.8 },
 ];
 
 export function isSupportedLocale(locale: string): locale is Locale {
