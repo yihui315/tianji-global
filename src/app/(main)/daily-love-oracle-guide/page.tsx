@@ -1,19 +1,5 @@
 'use client';
 
-export async function generateMetadata() {
-  return {
-    title: 'Daily Love Oracle Guide — Free Planetary Timing for Relationships | Tianji Love',
-    description: 'Learn how to use the free daily love oracle for planetary transits, element balance, and optimal timing windows to navigate your relationships each day.',
-    alternates: {
-      languages: {
-        'en': '/daily-love-oracle-guide',
-        'zh-CN': '/zh-CN/daily-love-oracle-guide',
-        'x-default': '/daily-love-oracle-guide',
-      },
-    },
-  };
-}
-
 import Link from 'next/link';
 import {
   Brain,

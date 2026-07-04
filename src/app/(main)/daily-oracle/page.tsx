@@ -1,19 +1,5 @@
 'use client';
 
-export async function generateMetadata() {
-  return {
-    title: 'Daily Love Oracle — Free Daily Relationship Inspiration签 | Tianji Love',
-    description: 'Draw a free daily love oracle based on your mood. Deterministic results tied to today\'s planetary energy — no login, no AI call, no database.',
-    alternates: {
-      languages: {
-        'en': '/daily-oracle',
-        'zh-CN': '/zh-CN/daily-oracle',
-        'x-default': '/daily-oracle',
-      },
-    },
-  };
-}
-
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowRight, Copy, Heart, RotateCcw, ShieldCheck, Sparkles } from 'lucide-react';

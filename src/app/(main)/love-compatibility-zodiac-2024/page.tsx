@@ -1,5 +1,3 @@
-'use client';
-
 import { TianjiLoveShell } from '@/components/layout/TianjiLoveShell';
 import { TianjiLoveHeader } from '@/components/layout/TianjiLoveHeader';
 import { TianjiLoveFooter } from '@/components/layout/TianjiLoveFooter';

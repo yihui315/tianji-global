@@ -1,10 +1,9 @@
-'use client';
+import { AffiliateProductGrid } from '@/components/affiliate/AffiliateProductGrid';
 
 import { TianjiLoveShell } from '@/components/layout/TianjiLoveShell';
 import { TianjiLoveHeader } from '@/components/layout/TianjiLoveHeader';
 import { TianjiLoveFooter } from '@/components/layout/TianjiLoveFooter';
 import { AdSenseSlot } from '@/components/ads/AdSenseSlot';
-import { AffiliateProductGrid } from '@/components/affiliate/AffiliateProductGrid';
 
 export async function generateMetadata() {
   return {

@@ -1,5 +1,3 @@
-'use client';
-
 export async function generateMetadata() {
   return {
     title: 'Tarot Card Spreads Explained: Find the Perfect Layout for Love Readings | Tianji Love',

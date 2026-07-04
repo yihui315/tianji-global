@@ -1,5 +1,3 @@
-'use client';
-
 export async function generateMetadata() {
   return {
     title: 'How to Read Tarot Cards for Beginners: Complete Visual Guide | Tianji Love',

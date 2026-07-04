@@ -17,20 +17,6 @@ import { withLanguageParam } from '@/lib/language-routing';
 import { AdSenseSlot } from '@/components/ads/AdSenseSlot';
 import { AffiliateProductGrid } from '@/components/affiliate/AffiliateProductGrid';
 
-export async function generateMetadata() {
-  return {
-    title: 'Signs He Loves You — Quiz & Behavioral Guide to Read His True Feelings',
-    description: '22 behavioral and astrological signs to know if he truly loves you. Venus, Mars, Moon analysis plus actionable relationship quizzes for emotional clarity.',
-    alternates: {
-      languages: {
-        'en': '/he-loves-you-signs',
-        'zh-CN': '/zh-CN/he-loves-you-signs',
-        'x-default': '/he-loves-you-signs',
-      },
-    },
-  };
-}
-
 const INTERNAL_LINKS = [
   { href: '/love-test', labelEn: 'Love Test', labelZh: '感情测试' },
   { href: '/ask', labelEn: 'Ask a Question', labelZh: '提问' },
@@ -162,7 +148,7 @@ function href(path: string) {
   return path;
 }
 
-export default withLanguageParam(function HeLovesYouSignsPage() {
+export default function HeLovesYouSignsPage() {
   const { language } = useSyncedLanguage();
   const lang = language === 'zh' ? 'zh' : 'en';
   const navLinks = getTianjiLovePrimaryNav(lang);
@@ -315,4 +301,4 @@ export default withLanguageParam(function HeLovesYouSignsPage() {
       />
     </TianjiLoveShell>
   );
-});
+}
