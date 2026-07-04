@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { LanguageProvider } from '@/hooks/useLanguage';
 import { JsonLd, SITE } from '@/components/seo/JsonLd';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Tianji Love metadata for the primary customer path.
  */
