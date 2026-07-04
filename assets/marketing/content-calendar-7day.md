@@ -57,6 +57,13 @@ Safety baseline: no fake testimonials, no fake numbers, no guaranteed outcomes, 
 | 2026-08-15 | Day 53 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Dynamic readjustment | People shift; a flexible read beats a fixed story you wrote months ago. | /love-test | clicks, leads | No certainty or mind-reading claim. |
 | 2026-08-16 | Day 54 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Friendship-rooted reading | A relationship that survives a calm question about friendship is worth a closer look. | /relationship/new | relationship starts, leads | No shaming either side. |
 | 2026-08-17 | Day 55 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | End-of-cycle reflection | What you notice now is the seed of what you will read next month. | /love-reading | organic clicks, leads | Use real metrics only. |
+| 2026-08-18 | Day 56 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Quiet attention audit | Where your attention keeps returning is data, not a verdict on what they feel. | /love-test | clicks, leads | No mind-reading claim. |
+| 2026-08-19 | Day 57 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | First-message draft | A first message you can rewrite tomorrow is steadier than one you send in a panic. | /ask | clicks, leads | No pressure or chase tactics. |
+| 2026-08-20 | Day 58 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Returning-silence read | A silence that returns is still a data point; it is not always a door left open. | /love-reading | organic clicks, leads | No reunion promise. |
+| 2026-08-21 | Day 59 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Worth continuing audit | Worth continuing is a rhythm you can describe, not a verdict you inherited. | /relationship/new | relationship starts, leads | No decision made for the user. |
+| 2026-08-22 | Day 60 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Calm weekly recap | The best post this week is the one that helped without selling fear. | /love-reading | organic clicks, leads | Use real metrics only. |
+| 2026-08-23 | Day 61 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Energy-direction check | Notice where your energy keeps going, then ask whether the rhythm matches the signal. | /love-test | clicks, leads | No fear-based CTA or guaranteed outcomes. |
+| 2026-08-24 | Day 62 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Decision-pacing breath | A real decision can sit overnight; panic usually cannot wait and usually cannot be trusted. | /ask | clicks, leads | No pressure or chase tactics. |
 
 ## Daily publishing rhythm
 

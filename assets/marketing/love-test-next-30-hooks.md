@@ -115,6 +115,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 74. 主动联系的速度本身也是信息，节奏稳了，下一步才看得清。
 75. 人会变，固定剧本会过期。留一点弹性，比守住旧故事更清楚。
 
+## Refresh 2026-07-04 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-04 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the attention-audit, draft-before-send, returning-silence, energy-direction, and decision-pacing supporting angles. None are certainty claims.
+
+76. 你反复回到的地方，是一种数据，不一定是他对你的态度。
+77. 第一条消息写得可以明天再改，通常比今天发出的更稳。
+78. 重新出现的沉默依然是数据，并不一定是一扇重新打开的门。
+79. 值得继续是一种节奏，不是你继承来的结论。
+80. 真正的决定能再坐一晚；慌着的消息发出去常常回不来。
+
 ## CTA pairings
 
 ```text

@@ -83,6 +83,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 44. The voice inside was clearer than the signal outside. The Love Test helped me listen first: tianji.love/relationship/new
 45. How fast I send is also information. The Love Test gave me a steadier pace before I reached out: tianji.love/ask
 
+## Refresh 2026-07-04 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-04 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the attention-audit, draft-before-send, and returning-silence supporting angles. None are certainty claims.
+
+46. I noticed where my attention kept returning before I asked what they were feeling. The free Love Test made it easier to look: tianji.love/love-test
+47. I saved the first message as a draft instead of sending it at midnight. The morning read it back clearer than the night wrote it: tianji.love/love-test
+48. A silence that returns is still data, not always an invitation. The Love Test framed it as a rhythm, not a verdict: tianji.love/love-reading
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.

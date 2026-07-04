@@ -1,6 +1,23 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-04 - TianJi Love content calendar refresh (cron 37 2 * * *)
+
+- Task ID: `20260704-tianji-love-content-calendar-refresh`.
+- Skill: `tianji-github-content-calendar`.
+- Working tree: feature branch `feature/monetization-ads-affiliate`, clean at start of run, no unrelated tracked edits, no untracked files introduced.
+- Files updated: `assets/marketing/content-calendar-7day.md`, `assets/marketing/love-test-next-30-hooks.md`, `assets/marketing/love-test-next-20-video-scripts.md`, `assets/marketing/love-test-next-20-share-captions.md`, `.ai/CHANGELOG_AI.md` (this entry), `.ai/REVIEW_PACKET.md`.
+- Calendar extension: added 7 future days (Days 56–62, 2026-08-18 → 2026-08-24) on the rotation angles quiet-attention-audit, first-message-draft, returning-silence-read, worth-continuing-audit, calm-weekly-recap, energy-direction-check, and decision-pacing-breath. CTAs rotate across `/love-test`, `/ask`, `/love-reading`, `/relationship/new` following the established ladder. Pool now extends 49 future calendar days (Days 14–62).
+- Hook pool: added 5 new hooks (#76–80) covering attention-audit, draft-before-send, returning-silence, worth-continuing rhythm, and decision-pacing. Pool now 80 hooks.
+- Video script pool: added 3 new scripts (#38 Attention Audit, #39 Draft Before Send, #40 Returning Silence Read). Pool now 43 scripts (37 original + 6 refresh batches).
+- Share caption pool: added 3 new captions (#46–48) on the same supporting angles. Pool now 48 captions.
+- Themes rotated away from the Days 49–55 emotional-vocabulary / self-trust / contact-calibration / dynamic-readjustment cluster. The new angles cover attention-audit (where attention returns), draft-before-send (saving the message), returning-silence (reading a returning silence), worth-continuing rhythm (vs. inherited verdict), and decision-pacing (sitting overnight).
+- Safety baseline enforced: no fake testimonials/metrics, no reunion promise, no mind-reading claim, no diagnosis language, no perfect-accuracy claim, no "act now" urgency, no Stripe/payment claims, no "if you wait perfectly they'll definitely return" guarantee, no "if they don't come back it means you never mattered" shame reversal.
+- Commands run: `git fetch origin`; `git status --short` (clean expected change set, no untracked files); `git diff --check` (0 warnings on the markdown delta); targeted secret-shape scan over the 4 changed files for `sk_live_`, `sk_test_`, `ghp_`, `xox[abp]-`, `AKIA[0-9A-Z]{16}`, `-----BEGIN` (0 hits); `npm run typecheck` (pre-existing branch errors verified to exist before this run via `git stash -u` round-trip; this docs-only change set has no TypeScript surface); `npm run lint` (same — pre-existing branch errors unrelated to docs-only change set).
+- Results: `git diff --check` clean on the new files. Secret-shape scan clean. No auto-posting, no account credentials touched, no fake testimonials or guaranteed outcomes added, no Stripe / paid smoke / production deploy invoked.
+- Risks: Branch has unrelated pre-existing typecheck/lint failures (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, MediaNetSlot, LoveReportCheckoutButton, landing pages) — none introduced or touched by this run. Staging env, Stripe live, Supabase production, Resend, AI provider, and `DESTINY_SCAN_SECRET` gates remain blocked from prior runs and were not touched here.
+- Next step: Push this commit and continue manual review of the publishing pack on the operator's schedule. The next scheduled run will continue the daily growth rotation.
+
 ### 2026-07-04 - TianJi Love daily growth publishing pack — Day 017 (cron 17 1 * * *)
 
 - Task ID: `20260704-tianji-love-daily-growth-day-017`.

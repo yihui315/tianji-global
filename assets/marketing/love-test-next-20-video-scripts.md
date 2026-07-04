@@ -455,3 +455,37 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 速度也是信息。
 - CTA: `/love-test` then `/ask?source=love_test&intent=should_i_initiate`.
 - risk-safe check: No pressure or chase tactics, no guaranteed reply.
+
+## Refresh 2026-07-04 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-04 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the attention-audit, draft-before-send, and returning-silence supporting angles.
+
+## 38 Attention Audit
+
+- channel: Douyin
+- 3-second hook: Where your attention keeps going is also information.
+- scene: A phone screen dimming, a notebook being opened, then a steady result card.
+- spoken copy: Notice the place your mind keeps returning to. That is data about the pattern, not a verdict about what they feel. Love Test gives you a calm place to look at where your attention has been going.
+- caption: 看注意力，也是一种观察。
+- CTA: `/love-test`.
+- risk-safe check: No mind-reading claim, no certainty about the other person's thoughts.
+
+## 39 Draft Before Send
+
+- channel: Xiaohongshu video
+- 3-second hook: A first message you can rewrite tomorrow is steadier than one you send today.
+- scene: A typed message saved to drafts, then a calm result card next to it.
+- spoken copy: Saving the message in drafts is not avoidance; it is a small act of care for your future self. Love Test gives you a pause so the message you do send is one you would still want to send tomorrow morning.
+- caption: 草稿不是逃避，是给明天的自己留空间。
+- CTA: `/love-test` then `/ask?source=love_test&intent=should_i_initiate`.
+- risk-safe check: No pressure or chase tactics, no guarantee the reply will come.
+
+## 40 Returning Silence Read
+
+- channel: Videohao
+- 3-second hook: A silence that returns is still a data point.
+- scene: A phone screen staying dark for a while, then a quiet mirror card.
+- spoken copy: When silence comes back, the temptation is to call it an answer. It is still data, and not always a door left open. Love Test helps you read the rhythm without making it mean more than it does.
+- caption: 重新出现的沉默，也要先看清楚。
+- CTA: `/love-reading`.
+- risk-safe check: No reunion promise, no closure guarantee.
