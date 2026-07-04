@@ -1,5 +1,19 @@
 'use client';
 
+export async function generateMetadata() {
+  return {
+    title: 'How to Read Tarot Cards for Beginners: Complete Visual Guide | Tianji Love',
+    description: 'Learn tarot card reading from scratch. Complete beginner guide covering all 78 cards, five elements, suit meanings, and how to read spreads for love.',
+    alternates: {
+      languages: {
+        'en': '/how-to-read-tarot-cards-for-beginners',
+        'zh-CN': '/zh-CN/how-to-read-tarot-cards-for-beginners',
+        'x-default': '/how-to-read-tarot-cards-for-beginners',
+      },
+    },
+  };
+}
+
 import { TianjiLoveShell } from '@/components/layout/TianjiLoveShell';
 import { TianjiLoveHeader } from '@/components/layout/TianjiLoveHeader';
 import { TianjiLoveFooter } from '@/components/layout/TianjiLoveFooter';

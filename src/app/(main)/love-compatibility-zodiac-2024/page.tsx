@@ -6,6 +6,20 @@ import { TianjiLoveFooter } from '@/components/layout/TianjiLoveFooter';
 import { AdSenseSlot } from '@/components/ads/AdSenseSlot';
 import { AffiliateProductGrid } from '@/components/affiliate/AffiliateProductGrid';
 
+export async function generateMetadata() {
+  return {
+    title: 'Love Compatibility by Zodiac Sign 2024 — Element Dynamics & Pairing Guide',
+    description: 'Explore zodiac 2024 compatibility for all 12 signs. Fire, Earth, Air, Water element pairings, cross-element tension patterns, and relationship timing insights.',
+    alternates: {
+      languages: {
+        'en': '/love-compatibility-zodiac-2024',
+        'zh-CN': '/zh-CN/love-compatibility-zodiac-2024',
+        'x-default': '/love-compatibility-zodiac-2024',
+      },
+    },
+  };
+}
+
 const AFFILIATE_PRODUCTS = [
   {
     nameEn: 'Crystal Bracelet for Love & Attraction',

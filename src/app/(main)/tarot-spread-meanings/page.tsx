@@ -1,5 +1,19 @@
 'use client';
 
+export async function generateMetadata() {
+  return {
+    title: 'Tarot Card Spreads Explained: Find the Perfect Layout for Love Readings | Tianji Love',
+    description: 'Master tarot spreads for love questions. Three-Card, Celtic Cross, Relationship, and Yes/No spreads explained with position meanings and practical guidance.',
+    alternates: {
+      languages: {
+        'en': '/tarot-spread-meanings',
+        'zh-CN': '/zh-CN/tarot-spread-meanings',
+        'x-default': '/tarot-spread-meanings',
+      },
+    },
+  };
+}
+
 import { TianjiLoveShell } from '@/components/layout/TianjiLoveShell';
 import { TianjiLoveHeader } from '@/components/layout/TianjiLoveHeader';
 import { TianjiLoveFooter } from '@/components/layout/TianjiLoveFooter';

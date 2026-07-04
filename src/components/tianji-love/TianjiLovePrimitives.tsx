@@ -22,6 +22,7 @@ const PRIMARY_NAV: Record<TianjiLoveLanguage, TianjiLoveNavItem[]> = {
     { label: 'Ask', href: '/ask', mobile: true },
     { label: 'Draw Timing', href: '/draw', mobile: true },
     { label: 'Pricing', href: '/pricing' },
+    { label: 'Guides', href: '/blog' },
     { label: 'About', href: '/about' },
     { label: 'Login', href: '/login' },
   ],
@@ -31,6 +32,7 @@ const PRIMARY_NAV: Record<TianjiLoveLanguage, TianjiLoveNavItem[]> = {
     { label: '提问', href: '/ask', mobile: true },
     { label: '抽牌', href: '/draw', mobile: true },
     { label: '价格', href: '/pricing' },
+    { label: '指南', href: '/blog' },
     { label: '关于', href: '/about' },
     { label: '登录', href: '/login' },
   ],
@@ -39,11 +41,13 @@ const PRIMARY_NAV: Record<TianjiLoveLanguage, TianjiLoveNavItem[]> = {
 const FOOTER_NAV: Record<TianjiLoveLanguage, TianjiLoveNavItem[]> = {
   en: [
     ...PRIMARY_NAV.en,
+    { label: 'Services', href: '/services' },
     { label: 'Privacy', href: '/legal/privacy' },
     { label: 'Terms', href: '/legal/terms' },
   ],
   zh: [
     ...PRIMARY_NAV.zh,
+    { label: '服务', href: '/services' },
     { label: '隐私', href: '/legal/privacy' },
     { label: '条款', href: '/legal/terms' },
   ],

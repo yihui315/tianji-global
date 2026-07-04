@@ -6,6 +6,20 @@ import { TianjiLoveFooter } from '@/components/layout/TianjiLoveFooter';
 import { AdSenseSlot } from '@/components/ads/AdSenseSlot';
 import { AffiliateProductGrid } from '@/components/affiliate/AffiliateProductGrid';
 
+export async function generateMetadata() {
+  return {
+    title: 'Complete Zodiac Compatibility Guide — All 12 Signs Love Match Chart',
+    description: 'Full zodiac compatibility guide for all 12 signs. Element patterns, love styles, challenges, and growth edges for every zodiac archetype — Aries to Pisces.',
+    alternates: {
+      languages: {
+        'en': '/compatibility-zodiac-signs',
+        'zh-CN': '/zh-CN/compatibility-zodiac-signs',
+        'x-default': '/compatibility-zodiac-signs',
+      },
+    },
+  };
+}
+
 const AFFILIATE_PRODUCTS = [
   {
     nameEn: 'Love Horoscope 2025 — Annual Forecast',
