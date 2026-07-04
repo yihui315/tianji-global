@@ -1,13 +1,13 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love daily growth publishing pack — Day 016 for 2026-07-03 (cron `17 1 * * *`, skill `tianji-github-daily-growth`). Theme: "No-contact week one — silence is information; what you do with it is yours", taken from the 7-day content calendar Day 16 row (2026-07-09). CTA: `/relationship/new`. Day 15 = pause before send (motive vs. reply expectation); Day 16 = no-contact week one (silence as information, not verdict); the rotation continues the calm-hooks-only discipline.
+TianJi Love daily growth publishing pack — Day 017 for 2026-07-04 (cron `17 1 * * *`, skill `tianji-github-daily-growth`). Theme: "Will they come back — patterns return, but a returned pattern is not the same as a returned person", taken from the 7-day content calendar Day 17 row (2026-07-10). CTA: `/love-reading`. Day 16 = no-contact week one (silence as information); Day 17 = will they come back (pattern vs. person); the rotation continues the calm-hooks-only discipline and explicitly separates low-cost signals from reunion forecasts.
 
 ## Files created this run
 
-- `assets/marketing/daily/day-016-publishing-pack.md`
-- `assets/marketing/daily/day-016-review-checklist.md`
-- `data/love-test-day-016-kpi-entry.csv`
+- `assets/marketing/daily/day-017-publishing-pack.md`
+- `assets/marketing/daily/day-017-review-checklist.md`
+- `data/love-test-day-017-kpi-entry.csv`
 
 ## Files updated this run
 
@@ -16,10 +16,10 @@ TianJi Love daily growth publishing pack — Day 016 for 2026-07-03 (cron `17 1 
 
 ## Allowed files inspected read-only (no edits)
 
-- `assets/marketing/content-calendar-7day.md` (Day 16 row, 2026-07-09)
-- `assets/marketing/daily/day-015-publishing-pack.md` (prior pack precedent)
-- `assets/marketing/daily/day-015-review-checklist.md` (prior checklist precedent)
-- `data/love-test-day-015-kpi-entry.csv` (prior KPI scaffold precedent)
+- `assets/marketing/content-calendar-7day.md` (Day 17 row, 2026-07-10)
+- `assets/marketing/daily/day-016-publishing-pack.md` (prior pack precedent)
+- `assets/marketing/daily/day-016-review-checklist.md` (prior checklist precedent)
+- `data/love-test-day-016-kpi-entry.csv` (prior KPI scaffold precedent)
 - `assets/marketing/love-test-next-30-hooks.md` (hook pool)
 - `assets/marketing/love-test-next-20-video-scripts.md` (script pool)
 - `assets/marketing/love-test-next-20-share-captions.md` (caption pool)
@@ -35,6 +35,46 @@ Stripe checkout execution: Not run
 Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
 ```
+
+## Validation evidence
+
+### git diff --check
+
+Passed — 0 warnings on the markdown + CSV delta from this run.
+
+### Targeted secret-shape scan
+
+Passed — 0 raw-shape hits over the new files (`assets/marketing/daily/day-017-publishing-pack.md`, `assets/marketing/daily/day-017-review-checklist.md`, `data/love-test-day-017-kpi-entry.csv`). Scanned for `sk_live_`, `sk_test_`, `ghp_`, `xox[abp]-`, `AKIA[0-9A-Z]{16}`, `-----BEGIN`.
+
+### npm run typecheck
+
+Change set is markdown + CSV only with no TypeScript surface. The pre-existing `npm run typecheck` failures on this branch (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton) are unrelated to this skill's docs-only output and were verified to exist before this run via `git stash -u` round-trip.
+
+### npm run lint
+
+Change set is markdown + CSV only with no ESLint surface. The pre-existing `npm run lint` errors on this branch (`<a>` navigation in landing pages, conditional `useEffect` in MediaNetSlot, `react-hooks/rules-of-hooks`) are unrelated to this skill's docs-only output and were verified to exist before this run.
+
+## Gate status (this run)
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Suggested commit message for this run
+
+```text
+chore(marketing): add love-test day 017 publishing pack
+```
+
+## Prior run (2026-07-03 daily growth Day 016)
+
+TianJi Love daily growth publishing pack — Day 016 for 2026-07-03 (cron `17 1 * * *`). Theme: "No-contact week one — silence is information; what you do with it is yours", taken from the 7-day content calendar Day 16 row (2026-07-09). CTA: `/relationship/new`. Day 15 = pause before send (motive vs. reply expectation); Day 16 = no-contact week one (silence as information, not verdict); the rotation continues the calm-hooks-only discipline.
 
 ## Prior run (2026-07-02 daily growth Day 015)
 

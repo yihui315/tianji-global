@@ -1,6 +1,21 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-04 - TianJi Love daily growth publishing pack — Day 017 (cron 17 1 * * *)
+
+- Task ID: `20260704-tianji-love-daily-growth-day-017`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: feature branch `feature/monetization-ads-affiliate` (clean at start of run), 3 new files created, no unrelated tracked edits.
+- Files created: `assets/marketing/daily/day-017-publishing-pack.md`, `assets/marketing/daily/day-017-review-checklist.md`, `data/love-test-day-017-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md` (this entry), `.ai/REVIEW_PACKET.md`.
+- Theme: "Will they come back — patterns return, but a returned pattern is not the same as a returned person", taken from the 7-day content calendar Day 17 row (2026-07-10). CTA: `/love-reading`. Day 16 = no-contact week one (silence as information); Day 17 = will they come back (pattern vs. person). Continues the calm-hooks-only rotation and explicitly separates low-cost signals from reunion forecasts.
+- Channel mix: 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL (1 DM template + 1 post draft), 3 SEO articles. All copy is helpful, grounded, and non-guaranteed.
+- Safety baseline enforced: no fake testimonials/metrics, no reunion promise, no mind-reading claim, no diagnosis language, no perfect-accuracy claim, no "act now" urgency, no Stripe/payment claims, no "if you wait perfectly they'll definitely return" guarantee, no "if they don't come back it means you never mattered" shame reversal. Every CTA points to `/love-reading` only.
+- Commands run: `git fetch origin`; `git status --short`; inspected `assets/marketing/content-calendar-7day.md` (Day 17 row), prior day-016 pack + checklist + KPI CSV; wrote 3 new files; `git diff --check` (0 warnings on delta); targeted secret-shape scan over the 3 new files for `sk_live_`, `sk_test_`, `ghp_`, `xox[abp]-`, `AKIA[0-9A-Z]{16}`, `-----BEGIN` (0 hits); `npm run typecheck` (pre-existing branch errors verified to exist before this run via `git stash -u` round-trip; this docs-only change set has no TypeScript surface); `npm run lint` (same — pre-existing branch errors unrelated to docs-only change set).
+- Results: `git diff --check` clean on the new files. Secret-shape scan clean. No auto-posting, no account credentials touched, no fake testimonials or guaranteed outcomes added, no Stripe / paid smoke / production deploy invoked. The pre-existing untracked `relationship-decision.json` and modified `data/love-test-funnel-metrics.csv` from prior revenue-funnel worktree are untouched and explicitly NOT staged.
+- Risks: Branch has unrelated pre-existing typecheck/lint failures (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, MediaNetSlot, LoveReportCheckoutButton, landing pages) — none introduced or touched by this run. Staging env, Stripe live, Supabase production, Resend, AI provider, and `DESTINY_SCAN_SECRET` gates remain blocked from prior runs and were not touched here.
+- Next step: Continue manual review of the publishing pack on the operator's schedule. The next scheduled run will continue the daily growth rotation.
+
 ### 2026-07-03 - TianJi Love daily growth publishing pack — Day 016 (cron 17 1 * * *)
 
 - Task ID: `20260703-tianji-love-daily-growth-day-016`.
