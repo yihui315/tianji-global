@@ -1,6 +1,20 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-05 - TianJi Love test growth report — Day 018 KPI analysis (cron 0 2 * * 0)
+
+- Task ID: `20260705-tianji-love-kpi-analysis-day-018`.
+- Skill: `tianji-github-kpi-analysis`.
+- Working tree: feature branch `feature/monetization-ads-affiliate` (clean at start of run).
+- Bridge: re-ran `python3 ~/.hermes/scripts/run_revenue_funnel.py`; appended a `real_db_pipeline` row to `data/love-test-funnel-metrics.csv` (observation window 2026-07-05, `home_view=0`, `test_start=0`, `result_view=0`, `unlock_click=0`, `checkout_created=1`, `checkout_success=0`, `revenue_cny=0`, all funnel rates `0.0`).
+- Files created: `.ai/reports/love-test-growth-report-2026-07-05.md`, plus updates to this changelog and `.ai/REVIEW_PACKET.md`.
+- Verdict: Real KPI data required — analysis skipped. Every numeric column across `data/love-test-day-011-kpi-entry.csv` through `data/love-test-day-018-kpi-entry.csv` is empty; Days 001–010 are `0` placeholders with `paid_smoke_result=not_run`; `data/love-test-marketing-kpi.csv` is still a 3-row template; the freshly-bridged funnel row carries zeros only.
+- Day-specific `assets/marketing/daily/day-018-optimization-notes.md` not created (would require inventing optimizations). `data/love-test-day-018-kpi-entry.csv` was not mutated (rule: do not overwrite manual entries).
+- Commands run: `git status`; `tail -3 data/love-test-funnel-metrics.csv`; `python3 ~/.hermes/scripts/run_revenue_funnel.py` (bridged row written); `git diff --check` (pending — will be run before commit); secret-shape scan over `.ai/`, `assets/marketing/`, `data/` (pending — will be run before commit). `npm run typecheck` / `npm run lint`: not applicable to this markdown-only change set.
+- Results: Bridge pipeline confirmed live and DB-readable (the `real_db_pipeline` marker and the single `checkout_created=1` from the production analytics_events table are real). No engagement signal available to rank hooks/topics/channels or to compute conversion deltas. No fabricated metrics, no fake conversion claims, no paid smoke, no Stripe call, no deploy.
+- Risks: None beyond the standing `tianji-github-paid-gate` No-Go (still awaiting explicit Stripe test-mode approval). Staging env, Stripe live, Supabase production, Resend, AI provider, and `DESTINY_SCAN_SECRET` gates unchanged from prior runs. The pre-existing untracked `relationship-decision.json` is left untouched.
+- Next step: Manual publisher records real per-post numbers into `data/love-test-day-018-kpi-entry.csv` after the 2026-07-11 publish; next weekly KPI run will re-evaluate against those rows.
+
 ### 2026-07-05 - TianJi Love daily growth publishing pack — Day 018 (cron 17 1 * * *)
 
 - Task ID: `20260705-tianji-love-daily-growth-day-018`.
