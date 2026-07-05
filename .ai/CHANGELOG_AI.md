@@ -1,6 +1,21 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-05 - TianJi Love daily growth publishing pack — Day 018 (cron 17 1 * * *)
+
+- Task ID: `20260705-tianji-love-daily-growth-day-018`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: feature branch `feature/monetization-ads-affiliate` (clean at start of run), 3 new files created, no unrelated tracked edits.
+- Files created: `assets/marketing/daily/day-018-publishing-pack.md`, `assets/marketing/daily/day-018-review-checklist.md`, `data/love-test-day-018-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md` (this entry), `.ai/REVIEW_PACKET.md`.
+- Theme: "Worth continuing — worth is not only what you feel; it is also what the rhythm allows", taken from the 7-day content calendar Day 18 row (2026-07-11). CTA: `/love-test`. Day 17 = will they come back (pattern vs. person); Day 18 = worth continuing (feeling vs. rhythm). Continues the calm-hooks-only rotation and explicitly avoids making a stay/leave verdict for the user.
+- Channel mix: 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL (1 DM template + 1 post draft), 3 SEO articles. All copy is helpful, grounded, and non-prescriptive.
+- Safety baseline enforced: no fake testimonials/metrics, no stay/leave verdict, no mind-reading claim, no diagnosis language, no perfect-accuracy claim, no "act now" urgency, no Stripe/payment claims, no "your feeling proves the relationship is worth it" guarantee, no "the rhythm proves you should leave" verdict, no "you wasted your time" shame framing, no "you already know the answer if you're honest" coercive framing. Every CTA points to `/love-test` only.
+- Commands run: `git fetch origin`; `git status --short` (3 untracked files exactly as planned); inspected `assets/marketing/content-calendar-7day.md` (Day 18 row), prior day-017 pack + checklist + KPI CSV; wrote 3 new files; `git diff --check` (0 warnings on delta); targeted secret-shape scan over the 3 new files for `sk_live_`, `sk_test_`, `ghp_`, `xox[abp]-`, `AKIA[0-9A-Z]{16}`, `-----BEGIN` (0 hits); `npm run typecheck` (pre-existing branch errors verified to exist before this run via `git stash -u` round-trip; this docs-only change set has no TypeScript surface); `npm run lint` (same — pre-existing branch errors unrelated to docs-only change set).
+- Results: `git diff --check` clean on the new files. Secret-shape scan clean. No auto-posting, no account credentials touched, no fake testimonials or guaranteed outcomes added, no Stripe / paid smoke / production deploy invoked.
+- Risks: Branch has unrelated pre-existing typecheck/lint failures (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, MediaNetSlot, LoveReportCheckoutButton, landing pages) — none introduced or touched by this run. Staging env, Stripe live, Supabase production, Resend, AI provider, and `DESTINY_SCAN_SECRET` gates remain blocked from prior runs and were not touched here.
+- Next step: Continue manual review of the publishing pack on the operator's schedule. The next scheduled run will continue the daily growth rotation.
+
 ### 2026-07-04 - TianJi Love content calendar refresh (cron 37 2 * * *)
 
 - Task ID: `20260704-tianji-love-content-calendar-refresh`.
