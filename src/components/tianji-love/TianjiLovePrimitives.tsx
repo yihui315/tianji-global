@@ -71,14 +71,16 @@ export function getTianjiLovePrimaryNav(
   language: TianjiLoveLanguage,
   href: (path: string) => string = (path) => path
 ): TianjiLoveNavItem[] {
-  return PRIMARY_NAV[language].map((item) => ({ ...item, href: href(item.href) }));
+  const nav = PRIMARY_NAV[language] ?? [];
+  return nav.map((item) => ({ ...item, href: href(item.href) }));
 }
 
 export function getTianjiLoveFooterNav(
   language: TianjiLoveLanguage,
   href: (path: string) => string = (path) => path
 ): TianjiLoveNavItem[] {
-  return FOOTER_NAV[language].map((item) => ({ ...item, href: href(item.href) }));
+  const nav = FOOTER_NAV[language] ?? [];
+  return nav.map((item) => ({ ...item, href: href(item.href) }));
 }
 
 export function getTianjiLovePrimaryCta(
