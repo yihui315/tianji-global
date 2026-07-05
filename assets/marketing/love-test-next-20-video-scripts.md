@@ -489,3 +489,37 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 重新出现的沉默，也要先看清楚。
 - CTA: `/love-reading`.
 - risk-safe check: No reunion promise, no closure guarantee.
+
+## Refresh 2026-07-05 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-05 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the late-summer-audit, body-aware-reading, and friend-of-friend-lens supporting angles.
+
+## 41 Questions You Stopped Asking
+
+- channel: Xiaohongshu video
+- 3-second hook: The questions you stopped asking are also part of the pattern.
+- scene: A notebook with crossed-out old questions, then a calm result card.
+- spoken copy: Sometimes the most useful data is the list of things you no longer ask. Love Test helps you look at what has shifted, not only at what is still loud.
+- caption: 沉默下来的问题，也是一份记录。
+- CTA: `/love-test`.
+- risk-safe check: No diagnosis language, no certainty claim.
+
+## 42 Body As A Signal
+
+- channel: Douyin
+- 3-second hook: What your body does after a message is information, not always a verdict.
+- scene: A person putting a phone face down, exhaling, then a calm mirror card.
+- spoken copy: Before you interpret the reply, it can help to notice what your body did after you read it. Love Test gives you a steadier place to read that signal without turning it into a conclusion.
+- caption: 身体的反应，也是一种信息。
+- CTA: `/love-test` then `/ask?source=love_test&intent=what_are_they_thinking`.
+- risk-safe check: No mind-reading claim, no shame framing.
+
+## 43 Friend-Of-Friend Lens
+
+- channel: Videohao
+- 3-second hook: A friend describing your pattern usually hears it more clearly than you do.
+- scene: Two people on a couch, one speaking calmly, then a mirror card.
+- spoken copy: Sometimes the clearest read of a pattern comes from a friend who is not inside the loop. Love Test helps you save a result so you can hear that calmer voice on a quieter day.
+- caption: 朋友的声音，常常更清楚。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No shaming either side, no third-party story used as evidence.

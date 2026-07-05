@@ -64,6 +64,13 @@ Safety baseline: no fake testimonials, no fake numbers, no guaranteed outcomes, 
 | 2026-08-22 | Day 60 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Calm weekly recap | The best post this week is the one that helped without selling fear. | /love-reading | organic clicks, leads | Use real metrics only. |
 | 2026-08-23 | Day 61 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Energy-direction check | Notice where your energy keeps going, then ask whether the rhythm matches the signal. | /love-test | clicks, leads | No fear-based CTA or guaranteed outcomes. |
 | 2026-08-24 | Day 62 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Decision-pacing breath | A real decision can sit overnight; panic usually cannot wait and usually cannot be trusted. | /ask | clicks, leads | No pressure or chase tactics. |
+| 2026-08-25 | Day 63 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Late-summer audit | Notice what you have stopped asking about; that list is data too. | /love-test | clicks, leads | No fear-based CTA. |
+| 2026-08-26 | Day 64 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Body-aware reading | What your body does after a message is information; it is not always a verdict. | /ask | clicks, leads | No diagnosis language. |
+| 2026-08-27 | Day 65 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Friend-of-friend lens | A friend describing your pattern usually hears it more clearly than you do. | /relationship/new | relationship starts, leads | No shaming either side. |
+| 2026-08-28 | Day 66 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Archive vs delete | Keeping the record without rereading it is also a way to keep yourself steady. | /love-reading | organic clicks, leads | No shame framing. |
+| 2026-08-29 | Day 67 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Attention-rest practice | One day off the chat refresh is rarely a regret; one day on rarely an answer. | /love-test | clicks, leads | No fear-based CTA. |
+| 2026-08-30 | Day 68 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | What you kept noticing | The thing you noticed first is usually the thing worth writing down first. | /love-reading | organic clicks, leads | No mind-reading claim. |
+| 2026-08-31 | Day 69 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Month-end breath | Closing a month with one sentence is steadier than chasing a new signal on day one. | /love-test | clicks, leads | No perfect-accuracy claim. |
 
 ## Daily publishing rhythm
 

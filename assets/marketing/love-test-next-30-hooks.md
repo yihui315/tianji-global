@@ -125,6 +125,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 79. 值得继续是一种节奏，不是你继承来的结论。
 80. 真正的决定能再坐一晚；慌着的消息发出去常常回不来。
 
+## Refresh 2026-07-05 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-05 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the late-summer-audit, body-aware-reading, friend-of-friend-lens, archive-vs-delete, attention-rest-practice, and month-end-breath supporting angles. None are certainty claims.
+
+81. 你不再问的那些问题，本身就是一份记录，比新消息更值得保存。
+82. 身体对一条消息的反应也是一种信息，未必是结论。先停下来听一遍。
+83. 让一个朋友描述你现在的状态，常常比你自己描述得更清楚一点。
+84. 留存但不反复回看，是一种节制的稳，也是对自己的一种照顾。
+85. 给自己留一天不看聊天记录，一天的距离通常不会变成一种遗憾。
+
 ## CTA pairings
 
 ```text

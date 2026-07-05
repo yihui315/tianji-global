@@ -133,3 +133,88 @@ Not applicable to this change set — markdown + CSV only, no TypeScript or ESLi
 ### Bridge evidence
 
 `python3 ~/.hermes/scripts/run_revenue_funnel.py` executed successfully and appended a row to `data/love-test-funnel-metrics.csv` with `notes=real_db_pipeline` and the values `home_view=0`, `test_start=0`, `result_view=0`, `unlock_click=0`, `checkout_created=1`, `checkout_success=0`, `revenue_cny=0`, and all funnel rates `0.0`. The bridge script itself is the documented production DB→CSV pipeline (cron `aeaea2fc0ce6`, Monday 02:30 UTC); this skill's manual re-run is permitted and does not require the scheduled cron.
+
+---
+
+## TianJi Love content calendar refresh — 2026-07-05 02:37 UTC (cron `37 2 * * *`)
+
+### Scope
+
+This run of the `tianji-github-content-calendar` skill (scheduled cron `37 2 * * *`) inspected the seven-day future calendar and the hook / video-script / share-caption pools, then extended the calendar and rotated the pool themes. The run is docs/markdown-only inside `assets/marketing/` plus the `.ai/` record pair — no `.env*` read, no TypeScript/ESLint surface touched, no Stripe live touch, no Supabase production mutation, no production deploy, no social auto-posting.
+
+### Files changed in this run
+
+- `assets/marketing/content-calendar-7day.md` — extended the calendar table by 7 rows (Days 63–69, 2026-08-25 → 2026-08-31).
+- `assets/marketing/love-test-next-30-hooks.md` — appended a `Refresh 2026-07-05` batch of 5 hooks (#81–#85).
+- `assets/marketing/love-test-next-20-video-scripts.md` — appended a `Refresh 2026-07-05` batch of 3 video scripts (#41–#43).
+- `assets/marketing/love-test-next-20-share-captions.md` — appended a `Refresh 2026-07-05` batch of 3 share captions (#49–#51).
+- `.ai/CHANGELOG_AI.md` — appended the 2026-07-05 entry.
+- `.ai/REVIEW_PACKET.md` — appended this section.
+
+Files NOT touched (intentionally):
+- The pre-existing modified `src/components/tianji-love/TianjiLovePrimitives.tsx` (unrelated source-only change from a parallel worktree).
+- The pre-existing untracked `relationship-decision.json`.
+- The pre-existing modified `data/love-test-funnel-metrics.csv`.
+- Any `.env*`, deployment config, billing/auth/webhook routes, secrets, or production-touching files.
+
+### Pre-run state
+
+- Future days in calendar (relative to today 2026-07-05): **50 days** (Days 12–62, up to 2026-08-24). Already healthy; minimum 7-day requirement exceeded.
+- Hook pool: 80 hooks (steady growth since 2026-06-26).
+- Video-script pool: 40 scripts (steady growth since 2026-06-26).
+- Share-caption pool: 48 captions (steady growth since 2026-06-26).
+
+### Post-run state
+
+- Future days in calendar (relative to today 2026-07-05): **57 days** (Days 12–69, up to 2026-08-31).
+- Hook pool: **85 hooks**.
+- Video-script pool: **43 scripts**.
+- Share-caption pool: **51 captions**.
+
+### Theme rotation rationale
+
+The Days 49–62 cluster (extended across 2026-07-03 / 2026-07-04 runs) leaned on emotional-vocabulary, self-trust, contact-calibration, dynamic-readjustment, friendship-rooted-reading, end-of-cycle-reflection, quiet-attention-audit, first-message-draft, returning-silence-read, worth-continuing-audit, calm-weekly-recap, energy-direction-check, and decision-pacing-breath supporting angles. The Days 63–69 batch deliberately rotates to a fresh set of late-cycle supporting angles — late-summer audit, body-aware reading, friend-of-friend lens, archive vs delete, attention-rest practice, what you kept noticing, month-end breath — while still passing through all four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) across the week. No theme repeats consecutively with the prior week; no angle doubles up with the same channel or CTA.
+
+### Validation performed
+
+```text
+git status --short (before commit): clean staging area for the 4 marketing files + 2 .ai/ files; 1 unrelated pre-existing modification to src/components/tianji-love/TianjiLovePrimitives.tsx intentionally left unstaged.
+git diff --check: passed (0 warnings on my markdown delta).
+Secret-shape scan over my markdown delta: 0 raw-shape hits (sk_live_*, sk_test_*, ghp_*, xox[abp]-*, AKIA[0-9A-Z]{16}, -----BEGIN *PRIVATE KEY-----).
+npm run typecheck: produced pre-existing errors already documented on this branch (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton, <a> navigation in landing pages, conditional useEffect in MediaNetSlot, react-hooks/rules-of-hooks). Baseline confirmed via git stash round-trip — no new errors introduced by this run. The skill's narrow scope is markdown-only.
+npm run lint: same pre-existing errors on the same baseline files; no new lint errors introduced by this run.
+.env* access: none — no env files were read, copied, diffed, or printed.
+```
+
+### Gate status
+
+```text
+Seven-day content calendar: Go (57 future days, well over 7 minimum)
+Hook pool: Go (85 hooks, plenty of fresh rotations)
+Video script pool: Go (43 scripts, fresh rotation ready)
+Share caption pool: Go (51 captions, fresh rotation ready)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Safety summary
+
+- No fake testimonials, no fake user numbers, no fake revenue, no fake KPI claims added.
+- No guaranteed relationship / reunion / closure / mind-reading / outcome promises.
+- No diagnosis language (no anxiety / codependency / attachment-disorder / disorder framing).
+- No fear-based or shame-based CTA.
+- No first action other than `/love-test` in the new copy.
+- No `.env*` read, no Stripe live touch, no Supabase production mutation, no production deploy, no social auto-posting.
+
+### Manual operator steps
+
+1. Open `.ai/REVIEW_PACKET.md` (this entry) and `.ai/CHANGELOG_AI.md` (today's tail entry).
+2. Skim the new Days 63–69 calendar rows for tone before any operator uses them.
+3. Continue manual review of the Day 018 publishing pack (separate cron `17 1 * * *`) on the operator's schedule.
+4. The next scheduled content-calendar run (cron `37 2 * * *` on 2026-07-06) will further extend the calendar as needed.
+
+### Next step
+
+Commit the docs-only delta (4 marketing files + 2 `.ai/` files) with the standard `chore(marketing): refresh love-test content calendar` message, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.
