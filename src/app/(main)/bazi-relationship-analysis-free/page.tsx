@@ -89,8 +89,9 @@ const INTERNAL_LINKS = [
 export default function BaziRelationshipAnalysisFreePage() {
   const [language, setLanguage] = useSyncedLanguage('en');
   const t = (en: string, zh: string) => (language === 'zh' ? zh : en);
-  const navItems = getTianjiLovePrimaryNav(language);
-  const footerLinks = getTianjiLoveFooterNav(language);
+  const navItems = getTianjiLovePrimaryNav(lang);
+  const lang = language === 'zh' ? 'zh' : 'en';
+  const footerLinks = getTianjiLoveFooterNav(lang);
   const href = (path: string) => withLanguageParam(path, language);
   const toggleLanguage = () => setLanguage(language === 'zh' ? 'en' : 'zh');
 

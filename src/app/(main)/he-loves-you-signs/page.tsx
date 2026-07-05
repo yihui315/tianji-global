@@ -152,7 +152,7 @@ export default function HeLovesYouSignsPage() {
   const { language } = useSyncedLanguage();
   const lang = language === 'zh' ? 'zh' : 'en';
   const navLinks = getTianjiLovePrimaryNav(lang);
-  const footerLinks = getTianjiLoveFooterNav(language);
+  const footerLinks = getTianjiLoveFooterNav(lang);
 
   return (
     <TianjiLoveShell>
