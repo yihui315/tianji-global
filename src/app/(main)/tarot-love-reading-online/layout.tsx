@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata() {
   return {
     title: 'Free AI Tarot Love Reading Online — Instant Card Interpretations | Tianji Love',

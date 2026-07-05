@@ -1,13 +1,11 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love daily growth publishing pack — Day 018 for 2026-07-11 (cron `17 1 * * *`, skill `tianji-github-daily-growth`). Theme: "Worth continuing — worth is not only what you feel; it is also what the rhythm allows", taken from the 7-day content calendar Day 18 row (2026-07-11). CTA: `/love-test`. Day 17 = will they come back (pattern vs. person); Day 18 = worth continuing (feeling vs. rhythm). The rotation continues the calm-hooks-only discipline and explicitly avoids making a stay/leave verdict for the user.
+TianJi Love test growth report — Day 018 KPI analysis for 2026-07-05 (cron `0 2 * * 0`, skill `tianji-github-kpi-analysis`). Verdict: real KPI data required, analysis skipped. Every numeric column across `data/love-test-day-011-kpi-entry.csv` through `data/love-test-day-018-kpi-entry.csv` is empty; Days 001–010 are `0` placeholders with `paid_smoke_result=not_run`; `data/love-test-marketing-kpi.csv` is still a 3-row template; the freshly-bridged `data/love-test-funnel-metrics.csv` row (2026-07-05, `real_db_pipeline`) carries only zeros plus `checkout_created=1`.
 
 ## Files created this run
 
-- `assets/marketing/daily/day-018-publishing-pack.md`
-- `assets/marketing/daily/day-018-review-checklist.md`
-- `data/love-test-day-018-kpi-entry.csv`
+- `.ai/reports/love-test-growth-report-2026-07-05.md`
 
 ## Files updated this run
 
@@ -16,21 +14,20 @@ TianJi Love daily growth publishing pack — Day 018 for 2026-07-11 (cron `17 1 
 
 ## Allowed files inspected read-only (no edits)
 
-- `assets/marketing/content-calendar-7day.md` (Day 18 row, 2026-07-11)
-- `assets/marketing/daily/day-017-publishing-pack.md` (prior pack precedent)
-- `assets/marketing/daily/day-017-review-checklist.md` (prior checklist precedent)
-- `data/love-test-day-017-kpi-entry.csv` (prior KPI scaffold precedent)
-- `assets/marketing/love-test-next-30-hooks.md` (hook pool)
-- `assets/marketing/love-test-next-20-video-scripts.md` (script pool)
-- `assets/marketing/love-test-next-20-share-captions.md` (caption pool)
+- `data/love-test-day-001-kpi-entry.csv` … `data/love-test-day-018-kpi-entry.csv`
+- `data/love-test-marketing-kpi.csv`
+- `data/love-test-kpi-tracking.csv`
+- `data/love-test-funnel-metrics.csv`
+- `assets/marketing/daily/day-017-publishing-pack.md`
+- `assets/marketing/daily/day-018-publishing-pack.md`
 
 ## Gate status
 
 ```
-Daily growth publishing pack: Go
-Manual review checklist: Go
-KPI entry scaffold: Go
-Social auto-posting: No-Go - manual publishing only
+KPI source file: No-Go - missing real metrics (all day-level KPI entries empty/zero/placeholder; aggregate is still a 3-row template; bridge funnel row carries real_db_pipeline marker but upstream counts are zero)
+KPI analysis report: Go (this report documents the absence of real data; no fabricated rankings)
+Optimization notes: Not run (cannot be grounded without non-zero input rows)
+Fake metrics: No-Go
 Stripe checkout execution: Not run
 Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
@@ -116,3 +113,23 @@ Day 018 returns to `/love-test` to keep the worth-continuing arc anchored on the
 ## Next step
 
 Push this commit and continue manual review of the publishing pack on the operator's schedule. The next scheduled run (cron `17 1 * * *` for the following day) will generate Day 019 from the content calendar Day 19 row.
+
+---
+
+## KPI analysis validation evidence (this run, 2026-07-05 02:00 UTC)
+
+### git diff --check
+
+Pending — will be run before commit on the markdown delta in `.ai/reports/love-test-growth-report-2026-07-05.md`, `.ai/CHANGELOG_AI.md`, and `.ai/REVIEW_PACKET.md`. (The 3 prior trailing-whitespace warnings on `data/love-test-funnel-metrics.csv` are pre-existing in the bridge CSV and are not produced by this skill.)
+
+### Targeted secret-shape scan
+
+Pending — will be run before commit over `.ai/`, `assets/marketing/`, `data/`. The scan will check `sk_live_`, `sk_test_`, `ghp_`, `xox[abp]-`, `AKIA[0-9A-Z]{16}`, `-----BEGIN`. Prior matches in `.ai/CHANGELOG_AI.md` and `.ai/TIANJI_LOVE_AUTO_GATE_STATUS_*.md` are descriptive mentions of the detector strings themselves, not real secrets.
+
+### npm run typecheck / npm run lint
+
+Not applicable to this change set — markdown + CSV only, no TypeScript or ESLint surface touched in this run. The pre-existing typecheck and lint failures on this branch (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton, `<a>` navigation in landing pages, conditional `useEffect` in MediaNetSlot, `react-hooks/rules-of-hooks`) are unrelated to this docs-only KPI analysis run.
+
+### Bridge evidence
+
+`python3 ~/.hermes/scripts/run_revenue_funnel.py` executed successfully and appended a row to `data/love-test-funnel-metrics.csv` with `notes=real_db_pipeline` and the values `home_view=0`, `test_start=0`, `result_view=0`, `unlock_click=0`, `checkout_created=1`, `checkout_success=0`, `revenue_cny=0`, and all funnel rates `0.0`. The bridge script itself is the documented production DB→CSV pipeline (cron `aeaea2fc0ce6`, Monday 02:30 UTC); this skill's manual re-run is permitted and does not require the scheduled cron.

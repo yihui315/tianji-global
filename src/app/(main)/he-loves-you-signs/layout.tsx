@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Signs He Loves You — Quiz & Behavioral Guide to Read His True Feelings',
