@@ -135,6 +135,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 84. 留存但不反复回看，是一种节制的稳，也是对自己的一种照顾。
 85. 给自己留一天不看聊天记录，一天的距离通常不会变成一种遗憾。
 
+## Refresh 2026-07-06 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-06 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the new-month-read, quiet-text-reread, pace-over-panic, story-i-keep-telling, two-voice-read, shared-language-check, and week-one-small-reframe supporting angles, deliberately avoiding the late-summer-audit / body-aware-reading / friend-of-friend-lens / archive-vs-delete / attention-rest-practice / month-end-breath / what-you-kept-noticing cluster used in Days 63–69. None are certainty claims.
+
+86. 新的一月是新的页面，不是新的结论。一句干净的话，胜过十条匆忙的新信号。
+87. 把同一条消息再读一遍，往往加的不是清晰，是又绕了一圈。停下来也常常是一种进度。
+88. 你回复的速度，本身就是信息。急出来的消息，对两边的负担常常都不一样。
+89. 你反复在讲的那个故事，也是一份数据。看清它不等于要相信它。
+90. 周一那句小调整，常常比周五夜里那场长谈，更容易留得住。
+
 ## CTA pairings
 
 ```text

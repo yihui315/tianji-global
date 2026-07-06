@@ -99,6 +99,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 50. I noticed my body settling after I put the phone face down. The Love Test gave me a calmer way to read that signal: tianji.love/ask
 51. A friend described my pattern more clearly than I could. I saved the Love Test result so I could hear her voice on a quieter day: tianji.love/relationship/new
 
+## Refresh 2026-07-06 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-06 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the new-month-read, quiet-text-reread, and story-i-keep-telling supporting angles, deliberately avoiding the late-summer-audit / body-aware-reading / friend-of-friend-lens / archive-vs-delete / attention-rest-practice / what-you-kept-noticing / month-end-breath cluster used in Days 63–69. None are certainty claims.
+
+52. I let the new month start with one cleaner sentence, not ten fresh signals. The free Love Test helped me write it: tianji.love/love-test
+53. I noticed rereading the same text added a loop, not clarity. The Love Test gave me a calmer place to look: tianji.love/love-reading
+54. I named the story I had been retelling, then put it next to the result. The Love Test let it sit there without making it a verdict: tianji.love/love-test
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.

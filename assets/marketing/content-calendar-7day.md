@@ -71,6 +71,13 @@ Safety baseline: no fake testimonials, no fake numbers, no guaranteed outcomes, 
 | 2026-08-29 | Day 67 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Attention-rest practice | One day off the chat refresh is rarely a regret; one day on rarely an answer. | /love-test | clicks, leads | No fear-based CTA. |
 | 2026-08-30 | Day 68 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | What you kept noticing | The thing you noticed first is usually the thing worth writing down first. | /love-reading | organic clicks, leads | No mind-reading claim. |
 | 2026-08-31 | Day 69 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Month-end breath | Closing a month with one sentence is steadier than chasing a new signal on day one. | /love-test | clicks, leads | No perfect-accuracy claim. |
+| 2026-09-01 | Day 70 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | New month read | A new month is a page, not a verdict; one clean sentence beats ten new signals. | /love-test | clicks, leads | No certainty or outcome guarantees. |
+| 2026-09-02 | Day 71 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Quiet-text reread | Reading the same message one more time rarely adds clarity; it usually tightens the loop. | /love-reading | organic clicks, leads | No shame framing or forced closure. |
+| 2026-09-03 | Day 72 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Pace over panic | The pace you keep is also information; rushing the reply is rarely a kindness to either side. | /ask | clicks, leads | No pressure or chase tactics. |
+| 2026-09-04 | Day 73 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Story I keep telling | The story you keep retelling is also data; noticing it is not the same as believing it. | /love-test | clicks, leads | No mind-reading claim, no diagnosis language. |
+| 2026-09-05 | Day 74 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Two-voice read | Your version and their version are both partial; a calmer read holds both without picking a side. | /relationship/new | relationship starts, leads | No third-party story used as evidence. |
+| 2026-09-06 | Day 75 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Shared-language check | Whether you can name the same moment is a real signal; whether you cannot is also one. | /love-test | clicks, leads | No certainty or outcome guarantees. |
+| 2026-09-07 | Day 76 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Week-one small reframe | A small reframed sentence on Monday is usually steadier than a long talk on Friday night. | /love-reading | organic clicks, leads | No decision made for the user. |
 
 ## Daily publishing rhythm
 

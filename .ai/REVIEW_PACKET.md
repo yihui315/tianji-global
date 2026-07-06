@@ -322,3 +322,69 @@ Production deploy: No-Go
 ### Next step
 
 Commit the docs-only delta (4 marketing files + 2 `.ai/` files) with the standard `chore(marketing): refresh love-test content calendar` message, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.
+
+---
+
+## Refresh 2026-07-06
+
+### Pre-run state
+
+- Future days in calendar (relative to today 2026-07-06): **57 days** (Days 13–69, up to 2026-08-31). Already healthy; minimum 7-day requirement exceeded.
+- Hook pool: 85 hooks.
+- Video-script pool: 43 scripts.
+- Share-caption pool: 51 captions.
+
+### Post-run state
+
+- Future days in calendar (relative to today 2026-07-06): **64 days** (Days 13–76, up to 2026-09-07).
+- Hook pool: **90 hooks**.
+- Video-script pool: **46 scripts**.
+- Share-caption pool: **54 captions**.
+
+### Theme rotation rationale
+
+The Days 49–69 cluster leaned on emotional-vocabulary, self-trust, contact-calibration, dynamic-readjustment, friendship-rooted-reading, end-of-cycle-reflection, quiet-attention-audit, first-message-draft, returning-silence-read, worth-continuing-audit, calm-weekly-recap, energy-direction-check, decision-pacing-breath, late-summer-audit, body-aware-reading, friend-of-friend-lens, archive-vs-delete, attention-rest-practice, what-you-kept-noticing, and month-end-breath supporting angles. The Days 70–76 batch deliberately rotates to a fresh set of supporting angles — new month read, quiet text reread, pace over panic, story I keep telling, two-voice read, shared-language check, week-one small reframe — while still passing through all four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) across the week. No theme repeats consecutively with the prior week; no angle doubles up with the same channel or CTA.
+
+### Validation performed
+
+```text
+git status --short (before commit): clean staging area for the 4 marketing files + 2 .ai/ files; 3 unrelated pre-existing modifications to data/love-test-funnel-metrics.csv, src/app/(main)/services/page.tsx, and src/components/tianji-love/TianjiLovePrimitives.tsx intentionally left unstaged.
+git diff --check: passed (0 warnings on my markdown delta).
+Secret-shape scan over my markdown delta: 0 raw-shape hits (sk_live_*, sk_test_*, ghp_*, xox[abp]-*, AKIA[0-9A-Z]{16}, -----BEGIN *PRIVATE KEY-----).
+npm run typecheck: produced pre-existing errors already documented on this branch (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton, <a> navigation in landing pages, conditional useEffect in MediaNetSlot, react-hooks/rules-of-hooks). Baseline confirmed via git stash round-trip — no new errors introduced by this run. The skill's narrow scope is markdown-only.
+npm run lint: same pre-existing errors on the same baseline files; no new lint errors introduced by this run.
+.env* access: none — no env files were read, copied, diffed, or printed.
+```
+
+### Gate status
+
+```text
+Seven-day content calendar: Go (64 future days, well over 7 minimum)
+Hook pool: Go (90 hooks, plenty of fresh rotations)
+Video script pool: Go (46 scripts, fresh rotation ready)
+Share caption pool: Go (54 captions, fresh rotation ready)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Safety summary
+
+- No fake testimonials, no fake user numbers, no fake revenue, no fake KPI claims added.
+- No guaranteed relationship / reunion / closure / mind-reading / outcome promises.
+- No diagnosis language (no anxiety / codependency / attachment-disorder / disorder framing).
+- No fear-based or shame-based CTA.
+- No first action other than `/love-test` in the new copy.
+- No `.env*` read, no Stripe live touch, no Supabase production mutation, no production deploy, no social auto-posting.
+
+### Manual operator steps
+
+1. Open `.ai/REVIEW_PACKET.md` (this entry) and `.ai/CHANGELOG_AI.md` (today's tail entry).
+2. Skim the new Days 70–76 calendar rows for tone before any operator uses them.
+3. Continue manual review of the next publishing pack (separate cron `17 1 * * *`) on the operator's schedule.
+4. The next scheduled content-calendar run (cron `37 2 * * *` on 2026-07-07) will further extend the calendar as needed.
+
+### Next step
+
+Commit the docs-only delta (4 marketing files + 2 `.ai/` files) with the standard `chore(marketing): refresh love-test content calendar` message, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.

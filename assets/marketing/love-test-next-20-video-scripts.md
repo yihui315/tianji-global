@@ -523,3 +523,37 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 朋友的声音，常常更清楚。
 - CTA: `/love-test` then `/relationship/new`.
 - risk-safe check: No shaming either side, no third-party story used as evidence.
+
+## Refresh 2026-07-06 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-06 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the new-month-read, quiet-text-reread, and story-i-keep-telling supporting angles, deliberately avoiding the late-summer-audit / body-aware-reading / friend-of-friend-lens / archive-vs-delete / attention-rest-practice cluster used in Days 63–69.
+
+## 44 New Month, Not New Verdict
+
+- channel: Xiaohongshu video
+- 3-second hook: A new month is a new page, not a new verdict.
+- scene: A blank calendar opening, a single line being written, then a calm result card.
+- spoken copy: A new month can feel like a reset, but it does not change what is still in motion. Love Test gives you a calmer place to look at what has shifted, so the new month can start from a clearer sentence and not from a fresh panic.
+- caption: 新的一月，先看清楚。
+- CTA: `/love-test`.
+- risk-safe check: No certainty or outcome guarantee, no pressure to start over.
+
+## 45 Quiet Text Reread
+
+- channel: Douyin
+- 3-second hook: Reading the same message one more time rarely adds clarity.
+- scene: A phone screen being re-opened slowly, then a steady mirror card.
+- spoken copy: Rereading the same text usually tightens the loop instead of opening it. Love Test helps you step back to a pattern view, so the next read is a small one and not a spiral.
+- caption: 多读一遍，常常不是更清楚。
+- CTA: `/love-reading`.
+- risk-safe check: No shame framing, no forced closure, no mind-reading claim.
+
+## 46 Story You Keep Telling
+
+- channel: Videohao
+- 3-second hook: The story you keep retelling is also data.
+- scene: A notebook page with a sentence circled, then a mirror card appearing next to it.
+- spoken copy: The version of the relationship you keep retelling is also information. Love Test helps you notice that story without making it a verdict, so a calmer read can sit next to the one you already had.
+- caption: 你反复在讲的故事，也是一份数据。
+- CTA: `/love-test` then `/ask?source=love_test&intent=what_are_they_thinking`.
+- risk-safe check: No diagnosis language, no third-party story used as evidence.
