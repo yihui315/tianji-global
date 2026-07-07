@@ -107,6 +107,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 53. I noticed rereading the same text added a loop, not clarity. The Love Test gave me a calmer place to look: tianji.love/love-reading
 54. I named the story I had been retelling, then put it next to the result. The Love Test let it sit there without making it a verdict: tianji.love/love-test
 
+## Refresh 2026-07-07 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-07 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the tone-mirror, calendar-vs-chat, and end-of-week-consolidation supporting angles, deliberately avoiding the new-month-read / quiet-text-reread / story-i-keep-telling cluster used in Days 70–76. None are certainty claims.
+
+55. I noticed the tone I kept reading before I decided what it meant. The free Love Test helped me check the temperature first: tianji.love/love-test
+56. My week held steadier than the chat. The Love Test gave me a place to weigh the rhythm I actually live by: tianji.love/relationship/new
+57. I folded the week into one sentence on Sunday instead of seven small checks. The Love Test was the quieter mirror I needed: tianji.love/love-reading
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.

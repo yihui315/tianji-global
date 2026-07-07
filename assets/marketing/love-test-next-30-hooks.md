@@ -145,6 +145,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 89. 你反复在讲的那个故事，也是一份数据。看清它不等于要相信它。
 90. 周一那句小调整，常常比周五夜里那场长谈，更容易留得住。
 
+## Refresh 2026-07-07 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-07 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the tone-mirror, mid-week-reset, calendar-vs-chat, guess-their-silence, response-tone-audit, follow-up-timing, and end-of-week-consolidation supporting angles, deliberately avoiding the new-month-read / quiet-text-reread / pace-over-panic / story-i-keep-telling / two-voice-read / shared-language-check / week-one-small-reframe cluster used in Days 70–76. None are certainty claims.
+
+91. 你读出来的那种语气，也是一种信息。留意它和你发出去的是不是同一个温度。
+92. 周中给自己留一次小清场，常常比一天三次小检查更省力，也更清楚。
+93. 你的日历常常比聊天记录更稳；两边都是数据，只是有一边完全是你的。
+94. 你可以给一个猜测命名，但不必为它负责；猜测是数据，不是结论。
+95. 周末把这一周整合成一句话，常常比七次散落的回想更接近事实本身。
+
 ## CTA pairings
 
 ```text

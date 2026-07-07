@@ -78,6 +78,13 @@ Safety baseline: no fake testimonials, no fake numbers, no guaranteed outcomes, 
 | 2026-09-05 | Day 74 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Two-voice read | Your version and their version are both partial; a calmer read holds both without picking a side. | /relationship/new | relationship starts, leads | No third-party story used as evidence. |
 | 2026-09-06 | Day 75 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Shared-language check | Whether you can name the same moment is a real signal; whether you cannot is also one. | /love-test | clicks, leads | No certainty or outcome guarantees. |
 | 2026-09-07 | Day 76 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Week-one small reframe | A small reframed sentence on Monday is usually steadier than a long talk on Friday night. | /love-reading | organic clicks, leads | No decision made for the user. |
+| 2026-09-08 | Day 77 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Tone mirror | The tone you keep reading in is also information; notice whether it matches what you sent. | /love-test | clicks, leads | No mind-reading claim. |
+| 2026-09-09 | Day 78 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Mid-week reset | One short reset in the middle of the week usually beats three small checks. | /ask | clicks, leads | No pressure or chase tactics. |
+| 2026-09-10 | Day 79 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Calendar vs chat | Your calendar often holds steadier than the chat; both are data, but only one is yours. | /relationship/new | relationship starts, leads | No shame framing. |
+| 2026-09-11 | Day 80 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Guess-their-silence | You can name a guess without believing it; the guess is data, not a verdict. | /love-test | clicks, leads | No mind-reading claim, no certainty. |
+| 2026-09-12 | Day 81 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Response-tone audit | A response that lingers in tone usually says more than the words on the surface. | /love-reading | organic clicks, leads | No diagnosis language. |
+| 2026-09-13 | Day 82 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Follow-up timing | The best follow-up is usually the one that does not need a reply to feel complete. | /ask | clicks, leads | No pressure or chase tactics. |
+| 2026-09-14 | Day 83 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | End-of-week consolidation | One consolidated reflection on Sunday usually beats seven scattered ones through the week. | /love-reading | organic clicks, leads | No fear-based CTA. |
 
 ## Daily publishing rhythm
 

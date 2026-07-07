@@ -557,3 +557,37 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 你反复在讲的故事，也是一份数据。
 - CTA: `/love-test` then `/ask?source=love_test&intent=what_are_they_thinking`.
 - risk-safe check: No diagnosis language, no third-party story used as evidence.
+
+## Refresh 2026-07-07 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-07 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the tone-mirror, calendar-vs-chat, and end-of-week-consolidation supporting angles, deliberately avoiding the new-month-read / quiet-text-reread / story-i-keep-telling / pace-over-panic / two-voice-read / shared-language-check cluster used in Days 70–76.
+
+## 47 Tone Mirror
+
+- channel: Xiaohongshu video
+- 3-second hook: The tone you keep reading is also information.
+- scene: Two side-by-side text bubbles with a soft mirror card between them, then a calmer mirror card.
+- spoken copy: Before you decide what the reply means, it can help to notice the tone you keep reading in it. Love Test helps you see whether the temperature matches what you sent, so the read is calmer and not louder.
+- caption: 读出来的语气，本身就是信息。
+- CTA: `/love-test` then `/ask?source=love_test&intent=what_are_they_thinking`.
+- risk-safe check: No mind-reading claim, no certainty, no shame framing.
+
+## 48 Calendar Versus Chat
+
+- channel: Douyin
+- 3-second hook: Your calendar often holds steadier than the chat.
+- scene: A weekly calendar page next to a phone with a paused chat, then a calm mirror card.
+- spoken copy: Both the calendar and the chat are data, but only one of them is fully yours. Love Test gives you a steadier place to weigh the rhythm you actually live by against the rhythm you keep reading into the messages.
+- caption: 日历常常比聊天记录更稳。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No shame framing, no certainty, no forced closure.
+
+## 49 One Sunday Sentence
+
+- channel: Videohao
+- 3-second hook: One consolidated reflection on Sunday usually beats seven scattered ones.
+- scene: A notebook opening to a single clean line, then a mirror card placed next to it.
+- spoken copy: When the week scatters your attention, one calm sentence on Sunday can carry more than seven small checks. Love Test gives you a place to fold the week into a single, steadier read so the next one starts from a clearer place.
+- caption: 一句整合，常常胜过七次散落。
+- CTA: `/love-reading`.
+- risk-safe check: No fear-based CTA, no diagnosis language, no certainty claim.
