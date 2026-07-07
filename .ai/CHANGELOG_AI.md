@@ -1,6 +1,21 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-07 - TianJi Love daily growth publishing pack — Day 020 (cron 17 1 * * *)
+
+- Task ID: `20260707-tianji-love-daily-growth-day-020`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: feature branch `feature/monetization-ads-affiliate`, with seven pre-existing unrelated modified files (`data/love-test-funnel-metrics.csv`, four `src/app/(main)/*` landing pages, `src/components/tianji-love/TianjiLovePrimitives.tsx`, `tsconfig.tsbuildinfo`) carried in from parallel worktrees. Those modifications are explicitly NOT staged; this skill only authors the docs/assets/data delta.
+- Files created: `assets/marketing/daily/day-020-publishing-pack.md`, `assets/marketing/daily/day-020-review-checklist.md`, `data/love-test-day-020-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md` (this entry), `.ai/REVIEW_PACKET.md`.
+- Theme: "Rolling recap — the best calendar entry is the one that helps without selling fear", taken from the 7-day content calendar Day 20 row (2026-07-13). CTA: `/love-reading`. Day 19 = honest audit (wish vs. description); Day 20 = rolling recap (post performed vs. post helped). The rotation continues the calm-hooks-only discipline and explicitly separates "the loudest metric" from "the most useful post."
+- Channel mix: 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL (1 DM template + 1 post draft), 3 SEO articles. All copy is helpful, grounded, and non-prescriptive; KPI CSV uses empty/zero placeholders only — no invented engagement, retention, or save-rate numbers.
+- Safety baseline enforced: no fake testimonials/metrics, no stay/leave verdict, no mind-reading claim, no diagnosis language, no perfect-accuracy claim, no "act now" urgency, no Stripe/payment claims, no "the loudest post is always the best post" guarantee, no "this recap is a verdict on whether you should keep posting" framing, no "you wasted your time" shame framing, no "you already know the answer if you're honest" coercive framing. Every CTA points to `/love-reading` only.
+- Commands run: `git fetch origin`; `git status --short` (3 untracked files exactly as planned; the seven pre-existing modified files left untouched); inspected `assets/marketing/content-calendar-7day.md` (Day 20 row), prior day-019 pack + checklist + KPI CSV; wrote 3 new files; `git diff --check` (0 warnings on the new markdown+CSV files; the only `diff --check` warning is a pre-existing trailing whitespace on `data/love-test-funnel-metrics.csv:5` in a modified file outside this skill's scope); targeted secret-shape scan over the 3 new files for `sk_live_`, `sk_test_`, `ghp_`, `xox[abp]-`, `AKIA[0-9A-Z]{16}`, `-----BEGIN` (0 hits); `npm run typecheck` (pre-existing branch errors verified to exist before this run; this docs-only change set has no TypeScript surface); `npm run lint` (same — pre-existing baseline).
+- Results: `git diff --check` clean on the new files. Secret-shape scan clean. No auto-posting, no account credentials touched, no fake testimonials or guaranteed outcomes added, no Stripe / paid smoke / production deploy invoked. The seven pre-existing modified files across `src/`, `data/`, and `tsconfig.tsbuildinfo` are left untouched and explicitly NOT staged in this commit.
+- Risks: Branch has unrelated pre-existing typecheck/lint failures (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, MediaNetSlot, LoveReportCheckoutButton, landing pages) — none introduced or touched by this run. Staging env, Stripe live, Supabase production, Resend, AI provider, and `DESTINY_SCAN_SECRET` gates remain blocked from prior runs and were not touched here.
+- Next step: Continue manual review of the publishing pack on the operator's schedule. The next scheduled run will continue the daily growth rotation.
+
 ### 2026-07-06 - TianJi Love daily growth publishing pack — Day 019 (cron 17 1 * * *)
 
 - Task ID: `20260706-tianji-love-daily-growth-day-019`.
