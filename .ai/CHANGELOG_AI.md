@@ -1,6 +1,21 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-08 - TianJi Love daily growth publishing pack — Day 021 (cron 17 1 * * *)
+
+- Task ID: `20260708-tianji-love-daily-growth-day-021`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: feature branch `feature/monetization-ads-affiliate`, with eight pre-existing unrelated modified files (`data/love-test-funnel-metrics.csv`, four `src/app/(main)/*` landing pages, `src/components/tianji-love/TianjiLovePrimitives.tsx`, `tsconfig.tsbuildinfo`) carried in from parallel worktrees. Those modifications are explicitly NOT staged; this skill only authors the docs/assets/data delta.
+- Files created: `assets/marketing/daily/day-021-publishing-pack.md`, `assets/marketing/daily/day-021-review-checklist.md`, `data/love-test-day-021-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md` (this entry), `.ai/REVIEW_PACKET.md`.
+- Theme: "Initiation in ambiguity — wanting to reach out is not the same as being ready to send", taken from the 7-day content calendar Day 21 row (2026-07-14). CTA: `/love-test`. Day 20 = rolling recap (post performed vs. post helped); Day 21 = initiation in ambiguity (want-to-send vs. ready-to-send). The rotation continues the calm-hooks-only discipline and explicitly separates the urge to send from the capacity to stand behind the message once it is sent.
+- Channel mix: 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL (1 DM template + 1 post draft), 3 SEO articles. All copy is helpful, grounded, and non-prescriptive; KPI CSV uses empty/zero placeholders only — no invented engagement, retention, or save-rate numbers.
+- Safety baseline enforced: no fake testimonials/metrics, no stay/leave verdict, no mind-reading claim, no diagnosis language, no perfect-accuracy claim, no "act now" urgency, no Stripe/payment claims, no "if you wait you will lose your only chance" pressure framing, no "if you don't reach out, they will forget you forever" shame reversal, no "waiting proves you don't care" coercive framing, no "send before you lose your chance" coercion. Every CTA points to `/love-test` only.
+- Commands run: `git fetch origin`; `git status --short` (3 untracked files exactly as planned; the eight pre-existing modified files left untouched); inspected `assets/marketing/content-calendar-7day.md` (Day 21 row), prior day-020 pack + checklist + KPI CSV; wrote 3 new files; `git diff --check` (0 warnings on the new markdown+CSV files; the only `diff --check` warning is a pre-existing trailing whitespace on `data/love-test-funnel-metrics.csv:5` in a modified file outside this skill's scope); targeted secret-shape scan over the 3 new files for `sk_live_`, `sk_test_`, `ghp_`, `xox[abp]-`, `AKIA[0-9A-Z]{16}`, `-----BEGIN` (0 hits); `npm run typecheck` (passed, exit 0 — docs-only change set has no TypeScript surface); `npm run lint` (pre-existing errors on tarot-spread-meanings, love-calculator, tarot-love-reading-online, MediaNetSlot verified to exist before this run; this docs-only change set has no ESLint surface).
+- Results: `git diff --check` clean on the new files. Secret-shape scan clean. `npm run typecheck` passed. No auto-posting, no account credentials touched, no fake testimonials or guaranteed outcomes added, no Stripe / paid smoke / production deploy invoked. The eight pre-existing modified files across `src/`, `data/`, and `tsconfig.tsbuildinfo` are left untouched and explicitly NOT staged in this commit.
+- Risks: Branch has unrelated pre-existing lint failures (tarot-spread-meanings, love-calculator, tarot-love-reading-online, MediaNetSlot — `<a>` navigation in landing pages, conditional `useEffect` in MediaNetSlot, AffiliateProductGrid undef) — none introduced or touched by this run. Staging env, Stripe live, Supabase production, Resend, AI provider, and `DESTINY_SCAN_SECRET` gates remain blocked from prior runs and were not touched here.
+- Next step: Continue manual review of the publishing pack on the operator's schedule. The next scheduled run will continue the daily growth rotation.
+
 ### 2026-07-07 - TianJi Love daily growth publishing pack — Day 020 (cron 17 1 * * *)
 
 - Task ID: `20260707-tianji-love-daily-growth-day-020`.

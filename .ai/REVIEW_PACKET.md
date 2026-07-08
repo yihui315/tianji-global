@@ -1,6 +1,89 @@
 # TianJi Love Review Packet
 ## Current Task
 
+### 2026-07-08 - TianJi Love daily growth publishing pack — Day 021 (cron 17 1 * * *)
+
+- Task ID: `20260708-tianji-love-daily-growth-day-021`.
+- Skill: `tianji-github-daily-growth`.
+- Branch: `feature/monetization-ads-affiliate`.
+
+### Theme
+
+"Initiation in ambiguity — wanting to reach out is not the same as being ready to send", taken from the 7-day content calendar Day 21 row (2026-07-14). CTA: `/love-test`. Day 20 = rolling recap (post performed vs. post helped); Day 21 = initiation in ambiguity (want-to-send vs. ready-to-send). The rotation continues the calm-hooks-only discipline and explicitly separates the urge to send from the capacity to stand behind the message once it is sent.
+
+### Channel mix and CTA
+
+- 5 Xiaohongshu posts → `/love-test`
+- 5 Reel scripts → `/love-test`
+- 5 X posts → `/love-test`
+- 3 Reddit/Quora answer drafts → `/love-test`
+- 2 KOL pieces (1 DM template + 1 post draft) → `/love-test`
+- 3 SEO article outlines → `/love-test`
+
+### Files in this change set
+
+```text
+A  assets/marketing/daily/day-021-publishing-pack.md
+A  assets/marketing/daily/day-021-review-checklist.md
+A  data/love-test-day-021-kpi-entry.csv
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+Unrelated pre-existing modifications in `data/love-test-funnel-metrics.csv`, four `src/app/(main)/*` landing pages, `src/components/tianji-love/TianjiLovePrimitives.tsx`, and `tsconfig.tsbuildinfo` are intentionally NOT staged.
+
+### Safety baseline
+
+- No fake testimonials, fake metrics, or fake user counts.
+- No guaranteed outcomes, no certainty claims, no mind-reading framing.
+- No diagnosis language (anxiety / codependency / attachment-disorder / disorder framing).
+- No "act now" urgency language; no fear-based or shame-based CTA.
+- No Stripe / payment claims.
+- No "if you wait, you will lose your only chance" pressure framing.
+- No "if you don't reach out, they will forget you forever" shame reversal.
+- No "waiting proves you don't care" coercive framing.
+- No "send before you lose your chance" coercion.
+- No collapsing "wanting to send" with "being ready to send".
+- No invented engagement / retention / save-rate metrics.
+- No decision made for the user.
+- Every CTA points to `/love-test` only.
+- Every post requires human review before publishing.
+
+### Validation performed
+
+```text
+git status --short (before commit): 3 staged files exactly as planned (2 marketing + 1 data); 8 unrelated pre-existing modifications to data/love-test-funnel-metrics.csv, src/app/(main)/bazi-relationship-analysis-free/page.tsx, src/app/(main)/daily-love-oracle-guide/page.tsx, src/app/(main)/free-ai-love-reading/page.tsx, src/app/(main)/services/page.tsx, src/app/(main)/tarot-love-reading-online/page.tsx, src/components/tianji-love/TianjiLovePrimitives.tsx, and tsconfig.tsbuildinfo intentionally left unstaged.
+git diff --check: 0 warnings on the 3 new markdown+CSV files. The only diff --check warning is pre-existing trailing whitespace on data/love-test-funnel-metrics.csv:5, in a modified file outside this skill's scope.
+Secret-shape scan over the 3 new files: 0 raw-shape hits (sk_live_*, sk_test_*, ghp_*, xox[abp]-*, AKIA[0-9A-Z]{16}, -----BEGIN *PRIVATE KEY-----).
+npm run typecheck: passed (exit 0). Docs-only change set has no TypeScript surface.
+npm run lint: pre-existing errors on tarot-spread-meanings, love-calculator, tarot-love-reading-online, MediaNetSlot verified to exist before this run; docs-only change set has no ESLint surface. No new lint errors introduced.
+.env* access: none — no env files were read, copied, diffed, or printed.
+```
+
+### Gate status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Manual operator steps
+
+1. Open this `REVIEW_PACKET.md` entry and the matching entry at the top of `.ai/CHANGELOG_AI.md`.
+2. Skim `assets/marketing/daily/day-021-publishing-pack.md` for tone and CTA consistency.
+3. Walk `assets/marketing/daily/day-021-review-checklist.md` row-by-row before any platform publish.
+4. Publish manually, one channel at a time; mark the publishing-log rows as posts go live.
+5. Fill KPI rows in `data/love-test-day-021-kpi-entry.csv` with real per-post numbers only — no invented engagement / retention / save-rate values.
+
+### Next step
+
+Commit the docs-only delta (3 new files + 2 `.ai/` files) with the message `chore(marketing): add love-test day 021 publishing pack`, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.
+
 TianJi Love daily growth publishing pack — Day 020 (cron `17 1 * * *`, skill `tianji-github-daily-growth`) for 2026-07-13 publish date. Theme: "Rolling recap — the best calendar entry is the one that helps without selling fear". CTA: `/love-reading`. Day 19 = honest audit (wish vs. description); Day 20 = rolling recap (post performed vs. post helped). The rotation continues the calm-hooks-only discipline and explicitly separates "the loudest metric" from "the most useful post."
 
 ## Files created this run
