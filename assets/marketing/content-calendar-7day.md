@@ -85,6 +85,13 @@ Safety baseline: no fake testimonials, no fake numbers, no guaranteed outcomes, 
 | 2026-09-12 | Day 81 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Response-tone audit | A response that lingers in tone usually says more than the words on the surface. | /love-reading | organic clicks, leads | No diagnosis language. |
 | 2026-09-13 | Day 82 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Follow-up timing | The best follow-up is usually the one that does not need a reply to feel complete. | /ask | clicks, leads | No pressure or chase tactics. |
 | 2026-09-14 | Day 83 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | End-of-week consolidation | One consolidated reflection on Sunday usually beats seven scattered ones through the week. | /love-reading | organic clicks, leads | No fear-based CTA. |
+| 2026-09-15 | Day 84 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Reply-delay read | How long they take to reply is data, not a verdict on whether they care. | /love-test | clicks, leads | No mind-reading claim, no certainty. |
+| 2026-09-16 | Day 85 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Self-talk swap | Replace one anxious sentence with one steady sentence; both can be true at once. | /ask | clicks, leads | No shaming either side. |
+| 2026-09-17 | Day 86 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Quiet history audit | The chats you stop rereading are also data; let the archive hold without rereading it. | /love-reading | organic clicks, leads | No shame framing, no forced closure. |
+| 2026-09-18 | Day 87 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | What you rehearsed | The message you keep typing in your head has its own weather; let it settle before sending. | /love-test | clicks, leads | No pressure or chase tactics. |
+| 2026-09-19 | Day 88 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Pattern vs person | A pattern can repeat without the same person returning; notice which one is in front of you. | /love-reading | organic clicks, leads | No reunion promise, no mind-reading claim. |
+| 2026-09-20 | Day 89 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Mid-cycle recalibration | Halfway through the month is a fair place to pause, not a reason to chase one more signal. | /love-test | clicks, leads | No fear-based CTA. |
+| 2026-09-21 | Day 90 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Quiet answer practice | A quieter answer now usually holds steadier than a louder one later tonight. | /relationship/new | relationship starts, leads | No decision made for the user, no certainty. |
 
 ## Daily publishing rhythm
 

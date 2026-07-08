@@ -591,3 +591,33 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 一句整合，常常胜过七次散落。
 - CTA: `/love-reading`.
 - risk-safe check: No fear-based CTA, no diagnosis language, no certainty claim.
+
+## 50 Reply-Delay Read
+
+- channel: Xiaohongshu video
+- 3-second hook: How long they take to reply is data, not a verdict.
+- scene: A phone clock ticking next to a chat bubble, then a calmer mirror card replacing the clock with a notebook.
+- spoken copy: Reply speed is information, but it is not the whole story on its own. Love Test helps you notice whether the rhythm you keep counting matches the rhythm you actually live by, so the read is calmer and not louder.
+- caption: 回复花多长时间，是数据，不是结论。
+- CTA: `/love-test` then `/ask?source=love_test&intent=will_they_reply`.
+- risk-safe check: No mind-reading claim, no certainty, no shaming either side.
+
+## 51 Self-Talk Swap
+
+- channel: Reels / Douyin
+- 3-second hook: Replace one anxious sentence with one steady sentence.
+- scene: Two text lines crossed out and rewritten on a mirror card, then a calm repeat card.
+- spoken copy: You can hold an anxious thought and a steadier one at the same time, and the steadier one does not erase the other. Love Test gives you a place to draft the steadier sentence first, so the next reply is yours and not the anxiety's.
+- caption: 一句站着的话，常常也是一种进度。
+- CTA: `/love-test` then `/ask?source=love_test&intent=should_i_initiate`.
+- risk-safe check: No pressure, no chase tactics, no decision made for the user.
+
+## 52 Quiet Answer Practice
+
+- channel: Videohao
+- 3-second hook: A quieter answer now usually holds steadier than a louder one tonight.
+- scene: A pencil writing one calm line on a card, then the same card placed next to a paused phone.
+- spoken copy: A quieter answer this morning usually holds steadier than a louder one tonight. Love Test gives you a place to draft that calmer reply first, so the timing and the tone both stay yours.
+- caption: 早一点更轻的回复，常常比夜里更响的那一句留得住。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No certainty, no guarantee, no shame framing.

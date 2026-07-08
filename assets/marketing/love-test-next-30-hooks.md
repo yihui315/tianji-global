@@ -166,3 +166,13 @@ Timing CTA: 如果你纠结要不要行动，再点 timing 入口。
 ## Risk-safe editing rule
 
 Do not turn hooks into certainty claims. Replace "he/she will" with "the pattern may show" or "you can observe".
+
+## Refresh 2026-07-08 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-08 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the reply-delay read, self-talk swap, quiet history audit, what-you-rehearsed, pattern-vs-person, mid-cycle recalibration, and quiet answer practice supporting angles, deliberately avoiding the tone-mirror / mid-week-reset / calendar-vs-chat / guess-their-silence / response-tone-audit / follow-up-timing / end-of-week-consolidation cluster used in Days 77–83. None are certainty claims.
+
+96. 回复花多长时间，是一种数据，不一定是对方在不在意的一个结论。
+97. 把一句让你紧绷的话，换成一句让你站得住的话；两句常常可以同时存在。
+98. 你不再反复翻看的聊天记录，也是一种数据，让存档停在那里，也是一种节制的稳。
+99. 在脑子里反复打出来的那条消息，也有它自己的天气，先让它落下来，再决定要不要发。
+100. 一种节奏可以重复，而人不一定会真的回来；先看清楚摆在你面前的，是哪一种。

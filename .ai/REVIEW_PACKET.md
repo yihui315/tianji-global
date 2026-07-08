@@ -536,3 +536,84 @@ Production deploy: No-Go
 ### Next step
 
 Commit the docs-only delta (4 marketing files + 2 `.ai/` files) with the standard `chore(marketing): refresh love-test content calendar` message, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.
+
+### 2026-07-08 - TianJi Love content calendar refresh (cron 37 2 * * *)
+
+- Task ID: `20260708-tianji-github-content-calendar`.
+- Skill: `tianji-github-content-calendar`.
+- Branch: `feature/monetization-ads-affiliate`.
+
+### Theme
+
+Extend the seven-day future content calendar without auto-posting, rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the new supporting angles used in Days 84–90: reply-delay-read, self-talk-swap, quiet-history-audit, what-you-rehearsed, pattern-vs-person, mid-cycle-recalibration, and quiet-answer-practice. The run avoids the tone-mirror / mid-week-reset / calendar-vs-chat / guess-their-silence / response-tone-audit / follow-up-timing / end-of-week-consolidation cluster used in Days 77–83. All copy stays helpful, grounded, and non-guaranteed.
+
+### Channel mix and CTA
+
+- Same per-row mix: 5 Xiaohongshu + 5 Reels + 5 X + 3 Reddit/Quora + 2 KOL + 3 SEO articles per publishing day.
+- CTAs rotate through `/love-test`, `/ask`, `/love-reading`, and `/relationship/new`, all unchanged from prior rows.
+- No auto-posting. Manual publishing only.
+
+### Files in this change set
+
+```text
+M  assets/marketing/content-calendar-7day.md
+M  assets/marketing/love-test-next-30-hooks.md
+M  assets/marketing/love-test-next-20-video-scripts.md
+M  assets/marketing/love-test-next-20-share-captions.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+Unrelated pre-existing modifications in `data/love-test-funnel-metrics.csv`, four `src/app/(main)/*` landing pages, `src/components/tianji-love/TianjiLovePrimitives.tsx`, and `tsconfig.tsbuildinfo` are intentionally NOT staged. The Day-021 publishing-pack files added earlier today are also explicitly NOT staged by this run.
+
+### Safety baseline
+
+- No fake testimonials, fake metrics, or fake user counts.
+- No guaranteed outcomes, no certainty claims, no mind-reading framing.
+- No diagnosis language (anxiety / codependency / attachment-disorder / disorder framing).
+- No "act now" urgency language; no fear-based or shame-based CTA.
+- No auto-posting. Manual publishing only. No Stripe, no paid smoke, no production deploy.
+- No `.env`, secrets, credentials, tokens, or webhook secrets read, printed, copied, or staged.
+
+### Gate status
+
+```text
+Seven-day content calendar: Go - 76 days ahead, last entry Day 90 on 2026-09-21
+Hook pool: Go - 100 hooks total (added 5 in this run)
+Video script pool: Go - 52 scripts total (added 3 in this run)
+Share caption pool: Go - 60 captions total (added 3 in this run)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Commands run
+
+```text
+git fetch origin --quiet
+git status --short
+git diff --check (over this run's delta)
+git stash for the marketing/pool/AI files (none of the unrelated files were touched by this run)
+npm run typecheck (baseline-confirmed pre-existing errors only; no new errors from this run's delta)
+npm run lint (baseline-confirmed pre-existing errors only; no new errors from this run's delta)
+Targeted secret-shape scan over .ai/, assets/marketing/, data/
+git add -A assets/marketing/content-calendar-7day.md ...
+git commit -m "chore(marketing): refresh love-test content calendar"
+git push origin feature/monetization-ads-affiliate (using token-embedded remote URL)
+git log origin/feature/monetization-ads-affiliate -1 --oneline
+```
+
+### Expected outputs
+
+- Extended 7-day content calendar with 7 new rows (Days 84–90, 2026-09-15 → 2026-09-21).
+- 5 new hooks (96–100), 3 new video scripts (50–52), 3 new share captions (58–60).
+- Updated CHANGELOG entry and this review packet section.
+- Single commit on `feature/monetization-ads-affiliate`, no other branches modified.
+
+### What remains blocked
+
+- No social auto-posting. The operator must run manual publishing.
+- No Stripe live calls. No paid smoke. No production deploy.
+- No changes to the unrelated pre-existing modifications (landing pages, primitives, funnel CSV, tsbuildinfo).
+- Next operator review window for the Day-022 publishing pack remains on the operator's manual schedule.
