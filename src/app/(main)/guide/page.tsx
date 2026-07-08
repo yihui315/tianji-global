@@ -22,6 +22,8 @@ import {
 } from '@/components/tianji-love';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
+import { AdSenseSlot } from '@/components/ads/AdSenseSlot';
+import { AffiliateProductGrid } from '@/components/affiliate/AffiliateProductGrid';
 
 const GUIDES = [
   {
@@ -102,8 +104,9 @@ export default function GuidePage() {
   const [language, setLanguage] = useSyncedLanguage('en');
 
   const t = (en: string, zh: string) => (language === 'zh' ? zh : en);
-  const navItems = getTianjiLovePrimaryNav(language);
-  const footerLinks = getTianjiLoveFooterNav(language);
+  const navItems = getTianjiLovePrimaryNav(lang);
+  const lang = language === 'zh' ? 'zh' : 'en';
+  const footerLinks = getTianjiLoveFooterNav(lang);
   const href = (path: string) => withLanguageParam(path, language);
 
   const toggleLanguage = () => {
@@ -186,7 +189,7 @@ export default function GuidePage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div id="guide-page-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
+      <AdSenseSlot slot="GUIDE_BOTTOM_SLOT" format="display" page="guide" />
 
       {/* CTA Banner */}
       <section className="relative z-10 px-5 pb-16 sm:px-8">
@@ -237,8 +240,13 @@ export default function GuidePage() {
         ))}
       </nav>
 
-      {/* AdSense placeholder after CTA */}
-      <div id="guide-page-ads" className="relative z-10 mx-auto max-w-7xl px-5 pb-12 sm:px-8" />
+      {/* AdSense placeholder */}
+      <AdSenseSlot slot="GUIDE_MAIN_SLOT" format="in-article" page="guide" />
+
+            {/* Affiliate Products */}
+      <section className="relative z-10 mx-auto max-w-6xl px-5 py-10 sm:px-8">
+        <AffiliateProductGrid page="guide" />
+      </section>
 
       <TianjiLoveFooter
         disclaimer={t(DISCLAIMER_EN, DISCLAIMER_ZH)}

@@ -455,3 +455,139 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 速度也是信息。
 - CTA: `/love-test` then `/ask?source=love_test&intent=should_i_initiate`.
 - risk-safe check: No pressure or chase tactics, no guaranteed reply.
+
+## Refresh 2026-07-04 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-04 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the attention-audit, draft-before-send, and returning-silence supporting angles.
+
+## 38 Attention Audit
+
+- channel: Douyin
+- 3-second hook: Where your attention keeps going is also information.
+- scene: A phone screen dimming, a notebook being opened, then a steady result card.
+- spoken copy: Notice the place your mind keeps returning to. That is data about the pattern, not a verdict about what they feel. Love Test gives you a calm place to look at where your attention has been going.
+- caption: 看注意力，也是一种观察。
+- CTA: `/love-test`.
+- risk-safe check: No mind-reading claim, no certainty about the other person's thoughts.
+
+## 39 Draft Before Send
+
+- channel: Xiaohongshu video
+- 3-second hook: A first message you can rewrite tomorrow is steadier than one you send today.
+- scene: A typed message saved to drafts, then a calm result card next to it.
+- spoken copy: Saving the message in drafts is not avoidance; it is a small act of care for your future self. Love Test gives you a pause so the message you do send is one you would still want to send tomorrow morning.
+- caption: 草稿不是逃避，是给明天的自己留空间。
+- CTA: `/love-test` then `/ask?source=love_test&intent=should_i_initiate`.
+- risk-safe check: No pressure or chase tactics, no guarantee the reply will come.
+
+## 40 Returning Silence Read
+
+- channel: Videohao
+- 3-second hook: A silence that returns is still a data point.
+- scene: A phone screen staying dark for a while, then a quiet mirror card.
+- spoken copy: When silence comes back, the temptation is to call it an answer. It is still data, and not always a door left open. Love Test helps you read the rhythm without making it mean more than it does.
+- caption: 重新出现的沉默，也要先看清楚。
+- CTA: `/love-reading`.
+- risk-safe check: No reunion promise, no closure guarantee.
+
+## Refresh 2026-07-05 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-05 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the late-summer-audit, body-aware-reading, and friend-of-friend-lens supporting angles.
+
+## 41 Questions You Stopped Asking
+
+- channel: Xiaohongshu video
+- 3-second hook: The questions you stopped asking are also part of the pattern.
+- scene: A notebook with crossed-out old questions, then a calm result card.
+- spoken copy: Sometimes the most useful data is the list of things you no longer ask. Love Test helps you look at what has shifted, not only at what is still loud.
+- caption: 沉默下来的问题，也是一份记录。
+- CTA: `/love-test`.
+- risk-safe check: No diagnosis language, no certainty claim.
+
+## 42 Body As A Signal
+
+- channel: Douyin
+- 3-second hook: What your body does after a message is information, not always a verdict.
+- scene: A person putting a phone face down, exhaling, then a calm mirror card.
+- spoken copy: Before you interpret the reply, it can help to notice what your body did after you read it. Love Test gives you a steadier place to read that signal without turning it into a conclusion.
+- caption: 身体的反应，也是一种信息。
+- CTA: `/love-test` then `/ask?source=love_test&intent=what_are_they_thinking`.
+- risk-safe check: No mind-reading claim, no shame framing.
+
+## 43 Friend-Of-Friend Lens
+
+- channel: Videohao
+- 3-second hook: A friend describing your pattern usually hears it more clearly than you do.
+- scene: Two people on a couch, one speaking calmly, then a mirror card.
+- spoken copy: Sometimes the clearest read of a pattern comes from a friend who is not inside the loop. Love Test helps you save a result so you can hear that calmer voice on a quieter day.
+- caption: 朋友的声音，常常更清楚。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No shaming either side, no third-party story used as evidence.
+
+## Refresh 2026-07-06 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-06 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the new-month-read, quiet-text-reread, and story-i-keep-telling supporting angles, deliberately avoiding the late-summer-audit / body-aware-reading / friend-of-friend-lens / archive-vs-delete / attention-rest-practice cluster used in Days 63–69.
+
+## 44 New Month, Not New Verdict
+
+- channel: Xiaohongshu video
+- 3-second hook: A new month is a new page, not a new verdict.
+- scene: A blank calendar opening, a single line being written, then a calm result card.
+- spoken copy: A new month can feel like a reset, but it does not change what is still in motion. Love Test gives you a calmer place to look at what has shifted, so the new month can start from a clearer sentence and not from a fresh panic.
+- caption: 新的一月，先看清楚。
+- CTA: `/love-test`.
+- risk-safe check: No certainty or outcome guarantee, no pressure to start over.
+
+## 45 Quiet Text Reread
+
+- channel: Douyin
+- 3-second hook: Reading the same message one more time rarely adds clarity.
+- scene: A phone screen being re-opened slowly, then a steady mirror card.
+- spoken copy: Rereading the same text usually tightens the loop instead of opening it. Love Test helps you step back to a pattern view, so the next read is a small one and not a spiral.
+- caption: 多读一遍，常常不是更清楚。
+- CTA: `/love-reading`.
+- risk-safe check: No shame framing, no forced closure, no mind-reading claim.
+
+## 46 Story You Keep Telling
+
+- channel: Videohao
+- 3-second hook: The story you keep retelling is also data.
+- scene: A notebook page with a sentence circled, then a mirror card appearing next to it.
+- spoken copy: The version of the relationship you keep retelling is also information. Love Test helps you notice that story without making it a verdict, so a calmer read can sit next to the one you already had.
+- caption: 你反复在讲的故事，也是一份数据。
+- CTA: `/love-test` then `/ask?source=love_test&intent=what_are_they_thinking`.
+- risk-safe check: No diagnosis language, no third-party story used as evidence.
+
+## Refresh 2026-07-07 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-07 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the tone-mirror, calendar-vs-chat, and end-of-week-consolidation supporting angles, deliberately avoiding the new-month-read / quiet-text-reread / story-i-keep-telling / pace-over-panic / two-voice-read / shared-language-check cluster used in Days 70–76.
+
+## 47 Tone Mirror
+
+- channel: Xiaohongshu video
+- 3-second hook: The tone you keep reading is also information.
+- scene: Two side-by-side text bubbles with a soft mirror card between them, then a calmer mirror card.
+- spoken copy: Before you decide what the reply means, it can help to notice the tone you keep reading in it. Love Test helps you see whether the temperature matches what you sent, so the read is calmer and not louder.
+- caption: 读出来的语气，本身就是信息。
+- CTA: `/love-test` then `/ask?source=love_test&intent=what_are_they_thinking`.
+- risk-safe check: No mind-reading claim, no certainty, no shame framing.
+
+## 48 Calendar Versus Chat
+
+- channel: Douyin
+- 3-second hook: Your calendar often holds steadier than the chat.
+- scene: A weekly calendar page next to a phone with a paused chat, then a calm mirror card.
+- spoken copy: Both the calendar and the chat are data, but only one of them is fully yours. Love Test gives you a steadier place to weigh the rhythm you actually live by against the rhythm you keep reading into the messages.
+- caption: 日历常常比聊天记录更稳。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No shame framing, no certainty, no forced closure.
+
+## 49 One Sunday Sentence
+
+- channel: Videohao
+- 3-second hook: One consolidated reflection on Sunday usually beats seven scattered ones.
+- scene: A notebook opening to a single clean line, then a mirror card placed next to it.
+- spoken copy: When the week scatters your attention, one calm sentence on Sunday can carry more than seven small checks. Love Test gives you a place to fold the week into a single, steadier read so the next one starts from a clearer place.
+- caption: 一句整合，常常胜过七次散落。
+- CTA: `/love-reading`.
+- risk-safe check: No fear-based CTA, no diagnosis language, no certainty claim.

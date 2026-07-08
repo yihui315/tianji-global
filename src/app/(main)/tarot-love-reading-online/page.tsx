@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Brain, Heart, Lock, Sparkles, Star, Users } from "lucide-react";
 import Link from "next/link";
@@ -101,8 +101,9 @@ export default function TarotLoveReadingOnlinePage() {
   const [language, setLanguage] = useSyncedLanguage("en");
 
   const t = (en: string, zh: string) => (language === "zh" ? zh : en);
-  const navItems = getTianjiLovePrimaryNav(language);
-  const footerLinks = getTianjiLoveFooterNav(language);
+  const navItems = getTianjiLovePrimaryNav(lang);
+  const lang = language === 'zh' ? 'zh' : 'en';
+  const footerLinks = getTianjiLoveFooterNav(lang);
   const href = (path: string) => withLanguageParam(path, language);
 
   const toggleLanguage = () => {
@@ -303,10 +304,7 @@ export default function TarotLoveReadingOnlinePage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div
-        id="tarot-love-reading-ads"
-        className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8"
-      />
+      <AdSenseSlot slot="TAROT_READING_BOTTOM_SLOT" format="display" page="tarot-love-reading-online" />
 
       {/* Privacy */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 py-8 sm:px-8">
@@ -365,10 +363,7 @@ export default function TarotLoveReadingOnlinePage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div
-        id="tarot-love-reading-ads-2"
-        className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8"
-      />
+      <AdSenseSlot slot="TAROT_READING_SLOT" format="in-article" page="tarot-love-reading-online" />
 
       {/* FAQ */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 pb-8 sm:px-8">
@@ -402,6 +397,11 @@ export default function TarotLoveReadingOnlinePage() {
           </Link>
         ))}
       </nav>
+
+            {/* Affiliate Products */}
+      <section className="relative z-10 mx-auto max-w-6xl px-5 py-10 sm:px-8">
+        <AffiliateProductGrid page="tarot-love-reading-online" />
+      </section>
 
       <TianjiLoveFooter
         disclaimer={t(DISCLAIMER_EN, DISCLAIMER_ZH)}

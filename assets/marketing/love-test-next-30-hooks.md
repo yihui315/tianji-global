@@ -115,6 +115,46 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 74. 主动联系的速度本身也是信息，节奏稳了，下一步才看得清。
 75. 人会变，固定剧本会过期。留一点弹性，比守住旧故事更清楚。
 
+## Refresh 2026-07-04 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-04 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the attention-audit, draft-before-send, returning-silence, energy-direction, and decision-pacing supporting angles. None are certainty claims.
+
+76. 你反复回到的地方，是一种数据，不一定是他对你的态度。
+77. 第一条消息写得可以明天再改，通常比今天发出的更稳。
+78. 重新出现的沉默依然是数据，并不一定是一扇重新打开的门。
+79. 值得继续是一种节奏，不是你继承来的结论。
+80. 真正的决定能再坐一晚；慌着的消息发出去常常回不来。
+
+## Refresh 2026-07-05 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-05 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the late-summer-audit, body-aware-reading, friend-of-friend-lens, archive-vs-delete, attention-rest-practice, and month-end-breath supporting angles. None are certainty claims.
+
+81. 你不再问的那些问题，本身就是一份记录，比新消息更值得保存。
+82. 身体对一条消息的反应也是一种信息，未必是结论。先停下来听一遍。
+83. 让一个朋友描述你现在的状态，常常比你自己描述得更清楚一点。
+84. 留存但不反复回看，是一种节制的稳，也是对自己的一种照顾。
+85. 给自己留一天不看聊天记录，一天的距离通常不会变成一种遗憾。
+
+## Refresh 2026-07-06 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-06 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the new-month-read, quiet-text-reread, pace-over-panic, story-i-keep-telling, two-voice-read, shared-language-check, and week-one-small-reframe supporting angles, deliberately avoiding the late-summer-audit / body-aware-reading / friend-of-friend-lens / archive-vs-delete / attention-rest-practice / month-end-breath / what-you-kept-noticing cluster used in Days 63–69. None are certainty claims.
+
+86. 新的一月是新的页面，不是新的结论。一句干净的话，胜过十条匆忙的新信号。
+87. 把同一条消息再读一遍，往往加的不是清晰，是又绕了一圈。停下来也常常是一种进度。
+88. 你回复的速度，本身就是信息。急出来的消息，对两边的负担常常都不一样。
+89. 你反复在讲的那个故事，也是一份数据。看清它不等于要相信它。
+90. 周一那句小调整，常常比周五夜里那场长谈，更容易留得住。
+
+## Refresh 2026-07-07 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-07 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the tone-mirror, mid-week-reset, calendar-vs-chat, guess-their-silence, response-tone-audit, follow-up-timing, and end-of-week-consolidation supporting angles, deliberately avoiding the new-month-read / quiet-text-reread / pace-over-panic / story-i-keep-telling / two-voice-read / shared-language-check / week-one-small-reframe cluster used in Days 70–76. None are certainty claims.
+
+91. 你读出来的那种语气，也是一种信息。留意它和你发出去的是不是同一个温度。
+92. 周中给自己留一次小清场，常常比一天三次小检查更省力，也更清楚。
+93. 你的日历常常比聊天记录更稳；两边都是数据，只是有一边完全是你的。
+94. 你可以给一个猜测命名，但不必为它负责；猜测是数据，不是结论。
+95. 周末把这一周整合成一句话，常常比七次散落的回想更接近事实本身。
+
 ## CTA pairings
 
 ```text

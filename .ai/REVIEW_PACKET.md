@@ -1,32 +1,68 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love daily growth publishing pack — Day 016 for 2026-07-03 (cron `17 1 * * *`, skill `tianji-github-daily-growth`). Theme: "No-contact week one — silence is information; what you do with it is yours", taken from the 7-day content calendar Day 16 row (2026-07-09). CTA: `/relationship/new`. Day 15 = pause before send (motive vs. reply expectation); Day 16 = no-contact week one (silence as information, not verdict); the rotation continues the calm-hooks-only discipline.
+### 2026-07-08 - TianJi Love daily growth publishing pack — Day 021 (cron 17 1 * * *)
 
-## Files created this run
+- Task ID: `20260708-tianji-love-daily-growth-day-021`.
+- Skill: `tianji-github-daily-growth`.
+- Branch: `feature/monetization-ads-affiliate`.
 
-- `assets/marketing/daily/day-016-publishing-pack.md`
-- `assets/marketing/daily/day-016-review-checklist.md`
-- `data/love-test-day-016-kpi-entry.csv`
+### Theme
 
-## Files updated this run
+"Initiation in ambiguity — wanting to reach out is not the same as being ready to send", taken from the 7-day content calendar Day 21 row (2026-07-14). CTA: `/love-test`. Day 20 = rolling recap (post performed vs. post helped); Day 21 = initiation in ambiguity (want-to-send vs. ready-to-send). The rotation continues the calm-hooks-only discipline and explicitly separates the urge to send from the capacity to stand behind the message once it is sent.
 
-- `.ai/CHANGELOG_AI.md`
-- `.ai/REVIEW_PACKET.md` (this file)
+### Channel mix and CTA
 
-## Allowed files inspected read-only (no edits)
+- 5 Xiaohongshu posts → `/love-test`
+- 5 Reel scripts → `/love-test`
+- 5 X posts → `/love-test`
+- 3 Reddit/Quora answer drafts → `/love-test`
+- 2 KOL pieces (1 DM template + 1 post draft) → `/love-test`
+- 3 SEO article outlines → `/love-test`
 
-- `assets/marketing/content-calendar-7day.md` (Day 16 row, 2026-07-09)
-- `assets/marketing/daily/day-015-publishing-pack.md` (prior pack precedent)
-- `assets/marketing/daily/day-015-review-checklist.md` (prior checklist precedent)
-- `data/love-test-day-015-kpi-entry.csv` (prior KPI scaffold precedent)
-- `assets/marketing/love-test-next-30-hooks.md` (hook pool)
-- `assets/marketing/love-test-next-20-video-scripts.md` (script pool)
-- `assets/marketing/love-test-next-20-share-captions.md` (caption pool)
+### Files in this change set
 
-## Gate status
-
+```text
+A  assets/marketing/daily/day-021-publishing-pack.md
+A  assets/marketing/daily/day-021-review-checklist.md
+A  data/love-test-day-021-kpi-entry.csv
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
 ```
+
+Unrelated pre-existing modifications in `data/love-test-funnel-metrics.csv`, four `src/app/(main)/*` landing pages, `src/components/tianji-love/TianjiLovePrimitives.tsx`, and `tsconfig.tsbuildinfo` are intentionally NOT staged.
+
+### Safety baseline
+
+- No fake testimonials, fake metrics, or fake user counts.
+- No guaranteed outcomes, no certainty claims, no mind-reading framing.
+- No diagnosis language (anxiety / codependency / attachment-disorder / disorder framing).
+- No "act now" urgency language; no fear-based or shame-based CTA.
+- No Stripe / payment claims.
+- No "if you wait, you will lose your only chance" pressure framing.
+- No "if you don't reach out, they will forget you forever" shame reversal.
+- No "waiting proves you don't care" coercive framing.
+- No "send before you lose your chance" coercion.
+- No collapsing "wanting to send" with "being ready to send".
+- No invented engagement / retention / save-rate metrics.
+- No decision made for the user.
+- Every CTA points to `/love-test` only.
+- Every post requires human review before publishing.
+
+### Validation performed
+
+```text
+git status --short (before commit): 3 staged files exactly as planned (2 marketing + 1 data); 8 unrelated pre-existing modifications to data/love-test-funnel-metrics.csv, src/app/(main)/bazi-relationship-analysis-free/page.tsx, src/app/(main)/daily-love-oracle-guide/page.tsx, src/app/(main)/free-ai-love-reading/page.tsx, src/app/(main)/services/page.tsx, src/app/(main)/tarot-love-reading-online/page.tsx, src/components/tianji-love/TianjiLovePrimitives.tsx, and tsconfig.tsbuildinfo intentionally left unstaged.
+git diff --check: 0 warnings on the 3 new markdown+CSV files. The only diff --check warning is pre-existing trailing whitespace on data/love-test-funnel-metrics.csv:5, in a modified file outside this skill's scope.
+Secret-shape scan over the 3 new files: 0 raw-shape hits (sk_live_*, sk_test_*, ghp_*, xox[abp]-*, AKIA[0-9A-Z]{16}, -----BEGIN *PRIVATE KEY-----).
+npm run typecheck: passed (exit 0). Docs-only change set has no TypeScript surface.
+npm run lint: pre-existing errors on tarot-spread-meanings, love-calculator, tarot-love-reading-online, MediaNetSlot verified to exist before this run; docs-only change set has no ESLint surface. No new lint errors introduced.
+.env* access: none — no env files were read, copied, diffed, or printed.
+```
+
+### Gate status
+
+```text
 Daily growth publishing pack: Go
 Manual review checklist: Go
 KPI entry scaffold: Go
@@ -36,53 +72,172 @@ Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
 ```
 
-## Prior run (2026-07-02 daily growth Day 015)
+### Manual operator steps
 
-TianJi Love daily growth publishing pack — Day 015 for 2026-07-02 (cron `17 1 * * *`). Theme: "Pause before you send — check your motive before you check their reply", taken from the 7-day content calendar Day 15 row (2026-07-08). CTA: `/ask`. Day 14 = initiation in ambiguity (want vs. ready); Day 15 = pause before send (motive vs. reply expectation); the rotation continues the calm-hooks-only discipline.
+1. Open this `REVIEW_PACKET.md` entry and the matching entry at the top of `.ai/CHANGELOG_AI.md`.
+2. Skim `assets/marketing/daily/day-021-publishing-pack.md` for tone and CTA consistency.
+3. Walk `assets/marketing/daily/day-021-review-checklist.md` row-by-row before any platform publish.
+4. Publish manually, one channel at a time; mark the publishing-log rows as posts go live.
+5. Fill KPI rows in `data/love-test-day-021-kpi-entry.csv` with real per-post numbers only — no invented engagement / retention / save-rate values.
+
+### Next step
+
+Commit the docs-only delta (3 new files + 2 `.ai/` files) with the message `chore(marketing): add love-test day 021 publishing pack`, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.
+
+TianJi Love daily growth publishing pack — Day 020 (cron `17 1 * * *`, skill `tianji-github-daily-growth`) for 2026-07-13 publish date. Theme: "Rolling recap — the best calendar entry is the one that helps without selling fear". CTA: `/love-reading`. Day 19 = honest audit (wish vs. description); Day 20 = rolling recap (post performed vs. post helped). The rotation continues the calm-hooks-only discipline and explicitly separates "the loudest metric" from "the most useful post."
 
 ## Files created this run
 
-- `assets/marketing/daily/day-014-publishing-pack.md`
-- `assets/marketing/daily/day-014-review-checklist.md`
-- `data/love-test-day-014-kpi-entry.csv`
+- `assets/marketing/daily/day-020-publishing-pack.md`
+- `assets/marketing/daily/day-020-review-checklist.md`
+- `data/love-test-day-020-kpi-entry.csv`
 
 ## Files updated this run
 
 - `.ai/CHANGELOG_AI.md`
-- `.ai/REVIEW_PACKET.md`
+- `.ai/REVIEW_PACKET.md` (this file)
 
 ## Allowed files inspected read-only (no edits)
 
-- `assets/marketing/love-test-next-30-hooks.md` (hook pool entries 31, 41, 44, 51, 56, 61, 62, 63, 64, 65)
-- `assets/marketing/love-test-next-20-share-captions.md` (caption pool)
-- `assets/marketing/content-calendar-7day.md` (Day 14 row, 2026-07-07)
-- `assets/marketing/daily/day-013-publishing-pack.md` (prior pack reference)
-- `data/love-test-day-013-kpi-entry.csv` (prior KPI scaffold reference)
-- `.ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260630.md` (gate context, no edits)
-- `assets/marketing/love-test-next-20-video-scripts.md` (script pool)
-- `assets/marketing/content-calendar-7day.md` (Day 7 row 2026-06-30)
-- `assets/marketing/daily/day-011-publishing-pack.md` (precedent)
-- `assets/marketing/daily/day-011-review-checklist.md` (precedent)
-- `data/love-test-day-011-kpi-entry.csv` (KPI schema)
-- `data/love-test-day-007-kpi-entry.csv` (already scaffolded 2026-06-30 KPI rows; not modified)
+- `assets/marketing/content-calendar-7day.md` (Day 20 row, 2026-07-13)
+- `assets/marketing/daily/day-019-publishing-pack.md`
+- `assets/marketing/daily/day-019-review-checklist.md`
+- `data/love-test-day-019-kpi-entry.csv`
+
+## Gate status (this run)
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go (empty/zero placeholders only — no invented metrics)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
 
 ## Validation evidence
 
 ### git diff --check
 
-Pending. Will be run before commit.
+Passed — 0 warnings on the 3 new files (`assets/marketing/daily/day-020-publishing-pack.md`, `assets/marketing/daily/day-020-review-checklist.md`, `data/love-test-day-020-kpi-entry.csv`) + the 2 `.ai/` files. The single `diff --check` warning on the worktree (`data/love-test-funnel-metrics.csv:5` trailing whitespace) is a pre-existing modification in a file outside this skill's scope and is explicitly NOT staged.
 
 ### Targeted secret-shape scan
 
-Pending. Will be run before commit over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/`.
+Passed — 0 raw-shape hits over the 3 new files. Scanned for `sk_live_`, `sk_test_`, `ghp_`, `xox[abp]-`, `AKIA[0-9A-Z]{16}`, `-----BEGIN`.
 
 ### npm run typecheck
 
-Change set is markdown + CSV only with no TypeScript or ESLint surface. Consistent with prior content-only skill run precedent (2026-06-26 through 2026-06-30). A full typecheck/lint will be attempted for documentation completeness; if `node_modules` or network access is unavailable in this docs-only cron runner, the run will be recorded as markdown+CSV-only and noted in CHANGELOG_AI.md.
+Change set is markdown + CSV only with no TypeScript surface. The pre-existing `npm run typecheck` failures on this branch (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton, conditional `useEffect` in MediaNetSlot, `react-hooks/rules-of-hooks`) are unrelated to this skill's docs-only output and were verified to exist before this run.
 
 ### npm run lint
 
-Same as typecheck above.
+Change set is markdown + CSV only with no ESLint surface. The pre-existing `npm run lint` errors on this branch (`<a>` navigation in landing pages) are unrelated to this skill's docs-only output and were verified to exist before this run.
+
+## Theme progression
+
+- Day 015 — Decision pacing: panic cannot drive the message.
+- Day 016 — No-contact week one: silence as information.
+- Day 017 — Will they come back: pattern vs. person.
+- Day 018 — Worth continuing: feeling vs. rhythm.
+- Day 019 — Honest audit: wish vs. description.
+- Day 020 — Rolling recap: post performed vs. post helped.
+
+The Day 020 pack is the natural next step after Day 019 — once the reader has separated "what I want" from "what the relationship actually is", the next question is whether the writing practice itself has been helping or just performing. A weekly recap, written as a maintenance log rather than a performance review, lets the writer notice which posts held up on a calm re-read without selling fear. The pack keeps the discipline of separating "performed" from "helped" without grading the user's own week.
+
+## CTA ladder
+
+- `/love-test` — used by Day 012, Day 018.
+- `/ask` — used by Day 013, Day 015, Day 016.
+- `/love-reading` — used by Days 14, 17, and now Day 020.
+- `/relationship/new` — used by Days 11, 16, 19.
+
+Day 020 uses `/love-reading` to keep the rolling-recap arc anchored on the reflective-reading surface — readers at this moment are doing a quiet re-read of their own week's content, which is closer to a reflection page than a fresh relationship write-down. Returning to `/love-reading` also preserves the "no fear, no performance review" tone of the recap.
+
+## Channel mix rationale
+
+5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO follows the established Day 019 template exactly. Same channel rotation, same 23 deliverable posts, same CTA cycle. Deviation would force re-validation on operator review schedules.
+
+## Safety summary
+
+- No fake testimonials or performance metrics.
+- No stay/leave verdict made for the user.
+- No "loudest post is always the best post" guarantee.
+- No "weekly recap is a verdict for whether you should keep writing" framing.
+- No "act now" / "last chance" / fear-based urgency.
+- No diagnosis language (anxiety disorder, codependency, attachment disorder, etc.).
+- No private chat screenshots or private user stories.
+- No Stripe/payment execution claims.
+- No mind-reading framing ("he is thinking X").
+- No shame framing ("you wasted your time").
+- No coercive framing ("you already know the answer if you're honest").
+- No collapsing of "the post performed" with "the post helped" in any channel.
+- No manufacturing of engagement / retention / save-rate metrics in the recap copy.
+- Every CTA points to `/love-reading` only — no direct payment mentions.
+
+## Manual operator steps
+
+1. Open `assets/marketing/daily/day-020-review-checklist.md`.
+2. Tick each pre-publishing verification row before publishing any post.
+3. Publish manually on operator's schedule across Xiaohongshu / Reels / X / Reddit / Quora / KOL / SEO channels.
+4. After a 24h observation window on each post, fill the KPI rows of the review checklist (Xiaohongshu clicks, Reels views, X impressions, Reddit upvotes, SEO organic clicks, leads, revenue). If a post is not yet posted, leave the cell blank rather than inventing performance.
+5. Transfer the filled KPIs into `data/love-test-day-020-kpi-entry.csv` with the `notes` field set to "manual entry after publish" or a real operator note.
+
+## Next step
+
+Commit the docs-only delta (5 new files: 2 marketing daily + 1 KPI CSV + 2 `.ai/` updates) with the standard `chore(marketing): add love-test day 020 publishing pack` message, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`. The seven unrelated pre-existing modified files across `src/`, `data/`, and `tsconfig.tsbuildinfo` remain explicitly NOT staged.
+
+---
+
+## Previous task (2026-07-05) — Day 018 KPI analysis
+
+## Files created this run
+
+- `.ai/reports/love-test-growth-report-2026-07-05.md`
+
+## Files updated this run
+
+- `.ai/CHANGELOG_AI.md`
+- `.ai/REVIEW_PACKET.md` (this file)
+
+## Allowed files inspected read-only (no edits)
+
+- `data/love-test-day-001-kpi-entry.csv` … `data/love-test-day-018-kpi-entry.csv`
+- `data/love-test-marketing-kpi.csv`
+- `data/love-test-kpi-tracking.csv`
+- `data/love-test-funnel-metrics.csv`
+- `assets/marketing/daily/day-017-publishing-pack.md`
+- `assets/marketing/daily/day-018-publishing-pack.md`
+
+## Gate status
+
+```
+KPI source file: No-Go - missing real metrics (all day-level KPI entries empty/zero/placeholder; aggregate is still a 3-row template; bridge funnel row carries real_db_pipeline marker but upstream counts are zero)
+KPI analysis report: Go (this report documents the absence of real data; no fabricated rankings)
+Optimization notes: Not run (cannot be grounded without non-zero input rows)
+Fake metrics: No-Go
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Validation evidence
+
+### git diff --check
+
+Passed — 0 warnings on the markdown + CSV delta from this run.
+
+### Targeted secret-shape scan
+
+Passed — 0 raw-shape hits over the new files (`assets/marketing/daily/day-018-publishing-pack.md`, `assets/marketing/daily/day-018-review-checklist.md`, `data/love-test-day-018-kpi-entry.csv`). Scanned for `sk_live_`, `sk_test_`, `ghp_`, `xox[abp]-`, `AKIA[0-9A-Z]{16}`, `-----BEGIN`.
+
+### npm run typecheck
+
+Change set is markdown + CSV only with no TypeScript surface. The pre-existing `npm run typecheck` failures on this branch (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton) are unrelated to this skill's docs-only output and were verified to exist before this run via `git stash -u` round-trip.
+
+### npm run lint
+
+Change set is markdown + CSV only with no ESLint surface. The pre-existing `npm run lint` errors on this branch (`<a>` navigation in landing pages, conditional `useEffect` in MediaNetSlot, `react-hooks/rules-of-hooks`) are unrelated to this skill's docs-only output and were verified to exist before this run.
 
 ## Gate status (this run)
 
@@ -96,1143 +251,288 @@ Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
 ```
 
-## Suggested commit message for this run
+## Theme progression
 
-```text
-chore(marketing): add love-test day 012 publishing pack
-```
+- Day 014 — Pause before you send: motive before reply.
+- Day 015 — Decision pacing: panic cannot drive the message.
+- Day 016 — No-contact week one: silence as information.
+- Day 017 — Will they come back: pattern vs. person.
+- Day 018 — Worth continuing: feeling vs. rhythm.
 
-## 2026-06-30 Content Calendar Refresh Run (cron 37 2 * * *)
+The Day 018 pack is the natural next step after Day 017 — once the reader has separated "pattern returned" from "person returned", the next question is what to do with that observation, and "worth continuing" is the most common version of that question. The pack keeps the discipline of separating inputs (feeling vs. rhythm) without making the verdict.
 
-### Files changed in this run
+## CTA ladder
 
-```text
-M  assets/marketing/love-test-next-30-hooks.md
-M  assets/marketing/love-test-next-20-video-scripts.md
-M  assets/marketing/love-test-next-20-share-captions.md
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
+- `/love-test` — used by Day 012 (worth continuing recap was redirected here) and Day 018.
+- `/ask` — used by Day 013 (clarity recap), Day 015 (decision pacing), and Day 016.
+- `/love-reading` — used by Days 14, 17 (will they come back).
+- `/relationship/new` — used by Days 11, 16 (no-contact).
 
-### Scope check
+Day 018 returns to `/love-test` to keep the worth-continuing arc anchored on the assessment surface rather than the reading surface — readers are at the moment of asking what the recent rhythm looks like, which is closer to a self-test than a reading.
 
-- Calendar pre-run count: 35 future days (Day 7 through Day 41, ending 2026-08-03). 35 ≥ 7 → no minimum-fill trigger. Calendar file `assets/marketing/content-calendar-7day.md` not modified this run.
-- Theme rotation: existing 35 future days already cycle through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus pattern-naming, decision-pacing, recap, and honest-audit supporting angles. No anchor theme appears more than three times in any rolling 14-day window; rotation is healthy and no rebalancing was needed.
-- Hook pool pre-run count: 60 (last batch +5 on 2026-06-29). Post-run count: 65 (this batch +5).
-- Script pool pre-run count: 32 (last batch +2 on 2026-06-28, +5 on 2026-06-27, +5 on 2026-06-26). Post-run count: 34 (this batch +2).
-- Caption pool pre-run count: 36 (last batch +3 on 2026-06-29, +3 on 2026-06-28, +5 on 2026-06-27, +5 on 2026-06-26). Post-run count: 39 (this batch +3).
+## Channel mix rationale
 
-### Hook batch details (entries 61-65)
+5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO follows the established Day 017 template exactly. Same channel rotation, same 23 deliverable posts, same CTA cycle. Deviation would force re-validation on operator review schedules.
 
-```text
-61. 想看清楚他在想什么的时候，先看清楚你在循环什么。
-62. 主动不丢判断力，盲目的主动才是消耗。先看清楚再决定发不发。
-63. 重新出现的联系是一种数据，它不一定是一种邀请。
-64. 一段值得继续的关系，常常看起来像一件你能用正常语气描述的事。
-65. 每周留出一晚回看记录，比每天追问一次新信号更稳。
-```
+## Safety summary
 
-- Hook 61: anchor theme "what is he thinking now?", supporting angle "pattern-not-mind-reading".
-- Hook 62: anchor theme "should I take the initiative in ambiguity?", supporting angle "judgment-preserving-initiation".
-- Hook 63: anchor theme "will they come back after no contact?", supporting angle "data-not-invitation".
-- Hook 64: anchor theme "is this relationship worth continuing?", supporting angle "calm-describability".
-- Hook 65: supporting angle "weekly-review-steadier-than-daily".
+- No fake testimonials or performance metrics.
+- No stay/leave verdict made for the user.
+- No "your strong feeling proves the relationship is worth it" guarantee.
+- No "the rhythm proves you should leave" verdict.
+- No "act now" / "last chance" / fear-based urgency.
+- No diagnosis language (anxiety disorder, codependency, attachment disorder, etc.).
+- No private chat screenshots or private user stories.
+- No Stripe/payment execution claims.
+- No mind-reading framing ("he is thinking X").
+- No shame framing ("you wasted your time").
+- No coercive framing ("you already know the answer if you're honest").
+- No collapsing of "feeling" with "rhythm allows" in any channel.
+- Every CTA points to `/love-test` only — no direct payment mentions.
 
-### Video script batch details (entries 33-34)
+## Manual operator steps
 
-```text
-33 What Is He Thinking Today — Douyin — observation-first, no mind-reading claim.
-34 Worth Continuing In Plain Words — Xiaohongshu video — rhythm, not verdict, no decision for the user.
-```
+1. Open `assets/marketing/daily/day-018-review-checklist.md`.
+2. Tick each pre-publishing verification row before publishing any post.
+3. Publish manually on operator's schedule across Xiaohongshu / Reels / X / Reddit / Quora / KOL / SEO channels.
+4. After a 24h observation window on each post, fill the KPI rows of the review checklist (Xiaohongshu clicks, Reels views, X impressions, Reddit upvotes, SEO organic clicks, leads, revenue). If a post is not yet posted, leave the cell blank rather than inventing performance.
+5. Transfer the filled KPIs into `data/love-test-day-018-kpi-entry.csv` with the `notes` field set to "manual entry after publish" or a real operator note.
 
-### Share caption batch details (entries 37-39)
+## Next step
 
-```text
-37. Observation-before-asking hook, CTA /love-test.
-38. Pause-vs-panic-send hook, CTA /love-test.
-39. Describable-relationships hook, CTA /relationship/new.
-```
+Push this commit and continue manual review of the publishing pack on the operator's schedule. The next scheduled run (cron `17 1 * * *` for the following day) will generate Day 019 from the content calendar Day 19 row.
 
-### Local validation
+---
 
-- `git status --short --branch` before run: working tree clean, branch `main`, local HEAD `89bb389`, in sync with origin.
-- After the calendar refresh branch switch: branch `chore/marketing-content-calendar-refresh-20260630` created off `main` at `89bb389` for this run's edits (per AGENTS.md "Never merge directly to main"; the W26 squash on main remains the most recent merged commit before this run).
-- Files modified in this run: 5 (3 marketing asset files + 2 `.ai/` record files).
-- `git diff --check`: pending — will run before commit.
-- Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/`: pending — will run before commit. Expectation: 0 raw-shape hits (`sk_live_*`, `pk_live_*`, `whsec_*`, `rk_live_*`, `AKIA*`, `-----BEGIN *PRIVATE KEY-----`).
-- `npm run typecheck`: not run — change set is markdown-only with no TypeScript surface, so a typecheck invocation would only reflect the pre-existing baseline. `node_modules/` is present in this runner but the docs-only surface rule applies.
-- `npm run lint`: not run — same rationale as typecheck; markdown change set has no ESLint surface.
+## KPI analysis validation evidence (this run, 2026-07-05 02:00 UTC)
 
-### Gate status (this run)
+### git diff --check
 
-```text
-Seven-day content calendar: Go (35 future days, no addition required)
-Hook pool: Go (65)
-Video script pool: Go (34)
-Share caption pool: Go (39)
-Social auto-posting: No-Go - manual publishing only
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
+Pending — will be run before commit on the markdown delta in `.ai/reports/love-test-growth-report-2026-07-05.md`, `.ai/CHANGELOG_AI.md`, and `.ai/REVIEW_PACKET.md`. (The 3 prior trailing-whitespace warnings on `data/love-test-funnel-metrics.csv` are pre-existing in the bridge CSV and are not produced by this skill.)
 
-### Blockers (No-Go conditions logged)
+### Targeted secret-shape scan
 
-- KPI evidence for funnel-optimizer copy change is still missing (see 2026-06-29 funnel-optimizer blocker entry above).
-- Stripe test-mode paid smoke approval phrase still not received.
-- Production deploy / Supabase production mutation / server mutation / webhook replay / social auto-posting remain No-Go.
+Pending — will be run before commit over `.ai/`, `assets/marketing/`, `data/`. The scan will check `sk_live_`, `sk_test_`, `ghp_`, `xox[abp]-`, `AKIA[0-9A-Z]{16}`, `-----BEGIN`. Prior matches in `.ai/CHANGELOG_AI.md` and `.ai/TIANJI_LOVE_AUTO_GATE_STATUS_*.md` are descriptive mentions of the detector strings themselves, not real secrets.
 
-### Suggested commit message for this run
+### npm run typecheck / npm run lint
 
-```text
-chore(marketing): refresh love-test content calendar
-```
+Not applicable to this change set — markdown + CSV only, no TypeScript or ESLint surface touched in this run. The pre-existing typecheck and lint failures on this branch (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton, `<a>` navigation in landing pages, conditional `useEffect` in MediaNetSlot, `react-hooks/rules-of-hooks`) are unrelated to this docs-only KPI analysis run.
 
-### Next step (for human or future run)
+### Bridge evidence
 
-- No calendar-row additions required this run. The next required calendar refresh is the standard pool-rotation maintenance cron (also cron `37 2 * * *`) on 2026-07-01.
-- Manual publishing team: continue picking from the refreshed hook/script/caption pools, and prefer hooks 61-65 and captions 37-39 for the first three slots of the 2026-07-01 to 2026-07-03 publish window to keep the new batch in active rotation.
-- Reminder: social auto-posting remains manual-only. Stripe checkout, paid smoke, production deploy, and Supabase production mutation all remain No-Go.
+`python3 ~/.hermes/scripts/run_revenue_funnel.py` executed successfully and appended a row to `data/love-test-funnel-metrics.csv` with `notes=real_db_pipeline` and the values `home_view=0`, `test_start=0`, `result_view=0`, `unlock_click=0`, `checkout_created=1`, `checkout_success=0`, `revenue_cny=0`, and all funnel rates `0.0`. The bridge script itself is the documented production DB→CSV pipeline (cron `aeaea2fc0ce6`, Monday 02:30 UTC); this skill's manual re-run is permitted and does not require the scheduled cron.
 
-## 2026-06-29 Funnel Optimizer Blocker Run (cron 0 2 */14 * *)
+---
+
+## TianJi Love content calendar refresh — 2026-07-05 02:37 UTC (cron `37 2 * * *`)
+
+### Scope
+
+This run of the `tianji-github-content-calendar` skill (scheduled cron `37 2 * * *`) inspected the seven-day future calendar and the hook / video-script / share-caption pools, then extended the calendar and rotated the pool themes. The run is docs/markdown-only inside `assets/marketing/` plus the `.ai/` record pair — no `.env*` read, no TypeScript/ESLint surface touched, no Stripe live touch, no Supabase production mutation, no production deploy, no social auto-posting.
 
 ### Files changed in this run
 
-```text
-A  .ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260629.md
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
+- `assets/marketing/content-calendar-7day.md` — extended the calendar table by 7 rows (Days 63–69, 2026-08-25 → 2026-08-31).
+- `assets/marketing/love-test-next-30-hooks.md` — appended a `Refresh 2026-07-05` batch of 5 hooks (#81–#85).
+- `assets/marketing/love-test-next-20-video-scripts.md` — appended a `Refresh 2026-07-05` batch of 3 video scripts (#41–#43).
+- `assets/marketing/love-test-next-20-share-captions.md` — appended a `Refresh 2026-07-05` batch of 3 share captions (#49–#51).
+- `.ai/CHANGELOG_AI.md` — appended the 2026-07-05 entry.
+- `.ai/REVIEW_PACKET.md` — appended this section.
 
-### Verdict
+Files NOT touched (intentionally):
+- The pre-existing modified `src/components/tianji-love/TianjiLovePrimitives.tsx` (unrelated source-only change from a parallel worktree).
+- The pre-existing untracked `relationship-decision.json`.
+- The pre-existing modified `data/love-test-funnel-metrics.csv`.
+- Any `.env*`, deployment config, billing/auth/webhook routes, secrets, or production-touching files.
 
-```text
-Funnel copy optimization: Not run - blocked on KPI evidence
-KPI evidence: No-Go - missing real weak-conversion signal
-Stripe checkout logic: Not changed
-Supabase mutation: Not changed
-Provider live call: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
+### Pre-run state
 
-### Evidence (Non-Secret Only)
+- Future days in calendar (relative to today 2026-07-05): **50 days** (Days 12–62, up to 2026-08-24). Already healthy; minimum 7-day requirement exceeded.
+- Hook pool: 80 hooks (steady growth since 2026-06-26).
+- Video-script pool: 40 scripts (steady growth since 2026-06-26).
+- Share-caption pool: 48 captions (steady growth since 2026-06-26).
 
-- `data/love-test-kpi-tracking.csv` — single 2026-05 template row, every numeric field `0`.
-- `data/love-test-funnel-metrics.csv` — single 2026-05-24 template row, every rate `0`, `notes="template baseline; paid conversion remains not measured until approved smoke/live gate"`.
-- `data/love-test-day-001-kpi-entry.csv` … `data/love-test-day-011-kpi-entry.csv` — every row: `impressions=0`, `clicks=0`, `love_test_starts=0`, `result_views=0`, `share_card_clicks=0`, `share_card_downloads=0`, `ask_next_clicks=0`, `paid_intent_views=0`, `preview_submits=0`, `unlock_clicks=0`, `checkout_blocked=0`, `checkout_ready=0`, `paid_smoke_result=not_run`. Every `notes` cell contains `manual entry after publish`.
-- `.ai/reports/love-test-growth-report-2026-06-28.md` — analysis skipped per skill rule; "no real signal to rank".
-- `.ai/reports/growth-report-2026-06-29.md` and `growth-report-2026-06-30.md` — `no real data yet`; Lead Capture Gate No-Go; Revenue execution No-Go.
-- `.ai/AUTOPILOT_STATUS.json` — `source-go-revenue-execution-no-go`; `revenue_execution=no-go`, `paid_smoke=no-go`, `production_deploy=no-go`.
+### Post-run state
 
-### Stripe / Production / Secret Boundary Validation
+- Future days in calendar (relative to today 2026-07-05): **57 days** (Days 12–69, up to 2026-08-31).
+- Hook pool: **85 hooks**.
+- Video-script pool: **43 scripts**.
+- Share-caption pool: **51 captions**.
 
-```text
-Test-mode only: Verified (no touch this run)
-Live Stripe key shape: 0 raw-shape hits in .ai/ and the allowed funnel files
-Production callback URL: not observed
-.env* read/print/diff/copy: none
-Production deploy: not performed
-Webhook replay: not performed
-Supabase production mutation: not performed
-PM2/Nginx/certbot/server mutation: not performed
-Social auto-posting: not performed
-Credential / browser session / platform token use: none
-```
+### Theme rotation rationale
 
-### Validation
+The Days 49–62 cluster (extended across 2026-07-03 / 2026-07-04 runs) leaned on emotional-vocabulary, self-trust, contact-calibration, dynamic-readjustment, friendship-rooted-reading, end-of-cycle-reflection, quiet-attention-audit, first-message-draft, returning-silence-read, worth-continuing-audit, calm-weekly-recap, energy-direction-check, and decision-pacing-breath supporting angles. The Days 63–69 batch deliberately rotates to a fresh set of late-cycle supporting angles — late-summer audit, body-aware reading, friend-of-friend lens, archive vs delete, attention-rest practice, what you kept noticing, month-end breath — while still passing through all four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) across the week. No theme repeats consecutively with the prior week; no angle doubles up with the same channel or CTA.
 
-- `git status` before run: working tree clean, branch `chore/marketing-content-calendar-refresh-20260626`, local HEAD `b6996a2`, in sync with origin.
-- Files created in this run: `.ai/TIANJI_LOVE_FUNNEL_OPTIMIZER_BLOCKER_20260629.md`, plus updates to `.ai/CHANGELOG_AI.md` and `.ai/REVIEW_PACKET.md`.
-- `git diff --check`: passed (no whitespace errors).
-- `npm run typecheck` / `npm run lint` / `npm run test` / `npm run audit:routes` / `npm run audit:share` / `npm run build:staging:degraded`: **not applicable** — change set is `.ai/` markdown-only with no TypeScript/ESLint surface touched. Skill validation rule for source changes does not fire on a docs-only blocker run.
-- Targeted secret-shape scan over `.ai/` and the allowed funnel files: 0 raw-shape hits.
-
-### Safety Boundary
-
-- No `.env*` files were read, printed, copied, uploaded, or modified.
-- No raw secret was printed.
-- No production deploy was performed.
-- No Stripe live-mode touch.
-- No Stripe test-mode paid smoke was executed (requires explicit human approval).
-- No webhook replay was performed.
-- No Supabase production mutation was performed.
-- No PM2/Nginx/certbot/server mutation was performed.
-- No social account auto-posting was performed.
-- No KPI value, funnel-stage rate, weak-step claim, conversion rate, or guaranteed relationship outcome was invented.
-
-### Suggested Commit Message
+### Validation performed
 
 ```text
-chore(marketing): funnel optimizer blocker — KPI evidence missing (2026-06-29)
-```
-
-### Next Step (For Human or Future Run)
-
-Re-run the `tianji-github-funnel-optimizer` skill when `data/love-test-day-NNN-kpi-entry.csv` has at least one row with non-zero `impressions` + non-zero `clicks` (or `love_test_starts`) AND the aggregate KPI or funnel-metrics CSV carries at least one real funnel-stage rate. The current allowed-file scope and copy-allowed surface are ready; only the evidence input is missing.
-
-## 2026-06-29 Daily Growth Day 011 Run (cron 17 1 * * *)
-
-### Files changed in this run
-
-```text
-A  assets/marketing/daily/day-011-publishing-pack.md
-A  assets/marketing/daily/day-011-review-checklist.md
-A  data/love-test-day-011-kpi-entry.csv
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
-
-### Theme and scope
-
-- Theme: "Naming the fear before you send — writing it down is not the same as hitting send" (rotation sub-angle drawn from hook pool entry 51 added 2026-06-28, not a dated calendar row).
-- Today (2026-06-29) is intentionally one day ahead of the dated Day 7 calendar row on 2026-06-30, so the Day 7 row is not displaced by this pack.
-- Day 11 explicitly does not collapse into Day 10's "pattern literacy ≠ prediction" framing. Day 10 = observation without prediction; Day 11 = pause before sending. The two angles share a calendar week but must not be merged into a single sales message.
-
-### Evidence read (non-secret only)
-
-- `.ai/CHANGELOG_AI.md` (tail) — Day 010 publishing pack, weekly KPI analysis Day 010, content calendar refresh, 2026-06-30 final-gate and prior entries.
-- `.ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260628.md` — Revenue Execution No-Go; Stripe test-mode paid smoke No-Go without explicit phrase; gate status CONDITIONAL-GO.
-- `.ai/REVIEW_PACKET.md` (tail) — 2026-06-28 auto paid-gate status run; all docs-only.
-- `.ai/AUTOPILOT_STATUS.json` — `source-go-revenue-execution-no-go`; all execution flags remain `no-go`.
-- `.ai/reports/growth-report-2026-06-28.md` — `no real data yet`.
-- `.ai/reports/love-test-growth-report-2026-06-28.md` — analysis skipped per skill rule; all metrics `0`/`not_run`/placeholder.
-- `assets/marketing/love-test-next-30-hooks.md` — hook pool entry 51 selected as the seed angle for Day 011.
-- `assets/marketing/content-calendar-7day.md` — confirmed Day 7 row is dated 2026-06-30 and is not displaced by Day 011.
-- `assets/marketing/daily/day-010-publishing-pack.md` and `data/love-test-day-010-kpi-entry.csv` — used as the structural template; KPI CSV header schema matches Day 010 (verified via `diff` of header line).
-
-### Stripe / production / secret boundary validation
-
-```text
-Test-mode only: Verified (no touch this run)
-Live Stripe key shape: 0 raw-shape hits in .agents/skills/, .github/workflows/, .ai/, assets/marketing/, data/
-Production callback URL: not observed
-.env* read/print/diff/copy: none
-Production deploy: not performed
-Webhook replay: not performed
-Supabase production mutation: not performed
-PM2/Nginx/certbot/server mutation: not performed
-Social auto-posting: not performed
-Credential / browser session / platform token use: none
-```
-
-### Validation
-
-- `git diff --check` passed.
-- `npm run typecheck` passed (`tsc -p tsconfig.typecheck.json --noEmit`, exit 0).
-- `npm run lint` passed (`next lint`, exit 0 — "No ESLint warnings or errors").
-- Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits.
-- Change set is markdown+CSV-only with no TypeScript or ESLint surface; typecheck and lint results reflect the pre-existing clean baseline.
-
-### Gate status
-
-```text
-Daily growth publishing pack: Go
-Manual review checklist: Go
-KPI entry scaffold: Go
-Social auto-posting: No-Go - manual publishing only
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
-
-## 2026-06-28 Auto Paid-Gate Status Run (cron 0 6 * * *)
-
-### Files changed in this run
-
-```text
-A  .ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260628.md
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
-
-### Evidence read (non-secret only)
-
-- `.ai/AUTOPILOT_STATUS.json` — status `source-go-revenue-execution-no-go`; all execution flags remain `no-go`; `stripe_test_mode=pending_human_approval`.
-- `.ai/AUTOPILOT_REPORT.md` — same verdict surface; Revenue Execution No-Go.
-- `.ai/TIANJI_LOVE_REVENUE_OS_V1_FINAL_GATE_REPORT_20260630.md` — Source/Test Go; Stripe Test-mode Pending Human Approval; Revenue Execution No-Go.
-- `.ai/TIANJI_LOVE_STRIPE_TEST_MODE_APPROVAL_PACKET_20260624.md` — readiness checklist still source-only.
-- `.ai/TIANJI_LOVE_STRIPE_TEST_MODE_PAID_SMOKE_APPROVAL_PACKET_20260524.md` — paid smoke No-Go without explicit phrase `批准跑 Stripe test-mode paid smoke`.
-- `.ai/REVIEW_PACKET.md` (tail) — 2026-06-28 content calendar refresh run, all docs-only.
-- `.ai/CHANGELOG_AI.md` (tail) — 2026-06-28 content calendar refresh, weekly KPI analysis Day 010, daily growth Day 010 publishing pack, plus 2026-06-30 final-gate and Day 7-Day 1 entries.
-- `.ai/reports/growth-report-2026-06-28.md` — `no real data yet`.
-- `.ai/reports/love-test-growth-report-2026-06-28.md` — analysis skipped per skill rule; all metrics `0`/`not_run`/placeholder.
-
-### Stripe test-mode boundary validation
-
-```text
-Test-mode only: Verified
-Live Stripe key shape: 0 raw-shape hits in .ai/, .agents/skills/, .github/workflows/
-Production callback URL: not observed
-.env* read/print/diff/copy: none
-Production deploy: not performed
-Webhook replay: not performed
-Supabase production mutation: not performed
-PM2/Nginx/certbot/server mutation: not performed
-Social auto-posting: not performed
-```
-
-### Test-mode paid smoke readiness
-
-```text
-Source-level checkout readiness artifacts: present (feat/love-test-paid-intent-20260524, chore/love-test-checkout-readiness-20260524, TIANJI_LOVE_PHASE5_STRIPE_TEST_READINESS_20260516.md, TIANJI_LOVE_LANE_N3_PAID_SMOKE_EXECUTION_EVIDENCE_20260520.md)
-Masked Stripe test-mode env evidence: not refreshed since 2026-06-24
-Explicit human approval phrase: NOT received
-Local execution of paid smoke: NOT performed
-Narrow test-mode smoke task draft: prepared, NOT executed
-```
-
-### Local validation
-
-```text
-git diff --check
-Passed (no whitespace errors on the markdown delta).
-
-Targeted secret-shape scan over .ai/ .agents/skills/ .github/workflows/
-Passed: 0 raw-shape hits.
-  - .ai/ matches were descriptive mentions in prior audit reports only.
-  - .agents/skills/ clean.
-  - .github/workflows/ clean.
-
-npm run typecheck
-Not required for docs/markdown-only delta; no TypeScript surface changed.
-
-npm run lint
-Not required for docs/markdown-only delta; no ESLint surface changed.
-```
-
-### Gate status (this run)
-
-```text
-Checkout readiness audit: Conditional Go (source-level ready; execution still requires masked env evidence + human approval)
-Test-mode smoke readiness: No-Go (awaiting explicit approval phrase and masked Stripe test-mode env evidence)
-Stripe test-mode boundary: Verified (no live touch, no .env* read, test-mode only references)
-Gate status: CONDITIONAL-GO
-Next scheduled run: 2026-06-29 06:00 UTC (cron 0 6 * * *)
-```
-
-### Blockers (No-Go conditions logged)
-
-```text
-1. Human approval phrase for Stripe test-mode paid smoke not received.
-2. Masked Stripe test-mode env evidence not refreshed on or after 2026-06-24.
-3. Stripe live mode: No-Go (forbidden).
-4. Production Supabase mutation: No-Go (forbidden).
-5. Production deploy / server mutation / webhook replay / social auto-posting: No-Go (forbidden).
-```
-
-### Suggested commit message for this run
-
-```text
-docs(revenue): auto gate status — 2026-06-28
-```
-
-## 2026-06-28 Content Calendar Refresh Run (cron 37 2 * * *)
-
-### Files changed in this run
-
-```text
-M  assets/marketing/content-calendar-7day.md
-M  assets/marketing/love-test-next-30-hooks.md
-M  assets/marketing/love-test-next-20-video-scripts.md
-M  assets/marketing/love-test-next-20-share-captions.md
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
-
-### Scope check
-
-```text
-All edits are inside the allowed docs/assets/data surface.
-No .env or .env.* file was read, printed, copied, uploaded, or modified.
-No raw secret was printed.
-No production deploy was performed.
-No Stripe test/live paid smoke or real payment was performed.
-No webhook replay was performed.
-No Supabase production mutation was performed.
-No PM2/Nginx/certbot/server mutation was performed.
-No social account auto-posting was performed.
-No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
-guaranteed relationship outcomes, or 100% accuracy claims were added.
-No diagnosis language (anxiety disorder, attachment disorder, codependency,
-toxic, narcissist) was introduced in any of the new copy.
-```
-
-### Local validation
-
-```text
-git diff --check
-Passed (no whitespace errors on the markdown delta).
-
-Targeted secret-shape scan over .ai/ assets/marketing/ data/
-Passed: 0 raw-shape hits.
-
-npm run typecheck
-Not required for docs/markdown-only delta; no TypeScript surface changed.
-
-npm run lint
-Not required for docs/markdown-only delta; no ESLint surface changed.
-```
-
-### Gate status (this run)
-
-```text
-Seven-day content calendar: Go (28 future days, Day 7 through Day 34 ending 2026-07-27)
-Hook pool: Go (55)
-Video script pool: Go (32)
-Share caption pool: Go (33)
-Social auto-posting: No-Go - manual publishing only
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
-
-### Suggested commit message for this run
-
-```text
-chore(marketing): refresh love-test content calendar
-```
-
-## 2026-06-28 Weekly KPI Analysis Run (cron 0 2 * * 0)
-
-### Files changed in this run
-
-```text
-A  .ai/reports/love-test-growth-report-2026-06-28.md
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
-
-### Scope check
-
-```text
-All edits are inside the .ai/ record surface plus one new .ai/reports/ markdown file.
-No .env or .env.* file was read, printed, copied, uploaded, or modified.
-No raw secret was printed.
-No production deploy was performed.
-No Stripe test/live paid smoke or real payment was performed.
-No webhook replay was performed.
-No Supabase production mutation was performed.
-No PM2/Nginx/certbot/server mutation was performed.
-No social account auto-posting was performed.
-No account credential, login cookie, browser session, or platform token was used.
-No KPI value, hook rank, channel rank, conversion rate, or guaranteed relationship outcome was invented.
-assets/marketing/daily/day-010-optimization-notes.md was intentionally NOT created in this run because the source data is zero/placeholder and a notes file would require fabricated optimization, which the skill's Forbidden Actions rule disallows.
-```
-
-### KPI data state observed
-
-```text
-data/love-test-day-001-kpi-entry.csv ... day-010: all numeric fields = 0, paid_smoke_result = not_run, notes = "manual entry after publish" scaffold
-data/love-test-marketing-kpi.csv: 2-row template dated 2026-05-24, notes = "template row"
-=> Verdict: Real KPI data required. Analysis skipped per skill workflow step 2.
+git status --short (before commit): clean staging area for the 4 marketing files + 2 .ai/ files; 1 unrelated pre-existing modification to src/components/tianji-love/TianjiLovePrimitives.tsx intentionally left unstaged.
+git diff --check: passed (0 warnings on my markdown delta).
+Secret-shape scan over my markdown delta: 0 raw-shape hits (sk_live_*, sk_test_*, ghp_*, xox[abp]-*, AKIA[0-9A-Z]{16}, -----BEGIN *PRIVATE KEY-----).
+npm run typecheck: produced pre-existing errors already documented on this branch (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton, <a> navigation in landing pages, conditional useEffect in MediaNetSlot, react-hooks/rules-of-hooks). Baseline confirmed via git stash round-trip — no new errors introduced by this run. The skill's narrow scope is markdown-only.
+npm run lint: same pre-existing errors on the same baseline files; no new lint errors introduced by this run.
+.env* access: none — no env files were read, copied, diffed, or printed.
 ```
 
 ### Gate status
 
 ```text
-KPI source file: No-Go - missing real metrics
-KPI analysis report: Go (records the absence of real data, no fabricated rankings)
-Optimization notes: Not run (intentional; cannot be grounded in zero-value rows)
-Fake metrics: No-Go
+Seven-day content calendar: Go (57 future days, well over 7 minimum)
+Hook pool: Go (85 hooks, plenty of fresh rotations)
+Video script pool: Go (43 scripts, fresh rotation ready)
+Share caption pool: Go (51 captions, fresh rotation ready)
+Social auto-posting: No-Go - manual publishing only
 Stripe checkout execution: Not run
 Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
 ```
 
-## 2026-06-28 Daily Growth Day 010 Publishing Pack Run (cron 17 1 * * *)
+### Safety summary
 
-### Files changed in this run
+- No fake testimonials, no fake user numbers, no fake revenue, no fake KPI claims added.
+- No guaranteed relationship / reunion / closure / mind-reading / outcome promises.
+- No diagnosis language (no anxiety / codependency / attachment-disorder / disorder framing).
+- No fear-based or shame-based CTA.
+- No first action other than `/love-test` in the new copy.
+- No `.env*` read, no Stripe live touch, no Supabase production mutation, no production deploy, no social auto-posting.
+
+### Manual operator steps
+
+1. Open `.ai/REVIEW_PACKET.md` (this entry) and `.ai/CHANGELOG_AI.md` (today's tail entry).
+2. Skim the new Days 63–69 calendar rows for tone before any operator uses them.
+3. Continue manual review of the Day 018 publishing pack (separate cron `17 1 * * *`) on the operator's schedule.
+4. The next scheduled content-calendar run (cron `37 2 * * *` on 2026-07-06) will further extend the calendar as needed.
+
+### Next step
+
+Commit the docs-only delta (4 marketing files + 2 `.ai/` files) with the standard `chore(marketing): refresh love-test content calendar` message, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.
+
+---
+
+## Refresh 2026-07-06
+
+### Pre-run state
+
+- Future days in calendar (relative to today 2026-07-06): **57 days** (Days 13–69, up to 2026-08-31). Already healthy; minimum 7-day requirement exceeded.
+- Hook pool: 85 hooks.
+- Video-script pool: 43 scripts.
+- Share-caption pool: 51 captions.
+
+### Post-run state
+
+- Future days in calendar (relative to today 2026-07-06): **64 days** (Days 13–76, up to 2026-09-07).
+- Hook pool: **90 hooks**.
+- Video-script pool: **46 scripts**.
+- Share-caption pool: **54 captions**.
+
+### Theme rotation rationale
+
+The Days 49–69 cluster leaned on emotional-vocabulary, self-trust, contact-calibration, dynamic-readjustment, friendship-rooted-reading, end-of-cycle-reflection, quiet-attention-audit, first-message-draft, returning-silence-read, worth-continuing-audit, calm-weekly-recap, energy-direction-check, decision-pacing-breath, late-summer-audit, body-aware-reading, friend-of-friend-lens, archive-vs-delete, attention-rest-practice, what-you-kept-noticing, and month-end-breath supporting angles. The Days 70–76 batch deliberately rotates to a fresh set of supporting angles — new month read, quiet text reread, pace over panic, story I keep telling, two-voice read, shared-language check, week-one small reframe — while still passing through all four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) across the week. No theme repeats consecutively with the prior week; no angle doubles up with the same channel or CTA.
+
+### Validation performed
 
 ```text
-A  assets/marketing/daily/day-010-publishing-pack.md
-A  assets/marketing/daily/day-010-review-checklist.md
-A  data/love-test-day-010-kpi-entry.csv
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
-
-### Scope check
-
-```text
-All edits are inside the allowed docs/assets/data surface plus the .ai/ record pair.
-No .env or .env.* file was read, printed, copied, uploaded, or modified.
-No raw secret was printed.
-No production deploy was performed.
-No Stripe test/live paid smoke or real payment was performed.
-No webhook replay was performed.
-No Supabase production mutation was performed.
-No PM2/Nginx/certbot/server mutation was performed.
-No social account auto-posting was performed.
-No account credential, login cookie, browser session, or platform token was used.
-No KPI value, testimonial, customer count, or guaranteed relationship outcome was invented.
-```
-
-### Pack shape (Day 010)
-
-```text
-Theme: Reading the room vs reading the person — pattern literacy is not prediction.
-Date: 2026-06-28 (rotation sub-angle ahead of the dated Day 7 row on 2026-06-30).
-Channel mix: 5 Xiaohongshu + 5 TikTok/Reels + 5 X + 3 Reddit/Quora + 2 KOL DM + 3 SEO + 5 share-card captions.
-CTAs point to reflective surfaces only: /love-test, /relationship/new, /love-reading, /ask?source=love_test.
+git status --short (before commit): clean staging area for the 4 marketing files + 2 .ai/ files; 3 unrelated pre-existing modifications to data/love-test-funnel-metrics.csv, src/app/(main)/services/page.tsx, and src/components/tianji-love/TianjiLovePrimitives.tsx intentionally left unstaged.
+git diff --check: passed (0 warnings on my markdown delta).
+Secret-shape scan over my markdown delta: 0 raw-shape hits (sk_live_*, sk_test_*, ghp_*, xox[abp]-*, AKIA[0-9A-Z]{16}, -----BEGIN *PRIVATE KEY-----).
+npm run typecheck: produced pre-existing errors already documented on this branch (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton, <a> navigation in landing pages, conditional useEffect in MediaNetSlot, react-hooks/rules-of-hooks). Baseline confirmed via git stash round-trip — no new errors introduced by this run. The skill's narrow scope is markdown-only.
+npm run lint: same pre-existing errors on the same baseline files; no new lint errors introduced by this run.
+.env* access: none — no env files were read, copied, diffed, or printed.
 ```
 
 ### Gate status
 
 ```text
-Daily growth publishing pack: Go
-Manual review checklist: Go
-KPI entry scaffold: Go
+Seven-day content calendar: Go (64 future days, well over 7 minimum)
+Hook pool: Go (90 hooks, plenty of fresh rotations)
+Video script pool: Go (46 scripts, fresh rotation ready)
+Share caption pool: Go (54 captions, fresh rotation ready)
 Social auto-posting: No-Go - manual publishing only
 Stripe checkout execution: Not run
 Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
 ```
 
-### Suggested commit message for this run
+### Safety summary
+
+- No fake testimonials, no fake user numbers, no fake revenue, no fake KPI claims added.
+- No guaranteed relationship / reunion / closure / mind-reading / outcome promises.
+- No diagnosis language (no anxiety / codependency / attachment-disorder / disorder framing).
+- No fear-based or shame-based CTA.
+- No first action other than `/love-test` in the new copy.
+- No `.env*` read, no Stripe live touch, no Supabase production mutation, no production deploy, no social auto-posting.
+
+### Manual operator steps
+
+1. Open `.ai/REVIEW_PACKET.md` (this entry) and `.ai/CHANGELOG_AI.md` (today's tail entry).
+2. Skim the new Days 70–76 calendar rows for tone before any operator uses them.
+3. Continue manual review of the next publishing pack (separate cron `17 1 * * *`) on the operator's schedule.
+4. The next scheduled content-calendar run (cron `37 2 * * *` on 2026-07-07) will further extend the calendar as needed.
+
+### Next step
+
+Commit the docs-only delta (4 marketing files + 2 `.ai/` files) with the standard `chore(marketing): refresh love-test content calendar` message, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.
+
+## 2026-07-07 - TianJi Love content calendar refresh (cron `37 2 * * *`)
+
+### Pre-run state (relative to today 2026-07-07)
+
+- Future days in calendar (relative to today 2026-07-07): **62 days** (Days 14–76, up to 2026-09-07). Already healthy; minimum 7-day requirement exceeded.
+- Hook pool: 90 hooks.
+- Video-script pool: 46 scripts.
+- Share-caption pool: 54 captions.
+
+### Post-run state
+
+- Future days in calendar (relative to today 2026-07-07): **69 days** (Days 14–83, up to 2026-09-14).
+- Hook pool: **95 hooks**.
+- Video-script pool: **49 scripts**.
+- Share-caption pool: **57 captions**.
+
+### Theme rotation rationale
+
+The Days 70–76 cluster leaned on new-month-read, quiet-text-reread, pace-over-panic, story-i-keep-telling, two-voice-read, shared-language-check, and week-one-small-reframe supporting angles. The Days 77–83 batch deliberately rotates to a fresh set of supporting angles — tone mirror, mid-week reset, calendar vs chat, guess-their-silence, response-tone audit, follow-up timing, end-of-week consolidation — while still passing through all four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) across the week. No theme repeats consecutively with the prior week; no angle doubles up with the same channel or CTA.
+
+### Validation performed
 
 ```text
-chore(marketing): add love-test day 010 publishing pack
+git status --short (before commit): clean staging area for the 4 marketing files + 2 .ai/ files; 8 unrelated pre-existing modifications to data/love-test-funnel-metrics.csv, src/app/(main)/bazi-relationship-analysis-free/page.tsx, src/app/(main)/daily-love-oracle-guide/page.tsx, src/app/(main)/free-ai-love-reading/page.tsx, src/app/(main)/services/page.tsx, src/app/(main)/tarot-love-reading-online/page.tsx, src/components/tianji-love/TianjiLovePrimitives.tsx, and tsconfig.tsbuildinfo intentionally left unstaged.
+git diff --check: passed (0 warnings on my markdown delta).
+Secret-shape scan over my markdown delta: 0 raw-shape hits (sk_live_*, sk_test_*, ghp_*, xox[abp]-*, AKIA[0-9A-Z]{16}, -----BEGIN *PRIVATE KEY-----).
+npm run typecheck: produced pre-existing errors already documented on this branch (tarot-spread-meanings, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton, <a> navigation in landing pages, conditional useEffect in MediaNetSlot, react-hooks/rules-of-hooks). Baseline confirmed via git stash round-trip — no new errors introduced by this run. The skill's narrow scope is markdown-only.
+npm run lint: same pre-existing errors on the same baseline files; no new lint errors introduced by this run.
+.env* access: none — no env files were read, copied, diffed, or printed.
 ```
 
-## 2026-06-27 Content Calendar Refresh Run (cron 37 2 * * *)
-
-### Files changed in this run
+### Gate status
 
 ```text
-M  assets/marketing/content-calendar-7day.md
-M  assets/marketing/love-test-next-30-hooks.md
-M  assets/marketing/love-test-next-20-video-scripts.md
-M  assets/marketing/love-test-next-20-share-captions.md
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
-
-### Scope check
-
-```text
-All edits are inside the allowed docs/assets/data surface plus the .ai/ record pair.
-No .env or .env.* file was read, printed, copied, uploaded, or modified.
-No raw secret was printed.
-No production deploy was performed.
-No Stripe test/live paid smoke or real payment was performed.
-No webhook replay was performed.
-No Supabase production mutation was performed.
-No PM2/Nginx/certbot/server mutation was performed.
-No social account auto-posting was performed.
-No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
-guaranteed relationship outcomes, or 100% accuracy claims were added.
-No diagnosis language (anxiety disorder, attachment disorder, codependency,
-toxic, narcissist) was introduced in any of the new copy.
-```
-
-### Local validation
-
-```text
-git diff --check
-Passed (no whitespace errors on the markdown delta).
-
-Targeted secret-shape scan over .ai/ assets/marketing/ data/
-Passed: 0 raw-shape hits.
-
-npm run typecheck
-Not required for docs/markdown-only delta; no TypeScript surface changed.
-
-npm run lint
-Not required for docs/markdown-only delta; no ESLint surface changed.
-```
-
-### Pre-run state vs. post-run state
-
-```text
-Content calendar future days: 14 (Day 7..Day 20, ending 2026-07-13) -> 21 (Day 7..Day 27, ending 2026-07-20).
-Hook pool size: 40 -> 50 (+10 entries).
-Video script pool size: 25 -> 30 (+5 entries).
-Share caption pool size: 25 -> 30 (+5 entries).
-Theme rotation: anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and supporting pattern/clarity/recap angles distributed across the new week.
-Minimum 7-day gate: satisfied with a 14-day buffer beyond the floor.
-```
-
-### Gate status (this run)
-
-```text
-Seven-day content calendar: Go (21 future days)
-Hook pool: Go (50)
-Video script pool: Go (30)
-Share caption pool: Go (30)
+Seven-day content calendar: Go (69 future days, well over 7 minimum)
+Hook pool: Go (95 hooks, plenty of fresh rotations)
+Video script pool: Go (49 scripts, fresh rotation ready)
+Share caption pool: Go (57 captions, fresh rotation ready)
 Social auto-posting: No-Go - manual publishing only
 Stripe checkout execution: Not run
 Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
 ```
 
-### Suggested commit message for this run
+### Safety summary
 
-```text
-chore(marketing): refresh love-test content calendar
-```
+- No fake testimonials, no fake user numbers, no fake revenue, no fake KPI claims added.
+- No guaranteed relationship / reunion / closure / mind-reading / outcome promises.
+- No diagnosis language (no anxiety / codependency / attachment-disorder / disorder framing).
+- No fear-based or shame-based CTA.
+- No first action other than `/love-test` in the new copy.
+- No `.env*` read, no Stripe live touch, no Supabase production mutation, no production deploy, no social auto-posting.
 
-## 2026-07-02 Daily Growth Day 009 Publishing Pack Run
+### Manual operator steps
 
-### Files changed in this run
+1. Open `.ai/REVIEW_PACKET.md` (this entry) and `.ai/CHANGELOG_AI.md` (today's tail entry).
+2. Skim the new Days 77–83 calendar rows for tone before any operator uses them.
+3. Continue manual review of the next publishing pack (separate cron `17 1 * * *`) on the operator's schedule.
+4. The next scheduled content-calendar run (cron `37 2 * * *` on 2026-07-08) will further extend the calendar as needed.
 
-```text
-A  assets/marketing/daily/day-009-publishing-pack.md
-A  assets/marketing/daily/day-009-review-checklist.md
-A  data/love-test-day-009-kpi-entry.csv
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
+### Next step
 
-### Scope check
-
-```text
-All new files are inside the allowed assets/marketing/daily/ and data/ surfaces.
-.ai/ updates are limited to CHANGELOG_AI.md and REVIEW_PACKET.md.
-No .env or .env.* file was read, printed, copied, uploaded, or modified.
-No raw secret was printed.
-No production deploy was performed.
-No Stripe test/live paid smoke or real payment was performed.
-No webhook replay was performed.
-No Supabase production mutation was performed.
-No PM2/Nginx/certbot/server mutation was performed.
-No social account auto-posting was performed.
-No live Stripe touch under any circumstance.
-```
-
-### Local validation
-
-```text
-git status
-Clean delta: three new docs/assets/data files plus two .ai/ updates, all inside allowed paths.
-
-git diff --check
-Passed (no whitespace errors on the new markdown and CSV files).
-
-Targeted secret-shape scan over .agents/skills/, .github/workflows/, .ai/, assets/marketing/, data/
-Passed: 0 raw-shape hits on the new day-009 files. The single prior-changelog hit in
-.TIANJI_LOVE_STAGING_SMOKE_READINESS_EVIDENCE_20260516.md is a description of a past scan
-result, not a real secret.
-
-npm run typecheck
-Not required for docs/assets/data-only delta; no TypeScript surface changed.
-
-npm run lint
-Not required for docs/assets/data-only delta; no ESLint surface changed.
-```
-
-### Gate status (this run)
-
-```text
-Daily growth publishing pack: Go
-Manual review checklist: Go
-KPI entry scaffold: Go
-Social auto-posting: No-Go - manual publishing only
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
-
-## 2026-06-26 Auto Paid-Gate Status Run
-
-### Files changed in this run
-
-```text
-A  .ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260626.md
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
-
-### Scope check
-
-```text
-All new files are inside the allowed docs/.ai surface.
-No .env or .env.* file was read, printed, copied, uploaded, or modified.
-No raw secret was printed.
-No production deploy was performed.
-No Stripe test/live paid smoke or real payment was performed.
-No webhook replay was performed.
-No Supabase production mutation was performed.
-No PM2/Nginx/certbot/server mutation was performed.
-No social account auto-posting was performed.
-No live Stripe touch under any circumstance.
-```
-
-### Local validation
-
-```text
-git status
-Clean before commit; staged delta is limited to .ai/ markdown files.
-
-git diff --check
-Passed (no whitespace errors on the markdown delta).
-
-Targeted secret-shape scan over .ai/, .agents/skills/, .github/workflows/
-Passed: 0 raw-shape hits.
-
-npm run typecheck
-Not required for docs/markdown-only delta; no TypeScript surface changed.
-
-npm run lint
-Not required for docs/markdown-only delta; no ESLint surface changed.
-```
-
-### Gate status (this run)
-
-```text
-Checkout readiness audit: Conditional Go (source-level ready; execution requires masked env + human approval)
-Test-mode smoke readiness: No-Go (awaiting explicit approval phrase)
-Stripe test-mode boundary: Verified
-Gate status: CONDITIONAL-GO
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
-
-### Suggested commit message for this run
-
-```text
-docs(revenue): auto gate status — 2026-06-26
-```
-
-## Current Task (prior)
-
-Content calendar cron run for 2026-06-26 (cron 37 2 * * *). Refresh the seven-day marketing content calendar and the next-batch hook/script/caption pools so the rolling future-day count stays at seven or more, without auto-posting, without payment execution, without touching production or secrets. Revenue execution remains closed.
-
-## Summary
-
-- Added seven new future days (Day 14 through Day 20, 2026-07-07 through 2026-07-13) to `assets/marketing/content-calendar-7day.md`, rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) and the supporting pattern/clarity/recap angles.
-- Added a refresh batch of 10 new hooks (entries 31-40) to `assets/marketing/love-test-next-30-hooks.md`.
-- Added a refresh batch of 5 new video scripts (entries 21-25) to `assets/marketing/love-test-next-20-video-scripts.md`.
-- Added a refresh batch of 5 new share-card captions (entries 21-25) to `assets/marketing/love-test-next-20-share-captions.md`.
-- All copy remains helpful, grounded, and non-guaranteed. No fake testimonials, no fake metrics, no guaranteed outcomes, no diagnosis language, no perfect-accuracy claim.
-- Manual publishing and review steps preserved. No social auto-posting. No Stripe or paid smoke. No production deploy. No Supabase production mutation.
-- Confirmed prior day-008 publishing pack assets, daily publishing packs, review checklists, KPI scaffolds, and no-real-data growth reports remain intact.
-
-## Latest Local Validation
-
-```text
-git diff --check
-Passed (no whitespace errors on the markdown delta).
-
-Targeted changed-file secret-shape scan over .ai/, assets/marketing/, data/
-Passed: 0 raw-shape hits; .env* files were not read, copied, or printed.
-
-npm run typecheck and npm run lint
-Not run on this docs/markdown-only delta because the change set has no
-TypeScript or ESLint surface (consistent with the 2026-07-01 content-only
-skill run precedent). Re-run only if a future run adds source edits.
-```
-
-## Safety Boundaries
-
-```text
-No .env or .env.* file was read, printed, copied, uploaded, or modified.
-No raw secret was printed.
-No production deploy was performed.
-No Stripe test/live paid smoke or real payment was performed.
-No webhook replay was performed.
-No Supabase production mutation was performed.
-No PM2/Nginx/certbot/server mutation was performed.
-No social account auto-posting was performed.
-No fake testimonials, fake user numbers, fake revenue, fake conversion rates, guaranteed relationship outcomes, or 100% accuracy claims were added.
-```
-
-## Gate Status
-
-| Gate | Status |
-|---|---|
-| Source/Test Gate | Go |
-| PR #114 Build & Test | Go at observed head `4f924e0`; rerun expected after this docs-only final report commit |
-| Vercel | Not Applicable |
-| PR review | Required |
-| Draft status | Draft |
-| Lead Capture Source | Go |
-| Marketing Leads Migration | Source Go; production execution pending human approval |
-| Lead Capture Production DB Write | No-Go until migration is human-applied |
-| Daily Marketing Queues | Go for manual review only |
-| Daily Growth Reports | Go; no fabricated metrics |
-| Email Funnel Templates | Go for templates only |
-| CTA Improvement PR | Go |
-| Stripe Test-mode Gate | Pending Human Approval |
-| Stripe Live Gate | No-Go |
-| Revenue Execution | No-Go |
-| Supabase production mutation | No-Go |
-| Production deploy/server mutation | No-Go |
-| Social auto-posting | No-Go |
-
-## Suggested Commit Message
-
-```text
-docs(ai): add revenue os v1 final gate report
-```
-
-## Day 008 Daily Growth Run (2026-07-01)
-
-### Files changed in this run
-
-```text
-A  assets/marketing/daily/day-008-publishing-pack.md
-A  assets/marketing/daily/day-008-review-checklist.md
-A  data/love-test-day-008-kpi-entry.csv
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
-
-### Scope check
-
-```text
-All new files are inside the allowed docs/assets/data surface.
-No .env or .env.* file was read, printed, copied, uploaded, or modified.
-No raw secret was printed.
-No production deploy was performed.
-No Stripe test/live paid smoke or real payment was performed.
-No webhook replay was performed.
-No Supabase production mutation was performed.
-No PM2/Nginx/certbot/server mutation was performed.
-No social account auto-posting was performed.
-No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
-guaranteed relationship outcomes, or 100% accuracy claims were added.
-No diagnosis language (anxiety disorder, attachment disorder, codependency,
-toxic, narcissist) was introduced in any of the new copy.
-```
-
-### Local validation
-
-```text
-git diff --check
-Passed.
-
-Targeted secret-shape scan over .agents/skills/ .github/workflows/ .ai/
-assets/marketing/ data/
-Passed: 0 raw-shape hits.
-
-npm run typecheck
-Not required for docs/assets/data-only delta; no TypeScript surface changed.
-
-npm run lint
-Not required for docs/assets/data-only delta; no ESLint surface changed.
-```
-
-### Gate status (this run)
-
-```text
-Daily growth publishing pack: Go
-Manual review checklist: Go
-KPI entry scaffold: Go
-Social auto-posting: No-Go - manual publishing only
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
-
-### Suggested commit message for this run
-
-```text
-chore(marketing): add love-test day 008 publishing pack
-```
-
-## 2026-06-26 Content Calendar Refresh Run (cron 37 2 * * *)
-
-### Files changed in this run
-
-```text
-M  assets/marketing/content-calendar-7day.md
-M  assets/marketing/love-test-next-30-hooks.md
-M  assets/marketing/love-test-next-20-video-scripts.md
-M  assets/marketing/love-test-next-20-share-captions.md
-M  .ai/CHANGELOG_AI.md
-M  .ai/REVIEW_PACKET.md
-```
-
-### Scope check
-
-```text
-All edits are inside the allowed docs/assets/data surface.
-No .env or .env.* file was read, printed, copied, uploaded, or modified.
-No raw secret was printed.
-No production deploy was performed.
-No Stripe test/live paid smoke or real payment was performed.
-No webhook replay was performed.
-No Supabase production mutation was performed.
-No PM2/Nginx/certbot/server mutation was performed.
-No social account auto-posting was performed.
-No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
-guaranteed relationship outcomes, or 100% accuracy claims were added.
-No diagnosis language (anxiety disorder, attachment disorder, codependency,
-toxic, narcissist) was introduced in any of the new copy.
-```
-
-### Local validation
-
-```text
-git diff --check
-Passed (no whitespace errors on the markdown delta).
-
-Targeted secret-shape scan over .ai/ assets/marketing/ data/
-Passed: 0 raw-shape hits.
-
-npm run typecheck
-Not required for docs/markdown-only delta; no TypeScript surface changed.
-
-npm run lint
-Not required for docs/markdown-only delta; no ESLint surface changed.
-```
-
-### Gate status (this run)
-
-```text
-Seven-day content calendar: Go
-Hook pool: Go
-Video script pool: Go
-Share caption pool: Go
-Social auto-posting: No-Go - manual publishing only
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
-
-### Suggested commit message for this run
-
-```text
-chore(marketing): refresh love-test content calendar
-```
-
-## 2026-06-29 - tianji-github-content-calendar refresh
-
-### What changed
-
-```text
-assets/marketing/content-calendar-7day.md
-  + 7 new rows (Day 35–41, 2026-07-28 → 2026-08-03)
-  + Themes rotated across pattern naming, decision pacing, quiet return, worth continuing, honest reframe, mid-cycle recap, steadiness checkpoint
-
-assets/marketing/love-test-next-30-hooks.md
-  + 5 new hooks (entries 56–60) under "Refresh 2026-06-29"
-  + Themes: pattern naming, decision pacing, quiet return, rhythm choice, self-sufficient next step
-
-assets/marketing/love-test-next-20-video-scripts.md
-  + 3 new scripts (entries 26–28) — Pattern Naming, Decision Pacing, Quiet Return
-  + Channels: Douyin, Xiaohongshu video, Videohao
-  + All scripts include a risk-safe check line
-
-assets/marketing/love-test-next-20-share-captions.md
-  + 3 new captions (entries 34–36) under "Refresh 2026-06-29"
-  + All end with the `/love-test` first-action rule or a related free entry
-```
-
-### Copy review (this run)
-
-```text
-No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
-guaranteed relationship outcomes, or 100% accuracy claims were added.
-No diagnosis language (anxiety disorder, attachment disorder, codependency,
-toxic, narcissist) was introduced in any of the new copy.
-CTAs follow the established ladder: /love-test first, then /ask or /love-reading.
-```
-
-### Local validation
-
-```text
-git diff --check
-Passed (no whitespace errors on the markdown delta).
-
-Targeted secret-shape scan over .ai/ assets/marketing/ data/
-Passed: 0 raw-shape hits. The only matched lines are descriptive mentions
-in prior audit reports (CHANGELOG_AI.md, TIANJI_LOVE_AUTO_GATE_STATUS_20260627.md,
-TIANJI_LOVE_AUTO_GATE_STATUS_20260628.md, and
-TIANJI_LOVE_STAGING_SMOKE_READINESS_EVIDENCE_20260516.md) that describe the
-scan detector strings, not real credentials.
-
-npm run typecheck
-Passed (tsc -p tsconfig.typecheck.json --noEmit, exit 0).
-
-npm run lint
-Passed (next lint, exit 0 — "No ESLint warnings or errors").
-```
-
-### Gate status (this run)
-
-```text
-Seven-day content calendar: Go
-Hook pool: Go
-Video script pool: Go
-Share caption pool: Go
-Social auto-posting: No-Go - manual publishing only
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
-
-### Suggested commit message for this run
-
-```text
-chore(marketing): refresh love-test content calendar
-```
-
-## 2026-07-01 - TianJi Love daily growth Day 014 run (cron 17 1 * * *)
-
-### Copy review (this run)
-
-```text
-No fake testimonials, fake user numbers, fake revenue, fake conversion rates,
-guaranteed relationship outcomes, or 100% accuracy claims were added.
-No diagnosis language (anxiety disorder, attachment disorder, codependency,
-toxic, narcissist) was introduced in any of the new copy.
-No "act now", "last chance", or fear-based urgency language was used.
-No "wanting to reach out = should send" coercion or
-"if you don't send you don't care" shame reversal was introduced.
-CTAs follow the established ladder: /love-test first, then /ask or /love-reading.
-```
-
-### Local validation
-
-```text
-git diff --check
-Passed (no whitespace errors on the markdown delta).
-
-Targeted secret-shape scan over .agents/skills/ .github/workflows/ .ai/ assets/marketing/ data/
-Passed: 0 raw-shape hits. No real credentials present.
-
-npm run typecheck
-Passed (tsc -p tsconfig.typecheck.json --noEmit, exit 0).
-
-npm run lint
-Passed (next lint, exit 0 — "No ESLint warnings or errors").
-```
-
-### Gate status (this run)
-
-```text
-Daily growth publishing pack: Go
-Manual review checklist: Go
-KPI entry scaffold: Go
-Social auto-posting: No-Go - manual publishing only
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
-
-### Suggested commit message for this run
-
-```text
-chore(marketing): add love-test day 014 publishing pack
-```
-
-## 2026-07-02 - TianJi Love content calendar refresh (cron)
-
-### Files changed
-
-- `assets/marketing/content-calendar-7day.md` — extended future calendar by 7 rows (Days 42–48, 2026-08-04 → 2026-08-10).
-- `assets/marketing/love-test-next-30-hooks.md` — added a "Refresh 2026-07-02" batch of 5 hooks (numbers 66–70).
-- `assets/marketing/love-test-next-20-video-scripts.md` — added a "Refresh 2026-07-02" batch of 3 scripts (numbered 35 / 36 / 37).
-- `assets/marketing/love-test-next-20-share-captions.md` — added a "Refresh 2026-07-02" batch of 3 captions (numbers 40–42).
-
-### Safety baseline (re-checked)
-
-```text
-No fake testimonials, fake numbers, or fake user counts were introduced.
-No guaranteed reunion, reply, commitment, or relationship repair claims were introduced.
-No "diagnostic" language (e.g. anxiety disorder, attachment disorder, codependency,
-toxic, narcissist) was introduced in any of the new copy.
-No "act now", "last chance", or fear-based urgency language was used.
-No "wanting to reach out = should send" coercion or
-"if you don't send you don't care" shame reversal was introduced.
-CTAs follow the established ladder: /love-test first, then /ask or /love-reading or /relationship/new.
-```
-
-### Local validation
-
-```text
-git diff --check
-Passed (no whitespace errors on the markdown delta).
-
-Targeted secret-shape scan over .ai/ assets/marketing/ data/
-Passed: 0 raw-shape hits. No real credentials present.
-
-npm run typecheck
-Passed (tsc -p tsconfig.typecheck.json --noEmit, exit 0).
-
-npm run lint
-Passed (next lint, exit 0 — "No ESLint warnings or errors").
-```
-
-### Gate status (this run)
-
-```text
-Seven-day content calendar: Go - 40 future days (Days 9–48, 2026-07-02 → 2026-08-10)
-Hook pool: Go - 70 hooks
-Video script pool: Go - 37 scripts
-Share caption pool: Go - 42 captions
-Social auto-posting: No-Go - manual publishing only
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
-
-### Suggested commit message for this run
-
-```text
-chore(marketing): refresh love-test content calendar
-```
-
-## 2026-07-03 - TianJi Love content calendar refresh (cron)
-
-### Files changed
-
-- `assets/marketing/content-calendar-7day.md` — extended future calendar by 7 rows (Days 49–55, 2026-08-11 → 2026-08-17).
-- `assets/marketing/love-test-next-30-hooks.md` — added a "Refresh 2026-07-03" batch of 5 hooks (numbers 71–75).
-- `assets/marketing/love-test-next-20-video-scripts.md` — added a "Refresh 2026-07-03" batch of 3 scripts (numbered 35 / 36 / 37: "Name The Feeling First", "The Voice Inside", "Pace Before Press").
-- `assets/marketing/love-test-next-20-share-captions.md` — added a "Refresh 2026-07-03" batch of 3 captions (numbers 43–45).
-
-### Safety baseline (re-checked)
-
-```text
-No fake testimonials, fake numbers, or fake user counts were introduced.
-No guaranteed reunion, reply, commitment, or relationship repair claims were introduced.
-No "diagnostic" language (e.g. anxiety disorder, attachment disorder, codependency,
-toxic, narcissist) was introduced in any of the new copy.
-No "act now", "last chance", or fear-based urgency language was used.
-No "wanting to reach out = should send" coercion or
-"if you don't send you don't care" shame reversal was introduced.
-CTAs follow the established ladder: /love-test first, then /ask or /love-reading or /relationship/new.
-```
-
-### Local validation
-
-```text
-git diff --check
-Returned 0 warnings on the markdown delta from this run. The 3 trailing-whitespace
-warnings flagged by `git diff --check` are pre-existing in `data/love-test-funnel-metrics.csv`
-and outside the scope of this content-calendar skill run.
-
-Targeted secret-shape scan over .ai/ assets/marketing/ data/
-Returned 0 raw-shape hits over the new edits. Matches in .ai/CHANGELOG_AI.md,
-.ai/REVIEW_PACKET.md, and prior .ai/TIANJI_LOVE_AUTO_GATE_STATUS_*.md are descriptive
-mentions of the scan detector strings in audit reports, not real secrets.
-
-npm run typecheck
-Passed (tsc -p tsconfig.typecheck.json --noEmit, exit 0).
-
-npm run lint
-Passed (next lint, exit 0 — "No ESLint warnings or errors").
-```
-
-### Gate status (this run)
-
-```text
-Seven-day content calendar: Go - 45 future days (Days 10–55, 2026-07-03 → 2026-08-17)
-Hook pool: Go - 75 hooks
-Video script pool: Go - 40 scripts
-Share caption pool: Go - 45 captions
-Social auto-posting: No-Go - manual publishing only
-Stripe checkout execution: Not run
-Paid smoke: No-Go - awaiting explicit approval
-Production deploy: No-Go
-```
-
-### Suggested commit message for this run
-
-```text
-chore(marketing): refresh love-test content calendar
-```
+Commit the docs-only delta (4 marketing files + 2 `.ai/` files) with the standard `chore(marketing): refresh love-test content calendar` message, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.

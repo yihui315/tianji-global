@@ -27,6 +27,7 @@ import {
 } from '@/components/tianji-love';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
+import { AdSenseSlot } from '@/components/ads/AdSenseSlot';
 
 const INTERNAL_LINKS = [
   { href: '/guide', labelEn: 'Guides', labelZh: '指南' },
@@ -108,8 +109,9 @@ export default function FreeAILoveReadingPage() {
   const [language, setLanguage] = useSyncedLanguage('en');
 
   const t = (en: string, zh: string) => (language === 'zh' ? zh : en);
-  const navItems = getTianjiLovePrimaryNav(language);
-  const footerLinks = getTianjiLoveFooterNav(language);
+  const navItems = getTianjiLovePrimaryNav(lang);
+  const lang = language === 'zh' ? 'zh' : 'en';
+  const footerLinks = getTianjiLoveFooterNav(lang);
   const href = (path: string) => withLanguageParam(path, language);
 
   const toggleLanguage = () => {
@@ -277,7 +279,7 @@ export default function FreeAILoveReadingPage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div id="free-ai-reading-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
+      <AdSenseSlot slot="FREE_READING_BOTTOM_SLOT" format="display" page="free-ai-love-reading" />
 
       {/* Free vs Paid */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 py-8 sm:px-8">
@@ -392,7 +394,7 @@ export default function FreeAILoveReadingPage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div id="free-ai-reading-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
+      <AdSenseSlot slot="FREE_READING_SLOT" format="in-article" page="free-ai-love-reading" />
 
       {/* FAQ */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 pb-8 sm:px-8">

@@ -83,6 +83,38 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 44. The voice inside was clearer than the signal outside. The Love Test helped me listen first: tianji.love/relationship/new
 45. How fast I send is also information. The Love Test gave me a steadier pace before I reached out: tianji.love/ask
 
+## Refresh 2026-07-04 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-04 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the attention-audit, draft-before-send, and returning-silence supporting angles. None are certainty claims.
+
+46. I noticed where my attention kept returning before I asked what they were feeling. The free Love Test made it easier to look: tianji.love/love-test
+47. I saved the first message as a draft instead of sending it at midnight. The morning read it back clearer than the night wrote it: tianji.love/love-test
+48. A silence that returns is still data, not always an invitation. The Love Test framed it as a rhythm, not a verdict: tianji.love/love-reading
+
+## Refresh 2026-07-05 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-05 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the late-summer-audit, body-aware-reading, and friend-of-friend-lens supporting angles. None are certainty claims.
+
+49. I wrote down the questions I had stopped asking. The free Love Test helped me notice what had shifted on its own: tianji.love/love-test
+50. I noticed my body settling after I put the phone face down. The Love Test gave me a calmer way to read that signal: tianji.love/ask
+51. A friend described my pattern more clearly than I could. I saved the Love Test result so I could hear her voice on a quieter day: tianji.love/relationship/new
+
+## Refresh 2026-07-06 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-06 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the new-month-read, quiet-text-reread, and story-i-keep-telling supporting angles, deliberately avoiding the late-summer-audit / body-aware-reading / friend-of-friend-lens / archive-vs-delete / attention-rest-practice / what-you-kept-noticing / month-end-breath cluster used in Days 63–69. None are certainty claims.
+
+52. I let the new month start with one cleaner sentence, not ten fresh signals. The free Love Test helped me write it: tianji.love/love-test
+53. I noticed rereading the same text added a loop, not clarity. The Love Test gave me a calmer place to look: tianji.love/love-reading
+54. I named the story I had been retelling, then put it next to the result. The Love Test let it sit there without making it a verdict: tianji.love/love-test
+
+## Refresh 2026-07-07 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-07 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the tone-mirror, calendar-vs-chat, and end-of-week-consolidation supporting angles, deliberately avoiding the new-month-read / quiet-text-reread / story-i-keep-telling cluster used in Days 70–76. None are certainty claims.
+
+55. I noticed the tone I kept reading before I decided what it meant. The free Love Test helped me check the temperature first: tianji.love/love-test
+56. My week held steadier than the chat. The Love Test gave me a place to weigh the rhythm I actually live by: tianji.love/relationship/new
+57. I folded the week into one sentence on Sunday instead of seven small checks. The Love Test was the quieter mirror I needed: tianji.love/love-reading
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.
