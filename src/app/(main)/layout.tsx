@@ -5,6 +5,8 @@ import { JsonLd, SITE } from '@/components/seo/JsonLd';
 /**
  * Tianji Love metadata for the primary customer path.
  */
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Tianji Love | AI Relationship Reading',
   description:
