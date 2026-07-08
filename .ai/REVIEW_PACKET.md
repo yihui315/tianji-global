@@ -617,3 +617,76 @@ git log origin/feature/monetization-ads-affiliate -1 --oneline
 - No Stripe live calls. No paid smoke. No production deploy.
 - No changes to the unrelated pre-existing modifications (landing pages, primitives, funnel CSV, tsbuildinfo).
 - Next operator review window for the Day-022 publishing pack remains on the operator's manual schedule.
+
+### 2026-07-08 - TianJi Love safe publisher bridge export (cron 0 3 * * 3)
+
+- Task ID: `20260708-tianji-github-safe-publisher-bridge`.
+- Skill: `tianji-github-safe-publisher-bridge`.
+- Branch: `feature/monetization-ads-affiliate`.
+
+### What this run did
+
+Built a credential-free, manual-review-only handoff between the latest active TianJi Love publishing pack (Day 021, 2026-07-14, theme "Initiation in ambiguity") and a future approved publishing tool (n8n / Postiz / Mixpost). The export covers 23 items across 6 channels and the bridge doc was updated from the original 2026-05-24 Day-001 reference to the current Day-021 state. No posting, no credentials, no automation wired.
+
+### Channel mix and CTA
+
+- 5 Xiaohongshu posts → `/love-test`
+- 5 Reels → `/love-test`
+- 5 X posts → `/love-test`
+- 3 Reddit/Quora answer drafts → `/love-test`
+- 2 KOL pieces (1 DM template + 1 post draft) → `/love-test`
+- 3 SEO article outlines → `/love-test`
+
+### Files in this change set
+
+```text
+A  assets/marketing/publishing-queue.json
+A  assets/marketing/publishing-queue.csv
+M  .ai/TIANJI_LOVE_SAFE_PUBLISHER_BRIDGE.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+Unrelated pre-existing modifications in `data/love-test-funnel-metrics.csv`, four `src/app/(main)/*` landing pages, `src/components/tianji-love/TianjiLovePrimitives.tsx`, `tsconfig.tsbuildinfo`, and the Day-021 publishing-pack files are intentionally NOT staged.
+
+### Safety baseline
+
+- No fake testimonials, fake metrics, fake user counts, or revenue claims.
+- No guaranteed outcomes, no certainty claims, no mind-reading framing, no reunion promise, no payment claim.
+- No diagnosis language (anxiety / codependency / attachment-disorder framing).
+- No "act now" urgency language; no fear-based or shame-based CTA.
+- No credentials of any kind stored in the queue files (`auto_posting_enabled=false`, `credentials_present=false`, no `token` / `api_key` / `password` / `cookie` / `webhook_secret` / `postiz_*` / `supabase_*` / `stripe_*` / `resend_*` / `sk_*` / `ghp_*` fields).
+- Every item flagged `pending_manual_review` and `not_published`.
+
+### Commands run
+
+```text
+git fetch origin --quiet
+git status --short
+git diff --check (over this run's delta)
+npm run typecheck (baseline-confirmed pre-existing errors only; no new errors from this run's delta)
+npm run lint (baseline-confirmed pre-existing errors only; no new errors from this run's delta)
+Targeted secret-shape scan over .ai/, assets/marketing/, data/
+JSON parse + per-item safety baseline check on assets/marketing/publishing-queue.json
+CSV parse + per-row credential-name scan on assets/marketing/publishing-queue.csv
+git add -A assets/marketing/publishing-queue.json assets/marketing/publishing-queue.csv .ai/TIANJI_LOVE_SAFE_PUBLISHER_BRIDGE.md .ai/CHANGELOG_AI.md .ai/REVIEW_PACKET.md
+git commit -m "chore(marketing): add safe publisher bridge queue"
+git push origin feature/monetization-ads-affiliate (using token-embedded remote URL)
+git log origin/feature/monetization-ads-affiliate -1 --oneline
+```
+
+### Expected outputs
+
+- 23-row queue export in `assets/marketing/publishing-queue.json` and `assets/marketing/publishing-queue.csv`.
+- 90-day calendar window documented in the bridge JSON metadata (Days 21–90, 2026-07-14 → 2026-09-21).
+- 10 boolean safety checks encoded per item.
+- Bridge doc updated to reflect Day 021 and the credential-free contract.
+- Single commit on `feature/monetization-ads-affiliate`, no other branches modified.
+
+### What remains blocked
+
+- No social auto-posting. The operator must run manual publishing.
+- No Stripe live calls. No paid smoke. No production deploy. No Supabase production mutation. No Resend. No AI provider live call. No `DESTINY_SCAN_SECRET` use.
+- No n8n / Postiz / Mixpost adapter wired in this export. Any such adapter is a separate gate with explicit approval.
+- No changes to the unrelated pre-existing modifications (landing pages, primitives, funnel CSV, tsbuildinfo, Day-021 publishing pack).
+- Next manual publishing loop is for the Day 022 pack on the operator's schedule.
