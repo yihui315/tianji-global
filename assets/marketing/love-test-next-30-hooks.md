@@ -176,3 +176,13 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 98. 你不再反复翻看的聊天记录，也是一种数据，让存档停在那里，也是一种节制的稳。
 99. 在脑子里反复打出来的那条消息，也有它自己的天气，先让它落下来，再决定要不要发。
 100. 一种节奏可以重复，而人不一定会真的回来；先看清楚摆在你面前的，是哪一种。
+
+## Refresh 2026-07-09 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-09 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the memory-of-the-relationship, first-message-rewrite, reciprocity-audit, mutual-curiosity, shared-history-read, restraint-as-information, and mood-window-observation supporting angles, deliberately avoiding the tone-mirror / mid-week-reset / calendar-vs-chat / guess-their-silence / response-tone-audit / follow-up-timing / end-of-week-consolidation / reply-delay-read / self-talk-swap / quiet-history-audit / what-you-rehearsed / pattern-vs-person / mid-cycle-recalibration / quiet-answer-practice cluster used in Days 77–90. None are certainty claims.
+
+101. 你记下来的版本和对方还在线的版本，常常是两本不同的书。先看清是哪一本，再继续翻。
+102. 凌晨打磨出来的第一条消息，常常不如第二天早上再改一遍的那一版。把重新写一遍当成一种工具。
+103. 谁先伸手也是数据，看到这个模式不等于要立刻下结论。先观察，再决定要不要动。
+104. 对方是否还在向你提问，是一个信号，但通常不是唯一的那一个。把它放进整体里再看。
+105. 你们一起走过的是真的；你们是否还想走同样的下一步，是另一个问题。两个可以同时是真的。

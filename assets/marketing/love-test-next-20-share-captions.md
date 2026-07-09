@@ -126,3 +126,11 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 58. I noticed the reply delay without making it a verdict on care. The free Love Test gave me a calmer way to weigh the rhythm: tianji.love/love-test
 59. I swapped one anxious sentence for one steady one, then sat with both. The Love Test let me draft the steadier version first: tianji.love/ask
 60. I let the archive hold without rereading it. The Love Test gave me a place to name what I had quietly stopped checking: tianji.love/love-reading
+
+## Refresh 2026-07-09 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-09 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the memory-of-the-relationship, reciprocity-audit, and mood-window-observation supporting angles, deliberately avoiding the tone-mirror / calendar-vs-chat / end-of-week-consolidation / reply-delay-read / self-talk-swap / quiet-history-audit / quiet-answer-practice cluster used in Days 77–90. None are certainty claims.
+
+61. I noticed the version I keep replaying and the version that is still in motion were two different texts. The free Love Test helped me see the gap: tianji.love/love-reading
+62. I let one message sit in drafts and reread it in the morning. The rewrite was steadier than the original: tianji.love/ask
+63. I noticed my reading window shifts through the day. The Love Test gave me a calmer place to pick the time of the next read: tianji.love/love-test

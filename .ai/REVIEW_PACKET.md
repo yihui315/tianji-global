@@ -1,6 +1,85 @@
 # TianJi Love Review Packet
 ## Current Task
 
+### 2026-07-09 - TianJi Love content calendar refresh (cron 37 2 * * *)
+
+- Task ID: `20260709-tianji-github-content-calendar`.
+- Skill: `tianji-github-content-calendar`.
+- Branch: `feature/monetization-ads-affiliate`.
+
+### Theme
+
+Daily marketing content-calendar maintenance: extend the seven-day future publishing window to stay at least seven days ahead, rotate the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) with fresh supporting angles, and refresh the hook / video-script / share-caption pools. This run did not add a publishing pack (Day 022 was added earlier today by the `tianji-github-daily-growth` skill). No social auto-posting, no credentials, no Stripe / paid smoke / production deploy.
+
+### Change set
+
+```text
+M  assets/marketing/content-calendar-7day.md
+M  assets/marketing/love-test-next-30-hooks.md
+M  assets/marketing/love-test-next-20-video-scripts.md
+M  assets/marketing/love-test-next-20-share-captions.md
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+Unrelated pre-existing modification in `src/lib/love-reading/revenue-contract.ts` is intentionally NOT staged.
+
+### What was added
+
+```text
+Calendar:    +7 rows (Days 91–97, 2026-09-22 → 2026-09-28) — themes: memory of the relationship, first-message rewrite, reciprocity audit, mutual curiosity, shared-history read, restraint as information, mood-window observation.
+Hooks:       +5 hooks (#101–105) — all zh-CN, helpful/grounded/non-guaranteed.
+Video pool:  +3 scripts (## 53 Memory Of The Relationship, ## 54 Reciprocity Audit, ## 55 Mood-Window Observation) — channels: Xiaohongshu, Douyin, Videohao.
+Captions:    +3 captions (#61–63) — soft, mysterious, non-deceptive, no fake testimonials.
+```
+
+### Safety baseline
+
+- No fake testimonials, fake metrics, fake user counts, or revenue claims.
+- No guaranteed outcomes, no certainty claims, no mind-reading framing, no reunion promise, no payment claim.
+- No diagnosis language (anxiety / codependency / attachment-disorder framing).
+- No "act now" urgency language; no fear-based or shame-based CTA.
+- No pressure or chase tactics in any of the new copy.
+- Every CTA points to a real product route (`/love-test`, `/love-reading`, `/ask`, or `/relationship/new`).
+- Every item requires human review before publishing.
+
+### Validation performed
+
+```text
+git status --short (before commit): 4 marketing files + 2 .ai files = 6 modified files exactly as planned; 1 unrelated pre-existing modification to src/lib/love-reading/revenue-contract.ts intentionally left unstaged.
+git diff --check: 0 warnings on this run's 6 modified files.
+Secret-shape scan over this run's delta: 0 raw-shape hits (sk_live_*, sk_test_*, ghp_*, xox[abp]-*, AKIA[0-9A-Z]{16}, AIza…, -----BEGIN *PRIVATE KEY-----, postiz_*, supabase_*, stripe_webhook_secret, resend_*).
+npm run typecheck: pre-existing errors on tarot-love-reading-online, tarot-spread-meanings, stripe webhook, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton verified to exist before this run; docs-only change set has no TypeScript surface. No new typecheck errors introduced.
+npm run lint: pre-existing errors on love-calculator, tarot-love-reading-online, tarot-spread-meanings, MediaNetSlot verified to exist before this run; docs-only change set has no ESLint surface. No new lint errors introduced.
+.env* access: none — no env files were read, copied, diffed, or printed.
+```
+
+### Gate status
+
+```text
+Seven-day content calendar: Go (82 days ahead, up to 2026-09-28 / Day 97)
+Hook pool: Go (105 hooks)
+Video script pool: Go (55 scripts)
+Share caption pool: Go (63 captions)
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Manual operator steps
+
+1. Open this `REVIEW_PACKET.md` entry and the matching entry at the top of `.ai/CHANGELOG_AI.md`.
+2. Skim the new 7 calendar rows (Days 91–97) and confirm they are not a regression against the editorial voice in the operator's last review.
+3. Open `assets/marketing/love-test-next-30-hooks.md` hooks #101–105 and `assets/marketing/love-test-next-20-share-captions.md` captions #61–63 for tone.
+4. Open `assets/marketing/love-test-next-20-video-scripts.md` scripts ## 53–55 for tone and CTA consistency.
+5. Publish manually, one channel at a time; mark publishing-log rows as posts go live.
+6. Fill KPI rows with real per-post numbers only — no invented engagement / retention / save-rate values.
+
+### Next step
+
+Commit the docs-only delta (6 modified files: 4 marketing + 2 `.ai/`) with the message `chore(marketing): refresh love-test content calendar`, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.
+
 ### 2026-07-09 - TianJi Love daily growth publishing pack — Day 022 (cron 17 1 * * *)
 
 - Task ID: `20260709-tianji-love-daily-growth-day-022`.

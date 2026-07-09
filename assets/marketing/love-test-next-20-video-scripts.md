@@ -621,3 +621,37 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 早一点更轻的回复，常常比夜里更响的那一句留得住。
 - CTA: `/love-test` then `/relationship/new`.
 - risk-safe check: No certainty, no guarantee, no shame framing.
+
+## Refresh 2026-07-09 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-09 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the memory-of-the-relationship, reciprocity-audit, and mood-window-observation supporting angles, deliberately avoiding the tone-mirror / calendar-vs-chat / end-of-week-consolidation / reply-delay-read / self-talk-swap / quiet-answer-practice cluster used in Days 77–90.
+
+## 53 Memory Of The Relationship
+
+- channel: Xiaohongshu video
+- 3-second hook: What you remember and what is still in motion are usually two different texts.
+- scene: A notebook page with a circled memory sentence next to a calm result card showing the present pattern, then a mirror card.
+- spoken copy: The version you keep replaying is a real memory, and the version that is still in motion is also real. Love Test gives you a calmer place to read the gap between the two, so the next sentence is yours and not a quote from a year ago.
+- caption: 你记下来的版本和还在线的版本，常常是两本不同的书。
+- CTA: `/love-reading`.
+- risk-safe check: No nostalgia used as evidence, no mind-reading claim, no guarantee the memory matches theirs.
+
+## 54 Reciprocity Audit
+
+- channel: Douyin
+- 3-second hook: Who reaches for whom is also data.
+- scene: Two hands at opposite edges of a small table, neither moving for a beat, then a steady pattern card appearing between them.
+- spoken copy: A relationship often has a clearer shape when you notice who reaches for whom and when. Love Test gives you a place to look at that pattern without turning it into a verdict, so the read is data and not a moral judgment.
+- caption: 谁先伸手，是数据，不是判决。
+- CTA: `/love-test` then `/ask?source=love_test&intent=what_are_they_thinking`.
+- risk-safe check: No shaming either side, no certainty about motive, no outcome claim.
+
+## 55 Mood-Window Observation
+
+- channel: Videohao
+- 3-second hook: Your window for reading messages shifts through the day.
+- scene: A clock face rotating slowly with a soft glow on different hours, then a calm mirror card placed next to a paused phone.
+- spoken copy: The same message can read very differently in the morning, the afternoon, and late at night. Love Test gives you a steadier place to notice your own reading window, so the next read is taken at the time it is most likely to be fair.
+- caption: 读消息的窗口，一天里会变。先看到窗，再读消息。
+- CTA: `/love-test` then `/relationship/new`.
+- risk-safe check: No fear-based CTA, no certainty about what they meant at the time, no shame framing.
