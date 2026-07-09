@@ -1,6 +1,90 @@
 # TianJi Love Review Packet
 ## Current Task
 
+### 2026-07-09 - TianJi Love daily growth publishing pack — Day 022 (cron 17 1 * * *)
+
+- Task ID: `20260709-tianji-love-daily-growth-day-022`.
+- Skill: `tianji-github-daily-growth`.
+- Branch: `feature/monetization-ads-affiliate`.
+
+### Theme
+
+"Order of attention — checking your motive first and their reply second is a small sequence question, not a moral one", taken from the 7-day content calendar Day 22 row (2026-07-15). CTA: `/ask`. Day 21 = initiation in ambiguity (want-to-send vs. ready-to-send); Day 22 = order of attention (motive-check before reply-check). The rotation continues the calm-hooks-only discipline and explicitly separates the motive-check (a writing question you can answer) from a moral verdict (a question you will never finish answering), and keeps the order-of-attention framing as a small habit rather than a personality trait.
+
+### Channel mix and CTA
+
+- 5 Xiaohongshu posts → `/ask`
+- 5 Reel scripts → `/ask`
+- 5 X posts → `/ask`
+- 3 Reddit/Quora answer drafts → `/ask`
+- 2 KOL pieces (1 DM template + 1 post draft) → `/ask`
+- 3 SEO article outlines → `/ask`
+
+### Files in this change set
+
+```text
+A  assets/marketing/daily/day-022-publishing-pack.md
+A  assets/marketing/daily/day-022-review-checklist.md
+A  data/love-test-day-022-kpi-entry.csv
+M  .ai/CHANGELOG_AI.md
+M  .ai/REVIEW_PACKET.md
+```
+
+Unrelated pre-existing modification in `src/lib/love-reading/revenue-contract.ts` is intentionally NOT staged.
+
+### Safety baseline
+
+- No fake testimonials, fake metrics, or fake user counts.
+- No guaranteed outcomes, no certainty claims, no mind-reading framing.
+- No diagnosis language (anxiety / codependency / attachment-disorder / disorder framing).
+- No "act now" urgency language; no fear-based or shame-based CTA.
+- No Stripe / payment claims.
+- No "if you check yourself first, you will lose your only chance" pressure framing.
+- No "if you don't check their reply time the moment you send, you've already failed" performance framing.
+- No "if you don't change the order, you are fundamentally broken" character framing.
+- No "watching the reply time is a moral failure" shame reversal.
+- No "naming the motive in one sentence is just performing calmness" dismissive framing.
+- No collapsing the motive-check with a moral verdict.
+- No invented engagement / retention / save-rate metrics.
+- No decision made for the user.
+- Every CTA points to `/ask` only.
+- Every post requires human review before publishing.
+
+### Validation performed
+
+```text
+git status --short (before commit): 3 staged files exactly as planned (2 marketing + 1 data); 1 unrelated pre-existing modification to src/lib/love-reading/revenue-contract.ts intentionally left unstaged.
+git diff --check: 0 warnings on the 3 new markdown+CSV files.
+Secret-shape scan over the 3 new files: 0 raw-shape hits (sk_live_*, sk_test_*, ghp_*, xox[abp]-*, AKIA[0-9A-Z]{16}, -----BEGIN *PRIVATE KEY-----).
+npm run typecheck: pre-existing errors on tarot-love-reading-online, tarot-spread-meanings, stripe webhook, AdSenseSlot, AffiliateProductGrid, LoveReportCheckoutButton verified to exist before this run; docs-only change set has no TypeScript surface. No new typecheck errors introduced.
+npm run lint: pre-existing errors on love-calculator, tarot-love-reading-online, tarot-spread-meanings, MediaNetSlot verified to exist before this run; docs-only change set has no ESLint surface. No new lint errors introduced.
+.env* access: none — no env files were read, copied, diffed, or printed.
+```
+
+### Gate status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Manual operator steps
+
+1. Open this `REVIEW_PACKET.md` entry and the matching entry at the top of `.ai/CHANGELOG_AI.md`.
+2. Skim `assets/marketing/daily/day-022-publishing-pack.md` for tone and CTA consistency.
+3. Walk `assets/marketing/daily/day-022-review-checklist.md` row-by-row before any platform publish.
+4. Publish manually, one channel at a time; mark the publishing-log rows as posts go live.
+5. Fill KPI rows in `data/love-test-day-022-kpi-entry.csv` with real per-post numbers only — no invented engagement / retention / save-rate values.
+
+### Next step
+
+Commit the docs-only delta (3 new files + 2 `.ai/` files) with the message `chore(marketing): add love-test day 022 publishing pack`, push to `origin/feature/monetization-ads-affiliate`, and verify the new commit is visible via `git log origin/feature/monetization-ads-affiliate -1 --oneline`.
+
 ### 2026-07-08 - TianJi Love daily growth publishing pack — Day 021 (cron 17 1 * * *)
 
 - Task ID: `20260708-tianji-love-daily-growth-day-021`.
