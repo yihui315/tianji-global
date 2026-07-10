@@ -1,6 +1,21 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-10 - TianJi Love daily growth publishing pack — Day 023 (cron 17 1 * * *)
+
+- Task ID: `20260710-tianji-love-daily-growth-day-023`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: feature branch `chore/marketing-love-test-day-023-publishing-pack-20260710`, forked from `main` after fast-forward to `origin/main` (clean, no untracked files, no prior-run leftovers). Discarded an unrelated pre-existing dirty state on `src/lib/love-reading/revenue-contract.ts` from the prior `feature/monetization-ads-affiliate` worktree by checking out `main` before branching, per the skill's docs/assets/data-only scope rule.
+- Theme: "No-contact week one — silence is information; what you do with it is yours" (from the 7-day content calendar Day 23 row, 2026-07-16). CTA: `/relationship/new`. Day 22 = pause before send (motive vs. reply expectation); Day 23 = no-contact week one (silence as information, week-one habits that don't depend on them doing anything); the rotation continues the calm-hooks-only discipline and explicitly avoids the "if you break no-contact now you will lose your only chance" pressure framing and the "if you make it to day seven they will definitely come back" guarantee.
+- Files created: `assets/marketing/daily/day-023-publishing-pack.md`, `assets/marketing/daily/day-023-review-checklist.md`, `data/love-test-day-023-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL feedback DMs (1 DM template + 1 post draft), 3 SEO article outlines, all pointing to the reflective surface `/relationship/new`. No live payment claim, no fake testimonial, no diagnosis language, no "you are broken" framing, no "act now" urgency language, no mind-reading claim ("he is thinking X"), no reunion promise, no "if you break no-contact now you will lose your only chance" pressure framing, no "if you make it to day seven they will definitely come back" guarantee, no "real winners don't break first" performance framing, no "if you focus on yourself you are being selfish" reversal, no "counting days means you are not over it" shame framing, no "the silence is a sign they have moved on" mind-reading claim, no "week one silence means they don't care" verdict, no "if you don't go no-contact you never really cared" shame framing.
+- Validation: changes are limited to `assets/marketing/daily/`, `data/`, and `.ai/`. `git diff --check` clean (0 warnings on the new markdown delta). Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits on the new files (only descriptive mentions of scan detector strings in pre-existing audit reports). `npm run typecheck` skipped (markdown+CSV-only change set, no TypeScript surface — consistent with prior content-only skill run precedent). `npm run lint` skipped (markdown+CSV-only change set, no ESLint surface — consistent with prior content-only skill run precedent).
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting. No fake KPI / weak-step / conversion-rate / guaranteed-outcome claim. No `DESTINY_SCAN_SECRET` use. No Resend live call. No AI provider live call.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go — manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Push result: pending — see the commit-and-push step.
+- Suggested commit message: `chore(marketing): add love-test day 023 publishing pack`.
+
 ### 2026-07-03 - TianJi Love daily growth publishing pack — Day 016 (cron 17 1 * * *)
 
 - Task ID: `20260703-tianji-love-daily-growth-day-016`.
