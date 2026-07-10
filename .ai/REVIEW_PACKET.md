@@ -1,6 +1,43 @@
 # TianJi Love Review Packet
 ## Current Task
 
+TianJi Love content calendar refresh for 2026-07-10 (cron `37 2 * * *`, skill `tianji-github-content-calendar`). Calendar prior to this run was healthy with 39 future days (last entry 2026-08-17, Day 55), well above the 7-day minimum. Extended the calendar by Days 56–62 (2026-08-18 → 2026-08-24) so a healthy forward buffer is preserved while the new content lands at the start of the new cycle. Refreshed the three pools: added hooks 76–80 (5 hooks, total pool 80), added video scripts 38–39 (2 scripts, total pool 39), added share captions 46–48 (3 captions, total pool 48). New themes rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the post-cycle opening, re-entry check, and quiet-observation supporting angles. No certainty claims, no reunion promises, no mind-reading, no diagnosis, no shame reversal, no fear-based CTA.
+
+## Files created this run
+
+- None (refresh-only run; all changes are appends to existing pool files and the calendar).
+
+## Files updated this run
+
+- `assets/marketing/content-calendar-7day.md` (Days 56–62 appended)
+- `assets/marketing/love-test-next-30-hooks.md` (hooks 76–80)
+- `assets/marketing/love-test-next-20-video-scripts.md` (scripts 38–39)
+- `assets/marketing/love-test-next-20-share-captions.md` (captions 46–48)
+- `.ai/CHANGELOG_AI.md`
+- `.ai/REVIEW_PACKET.md` (this file)
+
+## Allowed files inspected read-only (no edits)
+
+- `assets/marketing/content-calendar-7day.md` (existing Days 49–55 themes, used for rotation continuity check)
+- `assets/marketing/love-test-next-30-hooks.md` (existing hook pool, used as rotation reference)
+- `assets/marketing/love-test-next-20-video-scripts.md` (existing script pool, used as rotation reference)
+- `assets/marketing/love-test-next-20-share-captions.md` (existing caption pool, used as rotation reference)
+
+## Gate status
+
+```
+Seven-day content calendar: Go
+Hook pool: Go
+Video script pool: Go
+Share caption pool: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Prior run (2026-07-10 daily growth Day 023)
+
 TianJi Love daily growth publishing pack — Day 023 for 2026-07-10 (cron `17 1 * * *`, skill `tianji-github-daily-growth`). Theme: "No-contact week one — silence is information; what you do with it is yours", taken from the 7-day content calendar Day 23 row (2026-07-16). CTA: `/relationship/new`. Day 22 = pause before send (motive vs. reply expectation); Day 23 = no-contact week one (silence as information, week-one habits that don't depend on them doing anything); the rotation continues the calm-hooks-only discipline and explicitly avoids the "if you break no-contact now you will lose your only chance" pressure framing and the "if you make it to day seven they will definitely come back" guarantee.
 
 ## Files created this run

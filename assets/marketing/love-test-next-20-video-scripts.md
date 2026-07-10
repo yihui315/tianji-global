@@ -455,3 +455,27 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 速度也是信息。
 - CTA: `/love-test` then `/ask?source=love_test&intent=should_i_initiate`.
 - risk-safe check: No pressure or chase tactics, no guaranteed reply.
+
+## Refresh 2026-07-10 - Next batch of 2 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-10 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the post-cycle opening, re-entry check, and quiet-observation supporting angles.
+
+## 38 First Three Days Of A New Cycle
+
+- channel: Douyin
+- 3-second hook: The first three days of a new cycle are usually about noticing, not deciding.
+- scene: A calm desk at the start of a new month, a notebook with three quiet lines.
+- spoken copy: New cycles do not need new signals. They usually need three days of listening before any next move. Love Test gives you a steadier first page.
+- caption: 先听三天，再走下一步。
+- CTA: `/love-reading`.
+- risk-safe check: No pressure or chase tactics, no guarantee a new signal will arrive.
+
+## 39 Re-Reading An Old Result
+
+- channel: Xiaohongshu video
+- 3-second hook: Re-reading an old result is normal. Re-reading it from panic is different.
+- scene: A result card on a phone screen, a hand pausing, then setting the phone face down.
+- spoken copy: If you are pulling up an old Love Test result from a calm place, that is a check-in. If you are pulling it up from panic, that is a different moment. Love Test helps you notice which one you are in.
+- caption: 看清楚你是在复盘，还是在慌。
+- CTA: `/love-test`.
+- risk-safe check: No fear-based CTA, no certainty claim, no decision made for the user.

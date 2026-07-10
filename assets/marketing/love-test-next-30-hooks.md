@@ -115,6 +115,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 74. 主动联系的速度本身也是信息，节奏稳了，下一步才看得清。
 75. 人会变，固定剧本会过期。留一点弹性，比守住旧故事更清楚。
 
+## Refresh 2026-07-10 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-10 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the post-cycle opening, re-entry check, and quiet-observation supporting angles. None are certainty claims.
+
+76. 新的一个月不一定要追新信号，先听几天再决定怎么走。
+77. 旧结果重新拿出来看是正常的，从慌里重读往往不是。
+78. 一个熟悉的联系重新出现，你可以先叫出它，再决定怎么回应。
+79. 六十天的关注，本身就是回答的一部分，不必等下一个问题。
+80. 关闭一个小周期是一种清楚。下一段开始的时候，节奏可以慢一点。
+
 ## CTA pairings
 
 ```text

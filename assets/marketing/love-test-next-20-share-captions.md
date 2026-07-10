@@ -83,6 +83,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 44. The voice inside was clearer than the signal outside. The Love Test helped me listen first: tianji.love/relationship/new
 45. How fast I send is also information. The Love Test gave me a steadier pace before I reached out: tianji.love/ask
 
+## Refresh 2026-07-10 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-10 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the post-cycle opening, re-entry check, and quiet-observation supporting angles. None are certainty claims.
+
+46. The first three days of a new cycle are for listening. The free Love Test gave me a steadier first page: tianji.love/love-reading
+47. I was about to re-read an old result from panic. The Love Test helped me notice that I was in a different moment: tianji.love/love-test
+48. A familiar contact reappeared. I named the rhythm before I named the next step: tianji.love/relationship/new
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.
