@@ -125,6 +125,16 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 79. 六十天的关注，本身就是回答的一部分，不必等下一个问题。
 80. 关闭一个小周期是一种清楚。下一段开始的时候，节奏可以慢一点。
 
+## Refresh 2026-07-11 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-11 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the single-sentence-clarity, story-vs-signal, boundary-softness, repair-vs-reunion, and time-without-pressure supporting angles. None are certainty claims.
+
+81. 想要一句话讲清楚想要什么，本身就是一种清楚。讲不清的，常常也不是答案。
+82. 你讲的那个故事，常常比昨天看到的信号更旧。先分清楚你看到的是哪一件。
+83. 边界清楚一点的人，关系里也更容易温柔。温柔不等于随时在线。
+84. 想复合是一种心情，看清楚要修的什么才是一个问题。两件事不能混。
+85. 给一段关系多一点时间，不等于放弃。是让答案自己落下来。
+
 ## CTA pairings
 
 ```text

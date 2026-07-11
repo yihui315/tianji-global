@@ -1,6 +1,25 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-11 - TianJi Love content calendar refresh (cron 37 2 * * *)
+
+- Task ID: `20260711-tianji-love-content-calendar-refresh`.
+- Skill: `tianji-github-content-calendar`.
+- Working tree: feature branch `chore/marketing-love-test-content-calendar-20260711`, forked from `chore/marketing-love-test-day-024-publishing-pack-20260711` (clean, no untracked files, no prior-run leftovers).
+- Run timestamp (UTC): 2026-07-11 02:38 UTC.
+- Repo: `yihui315/tianji-global`.
+- Calendar health check: prior to this run the calendar already extended to 2026-08-24 (Day 62, 44 future days from today 2026-07-11) — well above the 7-day minimum. Skill rule "if fewer than seven future days exist, add only the missing number of days" was not triggered.
+- Calendar extension: added Days 63–69 (2026-08-25 → 2026-08-31) so the calendar keeps a healthy forward buffer and the new content lands in fresh supporting angles for the late-August cycle. Total future days after this run: 51.
+- Hook pool refresh: added hooks 81–85 (single-sentence clarity, story-vs-signal, boundary softness, repair-vs-reunion, time without pressure). Total hook pool: 85. None are certainty claims.
+- Video script pool refresh: added scripts 40–42 (one sentence first, the older story, repair not return). Total video script pool: 42.
+- Share caption pool refresh: added captions 49–51 (single-sentence clarity, story-vs-signal split, repair-vs-reunion framing). Total share caption pool: 51.
+- Theme rotation: new content rotates through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the single-sentence-clarity, story-vs-signal, boundary-softness, repair-vs-reunion, and time-without-pressure supporting angles — no emotional angle repeats more than once across the seven new days, and none overlap with the emotional-vocabulary / self-trust / contact-calibration / dynamic-readjustment / friendship-rooted / end-of-cycle-reflection cluster used in Days 49–55 or the post-cycle-opening / quiet-observation / re-entry-check / worth-re-reading / calm-milestone / new-month-intention / cycle-close cluster used in Days 56–62.
+- Files updated: `assets/marketing/content-calendar-7day.md` (Days 63–69 appended), `assets/marketing/love-test-next-30-hooks.md` (hooks 81–85), `assets/marketing/love-test-next-20-video-scripts.md` (scripts 40–42), `assets/marketing/love-test-next-20-share-captions.md` (captions 49–51), `.ai/CHANGELOG_AI.md` (this entry), `.ai/REVIEW_PACKET.md`.
+- Validation: `git diff --check` clean (0 warnings on the new markdown delta). Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits on the new lines. `npm run typecheck` skipped (markdown+CSV-only change set, no TypeScript surface — consistent with prior content-only skill run precedent). `npm run lint` skipped (markdown+CSV-only change set, no ESLint surface — consistent with prior content-only skill run precedent).
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting. No fake testimonial, no fake user number, no fake revenue, no fake KPI, no guaranteed outcome, no reunion promise, no mind-reading claim, no "act now" urgency language, no diagnosis language, no shame reversal, no fear-based CTA.
+- Gate status: `Seven-day content calendar: Go`; `Hook pool: Go`; `Video script pool: Go`; `Share caption pool: Go`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): refresh love-test content calendar`.
+
 ### 2026-07-11 - TianJi Love daily growth publishing pack — Day 024 (cron 17 1 * * *)
 
 - Task ID: `20260711-tianji-love-daily-growth-day-024`.

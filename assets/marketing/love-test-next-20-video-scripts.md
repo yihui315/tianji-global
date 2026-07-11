@@ -479,3 +479,37 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 看清楚你是在复盘，还是在慌。
 - CTA: `/love-test`.
 - risk-safe check: No fear-based CTA, no certainty claim, no decision made for the user.
+
+## Refresh 2026-07-11 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-11 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the single-sentence-clarity, story-vs-signal, boundary-softness, repair-vs-reunion, and time-without-pressure supporting angles.
+
+## 40 One Sentence First
+
+- channel: Xiaohongshu video
+- 3-second hook: If you can say what you want in one sentence, the next step usually gets shorter.
+- scene: A hand crossing out three lines on a notepad, leaving a single clean sentence behind.
+- spoken copy: Long stories hide short answers. Try to write what you actually want in one sentence. Love Test gives you a quieter place to do that, before the next move.
+- caption: 先写一句话，再决定下一步。
+- CTA: `/love-test`.
+- risk-safe check: No certainty claim, no outcome guarantee.
+
+## 41 The Older Story
+
+- channel: Douyin
+- 3-second hook: The story you keep telling is older than the signal you saw yesterday.
+- scene: A split-screen: an old notebook page on the left, a fresh phone notification on the right.
+- spoken copy: When a feeling stays the same for weeks, it is usually the story you are telling, not the signal you saw. Love Test helps you separate the two before you act on either.
+- caption: 先分清楚，是故事还是信号。
+- CTA: `/love-reading`.
+- risk-safe check: No shame reversal, no mind-reading claim.
+
+## 42 Repair Not Return
+
+- channel: Videohao
+- 3-second hook: Wanting them back is one question. Naming what to repair is another.
+- scene: A notepad with two columns, one titled "want back" and the other titled "repair", the second column longer.
+- spoken copy: Reunion is a feeling. Repair is a question. If you can name what would actually need to change for the next round to feel different, that is a stronger starting place. Love Test helps you put that into words.
+- caption: 想回去是一种心情，看清楚要修的是什么才是一个问题。
+- CTA: `/ask` after `/love-test`.
+- risk-safe check: No reunion promise, no closure guarantee.

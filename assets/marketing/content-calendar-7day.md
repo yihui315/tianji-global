@@ -64,6 +64,13 @@ Safety baseline: no fake testimonials, no fake numbers, no guaranteed outcomes, 
 | 2026-08-22 | Day 60 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Calm milestone | Sixty days of paying attention is a kind of answer, even before the next question. | /love-reading | organic clicks, leads | Use real metrics only. |
 | 2026-08-23 | Day 61 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | New-month intention | An intention is a direction, not a deadline. The next step can stay small. | /ask | clicks, leads | No pressure or chase tactics. |
 | 2026-08-24 | Day 62 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Cycle close | Closing a cycle is a kind of clarity. The next one can begin with a calmer voice. | /love-test | clicks, leads | No decision made for the user. |
+| 2026-08-25 | Day 63 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Single-sentence clarity | If you can say what you want in one sentence, the next step usually gets shorter. | /love-test | clicks, leads | No mind-reading claim, no outcome guarantee. |
+| 2026-08-26 | Day 64 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Story vs signal | The story you keep telling is older than the signal you saw yesterday. | /love-reading | organic clicks, leads | No shame reversal, no fear-based CTA. |
+| 2026-08-27 | Day 65 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Boundary softness | A clean boundary can be warm. Warmth is not the same as availability. | /love-test | clicks, leads | No pressure or chase tactics. |
+| 2026-08-28 | Day 66 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Repair vs reunion | Wanting them back is one question. Naming what to repair is another. | /ask | clicks, leads | No reunion promise, no mind-reading claim. |
+| 2026-08-29 | Day 67 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Time without pressure | Giving something time is not giving up. It is letting the answer settle. | /love-reading | organic clicks, leads | No fear-based urgency, no guaranteed return. |
+| 2026-08-30 | Day 68 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Your own answer | Sometimes the clearest answer is the one you keep editing down to one line. | /relationship/new | relationship starts, leads | No decision made for the user. |
+| 2026-08-31 | Day 69 | 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO | Late-month recap | The best entry this month is the one that helped without selling fear. | /love-reading | organic clicks, leads | Use real metrics only. |
 
 ## Daily publishing rhythm
 

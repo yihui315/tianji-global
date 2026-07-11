@@ -91,6 +91,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 47. I was about to re-read an old result from panic. The Love Test helped me notice that I was in a different moment: tianji.love/love-test
 48. A familiar contact reappeared. I named the rhythm before I named the next step: tianji.love/relationship/new
 
+## Refresh 2026-07-11 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-11 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the single-sentence-clarity, story-vs-signal, boundary-softness, repair-vs-reunion, and time-without-pressure supporting angles. None are certainty claims.
+
+49. I tried to write what I actually wanted in one sentence. The free Love Test made the next step shorter: tianji.love/love-test
+50. The story I was telling was older than the signal I saw. The Love Test helped me split the two apart: tianji.love/love-reading
+51. Wanting them back was a feeling. Naming what to repair was a question. The Love Test held both without rushing either: tianji.love/relationship/new
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.
