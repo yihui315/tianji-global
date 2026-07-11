@@ -1,6 +1,51 @@
 # TianJi Love Review Packet
 ## Current Task
 
+TianJi Love daily growth publishing pack — Day 024 for 2026-07-11 (cron `17 1 * * *`, skill `tianji-github-daily-growth`). Theme: "No-contact week two — the loud question changes, and 'I still care' is allowed to coexist with 'my week has shape again'", the natural continuation of Day 023's "silence is information; what you do with it is yours". CTA: `/relationship/new`. Day 023 = week-one silence as information (data, not verdict); Day 024 = week-two question-not-test ("what does my week look like that isn't about them" is a question, not a verdict on healing speed). The rotation continues the calm-hooks-only discipline and explicitly avoids "if you are not over it by day fourteen you failed the test" performance framing, "real winners feel nothing by week two" pressure framing, "if you still care you have made no progress" shame framing, "you must be ready to date again by day fourteen" reversal, and "two weeks is nothing, give it six months" minimization.
+
+## Files created this run
+
+- `assets/marketing/daily/day-024-publishing-pack.md`
+- `assets/marketing/daily/day-024-review-checklist.md`
+- `data/love-test-day-024-kpi-entry.csv`
+
+## Files updated this run
+
+- `.ai/CHANGELOG_AI.md`
+- `.ai/REVIEW_PACKET.md` (this file)
+
+## Allowed files inspected read-only (no edits)
+
+- `assets/marketing/daily/day-023-publishing-pack.md` (rotation reference for the Day 023 → Day 024 transition)
+- `data/love-test-day-023-kpi-entry.csv` (KPI schema reference for column structure)
+- `.ai/CHANGELOG_AI.md` (read top + recent entries for skill format precedent)
+- `data/love-test-content-calendar.csv` (existing rotation themes, used to ensure no repeat of Day 023's week-one silence-is-information anchor)
+
+## Pack contents (Day 024)
+
+- 5 Xiaohongshu posts
+- 5 Reels scripts
+- 5 X / Twitter posts
+- 3 Reddit / Quora answer drafts (r/ExNoContact, r/BreakUps, r/self)
+- 2 KOL feedback pieces (1 DM template + 1 post draft)
+- 3 SEO article outlines
+- All pointing to `/relationship/new`
+- No live payment claim, no fake testimonial, no fake KPI, no diagnosis language, no mind-reading claim ("he is thinking X"), no reunion promise, no "you should be over it by now" performance framing, no shame reversal.
+
+## Gate status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Prior run (2026-07-10 content calendar refresh)
+
 TianJi Love content calendar refresh for 2026-07-10 (cron `37 2 * * *`, skill `tianji-github-content-calendar`). Calendar prior to this run was healthy with 39 future days (last entry 2026-08-17, Day 55), well above the 7-day minimum. Extended the calendar by Days 56–62 (2026-08-18 → 2026-08-24) so a healthy forward buffer is preserved while the new content lands at the start of the new cycle. Refreshed the three pools: added hooks 76–80 (5 hooks, total pool 80), added video scripts 38–39 (2 scripts, total pool 39), added share captions 46–48 (3 captions, total pool 48). New themes rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the post-cycle opening, re-entry check, and quiet-observation supporting angles. No certainty claims, no reunion promises, no mind-reading, no diagnosis, no shame reversal, no fear-based CTA.
 
 ## Files created this run

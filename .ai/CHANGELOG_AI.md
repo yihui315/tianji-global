@@ -1,6 +1,21 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-11 - TianJi Love daily growth publishing pack — Day 024 (cron 17 1 * * *)
+
+- Task ID: `20260711-tianji-love-daily-growth-day-024`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: feature branch `chore/marketing-love-test-day-024-publishing-pack-20260711`, forked from `origin/main` at `7149b06` (clean, no untracked files, no prior-run leftovers).
+- Theme: "No-contact week two — the loud question changes, and 'I still care' is allowed to coexist with 'my week has shape again'" (the natural Day 024 continuation after Day 023's "silence is information; what you do with it is yours"). CTA: `/relationship/new`. Day 023 = week-one silence as information (data, not verdict); Day 024 = week-two question-not-test ("what does my week look like that isn't about them" is a question, not a verdict on healing speed). The rotation continues the calm-hooks-only discipline and explicitly avoids "if you are not over it by day fourteen you failed the test" performance framing, "real winners feel nothing by week two" pressure framing, "if you still care you have made no progress" shame framing, "you must be ready to date again by day fourteen" reversal, and "two weeks is nothing, give it six months" minimization.
+- Files created: `assets/marketing/daily/day-024-publishing-pack.md`, `assets/marketing/daily/day-024-review-checklist.md`, `data/love-test-day-024-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md`, `.ai/REVIEW_PACKET.md`.
+- Pack contents: 5 Xiaohongshu posts, 5 Reels scripts, 5 X posts, 3 Reddit/Quora answer drafts, 2 KOL feedback pieces (1 DM template + 1 post draft), 3 SEO article outlines, all pointing to the reflective surface `/relationship/new`. No live payment claim, no fake testimonial, no fake KPI, no diagnosis language, no "you are broken" framing, no "act now" urgency language, no mind-reading claim ("he is thinking X"), no reunion promise, no "if you are not over it by day fourteen you failed the test" performance framing, no "real winners feel nothing by week two" pressure framing, no "if you still care you have made no progress" shame framing, no "you must be ready to date again by day fourteen" reversal, no "two weeks is nothing, give it six months" minimization, no "the new question means you are healing faster" performance framing, no "the new question means you are suppressing the real one" reversal, no "week two silence is a sign they will / won't come back" guarantee.
+- Validation: changes are limited to `assets/marketing/daily/`, `data/`, and `.ai/`. `git diff --check` clean (0 warnings on the new markdown delta). Targeted secret-shape scan over `.agents/skills/`, `.github/workflows/`, `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits on the new files. `npm run typecheck` skipped (markdown+CSV-only change set, no TypeScript surface — consistent with prior content-only skill run precedent). `npm run lint` skipped (markdown+CSV-only change set, no ESLint surface — consistent with prior content-only skill run precedent).
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting. No fake KPI / weak-step / conversion-rate / guaranteed-outcome claim. No `DESTINY_SCAN_SECRET` use. No Resend live call. No AI provider live call.
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go — manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go — awaiting explicit approval`; `Production deploy: No-Go`.
+- Push result: pending — see the commit-and-push step.
+- Suggested commit message: `chore(marketing): add love-test day 024 publishing pack`.
+
 ### 2026-07-10 - TianJi Love content calendar refresh (cron 37 2 * * *)
 
 - Task ID: `20260710-tianji-love-content-calendar-refresh`.
