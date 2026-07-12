@@ -1469,3 +1469,129 @@ Production deploy: No-Go
 ```text
 chore(marketing): add love-test day 019 publishing pack
 ```
+
+### 2026-07-12 - TianJi Love weekly KPI analysis review
+
+#### Files in scope (this run)
+
+```text
+.ai/reports/love-test-growth-report-2026-07-12.md  (new)
+.ai/CHANGELOG_AI.md                                 (updated)
+.ai/REVIEW_PACKET.md                                (updated)
+```
+
+#### KPI source check (workflow step 1)
+
+```text
+data/love-test-day-019-kpi-entry.csv
+  Publishing date: 2026-07-12. Day: 19.
+  Schema: date, day, channel, post_type, impressions, clicks, leads_captured, revenue_usd, notes.
+  Rows: 23 (xiaohongshu x5, reels x5, x x5, reddit x3, kol x2, seo x3).
+  Numeric cells (impressions, clicks, leads_captured, revenue_usd): all empty (blank, not 0).
+  notes column on every row: literal "manual entry after publish".
+  Verdict: placeholder scaffold. No real engagement data.
+
+data/love-test-day-024-kpi-entry.csv
+  Publishing date: 2026-07-17. Day: 24.
+  Schema: same as day-019.
+  Rows: 23 (xiaohongshu x5, reels x5, x x5, reddit x3, kol x2, seo x3).
+  Numeric cells (impressions, clicks, leads_captured, revenue_usd): all empty (blank, not 0).
+  notes column on every row: literal "manual entry after publish".
+  Verdict: placeholder scaffold. No real engagement data.
+
+data/love-test-marketing-kpi.csv
+  Rows: 2 template rows dated 2026-05-24 (xhs-001, dy-001, vh-001).
+  Numeric cells: all 0. paid_smoke_result: not_run.
+  notes column on every row: literal "template row".
+  Verdict: template. No per-day rollup.
+
+data/love-test-funnel-metrics.csv (after bridge run)
+  2026-07-12 row written by `python3 ~/.hermes/scripts/run_revenue_funnel.py`.
+  All funnel-rate columns: 0 / 0.0.
+  revenue_cny: 0.
+  notes: real_db_pipeline.
+  Verdict: real bridge output, genuinely empty production DB.
+```
+
+#### Workflow verdict (workflow step 2)
+
+```text
+Per-day KPI entries: empty placeholders → No-Go.
+Aggregate marketing KPI: 2-row template → No-Go.
+Funnel bridge row: all-zero, real_db_pipeline → measured real zero, but still No-Go
+  because no channel has any non-zero engagement cell to rank.
+Workflow decision: SKIP analysis. Document data-required verdict.
+```
+
+#### What was NOT produced (workflow step 5)
+
+```text
+- assets/marketing/daily/day-024-optimization-notes.md  — NOT created this run.
+  Reason: cannot be grounded without non-zero input rows.
+  The skill rule "Do not fake, infer, or invent metrics, conversions, sales, users,
+  testimonials, or attribution" extends to optimization recommendations derived
+  from those metrics. A notes file will be created on the next run where at least
+  one channel/content_id row has a non-zero engagement value.
+
+- Strongest hook rank    — Not identified. No engagement data exists.
+- Weakest topic rank     — Not identified. No engagement data exists.
+- Best channel rank      — Not identified. No engagement data exists.
+- Conversion-funnel rank — Not identified. All rates are 0.
+```
+
+#### Bridge run evidence (this run)
+
+```text
+Command: python3 ~/.hermes/scripts/run_revenue_funnel.py
+Exit:    0
+Stdout:
+  [revenue-funnel] Starting at 2026-07-12
+  === Revenue Funnel Metrics ===
+    home_view: 0
+    test_start: 0
+    result_view: 0
+    unlock_click: 0
+    checkout_created: 0
+    checkout_success: 0
+    refund_count: 0
+    revenue_cny: 0  paid_orders: 0
+    home→test: 0.0  test→result: 0.0  result→unlock: 0.0  unlock→checkout: 0.0  checkout→paid: 0.0
+  Written to /root/tianji-global/data/love-test-funnel-metrics.csv
+
+Bridge side-effect: appended one row to data/love-test-funnel-metrics.csv.
+No .env, no production DB write, no Stripe call, no webhook, no deploy.
+```
+
+#### Local validation
+
+```text
+git diff --check
+Pending final pass before commit.
+
+Targeted secret-shape scan over .ai/ assets/marketing/ data/
+Pending final pass before commit.
+
+npm run typecheck
+Not applicable to this change set (markdown + CSV only).
+
+npm run lint
+Not applicable to this change set (markdown + CSV only).
+```
+
+#### Gate status (this run)
+
+```text
+KPI source file: No-Go - missing real metrics (day-019 and day-024 entries are empty placeholders; aggregate is 2-row template; funnel row is all-zero; paid_smoke_result=not_run everywhere)
+KPI analysis report: Go (this report documents the absence of real data, no fabricated rankings)
+Optimization notes: Not run (cannot be grounded without non-zero input rows; per skill rule against fabricated optimization)
+Fake metrics: No-Go (none invented)
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+#### Suggested commit message for this run
+
+```text
+chore(marketing): add love-test KPI analysis for day 024 (data required)
+```
