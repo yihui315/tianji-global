@@ -513,3 +513,37 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 想回去是一种心情，看清楚要修的是什么才是一个问题。
 - CTA: `/ask` after `/love-test`.
 - risk-safe check: No reunion promise, no closure guarantee.
+
+## Refresh 2026-07-12 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-12 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the rhythm-over-mood, slow-send, and worth-audit supporting angles. The single-sentence-clarity, story-vs-signal, boundary-softness, repair-vs-reunion, and time-without-pressure cluster from Refresh 2026-07-11 is deliberately not repeated here.
+
+## 43 Mood Is Hourly, Rhythm Is Weekly
+
+- channel: Xiaohongshu video
+- 3-second hook: Mood moves by the hour. Rhythm moves by the week. The second one is the one you can describe.
+- scene: A weekly planner with five soft color blocks, one mood word on top of each day, and a single line of steady pattern underlined at the bottom.
+- spoken copy: A bad morning can look like a bad relationship. A bad week might still be a steady one. Love Test helps you look at the rhythm before the mood tells you the whole story.
+- caption: 先看一周的节奏，再听今天的心情。
+- CTA: `/love-reading`.
+- risk-safe check: No mind-reading claim, no shame reversal, no guaranteed outcome.
+
+## 44 Draft Tonight, Read Tomorrow
+
+- channel: Douyin
+- 3-second hook: Drafting is free. Sending is the part you pace. Read it tomorrow morning before you send it tonight.
+- scene: A phone with a half-written message, the screen dimmed, a glass of water placed beside it, morning light coming through the curtain.
+- spoken copy: Tonight's message always sounds more urgent than tomorrow's. The point is not to never send it. It is to give yourself the version that comes after sleep. Love Test gives you a calmer way to notice which one you are writing.
+- caption: 今晚写的，明早再读一次。
+- CTA: `/love-test`.
+- risk-safe check: No pressure or chase tactics, no certainty claim, no decision made for the user.
+
+## 45 Worth In The Morning Light
+
+- channel: Videohao
+- 3-second hook: Worth is what the rhythm allows, not only what you feel at eleven at night. Test it in the morning light.
+- scene: A side-by-side shot: a dim phone screen at night on the left, the same page in clean daylight on the right.
+- spoken copy: The question "is this worth it" usually arrives late. The answer often reads differently in the morning. Love Test gives you a steadier way to see whether the morning version and the night version are pointing at the same relationship.
+- caption: 值不值得，看早晨那一眼是不是同一个答案。
+- CTA: `/relationship/new`.
+- risk-safe check: No decision made for the user, no outcome guarantee, no shame reversal.

@@ -99,6 +99,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 50. The story I was telling was older than the signal I saw. The Love Test helped me split the two apart: tianji.love/love-reading
 51. Wanting them back was a feeling. Naming what to repair was a question. The Love Test held both without rushing either: tianji.love/relationship/new
 
+## Refresh 2026-07-12 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-12 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the rhythm-over-mood, slow-send, and worth-audit supporting angles. The single-sentence-clarity, story-vs-signal, boundary-softness, repair-vs-reunion, and time-without-pressure cluster from Refresh 2026-07-11 is deliberately not repeated here. None are certainty claims.
+
+52. The bad morning was not the bad week. The free Love Test helped me look at the rhythm before the mood spoke first: tianji.love/love-reading
+53. I drafted the message tonight and read it again in the morning. The Love Test made the second version easier to choose: tianji.love/love-test
+54. Worth showed up differently in daylight than it did at eleven at night. The Love Test held both without rushing either: tianji.love/relationship/new
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.

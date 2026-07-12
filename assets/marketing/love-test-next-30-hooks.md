@@ -146,3 +146,13 @@ Timing CTA: 如果你纠结要不要行动，再点 timing 入口。
 ## Risk-safe editing rule
 
 Do not turn hooks into certainty claims. Replace "he/she will" with "the pattern may show" or "you can observe".
+
+## Refresh 2026-07-12 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-12 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the quiet-start, rhythm-over-mood, slow-send, return-check, and worth-audit supporting angles. The single-sentence-clarity, story-vs-signal, boundary-softness, repair-vs-reunion, and time-without-pressure cluster from Refresh 2026-07-11 is deliberately not repeated here. None are certainty claims.
+
+86. 新的一周不一定要换一个新问题，先把那个你讲了半句的重新讲清楚。
+87. 心情按小时走，节奏按周走。能描述的是后面那一个，不一定是现在最响的那个。
+88. 起草是免费的，发出去才是要定节奏的那一步。今晚写完，明早再看一次。
+89. 一个熟悉的人重新出现，你可以先叫出上次这种节奏的样子，再决定怎么回。
+90. 值不值得，看的是这段关系接得住你的早晨，不只是你深夜那一刻的心情。

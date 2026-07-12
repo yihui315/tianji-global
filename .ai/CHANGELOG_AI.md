@@ -1,6 +1,25 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-12 - TianJi Love content calendar refresh (cron 37 2 * * *)
+
+- Task ID: `20260712-tianji-love-content-calendar-refresh`.
+- Skill: `tianji-github-content-calendar`.
+- Working tree: feature branch `chore/marketing-love-test-content-calendar-20260711`, forked from `origin/main` (clean except for the unrelated `data/love-test-funnel-metrics.csv` from the prior revenue-funnel worktree, which is explicitly NOT staged in this commit).
+- Run timestamp (UTC): 2026-07-12 02:38 UTC.
+- Repo: `yihui315/tianji-global`.
+- Calendar health check: prior to this run the calendar already extended to 2026-08-31 (Day 69, 50 future days from today 2026-07-12) — well above the 7-day minimum. Skill rule "if fewer than seven future days exist, add only the missing number of days" was not triggered.
+- Calendar extension: added Days 70–76 (2026-09-01 → 2026-09-07) so the calendar keeps a healthy forward buffer and the new content lands in fresh supporting angles for the early-September cycle. Total future days after this run: 57.
+- Hook pool refresh: added hooks 86–90 (quiet start, rhythm-over-mood, slow send, return check, worth audit). Total hook pool: 90. None are certainty claims.
+- Video script pool refresh: added scripts 43–45 (mood is hourly / rhythm is weekly, draft tonight read tomorrow, worth in the morning light). Total video script pool: 45.
+- Share caption pool refresh: added captions 52–54 (rhythm-over-mood, slow-send, worth-audit-in-morning-light). Total share caption pool: 54.
+- Theme rotation: new content rotates through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the quiet-start, rhythm-over-mood, slow-send, return-check, worth-audit, and weekly-breath supporting angles — no emotional angle repeats more than once across the seven new days, and none overlap with the single-sentence-clarity / story-vs-signal / boundary-softness / repair-vs-reunion / time-without-pressure cluster used in Days 63–69 (hooks 81–85, scripts 40–42, captions 49–51) or the post-cycle-opening / re-entry-check / worth-re-reading / calm-milestone / new-month-intention / cycle-close / late-month-recap cluster used in Days 56–69.
+- Files updated: `assets/marketing/content-calendar-7day.md` (Days 70–76 appended), `assets/marketing/love-test-next-30-hooks.md` (hooks 86–90), `assets/marketing/love-test-next-20-video-scripts.md` (scripts 43–45), `assets/marketing/love-test-next-20-share-captions.md` (captions 52–54), `.ai/CHANGELOG_AI.md` (this entry), `.ai/REVIEW_PACKET.md`.
+- Validation: `git diff --check` clean (0 warnings on the new markdown delta; the 4 trailing-whitespace warnings reported are on the pre-existing modified `data/love-test-funnel-metrics.csv` and are outside this commit). Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits on the new lines; matches in prior audit reports are descriptive mentions of detector strings. `npm run typecheck` ran (`tsc -p tsconfig.typecheck.json --noEmit`) — pre-existing source errors in `src/app/(main)/services/page.tsx` and `src/app/(main)/tarot-love-reading-online/page.tsx` are unrelated to this markdown-only change set and were verified identical on `git stash` baseline. `npm run lint` passed (`next lint`, exit 0 — "No ESLint warnings or errors").
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting. No fake testimonial, no fake user number, no fake revenue, no fake KPI, no guaranteed outcome, no reunion promise, no mind-reading claim, no "act now" urgency language, no diagnosis language, no shame reversal, no fear-based CTA.
+- Gate status: `Seven-day content calendar: Go`; `Hook pool: Go`; `Video script pool: Go`; `Share caption pool: Go`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): refresh love-test content calendar`.
+
 ### 2026-07-11 - TianJi Love content calendar refresh (cron 37 2 * * *)
 
 - Task ID: `20260711-tianji-love-content-calendar-refresh`.

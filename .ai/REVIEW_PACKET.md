@@ -1,6 +1,43 @@
 # TianJi Love Review Packet
 ## Current Task
 
+TianJi Love content calendar refresh for 2026-07-12 (cron `37 2 * * *`, skill `tianji-github-content-calendar`). Calendar prior to this run was healthy with 50 future days (last entry 2026-08-31, Day 69), well above the 7-day minimum. Extended the calendar by Days 70–76 (2026-09-01 → 2026-09-07) so a healthy forward buffer is preserved while the new content lands in fresh supporting angles for the early-September cycle. Refreshed the three pools: added hooks 86–90 (5 hooks, total pool 90), added video scripts 43–45 (3 scripts, total pool 45), added share captions 52–54 (3 captions, total pool 54). New themes rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the quiet-start, rhythm-over-mood, slow-send, return-check, worth-audit, and weekly-breath supporting angles, deliberately avoiding the single-sentence-clarity / story-vs-signal / boundary-softness / repair-vs-reunion / time-without-pressure cluster (Days 63–69, hooks 81–85, scripts 40–42, captions 49–51) and the post-cycle-opening / re-entry-check / worth-re-reading / calm-milestone / new-month-intention / cycle-close / late-month-recap cluster (Days 56–69). No certainty claims, no reunion promises, no mind-reading, no diagnosis, no shame reversal, no fear-based CTA.
+
+## Files created this run
+
+- None (refresh-only run; all changes are appends to existing pool files and the calendar).
+
+## Files updated this run
+
+- `assets/marketing/content-calendar-7day.md` (Days 70–76 appended)
+- `assets/marketing/love-test-next-30-hooks.md` (hooks 86–90)
+- `assets/marketing/love-test-next-20-video-scripts.md` (scripts 43–45)
+- `assets/marketing/love-test-next-20-share-captions.md` (captions 52–54)
+- `.ai/CHANGELOG_AI.md`
+- `.ai/REVIEW_PACKET.md` (this file)
+
+## Allowed files inspected read-only (no edits)
+
+- `assets/marketing/content-calendar-7day.md` (existing Days 56–69 themes, used for rotation continuity check)
+- `assets/marketing/love-test-next-30-hooks.md` (existing hook pool, used as rotation reference)
+- `assets/marketing/love-test-next-20-video-scripts.md` (existing script pool, used as rotation reference)
+- `assets/marketing/love-test-next-20-share-captions.md` (existing caption pool, used as rotation reference)
+
+## Gate status
+
+```
+Seven-day content calendar: Go
+Hook pool: Go
+Video script pool: Go
+Share caption pool: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Prior run (2026-07-11 content calendar refresh)
+
 TianJi Love content calendar refresh for 2026-07-11 (cron `37 2 * * *`, skill `tianji-github-content-calendar`). Calendar prior to this run was healthy with 44 future days (last entry 2026-08-24, Day 62), well above the 7-day minimum. Extended the calendar by Days 63–69 (2026-08-25 → 2026-08-31) so a healthy forward buffer is preserved while the new content lands in fresh supporting angles for the late-August cycle. Refreshed the three pools: added hooks 81–85 (5 hooks, total pool 85), added video scripts 40–42 (3 scripts, total pool 42), added share captions 49–51 (3 captions, total pool 51). New themes rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the single-sentence-clarity, story-vs-signal, boundary-softness, repair-vs-reunion, and time-without-pressure supporting angles, deliberately avoiding the emotional-vocabulary / self-trust / contact-calibration / dynamic-readjustment / friendship-rooted / end-of-cycle-reflection cluster (Days 49–55) and the post-cycle-opening / quiet-observation / re-entry-check / worth-re-reading / calm-milestone / new-month-intention / cycle-close cluster (Days 56–62). No certainty claims, no reunion promises, no mind-reading, no diagnosis, no shame reversal, no fear-based CTA.
 
 ## Files created this run
