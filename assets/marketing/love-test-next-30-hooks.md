@@ -156,3 +156,13 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 88. 起草是免费的，发出去才是要定节奏的那一步。今晚写完，明早再看一次。
 89. 一个熟悉的人重新出现，你可以先叫出上次这种节奏的样子，再决定怎么回。
 90. 值不值得，看的是这段关系接得住你的早晨，不只是你深夜那一刻的心情。
+
+## Refresh 2026-07-13 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-13 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the late-summer-rhythm, what-the-question-was-actually-asking, friendship-as-lens, repair-vs-return-reread, and cycle-completion-without-decision supporting angles. The quiet-start, rhythm-over-mood, slow-send, return-check, and worth-audit cluster from Refresh 2026-07-12 is deliberately not repeated here. None are certainty claims.
+
+91. 慢一点的这一周，常常是给下一个能描述的答案留时间。
+92. 你问的那个问题，有时候其实已经告诉了你它在问什么。
+93. 用朋友的眼光看一段关系，常常比用恋人的眼光更稳。
+94. 想重读一次旧结果，可以先把"想修什么"和"想回到哪"分开。
+95. 走完一个小周期不一定要得出结论，也是一种清楚。

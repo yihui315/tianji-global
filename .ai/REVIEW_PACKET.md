@@ -1,20 +1,28 @@
 # TianJi Love Review Packet
 ## Current Task
 
-TianJi Love content calendar refresh for 2026-07-12 (cron `37 2 * * *`, skill `tianji-github-content-calendar`). Calendar prior to this run was healthy with 50 future days (last entry 2026-08-31, Day 69), well above the 7-day minimum. Extended the calendar by Days 70–76 (2026-09-01 → 2026-09-07) so a healthy forward buffer is preserved while the new content lands in fresh supporting angles for the early-September cycle. Refreshed the three pools: added hooks 86–90 (5 hooks, total pool 90), added video scripts 43–45 (3 scripts, total pool 45), added share captions 52–54 (3 captions, total pool 54). New themes rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the quiet-start, rhythm-over-mood, slow-send, return-check, worth-audit, and weekly-breath supporting angles, deliberately avoiding the single-sentence-clarity / story-vs-signal / boundary-softness / repair-vs-reunion / time-without-pressure cluster (Days 63–69, hooks 81–85, scripts 40–42, captions 49–51) and the post-cycle-opening / re-entry-check / worth-re-reading / calm-milestone / new-month-intention / cycle-close / late-month-recap cluster (Days 56–69). No certainty claims, no reunion promises, no mind-reading, no diagnosis, no shame reversal, no fear-based CTA.
+TianJi Love content calendar refresh for 2026-07-13 (cron `37 2 * * *`, skill `tianji-github-content-calendar`). Calendar prior to this run was healthy with 56 future days (last entry 2026-09-07, Day 76), well above the 7-day minimum — skill rule "if fewer than seven future days exist, add only the missing number of days" was not triggered. This run did NOT extend the calendar (the forward buffer is in the healthy band and the supporting-angle rotation queue for late-August / early-September still has unused entries, so adding more days now would force premature angle repetition); instead the run refreshed the three pools: added hooks 91–95 (5 hooks, total pool 95), added video scripts 46–48 (3 scripts, total pool 48), added share captions 55–57 (3 captions, total pool 57). New themes rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the late-summer-rhythm, what-the-question-was-actually-asking, friendship-as-lens, repair-vs-return-reread, and cycle-completion-without-decision supporting angles, deliberately avoiding the rhythm-over-mood / slow-send / worth-audit cluster (Refresh 2026-07-12, hooks 86–90, scripts 43–45, captions 52–54) and the single-sentence-clarity / story-vs-signal / boundary-softness / repair-vs-reunion / time-without-pressure cluster (Refresh 2026-07-11, hooks 81–85, scripts 40–42, captions 49–51). No certainty claims, no reunion promises, no mind-reading, no diagnosis, no shame reversal, no fear-based CTA.
+
+## Previous Task
+
+TianJi Love content calendar refresh for 2026-07-12 (cron `37 2 * * *`, skill `tianji-github-content-calendar`). Calendar prior to that run was healthy with 50 future days (last entry 2026-08-31, Day 69), well above the 7-day minimum. Extended the calendar by Days 70–76 (2026-09-01 → 2026-09-07) so a healthy forward buffer is preserved while the new content lands in fresh supporting angles for the early-September cycle. Refreshed the three pools: added hooks 86–90 (5 hooks, total pool 90), added video scripts 43–45 (3 scripts, total pool 45), added share captions 52–54 (3 captions, total pool 54). New themes rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the quiet-start, rhythm-over-mood, slow-send, return-check, worth-audit, and weekly-breath supporting angles, deliberately avoiding the single-sentence-clarity / story-vs-signal / boundary-softness / repair-vs-reunion / time-without-pressure cluster (Days 63–69, hooks 81–85, scripts 40–42, captions 49–51) and the post-cycle-opening / re-entry-check / worth-re-reading / calm-milestone / new-month-intention / cycle-close / late-month-recap cluster (Days 56–69). No certainty claims, no reunion promises, no mind-reading, no diagnosis, no shame reversal, no fear-based CTA.
 
 ## Files created this run
 
-- None (refresh-only run; all changes are appends to existing pool files and the calendar).
+- None (refresh-only run; all changes are appends to existing pool files).
 
 ## Files updated this run
 
-- `assets/marketing/content-calendar-7day.md` (Days 70–76 appended)
-- `assets/marketing/love-test-next-30-hooks.md` (hooks 86–90)
-- `assets/marketing/love-test-next-20-video-scripts.md` (scripts 43–45)
-- `assets/marketing/love-test-next-20-share-captions.md` (captions 52–54)
+- `assets/marketing/love-test-next-30-hooks.md` (hooks 91–95 appended)
+- `assets/marketing/love-test-next-20-video-scripts.md` (scripts 46–48 appended)
+- `assets/marketing/love-test-next-20-share-captions.md` (captions 55–57 appended)
 - `.ai/CHANGELOG_AI.md`
 - `.ai/REVIEW_PACKET.md` (this file)
+
+## Files explicitly NOT updated this run
+
+- `assets/marketing/content-calendar-7day.md` (no calendar extension this cycle — forward buffer remains at 56 future days; new pool angles are now ready to backfill the next extension cycle)
+- `data/love-test-funnel-metrics.csv` (pre-existing modified file from a prior revenue-funnel worktree; not part of this skill's scope)
 
 ## Allowed files inspected read-only (no edits)
 

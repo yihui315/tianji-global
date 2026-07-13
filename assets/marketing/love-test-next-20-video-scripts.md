@@ -547,3 +547,37 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 值不值得，看早晨那一眼是不是同一个答案。
 - CTA: `/relationship/new`.
 - risk-safe check: No decision made for the user, no outcome guarantee, no shame reversal.
+
+## Refresh 2026-07-13 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-13 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the late-summer-rhythm, what-the-question-was-actually-asking, friendship-as-lens, repair-vs-return-reread, and cycle-completion-without-decision supporting angles. The rhythm-over-mood, slow-send, and worth-audit cluster from Refresh 2026-07-12 is deliberately not repeated here. None are certainty claims.
+
+## 46 What The Question Was Actually Asking
+
+- channel: Xiaohongshu video
+- 3-second hook: The question you keep replaying usually already named what it was asking.
+- scene: A close-up of a notebook page with one question written twice, the second time underlined, and a small arrow pointing at the verb inside the sentence.
+- spoken copy: Most replayed questions are not really asking for an answer. They are asking you to notice what part of the sentence you keep returning to. Love Test gives you a steadier way to read the question instead of just answering it.
+- caption: 你一直在重读的那个问题，常常已经告诉了你它在问什么。
+- CTA: `/love-test`.
+- risk-safe check: No mind-reading claim, no outcome guarantee, no shame reversal.
+
+## 47 Friendship As A Lens
+
+- channel: Reels
+- 3-second hook: A friendship lens usually sees a relationship more clearly than a romance lens does.
+- scene: Two photos side by side: the left shows the relationship through a soft filter, the right shows the same people in everyday clothes on a coffee shop bench, both relaxed.
+- spoken copy: When the same two people look different through a friendship lens and a romance lens, the gap is usually information. Love Test helps you look at the everyday version before the title does the work.
+- caption: 用朋友的眼光看一段关系，常常比用恋人的眼光更稳。
+- CTA: `/relationship/new`.
+- risk-safe check: No shaming either side, no diagnosis language, no decision made for the user.
+
+## 48 Reread Without Redoing
+
+- channel: Douyin
+- 3-second hook: Re-reading an old result is normal. Treating the reread as a redo usually is not.
+- scene: A phone screen showing an older Love Test result next to a fresh notebook page titled "what would I want to repair, not return to".
+- spoken copy: Returning to a result from weeks ago is not the same as restarting it. The useful question is what would actually need to change for the next round to feel different. Love Test helps you split the reread from the redo.
+- caption: 重读旧结果可以，重做旧问题常常不是同一件事。
+- CTA: `/ask` after `/love-test`.
+- risk-safe check: No reunion promise, no mind-reading claim, no pressure or chase tactics.

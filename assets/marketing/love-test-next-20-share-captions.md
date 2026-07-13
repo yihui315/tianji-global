@@ -107,6 +107,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 53. I drafted the message tonight and read it again in the morning. The Love Test made the second version easier to choose: tianji.love/love-test
 54. Worth showed up differently in daylight than it did at eleven at night. The Love Test held both without rushing either: tianji.love/relationship/new
 
+## Refresh 2026-07-13 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-13 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the what-the-question-was-actually-asking, friendship-as-lens, and repair-vs-return-reread supporting angles. The rhythm-over-mood, slow-send, and worth-audit cluster from Refresh 2026-07-12 is deliberately not repeated here. None are certainty claims.
+
+55. The question I kept replaying was already telling me what it was asking. The free Love Test helped me read it instead of just answering it: tianji.love/love-test
+56. A friendship lens saw my relationship more clearly than a romance lens did. The Love Test held the everyday version before the title did the work: tianji.love/relationship/new
+57. I was about to re-do an old question. The Love Test helped me split the reread from the redo: tianji.love/love-reading
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.
