@@ -1632,3 +1632,46 @@ Production deploy: No-Go
 ```text
 chore(marketing): add love-test KPI analysis for day 024 (data required)
 ```
+
+---
+
+## Day 025 publishing pack (2026-07-18)
+
+### Current Task
+
+TianJi Love Day 025 publishing pack (cron `17 1 * * *`, skill `tianji-github-daily-growth`). Calendar entry for 2026-07-18 is Day 25 with the theme "Worth continuing — worth is not only what you feel; it is also what the rhythm allows", channel mix 5 Xiaohongshu / 5 Reels / 5 X / 3 Reddit / 2 KOL / 3 SEO, and CTA `/love-test`. The pack separates the feeling question ("I still feel it") from the rhythm question ("does this rhythm let me be a person on a Wednesday morning") and keeps both as separate observations on two separate axes, refusing to collapse either into a "if you feel it, it is worth it" trap, a "if the rhythm is hard, you have your answer" reversal, or a "real worth is felt in the body, not the calendar" performance frame. All copy is helpful, grounded, and non-guaranteed; no auto-posting, no Stripe, no paid smoke, no production deploy.
+
+### Files created this run
+
+- `assets/marketing/daily/day-025-publishing-pack.md`
+- `assets/marketing/daily/day-025-review-checklist.md`
+- `data/love-test-day-025-kpi-entry.csv`
+
+### Files updated this run
+
+- `.ai/CHANGELOG_AI.md`
+- `.ai/REVIEW_PACKET.md` (this file)
+
+### Allowed files inspected read-only (no edits)
+
+- `assets/marketing/content-calendar-7day.md` (2026-07-18 Day 25 entry, used for theme/CTA confirmation)
+- `assets/marketing/daily/day-024-publishing-pack.md` (used for format continuity)
+- `assets/marketing/daily/day-024-review-checklist.md` (used for safety-gate continuity)
+- `data/love-test-day-024-kpi-entry.csv` (used for KPI scaffold shape)
+- `assets/marketing/love-test-next-30-hooks.md` (hooks 86-90 from Refresh 2026-07-12, used for fresh supporting angles)
+
+### Files explicitly NOT staged
+
+- `data/love-test-funnel-metrics.csv` (pre-existing modified file from a prior revenue-funnel worktree; not part of this skill's scope)
+
+### Gate status
+
+```text
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
