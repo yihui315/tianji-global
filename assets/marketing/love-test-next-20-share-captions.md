@@ -115,6 +115,14 @@ These captions were added by the `tianji-github-content-calendar` cron job on 20
 56. A friendship lens saw my relationship more clearly than a romance lens did. The Love Test held the everyday version before the title did the work: tianji.love/relationship/new
 57. I was about to re-do an old question. The Love Test helped me split the reread from the redo: tianji.love/love-reading
 
+## Refresh 2026-07-15 - Next batch of 3 share captions
+
+These captions were added by the `tianji-github-content-calendar` cron job on 2026-07-15 to keep the share-card pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the naming-before-reacting, calm-agency, and story-vs-rhythm supporting angles. The what-the-question-was-actually-asking, friendship-as-lens, and repair-vs-return-reread cluster from Refresh 2026-07-13 is deliberately not repeated here. None are certainty claims.
+
+58. I noticed what I noticed before I decided what to do with it. The free Love Test made those two steps feel different on purpose: tianji.love/love-test
+59. Agency felt less like proving who moved first and more like choosing the next small step. The Love Test held the order for me: tianji.love/relationship/new
+60. The story was changing by the hour. The rhythm was steadier. The Love Test helped me trust the slower one: tianji.love/love-reading
+
 ## Safety note
 
 Do not edit these captions into fake testimonials or certainty claims. Keep the first action as `/love-test`.

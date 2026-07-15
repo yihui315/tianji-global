@@ -1683,3 +1683,148 @@ Stripe checkout execution: Not run
 Paid smoke: No-Go - awaiting explicit approval
 Production deploy: No-Go
 ```
+
+---
+
+## 2026-07-15 — Funnel Copy Optimizer (cron `0 2 */14 * *`)
+
+### Run
+
+- Skill: `tianji-github-funnel-optimizer` (auto mode).
+- Trigger: scheduled cron (`0 2 */14 * *`).
+- Run timestamp (UTC): 2026-07-15 02:06 UTC.
+- Repo: `yihui315/tianji-global`.
+- Branch observed: `chore/marketing-love-test-content-calendar-20260711` (local HEAD `03826dc`).
+- Working tree: one pre-existing modified file `data/love-test-funnel-metrics.csv` from the bridge-script run (not staged by this skill).
+- Prior gate context: `.ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260712.md` (gate matrix unchanged; revenue execution remains No-Go; source/test Go).
+- Upstream git log since 2026-07-13 (per `git log --all --oneline`): no new commits on this branch between 2026-07-13 and now (latest is the 2026-07-13 day-025 publishing pack).
+
+### KPI Evidence Read
+
+- `data/love-test-funnel-metrics.csv` (after bridge invocation):
+  - Rows 2-5: `homepage_to_love_test_ctr=0`, `love_test_start_rate=0`, `result_view_rate=0`, `share_card_click_rate=0`, `ask_next_click_rate=0`, `paid_intent_view_rate=0`, `preview_submit_rate=0`, `unlock_click_rate=0`, `checkout_ready_rate=0`, `paid_conversion_rate=0`, `revenue_cny=0`.
+  - No row contains a non-zero numeric in any funnel column. No weak step can be ranked below any other step.
+- `data/love-test-kpi-tracking.csv`: only the `2026-05` template row with all metrics `0`.
+- `data/love-test-marketing-kpi.csv`: only template rows, no real engagement data.
+- `data/love-test-day-*-kpi-entry.csv` (day-001 through day-025): all scaffold rows with `notes=manual entry after publish` and empty numeric cells.
+
+### Decision
+
+- Per the skill workflow step 1 ("Confirm KPI evidence and the exact weak funnel step"), the prerequisite is **NOT** satisfied. No weak funnel step can be identified from all-zero data.
+- Per skill rule 6 ("If validation fails, repair only within the allowed scope or stop and report the blocker"), this run **stops and reports the blocker** rather than fabricating a weak step.
+- No source files were edited. No `src/app/(main)/love-test/page.tsx`, `src/app/(main)/ask/page.tsx`, `src/lib/love-test.ts`, `assets/love-test-copywriting.md`, `data/love-test-event-tracking.csv`, or `data/love-test-kpi-tracking.csv` was changed.
+- Only `.ai/CHANGELOG_AI.md` and `.ai/REVIEW_PACKET.md` were appended (records only).
+
+### Validation
+
+- `git status --short`: `M data/love-test-funnel-metrics.csv` (pre-existing bridge row, NOT staged in this run); `.ai/CHANGELOG_AI.md` and `.ai/REVIEW_PACKET.md` modified by this run.
+- `git diff --check` on the new CHANGELOG/REVIEW_PACKET entries: passed (0 warnings on the new lines).
+- `npm run typecheck` / `npm run lint` / `npm run test`: not run — no source change.
+- `npm run audit:routes` / `npm run audit:share`: not run — no source change.
+- `npm run build:staging:degraded`: not run — no source change.
+- Secret-shape scan: not refreshed (prior 2026-07-12 scan result of 0 raw-shape hits over `.ai/`, `.agents/skills/`, `.github/workflows/` still applies; no new raw-shape surface introduced).
+
+### Commit / Push
+
+- This run produces a No-Go verdict and intentionally does NOT commit or push any source-level copy change.
+- The CHANGELOG and REVIEW_PACKET edits are records-only. Per the skill's commit rules ("Commit only the allowed funnel files and AI records changed by this skill"), they would be eligible for commit, but since the verdict is No-Go and there is no operator request to ship a records-only commit, no commit is made this run.
+- If a follow-up records-only commit is desired, the operator can run `git add .ai/CHANGELOG_AI.md .ai/REVIEW_PACKET.md && git commit -m "docs(ai): record 2026-07-15 funnel optimizer No-Go"` locally; that is outside the scope of this auto run.
+
+### Safety Boundary
+
+- No `.env*` files were read, printed, copied, diffed, or summarized.
+- No Stripe live-mode touch; no Stripe test-mode paid smoke (still awaiting explicit human approval phrase).
+- No webhook replay.
+- No Supabase production mutation.
+- No AI provider live call.
+- No production deploy; no PM2/Nginx/certbot/server mutation.
+- No social auto-posting.
+- The bridge script (`~/.hermes/scripts/run_revenue_funnel.py`) ran once in read-only mode and wrote one row to `data/love-test-funnel-metrics.csv`.
+
+### Gate Status
+
+```
+Funnel copy optimization: Not run
+KPI evidence: No-Go - missing real weak-conversion signal
+Stripe checkout logic: Not changed
+Supabase mutation: Not changed
+Provider live call: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Blockers (No-Go Conditions Logged)
+
+1. Real weak-conversion signal absent: `data/love-test-funnel-metrics.csv` row from the read-only bridge is all `0`/`0.0`/`revenue_cny=0`; `data/love-test-kpi-tracking.csv` row is all `0`; per-day `data/love-test-day-*-kpi-entry.csv` rows remain scaffolds with no real `impressions`/`clicks`/`love_test_starts`/`paid_intent_view`/`paid_unlock_click` values.
+2. Until at least one real channel/content_id row is back-filled, the funnel optimizer cannot identify a weak step and will continue to report No-Go on this prerequisite.
+3. The pre-existing blockers from `.ai/TIANJI_LOVE_AUTO_GATE_STATUS_20260712.md` remain unchanged: Stripe test-mode paid smoke awaits explicit human approval phrase; Stripe live No-Go; Supabase production mutation No-Go; production deploy No-Go.
+
+## 2026-07-15 - TianJi Love content calendar refresh (cron)
+
+### Files changed
+
+- `assets/marketing/content-calendar-7day.md` — extended future calendar by 7 rows (Days 77–83, 2026-09-08 → 2026-09-14).
+- `assets/marketing/love-test-next-30-hooks.md` — added a "Refresh 2026-07-15" batch of 5 hooks (numbers 96–100).
+- `assets/marketing/love-test-next-20-video-scripts.md` — added a "Refresh 2026-07-15" batch of 3 scripts (numbered 49 / 50 / 51: "Name It Before You Move It", "The Order Of A Small Step", "Story Moves By The Hour, Rhythm By The Week").
+- `assets/marketing/love-test-next-20-share-captions.md` — added a "Refresh 2026-07-15" batch of 3 captions (numbers 58–60).
+
+### Safety baseline (re-checked)
+
+```text
+No fake testimonials, fake numbers, or fake user counts were introduced.
+No guaranteed reunion, reply, commitment, or relationship repair claims were introduced.
+No "diagnostic" language (e.g. anxiety disorder, attachment disorder, codependency,
+toxic, narcissist) was introduced in any of the new copy.
+No "act now", "last chance", or fear-based urgency language was used.
+No "wanting to reach out = should send" coercion or
+"if you don't send you don't care" shame reversal was introduced.
+CTAs follow the established ladder: /love-test first, then /ask or /love-reading or /relationship/new.
+```
+
+### Local validation
+
+```text
+git diff --check
+Returned 0 warnings on the markdown delta from this run. The trailing-whitespace
+warnings flagged on data/love-test-funnel-metrics.csv are pre-existing from the
+prior revenue-funnel worktree and outside the scope of this content-calendar
+skill run; that file is explicitly NOT staged in this commit.
+
+Targeted secret-shape scan over .ai/ assets/marketing/ data/
+Returned 0 raw-shape hits over the new edits. Matches in .ai/CHANGELOG_AI.md,
+.ai/REVIEW_PACKET.md, and prior .ai/TIANJI_LOVE_AUTO_GATE_STATUS_*.md are
+descriptive mentions of the scan detector strings in audit reports, not real
+secrets (sk_live_*, pk_live_*, whsec_*, rk_live_*, AKIA*, -----BEGIN *PRIVATE KEY-----).
+
+npm run typecheck
+Long-running tsc -p tsconfig.typecheck.json --noEmit. Reports 29 pre-existing
+TypeScript errors, all in src/app/(main)/services/page.tsx,
+src/app/(main)/tarot-love-reading-online/page.tsx,
+src/app/(main)/daily-love-oracle-guide/page.tsx,
+src/app/(main)/free-ai-love-reading/page.tsx, and
+src/app/(main)/free-relationship-compatibility-test/page.tsx — none of which
+were touched by this skill run; exit code 2 reflects the pre-existing baseline,
+not a regression from the markdown+CSV-only delta.
+
+npm run lint
+Passed (next lint, exit 0 — "No ESLint warnings or errors").
+```
+
+### Gate status (this run)
+
+```text
+Seven-day content calendar: Go - 61 future days (Days 23–83, 2026-07-15 → 2026-09-14)
+Hook pool: Go - 100 hooks
+Video script pool: Go - 51 scripts
+Share caption pool: Go - 60 captions
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+### Suggested commit message for this run
+
+```text
+chore(marketing): refresh love-test content calendar
+```

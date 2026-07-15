@@ -166,3 +166,13 @@ These hooks were added by the `tianji-github-content-calendar` cron job on 2026-
 93. 用朋友的眼光看一段关系，常常比用恋人的眼光更稳。
 94. 想重读一次旧结果，可以先把"想修什么"和"想回到哪"分开。
 95. 走完一个小周期不一定要得出结论，也是一种清楚。
+
+## Refresh 2026-07-15 - Next batch of 5 hooks
+
+These hooks were added by the `tianji-github-content-calendar` cron job on 2026-07-15 to keep the pool fresh while rotating through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the naming-before-reacting, quiet-confidence, one-thing-at-a-time, mid-cycle-audit, calm-agency, story-vs-rhythm, and quiet-weekly-review supporting angles. The late-summer-rhythm, what-the-question-was-actually-asking, friendship-as-lens, repair-vs-return-reread, and cycle-completion-without-decision cluster from Refresh 2026-07-13 is deliberately not repeated here. None are certainty claims.
+
+96. 命名你注意到的，再决定要不要行动。两步不是一步。
+97. 自信听起来是安静的，确定听起来才大声。先认得哪一边更接近你。
+98. 很多问题常常是一个问题换了衣服，先看清它原本的样子。
+99. 中段的复盘是用来观察的，不是用来发消息的。先看，再写，最后才发。
+100. 主动权是选下一步，不是比谁先动。顺序不一样。

@@ -581,3 +581,37 @@ These scripts were added by the `tianji-github-content-calendar` cron job on 202
 - caption: 重读旧结果可以，重做旧问题常常不是同一件事。
 - CTA: `/ask` after `/love-test`.
 - risk-safe check: No reunion promise, no mind-reading claim, no pressure or chase tactics.
+
+## Refresh 2026-07-15 - Next batch of 3 video scripts
+
+These scripts were added by the `tianji-github-content-calendar` cron job on 2026-07-15 to keep the pool fresh and rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the naming-before-reacting, calm-agency, and story-vs-rhythm supporting angles. The late-summer-rhythm, what-the-question-was-actually-asking, friendship-as-lens, repair-vs-return-reread, and cycle-completion-without-decision cluster from Refresh 2026-07-13 is deliberately not repeated here. None are certainty claims.
+
+## 49 Name It Before You Move It
+
+- channel: Xiaohongshu video
+- 3-second hook: Name what you noticed before you decide what to do with it.
+- scene: A notebook page with one observation written at the top and a blank line below it where the next step will go later.
+- spoken copy: Noticing and deciding feel like the same motion, but they are not. Love Test gives you a place to write down what you have been noticing first, so the next step is yours and not the next message's.
+- caption: 先命名你注意到的，再决定下一步。
+- CTA: `/love-test`.
+- risk-safe check: No decision made for the user, no certainty claim, no urgency framing.
+
+## 50 The Order Of A Small Step
+
+- channel: Douyin
+- 3-second hook: Agency is choosing the next small step, not proving who moved first.
+- scene: A side-by-side of two sticky notes: one labeled "prove I moved first", the other labeled "choose the next small step". The second one stays on the wall.
+- spoken copy: Agency often gets confused with speed. The useful version is the one where the next small step fits the rhythm you can actually keep. Love Test helps you sort those two apart before you send.
+- caption: 主动权是选下一步，不是比谁先动。
+- CTA: `/relationship/new`.
+- risk-safe check: No mind-reading claim, no pressure or chase tactics, no outcome guarantee.
+
+## 51 Story Moves By The Hour, Rhythm By The Week
+
+- channel: Reels
+- 3-second hook: The story changes by the hour. The rhythm usually changes by the week. Trust the slower one.
+- scene: A split-screen: a clock on the left spinning fast, a weekly planner on the right with one steady line underlined at the bottom.
+- spoken copy: When the inside story is loud, the week is usually still telling the same quieter thing. Love Test helps you read the rhythm before the story tells you the whole answer.
+- caption: 故事按小时走，节奏按周走。先信慢的那个。
+- CTA: `/love-reading`.
+- risk-safe check: No shame reversal, no fear-based CTA, no certainty claim.
