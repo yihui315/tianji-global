@@ -386,6 +386,7 @@ export default function FreeRelationshipCompatibilityTestPage() {
     <>
       <TianjiLoveShell>
         <TianjiLoveHeader
+          homeHref="/"
           navItems={[
             { label: copy.nav.loveReading, href: '/love-reading' },
             { label: copy.nav.ask, href: '/ask' },
@@ -393,22 +394,20 @@ export default function FreeRelationshipCompatibilityTestPage() {
             { label: copy.nav.pricing, href: '/pricing' },
             { label: copy.nav.about, href: '/about' },
           ]}
-          ctaLabel={copy.nav.privacy}
-          ctaHref="/privacy"
         />
 
         {/* Hero */}
-        <TianjiLoveHeroImage
-          eyebrow={copy.hero.eyebrow}
-          title={copy.hero.title}
-          body={copy.hero.body}
-          imageSrc={HERO_IMG}
-          imageAlt="Two people with red thread"
-          primaryCta={copy.hero.primary}
-          primaryHref="/love-test"
-          secondaryCta={copy.hero.secondary}
-          secondaryHref="/love-reading"
-        />
+        <section className="relative z-10 px-5 pt-20 sm:px-8">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-xs uppercase tracking-[0.28em] text-[#d8b77b]/64">{copy.hero.eyebrow}</p>
+            <h1 className="mt-4 font-serif text-4xl font-semibold leading-tight text-[#ffe3b4] sm:text-5xl">{copy.hero.title}</h1>
+            <p className="mx-auto mt-5 max-w-2xl text-base text-[#f4d7a3]/72">{copy.hero.body}</p>
+            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+              <TianjiLoveButton href="/love-test" variant="primary">{copy.hero.primary}</TianjiLoveButton>
+              <TianjiLoveButton href="/love-reading" variant="secondary">{copy.hero.secondary}</TianjiLoveButton>
+            </div>
+          </div>
+        </section>
 
         {/* Dimensions */}
         <TianjiLovePanel>
@@ -496,7 +495,7 @@ export default function FreeRelationshipCompatibilityTestPage() {
             ))}
           </ul>
           <div className="mt-8">
-            <TianjiLoveButton href="/relationship/new" variant="premium">
+            <TianjiLoveButton href="/relationship/new" variant="primary">
               <CreditCard className="h-4 w-4" />
               {copy.fullReport.cta}
             </TianjiLoveButton>
@@ -536,43 +535,26 @@ export default function FreeRelationshipCompatibilityTestPage() {
 
         {/* Final CTA */}
         <TianjiLoveFinalCta
-          title={copy.finalCta.title}
-          primaryCta={copy.finalCta.primary}
-          primaryHref="/love-test"
-          secondaryCta={copy.finalCta.secondary}
-          secondaryHref="/love-reading"
           imageSrc={FINAL_IMG}
-          imageAlt="Love oracle"
+          title={copy.finalCta.title}
+          buttonLabel={copy.finalCta.primary}
+          href="/love-test"
         />
 
         {/* Trust */}
-        <TianjiLoveTrustCard
-          items={[
-            {
-              icon: HeartHandshake,
-              title: t('Private by default', '默认私密'),
-              body: t('No birth dates or relationship data exposed on public pages.', '公开页面上不暴露出生日期或关系数据。'),
-            },
-            {
-              icon: Brain,
-              title: t('AI-powered analysis', 'AI 驱动分析'),
-              body: t('Five-dimensional BaZi compatibility model.', '五行八字五维契合模型。'),
-            },
-            {
-              icon: CalendarHeart,
-              title: t('Instant free score', '即时免费评分'),
-              body: t('Get your 0–100 score in seconds, no signup required.', '几秒内获得 0-100 评分，无需注册。'),
-            },
-          ]}
-        />
+        <div className="grid gap-4 sm:grid-cols-3">
+          <TianjiLoveTrustCard icon={HeartHandshake} title={t('Private by default', '默认私密')} body={t('No birth dates or relationship data exposed on public pages.', '公开页面上不暴露出生日期或关系数据。')} />
+          <TianjiLoveTrustCard icon={Brain} title={t('AI-powered analysis', 'AI 驱动分析')} body={t('Five-dimensional BaZi compatibility model.', '五行八字五维契合模型。')} />
+          <TianjiLoveTrustCard icon={CalendarHeart} title={t('Instant free score', '即时免费评分')} body={t('Get your 0–100 score in seconds, no signup required.', '几秒内获得 0-100 评分，无需注册。')} />
+        </div>
 
         <TianjiLoveFooter
-          copy={copy.footer}
-          href={(path: string) => path}
+          disclaimer={copy.footer}
           links={[
             { label: copy.nav.about, href: '/about' },
             { label: copy.nav.privacy, href: '/privacy' },
           ]}
+          homeHref="/"
         />
       </TianjiLoveShell>
 

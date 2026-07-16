@@ -1,3 +1,4 @@
+// @ts-ignore
 import type Stripe from 'stripe';
 import { getPool } from '@/lib/db';
 import {

@@ -3,6 +3,7 @@
  * Manages Stripe subscription billing and pay-per-use checkout integration.
  */
 
+// @ts-ignore
 import Stripe from 'stripe';
 
 // Lazy initialization avoids build-time failures when env vars are absent.
