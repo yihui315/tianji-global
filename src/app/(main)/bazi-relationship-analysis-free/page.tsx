@@ -413,7 +413,7 @@ export default function BaziRelationshipAnalysisFreePage() {
       </nav>
 
       {/* AdSense placeholder after CTA */}
-      <div id="bazi-ads" className="relative z-10 mx-auto max-w-7xl px-5 pb-12 sm:px-8" />
+      <div id="bazi-ads-2" className="relative z-10 mx-auto max-w-7xl px-5 pb-12 sm:px-8" />
 
       <TianjiLoveFooter
         disclaimer={t(DISCLAIMER_EN, DISCLAIMER_ZH)}

@@ -31,6 +31,7 @@
     "smoke:ai-providers": "tsx scripts/smoke-ai-providers.ts",
     "smoke:stripe:test-readiness": "tsx scripts/smoke-stripe-test-readiness.ts",
     "audit:release-gate": "tsx scripts/audit-release-gate.ts",
+    "audit:adsense": "bash scripts/audit-adsense.sh",
     "release:check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run audit:routes && npm run audit:copy && npm run audit:share && npm run audit:upgrade",
     "upgrade:plan": "node scripts/generate-upgrade-plan.ts"
   },

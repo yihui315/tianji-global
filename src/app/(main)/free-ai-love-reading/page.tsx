@@ -392,7 +392,7 @@ export default function FreeAILoveReadingPage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div id="free-ai-reading-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
+      <div id="free-ai-reading-ads-2" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
 
       {/* FAQ */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 pb-8 sm:px-8">
