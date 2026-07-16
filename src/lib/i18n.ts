@@ -20,17 +20,17 @@ export const localizedPublicRoutes: Array<{
   changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'];
   priority: number;
 }> = [
-  // Homepage (no locale prefix — served by (main) route group)
+  // Homepage — no locale prefix, served by (main)
   { path: '/', changeFrequency: 'daily', priority: 1 },
-  // Core tools (no locale prefix — served by (main) route group)
+  // Core tools — no locale prefix, served by (main)
   { path: '/love-test', changeFrequency: 'weekly', priority: 0.9 },
   { path: '/ask', changeFrequency: 'weekly', priority: 0.85 },
   { path: '/draw', changeFrequency: 'weekly', priority: 0.85 },
-  // love-reading — served by [locale] route group (has /en and /zh-CN)
-  { path: '/love-reading', changeFrequency: 'weekly', priority: 0.9 },
-  // Pricing (no locale prefix)
-  { path: '/pricing', changeFrequency: 'weekly', priority: 0.9 },
-  // Privacy center (no locale prefix)
+  // love-reading — has [locale] variant: /en/love-reading and /zh-CN/love-reading
+  { path: '/love-reading', changeFrequency: 'weekly', priority: 0.9, hasLocaleVariant: true },
+  // Pricing — has [locale] variant: /en/pricing and /zh-CN/pricing
+  { path: '/pricing', changeFrequency: 'weekly', priority: 0.9, hasLocaleVariant: true },
+  // Privacy center — no locale prefix, served by (main)
   { path: '/privacy-center', changeFrequency: 'yearly', priority: 0.5 },
 ];
 
