@@ -45,7 +45,7 @@ export {
   sectionHeadings,
   disclaimers,
   pricingPlans,
-  testimonials,
+  productUseExamples,
   trustPillars,
 } from './content-tokens';
 
