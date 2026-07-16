@@ -35,6 +35,9 @@ export const localizedPublicRoutes: SitemapRoute[] = [
   { path: '/pricing', changeFrequency: 'weekly', priority: 0.9, hasLocaleVariant: true },
   // Privacy center — no locale prefix, served by (main)
   { path: '/privacy-center', changeFrequency: 'yearly', priority: 0.5 },
+  // Legal pages — [locale] variants: /en/privacy, /en/terms, etc.
+  { path: '/privacy', changeFrequency: 'yearly', priority: 0.45, hasLocaleVariant: true },
+  { path: '/terms', changeFrequency: 'yearly', priority: 0.45, hasLocaleVariant: true },
 ];
 
 export function isSupportedLocale(locale: string): locale is Locale {
