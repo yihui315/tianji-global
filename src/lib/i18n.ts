@@ -15,11 +15,14 @@ export const localeOpenGraph: Record<Locale, string> = {
   'zh-CN': 'zh_CN',
 };
 
-export const localizedPublicRoutes: Array<{
+export type SitemapRoute = {
   path: string;
   changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'];
   priority: number;
-}> = [
+  hasLocaleVariant?: boolean;
+};
+
+export const localizedPublicRoutes: SitemapRoute[] = [
   // Homepage — no locale prefix, served by (main)
   { path: '/', changeFrequency: 'daily', priority: 1 },
   // Core tools — no locale prefix, served by (main)
