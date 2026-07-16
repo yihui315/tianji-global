@@ -1,6 +1,46 @@
 # TianJi Love Review Packet
 ## Current Task
 
+TianJi Love daily growth publishing pack Day 026 for 2026-07-19 (cron `17 1 * * *`, skill `tianji-github-daily-growth`). This is the next sequential day after Day 025 (last committed 2026-07-15); Day 26 row in `assets/marketing/content-calendar-7day.md` is the "Honest audit" theme — "A relationship worth continuing often looks like one you can name clearly" — and the pack follows that theme. Honest-audit framing: a small exercise in describing an ordinary week in normal voice out loud, NOT a verdict (stay/leave) and NOT a complaint list. Two distinct moves are kept separate in every channel: "naming clearly" (a description the user can speak out loud) vs "choosing" (a decision the user can hold). Two distinct versions of the audit are kept separate: the midnight-written description (smoother, closer to "I hope this is what we are") vs the afternoon-spoken description (messier, closer to "this is what we are on a normal Tuesday"). The audit lives in the difference between them — not as a verdict, not as a decision, not as a shame reversal. Channel mix: 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO. CTA: `/relationship/new` (no direct payment mentions, no Stripe claims).
+
+## Files created this run
+
+- `assets/marketing/daily/day-026-publishing-pack.md` (5 Xiaohongshu + 5 Reels + 5 X + 3 Reddit/Quora + 2 KOL + 3 SEO)
+- `assets/marketing/daily/day-026-review-checklist.md` (pre-publishing verification, safety gates, publishing log, manual operator notes, gate status block)
+- `data/love-test-day-026-kpi-entry.csv` (empty/zero placeholders only; 23 rows × 9 columns; manual entry after publish)
+
+## Files updated this run
+
+- `.ai/CHANGELOG_AI.md` (new entry for this run)
+- `.ai/REVIEW_PACKET.md` (this file — current task summary, files list, gate status)
+
+## Files explicitly NOT updated this run
+
+- `assets/marketing/content-calendar-7day.md` (Day 26 row already exists from prior refresh; no calendar extension needed this cycle)
+- `data/love-test-funnel-metrics.csv` (pre-existing modified file from a prior revenue-funnel worktree; not part of this skill's scope)
+- `assets/marketing/publishing-queue*` (pre-existing untracked files from a prior cron run; not part of this skill's scope)
+
+## Allowed files inspected read-only (no edits)
+
+- `assets/marketing/content-calendar-7day.md` (Day 26 row used as theme anchor)
+- `assets/marketing/daily/day-025-publishing-pack.md` (style / safety / structure reference)
+- `assets/marketing/daily/day-025-review-checklist.md` (style / safety / structure reference)
+- `data/love-test-day-025-kpi-entry.csv` (KPI CSV schema reference)
+
+## Gate status
+
+```
+Daily growth publishing pack: Go
+Manual review checklist: Go
+KPI entry scaffold: Go
+Social auto-posting: No-Go - manual publishing only
+Stripe checkout execution: Not run
+Paid smoke: No-Go - awaiting explicit approval
+Production deploy: No-Go
+```
+
+## Previous Task
+
 TianJi Love content calendar refresh for 2026-07-13 (cron `37 2 * * *`, skill `tianji-github-content-calendar`). Calendar prior to this run was healthy with 56 future days (last entry 2026-09-07, Day 76), well above the 7-day minimum — skill rule "if fewer than seven future days exist, add only the missing number of days" was not triggered. This run did NOT extend the calendar (the forward buffer is in the healthy band and the supporting-angle rotation queue for late-August / early-September still has unused entries, so adding more days now would force premature angle repetition); instead the run refreshed the three pools: added hooks 91–95 (5 hooks, total pool 95), added video scripts 46–48 (3 scripts, total pool 48), added share captions 55–57 (3 captions, total pool 57). New themes rotate through the four anchor themes (what is he thinking, should I initiate, will they come back, is it worth continuing) plus the late-summer-rhythm, what-the-question-was-actually-asking, friendship-as-lens, repair-vs-return-reread, and cycle-completion-without-decision supporting angles, deliberately avoiding the rhythm-over-mood / slow-send / worth-audit cluster (Refresh 2026-07-12, hooks 86–90, scripts 43–45, captions 52–54) and the single-sentence-clarity / story-vs-signal / boundary-softness / repair-vs-reunion / time-without-pressure cluster (Refresh 2026-07-11, hooks 81–85, scripts 40–42, captions 49–51). No certainty claims, no reunion promises, no mind-reading, no diagnosis, no shame reversal, no fear-based CTA.
 
 ## Previous Task

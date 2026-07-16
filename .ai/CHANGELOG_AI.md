@@ -1,6 +1,24 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-16 - TianJi Love daily growth publishing pack day 026 (cron 17 1 * * *)
+
+- Task ID: `20260716-tianji-love-day-026-publishing-pack`.
+- Skill: `tianji-github-daily-growth`.
+- Working tree: feature branch `chore/marketing-love-test-content-calendar-20260711`, forked from `origin/main`. The pre-existing modified `data/love-test-funnel-metrics.csv` and the pre-existing untracked `assets/marketing/publishing-queue*` files from the prior cron run are explicitly NOT staged in this commit.
+- Run timestamp (UTC): 2026-07-16 01:18 UTC.
+- Repo: `yihui315/tianji-global`.
+- Target day: **Day 026** (publishing date 2026-07-19), theme "Honest audit — a relationship worth continuing often looks like one you can name clearly". This is the next sequential day after Day 025 (last committed 2026-07-15), aligned with the existing content calendar Day 26 row.
+- Files created: `assets/marketing/daily/day-026-publishing-pack.md`, `assets/marketing/daily/day-026-review-checklist.md`, `data/love-test-day-026-kpi-entry.csv`.
+- Files updated: `.ai/CHANGELOG_AI.md` (this entry), `.ai/REVIEW_PACKET.md`.
+- Files explicitly NOT updated: `assets/marketing/content-calendar-7day.md` (no calendar extension this cycle — Day 26 row already exists), `data/love-test-funnel-metrics.csv` (pre-existing modified file from a prior revenue-funnel worktree; not part of this skill's scope).
+- Channel mix: 5 Xiaohongshu, 5 Reels, 5 X, 3 Reddit/Quora, 2 KOL, 3 SEO.
+- Theme framing: honest audit as a small exercise in describing an ordinary week in normal voice out loud, NOT as a verdict (stay/leave) and NOT as a complaint list. Two distinct moves are kept separate: "naming clearly" (a description the user can speak out loud) vs "choosing" (a decision the user can hold). Two distinct versions of the audit are kept separate: the midnight-written description (smoother, closer to "I hope this is what we are") vs the afternoon-spoken description (messier, closer to "this is what we are on a normal Tuesday"). The audit lives in the difference between them.
+- Safety: No live Stripe touch. No production deploy. No production Supabase mutation. No `.env*` read, copy, diff, or print. No credential use, no browser session, no platform token, no auto-posting. No fake testimonial, no fake user number, no fake revenue, no fake KPI, no guaranteed outcome, no reunion promise, no mind-reading claim, no "act now" urgency language, no diagnosis language, no shame reversal, no fear-based CTA.
+- Validation: `git diff --check` clean on the new markdown and CSV files (0 warnings). Targeted secret-shape scan over `.ai/`, `assets/marketing/`, `data/` returned 0 raw-shape hits on the new lines. `npm run typecheck` ran (`tsc -p tsconfig.typecheck.json --noEmit`) — pre-existing TypeScript errors in `src/app/(main)/**` are unrelated to this markdown+CSV-only change set. `npm run lint` passed (`next lint`, exit 0 — "No ESLint warnings or errors").
+- Gate status: `Daily growth publishing pack: Go`; `Manual review checklist: Go`; `KPI entry scaffold: Go`; `Social auto-posting: No-Go - manual publishing only`; `Stripe checkout execution: Not run`; `Paid smoke: No-Go - awaiting explicit approval`; `Production deploy: No-Go`.
+- Suggested commit message: `chore(marketing): add love-test day 026 publishing pack`.
+
 ### 2026-07-13 - TianJi Love content calendar refresh (cron 37 2 * * *)
 
 - Task ID: `20260713-tianji-love-content-calendar-refresh`.
