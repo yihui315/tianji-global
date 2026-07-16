@@ -1,4 +1,3 @@
-// @ts-ignore
 import type Stripe from 'stripe';
 import { getPool } from '@/lib/db';
 import {
@@ -147,7 +146,7 @@ export async function createPendingOrder(input: {
   );
 }
 
-export async function recordStripeEvent(event: Stripe.Event): Promise<boolean> {
+export async function recordStripeEvent(event: import('@/types/stripe-api').StripeEvent): Promise<boolean> {
   if (!process.env.DATABASE_URL) return true;
 
   const result = await getPool().query(
