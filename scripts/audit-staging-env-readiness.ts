@@ -77,15 +77,15 @@ function overallFor(statuses: Status[]): OverallStatus {
 }
 
 export function auditStagingEnvReadiness(env: EnvLike = process.env): StagingEnvReadinessResult {
-  const result = {
-    app: statusForGroup(env, REQUIRED_GROUPS.app),
-    supabase: statusForGroup(env, REQUIRED_GROUPS.supabase),
-    stripeTestMode: statusForGroup(env, REQUIRED_GROUPS.stripeTestMode),
-    email: statusForGroup(env, REQUIRED_GROUPS.email),
-    aiRuntime: statusForGroup(env, REQUIRED_GROUPS.aiRuntime),
-    ollama: statusForGroup(env, REQUIRED_GROUPS.ollama),
-    deepseek: statusForGroup(env, REQUIRED_GROUPS.deepseek),
-    minimax: statusForGroup(env, REQUIRED_GROUPS.minimax),
+  const result: Omit<StagingEnvReadinessResult, 'overall' | 'missingNamesOnly'> = {
+    app: statusForGroup(env, REQUIRED_GROUPS.app) as Status,
+    supabase: statusForGroup(env, REQUIRED_GROUPS.supabase) as Status,
+    stripeTestMode: statusForGroup(env, REQUIRED_GROUPS.stripeTestMode) as Status,
+    email: statusForGroup(env, REQUIRED_GROUPS.email) as Status,
+    aiRuntime: statusForGroup(env, REQUIRED_GROUPS.aiRuntime) as Status,
+    ollama: statusForGroup(env, REQUIRED_GROUPS.ollama) as Status,
+    deepseek: statusForGroup(env, REQUIRED_GROUPS.deepseek) as Status,
+    minimax: statusForGroup(env, REQUIRED_GROUPS.minimax) as Status,
   };
 
   return {
