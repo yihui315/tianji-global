@@ -341,7 +341,7 @@ export default function LoveTimingInsightsPage() {
       </nav>
 
       {/* AdSense placeholder after CTA */}
-      <div id="timing-ads" className="relative z-10 mx-auto max-w-7xl px-5 pb-12 sm:px-8" />
+      <div id="timing-ads-2" className="relative z-10 mx-auto max-w-7xl px-5 pb-12 sm:px-8" />
 
       <TianjiLoveFooter
         disclaimer={t(DISCLAIMER_EN, DISCLAIMER_ZH)}

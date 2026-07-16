@@ -157,14 +157,15 @@ const copy = {
 };
 
 export default function ServicesPage() {
-  const { lang } = useSyncedLanguage('en');
+  const [lang] = useSyncedLanguage('en');
   const c = copy[lang];
 
   return (
     <TianjiLoveShell>
       <TianjiLoveHeader
-        nav={getTianjiLovePrimaryNav(lang)}
-        cta={<TianjiLoveButton href={withLanguageParam('/pricing', lang)}>{c.nav.pricing}</TianjiLoveButton>}
+        homeHref={withLanguageParam('/', lang)}
+        navItems={getTianjiLovePrimaryNav(lang)}
+        cta={{ label: c.nav.pricing, href: withLanguageParam('/pricing', lang) }}
       />
 
       {/* Hero */}
@@ -253,10 +254,7 @@ export default function ServicesPage() {
             {c.trust.map((t) => {
               const Icon = t.icon;
               return (
-                <TianjiLoveTrustCard key={t.title} icon={<Icon className="h-5 w-5" />}>
-                  <h3 className="mb-1 font-semibold">{t.title}</h3>
-                  <p className="text-sm text-gray-400">{t.body}</p>
-                </TianjiLoveTrustCard>
+                <TianjiLoveTrustCard key={t.title} icon={Icon} title={t.title} body={t.body} />
               );
             })}
           </div>
@@ -268,7 +266,7 @@ export default function ServicesPage() {
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="mb-4 text-3xl font-bold">{c.ctaTitle}</h2>
           <p className="mb-6 text-gray-300">{c.ctaBody}</p>
-          <TianjiLoveButton href="mailto:hello@tianji.love" size="lg">
+          <TianjiLoveButton href="mailto:hello@tianji.love">
             <Mail className="mr-2 h-5 w-5" />
             {c.ctaButton}
           </TianjiLoveButton>
@@ -290,8 +288,9 @@ export default function ServicesPage() {
       </section>
 
       <TianjiLoveFooter
-        nav={getTianjiLoveFooterNav(lang)}
+        links={getTianjiLoveFooterNav(lang)}
         disclaimer={c.footer}
+        homeHref={withLanguageParam('/', lang)}
       />
     </TianjiLoveShell>
   );

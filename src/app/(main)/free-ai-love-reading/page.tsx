@@ -166,11 +166,11 @@ export default function FreeAILoveReadingPage() {
             )}
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <TianjiLoveButton href={href('/relationship/new')} size="lg">
+            <TianjiLoveButton href={href('/relationship/new')}>
               {t('Get Free Preview', '获取免费预览')}
               <Sparkles className="ml-2 h-5 w-5" aria-hidden />
             </TianjiLoveButton>
-            <TianjiLoveButton href={href('/guide')} variant="secondary" size="lg">
+            <TianjiLoveButton href={href('/guide')} variant="secondary">
               {t('Explore Guides', '探索指南')}
             </TianjiLoveButton>
           </div>
@@ -392,7 +392,7 @@ export default function FreeAILoveReadingPage() {
       </section>
 
       {/* AdSense placeholder */}
-      <div id="free-ai-reading-ads" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
+      <div id="free-ai-reading-ads-2" className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8" />
 
       {/* FAQ */}
       <section className="relative z-10 mx-auto max-w-4xl px-5 pb-8 sm:px-8">

@@ -18,26 +18,26 @@ import {
   isStripePaymentAvailable,
 } from '@/lib/staging-degraded-mode';
 import { getStripe } from '@/lib/stripe';
+import type { CheckoutSession, StripeCharge, StripeRefund, StripeEvent, StripeMetadata } from '@/types/stripe-api';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-function metadataProductId(metadata?: Stripe.Metadata | null): BillingProductId | null {
+function metadataProductId(metadata?: StripeMetadata | null): BillingProductId | null {
   return normalizeLoveProductType(metadata?.productId ?? metadata?.legacyProductId);
 }
 
-function readingModeFromMetadata(metadata?: Stripe.Metadata | null) {
+function readingModeFromMetadata(metadata?: StripeMetadata | null) {
   if (
     metadata?.loveReportMode === 'compatibility' ||
     metadata?.legacyProductId === 'compatibility_report'
   ) {
     return 'compatibility';
   }
-
   return 'solo';
 }
 
-async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
+async function handleCheckoutSessionCompleted(session: CheckoutSession) {
   if (session.mode !== 'payment' || session.payment_status !== 'paid') return;
 
   const productId = metadataProductId(session.metadata);
@@ -89,7 +89,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   }
 }
 
-async function handleRefundEvent(object: Stripe.Charge | Stripe.Refund) {
+async function handleRefundEvent(object: StripeCharge | StripeRefund) {
   const paymentIntent =
     typeof object.payment_intent === 'string' ? object.payment_intent : null;
 
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Missing stripe-signature header' }, { status: 400 });
   }
 
-  let event: Stripe.Event;
+  let event: import('@/types/stripe-api').StripeEvent;
   try {
     event = getStripe().webhooks.constructEvent(rawBody, signature, webhookSecret);
   } catch (error) {
@@ -138,13 +138,13 @@ export async function POST(request: NextRequest) {
 
   switch (event.type) {
     case 'checkout.session.completed':
-      await handleCheckoutSessionCompleted(event.data.object as Stripe.Checkout.Session);
+      await handleCheckoutSessionCompleted(event.data.object as import('@/types/stripe-api').CheckoutSession);
       break;
     case 'charge.refunded':
-      await handleRefundEvent(event.data.object as Stripe.Charge);
+      await handleRefundEvent(event.data.object as import('@/types/stripe-api').StripeCharge);
       break;
     case 'refund.created':
-      await handleRefundEvent(event.data.object as Stripe.Refund);
+      await handleRefundEvent(event.data.object as import('@/types/stripe-api').StripeRefund);
       break;
     default:
       break;

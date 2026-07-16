@@ -76,7 +76,7 @@ const FEATURES = [
     titleZh: "三种牌阵选择",
     descEn:
       "Single card for quick clarity, three-card for directional insight, or Celtic Cross for a full relationship map.",
-    descEn: "单张牌快速澄清，三张牌定向洞察，或韦特交叉牌完整关系地图。",
+    descZh: "单张牌快速澄清，三张牌定向洞察，或韦特交叉牌完整关系地图。",
   },
   {
     icon: Sparkles,
@@ -162,14 +162,13 @@ export default function TarotLoveReadingOnlinePage() {
             )}
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <TianjiLoveButton href={href("/tarot")} size="lg">
+            <TianjiLoveButton href={href("/tarot")}>
               {t("Draw Your Cards", "抽牌")}
               <Sparkles className="ml-2 h-5 w-5" aria-hidden />
             </TianjiLoveButton>
             <TianjiLoveButton
               href={href("/guide")}
               variant="secondary"
-              size="lg"
             >
               {t("Explore Guides", "探索指南")}
             </TianjiLoveButton>
@@ -294,7 +293,7 @@ export default function TarotLoveReadingOnlinePage() {
                   {t(feature.titleEn, feature.titleZh)}
                 </h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-[#f4d7a3]/62">
-                  {t(feature.descEn, feature.descZh)}
+                  {t(feature.descEn ?? '', feature.descZh ?? '')}
                 </p>
               </TianjiLovePanel>
             );

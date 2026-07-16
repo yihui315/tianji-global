@@ -378,6 +378,7 @@ export default function DailyLoveOracleGuidePage() {
     <>
       <TianjiLoveShell>
         <TianjiLoveHeader
+          homeHref="/"
           navItems={[
             { label: copy.nav.loveReading, href: '/love-reading' },
             { label: copy.nav.ask, href: '/ask' },
@@ -385,22 +386,20 @@ export default function DailyLoveOracleGuidePage() {
             { label: copy.nav.pricing, href: '/pricing' },
             { label: copy.nav.about, href: '/about' },
           ]}
-          ctaLabel={copy.nav.privacy}
-          ctaHref="/privacy"
         />
 
         {/* Hero */}
-        <TianjiLoveHeroImage
-          eyebrow={copy.hero.eyebrow}
-          title={copy.hero.title}
-          body={copy.hero.body}
-          imageSrc={HERO_IMG}
-          imageAlt="Love oracle"
-          primaryCta={copy.hero.primary}
-          primaryHref="/daily-oracle"
-          secondaryCta={copy.hero.secondary}
-          secondaryHref="/love-reading"
-        />
+        <section className="relative z-10 px-5 pt-20 sm:px-8">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-xs uppercase tracking-[0.28em] text-[#d8b77b]/64">{copy.hero.eyebrow}</p>
+            <h1 className="mt-4 font-serif text-4xl font-semibold leading-tight text-[#ffe3b4] sm:text-5xl">{copy.hero.title}</h1>
+            <p className="mx-auto mt-5 max-w-2xl text-base text-[#f4d7a3]/72">{copy.hero.body}</p>
+            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+              <TianjiLoveButton href="/daily-oracle" variant="primary">{copy.hero.primary}</TianjiLoveButton>
+              <TianjiLoveButton href="/love-reading" variant="secondary">{copy.hero.secondary}</TianjiLoveButton>
+            </div>
+          </div>
+        </section>
 
         {/* What it shows */}
         <TianjiLovePanel>
@@ -485,7 +484,7 @@ export default function DailyLoveOracleGuidePage() {
                 ))}
               </ul>
               <div className="mt-6">
-                <TianjiLoveButton href="/relationship/new" variant="premium" size="sm">
+                <TianjiLoveButton href="/relationship/new" variant="primary">
                   <CreditCard className="h-3.5 w-3.5" />
                   {t('Unlock full reading', '解锁完整解读')}
                 </TianjiLoveButton>
@@ -536,43 +535,26 @@ export default function DailyLoveOracleGuidePage() {
 
         {/* Final CTA */}
         <TianjiLoveFinalCta
-          title={copy.finalCta.title}
-          primaryCta={copy.finalCta.primary}
-          primaryHref="/daily-oracle"
-          secondaryCta={copy.finalCta.secondary}
-          secondaryHref="/love-reading"
           imageSrc={HERO_IMG}
-          imageAlt="Love oracle"
+          title={copy.finalCta.title}
+          buttonLabel={copy.finalCta.primary}
+          href="/daily-oracle"
         />
 
         {/* Trust */}
-        <TianjiLoveTrustCard
-          items={[
-            {
-              icon: CalendarHeart,
-              title: t('Refreshes daily', '每日更新'),
-              body: t('A new reading each day tied to the planetary transit.', '每天根据行星行运生成新解读。'),
-            },
-            {
-              icon: HeartHandshake,
-              title: t('Private by default', '默认私密'),
-              body: t('No data stored on public pages.', '公开页面上不存储任何数据。'),
-            },
-            {
-              icon: Brain,
-              title: t('Timing over prediction', '时机而非预言'),
-              body: t('Reads the day, not the future.', '读的是这一天，而非未来。'),
-            },
-          ]}
-        />
+        <div className="grid gap-4 sm:grid-cols-3">
+          <TianjiLoveTrustCard icon={CalendarHeart} title={t('Refreshes daily', '每日更新')} body={t('A new reading each day tied to the planetary transit.', '每天根据行星行运生成新解读。')} />
+          <TianjiLoveTrustCard icon={HeartHandshake} title={t('Private by default', '默认私密')} body={t('No data stored on public pages.', '公开页面上不存储任何数据。')} />
+          <TianjiLoveTrustCard icon={Brain} title={t('Timing over prediction', '时机而非预言')} body={t('Reads the day, not the future.', '读的是这一天，而非未来。')} />
+        </div>
 
         <TianjiLoveFooter
-          copy={copy.footer}
-          href={(path: string) => path}
+          disclaimer={copy.footer}
           links={[
             { label: copy.nav.about, href: '/about' },
             { label: copy.nav.privacy, href: '/privacy' },
           ]}
+          homeHref="/"
         />
       </TianjiLoveShell>
 

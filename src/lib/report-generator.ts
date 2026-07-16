@@ -6,7 +6,7 @@
  * planetary positions tables, house information, and AI interpretations.
  */
 
-import { jsPDF } from 'jspdf';
+import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { generateNatalChartSvg, generateSynastryChartSvg, svgToDataUrl, type PlanetPoint, type SynastryPlanetData } from './chart-svg';
 import { ZODIAC_SIGNS } from './synastry-engine';
