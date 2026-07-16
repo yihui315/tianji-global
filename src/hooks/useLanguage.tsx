@@ -15,7 +15,7 @@ import {
   sectionHeadings,
   disclaimers,
   pricingPlans,
-  testimonials as testimonialTokens,
+  productUseExamples,
 } from '@/design-system/content-tokens';
 import { resolveAppLanguage, type AppLanguage } from '@/lib/language-routing';
 
@@ -146,26 +146,18 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
     'charts.ascendant': { zh: '上升星座', en: 'Ascendant' },
     'charts.primarystar': { zh: '紫微主星', en: 'Primary Star' },
 
-    // ── Testimonials (from content-tokens) ─────
-    'testimonials.heading': {
+    // ── Product Use Examples (from content-tokens) ─────
+    'productUseExamples.heading': {
       zh: sectionHeadings.testimonials.zh,
       en: sectionHeadings.testimonials.en,
     },
-    'testimonials.subheading': {
+    'productUseExamples.subheading': {
       zh: '来自全球思考者、创作者与探索者的真实使用体验',
       en: 'Trusted by thinkers, creators, and seekers worldwide',
     },
-    'testimonial.1': {
-      zh: testimonialTokens[0].quote.zh,
-      en: testimonialTokens[0].quote.en,
-    },
-    'testimonial.2': {
-      zh: testimonialTokens[1].quote.zh,
-      en: testimonialTokens[1].quote.en,
-    },
-    'testimonial.3': {
-      zh: testimonialTokens[2].quote.zh,
-      en: testimonialTokens[2].quote.en,
+    'productUseExamples.items': {
+      zh: productUseExamples.zh,
+      en: productUseExamples.en,
     },
     // Social proof
     'social.readings': { zh: '结构化解读', en: 'Structured Readings' },
