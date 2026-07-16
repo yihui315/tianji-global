@@ -20,55 +20,18 @@ export const localizedPublicRoutes: Array<{
   changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'];
   priority: number;
 }> = [
-  // Home
+  // Homepage (no locale prefix — served by (main) route group)
   { path: '/', changeFrequency: 'daily', priority: 1 },
-  // Core relationship tools
+  // Core tools (no locale prefix — served by (main) route group)
   { path: '/love-test', changeFrequency: 'weekly', priority: 0.9 },
   { path: '/ask', changeFrequency: 'weekly', priority: 0.85 },
   { path: '/draw', changeFrequency: 'weekly', priority: 0.85 },
-  { path: '/relationship/new', changeFrequency: 'weekly', priority: 0.9 },
-  // Astrology & divination tools
-  { path: '/tarot', changeFrequency: 'weekly', priority: 0.85 },
-  { path: '/yijing', changeFrequency: 'weekly', priority: 0.85 },
-  { path: '/bazi', changeFrequency: 'weekly', priority: 0.85 },
-  { path: '/fortune', changeFrequency: 'weekly', priority: 0.8 },
-  { path: '/western', changeFrequency: 'weekly', priority: 0.8 },
-  { path: '/numerology', changeFrequency: 'weekly', priority: 0.8 },
-  { path: '/fengshui', changeFrequency: 'monthly', priority: 0.75 },
-  { path: '/synastry', changeFrequency: 'weekly', priority: 0.85 },
-  { path: '/horary', changeFrequency: 'weekly', priority: 0.8 },
-  { path: '/electional', changeFrequency: 'weekly', priority: 0.8 },
-  { path: '/transit', changeFrequency: 'weekly', priority: 0.8 },
-  { path: '/solar-return', changeFrequency: 'monthly', priority: 0.75 },
-  { path: '/sky-chart', changeFrequency: 'monthly', priority: 0.75 },
-  { path: '/ziwei', changeFrequency: 'weekly', priority: 0.8 },
-  // Love-specific pages
+  // love-reading — served by [locale] route group (has /en and /zh-CN)
   { path: '/love-reading', changeFrequency: 'weekly', priority: 0.9 },
-  { path: '/love-compatibility', changeFrequency: 'weekly', priority: 0.85 },
-  { path: '/love-match', changeFrequency: 'weekly', priority: 0.85 },
-  { path: '/free-relationship-compatibility-test', changeFrequency: 'weekly', priority: 0.85 },
-  { path: '/free-ai-love-reading', changeFrequency: 'weekly', priority: 0.8 },
-  { path: '/tarot-love-reading-online', changeFrequency: 'weekly', priority: 0.8 },
-  { path: '/bazi-relationship-analysis-free', changeFrequency: 'weekly', priority: 0.8 },
-  { path: '/love-timing-insights', changeFrequency: 'weekly', priority: 0.75 },
-  { path: '/daily-love-oracle-guide', changeFrequency: 'weekly', priority: 0.75 },
-  { path: '/how-to-get-clarity-in-relationship', changeFrequency: 'monthly', priority: 0.7 },
-  // Celebrity
-  { path: '/celebrities', changeFrequency: 'monthly', priority: 0.7 },
-  { path: '/celebrity-match', changeFrequency: 'weekly', priority: 0.75 },
-  // Info pages
+  // Pricing (no locale prefix)
   { path: '/pricing', changeFrequency: 'weekly', priority: 0.9 },
-  { path: '/about', changeFrequency: 'monthly', priority: 0.7 },
-  { path: '/guide', changeFrequency: 'weekly', priority: 0.7 },
-  { path: '/services', changeFrequency: 'monthly', priority: 0.8 },
-  { path: '/relationship-patterns-guide', changeFrequency: 'monthly', priority: 0.7 },
-  // Legal
-  { path: '/privacy', changeFrequency: 'yearly', priority: 0.45 },
-  { path: '/terms', changeFrequency: 'yearly', priority: 0.45 },
-  // Embed (public widget page)
-  { path: '/embed', changeFrequency: 'monthly', priority: 0.5 },
-  // Daily oracle
-  { path: '/daily-oracle', changeFrequency: 'daily', priority: 0.8 },
+  // Privacy center (no locale prefix)
+  { path: '/privacy-center', changeFrequency: 'yearly', priority: 0.5 },
 ];
 
 export function isSupportedLocale(locale: string): locale is Locale {
