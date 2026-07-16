@@ -97,7 +97,7 @@ async function generateVariant(
   engineContent: string,
 ): Promise<object> {
   const label = variant.toUpperCase();
-  const framing = variant === "A"
+  const framing = variant === "a"
     ? "emotional framing — speaks to the heart, uses evocative language"
     : "functional framing — analytical, practical, outcome-oriented";
 
