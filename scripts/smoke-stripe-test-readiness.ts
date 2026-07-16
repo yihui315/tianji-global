@@ -95,7 +95,7 @@ export async function createStripeTestReadinessResult(env: EnvLike = process.env
     subscriptionCheckoutReadiness,
     webhookReadiness,
     entitlementReadiness,
-  ];
+  ] as Status[];
 
   return {
     mode,
