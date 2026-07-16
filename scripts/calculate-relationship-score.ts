@@ -66,9 +66,9 @@ export function collectRelationshipMetrics(): RelationshipVariantMetrics {
   const formFile = read(`${base}/RelationshipForm.tsx`);
 
   const allCopy = [
-    ...(resultFile.match(/headline[^;]*['"`](.*?)['"`]/s) || []),
-    ...(resultFile.match(/oneLiner[^;]*['"`](.*?)['"`]/s) || []),
-    ...(dimensionFile.match(/summary[^;]*['"`](.*?)['"`]/s) || []),
+    ...(resultFile.match(/headline[^;]*['"`]([\s\S]*?)['"`]/) || []),
+    ...(resultFile.match(/oneLiner[^;]*['"`]([\s\S]*?)['"`]/) || []),
+    ...(dimensionFile.match(/summary[^;]*['"`]([\s\S]*?)['"`]/) || []),
   ];
 
   const avgHeadline = allCopy.length > 0
