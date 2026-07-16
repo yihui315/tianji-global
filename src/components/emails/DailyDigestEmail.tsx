@@ -34,7 +34,7 @@ interface DailyDigestEmailProps {
   language?: 'zh' | 'en';
 }
 
-const PLATFORM_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.global';
+const PLATFORM_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.love';
 const LOGO_URL = `${PLATFORM_URL}/logo.png`;
 
 function ServiceIcon({ service }: { service: string }) {

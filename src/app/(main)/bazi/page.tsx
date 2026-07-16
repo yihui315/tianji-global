@@ -669,7 +669,7 @@ function ResultBlock({
           <SharePanel
             serviceType="bazi"
             resultId="bazi-reading"
-            shareUrl="https://tianji.global/bazi"
+            shareUrl="https://tianji.love/bazi"
           />
         </div>
       </LandingSection>

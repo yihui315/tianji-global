@@ -58,7 +58,7 @@ export function localizedAlternates(path = '/') {
 }
 
 export function getSiteUrl() {
-  return process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.global';
+  return process.env.NEXT_PUBLIC_APP_URL || 'https://tianji.love';
 }
 
 export function absoluteLocalizedAlternates(path = '/') {

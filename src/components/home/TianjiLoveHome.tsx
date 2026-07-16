@@ -65,10 +65,6 @@ type LoveCopy = {
     title: string;
     steps: Array<{ number: string; title: string; body: string }>;
   };
-  testimonials: {
-    title: string;
-    cards: Array<{ name: string; tag: string; quote: string; avatar: string; tone: string }>;
-  };
   cta: {
     title: string;
     button: string;
@@ -227,32 +223,6 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
         { number: '3', title: 'Return with history', body: 'Subscribers keep report-ready readings and relationship history where implemented.' },
       ],
     },
-    testimonials: {
-      title: 'People Used Tianji Love For Clearer Reflection',
-      cards: [
-        {
-          name: 'Emma',
-          tag: 'Relationship clarity',
-          quote: 'The preview gave me language for a pattern I could actually discuss.',
-          avatar: '/assets/images/avatars/tianji-love-emma.png',
-          tone: 'avatar-a',
-        },
-        {
-          name: 'Sophie',
-          tag: 'timing insight',
-          quote: 'The timing spread helped me decide whether to reach out or pause.',
-          avatar: '/assets/images/avatars/tianji-love-sophie.png',
-          tone: 'avatar-b',
-        },
-        {
-          name: 'Olivia',
-          tag: 'Emotional growth',
-          quote: 'I liked that it felt practical without telling me what had to happen.',
-          avatar: '/assets/images/avatars/tianji-love-olivia.png',
-          tone: 'avatar-c',
-        },
-      ],
-    },
     cta: {
       title: 'Start with the free signal. Unlock depth only when it helps.',
       button: 'Start Free Love Reading',
@@ -355,32 +325,6 @@ const loveCopy: Record<AppLanguage, LoveCopy> = {
         { number: '1', title: '输入你的信息', body: '分享出生信息，开启第一段解读。' },
         { number: '2', title: '映射关系模式', body: '系统分析你的星轨与关系指标。' },
         { number: '3', title: '收到清晰建议', body: '把洞察转化为更稳定的行动。' },
-      ],
-    },
-    testimonials: {
-      title: '她们在命运转折处读懂了爱',
-      cards: [
-        {
-          name: '林小姐',
-          tag: '情感清晰',
-          quote: '它准确说出了我反复进入同一种关系的原因，我终于明白自己在等待什么。',
-          avatar: '/assets/images/avatars/tianji-love-emma.png',
-          tone: 'avatar-a',
-        },
-        {
-          name: '苏小姐',
-          tag: '时机洞察',
-          quote: '那段时机判断很准，我在真正准备好的时候遇见了新的人。',
-          avatar: '/assets/images/avatars/tianji-love-sophie.png',
-          tone: 'avatar-b',
-        },
-        {
-          name: '陈小姐',
-          tag: '关系成长',
-          quote: '这次解读让我在爱里更清醒，也更温柔。',
-          avatar: '/assets/images/avatars/tianji-love-olivia.png',
-          tone: 'avatar-c',
-        },
       ],
     },
     cta: {
@@ -615,7 +559,6 @@ export default function TianjiLoveHome() {
 
       <FeatureStrip features={copy.features} />
       <HowItWorks process={copy.process} />
-      <LoveTestimonials testimonials={copy.testimonials} />
       <FinalCta copy={copy} href={href} />
       <TianjiLoveFooter copy={copy} href={href} />
     </main>
@@ -907,40 +850,6 @@ function HowItWorks({ process }: { process: LoveCopy['process'] }) {
             <h3 className="mt-8 font-serif text-3xl font-semibold text-[#ffe3b4]">{step.title}</h3>
             <span className="tianji-love-card-divider mx-auto mt-5 block h-px w-32" aria-hidden />
             <p className="mx-auto mt-5 max-w-xs text-lg leading-9 text-[#f4d7a3]/76">{step.body}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function LoveTestimonials({ testimonials }: { testimonials: LoveCopy['testimonials'] }) {
-  return (
-    <section className="tianji-love-testimonial-section relative z-10 mx-auto w-full max-w-7xl px-5 py-12 sm:px-8">
-      <div className="mb-10 flex flex-col items-center justify-center gap-5 text-center">
-        <span className="tianji-love-ornament-line h-px w-[72%] max-w-4xl" />
-        <h2 className="font-serif text-[2.5rem] font-semibold leading-tight text-[#ffe3b4] sm:text-[3.25rem]">{testimonials.title}</h2>
-        <span className="tianji-love-card-divider block h-px w-72" />
-      </div>
-      <div className="grid gap-5 md:grid-cols-3">
-        {testimonials.cards.map((card) => (
-          <article key={card.name} className="tianji-love-testimonial-card min-h-[300px] rounded-lg border border-[#b57248]/38 bg-[#070b16]/72 p-7 backdrop-blur">
-            <div className="tianji-love-testimonial-header mb-7 grid grid-cols-[96px_minmax(0,1fr)] items-center gap-6">
-              <div className={cx('tianji-love-testimonial-avatar grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-full', card.tone)} aria-hidden>
-                <Image src={card.avatar} alt="" width={128} height={128} className="h-full w-full object-cover" />
-              </div>
-              <div className="min-w-0 self-center text-left">
-                <h3 className="font-serif text-[2.45rem] font-semibold leading-none text-[#ffe3b4]">{card.name}</h3>
-                <p className="mt-3 font-serif text-2xl leading-none text-[#d8b77b]/88">{card.tag}</p>
-                <div className="mt-6 flex h-6 items-center gap-2 text-[#d8b77b]" aria-label="five stars">
-                  {Array.from({ length: 5 }, (_, index) => (
-                    <Star key={index} className="h-6 w-6 fill-current" aria-hidden />
-                  ))}
-                </div>
-              </div>
-            </div>
-            <span className="tianji-love-card-divider mb-7 block h-px w-full" aria-hidden />
-            <p className="text-xl leading-10 text-[#f4d7a3]/84">“{card.quote}”</p>
           </article>
         ))}
       </div>

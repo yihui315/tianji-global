@@ -543,7 +543,7 @@ function YiJingResultBlock({
             <SharePanel
               serviceType="yijing"
               resultId={displayedHexagram.number.toString()}
-              shareUrl={`https://tianji.global/yijing?hex=${displayedHexagram.number}`}
+              shareUrl={`https://tianji.love/yijing?hex=${displayedHexagram.number}`}
             />
           </GlassCard>
 
