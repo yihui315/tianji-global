@@ -155,10 +155,6 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
       zh: '来自全球思考者、创作者与探索者的真实使用体验',
       en: 'Trusted by thinkers, creators, and seekers worldwide',
     },
-    'productUseExamples.items': {
-      zh: productUseExamples.zh,
-      en: productUseExamples.en,
-    },
     // Social proof
     'social.readings': { zh: '结构化解读', en: 'Structured Readings' },
     'social.reports': { zh: '双语报告', en: 'Bilingual Reports' },
