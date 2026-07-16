@@ -12,9 +12,10 @@ export function TrustSection({ lang }: TrustSectionProps) {
     {
       icon: '🔒',
       title: lang === 'zh' ? '隐私保护' : 'Privacy',
-      desc: lang === 'zh'
-        ? '你的出生信息仅用于计算，绝不共享或出售'
-        : 'Your birth data is used for calculation only, never shared or sold',
+      desc:
+        lang === 'zh'
+          ? '出生信息仅用于计算，可请求删除'
+          : 'Birth data used for calculation only, deletion available',
     },
     {
       icon: '📊',

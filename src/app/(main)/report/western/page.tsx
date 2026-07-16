@@ -542,7 +542,7 @@ function UpgradeSection({ lang }: { lang: 'zh' | 'en' }) {
 
 function TrustSection({ lang }: { lang: 'zh' | 'en' }) {
   const items = [
-    { icon: '🔒', title: lang === 'zh' ? '隐私保护' : 'Privacy', desc: lang === 'zh' ? '你的出生信息仅用于计算，绝不共享或出售' : 'Your birth data is used for calculation only, never shared or sold' },
+    { icon: '🔒', title: lang === 'zh' ? '隐私保护' : 'Privacy', desc: lang === 'zh' ? '出生信息仅用于计算，可请求删除' : 'Birth data used for calculation only, deletion available' },
     { icon: '📊', title: lang === 'zh' ? '数据来源' : 'Data Sources', desc: lang === 'zh' ? '使用瑞士星历表(SWEPH)天文计算，精度达0.001角秒' : 'Swiss Ephemeris (SWEPH) astronomical calculations accurate to 0.001 arcseconds' },
     { icon: '🤖', title: lang === 'zh' ? 'AI边界' : 'AI Limitations', desc: lang === 'zh' ? 'AI解读基于统计学模型，仅供参考，不构成人生决策依据' : 'AI interpretations are statistical models for reference only, not life decision advice' },
     { icon: '⚕️', title: lang === 'zh' ? '免责声明' : 'Disclaimer', desc: lang === 'zh' ? '本产品仅供娱乐参考，不能替代专业医疗、法律或心理建议' : 'For entertainment reference only. Does not replace professional medical, legal, or psychological advice' },

@@ -56,8 +56,8 @@ const FAQS = [
   {
     qEn: 'Is my birth data kept private?',
     qZh: '我的出生数据是否保密？',
-    aEn: 'Yes. Your birth date, birth time, and birth location are used only to calculate your chart and generate your reading. They are never shared, sold, or stored beyond the session unless you explicitly create an account. No account is required for a free preview.',
-    aZh: '是的。你的出生日期、出生时间和出生地点仅用于计算星盘和生成解读。除非你明确创建账户，否则它们永远不会在会话之外被共享、出售或存储。免费预览无需账户。',
+    aEn: 'Your birth date, birth time, and birth location are used only to calculate your chart and generate your reading. Free previews run in-session without requiring an account. When you create an account, data is stored with privacy safeguards. We do not sell or share your personal data with third parties.',
+    aZh: '你的出生日期、出生时间和出生地点仅用于计算星盘和生成解读。免费预览在会话中运行，无需账户。创建账户时，数据会获得隐私保护。我们不会出售或与第三方共享你的个人数据。',
   },
   {
     qEn: 'What is the difference between free and paid?',
@@ -360,8 +360,8 @@ export default function FreeAILoveReadingPage() {
           <div className="sm:ml-5">
             <p className="text-sm leading-relaxed text-[#f4d7a3]/72">
               {t(
-                'Your birth data — date, time, and location — is used only to generate your reading. It is never stored beyond your session unless you explicitly create an account. No account is required to receive a free preview. We do not sell or share your personal data with third parties.',
-                '你的出生数据——日期、时间和地点——仅用于生成你的解读。除非你明确创建账户，否则它永远不会在你的会话之外被存储。免费预览无需账户。我们不出售或与第三方共享你的个人数据。'
+              'Your birth data — date, time, and location — is used only to calculate your chart and generate your reading. Free previews run in-session without requiring an account. Account-based readings are stored with privacy safeguards. We do not sell or share your personal data with third parties.',
+                '你的出生数据——日期、时间和地点——仅用于计算星盘和生成解读。免费预览在会话中运行，无需账户。账户解读会获得隐私保护。我们不会出售或与第三方共享你的个人数据。'
               )}
             </p>
             <Link href={href('/privacy-center')} className="mt-2 inline-block text-sm text-[#d8b77b] underline">
