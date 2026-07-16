@@ -52,11 +52,11 @@ function getSourceCopy(focus: string): { section: string; copy: string } {
 
   // Extract first 200 chars of the section being experimented on
   if (focus === "hero_summary") {
-    const match = engineCopy.match(/headline.*?["'](.*?)["']/s);
+    const match = engineCopy.match(/headline.*?["'](.*?)["']/);
     return { section: "Hero Summary", copy: match?.[1] ?? "(headline not found)" };
   }
   if (focus === "pattern_naming") {
-    const match = engineCopy.match(/generateTopPattern.*?return (.*?);/s);
+    const match = engineCopy.match(/generateTopPattern.*?return ([\s\S]*?);/);
     return { section: "Pattern Naming", copy: (match?.[1] ?? "(pattern not found)").substring(0, 200) };
   }
   if (focus === "dimension_copy") {
