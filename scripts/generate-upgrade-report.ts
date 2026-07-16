@@ -73,9 +73,8 @@ function getSourceCopy(focus: string): { section: string; copy: string } {
 const focus = getFocus();
 const { section, copy } = getSourceCopy(focus);
 const timestamp = new Date().toISOString();
-const runId = `rel-ab-${String(
-  JSON.parse(fs.readFileSync(path.join(CWD, "experiments/manifest.json"), "utf8")?.runs?.length ?? 0
-) + 1).padStart(3, "0")}`;
+const manifest = JSON.parse(fs.readFileSync(path.join(CWD, "experiments/manifest.json"), "utf8") || '{}') as { runs?: { length: number }[] };
+const runId = `rel-ab-${String((manifest?.runs?.length ?? 0) + 1).padStart(3, "0")}`;
 
 const beforeScore =
   (currentScore?.score as number)
