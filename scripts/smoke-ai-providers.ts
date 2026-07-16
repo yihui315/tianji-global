@@ -91,7 +91,7 @@ export async function createAiProviderSmokeResult(env: EnvLike = process.env): P
     const deepseekFlash = paidAskRoute.provider === 'deepseek' && deepseekConfigured ? 'go' : 'unknown';
     const deepseekPro = deepseekProFallbackReady && deepseekConfigured ? 'go' : 'unknown';
     const minimaxQuota = getMiniMaxQuotaGate(env).tokenPlanKeyPresent ? 'go' : 'unknown';
-    const statuses = [ollama, deepseekFlash, deepseekPro, minimaxQuota];
+    const statuses = [ollama, deepseekFlash, deepseekPro, minimaxQuota] as Status[];
 
     return {
       mode,
