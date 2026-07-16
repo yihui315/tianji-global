@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 const COOKIE_KEY = 'tianji_cookie_consent';
 
@@ -36,7 +37,7 @@ export function CookieConsent() {
     >
       <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255,255,255,0.75)', flex: 1, minWidth: '240px' }}>
         {'We use cookies to improve your experience and analyze site traffic. '}
-        <a href="/privacy" style={{ color: '#d8b77b', textDecoration: 'underline' }}>Privacy Policy</a>
+        <Link href="/privacy" style={{ color: '#d8b77b', textDecoration: 'underline' }}>Privacy Policy</Link>
       </p>
       <div style={{ display: 'flex', gap: '12px', flexShrink: 0 }}>
         <button
