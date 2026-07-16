@@ -72,7 +72,7 @@ const copy = {
     trustTitle: 'Why clients choose us',
     trust: [
       { icon: Brain, title: 'Human + AI hybrid', body: 'Human judgment combined with AI precision — not one or the other.' },
-      { icon: Shield, title: 'Your data stays private', body: 'Birth data and reading content are never shared or resold.' },
+      { icon: Shield, title: 'Your data stays private', body: 'Birth data and reading content are used for the service only, not sold to third parties.' },
       { icon: Star, title: 'Specialist focus only', body: 'We work exclusively in relationship astrology and timing — no generalist readings.' },
     ],
     ctaTitle: 'Ready to start a conversation?',

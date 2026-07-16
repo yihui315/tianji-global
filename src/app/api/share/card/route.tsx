@@ -589,7 +589,7 @@ function renderCard(
           fontSize: isTall ? 22 : 16,
         }}
       >
-        <span>tianji.global</span>
+        <span>tianji.love</span>
         <span style={{ color: c.secondary }}>•</span>
         <span>AI destiny reading</span>
       </div>

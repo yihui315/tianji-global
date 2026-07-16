@@ -25,6 +25,7 @@ export default function robots(): MetadataRoute.Robots {
           '/*/love-reading/result/',
           '/widget/',
           '/embed/preview',
+          '/privacy-center',
         ],
       },
     ],

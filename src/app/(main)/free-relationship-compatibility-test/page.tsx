@@ -203,7 +203,7 @@ const PAGE_COPY: Record<Lang, PageCopy> = {
         },
         {
           q: 'What is the difference between the free score and the full report?',
-          a: 'The free score gives you a 0–100 compatibility number with a one-paragraph overview. The full report breaks down all five dimensions, includes planetary transits, and provides specific action recommendations.',
+          a: 'The free score gives you a 0–100 compatibility number with a one-paragraph overview. The full report breaks down all five dimensions, includes timing windows based on your chart state, and provides specific action recommendations.',
         },
         {
           q: 'Is this a Chinese zodiac compatibility test?',

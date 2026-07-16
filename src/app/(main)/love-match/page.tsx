@@ -866,7 +866,7 @@ export default function LoveMatchPage() {
                 <SharePanel
                   serviceType="love-match"
                   resultId={`love-match-${person1Data.birthday}-${person2Data.birthday}`}
-                  shareUrl={`https://tianji.global/love-match?score=${COMPAT.score}`}
+                  shareUrl={`https://tianji.love/love-match?score=${COMPAT.score}`}
                 />
               </div>
             </GlassCard>

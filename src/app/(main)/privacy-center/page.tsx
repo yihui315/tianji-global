@@ -40,7 +40,7 @@ export default function PrivacyCenterPage() {
       <div className="mx-auto max-w-5xl">
         <nav className="flex items-center justify-between text-sm text-white/58">
           <Link href="/" className="hover:text-white">
-            TianJi Global
+            Tianji Love
           </Link>
           <Link href="/legal/privacy" className="hover:text-white">
             Privacy policy
@@ -50,11 +50,26 @@ export default function PrivacyCenterPage() {
         <section className="py-14">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[rgb(252,230,191)]">Privacy center</p>
           <h1 className="mt-5 max-w-3xl font-serif text-4xl leading-tight sm:text-6xl">
-            Control your TianJi data without exposing private birth context.
+            Control your Tianji Love data without exposing private birth context.
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-white/68">
             Request an export, ask for deletion, or review how relationship readings stay bounded as reflective guidance.
           </p>
+        </section>
+
+        <section className="mb-8 rounded-3xl border border-white/10 bg-white/[0.055] p-6">
+          <h2 className="text-xl font-semibold">Data we collect</h2>
+          <p className="mt-3 text-sm leading-7 text-white/60">
+            We collect only what is needed to provide relationship readings and maintain your account.
+          </p>
+          <ul className="mt-4 space-y-2 text-sm text-white/70">
+            <li><span className="text-white/90 font-medium">Account information:</span> email address, language preference</li>
+            <li><span className="text-white/90 font-medium">Birth details:</span> birth date, time, and location you provide for readings</li>
+            <li><span className="text-white/90 font-medium">Relationship questions:</span> answers and context you share for compatibility or love readings</li>
+            <li><span className="text-white/90 font-medium">Reading outputs:</span> generated reports and guidance based on your input</li>
+            <li><span className="text-white/90 font-medium">Payment data:</span> Stripe handles all payment processing; we store only transaction identifiers</li>
+            <li><span className="text-white/90 font-medium">Technical logs:</span> IP address, browser type, and basic usage metrics for service security and reliability</li>
+          </ul>
         </section>
 
         <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">

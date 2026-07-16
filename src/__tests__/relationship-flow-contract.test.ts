@@ -100,7 +100,7 @@ describe('Tianji Love relationship flow contract', () => {
 
     expect(shareRoute).toContain('process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin');
     expect(shareRoute).toContain("replace(/\\/$/, '')");
-    expect(shareRoute).not.toContain('https://tianji.global/relationship/share');
+    expect(shareRoute).not.toContain('https://tianji.love/relationship/share');
   });
 
   it('records free access state and the P0 funnel analytics events', () => {

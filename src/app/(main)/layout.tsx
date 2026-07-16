@@ -40,9 +40,6 @@ export const metadata: Metadata = {
       'Compatibility, love timing, one-question clarity, and three-card relationship insight.',
     images: ['/api/og?title=Tianji+Love&subtitle=AI+Relationship+Reading'],
   },
-  alternates: {
-    canonical: 'https://tianji.love',
-  },
   robots: {
     index: true,
     follow: true,

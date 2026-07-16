@@ -116,6 +116,8 @@ export const disclaimers = {
     zh: 'Swiss Ephemeris 精确星历计算 · 经典算法 · 现代心理学框架',
     en: 'Swiss Ephemeris precision · Classical algorithms · Modern psychological framework',
   },
+  // Illustrative product-use examples, not customer testimonials.
+  // 产品使用场景示例，并非真实用户评价。
 } as const;
 
 // ────────────────────────────────────────────
@@ -146,64 +148,24 @@ export const pricingPlans = {
 } as const;
 
 // ────────────────────────────────────────────
-// 7. Testimonial Copy — Behavior-driven social proof
+// 7. Product Use Examples (replaces fake testimonials)
+// Illustrative product-use examples, not customer testimonials.
+// 产品使用场景示例，并非真实用户评价.
 // ────────────────────────────────────────────
-export const testimonials = [
-  {
-    quote: {
-      zh: '每个月我都会回来看运势曲线的变化。它帮我提前六个月预见了职业转型的关键窗口。',
-      en: 'I come back every month to check my timeline shifts. It helped me spot a career pivot 6 months before it happened.',
-    },
-    author: 'Sophia L.',
-    location: { zh: '伦敦', en: 'London, UK' },
-    avatar: '🇬🇧',
-  },
-  {
-    quote: {
-      zh: '合盘分析让我理解了为什么我的关系总在重复同样的模式。省了好几个月的困惑。',
-      en: 'It helped me understand why my relationships repeat the same patterns. Saved me months of confusion.',
-    },
-    author: 'Marcus T.',
-    location: { zh: '多伦多', en: 'Toronto, CA' },
-    avatar: '🇨🇦',
-  },
-  {
-    quote: {
-      zh: '没想到AI解读能做到这种深度。紫微和西方星盘的双引擎分析，完全超出预期。',
-      en: 'I didn\'t expect this level of depth from an AI reading. The dual-engine Zi Wei + Western chart blew me away.',
-    },
-    author: 'Yuki M.',
-    location: { zh: '东京', en: 'Tokyo, JP' },
-    avatar: '🇯🇵',
-  },
-  {
-    quote: {
-      zh: '作为一个创作者，我用它来理解自己的创造力周期。现在我知道什么时候该冲刺，什么时候该休息。',
-      en: 'As a creator, I use it to understand my creative cycles. Now I know when to push and when to rest.',
-    },
-    author: 'Ava R.',
-    location: { zh: '柏林', en: 'Berlin, DE' },
-    avatar: '🇩🇪',
-  },
-  {
-    quote: {
-      zh: '八字报告里对我日主的分析精准得让我起鸡皮疙瘩。感觉它比我更了解我自己。',
-      en: 'The Day Master analysis was so accurate it gave me chills. It felt like it knew me better than I know myself.',
-    },
-    author: 'James K.',
-    location: { zh: '纽约', en: 'New York, US' },
-    avatar: '🇺🇸',
-  },
-  {
-    quote: {
-      zh: '我给团队里的每个人都做了命盘分析。现在我们用它来理解团队动态和协作方式。',
-      en: 'I ran charts for everyone on my team. We now use it to understand group dynamics and how we collaborate best.',
-    },
-    author: 'Lin W.',
-    location: { zh: '新加坡', en: 'Singapore, SG' },
-    avatar: '🇸🇬',
-  },
-] as const;
+export const productUseExamples = {
+  zh: [
+    '整理沟通问题：了解自己在关系中的表达模式',
+    '识别重复关系模式：发现自己反复遇到的关系类型',
+    '记录情绪和关系变化：用图表追踪关系发展的节律',
+    '决定沟通、暂停或寻求帮助：在关键节点做出理性选择',
+  ],
+  en: [
+    'Organizing communication patterns: understand how you express yourself in relationships',
+    'Identifying recurring relationship patterns: discover the types of connections you keep forming',
+    'Tracking emotional and relationship changes: use charts to follow the rhythm of your bond',
+    'Deciding to communicate, pause, or seek help: make informed choices at key moments',
+  ],
+} as const;
 
 // ────────────────────────────────────────────
 // 8. Trust Section Copy

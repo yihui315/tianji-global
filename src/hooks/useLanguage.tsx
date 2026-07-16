@@ -236,8 +236,8 @@ function buildTranslations(): Record<string, Record<Lang, string>> {
     },
     'faq.q4': { zh: '我的出生数据安全吗？', en: 'Is my birth data private?' },
     'faq.a4': {
-      zh: '绝对安全。我们采用银行级加密传输，不会将你的出生数据分享给任何第三方。你随时可以在账户设置中删除所有个人数据。隐私是我们最核心的承诺之一。',
-      en: 'Absolutely. We use bank-grade encryption and never share birth data with third parties. You can delete all personal data from account settings at any time. Privacy is one of our core commitments.',
+      zh: '你的出生数据仅用于计算星盘和生成解读，采用加密传输。我们不会将出生数据用于广告。可以通过 privacy@tianji.love 请求删除。隐私是我们的核心承诺之一。',
+      en: 'Your birth data is used for chart calculation and generating readings, with encrypted transmission. We do not use birth data for advertising. Deletion requests can be made via privacy@tianji.love. Privacy is one of our core commitments.',
     },
     'faq.q5': { zh: '高级版包含什么？', en: 'What is included in premium?' },
     'faq.a5': {

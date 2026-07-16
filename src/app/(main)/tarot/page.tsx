@@ -287,7 +287,7 @@ export default function TarotPage() {
                 <SharePanel
                   serviceType="tarot"
                   resultId={`${reading.spread.name}-${Date.now()}`}
-                  shareUrl={`https://tianji.global/tarot?spread=${reading.spread.name}`}
+                  shareUrl={`https://tianji.love/tarot?spread=${reading.spread.name}`}
                 />
 
                 <div className="rounded-[2rem] border border-white/10 bg-black/30 p-5">

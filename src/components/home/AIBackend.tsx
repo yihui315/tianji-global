@@ -59,14 +59,14 @@ const PRIVACY_ITEMS: PrivacyItemConfig[] = [
   },
   {
     icon: EyeOff,
-    label: { zh: '绝不共享数据', en: 'Zero Data Sharing' },
-    sub: { zh: '出生数据不会分享给第三方', en: 'Birth data never shared with third parties' },
+    label: { zh: '数据最小化', en: 'Minimal Data Sharing' },
+    sub: { zh: '仅用于计算，不用于广告', en: 'Used for calculations only, not for ads' },
     color: 'rgba(168,130,255,',
   },
   {
     icon: Shield,
-    label: { zh: '随时可删除', en: 'Delete Anytime' },
-    sub: { zh: '一键清除全部个人数据', en: 'One-click deletion of all personal data' },
+    label: { zh: '可请求删除', en: 'Deletion Available' },
+    sub: { zh: '联系privacy@tianji.love删除数据', en: 'Request deletion via privacy@tianji.love' },
     color: 'rgba(245,158,11,',
   },
   {
