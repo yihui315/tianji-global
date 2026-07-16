@@ -1,26 +1,40 @@
 {
-  "id": "rel-ab-003-B",
-  "module": "relationship",
+  "name": "Variant B: Functional Hero Summary",
   "focus": "hero_summary",
-  "variant": "B",
-  "style": "functional_conversion",
-  "headlineApproach": "Lead with the computed relationship pattern and a clear reading of the current stage.",
-  "oneLinerApproach": "Name the strongest layer, the weakest layer, and the next best action.",
-  "strengths": [
-    "Makes the pattern visible immediately",
-    "Turns the weakest dimension into a concrete next step",
-    "Improves clarity for sharing and premium positioning"
-  ],
-  "risks": [
-    "Slightly less poetic than the emotional option"
-  ],
-  "rubric": {
-    "clarity": 10,
-    "emotionalResonance": 7,
-    "actionability": 9,
-    "shareability": 8,
-    "conversionSupport": 8,
-    "total": 42
-  }
+  "metrics": {
+    "hasHeroSummary": true,
+    "hasPattern": true,
+    "hasFiveDimensions": true,
+    "hasCurrentWindow": true,
+    "hasPracticalGuidance": true,
+    "hasPremiumSection": true,
+    "shareModes": 2,
+    "headlineStrength": 16,
+    "patternClarity": 18,
+    "emotionalResonance": 10,
+    "upgradeStrength": 14
+  },
+  "copy": {
+    "headline": "Your Relationship Compatibility Report",
+    "oneLiner": "A structured analysis of your connection across 5 key dimensions — attraction, communication, conflict, rhythm, and long-term potential.",
+    "cta": "Unlock Full Report — See Your Scores",
+    "patternLabel": "Compatibility Profile",
+    "dimensionTitles": [
+      "Attraction",
+      "Communication",
+      "Conflict",
+      "Rhythm",
+      "Long-Term"
+    ],
+    "dimensionDescriptions": [
+      "How your elements and pace types create magnetic pull or distance.",
+      "How your communication styles align or clash in daily exchange.",
+      "Where friction naturally arises and how to navigate it.",
+      "The tempo of your relationship — fast, steady, or slow-burning.",
+      "Structural fit for building a shared future over time."
+    ],
+    "currentWindowText": "Current alignment: moderate. Key tension in communication dimension — see full report for actionable steps.",
+    "shareCardText": "We got our Compatibility Profile — 5 dimensions scored."
+  },
+  "reasoning": "Variant B frames the relationship reading as an analytical, outcome-oriented report. The headline is clear and descriptive, the one-liner lists the five dimensions explicitly, and the CTA emphasizes unlocking specific scores. This appeals to users who want practical insights and data-driven guidance. Pattern label is renamed to 'Compatibility Profile' to signal structure. Share card text focuses on the dimensional scoring, inviting curiosity without emotional overpromise. Upgrade strength is higher because the free preview clearly signals what the paid report contains — a full breakdown with scores."
 }
-{"name":"test B","metrics":{"hasHeroSummary":true,"hasPattern":true,"hasFiveDimensions":true,"hasCurrentWindow":true,"hasPracticalGuidance":true,"hasPremiumSection":true,"shareModes":3,"headlineStrength":13,"patternClarity":13,"emotionalResonance":10,"upgradeStrength":15}}
