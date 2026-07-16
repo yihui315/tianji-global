@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
+import { CookieConsent } from '@/components/CookieConsent';
 
 export const metadata: Metadata = {
   title: 'Tianji Love | AI Relationship Reading',
@@ -40,6 +41,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-[#050508] text-white antialiased">
         <Providers>{children}</Providers>
+        <CookieConsent />
       </body>
     </html>
   );
