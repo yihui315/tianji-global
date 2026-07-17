@@ -30,9 +30,6 @@ function applyConsent(preferences: ConsentPreferences) {
   window.gtag = window.gtag || ((...args: unknown[]) => window.dataLayer?.push(args));
   window.gtag('consent', 'update', {
     analytics_storage: preferences.analytics ? 'granted' : 'denied',
-    ad_storage: preferences.advertising ? 'granted' : 'denied',
-    ad_user_data: preferences.advertising ? 'granted' : 'denied',
-    ad_personalization: preferences.advertising ? 'granted' : 'denied',
   });
   window.dispatchEvent(new CustomEvent(CONSENT_CHANGE_EVENT, { detail: preferences }));
 }
@@ -59,8 +56,8 @@ export function CookieConsent() {
     setVisible(true);
   }, []);
 
-  const save = (analytics: boolean, advertising: boolean) => {
-    const next = createConsentPreferences(analytics, advertising);
+  const save = (analytics: boolean) => {
+    const next = createConsentPreferences(analytics);
     localStorage.setItem(CONSENT_STORAGE_KEY, serializeConsentPreferences(next));
     setPreferences(next);
     applyConsent(next);
@@ -90,18 +87,18 @@ export function CookieConsent() {
         >
           <div style={{ margin: '0 auto', display: 'flex', maxWidth: '1180px', alignItems: 'center', gap: '18px', flexWrap: 'wrap' }}>
             <p style={{ margin: 0, minWidth: '260px', flex: 1, fontSize: '13px', lineHeight: 1.6, color: 'rgba(255,255,255,0.76)' }}>
-              Necessary cookies keep the site working. Analytics and advertising are off by default. Ads remain off until your choice and, where required, our certified consent provider both allow them.{' '}
+              Necessary cookies keep the site working. Analytics is off by default. Advertising remains disabled in this panel and, if enabled, is controlled only by a Google-certified consent provider.{' '}
               <Link href="/legal/privacy" style={{ color: '#d8b77b', textDecoration: 'underline' }}>Privacy Policy</Link>
             </p>
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              <button type="button" onClick={() => save(false, false)} className="consent-secondary-button">
+              <button type="button" onClick={() => save(false)} className="consent-secondary-button">
                 Reject non-essential
               </button>
               <button type="button" onClick={() => setManaging(true)} className="consent-secondary-button">
                 Manage options
               </button>
-              <button type="button" onClick={() => save(true, true)} className="consent-primary-button">
-                Accept all
+              <button type="button" onClick={() => save(true)} className="consent-primary-button">
+                Accept analytics
               </button>
             </div>
           </div>
@@ -131,17 +128,17 @@ export function CookieConsent() {
               checked={preferences.analytics}
               onChange={(analytics) => setPreferences((current) => ({ ...current, analytics }))}
             />
-            <ConsentToggle
-              label="Advertising"
-              description="Allows advertising storage only after all applicable consent requirements are met."
-              checked={preferences.advertising}
-              onChange={(advertising) => setPreferences((current) => ({ ...current, advertising }))}
-            />
+            <div style={{ padding: '14px 0', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <strong style={{ display: 'block', color: '#ffe3b4', fontSize: '14px' }}>Advertising</strong>
+              <span style={{ display: 'block', marginTop: '4px', color: 'rgba(255,255,255,0.55)', fontSize: '12px', lineHeight: 1.5 }}>
+                Advertising cannot be enabled here. A Google-certified consent provider is the only interface allowed to grant advertising and TCF consent.
+              </span>
+            </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px', flexWrap: 'wrap' }}>
-              <button type="button" onClick={() => save(false, false)} className="consent-secondary-button">
+              <button type="button" onClick={() => save(false)} className="consent-secondary-button">
                 Reject non-essential
               </button>
-              <button type="button" onClick={() => save(preferences.analytics, preferences.advertising)} className="consent-primary-button">
+              <button type="button" onClick={() => save(preferences.analytics)} className="consent-primary-button">
                 Save choices
               </button>
             </div>

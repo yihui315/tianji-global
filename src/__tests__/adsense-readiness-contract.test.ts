@@ -20,12 +20,23 @@ describe('AdSense source readiness contract', () => {
     expect(DEFAULT_CONSENT_PREFERENCES).toMatchObject({
       necessary: true,
       analytics: false,
-      advertising: false,
     });
 
-    const accepted = createConsentPreferences(true, true, '2026-07-17T00:00:00.000Z');
+    const accepted = createConsentPreferences(true, '2026-07-17T00:00:00.000Z');
     expect(parseConsentPreferences(serializeConsentPreferences(accepted))).toEqual(accepted);
-    expect(parseConsentPreferences('accepted')).toMatchObject({ analytics: true, advertising: false });
+    expect(parseConsentPreferences('accepted')).toMatchObject({ analytics: true });
+    expect(parseConsentPreferences(JSON.stringify({
+      version: 2,
+      necessary: true,
+      analytics: true,
+      advertising: true,
+      updatedAt: '2026-07-16T00:00:00.000Z',
+    }))).toEqual({
+      version: 3,
+      necessary: true,
+      analytics: true,
+      updatedAt: '2026-07-16T00:00:00.000Z',
+    });
     expect(parseConsentPreferences('invalid')).toBeNull();
   });
 
@@ -33,11 +44,15 @@ describe('AdSense source readiness contract', () => {
     const consent = read('src/components/CookieConsent.tsx');
     const rootLayout = read('src/app/layout.tsx');
 
-    expect(consent).toContain('Accept all');
+    expect(consent).toContain('Accept analytics');
     expect(consent).toContain('Reject non-essential');
     expect(consent).toContain('Manage options');
     expect(consent).toContain('Privacy settings');
     expect(consent).toContain('/legal/privacy');
+    expect(consent).toContain('Google-certified consent provider');
+    expect(consent).not.toContain('ad_storage:');
+    expect(consent).not.toContain('ad_user_data:');
+    expect(consent).not.toContain('ad_personalization:');
     expect(rootLayout).toContain("analytics_storage:'denied'");
     expect(rootLayout).toContain("ad_storage:'denied'");
   });
@@ -85,6 +100,14 @@ describe('AdSense source readiness contract', () => {
 
     expect(packageJson).toContain('npm run audit:adsense');
     expect(ci).not.toMatch(/vercel/i);
-    expect(read('.github/workflows/deploy-us-server.yml')).toContain('npm run release:check');
+    const deploy = read('.github/workflows/deploy-us-server.yml');
+    expect(deploy).toContain('commit_sha:');
+    expect(deploy).toContain('test "$REMOTE_MAIN_COMMIT" = "$DEPLOY_COMMIT"');
+    expect(deploy).toContain('git checkout --detach "$DEPLOY_COMMIT"');
+    expect(deploy).toContain('SERVICE_VERSION_COMMIT=');
+    expect(deploy).toContain('SERVICE_VERSION_BUILT_AT=');
+    expect(deploy).toContain('npm run release:check');
+    expect(deploy).toContain('ADSENSE_AUDIT_BASE_URL=');
+    expect(deploy).toContain('ADSENSE_EXPECTED_COMMIT=');
   });
 });

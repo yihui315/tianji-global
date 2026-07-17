@@ -93,14 +93,14 @@ log('Checking consent defaults, choices, withdrawal, and policy link...');
 requireTokens('src/components/CookieConsent.tsx', [
   'Reject non-essential',
   'Manage options',
-  'Accept all',
+  'Accept analytics',
   'Privacy settings',
   '/legal/privacy',
+  'Google-certified consent provider',
   "window.gtag('consent', 'update'",
 ]);
 requireTokens('src/lib/consent.ts', [
   'analytics: false',
-  'advertising: false',
   'tianji:consent-changed',
 ]);
 requireTokens('src/app/layout.tsx', [
@@ -109,6 +109,12 @@ requireTokens('src/app/layout.tsx', [
   "ad_storage:'denied'",
   '<CookieConsent />',
 ]);
+const firstPartyConsent = read('src/components/CookieConsent.tsx');
+for (const advertisingSignal of ['ad_storage:', 'ad_user_data:', 'ad_personalization:']) {
+  if (firstPartyConsent.includes(advertisingSignal)) {
+    fail(`First-party consent UI must not independently update ${advertisingSignal.slice(0, -1)}.`);
+  }
+}
 warn('Google-certified CMP/TCF status remains an external AdSense Privacy & messaging verification gate.');
 
 log('Checking sitemap CTA and canonical route integrity...');
@@ -179,7 +185,16 @@ log('Checking release workflow wiring...');
 requireTokens('package.json', ['npm run audit:adsense']);
 const ciWorkflow = read('.github/workflows/ci.yml');
 if (/vercel/i.test(ciWorkflow)) fail('CI workflow still contains a Vercel deployment job.');
-requireTokens('.github/workflows/deploy-us-server.yml', ['npm run release:check', 'npm run smoke:production']);
+requireTokens('.github/workflows/deploy-us-server.yml', [
+  'commit_sha:',
+  'test "$REMOTE_MAIN_COMMIT" = "$DEPLOY_COMMIT"',
+  'SERVICE_VERSION_COMMIT=',
+  'SERVICE_VERSION_BUILT_AT=',
+  'npm run release:check',
+  'npm run smoke:production',
+  'ADSENSE_AUDIT_BASE_URL=',
+  'ADSENSE_EXPECTED_COMMIT=',
+]);
 
 async function runLiveAudit() {
   const baseUrlValue = process.env.ADSENSE_AUDIT_BASE_URL?.trim();
