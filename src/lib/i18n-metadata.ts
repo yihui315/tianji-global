@@ -36,7 +36,7 @@ export function buildLocalizedMetadata({
       description,
       type: 'website',
       url: `${siteUrl}${pathname}`,
-      siteName: 'TianJi Global',
+      siteName: 'Tianji Love',
       locale: localeOpenGraph[locale],
       alternateLocale: locale === 'en' ? ['zh_CN'] : ['en_US'],
       images: [ogImage],

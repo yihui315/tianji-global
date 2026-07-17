@@ -4,6 +4,7 @@
  */
 
 import Stripe from 'stripe';
+import { PRODUCT_CATALOG } from '@/config/products';
 
 // Lazy initialization avoids build-time failures when env vars are absent.
 let _stripe: Stripe | null = null;
@@ -36,7 +37,7 @@ export const PLANS = {
     nameZh: '专业版月度',
     description: 'Unlimited readings, all fortune types, priority AI processing',
     descriptionZh: '无限命理解读，全部命理类型，优先 AI 处理',
-    price: 9.99,
+    price: PRODUCT_CATALOG.PRO_MONTHLY.amountMinor / 100,
     priceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || 'price_pro_monthly',
     interval: 'month' as const,
     features: {
@@ -64,7 +65,7 @@ export const PLANS = {
     nameZh: '专业版年度',
     description: 'Best value - 2 months free',
     descriptionZh: '最佳性价比 - 赠送 2 个月',
-    price: 99.99,
+    price: PRODUCT_CATALOG.PRO_YEARLY.amountMinor / 100,
     priceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID || 'price_pro_yearly',
     interval: 'year' as const,
     features: {

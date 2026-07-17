@@ -1,7 +1,7 @@
 {
-  "name": "tianji-global",
+  "name": "tianji-love",
   "version": "1.0.0",
-  "description": "TianJi Global — AI Fortune Platform | 天机全球AI算命平台",
+  "description": "Tianji Love — private AI-assisted relationship readings",
   "main": "src/index.js",
   "scripts": {
     "dev": "next dev",
@@ -32,7 +32,7 @@
     "smoke:stripe:test-readiness": "tsx scripts/smoke-stripe-test-readiness.ts",
     "audit:release-gate": "tsx scripts/audit-release-gate.ts",
     "audit:adsense": "tsx scripts/audit-adsense.ts",
-    "release:check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run audit:routes && npm run audit:copy && npm run audit:share && npm run audit:upgrade",
+    "release:check": "npm run typecheck && npm run lint && npm run test && npm run audit:adsense && npm run build && npm run audit:routes && npm run audit:copy && npm run audit:share && npm run audit:upgrade",
     "upgrade:plan": "node scripts/generate-upgrade-plan.ts"
   },
   "keywords": [
@@ -51,7 +51,7 @@
     "type": "git",
     "url": "https://github.com/yihui315/tianji-global.git"
   },
-  "homepage": "https://tianji.global",
+  "homepage": "https://tianji.love",
   "engines": {
     "node": ">=18.0.0"
   },

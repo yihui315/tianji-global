@@ -2,9 +2,15 @@ name: Deploy US Server
 
 on:
   workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: Exact reviewed main commit to deploy (40-character SHA)
+        required: true
+        type: string
 
 env:
   NODE_VERSION: '20'
+  DEPLOY_COMMIT: ${{ inputs.commit_sha }}
 
 jobs:
   deploy:
@@ -13,7 +19,7 @@ jobs:
     environment: production
 
     steps:
-      - name: Validate deployment secrets
+      - name: Validate deployment input and secrets
         env:
           US_SERVER_HOST: ${{ secrets.US_SERVER_HOST }}
           US_SERVER_USER: ${{ secrets.US_SERVER_USER }}
@@ -21,6 +27,7 @@ jobs:
           US_SERVER_APP_DIR: ${{ secrets.US_SERVER_APP_DIR }}
           US_SERVER_PM2_APP: ${{ secrets.US_SERVER_PM2_APP }}
         run: |
+          [[ "$DEPLOY_COMMIT" =~ ^[0-9a-f]{40}$ ]]
           test -n "$US_SERVER_HOST"
           test -n "$US_SERVER_USER"
           test -n "$US_SERVER_SSH_KEY"
@@ -51,14 +58,21 @@ jobs:
           US_SERVER_APP_DIR: ${{ secrets.US_SERVER_APP_DIR }}
           US_SERVER_PM2_APP: ${{ secrets.US_SERVER_PM2_APP }}
         run: |
+          [[ "$DEPLOY_COMMIT" =~ ^[0-9a-f]{40}$ ]]
           PORT="${US_SERVER_PORT:-22}"
           ssh -i ~/.ssh/tianji_us_server -p "$PORT" "$US_SERVER_USER@$US_SERVER_HOST" \
-            "APP_DIR='$US_SERVER_APP_DIR' PM2_APP='$US_SERVER_PM2_APP' bash -s" <<'REMOTE'
+            "APP_DIR='$US_SERVER_APP_DIR' PM2_APP='$US_SERVER_PM2_APP' DEPLOY_COMMIT='$DEPLOY_COMMIT' bash -s" <<'REMOTE'
           set -euo pipefail
           cd "$APP_DIR"
           git fetch origin main
-          git checkout main
-          git pull --ff-only origin main
+          git cat-file -e "${DEPLOY_COMMIT}^{commit}"
+          REMOTE_MAIN_COMMIT="$(git rev-parse origin/main)"
+          test "$REMOTE_MAIN_COMMIT" = "$DEPLOY_COMMIT"
+          git checkout --detach "$DEPLOY_COMMIT"
+          SERVICE_VERSION_COMMIT="$(git rev-parse HEAD)"
+          test "$SERVICE_VERSION_COMMIT" = "$DEPLOY_COMMIT"
+          SERVICE_VERSION_BUILT_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          export SERVICE_VERSION_COMMIT SERVICE_VERSION_BUILT_AT
           npm ci --legacy-peer-deps
           npm run release:check
           pm2 restart "$PM2_APP" --update-env || PORT=3000 NODE_ENV=production pm2 start npm --name "$PM2_APP" -- start
@@ -73,10 +87,14 @@ jobs:
           US_SERVER_APP_DIR: ${{ secrets.US_SERVER_APP_DIR }}
           SMOKE_BASE_URL: ${{ vars.SMOKE_BASE_URL }}
         run: |
+          [[ "$DEPLOY_COMMIT" =~ ^[0-9a-f]{40}$ ]]
           PORT="${US_SERVER_PORT:-22}"
           ssh -i ~/.ssh/tianji_us_server -p "$PORT" "$US_SERVER_USER@$US_SERVER_HOST" \
-            "APP_DIR='$US_SERVER_APP_DIR' SMOKE_BASE_URL='${SMOKE_BASE_URL:-https://tianji.love}' bash -s" <<'REMOTE'
+            "APP_DIR='$US_SERVER_APP_DIR' DEPLOY_COMMIT='$DEPLOY_COMMIT' SMOKE_BASE_URL='${SMOKE_BASE_URL:-https://tianji.love}' bash -s" <<'REMOTE'
           set -euo pipefail
           cd "$APP_DIR"
           SMOKE_BASE_URL="$SMOKE_BASE_URL" npm run smoke:production
+          ADSENSE_AUDIT_BASE_URL="$SMOKE_BASE_URL" \
+            ADSENSE_EXPECTED_COMMIT="$DEPLOY_COMMIT" \
+            npm run audit:adsense
           REMOTE

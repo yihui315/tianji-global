@@ -9,6 +9,7 @@ import { PLANS, type PlanId } from '@/lib/stripe';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
+import { PRODUCT_CATALOG } from '@/config/products';
 import {
   TianjiLoveButton,
   TianjiLoveFinalCta,
@@ -52,17 +53,17 @@ const pricingCopy = {
       },
       {
         name: 'One-time Ask unlock',
-        price: '$1.99',
+        price: PRODUCT_CATALOG.ASK_UNLOCK.displayPrice,
         body: 'Unlock one fuller relationship answer with deeper interpretation and practical next steps.',
       },
       {
         name: 'Draw Timing Reading',
-        price: '$2.99',
+        price: PRODUCT_CATALOG.DRAW_UNLOCK.displayPrice,
         body: 'Unlock the full three-card timing reading as reflection, not certainty.',
       },
       {
         name: 'Relationship Destiny Report',
-        price: 'Coming soon',
+        price: PRODUCT_CATALOG.LOVE_PREMIUM_REPORT.displayPrice,
         body: 'A deeper paid relationship report is still behind flags and will not be publicly exposed until smoke gates pass.',
       },
     ],
@@ -155,17 +156,17 @@ const pricingCopy = {
       },
       {
         name: 'Ask 单次解锁',
-        price: '$1.99',
+        price: PRODUCT_CATALOG.ASK_UNLOCK.displayPrice,
         body: '解锁一份更完整的关系回答，包含更深解释和可执行的下一步。',
       },
       {
         name: '时机抽牌完整解读',
-        price: '$2.99',
+        price: PRODUCT_CATALOG.DRAW_UNLOCK.displayPrice,
         body: '解锁完整三张时机牌解读，用作关系反思，而不是确定预言。',
       },
       {
         name: 'Relationship Destiny Report',
-        price: '即将开放',
+        price: PRODUCT_CATALOG.LOVE_PREMIUM_REPORT.displayPrice,
         body: '更深入的付费关系报告仍在功能开关后，smoke gate 通过前不会公开曝光。',
       },
     ],

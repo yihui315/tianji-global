@@ -1,247 +1,261 @@
 #!/usr/bin/env tsx
 /**
- * scripts/audit-adsense.ts
- * AdSense content scanner — TypeScript rewrite of audit-adsense.sh
+ * Static AdSense readiness gate with optional public-site verification.
  *
- * Checks:
- *  1. Duplicate ad slot IDs (data-ad-slot, id="slot-*", id="adsense-*")
- *  2. Testimonials / fake persona content (testimonialTokens, fake names)
- *  3. Cookie consent component mounted in root layout
- *  4. @ts-ignore / @ts-nocheck (zero tolerance in PR #143 scope)
- *  5. Empty ad containers (placeholder divs with no real content)
- *  6. tianji.global legacy references
- *
- * Exit: 0 = pass, 1 = issues found
+ * Static mode runs in release:check. Set ADSENSE_AUDIT_BASE_URL and
+ * ADSENSE_EXPECTED_COMMIT together to verify a deployed build, public routes,
+ * and /api/version without embedding environment details in source control.
  */
 
-import { readFileSync, readdirSync, statSync } from 'fs';
-import { join, relative } from 'path';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
 
 const REPO_ROOT = join(__dirname, '..');
 const SRC_DIR = join(REPO_ROOT, 'src');
-
 const errors: string[] = [];
 const warnings: string[] = [];
 
-function log(msg: string) {
-  console.log(`[${new Date().toISOString().slice(11, 19)}] ${msg}`);
+function log(message: string) {
+  console.log(`[${new Date().toISOString().slice(11, 19)}] ${message}`);
 }
 
-function warn(msg: string) {
-  warnings.push(msg);
-  console.warn(`  WARN: ${msg}`);
+function warn(message: string) {
+  warnings.push(message);
+  console.warn(`  WARN: ${message}`);
 }
 
-function err(msg: string) {
-  errors.push(msg);
-  console.error(`  FAIL: ${msg}`);
+function fail(message: string) {
+  errors.push(message);
+  console.error(`  FAIL: ${message}`);
 }
 
-function getAllTsxTsFiles(dir: string): string[] {
+function normalizePath(file: string) {
+  return relative(REPO_ROOT, file).replaceAll('\\', '/');
+}
+
+function read(relativePath: string) {
+  return readFileSync(join(REPO_ROOT, relativePath), 'utf8');
+}
+
+function getSourceFiles(dir: string): string[] {
   const files: string[] = [];
-  try {
-    for (const entry of readdirSync(dir)) {
-      const full = join(dir, entry);
-      try {
-        if (statSync(full).isDirectory()) {
-          if (!entry.startsWith('.') && entry !== 'node_modules') {
-            files.push(...getAllTsxTsFiles(full));
-          }
-        } else if (/\.(tsx?|jsx?)$/.test(entry)) {
-          files.push(full);
-        }
-      } catch {}
+  for (const entry of readdirSync(dir)) {
+    const fullPath = join(dir, entry);
+    if (statSync(fullPath).isDirectory()) {
+      if (!entry.startsWith('.') && entry !== 'node_modules') files.push(...getSourceFiles(fullPath));
+    } else if (/\.(tsx?|jsx?)$/.test(entry)) {
+      files.push(fullPath);
     }
-  } catch {}
+  }
   return files;
 }
 
-// ─── 1. Duplicate ad slot IDs ────────────────────────────────────────────────
-log('Scanning for duplicate ad slot IDs...');
-
-const slotIdPattern = /(?:data-ad-slot|id)="([^"]+)"/g;
-const adSlotFiles = new Map<string, Map<string, number>>(); // slotId → (file → count)
-
-for (const file of getAllTsxTsFiles(SRC_DIR)) {
-  let content: string;
-  try {
-    content = readFileSync(file, 'utf-8');
-  } catch {
-    continue;
-  }
-
-  // Skip non-component files
-  const rel = relative(REPO_ROOT, file);
-  if (rel.includes('/__tests__/') || rel.includes('/node_modules/')) continue;
-
-  let match: RegExpExecArray | null;
-  slotIdPattern.lastIndex = 0;
-  while ((match = slotIdPattern.exec(content)) !== null) {
-    const slotId = match[1];
-    if (!slotId || !/^(adsense|ad-|slot-)/.test(slotId)) continue;
-
-    if (!adSlotFiles.has(slotId)) adSlotFiles.set(slotId, new Map());
-    const fileMap = adSlotFiles.get(slotId)!;
-    fileMap.set(file, (fileMap.get(file) ?? 0) + 1);
+function requireTokens(relativePath: string, tokens: string[]) {
+  const source = read(relativePath);
+  for (const token of tokens) {
+    if (!source.includes(token)) fail(`${relativePath} is missing required token: ${token}`);
   }
 }
 
-for (const [slotId, fileMap] of adSlotFiles) {
-  const totalCount = [...fileMap.values()].reduce((a, b) => a + b, 0);
-  if (totalCount > 1) {
-    const files = [...fileMap.entries()].map(([f]) => `  - ${relative(REPO_ROOT, f)}`).join('\n');
-    err(`Duplicate ad slot ID "${slotId}" used ${totalCount} times:\n${files}`);
+const sourceFiles = getSourceFiles(SRC_DIR);
+
+log('Checking duplicate ad slot IDs...');
+const slotPattern = /(?:data-ad-slot|id)="([^"]+)"/g;
+const slotCounts = new Map<string, string[]>();
+for (const file of sourceFiles) {
+  const rel = normalizePath(file);
+  if (rel.includes('/__tests__/')) continue;
+  const source = readFileSync(file, 'utf8');
+  for (const match of source.matchAll(slotPattern)) {
+    const slot = match[1];
+    if (/^(adsense|ad-|slot-)/.test(slot)) slotCounts.set(slot, [...(slotCounts.get(slot) ?? []), rel]);
   }
 }
+for (const [slot, files] of slotCounts) {
+  if (files.length > 1) fail(`Duplicate ad slot ID "${slot}" in: ${files.join(', ')}`);
+}
 
-// ─── 2. Testimonials / fake persona content ──────────────────────────────────
-log('Scanning for testimonial/persona content...');
-
-const testimonialPatterns = [
-  /testimonialTokens/i,
-  /"name"\s*:\s*"[A-Z][a-z]+\s+[A-Z]\./,       // "Sophia L.", "Marcus T."
-  /"location"\s*:\s*"[^"]+"/,                    // fake locations like "New York, NY"
-  /satisfied\s+(customer|user|client)/i,
-  /customer\s+review/i,
-  /用户好评/i,
-  /五星评价/i,
-  /testimonial/i,
+log('Checking public homepage for fabricated testimonials and strong claims...');
+const homepageSources = [
+  'src/components/home/TianjiLoveHome.tsx',
+  'src/components/tianji-love/TianjiLovePrimitives.tsx',
+].map(read).join('\n');
+const prohibitedHomepagePatterns = [
+  /\b(?:Sophie|Olivia)\b/i,
+  /(?:林小姐|苏小姐|陈小姐)/,
+  /判断很准|准确说出问题|guaranteed accuracy|guaranteed result/i,
 ];
+for (const pattern of prohibitedHomepagePatterns) {
+  if (pattern.test(homepageSources)) fail(`Public homepage contains prohibited claim/persona pattern: ${pattern}`);
+}
 
-const skipDirs = ['/__tests__/', '/node_modules/', '/lib/astro/'];
+log('Checking consent defaults, choices, withdrawal, and policy link...');
+requireTokens('src/components/CookieConsent.tsx', [
+  'Reject non-essential',
+  'Manage options',
+  'Accept analytics',
+  'Privacy settings',
+  '/legal/privacy',
+  'Google-certified consent provider',
+  "window.gtag('consent', 'update'",
+]);
+requireTokens('src/lib/consent.ts', [
+  'analytics: false',
+  'tianji:consent-changed',
+]);
+requireTokens('src/app/layout.tsx', [
+  'consent-mode-defaults',
+  "analytics_storage:'denied'",
+  "ad_storage:'denied'",
+  '<CookieConsent />',
+]);
+const firstPartyConsent = read('src/components/CookieConsent.tsx');
+for (const advertisingSignal of ['ad_storage:', 'ad_user_data:', 'ad_personalization:']) {
+  if (firstPartyConsent.includes(advertisingSignal)) {
+    fail(`First-party consent UI must not independently update ${advertisingSignal.slice(0, -1)}.`);
+  }
+}
+warn('Google-certified CMP/TCF status remains an external AdSense Privacy & messaging verification gate.');
 
-for (const file of getAllTsxTsFiles(SRC_DIR)) {
-  const rel = relative(REPO_ROOT, file);
-  if (skipDirs.some(d => rel.includes(d))) continue;
+log('Checking sitemap CTA and canonical route integrity...');
+const loveReading = read('src/app/[locale]/love-reading/page.tsx');
+if (loveReading.includes("getLocalizedPath(locale, '/relationship')")) {
+  fail('Localized love-reading still links to the missing /relationship route.');
+}
+if (!loveReading.includes("`/relationship/new?lang=${locale === 'zh-CN' ? 'zh' : 'en'}`")) {
+  fail('Localized love-reading does not link to the real /relationship/new route with a language hint.');
+}
 
-  let content: string;
-  try {
-    content = readFileSync(file, 'utf-8');
-  } catch {
-    continue;
+const i18n = read('src/lib/i18n.ts');
+for (const route of ["'/pricing'", "'/legal/privacy'", "'/legal/terms'"]) {
+  if (!i18n.includes(route)) fail(`Canonical public route missing from sitemap config: ${route}`);
+}
+if (i18n.includes("{ path: '/privacy-center'")) fail('/privacy-center must not be emitted in sitemap.');
+
+requireTokens('src/app/[locale]/pricing/page.tsx', ['permanentRedirect', '/pricing?lang=']);
+requireTokens('src/app/[locale]/privacy/page.tsx', ['permanentRedirect', '/legal/privacy?lang=']);
+requireTokens('src/app/[locale]/terms/page.tsx', ['permanentRedirect', '/legal/terms?lang=']);
+
+log('Checking the shared product catalog across UI, checkout, and JSON-LD...');
+requireTokens('src/app/(main)/pricing/page.tsx', ['PRODUCT_CATALOG.ASK_UNLOCK', 'PRODUCT_CATALOG.DRAW_UNLOCK', 'PRODUCT_CATALOG.LOVE_PREMIUM_REPORT']);
+requireTokens('src/app/(main)/pricing/layout.tsx', ['PUBLICLY_AVAILABLE_PRODUCTS', 'minorAmountToMajor']);
+for (const file of ['src/lib/ask-question.ts', 'src/lib/quick-draw.ts', 'src/lib/stripe.ts', 'src/lib/love-reading/revenue-contract.ts']) {
+  if (!read(file).includes("@/config/products")) fail(`${file} does not import the shared product catalog.`);
+}
+
+log('Checking canonical brand and legacy-route indexing controls...');
+const packageJson = read('package.json');
+if (packageJson.includes('tianji.global') || packageJson.includes('TianJi Global')) {
+  fail('package.json still exposes the legacy brand or domain.');
+}
+requireTokens('src/lib/i18n-metadata.ts', ["siteName: 'Tianji Love'"]);
+requireTokens('src/app/api/health/route.ts', ["service: 'tianji-love'"]);
+const nextConfig = read('next.config.js');
+for (const route of ['/bazi', '/ziwei', '/tarot', '/yijing', '/western', '/astrology']) {
+  if (!nextConfig.includes(`'${route}'`)) fail(`Legacy route is missing an indexing policy: ${route}`);
+}
+if (!nextConfig.includes("key: 'X-Robots-Tag'") || !nextConfig.includes("value: 'noindex, nofollow'")) {
+  fail('Legacy public routes are not protected by X-Robots-Tag noindex, nofollow.');
+}
+
+for (const file of sourceFiles) {
+  const rel = normalizePath(file);
+  if (rel.includes('/__tests__/')) continue;
+  const source = readFileSync(file, 'utf8');
+  if (/tianji\.global/i.test(source)) fail(`Legacy tianji.global domain in ${rel}.`);
+}
+
+log('Checking TypeScript suppression and empty ad containers...');
+for (const file of sourceFiles) {
+  const rel = normalizePath(file);
+  if (rel.includes('/__tests__/')) continue;
+  const source = readFileSync(file, 'utf8');
+  const suppressions = source.match(/@ts-ignore|@ts-nocheck/g);
+  if (suppressions && !rel.startsWith('src/data/') && !rel.startsWith('src/lib/bazi') && !rel.startsWith('src/lib/yijing') && !rel.startsWith('src/types/')) {
+    fail(`TypeScript suppression in ${rel} (${suppressions.length}x).`);
   }
 
-  for (const pattern of testimonialPatterns) {
-    if (pattern.test(content)) {
-      const match = content.match(pattern)?.[0];
-      warn(`Testimonial/persona content in ${rel}: "${match}"`);
-      break;
-    }
+  const emptyAdPattern = /<(?:div|section|aside)[^>]*(?:data-ad-slot|id)="([^"]*)"[^>]*>\s*<\/(?:div|section|aside)>/gi;
+  for (const match of source.matchAll(emptyAdPattern)) {
+    if (/^(adsense|ad-|slot-)/.test(match[1])) warn(`Empty ad container "${match[1]}" in ${rel}.`);
   }
 }
 
-// ─── 3. Cookie consent in root layout ───────────────────────────────────────
-log('Checking cookie consent component...');
+log('Checking release workflow wiring...');
+requireTokens('package.json', ['npm run audit:adsense']);
+const ciWorkflow = read('.github/workflows/ci.yml');
+if (/vercel/i.test(ciWorkflow)) fail('CI workflow still contains a Vercel deployment job.');
+requireTokens('.github/workflows/deploy-us-server.yml', [
+  'commit_sha:',
+  'test "$REMOTE_MAIN_COMMIT" = "$DEPLOY_COMMIT"',
+  'SERVICE_VERSION_COMMIT=',
+  'SERVICE_VERSION_BUILT_AT=',
+  'npm run release:check',
+  'npm run smoke:production',
+  'ADSENSE_AUDIT_BASE_URL=',
+  'ADSENSE_EXPECTED_COMMIT=',
+]);
 
-const rootLayoutPath = join(REPO_ROOT, 'src/app/layout.tsx');
-let hasCookieConsent = false;
-try {
-  const content = readFileSync(rootLayoutPath, 'utf-8');
-  hasCookieConsent = /cookie[Cc]onsent|Cookie[Cc]onsent|CookieBanner|cookie_banner/i.test(content);
-} catch {
-  warn('Cannot read root layout.tsx');
-}
+async function runLiveAudit() {
+  const baseUrlValue = process.env.ADSENSE_AUDIT_BASE_URL?.trim();
+  const expectedCommit = process.env.ADSENSE_EXPECTED_COMMIT?.trim();
 
-if (!hasCookieConsent) {
-  err(`Cookie consent component NOT mounted in src/app/layout.tsx — required for GDPR/AdSense`);
-} else {
-  log('  Cookie consent component found in root layout');
-}
-
-// ─── 4. @ts-ignore / @ts-nocheck ─────────────────────────────────────────────
-log('Scanning for @ts-ignore / @ts-nocheck...');
-
-const tsIgnoreFiles = new Map<string, number>();
-
-for (const file of getAllTsxTsFiles(SRC_DIR)) {
-  const rel = relative(REPO_ROOT, file);
-  if (rel.includes('/node_modules/')) continue;
-
-  let content: string;
-  try {
-    content = readFileSync(file, 'utf-8');
-  } catch {
-    continue;
+  if (!baseUrlValue && !expectedCommit) {
+    warn('Live route/SHA audit skipped; set ADSENSE_AUDIT_BASE_URL and ADSENSE_EXPECTED_COMMIT together after deployment.');
+    return;
+  }
+  if (!baseUrlValue || !expectedCommit) {
+    fail('Live audit requires both ADSENSE_AUDIT_BASE_URL and ADSENSE_EXPECTED_COMMIT.');
+    return;
   }
 
-  const matches = content.match(/@ts-ignore|@ts-nocheck/g);
-  if (matches) {
-    tsIgnoreFiles.set(rel, matches.length);
-  }
-}
+  const baseUrl = new URL(baseUrlValue);
+  const fetchText = async (path: string) => {
+    const response = await fetch(new URL(path, baseUrl), { redirect: 'follow' });
+    if (!response.ok) fail(`Live route ${path} returned ${response.status}.`);
+    return response.text();
+  };
 
-for (const [file, count] of [...tsIgnoreFiles.entries()].sort()) {
-  // Filter out legitimate library/type files that pre-exist
-  if (file.startsWith('src/data/') || file.startsWith('src/lib/bazi') || file.startsWith('src/lib/yijing') || file.startsWith('src/types/')) {
-    warn(`@ts-ignore found in ${file} (${count}x) — existing library, tolerated`);
+  log(`Running live AdSense audit against ${baseUrl.origin}...`);
+  const versionResponse = await fetch(new URL('/api/version', baseUrl));
+  if (!versionResponse.ok) {
+    fail(`/api/version returned ${versionResponse.status}.`);
   } else {
-    err(`@ts-ignore/@ts-nocheck found in ${file} (${count}x)`);
+    const version = (await versionResponse.json()) as { commit?: string };
+    if (version.commit !== expectedCommit) fail(`/api/version commit ${version.commit ?? 'missing'} does not match ${expectedCommit}.`);
+  }
+
+  const home = await fetchText('/');
+  for (const pattern of [/tianji\.global/i, /(?:Sophie|Olivia|林小姐|苏小姐|陈小姐)/i, /©\s*2024/i]) {
+    if (pattern.test(home)) fail(`Live homepage contains prohibited legacy content: ${pattern}`);
+  }
+
+  for (const path of ['/en/love-reading', '/zh-CN/love-reading', '/relationship/new?lang=en', '/relationship/new?lang=zh', '/pricing', '/legal/privacy', '/legal/terms']) {
+    await fetchText(path);
+  }
+
+  const sitemap = await fetchText('/sitemap.xml');
+  if (sitemap.includes('/privacy-center')) fail('Live sitemap still contains /privacy-center.');
+  for (const path of ['/legal/privacy', '/legal/terms', '/pricing']) {
+    if (!sitemap.includes(path)) fail(`Live sitemap is missing ${path}.`);
   }
 }
 
-// ─── 5. Empty ad containers ───────────────────────────────────────────────────
-log('Scanning for empty ad containers...');
-
-const emptyAdPattern = /<(?:div|section|aside)[^>]*(?:data-ad-slot|id)="([^"]*)"[^>]*>\s*<\/(?:div|section|aside)>/gi;
-
-for (const file of getAllTsxTsFiles(SRC_DIR)) {
-  const rel = relative(REPO_ROOT, file);
-  if (rel.includes('/__tests__/') || rel.includes('/node_modules/')) continue;
-
-  let content: string;
-  try {
-    content = readFileSync(file, 'utf-8');
-  } catch {
-    continue;
+function finish() {
+  log('');
+  if (errors.length > 0) {
+    console.error(`\n=== RESULT: FAIL — ${errors.length} error(s) ===`);
+    errors.forEach((message) => console.error(`  ${message}`));
+    process.exitCode = 1;
+    return;
   }
 
-  let match;
-  emptyAdPattern.lastIndex = 0;
-  while ((match = emptyAdPattern.exec(content)) !== null) {
-    if (match[1] && /^(adsense|ad-|slot-)/.test(match[1])) {
-      warn(`Empty ad container with slot "${match[1]}" in ${rel}`);
-    }
-  }
-}
-
-// ─── 6. tianji.global legacy references ──────────────────────────────────────
-log('Scanning for tianji.global legacy references...');
-
-const globalPattern = /tianji\.global/gi;
-const globalFiles = new Map<string, number>();
-
-for (const file of getAllTsxTsFiles(SRC_DIR)) {
-  const rel = relative(REPO_ROOT, file);
-  if (rel.includes('/node_modules/')) continue;
-
-  let content: string;
-  try {
-    content = readFileSync(file, 'utf-8');
-  } catch {
-    continue;
-  }
-
-  const matches = content.match(globalPattern);
-  if (matches) {
-    globalFiles.set(rel, matches.length);
-  }
-}
-
-for (const [file, count] of [...globalFiles.entries()].sort()) {
-  err(`tianji.global legacy reference in ${file} (${count}x) — should be tianji.love`);
-}
-
-// ─── Summary ─────────────────────────────────────────────────────────────────
-log('');
-if (errors.length > 0) {
-  console.error(`\n=== RESULT: FAIL — ${errors.length} error(s) ===`);
-  errors.forEach(e => console.error('  ' + e));
-  process.exit(1);
-} else {
-  console.log(`\n=== RESULT: PASS ===`);
+  console.log('\n=== RESULT: PASS (SOURCE GATE) ===');
   if (warnings.length > 0) {
-    console.log(`${warnings.length} warning(s):`);
-    warnings.forEach(w => console.log('  WARN: ' + w));
+    console.log(`${warnings.length} external or non-blocking warning(s) were reported above.`);
   }
-  process.exit(0);
 }
+
+runLiveAudit()
+  .catch((error: unknown) => fail(`Live audit failed: ${error instanceof Error ? error.message : String(error)}`))
+  .finally(finish);

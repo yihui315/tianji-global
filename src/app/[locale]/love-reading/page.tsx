@@ -150,6 +150,7 @@ export default async function LoveReadingPage({ params }: PageParams) {
   const copy = pageCopy[locale];
   const featureItems = features[locale];
   const cta = ctas[locale];
+  const relationshipHref = `/relationship/new?lang=${locale === 'zh-CN' ? 'zh' : 'en'}`;
 
   return (
     <main className="min-h-screen bg-[#050508] px-5 py-10 text-white sm:px-8">
@@ -176,7 +177,7 @@ export default async function LoveReadingPage({ params }: PageParams) {
           <h2 className="mb-2 text-2xl font-semibold text-[#ffe3b4]">{copy.cardTitle}</h2>
           <p className="mb-6 text-sm text-[#f4d7a3]/60">{cta.note}</p>
           <Link
-            href={getLocalizedPath(locale, '/relationship')}
+            href={relationshipHref}
             className="inline-block rounded-full bg-[#ff6c73] px-8 py-4 text-base font-semibold text-white transition hover:bg-[#ff6c73]/90"
           >
             {cta.primary}
@@ -201,7 +202,7 @@ export default async function LoveReadingPage({ params }: PageParams) {
         <div className="text-center">
           <p className="mb-4 text-sm text-[#f4d7a3]/50">{copy.samplePrompt}</p>
           <Link
-            href={getLocalizedPath(locale, '/relationship')}
+            href={relationshipHref}
             className="text-sm text-[#d8b77b] underline hover:text-[#f4d7a3]"
           >
             {cta.secondary} -&gt;

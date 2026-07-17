@@ -31,13 +31,11 @@ export const localizedPublicRoutes: SitemapRoute[] = [
   { path: '/draw', changeFrequency: 'weekly', priority: 0.85 },
   // love-reading — has [locale] variant: /en/love-reading and /zh-CN/love-reading
   { path: '/love-reading', changeFrequency: 'weekly', priority: 0.9, hasLocaleVariant: true },
-  // Pricing — has [locale] variant: /en/pricing and /zh-CN/pricing
-  { path: '/pricing', changeFrequency: 'weekly', priority: 0.9, hasLocaleVariant: true },
-  // Privacy center — no locale prefix, served by (main)
-  { path: '/privacy-center', changeFrequency: 'yearly', priority: 0.5 },
-  // Legal pages — [locale] variants: /en/privacy, /en/terms, etc.
-  { path: '/privacy', changeFrequency: 'yearly', priority: 0.45, hasLocaleVariant: true },
-  { path: '/terms', changeFrequency: 'yearly', priority: 0.45, hasLocaleVariant: true },
+  // Pricing has one canonical public route. Locale aliases permanently redirect here.
+  { path: '/pricing', changeFrequency: 'weekly', priority: 0.9 },
+  // Legal pages use one canonical route each. Locale aliases permanently redirect here.
+  { path: '/legal/privacy', changeFrequency: 'yearly', priority: 0.45 },
+  { path: '/legal/terms', changeFrequency: 'yearly', priority: 0.45 },
 ];
 
 export function isSupportedLocale(locale: string): locale is Locale {

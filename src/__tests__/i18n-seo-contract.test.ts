@@ -54,8 +54,9 @@ describe('localized SEO routing contract', () => {
 
     expect(sitemap).toContain('localizedPublicRoutes');
     expect(i18n).toContain('/pricing');
-    expect(i18n).toContain('/privacy');
-    expect(i18n).toContain('/terms');
+    expect(i18n).toContain('/legal/privacy');
+    expect(i18n).toContain('/legal/terms');
+    expect(i18n).not.toContain("{ path: '/privacy-center'");
     expect(sitemap).toContain('getLocalizedPath(locale, route.path)');
   });
 
@@ -70,7 +71,10 @@ describe('localized SEO routing contract', () => {
     expect(pages).toContain('Discover patterns.');
     expect(pages).toContain('Make clearer relationship choices.');
     expect(pages).toContain('爱，是唯一能改变命运的变量。');
-    expect(pages).toContain('个人爱情报告');
+    expect(pages).toContain('permanentRedirect(`/pricing?lang=');
+    expect(pages).toContain('permanentRedirect(`/legal/privacy?lang=');
+    expect(pages).toContain('permanentRedirect(`/legal/terms?lang=');
+    expect(pages).not.toMatch(/个人爱情报告|关系合盘报告|礼物报告|\$4\.99|\$12\.99/);
     expect(pages).not.toContain('TianJi Plus monthly');
     expect(pages).not.toMatch(/涓|鐖|绉|鍏崇郴|瑙ｈ/);
     expect(pages).not.toMatch(/We predict your future|Find your soulmate|Know exactly when love will arrive/i);

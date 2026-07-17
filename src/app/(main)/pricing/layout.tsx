@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { JsonLd, SITE, buildBreadcrumb } from '@/components/seo/JsonLd';
+import { PUBLICLY_AVAILABLE_PRODUCTS, minorAmountToMajor } from '@/config/products';
 
 const TITLE = 'Tianji Love Pricing | Deeper Love Readings & Compatibility Reports';
 const DESCRIPTION =
@@ -39,46 +40,21 @@ const productLd = {
   description: DESCRIPTION,
   brand: { '@type': 'Brand', name: SITE.name },
   url: PAGE_URL,
-  offers: [
-    {
-      '@type': 'Offer',
-      name: 'Ask One Question Unlock',
-      price: '1.99',
-      priceCurrency: 'USD',
-      url: PAGE_URL,
-      availability: 'https://schema.org/InStock',
-      category: 'one-time',
-    },
-    {
-      '@type': 'Offer',
-      name: 'Draw Timing Reading Unlock',
-      price: '2.99',
-      priceCurrency: 'USD',
-      url: PAGE_URL,
-      availability: 'https://schema.org/InStock',
-      category: 'one-time',
-    },
-    {
-      '@type': 'Offer',
-      name: 'Tianji Love Monthly',
-      price: '9.99',
-      priceCurrency: 'USD',
-      url: PAGE_URL,
-      availability: 'https://schema.org/InStock',
-      category: 'subscription',
-      eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON' },
-    },
-    {
-      '@type': 'Offer',
-      name: 'Tianji Love Yearly',
-      price: '99.99',
-      priceCurrency: 'USD',
-      url: PAGE_URL,
-      availability: 'https://schema.org/InStock',
-      category: 'subscription',
-      eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'ANN' },
-    },
-  ],
+  offers: PUBLICLY_AVAILABLE_PRODUCTS.map((product) => ({
+    '@type': 'Offer',
+    name: product.name,
+    price: minorAmountToMajor(product.amountMinor),
+    priceCurrency: product.currency,
+    url: PAGE_URL,
+    availability: 'https://schema.org/InStock',
+    category: product.billing === 'one_time' ? 'one-time' : 'subscription',
+    ...(product.billing === 'month'
+      ? { eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON' } }
+      : {}),
+    ...(product.billing === 'year'
+      ? { eligibleDuration: { '@type': 'QuantitativeValue', value: 1, unitCode: 'ANN' } }
+      : {}),
+  })),
 };
 
 const faqLd = {

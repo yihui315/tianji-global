@@ -16,6 +16,7 @@
 
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
 import { z } from 'zod';
+import { PRODUCT_CATALOG } from '@/config/products';
 import {
   allCards,
   type TarotCard,
@@ -264,8 +265,8 @@ export function buildDrawPreview(fullReading: string, language: QuickDrawLanguag
 
 // ─── Pricing ───────────────────────────────────────────────────────────
 
-/** $2.99 (USD, lowest unit). Single source of truth for the paywall. */
-export const QUICK_DRAW_UNLOCK_PRICE_USD_CENTS = 299;
+/** USD lowest unit. Sourced from the public product catalog. */
+export const QUICK_DRAW_UNLOCK_PRICE_USD_CENTS = PRODUCT_CATALOG.DRAW_UNLOCK.amountMinor;
 
 /** Display price for UI. */
-export const QUICK_DRAW_UNLOCK_PRICE_DISPLAY = '$2.99';
+export const QUICK_DRAW_UNLOCK_PRICE_DISPLAY = PRODUCT_CATALOG.DRAW_UNLOCK.displayPrice;

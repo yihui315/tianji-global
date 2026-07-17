@@ -351,7 +351,7 @@ export function TianjiLoveFooter({
             </Link>
           ))}
         </nav>
-        <p className="text-xs text-[#f4d7a3]/48">© 2024 Tianji Love</p>
+        <p className="text-xs text-[#f4d7a3]/48">© {new Date().getFullYear()} Tianji Love</p>
       </div>
     </footer>
   );
