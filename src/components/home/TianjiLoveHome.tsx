@@ -900,7 +900,7 @@ function TianjiLoveFooter({ copy, href }: { copy: LoveCopy; href: (path: string)
             </Link>
           ))}
         </nav>
-        <p className="text-xs">© 2024 Tianji Love</p>
+        <p className="text-xs">© {new Date().getFullYear()} Tianji Love</p>
       </div>
     </footer>
   );

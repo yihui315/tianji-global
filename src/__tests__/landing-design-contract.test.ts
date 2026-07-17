@@ -93,9 +93,6 @@ describe('Tianji Love landing redesign contract', () => {
       'tianji-love-icon-relationship-rings.png',
       'tianji-love-icon-future-hourglass.png',
       'tianji-love-divider-long.png',
-      'tianji-love-emma.png',
-      'tianji-love-sophie.png',
-      'tianji-love-olivia.png',
       'Love Reading',
       'Ask',
       'Draw',
@@ -137,11 +134,6 @@ describe('Tianji Love landing redesign contract', () => {
       'Start free',
       'Unlock depth',
       'Return with history',
-      'People Used Tianji Love For Clearer Reflection',
-      'Emma',
-      'Sophie',
-      'Olivia',
-      'tianji-love-testimonial-avatar',
       'Start with the free signal. Unlock depth only when it helps.',
       'Tianji Love first-viewport reference',
       'love-hero-reference-grid',
@@ -164,9 +156,7 @@ describe('Tianji Love landing redesign contract', () => {
     expect(publicAssetExists('/assets/images/icons/tianji-love-icon-relationship-rings.png')).toBe(true);
     expect(publicAssetExists('/assets/images/icons/tianji-love-icon-future-hourglass.png')).toBe(true);
     expect(publicAssetExists('/assets/images/decor/tianji-love-divider-long.png')).toBe(true);
-    expect(publicAssetExists('/assets/images/avatars/tianji-love-emma.png')).toBe(true);
-    expect(publicAssetExists('/assets/images/avatars/tianji-love-sophie.png')).toBe(true);
-    expect(publicAssetExists('/assets/images/avatars/tianji-love-olivia.png')).toBe(true);
+    expect(home).not.toMatch(/People Used Tianji Love For Clearer Reflection|\bEmma\b|\bSophie\b|\bOlivia\b/);
   });
 
   it('applies the module landing template without changing core endpoints', () => {
@@ -385,7 +375,6 @@ describe('Tianji Love landing redesign contract', () => {
       'Ask One Question',
       'Draw Timing Cards',
       'HowItWorks',
-      'LoveTestimonials',
       'FinalCta',
     ]) {
       expect(home).toContain(signal);

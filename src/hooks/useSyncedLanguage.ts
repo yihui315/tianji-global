@@ -11,6 +11,7 @@ export function useSyncedLanguage(defaultLanguage?: AppLanguage) {
 
   useEffect(() => {
     setLanguageState(lang);
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
   }, [lang]);
 
   useEffect(() => {

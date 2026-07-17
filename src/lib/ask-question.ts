@@ -14,6 +14,7 @@
 
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
 import { z } from 'zod';
+import { PRODUCT_CATALOG } from '@/config/products';
 import { LOVE_TEST_ASK_INTENTS } from '@/lib/love-test';
 
 // ─── Schema ────────────────────────────────────────────────────────────
@@ -143,8 +144,8 @@ export function buildAskPreview(fullAnswer: string, language: AskQuestionLanguag
 
 // ─── Pricing ───────────────────────────────────────────────────────────
 
-/** $1.99 (USD, lowest unit). Single source of truth for the paywall. */
-export const ASK_QUESTION_UNLOCK_PRICE_USD_CENTS = 199;
+/** USD lowest unit. Sourced from the public product catalog. */
+export const ASK_QUESTION_UNLOCK_PRICE_USD_CENTS = PRODUCT_CATALOG.ASK_UNLOCK.amountMinor;
 
-/** Display price for UI (no decimals if integer; 2 decimals otherwise). */
-export const ASK_QUESTION_UNLOCK_PRICE_DISPLAY = '$1.99';
+/** Display price for UI. */
+export const ASK_QUESTION_UNLOCK_PRICE_DISPLAY = PRODUCT_CATALOG.ASK_UNLOCK.displayPrice;

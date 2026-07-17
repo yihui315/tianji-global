@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
 import { CookieConsent } from '@/components/CookieConsent';
+import { DocumentLanguage } from '@/components/DocumentLanguage';
 
 export const metadata: Metadata = {
   title: 'Tianji Love | AI Relationship Reading',
@@ -40,7 +42,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-[#050508] text-white antialiased">
+        <Script id="consent-mode-defaults" strategy="beforeInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});`}
+        </Script>
         <Providers>{children}</Providers>
+        <DocumentLanguage />
         <CookieConsent />
       </body>
     </html>

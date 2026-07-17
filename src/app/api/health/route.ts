@@ -6,6 +6,6 @@ export async function GET() {
   return NextResponse.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    service: 'tianji-global',
+    service: 'tianji-love',
   });
 }

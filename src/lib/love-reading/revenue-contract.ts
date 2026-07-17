@@ -1,8 +1,10 @@
+import { PRODUCT_CATALOG } from '@/config/products';
+
 export const LOVE_PREMIUM_REPORT_PRODUCT_TYPE = 'love_premium_report';
 
 export const LOVE_PREMIUM_REPORT_PRICE = {
-  currency: 'cny',
-  amountMinor: 1990,
+  currency: PRODUCT_CATALOG.LOVE_PREMIUM_REPORT.currency.toLowerCase(),
+  amountMinor: PRODUCT_CATALOG.LOVE_PREMIUM_REPORT.amountMinor,
   display: '¥19.9',
 } as const;
 

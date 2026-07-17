@@ -854,6 +854,17 @@
 - Risks: Pool is now 60 hooks / 28 video scripts / 36 share captions — content remains manual-publish only. No risk surface beyond copy review. Staging env, Stripe live, Supabase production, Resend, AI provider, and `DESTINY_SCAN_SECRET` gates remain blocked from prior runs and were not touched here.
 - Next step: Continue manual review of the next publishing pack on the operator's schedule. The next scheduled calendar run will further extend the calendar as needed.
 
+### 2026-07-17 - Tianji Love AdSense source-readiness remediation
+
+- Task ID: `20260717-tianji-adsense-final-remediation`
+- Source base: `origin/main@bfa77cd8810e39f349db61028a5d95a6f6c42da7`; isolated branch `codex/adsense-final-remediation-20260717`.
+- Files changed: pricing/product configuration, canonical redirects and sitemap configuration, consent controls, love-reading CTA, brand metadata, legal copy, legacy-route indexing headers, AdSense audit/tests, CI release gate, `.ai/CHANGELOG_AI.md`, and `.ai/REVIEW_PACKET.md`.
+- Summary: Implemented the source-code items from the final AdSense audit: centralized public prices, removed the coming-soon report from structured offers, consolidated duplicate locale routes through permanent redirects, added granular default-denied analytics/advertising consent with withdrawal controls, corrected the love-reading CTA, removed stale brand/year signals, added noindex headers for legacy product routes, and made the source AdSense audit part of `release:check`. The CI workflow no longer contains a production deployment job.
+- Commands run: `npm ci` (blocked by local Node 24 native `sweph` build prerequisites), `npm ci --ignore-scripts`, `npm run typecheck -- --pretty false`, `npm run lint`, `npm run test`, `npm run audit:adsense`, `npm run build`, `npm run release:check`, and local HTTP route/header smoke checks.
+- Results: typecheck and lint passed; 83 test files / 643 tests passed; AdSense source audit passed; production build passed with 75 static pages; release check passed; local canonical/redirect/CTA/sitemap/robots/version/noindex smoke checks passed. No production deployment, live payment, provider dashboard mutation, `.env` access, or secret access was performed.
+- Gate: Source readiness is improved, but AdSense submission remains `NO-GO` until a Google-certified CMP is configured and published, the reviewed commit is deployed and verified publicly, multi-region crawl/UX checks pass, and Google reports the site's `ads.txt` as Authorized. Source Go does not imply production or AdSense submission Go.
+- Next step: Review and merge the branch, configure the certified CMP in Google's Privacy & messaging product, deploy the exact reviewed commit through the approved release process, and collect fresh public evidence before changing the final verdict.
+
 ### 2026-07-02 - TianJi Love content calendar refresh
 
 - Task ID: 20260702-tianji-github-content-calendar
