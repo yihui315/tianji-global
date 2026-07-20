@@ -15,6 +15,12 @@ export const LOVE_PREMIUM_REPORT_LEGACY_PRODUCT_TYPES = [
 
 export type LovePremiumReportProductType = typeof LOVE_PREMIUM_REPORT_PRODUCT_TYPE;
 
+export const ASK_UNLOCK_PRODUCT_TYPE = 'ask_unlock';
+export const DRAW_UNLOCK_PRODUCT_TYPE = 'draw_unlock';
+
+export type AskUnlockProductType = typeof ASK_UNLOCK_PRODUCT_TYPE;
+export type DrawUnlockProductType = typeof DRAW_UNLOCK_PRODUCT_TYPE;
+
 export const STRIPE_LOVE_PREMIUM_REPORT_PRICE_ID_ENV =
   'STRIPE_LOVE_PREMIUM_REPORT_PRICE_ID';
 
@@ -45,4 +51,23 @@ export function getLovePremiumReportStripePriceId(
   env: Record<string, string | undefined> = process.env
 ): string | null {
   return env[STRIPE_LOVE_PREMIUM_REPORT_PRICE_ID_ENV]?.trim() || null;
+}
+
+export const ONETIME_PRODUCT_TYPES = new Set<string>([
+  ASK_UNLOCK_PRODUCT_TYPE,
+  DRAW_UNLOCK_PRODUCT_TYPE,
+]);
+
+export function isOneTimeProduct(input: string | null | undefined): boolean {
+  return ONETIME_PRODUCT_TYPES.has(input?.trim() ?? '');
+}
+
+export function normalizeOneTimeProductType(
+  input: string | null | undefined
+): AskUnlockProductType | DrawUnlockProductType | null {
+  const productType = input?.trim();
+  if (!productType || !ONETIME_PRODUCT_TYPES.has(productType)) {
+    return null;
+  }
+  return productType as AskUnlockProductType | DrawUnlockProductType;
 }

@@ -6,18 +6,29 @@ import {
   LOVE_PREMIUM_REPORT_PRICE,
   LOVE_PREMIUM_REPORT_PRODUCT_TYPE,
   STRIPE_LOVE_PREMIUM_REPORT_PRICE_ID_ENV,
+  ASK_UNLOCK_PRODUCT_TYPE,
+  DRAW_UNLOCK_PRODUCT_TYPE,
   getLovePremiumReportStripePriceId,
   normalizeLoveProductType,
+  normalizeOneTimeProductType,
   type LovePremiumReportProductType,
+  type AskUnlockProductType,
+  type DrawUnlockProductType,
 } from '@/lib/love-reading/revenue-contract';
 
 export type LegacyLoveReportProductId =
   (typeof LOVE_PREMIUM_REPORT_LEGACY_PRODUCT_TYPES)[number];
 
-export type BillingProductId = LovePremiumReportProductType | LegacyLoveReportProductId;
+export type OneTimeProductId = AskUnlockProductType | DrawUnlockProductType;
 
-export type BillingProduct = {
+export type BillingProductId =
+  | LovePremiumReportProductType
+  | LegacyLoveReportProductId
+  | OneTimeProductId;
+
+export type PremiumReportBillingProduct = {
   productId: LovePremiumReportProductType;
+  kind: 'premium_report';
   legacyProductIds: readonly LegacyLoveReportProductId[];
   name: string;
   description: string;
@@ -28,9 +39,24 @@ export type BillingProduct = {
   stripePriceIdEnv: typeof STRIPE_LOVE_PREMIUM_REPORT_PRICE_ID_ENV;
 };
 
+export type OneTimeUnlockBillingProduct = {
+  productId: OneTimeProductId;
+  kind: 'one_time_unlock';
+  name: string;
+  nameZh: string;
+  description: string;
+  unitAmount: number;
+  currency: string;
+  mode: 'payment';
+  entitlement: OneTimeProductId;
+};
+
+export type BillingProduct = PremiumReportBillingProduct | OneTimeUnlockBillingProduct;
+
 export const BILLING_PRODUCTS = {
   [LOVE_PREMIUM_REPORT_PRODUCT_TYPE]: {
     productId: LOVE_PREMIUM_REPORT_PRODUCT_TYPE,
+    kind: 'premium_report',
     legacyProductIds: LOVE_PREMIUM_REPORT_LEGACY_PRODUCT_TYPES,
     name: 'TianJi Love Premium Relationship Report',
     description: 'A private premium relationship report.',
@@ -40,7 +66,29 @@ export const BILLING_PRODUCTS = {
     entitlement: LOVE_PREMIUM_REPORT_PRODUCT_TYPE,
     stripePriceIdEnv: STRIPE_LOVE_PREMIUM_REPORT_PRICE_ID_ENV,
   },
-} as const satisfies Record<LovePremiumReportProductType, BillingProduct>;
+  [ASK_UNLOCK_PRODUCT_TYPE]: {
+    productId: ASK_UNLOCK_PRODUCT_TYPE,
+    kind: 'one_time_unlock',
+    name: 'Ask One Question Unlock',
+    nameZh: 'Ask 单次解锁',
+    description: 'Unlock deeper AI interpretation for a single Ask reading.',
+    unitAmount: 199, // $1.99 USD
+    currency: 'usd',
+    mode: 'payment',
+    entitlement: ASK_UNLOCK_PRODUCT_TYPE,
+  },
+  [DRAW_UNLOCK_PRODUCT_TYPE]: {
+    productId: DRAW_UNLOCK_PRODUCT_TYPE,
+    kind: 'one_time_unlock',
+    name: 'Draw Timing Reading Unlock',
+    nameZh: '时机抽牌完整解读',
+    description: 'Unlock the full interpretation for a Draw Timing reading.',
+    unitAmount: 299, // $2.99 USD
+    currency: 'usd',
+    mode: 'payment',
+    entitlement: DRAW_UNLOCK_PRODUCT_TYPE,
+  },
+} as const satisfies Partial<Record<BillingProductId, BillingProduct>>;
 
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -50,8 +98,13 @@ function optionalUuid(value?: string | null) {
 }
 
 export function getBillingProduct(productId: string | null | undefined): BillingProduct | null {
-  const normalizedProductType = normalizeLoveProductType(productId);
-  return normalizedProductType ? BILLING_PRODUCTS[normalizedProductType] : null;
+  const normalized = normalizeLoveProductType(productId);
+  if (normalized) return BILLING_PRODUCTS[normalized];
+
+  const normalizedOneTime = normalizeOneTimeProductType(productId);
+  if (normalizedOneTime) return BILLING_PRODUCTS[normalizedOneTime];
+
+  return null;
 }
 
 export function getLovePremiumReportCheckoutPriceId(
@@ -64,12 +117,17 @@ export function getCheckoutPriceIdReadiness(
   product: BillingProduct,
   env: Record<string, string | undefined> = process.env
 ):
-  | { ready: true; priceId: string }
+  | { ready: true; priceId: string | null }
   | {
       ready: false;
       code: typeof LOVE_PREMIUM_REPORT_CHECKOUT_READINESS_ERROR;
       error: string;
     } {
+  if (product.kind === 'one_time_unlock') {
+    // One-time unlocks use inline price_data, no Stripe Price ID needed
+    return { ready: true, priceId: null };
+  }
+
   const priceId = env[product.stripePriceIdEnv]?.trim() || null;
   if (priceId) return { ready: true, priceId };
 
@@ -84,6 +142,21 @@ export function buildLineItem(product: BillingProduct, stripePriceId?: string | 
   if (stripePriceId) {
     return {
       price: stripePriceId,
+      quantity: 1,
+    };
+  }
+
+  // One-time unlocks always use inline price_data
+  if (product.kind === 'one_time_unlock') {
+    return {
+      price_data: {
+        currency: product.currency,
+        unit_amount: product.unitAmount,
+        product_data: {
+          name: product.name,
+          description: product.description ?? '',
+        },
+      },
       quantity: 1,
     };
   }

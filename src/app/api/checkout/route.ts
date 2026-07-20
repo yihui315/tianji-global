@@ -8,8 +8,8 @@ import {
   type BillingProductId,
 } from '@/lib/billing';
 import {
-  isLovePremiumReportProduct,
   normalizeLoveProductType,
+  normalizeOneTimeProductType,
 } from '@/lib/love-reading/revenue-contract';
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
 import { requirePayPerUseEnabled } from '@/lib/pay-per-use';
@@ -33,26 +33,35 @@ export async function POST(request: NextRequest) {
     };
 
     const inputProductType = body.productId ?? '';
-    const normalizedProductType = normalizeLoveProductType(inputProductType);
-    if (!normalizedProductType || !isLovePremiumReportProduct(inputProductType)) {
+
+    // Try premium_report first, then one-time unlock
+    const normalizedPremium = normalizeLoveProductType(inputProductType);
+    const normalizedOneTime = normalizeOneTimeProductType(inputProductType);
+
+    if (!normalizedPremium && !normalizedOneTime) {
       return NextResponse.json({ error: 'Invalid productId' }, { status: 400 });
     }
 
-    const product = getBillingProduct(normalizedProductType);
+    const product = getBillingProduct(inputProductType);
     if (!product) {
       return NextResponse.json({ error: 'Invalid productId' }, { status: 400 });
     }
+
+    // One-time unlocks require readingSessionId (payment is tied to a specific reading)
+    const isOneTime = product.kind === 'one_time_unlock';
     const checkoutSource = body.source === 'relationship' ? 'relationship' : 'love_reading';
     const checkoutReferenceId =
       checkoutSource === 'relationship'
         ? body.relationshipReadingId ?? body.readingSessionId
         : body.readingSessionId;
 
-    if (!checkoutReferenceId) {
-      return NextResponse.json({ error: 'Missing readingSessionId' }, { status: 400 });
-    }
-    if (!uuidPattern.test(checkoutReferenceId)) {
-      return NextResponse.json({ error: 'Invalid readingSessionId' }, { status: 400 });
+    if (isOneTime) {
+      if (!checkoutReferenceId) {
+        return NextResponse.json({ error: 'Missing readingSessionId' }, { status: 400 });
+      }
+      if (!uuidPattern.test(checkoutReferenceId)) {
+        return NextResponse.json({ error: 'Invalid readingSessionId' }, { status: 400 });
+      }
     }
 
     const session = await auth();
@@ -76,18 +85,32 @@ export async function POST(request: NextRequest) {
       checkoutSource === 'relationship' || inputProductType === 'compatibility_report'
         ? 'compatibility'
         : 'solo';
-    const metadata = {
-      productId: normalizedProductType,
-      legacyProductId: inputProductType !== normalizedProductType ? inputProductType : '',
-      loveReportMode,
+    const metadata: Record<string, string> = {
+      productId: product.productId,
       source: checkoutSource,
-      readingSessionId: checkoutReferenceId,
-      relationshipReadingId: checkoutSource === 'relationship' ? checkoutReferenceId : '',
       locale,
       userId: session?.user?.id ?? '',
     };
-    const resultPath =
-      checkoutSource === 'relationship'
+
+    if (!isOneTime) {
+      // Premium report metadata
+      Object.assign(metadata, {
+        legacyProductId: normalizedPremium && inputProductType !== normalizedPremium ? inputProductType : '',
+        loveReportMode,
+        readingSessionId: checkoutReferenceId ?? '',
+        relationshipReadingId: checkoutSource === 'relationship' ? (checkoutReferenceId ?? '') : '',
+      });
+    } else {
+      // One-time unlock metadata
+      Object.assign(metadata, {
+        readingSessionId: checkoutReferenceId ?? '',
+        entitlement: product.productId,
+      });
+    }
+
+    const resultPath = isOneTime
+      ? `/${locale}/love-reading/result/${checkoutReferenceId}`
+      : checkoutSource === 'relationship'
         ? `/relationship/result/${checkoutReferenceId}?lang=${locale === 'zh-CN' ? 'zh' : 'en'}`
         : `/${locale}/love-reading/result/${checkoutReferenceId}`;
 
@@ -96,29 +119,31 @@ export async function POST(request: NextRequest) {
         mode: 'payment',
         line_items: [buildLineItem(product, checkoutPriceReadiness.priceId)],
         customer_email: customerEmail,
-        client_reference_id: checkoutReferenceId,
+        client_reference_id: isOneTime ? checkoutReferenceId ?? undefined : checkoutReferenceId ?? undefined,
         metadata,
         success_url: `${appUrl}${resultPath}${resultPath.includes('?') ? '&' : '?'}checkout=success`,
         cancel_url: `${appUrl}${resultPath}${resultPath.includes('?') ? '&' : '?'}checkout=cancelled`,
         allow_promotion_codes: true,
       },
       {
-        idempotencyKey: `${checkoutSource}:${normalizedProductType}:${checkoutReferenceId}:${session?.user?.id ?? body.email ?? 'guest'}`,
+        idempotencyKey: `${checkoutSource}:${product.productId}:${checkoutReferenceId ?? 'no_session'}:${session?.user?.id ?? body.email ?? 'guest'}`,
       }
     );
 
-    await createPendingOrder({
-      product,
-      checkoutSessionId: checkoutSession.id,
-      userId: session?.user?.id ?? null,
-      readingSessionId: checkoutReferenceId,
-      customerEmail,
-    });
+    if (!isOneTime) {
+      await createPendingOrder({
+        product,
+        checkoutSessionId: checkoutSession.id,
+        userId: session?.user?.id ?? null,
+        readingSessionId: checkoutReferenceId ?? null,
+        customerEmail,
+      });
+    }
     await trackLoveFunnelEvent('love_checkout_created', {
       productId: product.productId,
       source: checkoutSource,
-      readingSessionId: checkoutReferenceId,
-      relationshipReadingId: checkoutSource === 'relationship' ? checkoutReferenceId : null,
+      readingSessionId: checkoutReferenceId ?? null,
+      relationshipReadingId: checkoutSource === 'relationship' ? checkoutReferenceId ?? null : null,
       checkoutSessionId: checkoutSession.id,
       amountTotal: product.unitAmount,
       currency: product.currency,
