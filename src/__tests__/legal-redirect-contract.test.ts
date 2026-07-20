@@ -1,83 +1,65 @@
-import { describe, expect, it } from 'vitest';
-import { parse } from 'url';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+const { permanentRedirectMock } = vi.hoisted(() => ({
+  permanentRedirectMock: vi.fn((target: string): never => {
+    throw new Error(`NEXT_REDIRECT:${target}`);
+  }),
+}));
+
+vi.mock('next/navigation', () => ({
+  permanentRedirect: permanentRedirectMock,
+}));
+
+import LegacyPrivacyPage from '../app/(main)/privacy/page';
+import LegacyTermsPage from '../app/(main)/terms/page';
 
 /**
- * Contract test for legacy legal route redirects.
+ * Offline contract tests for legacy legal route redirects.
  *
- * Legacy routes /privacy and /terms must permanently redirect (308) to
- * their canonical counterparts under /legal/, preserving the lang query param.
+ * Next.js permanentRedirect emits HTTP 308 at runtime. These tests verify that
+ * each legacy page invokes it with the correct canonical target without making
+ * network requests to production or requiring a preview deployment.
  *
- * These pages were previously returning 404, causing UX breaks and SEO gaps.
  * See: PILOT-001-TASK-001.
  */
 describe('Legacy legal route redirects', () => {
-  const BASE = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://tianji.love';
+  beforeEach(() => {
+    permanentRedirectMock.mockClear();
+  });
 
-  describe('GET /privacy', () => {
-    it('returns 308 redirect to /legal/privacy', async () => {
-      const res = await fetch(`${BASE}/privacy`, {
-        redirect: 'manual',
-      });
-      expect(res.status).toBe(308);
-      const location = res.headers.get('location') ?? '';
-      expect(location).toMatch(/^\/legal\/privacy/);
-    });
+  describe('/privacy', () => {
+    it.each([
+      [undefined, '/legal/privacy?lang=en'],
+      ['en', '/legal/privacy?lang=en'],
+      ['zh', '/legal/privacy?lang=zh'],
+      ['unsupported', '/legal/privacy?lang=en'],
+    ])('redirects lang=%s to %s', async (lang, expectedTarget) => {
+      const searchParams = lang === undefined ? {} : { lang };
 
-    it('preserves lang=en query param', async () => {
-      const res = await fetch(`${BASE}/privacy?lang=en`, {
-        redirect: 'manual',
-      });
-      expect(res.status).toBe(308);
-      const location = res.headers.get('location') ?? '';
-      expect(location).toMatch(/lang=en/);
-    });
+      await expect(
+        LegacyPrivacyPage({ searchParams: Promise.resolve(searchParams) }),
+      ).rejects.toThrow(`NEXT_REDIRECT:${expectedTarget}`);
 
-    it('preserves lang=zh query param', async () => {
-      const res = await fetch(`${BASE}/privacy?lang=zh`, {
-        redirect: 'manual',
-      });
-      expect(res.status).toBe(308);
-      const location = res.headers.get('location') ?? '';
-      expect(location).toMatch(/lang=zh/);
-    });
-
-    it('canonical /legal/privacy remains accessible (200)', async () => {
-      const res = await fetch(`${BASE}/legal/privacy`);
-      expect(res.status).toBe(200);
+      expect(permanentRedirectMock).toHaveBeenCalledOnce();
+      expect(permanentRedirectMock).toHaveBeenCalledWith(expectedTarget);
     });
   });
 
-  describe('GET /terms', () => {
-    it('returns 308 redirect to /legal/terms', async () => {
-      const res = await fetch(`${BASE}/terms`, {
-        redirect: 'manual',
-      });
-      expect(res.status).toBe(308);
-      const location = res.headers.get('location') ?? '';
-      expect(location).toMatch(/^\/legal\/terms/);
-    });
+  describe('/terms', () => {
+    it.each([
+      [undefined, '/legal/terms?lang=en'],
+      ['en', '/legal/terms?lang=en'],
+      ['zh', '/legal/terms?lang=zh'],
+      ['unsupported', '/legal/terms?lang=en'],
+    ])('redirects lang=%s to %s', async (lang, expectedTarget) => {
+      const searchParams = lang === undefined ? {} : { lang };
 
-    it('preserves lang=en query param', async () => {
-      const res = await fetch(`${BASE}/terms?lang=en`, {
-        redirect: 'manual',
-      });
-      expect(res.status).toBe(308);
-      const location = res.headers.get('location') ?? '';
-      expect(location).toMatch(/lang=en/);
-    });
+      await expect(
+        LegacyTermsPage({ searchParams: Promise.resolve(searchParams) }),
+      ).rejects.toThrow(`NEXT_REDIRECT:${expectedTarget}`);
 
-    it('preserves lang=zh query param', async () => {
-      const res = await fetch(`${BASE}/terms?lang=zh`, {
-        redirect: 'manual',
-      });
-      expect(res.status).toBe(308);
-      const location = res.headers.get('location') ?? '';
-      expect(location).toMatch(/lang=zh/);
-    });
-
-    it('canonical /legal/terms remains accessible (200)', async () => {
-      const res = await fetch(`${BASE}/legal/terms`);
-      expect(res.status).toBe(200);
+      expect(permanentRedirectMock).toHaveBeenCalledOnce();
+      expect(permanentRedirectMock).toHaveBeenCalledWith(expectedTarget);
     });
   });
 });
