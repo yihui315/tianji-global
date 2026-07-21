@@ -123,7 +123,8 @@ describe('Love Reading checkout contract readiness', () => {
     });
 
     const checkoutRoute = read('src/app/api/checkout/route.ts');
-    expect(checkoutRoute).toContain('normalizedProductType');
+    expect(checkoutRoute).toContain('normalizedPremium');
+    expect(checkoutRoute).toContain('normalizedOneTime');
     expect(checkoutRoute).toContain('getCheckoutPriceIdReadiness');
     expect(checkoutRoute.indexOf('getCheckoutPriceIdReadiness')).toBeLessThan(
       checkoutRoute.indexOf('checkout.sessions.create')
