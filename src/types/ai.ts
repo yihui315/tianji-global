@@ -27,6 +27,10 @@ export interface ModelEntry {
   inputCostPer1M?: number;
   outputCostPer1M?: number;
   recommendedFor: TaskType[];
+  /** When true, this entry is kept for reference/rollback but new code should not pick it. */
+  deprecated?: boolean;
+  /** Optional replacement model id (forwarded when this one is requested). */
+  replacedBy?: string;
 }
 
 export interface AIModelInfo {
@@ -220,6 +224,8 @@ export const MODEL_REGISTRY: ModelEntry[] = [
     inputCostPer1M: 0.3,
     outputCostPer1M: 1.2,
     recommendedFor: ['fast', 'analysis'],
+    deprecated: true,
+    replacedBy: 'minimax/MiniMax-M3',
   },
   // Packy (OpenAI-compatible, via www.packyapi.com)
   {

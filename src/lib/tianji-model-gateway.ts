@@ -179,8 +179,8 @@ const ROUTES: Record<TianjiModelIntent, TianjiModelRoute> = {
   'internal-research': {
     intent: 'internal-research',
     provider: 'minimax',
-    model: 'MiniMax-M2.7',
-    preferredModel: 'minimax/MiniMax-M2.7',
+    model: 'MiniMax-M3',
+    preferredModel: 'minimax/MiniMax-M3',
     taskType: 'analysis',
     publicUserFacing: false,
     safetyRewriteRequired: false,
@@ -199,7 +199,7 @@ const ROUTES: Record<TianjiModelIntent, TianjiModelRoute> = {
     taskType: 'privacy',
     publicUserFacing: false,
     safetyRewriteRequired: false,
-    fallbackModels: ['minimax/MiniMax-M2.7'],
+    fallbackModels: ['minimax/MiniMax-M3'],
   },
   'judge-replay': {
     intent: 'judge-replay',

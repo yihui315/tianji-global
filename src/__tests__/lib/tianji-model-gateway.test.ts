@@ -47,8 +47,8 @@ describe('TianJi Love model gateway routing', () => {
 
     expect(route).toMatchObject({
       provider: 'minimax',
-      model: 'MiniMax-M2.7',
-      preferredModel: 'minimax/MiniMax-M2.7',
+      model: 'MiniMax-M3',
+      preferredModel: 'minimax/MiniMax-M3',
       publicUserFacing: false,
       safetyRewriteRequired: false,
       quotaGate: {
