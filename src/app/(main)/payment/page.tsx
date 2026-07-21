@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Check, CreditCard, Lock, Sparkles, Star } from 'lucide-react';
 
@@ -38,7 +38,7 @@ const paymentCopy = {
     },
     optionsTitle: 'One-time unlocks',
     guestCta: 'Sign in to unlock',
-    authCta: 'Unlock now',
+    authCta: 'Start this reading',
     redirecting: 'Redirecting to checkout...',
     trust: [
       { icon: Lock, title: 'Secure Stripe checkout', body: 'Your card details never touch our servers. All payments processed by Stripe.' },
@@ -66,7 +66,7 @@ const paymentCopy = {
     },
     optionsTitle: '单次解锁',
     guestCta: '登录后解锁',
-    authCta: '立即解锁',
+    authCta: '开始本次解读',
     redirecting: '正在跳转到结账...',
     trust: [
       { icon: Lock, title: '安全 Stripe 结账', body: '卡号信息不经过我们的服务器，所有支付由 Stripe 处理。' },
@@ -82,8 +82,6 @@ export default function PaymentPage() {
   const readingSessionId = searchParams.get('session_id') || searchParams.get('readingSessionId') || '';
   const source = searchParams.get('source') || 'love_reading';
   const [language] = useSyncedLanguage('en');
-  const [loadingProduct, setLoadingProduct] = useState<string | null>(null);
-  const [error, setError] = useState('');
   const copy = paymentCopy[language];
   const href = (path: string) => withLanguageParam(path, language);
 
@@ -96,7 +94,7 @@ export default function PaymentPage() {
     });
   }, [language, source, readingSessionId]);
 
-  const handleUnlock = async (productId: string) => {
+  const handleUnlock = (productId: string) => {
     void trackRevenueFunnelEvent('unlock_click', {
       lang: language,
       surface: 'payment_page',
@@ -105,32 +103,7 @@ export default function PaymentPage() {
       source,
     });
 
-    setLoadingProduct(productId);
-    setError('');
-
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          productId,
-          readingSessionId,
-          source,
-          locale: language === 'zh' ? 'zh-CN' : 'en',
-        }),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || data.code || 'Checkout failed');
-      }
-      if (data.data?.url) {
-        window.location.href = data.data.url;
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
-      setLoadingProduct(null);
-    }
+    window.location.href = href(productId === 'ask_unlock' ? '/ask' : '/draw');
   };
 
   const oneTimeProducts = [
@@ -138,15 +111,13 @@ export default function PaymentPage() {
       id: 'ask_unlock',
       product: PRODUCT_CATALOG.ASK_UNLOCK,
       cta: copy.authCta,
-      loading: loadingProduct === 'ask_unlock',
-      badge: null,
+      loading: false,
     },
     {
       id: 'draw_unlock',
       product: PRODUCT_CATALOG.DRAW_UNLOCK,
       cta: copy.authCta,
-      loading: loadingProduct === 'draw_unlock',
-      badge: null,
+      loading: false,
     },
   ];
 
@@ -185,12 +156,6 @@ export default function PaymentPage() {
 
       <section id="options" className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8">
         <TianjiLoveSectionTitle title={copy.optionsTitle} className="mb-10" />
-        {error ? (
-          <div className="mx-auto mb-6 max-w-md rounded-lg border border-[#ff7f80]/30 bg-[#ff5264]/10 px-4 py-3 text-center text-sm text-[#ffb4a3]">
-            {error}
-          </div>
-        ) : null}
-
         <div className="grid gap-6 md:grid-cols-2">
           {oneTimeProducts.map(({ id, product, cta, loading }) => (
             <TianjiLovePanel key={id} as="article" className="p-7">

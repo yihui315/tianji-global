@@ -186,15 +186,17 @@ export async function createPendingOrder(input: {
   checkoutSessionId: string;
   userId?: string | null;
   readingSessionId?: string | null;
+  resourceRef?: string | null;
   customerEmail?: string | null;
 }) {
-  if (!process.env.DATABASE_URL) return;
+  if (!process.env.DATABASE_URL) return false;
 
   await getPool().query(
     `
       insert into orders (
         user_id,
         reading_session_id,
+        resource_ref,
         stripe_checkout_session_id,
         customer_email,
         product_id,
@@ -203,12 +205,13 @@ export async function createPendingOrder(input: {
         status,
         entitlement
       )
-      values ($1, $2, $3, $4, $5, $6, $7, 'pending', $8)
+      values ($1, $2, $3, $4, $5, $6, $7, $8, 'pending', $9)
       on conflict (stripe_checkout_session_id) do nothing
     `,
     [
       optionalUuid(input.userId),
       optionalUuid(input.readingSessionId),
+      input.resourceRef ?? null,
       input.checkoutSessionId,
       input.customerEmail ?? null,
       input.product.productId,
@@ -217,22 +220,71 @@ export async function createPendingOrder(input: {
       input.product.entitlement,
     ]
   );
+
+  return true;
 }
 
-export async function recordStripeEvent(event: import('@/types/stripe-api').StripeEvent): Promise<boolean> {
+export function isBillingPersistenceConfigured(
+  env: Record<string, string | undefined> = process.env
+): boolean {
+  return Boolean(env.DATABASE_URL?.trim());
+}
+
+export async function claimStripeEvent(event: import('@/types/stripe-api').StripeEvent): Promise<boolean> {
   if (!process.env.DATABASE_URL) return true;
 
   const result = await getPool().query(
     `
-      insert into stripe_events (stripe_event_id, event_type, payload, processed_at)
-      values ($1, $2, $3, now())
-      on conflict (stripe_event_id) do nothing
+      insert into stripe_events (
+        stripe_event_id,
+        event_type,
+        payload,
+        processing_started_at,
+        processed_at
+      )
+      values ($1, $2, $3, now(), null)
+      on conflict (stripe_event_id) do update
+      set processing_started_at = now(),
+          payload = excluded.payload
+      where stripe_events.processed_at is null
+        and (
+          stripe_events.processing_started_at is null
+          or stripe_events.processing_started_at < now() - interval '5 minutes'
+        )
       returning id
     `,
     [event.id, event.type, JSON.stringify(event)]
   );
 
   return result.rowCount === 1;
+}
+
+export async function markStripeEventProcessed(stripeEventId: string) {
+  if (!process.env.DATABASE_URL) return;
+
+  await getPool().query(
+    `
+      update stripe_events
+      set processed_at = now(),
+          processing_started_at = null
+      where stripe_event_id = $1
+    `,
+    [stripeEventId]
+  );
+}
+
+export async function markStripeEventFailed(stripeEventId: string) {
+  if (!process.env.DATABASE_URL) return;
+
+  await getPool().query(
+    `
+      update stripe_events
+      set processing_started_at = null
+      where stripe_event_id = $1
+        and processed_at is null
+    `,
+    [stripeEventId]
+  );
 }
 
 export async function markOrderPaid(input: {
@@ -320,7 +372,8 @@ export async function hasEntitlement(input: {
 }
 
 export async function getPaidOrderForCheckoutSession(checkoutSessionId: string): Promise<{
-  readingSessionId: string;
+  readingSessionId: string | null;
+  resourceRef: string | null;
   customerEmail: string | null;
   productId: BillingProductId;
 } | null> {
@@ -328,7 +381,7 @@ export async function getPaidOrderForCheckoutSession(checkoutSessionId: string):
 
   const result = await getPool().query(
     `
-      select reading_session_id, customer_email, product_id
+      select reading_session_id, resource_ref, customer_email, product_id
       from orders
       where stripe_checkout_session_id = $1
         and status = 'paid'
@@ -342,7 +395,8 @@ export async function getPaidOrderForCheckoutSession(checkoutSessionId: string):
   if (!row || !product) return null;
 
   return {
-    readingSessionId: String(row.reading_session_id),
+    readingSessionId: row.reading_session_id ? String(row.reading_session_id) : null,
+    resourceRef: row.resource_ref ? String(row.resource_ref) : null,
     customerEmail: row.customer_email ?? null,
     productId: product.productId,
   };

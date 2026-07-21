@@ -5,6 +5,7 @@ import {
   createPendingOrder,
   getCheckoutPriceIdReadiness,
   getBillingProduct,
+  isBillingPersistenceConfigured,
   type BillingProductId,
 } from '@/lib/billing';
 import {
@@ -13,7 +14,7 @@ import {
 } from '@/lib/love-reading/revenue-contract';
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
 import { requirePayPerUseEnabled } from '@/lib/pay-per-use';
-import { getStripe } from '@/lib/stripe';
+import { getStripe, getStripeTestModeReadiness } from '@/lib/stripe';
 
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -37,8 +38,9 @@ export async function POST(request: NextRequest) {
     // Try premium_report first, then one-time unlock
     const normalizedPremium = normalizeLoveProductType(inputProductType);
     const normalizedOneTime = normalizeOneTimeProductType(inputProductType);
+    const normalizedProductType = normalizedPremium ?? normalizedOneTime;
 
-    if (!normalizedPremium && !normalizedOneTime) {
+    if (!normalizedProductType) {
       return NextResponse.json({ error: 'Invalid productId' }, { status: 400 });
     }
 
@@ -47,7 +49,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid productId' }, { status: 400 });
     }
 
-    // One-time unlocks require readingSessionId (payment is tied to a specific reading)
+    // Every checkout is tied to an existing private reading session.
     const isOneTime = product.kind === 'one_time_unlock';
     const checkoutSource = body.source === 'relationship' ? 'relationship' : 'love_reading';
     const checkoutReferenceId =
@@ -55,13 +57,25 @@ export async function POST(request: NextRequest) {
         ? body.relationshipReadingId ?? body.readingSessionId
         : body.readingSessionId;
 
-    if (isOneTime) {
-      if (!checkoutReferenceId) {
-        return NextResponse.json({ error: 'Missing readingSessionId' }, { status: 400 });
-      }
-      if (!uuidPattern.test(checkoutReferenceId)) {
-        return NextResponse.json({ error: 'Invalid readingSessionId' }, { status: 400 });
-      }
+    if (!checkoutReferenceId) {
+      return NextResponse.json({ error: 'Missing readingSessionId' }, { status: 400 });
+    }
+    if (!uuidPattern.test(checkoutReferenceId)) {
+      return NextResponse.json({ error: 'Invalid readingSessionId' }, { status: 400 });
+    }
+
+    const stripeReadiness = getStripeTestModeReadiness();
+    if (!stripeReadiness.ready) {
+      return NextResponse.json(
+        { error: 'Stripe test mode is not configured', code: stripeReadiness.code },
+        { status: 503 }
+      );
+    }
+    if (!isBillingPersistenceConfigured()) {
+      return NextResponse.json(
+        { error: 'Billing persistence is not configured', code: 'billing_persistence_missing' },
+        { status: 503 }
+      );
     }
 
     const session = await auth();
@@ -119,7 +133,7 @@ export async function POST(request: NextRequest) {
         mode: 'payment',
         line_items: [buildLineItem(product, checkoutPriceReadiness.priceId)],
         customer_email: customerEmail,
-        client_reference_id: isOneTime ? checkoutReferenceId ?? undefined : checkoutReferenceId ?? undefined,
+        client_reference_id: checkoutReferenceId,
         metadata,
         success_url: `${appUrl}${resultPath}${resultPath.includes('?') ? '&' : '?'}checkout=success`,
         cancel_url: `${appUrl}${resultPath}${resultPath.includes('?') ? '&' : '?'}checkout=cancelled`,
@@ -130,15 +144,13 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    if (!isOneTime) {
-      await createPendingOrder({
-        product,
-        checkoutSessionId: checkoutSession.id,
-        userId: session?.user?.id ?? null,
-        readingSessionId: checkoutReferenceId ?? null,
-        customerEmail,
-      });
-    }
+    await createPendingOrder({
+      product,
+      checkoutSessionId: checkoutSession.id,
+      userId: session?.user?.id ?? null,
+      readingSessionId: checkoutReferenceId,
+      customerEmail,
+    });
     await trackLoveFunnelEvent('love_checkout_created', {
       productId: product.productId,
       source: checkoutSource,

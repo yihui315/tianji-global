@@ -85,9 +85,10 @@ const drawFreeBoundary = statusWhen(previewRoutePath, hasEvery(previewRoute, [
 ]) && !previewRoute.includes('fullReading,'));
 
 const drawPaidBoundary = statusWhen(unlockRoutePath, hasEvery(unlockRoute, [
-  'checkout.sessions.retrieve',
-  "session.metadata?.flow !== 'quick-draw'",
-  "session.payment_status === 'paid'",
+  'getPaidOrderForCheckoutSession',
+  "paidOrder.productId !== 'draw_unlock'",
+  'paidOrder.resourceRef !== tokenRef(id)',
+  'webhook_confirmation_pending',
   'decodeQuickDrawId',
   'buildPaidDrawPrompt',
   'locked: false',

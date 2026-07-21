@@ -5,7 +5,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
-import { getStripe } from '@/lib/stripe';
+import {
+  createPendingOrder,
+  getBillingProduct,
+  getPaidOrderForCheckoutSession,
+  isBillingPersistenceConfigured,
+} from '@/lib/billing';
+import { requirePayPerUseEnabled } from '@/lib/pay-per-use';
+import { getStripe, getStripeTestModeReadiness } from '@/lib/stripe';
 import {
   decodeAskQuestionId,
   askQuestionLanguageSchema,
@@ -109,6 +116,9 @@ const postBodySchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const payPerUseGate = requirePayPerUseEnabled();
+  if (payPerUseGate) return payPerUseGate;
+
   try {
     if (isStagingDegradedMode() && !isStripePaymentAvailable()) {
       return NextResponse.json(buildPaymentUnavailableBody(), { status: 503 });
@@ -134,47 +144,71 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const stripeReadiness = getStripeTestModeReadiness();
+    if (!stripeReadiness.ready || !isBillingPersistenceConfigured()) {
+      return NextResponse.json(
+        { error: 'Test payment infrastructure is not configured', code: 'test_payment_not_ready' },
+        { status: 503 }
+      );
+    }
+
     const stripe = getStripe();
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin;
     const sourceParam = askSource ? `&source=${askSource}` : '';
     const intentParam = askIntent ? `&intent=${askIntent}` : '';
 
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: lang === 'zh' ? '天机综合解读 - 单题完整解锁' : 'TianJi Oracle - Complete decision reading',
-              description:
-                lang === 'zh'
-                  ? '解锁本次问题的局势、隐变量、时机、下一步与反思问题 - 一次付费 - 无需订阅'
-                  : 'Unlock the situation map, hidden tension, timing, next move, and reflection prompt - One-time - No subscription',
+    const resourceRef = tokenRef(id);
+    const session = await stripe.checkout.sessions.create(
+      {
+        mode: 'payment',
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: lang === 'zh' ? '天机综合解读 - 单题完整解锁' : 'TianJi Oracle - Complete decision reading',
+                description:
+                  lang === 'zh'
+                    ? '解锁本次问题的局势、隐变量、时机、下一步与反思问题 - 一次付费 - 无需订阅'
+                    : 'Unlock the situation map, hidden tension, timing, next move, and reflection prompt - One-time - No subscription',
+              },
+              unit_amount: ASK_QUESTION_UNLOCK_PRICE_USD_CENTS,
             },
-            unit_amount: ASK_QUESTION_UNLOCK_PRICE_USD_CENTS,
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        metadata: {
+          flow: 'ask-question',
+          productId: 'ask_unlock',
+          productType: 'pay-per-use',
+          amount: String(ASK_QUESTION_UNLOCK_PRICE_USD_CENTS),
+          currency: 'usd',
+          askQuestionRef: resourceRef,
+          resourceRef,
+          language: lang,
+          source: askSource ?? 'ask',
+          intent: askIntent ?? 'none',
         },
-      ],
-      metadata: {
-        flow: 'ask-question',
-        productType: 'pay-per-use',
-        amount: String(ASK_QUESTION_UNLOCK_PRICE_USD_CENTS),
-        currency: 'usd',
-        askQuestionRef: tokenRef(id),
-        language: lang,
-        source: askSource ?? 'ask',
-        intent: askIntent ?? 'none',
+        success_url: `${appUrl}/ask?lang=${lang}${sourceParam}${intentParam}&id=${encodeURIComponent(id)}&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${appUrl}/ask?lang=${lang}${sourceParam}${intentParam}&cancelled=1`,
       },
-      success_url: `${appUrl}/ask?lang=${lang}${sourceParam}${intentParam}&id=${encodeURIComponent(id)}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/ask?lang=${lang}${sourceParam}${intentParam}&cancelled=1`,
-    });
+      { idempotencyKey: `ask_unlock:${resourceRef}` }
+    );
 
     if (!session.url) {
       return NextResponse.json({ error: 'Unable to create checkout session' }, { status: 500 });
     }
+
+    const product = getBillingProduct('ask_unlock');
+    if (!product) {
+      return NextResponse.json({ error: 'Ask unlock is not configured' }, { status: 503 });
+    }
+    await createPendingOrder({
+      product,
+      checkoutSessionId: session.id,
+      resourceRef,
+    });
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
@@ -204,21 +238,21 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
-
-    const paid = session.payment_status === 'paid' || session.status === 'complete';
-    if (!paid) {
-      return NextResponse.json({ error: 'Payment not verified' }, { status: 403 });
-    }
-
-    if (session.metadata?.flow !== 'ask-question') {
-      return NextResponse.json({ error: 'Unexpected session flow' }, { status: 400 });
-    }
-
-    const id = queryId || session.metadata?.askQuestionId;
+    const id = queryId;
     if (typeof id !== 'string' || !id) {
       return NextResponse.json({ error: 'Question id missing on session' }, { status: 400 });
+    }
+
+    const paidOrder = await getPaidOrderForCheckoutSession(sessionId);
+    if (
+      !paidOrder ||
+      paidOrder.productId !== 'ask_unlock' ||
+      paidOrder.resourceRef !== tokenRef(id)
+    ) {
+      return NextResponse.json(
+        { error: 'Payment confirmation pending', code: 'webhook_confirmation_pending' },
+        { status: 409 }
+      );
     }
 
     const decoded = decodeAskQuestionId(id);

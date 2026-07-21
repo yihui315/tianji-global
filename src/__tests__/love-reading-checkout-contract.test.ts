@@ -14,6 +14,7 @@ import {
 } from '@/lib/love-reading/revenue-contract';
 import { buildLoveReportSharePayload } from '@/lib/love-reading/share-payload';
 import type { LoveReport } from '@/lib/love-reading/report-schema';
+import { getStripeTestModeReadiness } from '@/lib/stripe';
 
 const repoRoot = process.cwd();
 
@@ -49,6 +50,38 @@ describe('Love Reading checkout contract readiness', () => {
     );
     expect(getBillingProduct('unknown_product')).toBeNull();
     expect(getBillingProduct('')).toBeNull();
+  });
+
+  it('keeps Ask and Draw as fixed one-time USD unlocks with inline price data', () => {
+    const ask = getBillingProduct('ask_unlock');
+    const draw = getBillingProduct('draw_unlock');
+
+    expect(ask).toMatchObject({ productId: 'ask_unlock', unitAmount: 199, currency: 'usd' });
+    expect(draw).toMatchObject({ productId: 'draw_unlock', unitAmount: 299, currency: 'usd' });
+    expect(ask && buildLineItem(ask)).toMatchObject({
+      price_data: { currency: 'usd', unit_amount: 199 },
+      quantity: 1,
+    });
+    expect(draw && buildLineItem(draw)).toMatchObject({
+      price_data: { currency: 'usd', unit_amount: 299 },
+      quantity: 1,
+    });
+  });
+
+  it('fails closed unless the server key is explicitly test mode', () => {
+    expect(getStripeTestModeReadiness({})).toMatchObject({ ready: false, mode: 'missing' });
+    expect(getStripeTestModeReadiness({ STRIPE_SECRET_KEY: ['sk', 'live', 'fixture'].join('_') })).toMatchObject({
+      ready: false,
+      mode: 'live_forbidden',
+    });
+    expect(getStripeTestModeReadiness({ STRIPE_SECRET_KEY: 'not-a-stripe-key' })).toMatchObject({
+      ready: false,
+      mode: 'invalid',
+    });
+    expect(getStripeTestModeReadiness({ STRIPE_SECRET_KEY: ['sk', 'test', 'fixture'].join('_') })).toEqual({
+      ready: true,
+      mode: 'test',
+    });
   });
 
   it('blocks checkout readiness when the future Stripe Price ID is missing', () => {

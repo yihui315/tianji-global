@@ -1,15 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
+import { createHash } from 'node:crypto';
 import { encodeAskQuestionId } from '@/lib/ask-question';
 import { generateReport } from '@/lib/ai-orchestrator';
 
 const mocks = vi.hoisted(() => ({
   createSession: vi.fn(),
   retrieveSession: vi.fn(),
+  createPendingOrder: vi.fn(),
+  getPaidOrder: vi.fn(),
   generateReport: vi.fn(),
 }));
 
 vi.mock('@/lib/stripe', () => ({
+  getStripeTestModeReadiness: () => ({ ready: true, mode: 'test' }),
   getStripe: () => ({
     checkout: {
       sessions: {
@@ -18,6 +22,19 @@ vi.mock('@/lib/stripe', () => ({
       },
     },
   }),
+}));
+
+vi.mock('@/lib/billing', () => ({
+  createPendingOrder: mocks.createPendingOrder,
+  getBillingProduct: () => ({
+    productId: 'ask_unlock',
+    kind: 'one_time_unlock',
+    unitAmount: 199,
+    currency: 'usd',
+    entitlement: 'ask_unlock',
+  }),
+  getPaidOrderForCheckoutSession: mocks.getPaidOrder,
+  isBillingPersistenceConfigured: () => true,
 }));
 
 vi.mock('@/lib/ai-orchestrator', () => ({
@@ -38,12 +55,19 @@ function getRequest(path: string) {
   });
 }
 
+function tokenRef(id: string) {
+  return createHash('sha256').update(id).digest('hex');
+}
+
 describe('Ask paid gateway contract', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.unstubAllEnvs();
+    vi.stubEnv('ENABLE_PAY_PER_USE', 'true');
     mocks.createSession.mockReset();
     mocks.retrieveSession.mockReset();
+    mocks.createPendingOrder.mockReset();
+    mocks.getPaidOrder.mockReset();
     mocks.generateReport.mockReset();
   });
 
@@ -193,10 +217,11 @@ describe('Ask paid gateway contract', () => {
       language: 'en',
     });
 
-    mocks.retrieveSession.mockResolvedValue({
-      payment_status: 'paid',
-      status: 'complete',
-      metadata: { flow: 'ask-question' },
+    mocks.getPaidOrder.mockResolvedValue({
+      productId: 'ask_unlock',
+      resourceRef: tokenRef(id),
+      readingSessionId: null,
+      customerEmail: null,
     });
     mocks.generateReport.mockResolvedValue({
       content:
@@ -244,6 +269,30 @@ describe('Ask paid gateway contract', () => {
     expect(aiMetaJson).not.toContain('Will they come back');
     expect(aiMetaJson).not.toContain('cards guarantee');
     expect(aiMetaJson).not.toMatch(/API_KEY|birthDate|birthTime|birthLocation|timezone|prompt/i);
+    expect(mocks.retrieveSession).not.toHaveBeenCalled();
+  });
+
+  it('does not unlock when the paid order is bound to a different Ask token', async () => {
+    const id = encodeAskQuestionId({
+      question: 'Should I wait?',
+      fullAnswer: '',
+      language: 'en',
+    });
+    mocks.getPaidOrder.mockResolvedValue({
+      productId: 'ask_unlock',
+      resourceRef: tokenRef('different-token'),
+      readingSessionId: null,
+      customerEmail: null,
+    });
+
+    const { GET } = await import('@/app/api/ask/unlock/route');
+    const response = await GET(getRequest(`/api/ask/unlock?session_id=cs_test_paid&id=${encodeURIComponent(id)}`));
+    const json = await response.json();
+
+    expect(response.status).toBe(409);
+    expect(json.code).toBe('webhook_confirmation_pending');
+    expect(mocks.generateReport).not.toHaveBeenCalled();
+    expect(mocks.retrieveSession).not.toHaveBeenCalled();
   });
 
   it('returns a safe locked 503 when Stripe env is missing in staging degraded mode', async () => {

@@ -108,7 +108,7 @@ export function auditStagingDegradedMode(env: EnvLike = process.env): StagingDeg
     ? guardedOrUnknown(
         stripeWebhook,
         ['isStagingDegradedMode()', 'isStripePaymentAvailable()', 'STAGING_DEGRADED_PAYMENT_UNAVAILABLE_CODE'],
-        ['constructEvent', 'recordStripeEvent'],
+        ['constructEvent', 'claimStripeEvent'],
       )
     : 'no-go';
   const providerLiveCallsDisabled: Status = isAiProviderLiveDisabled(env)

@@ -39,11 +39,29 @@ describe('Stripe checkout billing contract', () => {
     expect(checkout).toContain('/relationship/result/');
     expect(checkout).toContain('idempotencyKey');
     expect(checkout).toContain('customer_email');
+    expect(checkout).toContain('createPendingOrder');
+    expect(checkout).toContain('getStripeTestModeReadiness');
+    expect(checkout).toContain('isBillingPersistenceConfigured');
     expect(checkout.indexOf('getCheckoutPriceIdReadiness')).toBeLessThan(
       checkout.indexOf('checkout.sessions.create')
     );
     expect(checkout).not.toContain('subscription_data');
     expect(checkout).not.toContain('CHECKOUT_SESSION_ID');
+  });
+
+  it('keeps subscriptions disabled until lifecycle handlers exist and uses fixed Price IDs only', () => {
+    const checkout = read('src/app/api/stripe/checkout/route.ts');
+    const stripe = read('src/lib/stripe.ts');
+
+    expect(checkout).toContain('ENABLE_STRIPE_SUBSCRIPTIONS');
+    expect(checkout).toContain('subscription_lifecycle_not_ready');
+    expect(checkout).toContain('subscription_price_id_missing');
+    expect(checkout).toContain('price: plan.priceId');
+    expect(checkout).not.toContain('price_data');
+    expect(stripe).toContain('STRIPE_PRO_MONTHLY_PRICE_ID');
+    expect(stripe).toContain('STRIPE_PRO_YEARLY_PRICE_ID');
+    expect(stripe).not.toContain("|| 'price_pro_monthly'");
+    expect(stripe).not.toContain("|| 'price_pro_yearly'");
   });
 
   it('keeps paid checkout and unlock routes disabled unless pay-per-use is explicitly enabled', () => {
@@ -69,7 +87,10 @@ describe('Stripe checkout billing contract', () => {
     expect(webhook).toContain('request.text()');
     expect(webhook).toContain('stripe-signature');
     expect(webhook).toContain('webhooks.constructEvent');
-    expect(webhook).toContain('recordStripeEvent');
+    expect(webhook).toContain('claimStripeEvent');
+    expect(webhook).toContain('markStripeEventProcessed');
+    expect(webhook).toContain('markStripeEventFailed');
+    expect(webhook).toContain('normalizeOneTimeProductType');
     expect(webhook).toContain("case 'checkout.session.completed'");
     expect(webhook).toContain('payment_status');
     expect(webhook).toContain('markOrderPaid');
@@ -84,7 +105,10 @@ describe('Stripe checkout billing contract', () => {
   });
 
   it('adds one-time billing tables and an entitlement checker', () => {
-    const migration = read('supabase/migrations/20260507_stripe_checkout.sql');
+    const migration = [
+      read('supabase/migrations/20260507_stripe_checkout.sql'),
+      read('supabase/migrations/20260720_phase3_test_payment_closure.sql'),
+    ].join('\n');
     const billing = read('src/lib/billing.ts');
 
     for (const tableName of ['orders', 'stripe_events']) {
@@ -95,6 +119,10 @@ describe('Stripe checkout billing contract', () => {
     expect(migration).toContain('unique (stripe_event_id)');
     expect(migration).toContain('stripe_checkout_session_id');
     expect(migration).toContain('customer_email text');
+    expect(migration).toContain('resource_ref');
+    expect(migration).toContain("'ask_unlock'");
+    expect(migration).toContain("'draw_unlock'");
+    expect(migration).toContain('processing_started_at');
     expect(migration).not.toContain('create table if not exists public.subscriptions');
     expect(billing).toContain('async function hasEntitlement');
   });

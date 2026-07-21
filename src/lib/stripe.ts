@@ -9,12 +9,37 @@ import { PRODUCT_CATALOG } from '@/config/products';
 // Lazy initialization avoids build-time failures when env vars are absent.
 let _stripe: Stripe | null = null;
 
+export type StripeTestModeReadiness =
+  | { ready: true; mode: 'test' }
+  | {
+      ready: false;
+      mode: 'missing' | 'live_forbidden' | 'invalid';
+      code: 'stripe_test_key_missing' | 'stripe_live_key_forbidden' | 'stripe_test_key_required';
+    };
+
+export function getStripeTestModeReadiness(
+  env: Record<string, string | undefined> = process.env
+): StripeTestModeReadiness {
+  const secretKey = env.STRIPE_SECRET_KEY?.trim();
+  if (!secretKey) {
+    return { ready: false, mode: 'missing', code: 'stripe_test_key_missing' };
+  }
+  if (secretKey.startsWith('sk_live_') || secretKey.startsWith('rk_live_')) {
+    return { ready: false, mode: 'live_forbidden', code: 'stripe_live_key_forbidden' };
+  }
+  if (!secretKey.startsWith('sk_test_')) {
+    return { ready: false, mode: 'invalid', code: 'stripe_test_key_required' };
+  }
+  return { ready: true, mode: 'test' };
+}
+
 export function getStripe(): Stripe {
   if (!_stripe) {
-    const secretKey = process.env.STRIPE_SECRET_KEY;
-    if (!secretKey) {
-      throw new Error('Missing STRIPE_SECRET_KEY environment variable');
+    const readiness = getStripeTestModeReadiness();
+    if (!readiness.ready) {
+      throw new Error(readiness.code);
     }
+    const secretKey = process.env.STRIPE_SECRET_KEY!;
     _stripe = new Stripe(secretKey, {
       apiVersion: '2026-02-25.clover',
       typescript: true,
@@ -38,7 +63,7 @@ export const PLANS = {
     description: 'Unlimited readings, all fortune types, priority AI processing',
     descriptionZh: '无限命理解读，全部命理类型，优先 AI 处理',
     price: PRODUCT_CATALOG.PRO_MONTHLY.amountMinor / 100,
-    priceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || 'price_pro_monthly',
+    priceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID?.trim() || null,
     interval: 'month' as const,
     features: {
       en: [
@@ -66,7 +91,7 @@ export const PLANS = {
     description: 'Best value - 2 months free',
     descriptionZh: '最佳性价比 - 赠送 2 个月',
     price: PRODUCT_CATALOG.PRO_YEARLY.amountMinor / 100,
-    priceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID || 'price_pro_yearly',
+    priceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID?.trim() || null,
     interval: 'year' as const,
     features: {
       en: [

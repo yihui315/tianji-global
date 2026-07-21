@@ -324,10 +324,16 @@ function AskPageContent() {
         setUnlocking(true);
         const unlockParams = new URLSearchParams({ session_id: sessionId });
         if (id) unlockParams.set('id', id);
-        const res = await fetch(`/api/ask/unlock?${unlockParams.toString()}`, { method: 'GET' });
-        const json = await res.json();
-        if (!res.ok || !json.success) {
-          throw new Error(json.error || 'Unable to verify payment');
+        let res: Response | null = null;
+        let json: { success?: boolean; error?: string; data?: unknown } | null = null;
+        for (let attempt = 0; attempt < 5; attempt += 1) {
+          res = await fetch(`/api/ask/unlock?${unlockParams.toString()}`, { method: 'GET' });
+          json = await res.json();
+          if (res.status !== 409) break;
+          await new Promise((resolve) => window.setTimeout(resolve, 800));
+        }
+        if (!res?.ok || !json?.success) {
+          throw new Error(json?.error || 'Unable to verify payment');
         }
         const data = json.data as UnlockedState;
         setUnlocked(data);

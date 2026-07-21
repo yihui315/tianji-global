@@ -9,6 +9,7 @@ export interface StripeMetadata {
   source?: string;
   readingSessionId?: string;
   relationshipReadingId?: string;
+  resourceRef?: string;
 }
 
 export interface CheckoutSession {
