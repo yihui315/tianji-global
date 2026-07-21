@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Check, CreditCard, FileText, History, Lock, Sparkles, Star, Zap } from 'lucide-react';
 
 import { PLANS, type PlanId } from '@/lib/stripe';
+import { isPayPerUseEnabled } from '@/lib/pay-per-use';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
@@ -41,6 +42,7 @@ const upgradeCopy = {
         'Your first reading is a preview. Upgrade to unlock deeper AI interpretation, longer history, report-ready surfaces, and priority processing.',
       primary: 'Choose your plan',
       secondary: 'Start free first',
+      comingSoon: 'Coming soon',
     },
     plansTitle: 'Plans available',
     guestCta: 'Sign in to continue',
@@ -102,12 +104,14 @@ const upgradeCopy = {
     },
     hero: {
       eyebrow: 'Tianji Love / 升级',
-      title: '当解读引起共鸣时，进入更深一层。',
-      body: '第一次解读是预览。升级后解锁更深入的 AI 解读、更长历史、报告保存页面和优先处理。',
+      title: '当解读引起共鸣时，走向更深。',
+      body:
+        '你的第一次解读只是预览。升级后解锁更深入的 AI 解读、更长的历史记录、报告就绪的展示页面和优先处理。',
       primary: '选择方案',
-      secondary: '先免费开始',
+      secondary: '先开始免费',
+      comingSoon: '即将开放',
     },
-    plansTitle: '可用方案',
+    plansTitle: '可用的方案',
     guestCta: '登录后继续',
     authCta: '继续结账',
     redirecting: '正在跳转...',
@@ -169,6 +173,7 @@ export default function UpgradePage() {
   const copy = upgradeCopy[language];
   const isAuthenticated = !!session?.user;
   const href = (path: string) => withLanguageParam(path, language);
+  const payPerUseEnabled = isPayPerUseEnabled();
 
   useEffect(() => {
     void trackRevenueFunnelEvent('pricing_view', {
@@ -178,6 +183,8 @@ export default function UpgradePage() {
   }, [language]);
 
   const handleSubscribe = async (planId: PlanId) => {
+    if (!payPerUseEnabled) return;
+
     void trackRevenueFunnelEvent('unlock_click', {
       lang: language,
       surface: 'upgrade_page',
@@ -294,11 +301,11 @@ export default function UpgradePage() {
                 <button
                   type="button"
                   onClick={() => handleSubscribe(planId)}
-                  disabled={isLoading}
+                  disabled={isLoading || !payPerUseEnabled}
                   className="tianji-love-primary mt-8 inline-flex min-h-14 w-full items-center justify-center rounded-lg border border-[#ffb49e]/60 px-6 text-base font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {isLoading ? copy.redirecting : isAuthenticated ? copy.authCta : copy.guestCta}
-                  <Star className="ml-3 h-4 w-4" aria-hidden />
+                  {!payPerUseEnabled ? copy.hero.comingSoon : isLoading ? copy.redirecting : isAuthenticated ? copy.authCta : copy.guestCta}
+                  {!payPerUseEnabled ? null : <Star className="ml-3 h-4 w-4" aria-hidden />}
                 </button>
               </TianjiLovePanel>
             );

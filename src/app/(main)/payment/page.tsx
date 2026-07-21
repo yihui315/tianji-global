@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Check, CreditCard, Lock, Sparkles, Star } from 'lucide-react';
 
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
+import { isPayPerUseEnabled } from '@/lib/pay-per-use';
 import { withLanguageParam } from '@/lib/language-routing';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import { PRODUCT_CATALOG } from '@/config/products';
@@ -35,6 +36,7 @@ const paymentCopy = {
       body:
         'A single paid unlock gives you deeper interpretation, practical next steps, and a more complete reflection on the question that brought you here.',
       primary: 'See options below',
+      comingSoon: 'Coming soon',
     },
     optionsTitle: 'One-time unlocks',
     guestCta: 'Sign in to unlock',
@@ -63,6 +65,7 @@ const paymentCopy = {
       title: '一个问题的更清晰答案。',
       body: '单次付费解锁后，你可以获得更深入的解释、可执行的下一步，以及对引导你来到这里的问题的更完整反思。',
       primary: '见下方选项',
+      comingSoon: '即将开放',
     },
     optionsTitle: '单次解锁',
     guestCta: '登录后解锁',
@@ -86,6 +89,7 @@ export default function PaymentPage() {
   const [error, setError] = useState('');
   const copy = paymentCopy[language];
   const href = (path: string) => withLanguageParam(path, language);
+  const payPerUseEnabled = isPayPerUseEnabled();
 
   useEffect(() => {
     void trackRevenueFunnelEvent('pricing_view', {
@@ -97,6 +101,8 @@ export default function PaymentPage() {
   }, [language, source, readingSessionId]);
 
   const handleUnlock = async (productId: string) => {
+    if (!payPerUseEnabled) return;
+
     void trackRevenueFunnelEvent('unlock_click', {
       lang: language,
       surface: 'payment_page',
@@ -206,11 +212,11 @@ export default function PaymentPage() {
               <button
                 type="button"
                 onClick={() => handleUnlock(id)}
-                disabled={loading}
+                disabled={loading || !payPerUseEnabled}
                 className="tianji-love-primary mt-2 inline-flex min-h-14 w-full items-center justify-center rounded-lg border border-[#ffb49e]/60 px-6 text-base font-semibold text-[#fff7e6] transition disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {loading ? copy.redirecting : cta}
-                <Star className="ml-3 h-4 w-4" aria-hidden />
+                {!payPerUseEnabled ? copy.hero.comingSoon : loading ? copy.redirecting : cta}
+                {!payPerUseEnabled ? null : <Star className="ml-3 h-4 w-4" aria-hidden />}
               </button>
             </TianjiLovePanel>
           ))}
