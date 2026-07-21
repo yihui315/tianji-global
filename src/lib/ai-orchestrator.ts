@@ -59,7 +59,7 @@ function getBaseUrl(provider: ModelProvider): string {
     case 'deepseek':
       return process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com/v1';
     case 'minimax':
-      return process.env.MINIMAX_BASE_URL || 'https://api.minimax.io/v1';
+      return process.env.MINIMAX_BASE_URL || 'https://api.minimaxi.com/anthropic/v1';
   }
 }
 
@@ -653,8 +653,11 @@ export async function generateReport(
             case 'grok':
               return callGrok(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens });
             case 'deepseek':
-            case 'minimax':
               return callOpenAI(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens }, p);
+            case 'minimax':
+              // MiniMax API key only works on Anthropic-compatible endpoint
+              // (key was issued for api.minimaxi.com/anthropic, not api.minimax.io/v1)
+              return callAnthropic(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens });
             case 'gemini':
               return callGemini(k!, u, m, systemPrompt || '', prompt, { temperature, maxTokens });
             case 'ollama':

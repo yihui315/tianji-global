@@ -204,19 +204,21 @@ export const MODEL_REGISTRY: ModelEntry[] = [
     contextLength: 128000,
     recommendedFor: ['privacy'],
   },
-  // MiniMax
+  // MiniMax (uses Anthropic-compatible endpoint)
   {
-    id: 'minimax/minimax-01',
+    id: 'minimax/MiniMax-M3',
     provider: 'minimax',
-    contextLength: 1000000,
-    costPer1kInput: 0.001,
-    costPer1kOutput: 0.005,
-    recommendedFor: ['fast', 'analysis'],
+    contextLength: 204800,
+    inputCostPer1M: 0.5,
+    outputCostPer1M: 2,
+    recommendedFor: ['fast', 'analysis', 'creative'],
   },
   {
     id: 'minimax/MiniMax-M2.7',
     provider: 'minimax',
-    contextLength: 1000000,
+    contextLength: 204800,
+    inputCostPer1M: 0.3,
+    outputCostPer1M: 1.2,
     recommendedFor: ['fast', 'analysis'],
   },
   // Packy (OpenAI-compatible, via www.packyapi.com)
