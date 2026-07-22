@@ -1,5 +1,35 @@
 # TianJi Love Review Packet
 
+## PILOT-001 P2 status (2026-07-23)
+
+- Task ID: `20260723-pilot-001-p2-recovery`.
+- Working tree: branch `pilot-001-p2-recovery-20260723` from `origin/main@490d450`, clean before this run. Not committed yet — pending user review.
+- Goal: close the two PILOT-001 P2 items that do not require the US server (`154.217.241.238`), whose SSH is currently blocked on a manual cloud console / VNC restart. STAGING-004 admin wildcard RBAC patch and S01–S20 full validation remain out of scope for this packet.
+- Source base: `origin/main@490d450 chore(model): all-in to MiniMax-M3 on minimax provider`.
+- Diagnosis:
+  - Sitemap: the original PILOT-001 P2 claim that `/legal/privacy` and `/legal/terms` were missing from the sitemap was already resolved in PR #162. The current build artifact at `.next/server/app/sitemap.xml.body` contains both canonical entries plus `/en/love-reading` and `/zh-CN/love-reading`. No code change needed; a regression contract was added to lock the composition.
+  - US server health 500: root cause is `src/app/api/version/route.ts`, which returned HTTP 500 when `SERVICE_VERSION_BUILT_AT` was missing in production. There was no `src/app/api/health/route.ts` before this patch. The version route is the actual health probe target.
+- What changed:
+  - `src/app/api/version/route.ts` — now always returns HTTP 200 with `status: 'ok' | 'degraded'` and a typed `degradedReasons: string[]`. Malformed timestamps are treated as missing. The response adds `runtimeAt` so operators can confirm the handler actually ran.
+  - `src/app/api/health/route.ts` (new) — lightweight liveness/readiness endpoint that does NOT call into external services (Supabase / Stripe / AI providers), so it stays green when downstream integrations are temporarily broken. Returns `status`, `checks.version`, and `degradedReasons`.
+  - `src/__tests__/adsense-readiness-contract.test.ts` — added a contract assertion that forbids the literal `status: 500` shape from being reintroduced into the version route.
+  - `src/__tests__/api/version-health-route.test.ts` (new, 8 cases) — covers the ok/degraded paths for both routes, including production-with-missing-env and malformed-timestamp scenarios.
+  - `src/__tests__/sitemap-route-contract.test.ts` (new, 6 cases) — locks the canonical legal + locale-variant love-reading sitemap composition and the locale-alias redirect targets.
+- Validation evidence:
+  - `npm run typecheck` → exit 0.
+  - `npm run lint` → exit 0, "No ESLint warnings or errors".
+  - Targeted vitest run on the three affected suites → 20/20 PASS in ~0.5s.
+  - `npm run build:staging:degraded` → exit 0; sitemap emitted as static route; built artifacts contain the expected legal + locale-variant entries (verified via `.next/server/app/sitemap.xml.body`).
+  - `npm run audit:routes` → "audit-routes: OK".
+  - `npm run audit:adsense` → "RESULT: PASS (SOURCE GATE)". Live route audit intentionally skipped (per the existing workflow: needs `ADSENSE_AUDIT_BASE_URL` + `ADSENSE_EXPECTED_COMMIT` together, which only exist post-deployment).
+  - Secret-shape scan over the diff → 0 raw-shape hits. Only matches were the word "Stripe" inside JSDoc comments, which is acceptable narration.
+- Gate decision: **Source Go — pending user review.** US server live verification is intentionally deferred (SSH blocked). Re-run `npm run audit:adsense` with `ADSENSE_AUDIT_BASE_URL` + `ADSENSE_EXPECTED_COMMIT` after the next US deploy and append the `/api/version` and `/api/health` response bodies to the recovery review.
+- Risks:
+  - STAGING-004 admin wildcard RBAC patch and S01–S20 full validation remain blocked on the US server reboot. They are NOT addressed by this packet and must be retried in track A after the SSH path is restored.
+  - Future regression risk is mitigated by the new contract assertion in `src/__tests__/adsense-readiness-contract.test.ts`, which will fail CI if either route is changed to return HTTP 500 again.
+- Detailed evidence: see `.ai/PILOT_001_P2_RECOVERY_REVIEW_20260723.md`.
+- Suggested commit message: `fix(health): /api/version and /api/health return degraded instead of 500`.
+
 ## Current task
 
 - Task ID: `20260717-tianji-adsense-final-remediation`
