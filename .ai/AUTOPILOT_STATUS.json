@@ -27,5 +27,124 @@
       "stripe_test_paid_smoke_go": false
     },
     "next_human_action": "Publish 3 selected posts and backfill real public URLs"
+  },
+  "sias_autonomous_run_l1": {
+    "updated_at": "2026-07-23T04:50:00Z",
+    "system": "tianji-love-revenue-autopilot-v1",
+    "level": "L1",
+    "level_state": "complete",
+    "self_run_prep": "go",
+    "publishing_pack": "go",
+    "revenue_evidence": "no_go",
+    "kpi_learning_input": "no_go",
+    "stripe_test_paid_smoke": "no_go",
+    "orchestrator_decision": "no_go_would_be_reported",
+    "next_human_action": "publish 3 posts manually, paste real URLs into MANUAL_PUBLISH_EVIDENCE_20260723.md, add a real KPI row to data/kpi/revenue-autopilot-20260723.csv",
+    "next_sias_level": "L2_pending_human_publish",
+    "evidence_files": [
+      ".ai/REVENUE_AUTOPILOT_SELECTED_POSTS_20260723.md",
+      ".ai/REVENUE_AUTOPILOT_SELECTED_POSTS_20260723.json",
+      ".ai/HUMAN_APPROVED_PUBLISHING_PACK_20260723.md",
+      ".ai/SIAS_AUTONOMOUS_RUN_L1_20260723.md"
+    ],
+    "boundaries_respected": [
+      "no_production_deploy",
+      "no_live_stripe",
+      "no_production_supabase",
+      "no_real_paid_smoke",
+      "no_auto_publish",
+      "no_fake_url",
+      "no_fake_kpi",
+      "no_commit",
+      "no_push",
+      "no_pr",
+      "no_env_touch",
+      "no_workflow_change",
+      "no_ssh_to_154_217_241_238",
+      "no_staging_004_touch"
+    ],
+    "note": "L1 evidence was intentionally not included in PR #165 (code-only) to keep the code PR focused. This docs PR records the L1 run state for audit traceability."
+  },
+  "sias_autonomous_evolution_l2": {
+    "updated_at": "2026-07-23T05:00:00Z",
+    "system": "tianji-love-sias-autonomous-evolution-l2",
+    "round": 1,
+    "round_state": "complete",
+    "discovery_artifacts": [
+      ".ai/SIAS_PROBLEM_DISCOVERY_20260723.md",
+      ".ai/SIAS_TASK_CLASSIFICATION_20260723.md",
+      ".ai/SIAS_NEXT_AUTONOMOUS_TASK_20260723.md",
+      ".ai/SIAS_LEARNING_NOTE_20260723.md",
+      ".ai/SIAS_BLOCKED_REGISTRY_20260723.md",
+      ".ai/SIAS_AUTONOMOUS_EVOLUTION_L2_ROUND_1_20260723.md"
+    ],
+    "issues_discovered": 12,
+    "issues_classified": {
+      "autonomous_safe_now": 10,
+      "needs_human_input": 1,
+      "external_blocked": 0,
+      "infra_blocked": 1,
+      "unsafe_for_autonomy": 0
+    },
+    "selected_task": {
+      "id": "T0-001",
+      "title": "Daily-oracle SEO + sitemap inclusion + JsonLd",
+      "score": 6,
+      "score_formula": "impact + confidence - risk - effort",
+      "score_inputs": {
+        "impact": 4,
+        "confidence": 5,
+        "risk": 1,
+        "effort": 2
+      }
+    },
+    "executed": {
+      "branch": "sias/daily-oracle-seo-20260723",
+      "head_commit": "a66567b",
+      "files_changed": 3,
+      "additions": 192,
+      "deletions": 0,
+      "draft_pr": "https://github.com/yihui315/tianji-global/pull/166",
+      "pr_merged": true,
+      "merge_commit": "a5a9596",
+      "build_sitemap_includes_daily_oracle": true
+    },
+    "validation": {
+      "typecheck": "exit 0",
+      "lint": "no warnings",
+      "tests_added": 4,
+      "tests_passing": 4,
+      "audit_routes": "OK",
+      "audit_share": "OK",
+      "audit_adsense": "PASS (SOURCE GATE)",
+      "build_staging_degraded": "exit 0",
+      "diff_check": "clean",
+      "secret_scan": "0 hits"
+    },
+    "next_round_candidates": [
+      "T0-002 love-test SEO + JsonLd (same pattern as T0-001)",
+      "T0-006 widen KPI scanner to existing data/love-test-day-*kpi-entry.csv files"
+    ],
+    "blocked_active": [
+      "BLOCKED-001 human URLs",
+      "BLOCKED-002 SSH/STAGING-004",
+      "BLOCKED-005 real KPI",
+      "BLOCKED-009 SEO impact validation"
+    ],
+    "boundaries_respected": [
+      "no_production_deploy",
+      "no_live_stripe",
+      "no_production_supabase",
+      "no_real_paid_smoke",
+      "no_auto_publish",
+      "no_fake_url",
+      "no_fake_kpi",
+      "no_auto_merge",
+      "no_env_touch",
+      "no_workflow_change",
+      "no_ssh_to_154_217_241_238",
+      "no_staging_004_touch"
+    ],
+    "note": "L2 round 1 evidence was intentionally not included in PR #166 (code-only) to keep the code PR focused. This docs PR records the round 1 evolution state for audit traceability."
   }
 }
