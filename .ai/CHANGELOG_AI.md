@@ -1,6 +1,20 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-23 - PILOT-001 P2 recovery — /api/version degraded contract + /api/health
+
+- Task ID: `20260723-pilot-001-p2-recovery`.
+- Working tree: branch `pilot-001-p2-recovery-20260723` from `origin/main@490d450`, clean before this run.
+- Goal: close the two PILOT-001 P2 items that did not require the US server (`154.217.241.238`), whose SSH is blocked on a manual cloud console / VNC restart.
+- Files created: `src/app/api/health/route.ts`, `src/__tests__/api/version-health-route.test.ts`, `src/__tests__/sitemap-route-contract.test.ts`, `.ai/PILOT_001_P2_RECOVERY_REVIEW_20260723.md`, plus this changelog entry and the matching REVIEW_PACKET addition.
+- Files updated: `src/app/api/version/route.ts`, `src/__tests__/adsense-readiness-contract.test.ts`, `.ai/REVIEW_PACKET.md`.
+- Behavioural change: `/api/version` previously returned HTTP 500 when `SERVICE_VERSION_BUILT_AT` was missing in production, converting a build-metadata configuration gap into a fully-unreachable health probe. It now always returns 200 with `status: 'ok' | 'degraded'` and a typed `degradedReasons: string[]`. A new `/api/health` route provides a stable diagnostic surface that stays green even when downstream integrations fail, isolating routing/build/version problems from real dependency outages.
+- Sitemap finding: the original PILOT-001 P2 claim that `/legal/privacy` and `/legal/terms` were missing from the sitemap was already resolved in PR #162. The current build artifact at `.next/server/app/sitemap.xml.body` contains both canonical entries plus `/en/love-reading` and `/zh-CN/love-reading`. A new regression contract locks the composition.
+- Validation: `npm run typecheck` passed; `npm run lint` passed (no warnings or errors); targeted vitest run on `sitemap-route-contract.test.ts` (6), `adsense-readiness-contract.test.ts` (6), and `version-health-route.test.ts` (8) → 20/20 PASS in ~0.5s; `npm run build:staging:degraded` passed (sitemap emitted as static route); `npm run audit:routes` → "audit-routes: OK"; `npm run audit:adsense` → "RESULT: PASS (SOURCE GATE)" with the live route audit intentionally skipped pending deployment.
+- Safety: no live Stripe, no production deploy, no production Supabase mutation, no `.env*` read/print/diff, no credential use, no browser session, no SSH to `154.217.241.238`, no change to `.github/workflows/*`, no Vercel config change, no privacy/consent surface touched. Targeted secret-shape scan over the diff returned 0 raw-shape hits (the only matches were the word "Stripe" inside JSDoc comments, which is acceptable narration).
+- Gate status: `PILOT-001 P2 sitemap claim: closed — already fixed by PR #162, regression contract added`; `PILOT-001 P2 health 500: closed — /api/version and /api/health now degrade gracefully`; `STAGING-004 admin wildcard RBAC: Not run — out of scope for this packet, pending US server reboot`; `S01-S20 full validation: Not run — pending STAGING-004 deployment`; `US server live verification: Not run — SSH blocked on manual cloud console restart`; `Production deploy: No-Go`.
+- Suggested commit message: `fix(health): /api/version and /api/health return degraded instead of 500`.
+
 ### 2026-07-03 - TianJi Love daily growth publishing pack — Day 016 (cron 17 1 * * *)
 
 - Task ID: `20260703-tianji-love-daily-growth-day-016`.

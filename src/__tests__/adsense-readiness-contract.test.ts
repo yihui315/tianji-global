@@ -110,4 +110,29 @@ describe('AdSense source readiness contract', () => {
     expect(deploy).toContain('ADSENSE_AUDIT_BASE_URL=');
     expect(deploy).toContain('ADSENSE_EXPECTED_COMMIT=');
   });
+
+  it('keeps /api/version and /api/health from hard-500ing on missing build metadata', () => {
+    // PILOT-001 P2 recovery (2026-07-23): version/health routes must
+    // surface degraded status with explicit reasons instead of returning
+    // HTTP 500, so smoke probes can distinguish "misconfigured build"
+    // from "service fully broken". The full response contract is covered
+    // by src/__tests__/api/version-health-route.test.ts.
+    const versionRoute = read('src/app/api/version/route.ts');
+    const healthRoute = read('src/app/api/health/route.ts');
+
+    // Forbid a literal JS/TS `status: 500` shape (NextResponse options).
+    // The narrative mentions of "HTTP 500" in JSDoc are allowed and helpful.
+    expect(versionRoute).not.toMatch(/status:\s*500\b/);
+    expect(versionRoute).not.toMatch(/NextResponse\.json\([^)]*\{[^}]*status:\s*500/);
+    // Status values are produced via a ternary assignment, so we assert
+    // the literal strings appear in the source rather than expecting a
+    // specific object-literal shape.
+    expect(versionRoute).toContain("'ok'");
+    expect(versionRoute).toContain("'degraded'");
+    expect(versionRoute).toContain('degradedReasons');
+
+    expect(healthRoute).toContain("'ok'");
+    expect(healthRoute).toContain("'degraded'");
+    expect(healthRoute).toContain('checks:');
+  });
 });
