@@ -102,7 +102,56 @@ const faqLd = {
         text: 'Public sharing excludes birth date, birth time, birth location, and time zone by default. You can contact privacy@tianji.love about data requests.',
       },
     },
+    {
+      '@type': 'Question',
+      name: 'Should I start with a one-time unlock or a subscription?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'One-time Ask or Draw Timing unlocks are the cheapest path to a deeper private reading. Subscriptions add reading history, report-ready pages, and priority processing once those surfaces are enabled.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What does the Draw Timing unlock add?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Draw Timing unlock reveals the full three-card timing reading as reflection, not certainty, with deeper interpretation and practical next steps.',
+      },
+    },
   ],
+};
+
+const softwareApplicationLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  '@id': `${PAGE_URL}#software-application`,
+  name: SITE.name,
+  description: DESCRIPTION,
+  url: PAGE_URL,
+  applicationCategory: 'LifestyleApplication',
+  operatingSystem: 'Any modern browser',
+  inLanguage: ['en', 'zh-CN'],
+  isAccessibleForFree: true,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    availability: 'https://schema.org/InStock',
+    category: 'freemium',
+  },
+  featureList: [
+    'Free private relationship reading',
+    'One-time Ask unlock',
+    'One-time Draw Timing unlock',
+    'Subscription history and report-ready pages',
+    'Privacy-safe share links (no birth data, no payment state)',
+    'Bilingual zh / en surface',
+  ],
+  provider: {
+    '@type': 'Organization',
+    name: SITE.name,
+    url: SITE.url,
+  },
 };
 
 export default function PricingLayout({ children }: { children: React.ReactNode }) {
@@ -110,6 +159,7 @@ export default function PricingLayout({ children }: { children: React.ReactNode 
     <>
       <JsonLd data={breadcrumbLd} />
       <JsonLd data={productLd} />
+      <JsonLd data={softwareApplicationLd} />
       <JsonLd data={faqLd} />
       {children}
     </>
