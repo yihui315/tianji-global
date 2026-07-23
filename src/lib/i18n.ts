@@ -33,6 +33,8 @@ export const localizedPublicRoutes: SitemapRoute[] = [
   { path: '/love-reading', changeFrequency: 'weekly', priority: 0.9, hasLocaleVariant: true },
   // Pricing has one canonical public route. Locale aliases permanently redirect here.
   { path: '/pricing', changeFrequency: 'weekly', priority: 0.9 },
+  // Daily-oracle — entry funnel surface (5 funnel events tracked); now SEO-aware + sitemap-indexed.
+  { path: '/daily-oracle', changeFrequency: 'daily', priority: 0.9 },
   // Legal pages use one canonical route each. Locale aliases permanently redirect here.
   { path: '/legal/privacy', changeFrequency: 'yearly', priority: 0.45 },
   { path: '/legal/terms', changeFrequency: 'yearly', priority: 0.45 },
