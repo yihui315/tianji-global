@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-07-23T04:07:58.629Z",
+  "date": "20260723",
+  "system": "tianji-love-revenue-autopilot-v1",
+  "decision": "no_go",
+  "execution_go": false,
+  "gates": {
+    "revenue_evidence_go": false,
+    "kpi_learning_input_go": false,
+    "stripe_test_paid_smoke_go": false
+  },
+  "reasons": [
+    "Need at least 3 real public published URLs with UTM evidence.",
+    "Need at least 1 real non-zero KPI row not marked operator_smoke_visit.",
+    "Stripe test paid smoke evidence not present in this gate (hard-locked)"
+  ],
+  "boundaries": {
+    "production_deploy": "forbidden",
+    "live_stripe": "forbidden",
+    "production_supabase": "forbidden",
+    "real_paid_smoke": "forbidden",
+    "auto_merge": "forbidden",
+    "staging_004": "blocked_until_154_217_241_238_ssh_recovers"
+  }
+}

@@ -16,5 +16,16 @@
   "stripe_live": "no-go",
   "supabase_production_mutation": "no-go",
   "production_deploy": "no-go",
-  "social_auto_posting": "no-go"
+  "social_auto_posting": "no-go",
+  "revenue_self_run_v1": {
+    "updated_at": "2026-07-23T04:07:58.629Z",
+    "decision": "no_go",
+    "execution_go": false,
+    "gates": {
+      "revenue_evidence_go": false,
+      "kpi_learning_input_go": false,
+      "stripe_test_paid_smoke_go": false
+    },
+    "next_human_action": "Publish 3 selected posts and backfill real public URLs"
+  }
 }

@@ -33,7 +33,12 @@
     "audit:release-gate": "tsx scripts/audit-release-gate.ts",
     "audit:adsense": "tsx scripts/audit-adsense.ts",
     "release:check": "npm run typecheck && npm run lint && npm run test && npm run audit:adsense && npm run build && npm run audit:routes && npm run audit:copy && npm run audit:share && npm run audit:upgrade",
-    "upgrade:plan": "node scripts/generate-upgrade-plan.ts"
+    "upgrade:plan": "node scripts/generate-upgrade-plan.ts",
+    "revenue:self-run:select": "node scripts/revenue/self-run-select-posts.mjs",
+    "revenue:self-run:pack": "node scripts/revenue/self-run-build-pack.mjs",
+    "revenue:self-run:validate": "node scripts/revenue/self-run-validate-evidence.mjs",
+    "revenue:self-run:gate": "node scripts/revenue/self-run-orchestrator.mjs",
+    "revenue:self-run": "npm run revenue:self-run:select && npm run revenue:self-run:pack && npm run revenue:self-run:validate && npm run revenue:self-run:gate"
   },
   "keywords": [
     "fortune",

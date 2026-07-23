@@ -1,0 +1,26 @@
+{
+  "date": "20260723",
+  "revenue_evidence_go": false,
+  "kpi_learning_input_go": false,
+  "manual_publish_evidence": {
+    "evidenceFile": ".ai/MANUAL_PUBLISH_EVIDENCE_20260723.md",
+    "created_from_template": true,
+    "totalBlocks": 3,
+    "realPublicUrls": [],
+    "valid": false,
+    "reasons": [
+      "need at least 3 real public URLs, found 0",
+      "manual evidence file was just created from empty template"
+    ]
+  },
+  "kpi_evidence": {
+    "filesScanned": [],
+    "realNonZeroRows": [],
+    "operatorOnlyRows": [],
+    "valid": false,
+    "reasons": [
+      "need at least 1 real non-zero KPI row not marked operator_smoke_visit"
+    ]
+  },
+  "note": "Business No-Go is recorded here; the script exits 0 unless it itself failed."
+}

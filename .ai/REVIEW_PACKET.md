@@ -1,5 +1,33 @@
 # TianJi Love Review Packet
 
+## Revenue Autopilot v1 launch status (2026-07-23)
+
+- Task ID: `20260723-revenue-autopilot-v1-launch`.
+- Working tree: branch `feat/revenue-self-run-v1-20260723` from `origin/main@00039ba` (post-PR #164 merge), clean before this run. Not committed yet — pending user review.
+- Goal: ship the minimal Human-approved Revenue Autopilot v1 toolchain (4 Node 20 scripts + 5 npm script aliases + 1 seed queue + 1 launch review evidence file) so the project can move from "Revenue OS source exists" to "Revenue Autopilot v1 can run daily, but requires human-approved publishing and real KPI evidence."
+- Corrected contract vs. original spec:
+  1. Default manual evidence path is `.ai/MANUAL_PUBLISH_EVIDENCE_<DATE>.md`, not the historical 20260629 file. If today's file does not exist, the script creates an empty 3-block YAML template.
+  2. `AUTOPILOT_STATUS.json` is safe-merged: only `revenue_self_run_v1` is updated, all other top-level keys are preserved verbatim. If the existing file is unreadable / not valid JSON, the orchestrator does NOT overwrite it and instead emits `.ai/AUTOPILOT_STATUS_WRITE_SKIPPED_<DATE>.md`.
+  3. Business No-Go (Revenue Evidence, KPI Learning Input, Paid Smoke) exits 0; only fatal parse / write failures exit 2.
+- What changed:
+  - New files: 4 scripts under `scripts/revenue/`, 1 seed queue `data/publishing-queue/revenue-autopilot-seed-20260723.csv`, plus 8 evidence files under `.ai/`.
+  - Updated files: `package.json` (added 5 `revenue:self-run:*` scripts), `.ai/ORCHESTRATOR_GATE_DECISION.json` (regenerated), `.ai/AUTOPILOT_STATUS.json` (safe-merged), `.ai/CHANGELOG_AI.md`, this packet.
+- Validation evidence:
+  - `npm run revenue:self-run:select` → 3 posts selected, Gate Go (after fixing a `text.includes("published")` substring bug that falsely excluded every seed row).
+  - `npm run revenue:self-run:pack` → publishing pack written with 3 candidates × 3 copy variants × checklist × YAML evidence block.
+  - `npm run revenue:self-run:validate` → template auto-created; Revenue Evidence No-Go; KPI Learning Input No-Go; exit 0.
+  - `npm run revenue:self-run:gate` → decision=no_go, execution_go=false, exit 0.
+  - `npm run typecheck` / `npm run lint` → exit 0.
+  - `npm run audit:routes` → audit-routes: OK.
+  - `npm run audit:adsense` → RESULT: PASS (SOURCE GATE).
+  - `npm run build:staging:degraded` → exit 0.
+  - Post-run `.ai/AUTOPILOT_STATUS.json` check: 19 top-level keys, original 18 preserved, only `revenue_self_run_v1` added.
+  - `git diff --check` clean; secret-shape scan over the diff returned 0 raw-shape hits.
+- Gate decision: **Source Go — pending user review.** Execution gate is `no_go` by design on this run because there are no real public URLs, no real KPI rows, and paid smoke is hard-locked.
+- Risks: STAGING-004 admin wildcard RBAC patch and the US server live verification remain blocked on `154.217.241.238` SSH recovery; both are out of scope for this packet. The seed queue lives in `data/publishing-queue/` and ships 5 sample candidates — reviewer should confirm whether the seed queue should remain in the repo or be moved to a private ops location.
+- Detailed evidence: see `.ai/REVENUE_AUTOPILOT_V1_LAUNCH_REVIEW_20260723.md`, `.ai/REVENUE_SELF_RUN_V1_REVIEW_20260723.md`, `.ai/KPI_REAL_DATA_EVIDENCE_20260723.md`, `.ai/ORCHESTRATOR_GATE_DECISION.json`.
+- Suggested commit message: `feat(revenue): add human-approved self-run autopilot v1`.
+
 ## PILOT-001 P2 status (2026-07-23)
 
 - Task ID: `20260723-pilot-001-p2-recovery`.
