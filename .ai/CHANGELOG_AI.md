@@ -1,6 +1,24 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-23 - Revenue Autopilot v1 launch — human-approved self-run toolchain
+
+- Task ID: `20260723-revenue-autopilot-v1-launch`.
+- Working tree: branch `feat/revenue-self-run-v1-20260723` from `origin/main@00039ba` (post-PR #164 merge), clean before this run.
+- Goal: ship the minimal Human-approved Revenue Autopilot v1 toolchain so the project can move from "Revenue OS source exists" to "Revenue Autopilot v1 can run daily, but requires human-approved publishing and real KPI evidence".
+- Files created: `scripts/revenue/self-run-select-posts.mjs`, `scripts/revenue/self-run-build-pack.mjs`, `scripts/revenue/self-run-validate-evidence.mjs`, `scripts/revenue/self-run-orchestrator.mjs`, `data/publishing-queue/revenue-autopilot-seed-20260723.csv` (5 candidate posts, no fake URL/KPI/published state), `.ai/REVENUE_AUTOPILOT_SELECTED_POSTS_20260723.{md,json}`, `.ai/HUMAN_APPROVED_PUBLISHING_PACK_20260723.md`, `.ai/MANUAL_PUBLISH_EVIDENCE_20260723.md` (auto-template), `.ai/REVENUE_SELF_RUN_VALIDATION_20260723.json`, `.ai/KPI_REAL_DATA_EVIDENCE_20260723.md`, `.ai/REVENUE_SELF_RUN_V1_REVIEW_20260723.md`, `.ai/REVENUE_AUTOPILOT_V1_LAUNCH_REVIEW_20260723.md`, plus this changelog entry and the matching REVIEW_PACKET addition.
+- Files updated: `package.json` (added 5 `revenue:self-run:*` scripts), `.ai/ORCHESTRATOR_GATE_DECISION.json` (auto-regenerated), `.ai/AUTOPILOT_STATUS.json` (safe-merged; only `revenue_self_run_v1` key added, all 18 original keys preserved), `.ai/REVIEW_PACKET.md`.
+- Corrected contract vs. original spec:
+  1. Default manual evidence path is TODAY's file (`.ai/MANUAL_PUBLISH_EVIDENCE_<DATE>.md`), not the historical 20260629 file.
+  2. `AUTOPILOT_STATUS.json` is safe-merged (only `revenue_self_run_v1` is updated; parse failure aborts the write and emits a `_WRITE_SKIPPED_*.md` note).
+  3. Business No-Go (Revenue Evidence, KPI Learning, Paid Smoke) exits 0; only script bugs / fatal parse failures exit 2.
+- Score-row bug fixed during dev: `scoreRow` used `text.includes("published")` which falsely matched `status="pending_manual_review"` / `publish_status="not_published"`, excluding every seed row with `-100`. Fixed by switching to whole-field equality on `status` and `publish_status`. Verified after fix: 3 posts selected, Gate: Go.
+- Validation: `npm run revenue:self-run:select` (3 selected, Gate Go), `npm run revenue:self-run:pack` (pack written), `npm run revenue:self-run:validate` (template auto-created, Revenue Evidence No-Go, KPI Learning Input No-Go, exit 0), `npm run revenue:self-run:gate` (decision=no_go, execution_go=false, exit 0), `npm run typecheck` (exit 0), `npm run lint` (exit 0), `npm run audit:routes` (audit-routes: OK), `npm run audit:adsense` (RESULT: PASS SOURCE GATE), `npm run build:staging:degraded` (exit 0). `git diff --check` clean. Secret-shape scan over the diff returned 0 raw-shape hits.
+- Post-run verification of `.ai/AUTOPILOT_STATUS.json`: 19 top-level keys; original 18 preserved; only `revenue_self_run_v1` added. Other autopilot state untouched.
+- Safety: no live Stripe, no production deploy, no production Supabase mutation, no `.env*` read/print/diff, no credential use, no browser session, no SSH to `154.217.241.238`, no change to `.github/workflows/*`, no Vercel config change, no privacy/consent surface touched.
+- Gate status: `Self-Run Prep: Go (3 candidates selected)`; `Revenue Evidence: No-Go (waiting for real public URLs)`; `KPI Learning Input: No-Go (waiting for real non-zero KPI row)`; `Stripe Test Paid Smoke: No-Go (hard-locked, requires explicit test-mode approval)`; `Orchestrator decision: no_go`; `STAGING-004 admin wildcard RBAC: Not run — out of scope, pending US server reboot`; `Production deploy: No-Go`.
+- Suggested commit message: `feat(revenue): add human-approved self-run autopilot v1`.
+
 ### 2026-07-23 - PILOT-001 P2 recovery — /api/version degraded contract + /api/health
 
 - Task ID: `20260723-pilot-001-p2-recovery`.
