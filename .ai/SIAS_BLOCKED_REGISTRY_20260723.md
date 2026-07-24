@@ -1,160 +1,123 @@
-# SIAS Blocked Registry — 2026-07-23
+# SIAS BLOCKED Registry
 
-Source: `.ai/SIAS_PROBLEM_DISCOVERY_20260723.md` + cross-session context.
+Tracks items that **cannot be resolved by autonomous execution** in the SIAS conveyor. Each entry has a stable ID, a status, and a resolution path.
 
-Each entry follows:
-
-```
-BLOCKED-<id>
-title:
-type:
-status: parked
-resume_signal:
-next_check: manual only
-autonomous_action: none
-```
+## Status vocabulary
+- `parked` — discovered and intentionally not yet resolved
+- `design_decision_required` — needs a human to make a trade-off
+- `infra_blocked` — depends on external infrastructure
+- `human_required` — needs human action outside the codebase
+- `external_required` — depends on third-party data / verdict
+- `unsafe_for_autonomy` — out of scope for autonomous execution
+- `completed` — resolved (kept for audit trail)
 
 ---
 
-## BLOCKED-001
+## Active blockers
 
-- title: Need ≥ 3 real public published URLs with UTM evidence
-- type: human_required
-- status: parked
-- resume_signal: human pastes real `published_url` into `.ai/MANUAL_PUBLISH_EVIDENCE_<DATE>.md` for ≥ 3 rows
-- next_check: manual only
-- autonomous_action: none — SIAS must not auto-generate URLs
+### BLOCKED-001 — Real `tianji.love` URLs required
+- **Status**: human_required
+- **Origin**: T0-001 (initial L2 round)
+- **Why blocked**: Need canonical public URLs verified live in production crawler view. Cannot fake or guess.
+- **Resolution**: human provides validated URLs from production.
 
-## BLOCKED-002
+### BLOCKED-002 — STAGING-004 / 154.217.241.238 unreachable
+- **Status**: infra_blocked
+- **Origin**: T0-002 (initial L2 round)
+- **Why blocked**: VPS at 154.217.241.238 (STAGING-004) is unreachable; Redis cluster is on that host.
+- **Resolution**: restore SSH access to 154.217.241.238, then resume STAGING-004 work.
 
-- title: 154.217.241.238 SSH dead / STAGING-004 not deployable
-- type: infra_blocked
-- status: parked
-- resume_signal: SSH recovered through cloud console / VNC / provider reboot
-- next_check: manual only
-- autonomous_action: none — SIAS must not SSH-retry or connect to the server
+### BLOCKED-003 — Stripe test-mode smoke approval
+- **Status**: approval_required
+- **Origin**: T0-003
+- **Why blocked**: Live Stripe test-mode checkout requires explicit approval to fire real API calls against Stripe's sandbox.
+- **Resolution**: explicit human approval to run live Stripe test smoke.
 
-## BLOCKED-003
+### BLOCKED-005 — Real KPI data required
+- **Status**: external_required
+- **Origin**: T0-004
+- **Why blocked**: Real visitor KPI cannot be generated autonomously. All `data/love-test-day-*kpi-entry.csv` files are zero-scaffolded.
+- **Resolution**: human runs real funnel smoke and uploads actual KPI data.
 
-- title: Stripe test paid smoke evidence
-- type: approval_required
-- status: parked
-- resume_signal: explicit test-mode human approval recorded in a future evidence file
-- next_check: manual only
-- autonomous_action: none — orchestrator hard-locks `stripe_test_paid_smoke_go` to `false`
+### BLOCKED-006 — Production deploy gate
+- **Status**: unsafe_for_autonomy
+- **Origin**: T0-006
+- **Why blocked**: SIAS conveyor never touches production deploy pipeline.
+- **Resolution**: explicit human approval per deploy, with verified baseline.
 
-## BLOCKED-004
+### BLOCKED-007 — Live Stripe interaction
+- **Status**: unsafe_for_autonomy
+- **Origin**: T0-007
+- **Why blocked**: SIAS conveyor never fires live Stripe API calls.
+- **Resolution**: BLOCKED-003 must be cleared first, then human-controlled run.
 
-- title: Non-author reviewer approvals for open Draft PRs
-- type: approval_required
-- status: parked (PR #164 + PR #165 already merged; future PRs same pattern)
-- resume_signal: GitHub UI shows an approving review from a non-author code owner
-- next_check: manual only
-- autonomous_action: none — agent never self-approves or self-merges
+### BLOCKED-008 — Live AdSense verdict
+- **Status**: external_required
+- **Origin**: T0-008
+- **Why blocked**: Live AdSense publisher approval / crawler verdict cannot be generated autonomously.
+- **Resolution**: human submits site to AdSense and captures verdict.
 
-## BLOCKED-005
+### BLOCKED-009 — Real visit telemetry
+- **Status**: external_required
+- **Origin**: T0-009
+- **Why blocked**: Real visitor telemetry requires production traffic.
+- **Resolution**: real users + GA4 dashboard capture.
 
-- title: Real non-zero KPI traffic data
-- type: external_required
-- status: parked
-- resume_signal: real `impressions > 0` / `clicks > 0` / `visits > 0` row appears in `data/kpi/<file>.csv` with `notes` not containing `operator_smoke_visit`
-- next_check: manual only
-- autonomous_action: none — SIAS must not fabricate KPI rows; existing `data/love-test-day-*kpi-entry.csv` rows are zero-scaffolded per CHANGELOG_AI 2026-07-01 entry
+### BLOCKED-010 — Social profile verification
+- **Status**: human_required
+- **Origin**: T0-010
+- **Why blocked**: Twitter / Reddit / X social profile ownership cannot be verified autonomously.
+- **Resolution**: human claims social handles and updates AboutJsonLd or footer.
 
-## BLOCKED-006
+### BLOCKED-011 — apple-app-site-association verification
+- **Status**: human_required
+- **Origin**: discovery (L1)
+- **Why blocked**: iOS app entitlement requires Apple Developer ID + signed manifest.
+- **Resolution**: human provides signed manifest.
 
-- title: Production deploy
-- type: unsafe_for_autonomy
-- status: parked
-- resume_signal: explicit user instruction "deploy to production"
-- next_check: manual only
-- autonomous_action: none — any deploy without explicit approval is forbidden
+### BLOCKED-012 — humans.txt ownership
+- **Status**: human_required
+- **Origin**: discovery (L1)
+- **Why blocked**: Site ownership attestation requires legal entity confirmation.
+- **Resolution**: human provides entity info.
 
-## BLOCKED-007
+### BLOCKED-013 — security.txt verification
+- **Status**: human_required
+- **Origin**: discovery (L1)
+- **Why blocked**: Security contact requires a verified, monitored email.
+- **Resolution**: human provides contact.
 
-- title: Live Stripe / production Supabase mutation
-- type: unsafe_for_autonomy
-- status: parked
-- resume_signal: explicit test-mode human approval for the specific action
-- next_check: manual only
-- autonomous_action: none — `stripe_live` and `supabase_production_mutation` in `.ai/AUTOPILOT_STATUS.json` remain `no-go`
+### BLOCKED-015 — `/about-us` vs `/about` URL conflict
+- **Status**: human_required
+- **Origin**: H4 (T0-014 / BLOCKED-014 resolution)
+- **Why blocked**: If both `/about` and `/about-us` routes exist or are reachable via redirects, sitemap publication may surface a duplicate. Need verification that `/about-us` is not registered anywhere.
+- **Resolution**: human audits (main)/about-us for any layout/page existence.
 
-## BLOCKED-008
+### BLOCKED-016 — Real sitemap verification for `/about`
+- **Status**: external_required
+- **Origin**: H4 (T0-014 / BLOCKED-014 resolution)
+- **Why blocked**: `build:staging:degraded` does not produce a real sitemap with live `/about` URLs (only static generation). Manual fetch + parse of `/sitemap.xml` in production needed.
+- **Resolution**: human fetches production sitemap and confirms `/about` is listed with priority 0.6.
 
-- title: AdSense verdict (still NO-GO)
-- type: external_required
-- status: parked
-- resume_signal: Google reports `ads.txt` as Authorized + certified CMP/TCF published
-- next_check: manual only
-- autonomous_action: none — AdSense readiness contract stays a source-gate-only artifact
-
-## BLOCKED-009
-
-- title: Real visit data for /daily-oracle, /love-test, /pricing, /relationship/new to validate T0-001 / T0-002 / T0-008 SEO impact
-- type: external_required
-- status: parked
-- resume_signal: Google Search Console or analytics reports non-zero impressions / clicks for the canonical URLs
-- next_check: manual only
-- autonomous_action: none — SIAS cannot fabricate search-engine visits; the SEO metadata fix is shipped but its impact can only be observed externally
-
-## BLOCKED-010
-
-- title: Public-facing social profiles (LinkedIn / X / Reddit) for `sameAs` in JsonLd `Organization`
-- type: human_required
-- status: parked
-- resume_signal: human confirms which URLs go into `SITE.sameAs` in `src/components/seo/JsonLd.tsx`
-- next_check: manual only
-- autonomous_action: none — leaving `sameAs: []` empty is correct until profiles exist; fabricating them would be a privacy / accuracy violation
-
-## BLOCKED-011 (SIAS Self-Monitor H2 PR 2, 2026-07-23)
-
-- title: `public/apple-app-site-association` missing + App Router fallback absent
-- type: human_required
-- status: parked
-- resume_signal: human authors `public/apple-app-site-association` with the real Apple Team ID, appID, and Universal Links paths from the iOS team, then commits. After that lands, SIAS adds `src/app/apple-app-site-association/route.ts` (App Router fallback reading the file, returning `application/json`).
-- next_check: manual only (or any future H2/H3 batch after the human commits the file)
-- autonomous_action: none — SIAS will not invent a Team ID / appID / path; the empty-body file is invalid and would be fabrication
-- discovered_by: `scripts/sias-self-monitor.mjs` (H2 PR 2)
-- surfaces: `public/apple-app-site-association`, `src/app/apple-app-site-association/route.ts`
-
-## BLOCKED-012 (SIAS Self-Monitor H2 PR 2, 2026-07-23)
-
-- title: `public/humans.txt` missing + App Router fallback absent
-- type: human_required
-- status: parked
-- resume_signal: human authors `public/humans.txt` with the real site / team credit per the humans.txt convention, then commits. After that lands, SIAS adds `src/app/humans.txt/route.ts`.
-- next_check: manual only
-- autonomous_action: none — empty humans.txt would be fabrication of "we are here"
-- discovered_by: `scripts/sias-self-monitor.mjs` (H2 PR 2)
-- surfaces: `public/humans.txt`, `src/app/humans.txt/route.ts`
-
-## BLOCKED-013 (SIAS Self-Monitor H2 PR 2, 2026-07-23)
-
-- title: `public/.well-known/security.txt` missing + App Router fallback absent
-- type: human_required
-- status: parked
-- resume_signal: human authors `public/.well-known/security.txt` with a real `Contact:` (mailto or https URL) and `Expires:` per RFC 9116, then commits. After that lands, SIAS adds `src/app/.well-known/security.txt/route.ts`.
-- next_check: manual only
-- autonomous_action: none — empty security.txt is invalid per RFC 9116; an invented Contact is privacy / abuse-report-channel misdirection
-- discovered_by: `scripts/sias-self-monitor.mjs` (H2 PR 2)
-- surfaces: `public/.well-known/security.txt`, `src/app/.well-known/security.txt/route.ts`
+### BLOCKED-017 — `/about` canonical URL structure review
+- **Status**: human_required
+- **Origin**: H4 (T0-014 / BLOCKED-014 resolution)
+- **Why blocked**: Canonical URL should be `https://tianji.love/about` or include `/zh` locale variant? The current `SITE.url + '/about'` is a single canonical, but locale-alias redirects to `/[locale]/about` exist. Need confirmation that the canonical choice is intentional and not causing duplicate-content signal.
+- **Resolution**: human reviews locale vs single-canonical trade-off.
 
 ---
 
-## BLOCKED-014 (SIAS H3 T0-008 audit, 2026-07-24 → RESOLVED in H4 PR #175, 2026-07-24)
+## Resolved blockers
 
-- title: `/about` has full SEO + OG layout but is NOT registered in `localizedPublicRoutes`
-- type: design_decision_required
-- status: completed (resolved in H4 PR #175)
-- resume_signal: ✅ Decision A applied — `src/lib/i18n.ts` adds `{ path: '/about', changeFrequency: 'monthly', priority: 0.6 }`. Verified post-build (PR #175 CI): `.next/server/app/sitemap.xml.body` contains `<loc>https://tianji.love/about</loc>`. The localized-public-routes-coverage audit (H3 T0-008, shipped in PR #173) now locks the new entry with 5 audit cases.
-- next_check: not applicable — resolved
-- autonomous_action: PR #175 (commit `0c67b9d2`) shipped T0-014 in the H4 batch after the user picked decision A on 2026-07-24 in the H3 evidence docs thread (PR #174).
-- discovered_by: `src/__tests__/localized-public-routes-coverage.test.ts` (H3 T0-008)
-- resolved_in: PR #175 (`feat(sias): expand public route and attribution contracts`), merge commit `0c67b9d2e514b3f80b036412f5f725b358409d24`
-- surfaces: `src/app/(main)/about/layout.tsx` (unchanged), `src/app/(main)/about/page.tsx` (unchanged), `src/lib/i18n.ts#localizedPublicRoutes` (new entry), `src/__tests__/localized-public-routes-coverage.test.ts` (new audit entry)
+### BLOCKED-014 — `/about` SEO surface exclusion from public sitemap
+- **Status**: completed
+- **Origin**: H3 (T0-008 audit contract discovered `/about` had SEO+OG layout but was missing from `localizedPublicRoutes`)
+- **Resolution**: Decision A — added `/about` to `localizedPublicRoutes` with `priority: 0.6` and `changeFrequency: 'monthly'`.
+- **Resolved in**: PR #175 (`feat(sias): expand public route and attribution contracts`) — merge commit `0c67b9d2e514b3f80b036412f5f725b358409d24`.
+- **Verified**: `/about` appears in `localized-public-routes-coverage.test.ts`; audit entry registered.
 
 ---
 
-## Round-1 autonomous actions completed (parked back to A)
+## H5 Update
 
-- **T0-001 — Daily-oracle SEO + sitemap + JsonLd**: ✓ moved out of blocked. Now in active development (see Draft PR).
+**No new blockers** added in H5. The 17 meta-tools audited by T0-013 are explicitly registered in the `EXPLICIT_EXCLUDED_META_TOOLS` list (a code-level audit-trail, not a blocker registry entry) with tool-specific reasons for their exclusion from `localizedPublicRoutes`. If a future agent adds a new meta-tool `layout.tsx` without updating that registry OR `localizedPublicRoutes`, the T0-013 audit test will fail and surface the regression.
