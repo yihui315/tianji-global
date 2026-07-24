@@ -141,16 +141,17 @@ autonomous_action: none
 
 ---
 
-## BLOCKED-014 (SIAS H3 T0-008 audit, 2026-07-24)
+## BLOCKED-014 (SIAS H3 T0-008 audit, 2026-07-24 → RESOLVED in H4 PR #175, 2026-07-24)
 
 - title: `/about` has full SEO + OG layout but is NOT registered in `localizedPublicRoutes`
 - type: design_decision_required
-- status: parked
-- resume_signal: human decides whether to (a) add `{ path: '/about', changeFrequency: 'monthly', priority: 0.6 }` to `localizedPublicRoutes` in `src/lib/i18n.ts` and re-run the T0-008 coverage audit, or (b) keep the current in-product-only design (crawlers reach /about via internal links from /, /pricing, /legal/privacy etc., but it is not advertised in the public sitemap)
-- next_check: manual only (or any future H3 / H4 batch after the human decision)
-- autonomous_action: none — adding a route to `localizedPublicRoutes` changes the public sitemap contract and surfaces `/about` in `/sitemap.xml`; SIAS cannot make a unilateral decision about a public SEO surface
+- status: completed (resolved in H4 PR #175)
+- resume_signal: ✅ Decision A applied — `src/lib/i18n.ts` adds `{ path: '/about', changeFrequency: 'monthly', priority: 0.6 }`. Verified post-build (PR #175 CI): `.next/server/app/sitemap.xml.body` contains `<loc>https://tianji.love/about</loc>`. The localized-public-routes-coverage audit (H3 T0-008, shipped in PR #173) now locks the new entry with 5 audit cases.
+- next_check: not applicable — resolved
+- autonomous_action: PR #175 (commit `0c67b9d2`) shipped T0-014 in the H4 batch after the user picked decision A on 2026-07-24 in the H3 evidence docs thread (PR #174).
 - discovered_by: `src/__tests__/localized-public-routes-coverage.test.ts` (H3 T0-008)
-- surfaces: `src/app/(main)/about/layout.tsx`, `src/app/(main)/about/page.tsx`, `src/lib/i18n.ts#localizedPublicRoutes`
+- resolved_in: PR #175 (`feat(sias): expand public route and attribution contracts`), merge commit `0c67b9d2e514b3f80b036412f5f725b358409d24`
+- surfaces: `src/app/(main)/about/layout.tsx` (unchanged), `src/app/(main)/about/page.tsx` (unchanged), `src/lib/i18n.ts#localizedPublicRoutes` (new entry), `src/__tests__/localized-public-routes-coverage.test.ts` (new audit entry)
 
 ---
 
