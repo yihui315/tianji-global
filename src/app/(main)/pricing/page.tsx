@@ -9,6 +9,10 @@ import { PLANS, type PlanId } from '@/lib/stripe';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
 import { buildUtmHref } from '@/lib/analytics/utm-params';
+import {
+  PRICING_UTM_SOURCE,
+  PRICING_SURFACE_LABELS,
+} from '@/lib/analytics/pricing-surface';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import { PRODUCT_CATALOG } from '@/config/products';
 import {
@@ -256,19 +260,19 @@ export default function PricingPage() {
 // to the surface that started the visit. Self-links (/pricing) still get the
 // UTM triplet — they are dedup'd downstream by the classifier, not here.
 const href = (path: string) =>
-  withLanguageParam(buildUtmHref(path, { source: 'pricing' }), language);
+  withLanguageParam(buildUtmHref(path, { source: PRICING_UTM_SOURCE }), language);
 
   useEffect(() => {
     void trackRevenueFunnelEvent('pricing_viewed', {
       lang: language,
-      surface: 'pricing_page',
+      surface: PRICING_SURFACE_LABELS.pricingViewed,
     });
   }, [language]);
 
   const handleSubscribe = async (planId: PlanId) => {
     void trackRevenueFunnelEvent('unlock_click', {
       lang: language,
-      surface: 'pricing_plan',
+      surface: PRICING_SURFACE_LABELS.unlockClick,
       planId,
       product: planId,
       authenticated: isAuthenticated,
@@ -277,7 +281,7 @@ const href = (path: string) =>
     if (!isAuthenticated) {
       void trackRevenueFunnelEvent('login_started', {
         lang: language,
-        source: 'pricing_plan_click',
+        source: PRICING_SURFACE_LABELS.loginStarted,
         planId,
       });
       router.push(href('/login'));

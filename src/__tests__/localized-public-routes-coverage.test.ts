@@ -88,6 +88,14 @@ const PUBLIC_ROUTE_AUDITS: PublicRouteAudit[] = [
     ogTitleSubstring: '/api/og?title=Tianji+Love+Pricing',
   },
   {
+    path: '/about',
+    layoutFiles: [
+      'src/app/(main)/about/layout.tsx',
+      'src/app/(main)/about/page.tsx',
+    ],
+    ogTitleSubstring: '/api/og?title=About+Tianji+Love',
+  },
+  {
     path: '/ask',
     layoutFiles: ['src/app/(main)/ask/layout.tsx'],
     ogTitleSubstring: '/api/og?title=Tianji+Love+Reading',

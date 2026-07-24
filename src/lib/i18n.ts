@@ -35,6 +35,10 @@ export const localizedPublicRoutes: SitemapRoute[] = [
   { path: '/pricing', changeFrequency: 'weekly', priority: 0.9 },
   // Daily-oracle — entry funnel surface (5 funnel events tracked); now SEO-aware + sitemap-indexed.
   { path: '/daily-oracle', changeFrequency: 'daily', priority: 0.9 },
+  // About — SEO + OG layout already shipped; H4 T0-014 (BLOCKED-014 resolution, decision A)
+  // surfaces it in the public sitemap so crawlers reach the AboutPage JsonLd via
+  // /sitemap.xml instead of relying on internal links alone.
+  { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
   // Legal pages use one canonical route each. Locale aliases permanently redirect here.
   { path: '/legal/privacy', changeFrequency: 'yearly', priority: 0.45 },
   { path: '/legal/terms', changeFrequency: 'yearly', priority: 0.45 },
