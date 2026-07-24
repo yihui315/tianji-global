@@ -106,6 +106,41 @@ autonomous_action: none
 - next_check: manual only
 - autonomous_action: none — leaving `sameAs: []` empty is correct until profiles exist; fabricating them would be a privacy / accuracy violation
 
+## BLOCKED-011 (SIAS Self-Monitor H2 PR 2, 2026-07-23)
+
+- title: `public/apple-app-site-association` missing + App Router fallback absent
+- type: human_required
+- status: parked
+- resume_signal: human authors `public/apple-app-site-association` with the real Apple Team ID, appID, and Universal Links paths from the iOS team, then commits. After that lands, SIAS adds `src/app/apple-app-site-association/route.ts` (App Router fallback reading the file, returning `application/json`).
+- next_check: manual only (or any future H2/H3 batch after the human commits the file)
+- autonomous_action: none — SIAS will not invent a Team ID / appID / path; the empty-body file is invalid and would be fabrication
+- discovered_by: `scripts/sias-self-monitor.mjs` (H2 PR 2)
+- surfaces: `public/apple-app-site-association`, `src/app/apple-app-site-association/route.ts`
+
+## BLOCKED-012 (SIAS Self-Monitor H2 PR 2, 2026-07-23)
+
+- title: `public/humans.txt` missing + App Router fallback absent
+- type: human_required
+- status: parked
+- resume_signal: human authors `public/humans.txt` with the real site / team credit per the humans.txt convention, then commits. After that lands, SIAS adds `src/app/humans.txt/route.ts`.
+- next_check: manual only
+- autonomous_action: none — empty humans.txt would be fabrication of "we are here"
+- discovered_by: `scripts/sias-self-monitor.mjs` (H2 PR 2)
+- surfaces: `public/humans.txt`, `src/app/humans.txt/route.ts`
+
+## BLOCKED-013 (SIAS Self-Monitor H2 PR 2, 2026-07-23)
+
+- title: `public/.well-known/security.txt` missing + App Router fallback absent
+- type: human_required
+- status: parked
+- resume_signal: human authors `public/.well-known/security.txt` with a real `Contact:` (mailto or https URL) and `Expires:` per RFC 9116, then commits. After that lands, SIAS adds `src/app/.well-known/security.txt/route.ts`.
+- next_check: manual only
+- autonomous_action: none — empty security.txt is invalid per RFC 9116; an invented Contact is privacy / abuse-report-channel misdirection
+- discovered_by: `scripts/sias-self-monitor.mjs` (H2 PR 2)
+- surfaces: `public/.well-known/security.txt`, `src/app/.well-known/security.txt/route.ts`
+
+---
+
 ---
 
 ## Round-1 autonomous actions completed (parked back to A)

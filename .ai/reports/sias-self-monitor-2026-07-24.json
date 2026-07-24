@@ -1,0 +1,249 @@
+{
+  "scanner": "sias-self-monitor",
+  "version": "1.1.0",
+  "generated_at": "2026-07-24T02:30:06.216Z",
+  "report_date": "2026-07-24",
+  "previous_report_date": "2026-07-24",
+  "summary": {
+    "total_issues": 7,
+    "by_classification": {
+      "in_flight_in_sibling_pr": 1,
+      "human_required": 3,
+      "autonomous_possible_but_blocked_by_missing_content": 3
+    },
+    "by_severity": {
+      "info": 4,
+      "error": 3
+    },
+    "fresh_unclassified_count": 0,
+    "regression_count": 0,
+    "known_blocked_count": 6,
+    "autonomous_actionable_count": 0
+  },
+  "assets": [
+    {
+      "asset": "ads.txt",
+      "path": "public/ads.txt",
+      "app_route_path": "src/app/ads.txt/route.ts",
+      "description": "AdSense / ads.txt 1.0.2 declaration (Google crawler expects this at the site root).",
+      "blocked_registry_ref": null,
+      "issues": [
+        {
+          "surface": "asset",
+          "surface_ref": "ads.txt (App Router fallback)",
+          "severity": "info",
+          "code": "app_route_fallback_in_flight",
+          "message": "src/app/ads.txt/route.ts ships in PR #170 (sias/h2-ads-txt-hardening-20260723) (Draft, MERGEABLE). The current report is taken on the H2 PR 2 branch before that sibling merges; this issue is NOT a fresh regression.",
+          "classification": "in_flight_in_sibling_pr",
+          "resume_signal": "no action; route ships in PR #170 (sias/h2-ads-txt-hardening-20260723).",
+          "blocked_registry_ref": null
+        }
+      ]
+    },
+    {
+      "asset": "apple-app-site-association",
+      "path": "public/apple-app-site-association",
+      "app_route_path": "src/app/apple-app-site-association/route.ts",
+      "description": "iOS Universal Links manifest. SIAS cannot invent Apple Team ID / appID / paths.",
+      "blocked_registry_ref": "BLOCKED-011",
+      "issues": [
+        {
+          "surface": "asset",
+          "surface_ref": "apple-app-site-association",
+          "severity": "error",
+          "code": "asset_missing",
+          "message": "public/apple-app-site-association is missing. iOS Universal Links manifest. SIAS cannot invent Apple Team ID / appID / paths.",
+          "classification": "human_required",
+          "resume_signal": "human fills public/apple-app-site-association with real Apple Team ID, appID, and paths from the iOS team, then commits. SIAS then adds the App Router fallback route.",
+          "blocked_registry_ref": "BLOCKED-011"
+        },
+        {
+          "surface": "asset",
+          "surface_ref": "apple-app-site-association (App Router fallback)",
+          "severity": "info",
+          "code": "app_route_fallback_missing",
+          "message": "src/app/apple-app-site-association/route.ts does not exist. SIAS will add the App Router fallback ONLY after the underlying asset has real content (see BLOCKED-011).",
+          "classification": "autonomous_possible_but_blocked_by_missing_content",
+          "resume_signal": "human fills public/apple-app-site-association with real Apple Team ID, appID, and paths from the iOS team, then commits. SIAS then adds the App Router fallback route.",
+          "blocked_registry_ref": "BLOCKED-011"
+        }
+      ]
+    },
+    {
+      "asset": "humans.txt",
+      "path": "public/humans.txt",
+      "app_route_path": "src/app/humans.txt/route.ts",
+      "description": "humans.txt — credit / attribution. SIAS does not invent authorship or contributor list.",
+      "blocked_registry_ref": "BLOCKED-012",
+      "issues": [
+        {
+          "surface": "asset",
+          "surface_ref": "humans.txt",
+          "severity": "error",
+          "code": "asset_missing",
+          "message": "public/humans.txt is missing. humans.txt — credit / attribution. SIAS does not invent authorship or contributor list.",
+          "classification": "human_required",
+          "resume_signal": "human authors public/humans.txt with the real site / team credit (the humans.txt convention), then commits. SIAS then adds the App Router fallback route.",
+          "blocked_registry_ref": "BLOCKED-012"
+        },
+        {
+          "surface": "asset",
+          "surface_ref": "humans.txt (App Router fallback)",
+          "severity": "info",
+          "code": "app_route_fallback_missing",
+          "message": "src/app/humans.txt/route.ts does not exist. SIAS will add the App Router fallback ONLY after the underlying asset has real content (see BLOCKED-012).",
+          "classification": "autonomous_possible_but_blocked_by_missing_content",
+          "resume_signal": "human authors public/humans.txt with the real site / team credit (the humans.txt convention), then commits. SIAS then adds the App Router fallback route.",
+          "blocked_registry_ref": "BLOCKED-012"
+        }
+      ]
+    },
+    {
+      "asset": "security.txt",
+      "path": "public/.well-known/security.txt",
+      "app_route_path": "src/app/.well-known/security.txt/route.ts",
+      "description": "security.txt per RFC 9116. SIAS does not invent Contact / Expires values.",
+      "blocked_registry_ref": "BLOCKED-013",
+      "issues": [
+        {
+          "surface": "asset",
+          "surface_ref": "security.txt",
+          "severity": "error",
+          "code": "asset_missing",
+          "message": "public/.well-known/security.txt is missing. security.txt per RFC 9116. SIAS does not invent Contact / Expires values.",
+          "classification": "human_required",
+          "resume_signal": "human authors public/.well-known/security.txt with a real Contact (mailto or https URL) and Expires, then commits. SIAS then adds the App Router fallback route.",
+          "blocked_registry_ref": "BLOCKED-013"
+        },
+        {
+          "surface": "asset",
+          "surface_ref": "security.txt (App Router fallback)",
+          "severity": "info",
+          "code": "app_route_fallback_missing",
+          "message": "src/app/.well-known/security.txt/route.ts does not exist. SIAS will add the App Router fallback ONLY after the underlying asset has real content (see BLOCKED-013).",
+          "classification": "autonomous_possible_but_blocked_by_missing_content",
+          "resume_signal": "human authors public/.well-known/security.txt with a real Contact (mailto or https URL) and Expires, then commits. SIAS then adds the App Router fallback route.",
+          "blocked_registry_ref": "BLOCKED-013"
+        }
+      ]
+    }
+  ],
+  "contracts": [
+    {
+      "contract": "robots route",
+      "path": "src/app/robots.ts",
+      "issues": []
+    },
+    {
+      "contract": "sitemap route",
+      "path": "src/app/sitemap.ts",
+      "issues": []
+    },
+    {
+      "contract": "/api/version route",
+      "path": "src/app/api/version/route.ts",
+      "issues": []
+    },
+    {
+      "contract": "/api/health route",
+      "path": "src/app/api/health/route.ts",
+      "issues": []
+    }
+  ],
+  "issues": [
+    {
+      "surface": "asset",
+      "surface_ref": "ads.txt (App Router fallback)",
+      "severity": "info",
+      "code": "app_route_fallback_in_flight",
+      "message": "src/app/ads.txt/route.ts ships in PR #170 (sias/h2-ads-txt-hardening-20260723) (Draft, MERGEABLE). The current report is taken on the H2 PR 2 branch before that sibling merges; this issue is NOT a fresh regression.",
+      "classification": "in_flight_in_sibling_pr",
+      "resume_signal": "no action; route ships in PR #170 (sias/h2-ads-txt-hardening-20260723).",
+      "blocked_registry_ref": null,
+      "asset": "ads.txt",
+      "app_route_path": "src/app/ads.txt/route.ts"
+    },
+    {
+      "surface": "asset",
+      "surface_ref": "apple-app-site-association",
+      "severity": "error",
+      "code": "asset_missing",
+      "message": "public/apple-app-site-association is missing. iOS Universal Links manifest. SIAS cannot invent Apple Team ID / appID / paths.",
+      "classification": "human_required",
+      "resume_signal": "human fills public/apple-app-site-association with real Apple Team ID, appID, and paths from the iOS team, then commits. SIAS then adds the App Router fallback route.",
+      "blocked_registry_ref": "BLOCKED-011",
+      "asset": "apple-app-site-association",
+      "app_route_path": "src/app/apple-app-site-association/route.ts"
+    },
+    {
+      "surface": "asset",
+      "surface_ref": "apple-app-site-association (App Router fallback)",
+      "severity": "info",
+      "code": "app_route_fallback_missing",
+      "message": "src/app/apple-app-site-association/route.ts does not exist. SIAS will add the App Router fallback ONLY after the underlying asset has real content (see BLOCKED-011).",
+      "classification": "autonomous_possible_but_blocked_by_missing_content",
+      "resume_signal": "human fills public/apple-app-site-association with real Apple Team ID, appID, and paths from the iOS team, then commits. SIAS then adds the App Router fallback route.",
+      "blocked_registry_ref": "BLOCKED-011",
+      "asset": "apple-app-site-association",
+      "app_route_path": "src/app/apple-app-site-association/route.ts"
+    },
+    {
+      "surface": "asset",
+      "surface_ref": "humans.txt",
+      "severity": "error",
+      "code": "asset_missing",
+      "message": "public/humans.txt is missing. humans.txt — credit / attribution. SIAS does not invent authorship or contributor list.",
+      "classification": "human_required",
+      "resume_signal": "human authors public/humans.txt with the real site / team credit (the humans.txt convention), then commits. SIAS then adds the App Router fallback route.",
+      "blocked_registry_ref": "BLOCKED-012",
+      "asset": "humans.txt",
+      "app_route_path": "src/app/humans.txt/route.ts"
+    },
+    {
+      "surface": "asset",
+      "surface_ref": "humans.txt (App Router fallback)",
+      "severity": "info",
+      "code": "app_route_fallback_missing",
+      "message": "src/app/humans.txt/route.ts does not exist. SIAS will add the App Router fallback ONLY after the underlying asset has real content (see BLOCKED-012).",
+      "classification": "autonomous_possible_but_blocked_by_missing_content",
+      "resume_signal": "human authors public/humans.txt with the real site / team credit (the humans.txt convention), then commits. SIAS then adds the App Router fallback route.",
+      "blocked_registry_ref": "BLOCKED-012",
+      "asset": "humans.txt",
+      "app_route_path": "src/app/humans.txt/route.ts"
+    },
+    {
+      "surface": "asset",
+      "surface_ref": "security.txt",
+      "severity": "error",
+      "code": "asset_missing",
+      "message": "public/.well-known/security.txt is missing. security.txt per RFC 9116. SIAS does not invent Contact / Expires values.",
+      "classification": "human_required",
+      "resume_signal": "human authors public/.well-known/security.txt with a real Contact (mailto or https URL) and Expires, then commits. SIAS then adds the App Router fallback route.",
+      "blocked_registry_ref": "BLOCKED-013",
+      "asset": "security.txt",
+      "app_route_path": "src/app/.well-known/security.txt/route.ts"
+    },
+    {
+      "surface": "asset",
+      "surface_ref": "security.txt (App Router fallback)",
+      "severity": "info",
+      "code": "app_route_fallback_missing",
+      "message": "src/app/.well-known/security.txt/route.ts does not exist. SIAS will add the App Router fallback ONLY after the underlying asset has real content (see BLOCKED-013).",
+      "classification": "autonomous_possible_but_blocked_by_missing_content",
+      "resume_signal": "human authors public/.well-known/security.txt with a real Contact (mailto or https URL) and Expires, then commits. SIAS then adds the App Router fallback route.",
+      "blocked_registry_ref": "BLOCKED-013",
+      "asset": "security.txt",
+      "app_route_path": "src/app/.well-known/security.txt/route.ts"
+    }
+  ],
+  "fresh_unclassified": [],
+  "regressions": [],
+  "blocked_registry_ref": ".ai/SIAS_BLOCKED_REGISTRY_20260723.md",
+  "boundaries_respected": [
+    "source-side only (no live production fetch)",
+    "no .env / secrets read",
+    "no .github/workflows change",
+    "no fabrication (no empty placeholder files, no invented Contact / Team ID)",
+    "no commit (the self-monitor only writes to .ai/reports/ and .ai/SIAS_SELF_MONITOR_<date>.md)"
+  ]
+}
