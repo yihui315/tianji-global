@@ -3,19 +3,22 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /**
- * T0-007 (SIAS High-Throughput H3, 2026-07-24) regression contract.
+ * T0-007 (SIAS High-Throughput H3, 2026-07-24) + T0-010 (H4 parity
+ * extension) regression contract.
  *
  * Verifies the `/api/og` image generator and the call sites on the
- * privacy-critical surfaces (`/love-test` and `/daily-oracle`) do NOT
- * leak user input, birth data, or any other private fields into the
- * OpenGraph image that crawlers (Facebook, Twitter, LinkedIn, iMessage,
- * Slack, Discord) fetch when a user shares one of these pages.
+ * privacy-critical surfaces (`/love-test`, `/daily-oracle`,
+ * `/love-match`, `/synastry`, `/celebrity-match`) do NOT leak user
+ * input, birth data, or any other private fields into the OpenGraph
+ * image that crawlers (Facebook, Twitter, LinkedIn, iMessage, Slack,
+ * Discord) fetch when a user shares one of these pages.
  *
  * Background:
  *   - `/api/og/route.tsx` is the sole generator for social-card images.
  *   - It accepts ONLY three query params: `title`, `subtitle`, `module`.
- *   - All current call sites (love-test, daily-oracle, pricing, etc.)
- *     pass hard-coded constants — no user data is interpolated.
+ *   - All current call sites (love-test, daily-oracle, pricing,
+ *     love-match, synastry, celebrity-match, etc.) pass hard-coded
+ *     constants — no user data is interpolated.
  *   - Future regression: someone adding `?birthDate=...&name=...` to the
  *     OG URL would silently leak user data into a shared image that
  *     crawlers cache publicly.
@@ -51,6 +54,36 @@ const LOVE_TEST_PAGE = path.join(
 const DAILY_ORACLE_PAGE = path.join(
   REPO_ROOT,
   'src/app/(main)/daily-oracle/page.tsx'
+);
+
+const LOVE_MATCH_LAYOUT = path.join(
+  REPO_ROOT,
+  'src/app/(main)/love-match/layout.tsx'
+);
+
+const SYNASTRY_LAYOUT = path.join(
+  REPO_ROOT,
+  'src/app/(main)/synastry/layout.tsx'
+);
+
+const CELEBRITY_MATCH_LAYOUT = path.join(
+  REPO_ROOT,
+  'src/app/(main)/celebrity-match/layout.tsx'
+);
+
+const LOVE_MATCH_PAGE = path.join(
+  REPO_ROOT,
+  'src/app/(main)/love-match/page.tsx'
+);
+
+const SYNASTRY_PAGE = path.join(
+  REPO_ROOT,
+  'src/app/(main)/synastry/page.tsx'
+);
+
+const CELEBRITY_MATCH_PAGE = path.join(
+  REPO_ROOT,
+  'src/app/(main)/celebrity-match/page.tsx'
 );
 
 /** All query params that MUST NOT appear in any OG image URL on these pages. */
@@ -216,6 +249,9 @@ describe('privacy-safe OG image contract (T0-007)', () => {
       const dirs = [
         path.join(REPO_ROOT, 'src/app/(main)/love-test'),
         path.join(REPO_ROOT, 'src/app/(main)/daily-oracle'),
+        path.join(REPO_ROOT, 'src/app/(main)/love-match'),
+        path.join(REPO_ROOT, 'src/app/(main)/synastry'),
+        path.join(REPO_ROOT, 'src/app/(main)/celebrity-match'),
       ];
 
       for (const dir of dirs) {
@@ -241,6 +277,118 @@ describe('privacy-safe OG image contract (T0-007)', () => {
             ).toEqual([]);
           }
         }
+      }
+    });
+  });
+
+  describe('/love-match OG image URL (T0-010 parity extension)', () => {
+    it('layout.tsx OG_URL is a hard-coded constant with no user-data interpolation', () => {
+      expect(fs.existsSync(LOVE_MATCH_LAYOUT)).toBe(true);
+      const source = fs.readFileSync(LOVE_MATCH_LAYOUT, 'utf8');
+
+      expect(source).toContain(
+        '/api/og?title=Love+Compatibility&subtitle=BaZi+%2B+Western+Synastry&module=love'
+      );
+
+      // No template-string interpolation.
+      expect(source).not.toMatch(/OG_URL\s*=\s*[`'"][^`'"]*\$\{/);
+
+      const ogRelatedLines = source
+        .split('\n')
+        .filter((l) => l.includes('/api/og') || l.includes('OG_URL') || l.includes('images:'));
+      for (const line of ogRelatedLines) {
+        for (const param of FORBIDDEN_PARAMS) {
+          expect(line, `love-match OG line "${line.trim()}" contains forbidden param "${param}"`).not.toMatch(
+            new RegExp(`[?&]${param}=`)
+          );
+        }
+      }
+    });
+
+    it('page.tsx never constructs an /api/og URL with dynamic input', () => {
+      if (!fs.existsSync(LOVE_MATCH_PAGE)) return;
+      const source = fs.readFileSync(LOVE_MATCH_PAGE, 'utf8');
+
+      expect(source).not.toMatch(/fetch\([^)]*\/api\/og/);
+      expect(source).not.toMatch(/[`'"][^`'"]*\/api\/og\?\$\{/);
+      for (const param of FORBIDDEN_PARAMS) {
+        expect(source, `love-match page references forbidden OG param "${param}"`).not.toMatch(
+          new RegExp(`/api\\/og[^\\n]*${param}=`)
+        );
+      }
+    });
+  });
+
+  describe('/synastry OG image URL (T0-010 parity extension)', () => {
+    it('layout.tsx OG_URL is a hard-coded constant with no user-data interpolation', () => {
+      expect(fs.existsSync(SYNASTRY_LAYOUT)).toBe(true);
+      const source = fs.readFileSync(SYNASTRY_LAYOUT, 'utf8');
+
+      expect(source).toContain(
+        '/api/og?title=Relationship+Synastry&subtitle=Aspects+%C2%B7+Composite+%C2%B7+Cross-tradition&module=synastry'
+      );
+
+      expect(source).not.toMatch(/OG_URL\s*=\s*[`'"][^`'"]*\$\{/);
+
+      const ogRelatedLines = source
+        .split('\n')
+        .filter((l) => l.includes('/api/og') || l.includes('OG_URL') || l.includes('images:'));
+      for (const line of ogRelatedLines) {
+        for (const param of FORBIDDEN_PARAMS) {
+          expect(line, `synastry OG line "${line.trim()}" contains forbidden param "${param}"`).not.toMatch(
+            new RegExp(`[?&]${param}=`)
+          );
+        }
+      }
+    });
+
+    it('page.tsx never constructs an /api/og URL with dynamic input', () => {
+      if (!fs.existsSync(SYNASTRY_PAGE)) return;
+      const source = fs.readFileSync(SYNASTRY_PAGE, 'utf8');
+
+      expect(source).not.toMatch(/fetch\([^)]*\/api\/og/);
+      expect(source).not.toMatch(/[`'"][^`'"]*\/api\/og\?\$\{/);
+      for (const param of FORBIDDEN_PARAMS) {
+        expect(source, `synastry page references forbidden OG param "${param}"`).not.toMatch(
+          new RegExp(`/api\\/og[^\\n]*${param}=`)
+        );
+      }
+    });
+  });
+
+  describe('/celebrity-match OG image URL (T0-010 parity extension)', () => {
+    it('layout.tsx OG_URL is a hard-coded constant with no user-data interpolation', () => {
+      expect(fs.existsSync(CELEBRITY_MATCH_LAYOUT)).toBe(true);
+      const source = fs.readFileSync(CELEBRITY_MATCH_LAYOUT, 'utf8');
+
+      expect(source).toContain(
+        '/api/og?title=Celebrity+Compatibility&subtitle=BaZi+%2B+Synastry+overlay&module=love'
+      );
+
+      expect(source).not.toMatch(/OG_URL\s*=\s*[`'"][^`'"]*\$\{/);
+
+      const ogRelatedLines = source
+        .split('\n')
+        .filter((l) => l.includes('/api/og') || l.includes('OG_URL') || l.includes('images:'));
+      for (const line of ogRelatedLines) {
+        for (const param of FORBIDDEN_PARAMS) {
+          expect(line, `celebrity-match OG line "${line.trim()}" contains forbidden param "${param}"`).not.toMatch(
+            new RegExp(`[?&]${param}=`)
+          );
+        }
+      }
+    });
+
+    it('page.tsx never constructs an /api/og URL with dynamic input', () => {
+      if (!fs.existsSync(CELEBRITY_MATCH_PAGE)) return;
+      const source = fs.readFileSync(CELEBRITY_MATCH_PAGE, 'utf8');
+
+      expect(source).not.toMatch(/fetch\([^)]*\/api\/og/);
+      expect(source).not.toMatch(/[`'"][^`'"]*\/api\/og\?\$\{/);
+      for (const param of FORBIDDEN_PARAMS) {
+        expect(source, `celebrity-match page references forbidden OG param "${param}"`).not.toMatch(
+          new RegExp(`/api\\/og[^\\n]*${param}=`)
+        );
       }
     });
   });

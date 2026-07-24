@@ -49,7 +49,12 @@ describe('pricing CTA UTM propagation (T0-005)', () => {
     // The href() wrapper must wrap buildUtmHref with the pricing surface
     // BEFORE the withLanguageParam layer so the lang param stays at the
     // end of the query string (matches the H1 daily-oracle pattern).
-    expect(source).toMatch(/const\s+href\s*=\s*\(path:\s*string\)\s*=>\s*[\s\S]{0,200}?buildUtmHref\([\s\S]{0,80}?source:\s*['"]pricing['"][\s\S]{0,40}?\)/);
+    // The `source` value is provided by the canonical constant
+    // PRICING_UTM_SOURCE from '@/lib/analytics/pricing-surface' (H4 T0-012)
+    // rather than a bare 'pricing' string literal.
+    expect(source).toMatch(
+      /const\s+href\s*=\s*\(path:\s*string\)\s*=>\s*[\s\S]{0,200}?buildUtmHref\([\s\S]{0,80}?source:\s*PRICING_UTM_SOURCE[\s\S]{0,40}?\)/
+    );
     expect(source).toMatch(/withLanguageParam\(buildUtmHref/);
   });
 
