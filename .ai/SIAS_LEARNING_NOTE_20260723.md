@@ -65,3 +65,44 @@ Adding a route to `localizedPublicRoutes` automatically registers it in `/sitema
 - Replicate the pattern for any other `'use client'` funnel page (T0-002 = `/love-test`, T0-008 = `/relationship/new`).
 - The validation gate is small and predictable: typecheck + lint + a tiny contract test + sitemap body grep.
 - The risk surface is bounded to "metadata not picked up by Next" — easy to spot in the build output.
+## Merge Train Hold — 2026-07-24
+
+### Pattern
+
+When a SIAS round opens multiple autonomous-safe Draft PRs in parallel, the next phase is NOT a new round. It is a **merge train hold** — a deliberate pause during which:
+
+1. The agent does NOT write new code.
+2. The agent does NOT start a new H3 / H4 / Run.
+3. The agent marks each Draft PR Ready for review (Draft → Ready is not self-approval and does not bypass branch protection).
+4. The agent writes `.ai/MERGE_TRAIN_HOLD_<DATE>.md` with the merge order, the per-PR checklist, and the scope of "permanent approval" if one exists.
+5. The user Approves + Squash-merges + Deletes each branch in order.
+6. Only AFTER the user confirms all merges are done, the agent runs `git fetch && git checkout main && git reset --hard origin/main`, deletes local stale branches, and writes `.ai/MERGE_TRAIN_FINAL_<DATE>.md`.
+
+### Hard rule: agent never self-merges
+
+This was already in the user-profile hard rule, but the merge train reinforces it concretely:
+
+- `gh pr merge --admin` would bypass branch protection. NEVER.
+- `gh pr merge --auto` with a self-supplied approval token is a self-merge. NEVER.
+- The agent can mark a Draft PR Ready for review (this is not approval). It cannot Approve. It cannot merge.
+
+### Permanent-approval scope (user ruling 2026-07-24)
+
+A "permanent approval" — if any is ever granted by the user — applies ONLY to source-safe / test / docs / Draft PR operations. It does NOT cover:
+
+- production deploy
+- live Stripe
+- production Supabase mutation
+- real paid smoke
+- secrets / .env
+- .github/workflows/*
+- STAGING-004
+- 154.217.241.238
+- auto merge
+- self-approve / self-merge
+
+When a task touches any of the above, escalate to the user for explicit, named, in-the-moment approval.
+
+### Why this matters
+
+A merge train can stack 4–10 PRs without conflict only if the agent refuses to write code while the train is running. The moment the agent starts a new round, the next round's `git fetch origin` will pull partial merges and the local working tree will drift. The discipline is: hold, wait for the user, sync once, then continue.
