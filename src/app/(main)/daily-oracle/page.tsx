@@ -22,9 +22,14 @@ import {
   type DailyLoveOracleMood,
 } from '@/lib/daily-oracle';
 import { withLanguageParam } from '@/lib/language-routing';
+import { buildUtmHref } from '@/lib/analytics/utm-params';
 
-const LOVE_TEST_HREF = '/love-test?source=daily_oracle';
-const LOVE_READING_HREF = '/relationship/new?source=daily_oracle';
+const LOVE_TEST_HREF = buildUtmHref('/love-test?source=daily_oracle', {
+  source: 'daily_oracle',
+});
+const LOVE_READING_HREF = buildUtmHref('/relationship/new?source=daily_oracle', {
+  source: 'daily_oracle',
+});
 
 function href(path: string) {
   return withLanguageParam(path, 'en');
