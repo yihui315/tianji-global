@@ -8,6 +8,7 @@ import { Check, CreditCard, FileText, History, Lock, Sparkles, Star, Zap } from 
 import { PLANS, type PlanId } from '@/lib/stripe';
 import { useSyncedLanguage } from '@/hooks/useSyncedLanguage';
 import { withLanguageParam } from '@/lib/language-routing';
+import { buildUtmHref } from '@/lib/analytics/utm-params';
 import { trackRevenueFunnelEvent } from '@/lib/analytics/funnel-events';
 import { PRODUCT_CATALOG } from '@/config/products';
 import {
@@ -249,7 +250,13 @@ export default function PricingPage() {
   const afterUnlockTitle = 'afterUnlockTitle' in copy ? copy.afterUnlockTitle : pricingCopy.en.afterUnlockTitle;
   const afterUnlock = 'afterUnlock' in copy ? copy.afterUnlock : pricingCopy.en.afterUnlock;
   const isAuthenticated = !!session?.user;
-  const href = (path: string) => withLanguageParam(path, language);
+  // Mirror H1 daily-oracle pattern: thread a deterministic UTM triplet through
+// every pricing-page CTA so the in-product traffic classifier can attribute
+// the downstream funnel events (pricing_viewed → unlock_click → login_started)
+// to the surface that started the visit. Self-links (/pricing) still get the
+// UTM triplet — they are dedup'd downstream by the classifier, not here.
+const href = (path: string) =>
+  withLanguageParam(buildUtmHref(path, { source: 'pricing' }), language);
 
   useEffect(() => {
     void trackRevenueFunnelEvent('pricing_viewed', {
