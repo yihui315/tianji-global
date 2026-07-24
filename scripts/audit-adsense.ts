@@ -181,6 +181,47 @@ for (const file of sourceFiles) {
   }
 }
 
+log('Checking ads.txt source-side presence, format, and App Router fallback...');
+const adsTxtPath = 'public/ads.txt';
+let adsTxtBody = '';
+try {
+  adsTxtBody = readFileSync(join(REPO_ROOT, adsTxtPath), 'utf8');
+} catch (err) {
+  fail(`${adsTxtPath} is missing; AdSense requires ads.txt at the site root.`);
+}
+if (adsTxtBody) {
+  const lines = adsTxtBody
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith('#'));
+  if (lines.length === 0) {
+    fail(`${adsTxtPath} has no non-comment records; AdSense crawler will report "no entries".`);
+  }
+  // ads.txt 1.0.2 spec: each record line is comma-separated fields. The first
+  // record MUST contain a domain, a publisher account id, and a relationship
+  // (DIRECT or RESELLER).
+  const firstRecord = lines[0] ?? '';
+  const firstFields = firstRecord.split(',').map((field) => field.trim());
+  if (firstFields.length < 3) {
+    fail(`${adsTxtPath} first record has ${firstFields.length} field(s); AdSense spec requires at least 3 (domain, publisher, relationship).`);
+  }
+  if (!/^[a-z0-9.-]+$/i.test(firstFields[0] ?? '')) {
+    fail(`${adsTxtPath} first record domain is invalid: "${firstFields[0] ?? ''}".`);
+  }
+  const publisherId = firstFields[1] ?? '';
+  if (!/^pub-\d+$/i.test(publisherId)) {
+    fail(`${adsTxtPath} first record publisher id is invalid: "${publisherId}" (expected pub-<digits>).`);
+  }
+  if (!/^(DIRECT|RESELLER)$/i.test(firstFields[2] ?? '')) {
+    fail(`${adsTxtPath} first record relationship is invalid: "${firstFields[2] ?? ''}" (expected DIRECT or RESELLER).`);
+  }
+}
+requireTokens('src/app/ads.txt/route.ts', [
+  'GET',
+  'Content-Type',
+  'text/plain',
+]);
+
 log('Checking release workflow wiring...');
 requireTokens('package.json', ['npm run audit:adsense']);
 const ciWorkflow = read('.github/workflows/ci.yml');
