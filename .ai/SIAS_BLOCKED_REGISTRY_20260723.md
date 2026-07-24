@@ -141,6 +141,17 @@ autonomous_action: none
 
 ---
 
+## BLOCKED-014 (SIAS H3 T0-008 audit, 2026-07-24)
+
+- title: `/about` has full SEO + OG layout but is NOT registered in `localizedPublicRoutes`
+- type: design_decision_required
+- status: parked
+- resume_signal: human decides whether to (a) add `{ path: '/about', changeFrequency: 'monthly', priority: 0.6 }` to `localizedPublicRoutes` in `src/lib/i18n.ts` and re-run the T0-008 coverage audit, or (b) keep the current in-product-only design (crawlers reach /about via internal links from /, /pricing, /legal/privacy etc., but it is not advertised in the public sitemap)
+- next_check: manual only (or any future H3 / H4 batch after the human decision)
+- autonomous_action: none — adding a route to `localizedPublicRoutes` changes the public sitemap contract and surfaces `/about` in `/sitemap.xml`; SIAS cannot make a unilateral decision about a public SEO surface
+- discovered_by: `src/__tests__/localized-public-routes-coverage.test.ts` (H3 T0-008)
+- surfaces: `src/app/(main)/about/layout.tsx`, `src/app/(main)/about/page.tsx`, `src/lib/i18n.ts#localizedPublicRoutes`
+
 ---
 
 ## Round-1 autonomous actions completed (parked back to A)

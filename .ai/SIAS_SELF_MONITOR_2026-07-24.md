@@ -1,10 +1,10 @@
 # SIAS Self-Monitor — 2026-07-24
 
-Generated at `2026-07-24T02:30:06.216Z`. Previous report: `2026-07-24`.
+Generated at `2026-07-24T04:43:46.147Z`. Previous report: `2026-07-24`.
 
 ## Summary
 
-- Total issues: **7**
+- Total issues: **6**
 - Known-blocked (parked in `.ai/SIAS_BLOCKED_REGISTRY_20260723.md`): **6**
 - Autonomous-actionable: **0**
 - Fresh unclassified (NOT in BLOCKED REGISTRY, NOT parked): **0**
@@ -12,17 +12,10 @@ Generated at `2026-07-24T02:30:06.216Z`. Previous report: `2026-07-24`.
 
 ## Classification counts
 
-- `in_flight_in_sibling_pr`: 1
 - `human_required`: 3
 - `autonomous_possible_but_blocked_by_missing_content`: 3
 
 ## Discovered items
-
-### ads.txt
-- Path: `public/ads.txt`
-- App Router fallback: `src/app/ads.txt/route.ts`
-  - [info] `app_route_fallback_in_flight` (in_flight_in_sibling_pr): src/app/ads.txt/route.ts ships in PR #170 (sias/h2-ads-txt-hardening-20260723) (Draft, MERGEABLE). The current report is taken on the H2 PR 2 branch before that sibling merges; this issue is NOT a fresh regression.
-    - resume_signal: no action; route ships in PR #170 (sias/h2-ads-txt-hardening-20260723).
 
 ### apple-app-site-association
 - Path: `public/apple-app-site-association`
