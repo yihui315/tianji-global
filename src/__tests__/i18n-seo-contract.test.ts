@@ -71,9 +71,9 @@ describe('localized SEO routing contract', () => {
     expect(pages).toContain('Discover patterns.');
     expect(pages).toContain('Make clearer relationship choices.');
     expect(pages).toContain('爱，是唯一能改变命运的变量。');
-    expect(pages).toContain('permanentRedirect(`/pricing?lang=');
-    expect(pages).toContain('permanentRedirect(`/legal/privacy?lang=');
-    expect(pages).toContain('permanentRedirect(`/legal/terms?lang=');
+    expect(pages).toContain('permanentRedirect(buildRedirectHref(`/pricing?lang=');
+    expect(pages).toContain('permanentRedirect(buildRedirectHref(`/legal/privacy?lang=');
+    expect(pages).toContain('permanentRedirect(buildRedirectHref(`/legal/terms?lang=');
     expect(pages).not.toMatch(/个人爱情报告|关系合盘报告|礼物报告|\$4\.99|\$12\.99/);
     expect(pages).not.toContain('TianJi Plus monthly');
     expect(pages).not.toMatch(/涓|鐖|绉|鍏崇郴|瑙ｈ/);
