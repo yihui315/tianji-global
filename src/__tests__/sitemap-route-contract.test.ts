@@ -56,7 +56,7 @@ describe('locale-alias redirect pages still funnel to canonical legal routes', (
     );
     const source = fs.readFileSync(file, 'utf8');
 
-    expect(source).toContain('permanentRedirect(`/legal/privacy?lang=');
+    expect(source).toContain('permanentRedirect(buildRedirectHref(`/legal/privacy?lang=');
     expect(source).toContain("locale === 'zh-CN' ? 'zh' : 'en'");
   });
 
@@ -69,7 +69,7 @@ describe('locale-alias redirect pages still funnel to canonical legal routes', (
     );
     const source = fs.readFileSync(file, 'utf8');
 
-    expect(source).toContain('permanentRedirect(`/legal/terms?lang=');
+    expect(source).toContain('permanentRedirect(buildRedirectHref(`/legal/terms?lang=');
     expect(source).toContain("locale === 'zh-CN' ? 'zh' : 'en'");
   });
 });

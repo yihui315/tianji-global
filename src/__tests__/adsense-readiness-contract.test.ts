@@ -89,9 +89,9 @@ describe('AdSense source readiness contract', () => {
     expect(routeConfig).toContain("{ path: '/legal/privacy'");
     expect(routeConfig).toContain("{ path: '/legal/terms'");
 
-    expect(read('src/app/[locale]/pricing/page.tsx')).toContain('permanentRedirect(`/pricing?lang=');
-    expect(read('src/app/[locale]/privacy/page.tsx')).toContain('permanentRedirect(`/legal/privacy?lang=');
-    expect(read('src/app/[locale]/terms/page.tsx')).toContain('permanentRedirect(`/legal/terms?lang=');
+    expect(read('src/app/[locale]/pricing/page.tsx')).toContain('permanentRedirect(buildRedirectHref(`/pricing?lang=');
+    expect(read('src/app/[locale]/privacy/page.tsx')).toContain('permanentRedirect(buildRedirectHref(`/legal/privacy?lang=');
+    expect(read('src/app/[locale]/terms/page.tsx')).toContain('permanentRedirect(buildRedirectHref(`/legal/terms?lang=');
   });
 
   it('keeps AdSense audit in the release gate and Vercel out of CI', () => {

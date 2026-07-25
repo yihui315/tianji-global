@@ -1,17 +1,24 @@
 import { notFound, permanentRedirect } from 'next/navigation';
+import { buildRedirectHref } from '@/lib/analytics/redirect-query';
 import { isSupportedLocale, locales } from '@/lib/i18n';
 
 type PageParams = {
   params: Promise<{ locale: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-export default async function LocalizedPricingRedirect({ params }: PageParams) {
+export default async function LocalizedPricingRedirect({ params, searchParams }: PageParams) {
   const { locale } = await params;
   if (!isSupportedLocale(locale)) notFound();
-
-  permanentRedirect(`/pricing?lang=${locale === 'zh-CN' ? 'zh' : 'en'}`);
+  // Destination locale is fixed at /pricing?lang=<locale>. Only the
+  // strict UTM whitelist (utm_source/medium/campaign/content/term) is
+  // forwarded alongside the canonical lang hint; every other key — token,
+  // userId, name, birthDate, etc. — is dropped by `redirect-query`.
+  const query = searchParams ? await searchParams : {};
+  const lang = locale === 'zh-CN' ? 'zh' : 'en';
+  permanentRedirect(buildRedirectHref(`/pricing?lang=${lang}`, query));
 }
