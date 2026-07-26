@@ -13,6 +13,7 @@
 | A1 | main working tree clean | yes | yes | **PASS** |
 | A2 | target commit 精确 | `42eae7c4...` | `42eae7c4af4859fd579721591093eb14f530bc13` | **PASS** |
 | A3 | CI 成功（最近 main push） | success | 30xxxxx 编号 SUCCESS（待最终确认） | **CONDITIONAL** |
+| A11 | SSH alias `tianji-love-staging` exists & resolves | yes | **ABSENT** — `~/.ssh/config` does not exist; `ssh -G` falls through to system defaults; `known_hosts` has no tianji entry (only PILOT-001 `154.217.241.238`); shell history empty. See Readiness Review §10. | **FAIL** |
 | A4 | H7 Final Gate | GO | GO (PR #182 MERGED) | **PASS** |
 | A5 | Production baseline 已记录 | yes | partial（macOS 端无 SSH，仅 HTTP 基线） | **CONDITIONAL** |
 | A6 | Production env 变量名就绪 | yes | schema 已扫描，实际 .env 未读 | **CONDITIONAL** |
@@ -62,6 +63,7 @@ PRODUCTION_READINESS = NO_GO
 > **Revision history:**
 > - 2026-07-26 (initial): `CONDITIONAL_GO`
 > - 2026-07-26 (SSH preflight): **revised to `NO_GO`** because agent has no SSH credentials for the TianJi Love production server and cannot satisfy any of the 10 Gate A prerequisites.
+> - 2026-07-26 (SSH alias recovery, TASK_ID=TIANJI-PRODUCTION-SSH-ALIAS-RECOVERY-003): **NO_GO confirmed and hardened.** Re-verified on current machine that `tianji-love-staging` SSH alias is **ABSENT** (no `~/.ssh/config`, no `known_hosts` tianji entry, no shell history). Prior compact record claiming the alias resolved to `ser8221021417/tianji-prod` is **not reproducible**. Added Gate A row A11 = FAIL. Verdict unchanged `NO_GO`; release remains blocked on (a) human SSH alias configuration on agent's machine, or (b) human manually running the §8 check-list and pasting results.
 
 **前置条件 (none yet satisfied)**:
 1. 人工 SSH 完成 `TIANJI_LOVE_PRODUCTION_READINESS_REVIEW_20260726.md` §8 检查清单

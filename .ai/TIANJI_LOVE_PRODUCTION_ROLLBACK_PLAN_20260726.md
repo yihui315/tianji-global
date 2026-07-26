@@ -6,6 +6,8 @@
 > **Rollback policy:** atomic symlink swap + PM2 reload; **never** modify `/opt/tianji-global` in place.
 
 > **2026-07-26 SSH preflight note:** The rollback anchor (previous production release path) was supposed to be filled in §1 before any release runs. It is currently `UNKNOWN` because the SSH preflight could not run. Any deploy attempt before §1 is populated must be aborted.
+>
+> **2026-07-26 §10 follow-up (TASK_ID=TIANJI-PRODUCTION-SSH-ALIAS-RECOVERY-003):** Attempted to recover the `tianji-love-staging` SSH alias. **Confirmed absent** on current machine: no `~/.ssh/config`, no `known_hosts` entry for tianji, no shell history of prior tianji ssh. Prior compact record claiming the alias resolved to `ser8221021417/tianji-prod` is not reproducible. Rollback anchor therefore remains `UNKNOWN`; abort any deploy attempt. See `TIANJI_LOVE_PRODUCTION_READINESS_REVIEW_20260726.md` §10 for full audit.
 
 ---
 

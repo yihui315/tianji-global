@@ -9,6 +9,13 @@
 > **Production URL:** https://tianji.love
 
 > **2026-07-26 revision note:** All four assumptions above (root / port / PM2 name / URL) come from prior conversation evidence, not from this run's SSH preflight. A human SSH operator must verify them before any release executes.
+>
+> **2026-07-26 §10 follow-up (TASK_ID=TIANJI-PRODUCTION-SSH-ALIAS-RECOVERY-003):** Confirmed on current machine:
+> - `~/.ssh/config` does **not exist** — `ssh -G tianji-love-staging` falls through to system defaults and resolves to literal hostname (DNS NXDOMAIN).
+> - `~/.ssh/known_hosts` contains **only** `154.217.241.238` (PILOT-001 pdftool host, blocked in earlier evidence); **no tianji / ser8221021417 / 186.244.244.81 host key**.
+> - `~/.zsh_history` and `~/.bash_history` have no tianji ssh commands.
+>
+> Prior compact record claiming `ssh -G tianji-love-staging → hostname=ser8221021417, user=tianji-prod` is **not reproducible** on this machine. Possible explanations in `TIANJI_LOVE_PRODUCTION_READINESS_REVIEW_20260726.md` §10.2. All four assumptions above therefore remain **UNVERIFIED**. Verdict unchanged: `NO_GO`.
 
 ---
 

@@ -333,6 +333,75 @@ Until then, **no production deploy, no recovery deploy, no H8, no P3 fix, no fur
 
 ---
 
-生成时间: 2026-07-26
+## 10. SSH Alias Recovery Attempt — 2026-07-26 (TASK_ID=TIANJI-PRODUCTION-SSH-ALIAS-RECOVERY-003)
+
+> **Status: SSH_ALIAS=ABSENT** — agent did not attempt any SSH connection.
+> **Mode:** STRICT_READ_ONLY (no SSH / no Git mutation / no PM2 / no systemd write).
+> **Triggered by:** historical record claimed `ssh -G tianji-love-staging` previously returned `hostname=ser8221021417, user=tianji-prod, port=22`. Verified against current machine.
+
+### 10.1 Re-verification of SSH alias state
+
+| Probe | Command | Result |
+|------|---------|--------|
+| `~/.ssh/config` existence | `ls ~/.ssh/config` | **ABSENT** |
+| `/etc/ssh/ssh_config.d/` contents | `ls /etc/ssh/ssh_config.d/` | only `100-macos.conf` (system defaults only) |
+| Default config resolution | `ssh -G tianji-love-staging` | user=`yihui`, hostname=`tianji-love-staging` (literal, not aliased), port=22 — **all system defaults; no alias match** |
+| DNS lookup | `ssh tianji-love-staging` | `Could not resolve hostname tianji-love-staging: nodename nor servname provided, or not known` |
+| Explicit `-F ~/.ssh/config` | `ssh -F ~/.ssh/config -G tianji-love-staging` | `Can't open user config file /Users/yihui/.ssh/config: No such file or directory` |
+| `known_hosts` tianji entries | `grep known_hosts for tianji / 186.244 / ser822 / 154.217` | **only `154.217.241.238`** (PILOT-001 pdftool work-host, marked SSH-blocked in earlier evidence); **no tianji / ser8221021417 / 186.244.244.81 entry** |
+| Shell history | `~/.zsh_history`, `~/.bash_history` grep tianji+ssh | **empty** — no prior tianji ssh commands recorded |
+| Public keys on machine | `~/.ssh/*.pub` | `id_ed25519` (Mar 4), `id_rsa` (Apr 23), `pdftool_prod_ed25519` (Jul 25, PILOT-001 only) — **none mapped to tianji** |
+
+### 10.2 Conflict with prior historical record
+
+Earlier compact evidence referenced `tianji-love-staging` alias with `hostname=ser8221021417`, `user=tianji-prod`, `port=22`, identity `~/.ssh/id_rsa`. **This record cannot be reproduced on the current machine.**
+
+Possible explanations (none agent can verify without human confirmation):
+1. The alias was set up in a different shell environment / different machine / expired SSH config
+2. The historical record was incorrect (memory pollution)
+3. The alias lives in an `Include`-only config file the agent has not enumerated
+
+### 10.3 Agent decision
+
+Per task §2 rule: *if alias absent → stop and report SSH_ALIAS=ABSENT.* Per task §3 rule: *forbidden from attempting connection to unknown hosts or trying random keys/usernames.* Per task §1 hard rule: *PRODUCTION_MUTATION=FORBIDDEN.*
+
+Agent **stopped** at §2 and did NOT proceed to §3-§11. No SSH attempt was made. No PM2/systemd/Nginx env read attempted. No Git mutation. No PR body update beyond what this file amendment enables.
+
+### 10.4 Final status
+
+```
+SSH_ALIAS                    = ABSENT
+SSH_HANDSHAKE                = NOT_ATTEMPTED
+ACTIVE_RUNTIME               = UNKNOWN
+ACTIVE_PORT                  = UNKNOWN
+PRODUCTION_COMMIT            = UNKNOWN
+PRODUCTION_WORKTREE          = UNKNOWN
+PRODUCTION_CWD               = UNKNOWN (assumed /opt/tianji-global, unverified)
+CURRENT_RELEASE_PATH         = UNKNOWN
+PREVIOUS_RELEASE_PATH        = UNKNOWN
+ENV_NAME_AUDIT               = UNKNOWN (src/ schema only)
+ROLLBACK_ANCHOR_READY        = NO
+PRODUCTION_READINESS         = NO_GO  (unchanged from §9.4)
+PRODUCTION_DEPLOY            = HOLD
+PR_183                       = DRAFT
+H8                           = HOLD
+P3_CANONICAL                 = BACKLOG
+```
+
+### 10.5 To unblock NO_GO (updated from §9.5)
+
+A human operator with working SSH access to the TianJi Love production server must:
+
+1. **Establish the SSH alias on the agent's machine first.** Without this, agent cannot run §3-§11 of the SSH alias recovery task. Either:
+   - Add the alias to `~/.ssh/config` (with hostname, user, port, identity file), AND
+   - Add the production server's host key to `~/.ssh/known_hosts` (via `ssh-keyscan` once or first interactive SSH accept).
+2. Then re-issue `TASK_ID=TIANJI-PRODUCTION-SSH-ALIAS-RECOVERY-003` (or proceed to §3 of the original brief) and let the agent fill in §9.3 / §10.4 fields.
+3. OR: manually paste the §8 check-list outputs into §9.3 here.
+
+Until either path is taken, **no production deploy, no recovery deploy, no H8, no P3 fix, no further automation on this branch**.
+
+---
+
+生成时间: 2026-07-26 (initial) / 2026-07-26 §10 (SSH alias recovery attempt)
 执行 agent: Hermes
-下一动作: 等待人工 SSH 核验 + 单独发布授权
+下一动作: 等待人工提供 SSH alias 配置 OR 人工 SSH 核验 + 单独发布授权
