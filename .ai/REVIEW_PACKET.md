@@ -3,7 +3,7 @@
 ## H7 Browser UAT + self-evolution evidence archive (2026-07-25) — PR #182 (DRAFT, awaiting non-author reviewer)
 
 - Task ID: `TIANJI-H7-FOLLOWUP-SELF-EVOLUTION-001`.
-- Working tree: branch `docs/sias-h7-evidence-20260725` from `origin/main@c2631997` (post-PR #181 squash merge). Evidence archive committed and pushed as `f5a31020a019b00ead67e589096f516f5bae2528`; PR #182 remains OPEN DRAFT pending non-author review.
+- Working tree: branch `docs/sias-h7-evidence-20260725` from `origin/main@c2631997` (post-PR #181 squash merge). Evidence archive committed and pushed; PR #182 remains OPEN DRAFT pending non-author review.
 - Goal: complete H7 staging follow-up (Browser UAT + triage + self-evolution Skills + final gate) and archive evidence to the existing PR #182. Production deploy and H8 implementation remain **HOLD**.
 - What changed:
   - New files (all under `.ai/`, no production source touched):
@@ -31,11 +31,10 @@
 - Risks: PR #182 depends on a non-author reviewer to Approve + Squash-merge + delete branch. Production deploy and H8 implementation explicitly **HOLD** — do NOT trigger until human explicitly approves.
 - Detailed evidence: see `.ai/TIANJI_LOVE_H7_BROWSER_UAT_20260725.md`, `.ai/TIANJI_LOVE_H7_FINAL_UAT_GATE_20260725.md`, `.ai/TIANJI_LOVE_H7_SELF_EVOLUTION_REVIEW_20260725.md`, `.ai/evidence/h7-browser-uat-20260725/`, `.ai/H7_GATE_INDEX_20260725.md`.
 - Archive status (reconciled 2026-07-25):
-  - **Head commit:** `f5a31020a019b00ead67e589096f516f5bae2528`
-  - **Changed files:** 16
-  - **Diff:** +1134 / -0
-  - **Scope:** `.ai/` only
-  - **CI/CD run `30181119677`:** SUCCESS
+  - **Evidence archive content commit:** `f5a31020a019b00ead67e589096f516f5bae2528` (the commit that introduced all H7 Browser UAT evidence, Skills, screenshots, and the original Gate Index + REVIEW_PACKET entries).
+  - **Documentation reconciliation commit:** `6d605674b2a4285bd9a8f175800c87040382c625` (the commit that replaced mutable HEAD/CI/diff references with the canonical statement "see PR #182 metadata").
+  - **Current PR head / latest CI run / final diff:** Authoritative source is GitHub PR #182 metadata. Do **not** hard-code mutable PR state in this tracked document.
+  - **Archive scope (immutable):** 16 files, all under `.ai/`.
 
 ## Revenue Autopilot v1 launch status (2026-07-23)
 

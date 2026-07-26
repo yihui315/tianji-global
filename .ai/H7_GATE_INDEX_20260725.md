@@ -25,7 +25,7 @@ This is the latest Gate Index for the TianJi Love H7 follow-up batch. It superse
 | PR | Title | Branch | State | Commit |
 |----|-------|--------|-------|--------|
 | #181 | `fix(analytics): preserve UTM parameters across all alias redirects (H7)` | `sias/high-throughput-h7-20260725` | **MERGED** (squash) | `c26319976ac1cef6b96b4e4896d9cd0e78706cde` |
-| #182 | `docs(ai): record H7 browser UAT, clean-log, and self-evolution evidence` | `docs/sias-h7-evidence-20260725` | **OPEN DRAFT** (awaiting non-author reviewer) | `f5a31020a019b00ead67e589096f516f5bae2528` |
+| #182 | `docs(ai): record H7 browser UAT, clean-log, and self-evolution evidence` | `docs/sias-h7-evidence-20260725` | **OPEN DRAFT** (awaiting non-author reviewer) | see PR #182 head metadata |
 
 ## Backlog (non-blocking)
 
@@ -72,11 +72,27 @@ Next human-only action: review and merge PR #182 (Approve + Squash-merge + delet
 
 ## PR #182 archive snapshot (2026-07-25 reconcile)
 
-- **Head commit:** `f5a31020a019b00ead67e589096f516f5bae2528`
-- **Branch:** `docs/sias-h7-evidence-20260725`
-- **Changed files:** 16
-- **Diff:** +1134 / -0
-- **Scope:** `.ai/` only
-- **CI run:** `30181119677` — conclusion `success` — head SHA `f5a31020a019b00ead67e589096f516f5bae2528`
-- **Note:** `.ai/SIAS_HIGH_THROUGHPUT_H7_20260725.md` is part of this archive (originally introduced by PR #182's initial evidence commit `1f1e04a` and still present on the PR head branch).
-- **Reviewer-only action:** Approve + Squash-merge + delete branch from GitHub UI. Agent will NOT self-approve, self-merge, or enable auto-merge.
+### Immutable anchors (do not change with subsequent commits)
+
+- **Evidence archive content commit:** `f5a31020a019b00ead67e589096f516f5bae2528`
+  - This is the commit that introduced all H7 Browser UAT evidence, self-evolution Skills, screenshots, and the original Gate Index + REVIEW_PACKET entries. Any reference to "the original H7 evidence archive" points here.
+
+- **Documentation reconciliation commit:** `6d605674b2a4285bd9a8f175800c87040382c625`
+  - This is the commit that replaced the mutable HEAD/CI/diff references with the canonical statement "see PR #182 metadata". Any reference to "the post-reconciliation archive state" points here.
+
+### Mutable PR state (authoritative source: GitHub PR #182 metadata)
+
+- **Current PR head:** Authoritative source is GitHub PR #182 metadata. Do **not** hard-code the mutable PR head in this tracked document.
+- **Latest CI run:** Authoritative source is the PR Checks page on GitHub. As of the documentation reconciliation commit, CI/CD run `30181738142` passed for reconciliation commit `6d60567`.
+- **Final additions/deletions:** See GitHub PR #182 metadata (the diff grows with each reconciliation commit, so it is not pinned here).
+- **Archive scope (immutable):** 16 files, all under `.ai/`.
+
+### Vercel check status (for reviewer awareness)
+
+- The PR statusCheckRollup contains 3 checks: `Build & Test` (SUCCESS), `Vercel Preview Comments` (SUCCESS), and one anonymous check in FAILURE state.
+- **None of the 3 checks are required** (`isRequired: false` for all). Per the PR hard rule (do not bypass required checks), no required check is failing; the Vercel anomaly is treated as the previously documented external cancel / non-code failure and does **not** block merge.
+- Reviewer should confirm this classification before Approve.
+
+### Reviewer-only action
+
+- Approve + Squash-merge + delete branch from the GitHub UI. Agent will NOT self-approve, self-merge, or enable auto-merge.
