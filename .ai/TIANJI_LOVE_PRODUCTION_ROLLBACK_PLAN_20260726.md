@@ -1,8 +1,11 @@
 # TianJi Love Production Rollback Plan — 2026-07-26
 
 > **Status:** DESIGN ONLY (paired with `TIANJI_LOVE_PRODUCTION_RELEASE_PLAN_20260726.md`)
-> **Target rollback target:** previous production release (preserved under `/var/www/tianji-global/releases/`)
+> **Verdict:** `PRODUCTION_READINESS = NO_GO` — rollback plan not yet executable because previous-release anchor is UNKNOWN
+> **Target rollback target:** previous production release (presumed under `/var/www/tianji-global/releases/`, but not SSH-verified)
 > **Rollback policy:** atomic symlink swap + PM2 reload; **never** modify `/opt/tianji-global` in place.
+
+> **2026-07-26 SSH preflight note:** The rollback anchor (previous production release path) was supposed to be filled in §1 before any release runs. It is currently `UNKNOWN` because the SSH preflight could not run. Any deploy attempt before §1 is populated must be aborted.
 
 ---
 

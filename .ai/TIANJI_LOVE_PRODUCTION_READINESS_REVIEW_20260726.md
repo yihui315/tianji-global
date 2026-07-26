@@ -262,6 +262,77 @@ sudo awk '/ 5[0-9]{2} /' /var/log/nginx/tianji.love.access.log | wc -l
 
 ---
 
+## 9. SSH 后人工核验结果 — 2026-07-26 (TASK_ID=TIANJI-PRODUCTION-SSH-PREFLIGHT-002)
+
+> **Status: SSH PREFLIGHT NOT EXECUTED**
+> **Reason:** Agent has no SSH credentials for TianJi Love production server.
+
+### 9.1 凭据审计结果
+
+| 检查项 | 结果 |
+|--------|------|
+| TianJi production hostname | **UNKNOWN** (not in `~/.ssh/config`, `/etc/hosts`, env vars, or any tianji config file) |
+| TianJi production IP | **UNKNOWN** (`154.217.241.238` is historical PILOT-001 IP, recorded as SSH-blocked) |
+| Dedicated SSH key | **ABSENT** (`~/.ssh/` has only generic `id_ed25519`/`id_rsa` and a `pdftool_prod_ed25519`; none mapped to tianji) |
+| TianJi config in `~/.ssh/config` | empty |
+| TianJi entries in `~/.bash_history` / `~/.zsh_history` | none |
+| tmux session carrying SSH tunnel | none |
+
+### 9.2 Agent 决策
+
+Per task §1 (FORBIDDEN any non-authorized mutation / connection) and the project hard rule that agent must never bypass auth, agent **did not attempt** any SSH connection — including the historical `154.217.241.238` (PILOT-001 IP) — because:
+1. No authorized credential on file
+2. The known IP was historically recorded as blocked in `.ai/CHANGELOG_AI.md` and `.ai/REVIEW_PACKET.md`
+3. A failed SSH attempt would still write audit log entries on the remote side and potentially trigger fail2ban
+4. The task explicitly forbids production mutation; an unauthorised SSH handshake itself carries risk
+
+### 9.3 缺失的基线字段（待人工 SSH 填入）
+
+| 字段 | 状态 |
+|------|------|
+| `PRODUCTION_COMMIT` | **UNKNOWN** |
+| `PRODUCTION_BRANCH` | **UNKNOWN** |
+| `PRODUCTION_WORKTREE` (clean/dirty) | **UNKNOWN** |
+| `PRODUCTION_CWD` | **UNKNOWN** (assumed `/opt/tianji-global` but not verified) |
+| `ORIGIN_URL_WITHOUT_CREDENTIALS` | **UNKNOWN** |
+| `PM2_PROCESS_NAME` | assumed `tianji` (from earlier evidence) — not verified |
+| `PM2_STATUS / PID / UPTIME / RESTART_COUNT` | **UNKNOWN** |
+| `PM2_CWD / EXEC_PATH / INTERPRETER / NODE_VERSION` | **UNKNOWN** |
+| `NGINX_SERVER_NAME / PROXY_PASS / UPSTREAM / TIMEOUTS / TLS` | **UNKNOWN** |
+| `PRODUCTION_ENV_NAMES` | partial (src/ schema only, real .env.production not read) |
+| `ROLLBACK_ANCHOR` (previous release path) | **UNKNOWN** |
+| `LOG_BASELINE` (PM2 errors / Nginx 5xx / 502 / crash-loop / DB errors) | **UNKNOWN** |
+| `MAIN_VS_PRODUCTION_DIFF` (authoritative commit list) | **DEFERRED** (need PRODUCTION_COMMIT) |
+
+### 9.4 Final verdict revision
+
+```
+PRODUCTION_READINESS = NO_GO
+```
+
+Reason: Without SSH-supplied PRODUCTION_COMMIT, PM2 baseline, Nginx config, env-name list, log baseline, and rollback anchor, **none** of the 10 GO prerequisites in `TIANJI_LOVE_PRODUCTION_RELEASE_GATE_20260726.md` Gate A can be satisfied. Per task §10 of the SSH preflight brief ("可以给 GO 的必要条件"), every required condition is currently `UNKNOWN`. The CONDITIONAL → GO path is therefore closed until a human operator runs the §8 SSH check-list and fills in the §9.3 fields above.
+
+```
+PRODUCTION_DEPLOY = HOLD
+PR_183            = DRAFT
+H8                = HOLD
+P3_CANONICAL      = BACKLOG
+RECOVERY_DEPLOY_RECOMMENDED = NO   (cannot recommend without production commit)
+```
+
+### 9.5 To unblock NO_GO
+
+A human with SSH access must:
+1. SSH to the TianJi Love production server (credentials out of agent scope).
+2. Execute the §8 command list above in this same document.
+3. Paste the (de-sensitised) outputs into §9.3 fields above.
+4. Re-run main vs production diff using the now-known PRODUCTION_COMMIT.
+5. If diff is clean and Gate A passes, revise this verdict from `NO_GO` to `GO` and update PR #183.
+
+Until then, **no production deploy, no recovery deploy, no H8, no P3 fix, no further automation on this branch**.
+
+---
+
 生成时间: 2026-07-26
 执行 agent: Hermes
 下一动作: 等待人工 SSH 核验 + 单独发布授权

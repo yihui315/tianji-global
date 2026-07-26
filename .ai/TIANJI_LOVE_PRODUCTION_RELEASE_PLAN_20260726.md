@@ -1,11 +1,14 @@
 # TianJi Love Production Release Plan — 2026-07-26
 
 > **Status:** DESIGN ONLY (no execution)
+> **Verdict:** `PRODUCTION_READINESS = NO_GO` (revised 2026-07-26, see Readiness Review §9 — SSH preflight not executed due to missing credentials)
 > **Target commit:** `42eae7c4af4859fd579721591093eb14f530bc13`
-> **Production root:** `/opt/tianji-global`
-> **Production port:** 3103
-> **Production PM2 process:** `tianji`
+> **Production root:** `/opt/tianji-global` (assumed; not SSH-verified)
+> **Production port:** 3103 (assumed; not SSH-verified)
+> **Production PM2 process:** `tianji` (assumed; not SSH-verified)
 > **Production URL:** https://tianji.love
+
+> **2026-07-26 revision note:** All four assumptions above (root / port / PM2 name / URL) come from prior conversation evidence, not from this run's SSH preflight. A human SSH operator must verify them before any release executes.
 
 ---
 
