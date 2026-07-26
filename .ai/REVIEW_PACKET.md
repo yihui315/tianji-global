@@ -1,9 +1,9 @@
 # TianJi Love Review Packet
 
-## H7 Browser UAT + self-evolution evidence archive (2026-07-25) — PR #182 (DRAFT, awaiting non-author reviewer)
+## H7 Browser UAT + self-evolution evidence archive (2026-07-25) — PR #182 (OPEN — READY FOR REVIEW, awaiting non-author reviewer)
 
 - Task ID: `TIANJI-H7-FOLLOWUP-SELF-EVOLUTION-001`.
-- Working tree: branch `docs/sias-h7-evidence-20260725` from `origin/main@c2631997` (post-PR #181 squash merge). Evidence archive committed and pushed; PR #182 remains OPEN DRAFT pending non-author review.
+- Working tree: branch `docs/sias-h7-evidence-20260725` from `origin/main@c2631997` (post-PR #181 squash merge). Evidence archive committed and pushed; PR #182 is OPEN — READY FOR REVIEW pending non-author review.
 - Goal: complete H7 staging follow-up (Browser UAT + triage + self-evolution Skills + final gate) and archive evidence to the existing PR #182. Production deploy and H8 implementation remain **HOLD**.
 - What changed:
   - New files (all under `.ai/`, no production source touched):
@@ -26,7 +26,7 @@
   - `git diff --check` clean.
   - Sensitive-data scan: only test-grade fake values (`SECRET`, `test@example.com`, `DROP`) ever appeared in a redirect source URL, not in any retained screenshot or report.
   - Skill dedup confirmed: no prior `tianji-staging-deployment` / `tianji-browser-uat` / `tianji-deployment-troubleshooting` skill exists.
-- Gate decision: **READY_FOR_NON_AUTHOR_REVIEW**. PR #182 remains DRAFT — agent does NOT self-approve / self-merge / enable auto-merge / delete required checks.
+- Gate decision: **READY_FOR_NON_AUTHOR_REVIEW**. PR #182 is OPEN — READY FOR REVIEW — agent does NOT self-approve / self-merge / enable auto-merge / delete required checks.
 - Problems: **0 P0 / 0 P1 / 0 P2**. One P3 in backlog: `P3-CANONICAL-001` (missing canonical URL on `/`, `/relationship/new`, `/login` × 2 viewports). SEO-only, not H7-blocking. **Must NOT be fixed in this PR — separate scoped task later.**
 - Risks: PR #182 depends on a non-author reviewer to Approve + Squash-merge + delete branch. Production deploy and H8 implementation explicitly **HOLD** — do NOT trigger until human explicitly approves.
 - Detailed evidence: see `.ai/TIANJI_LOVE_H7_BROWSER_UAT_20260725.md`, `.ai/TIANJI_LOVE_H7_FINAL_UAT_GATE_20260725.md`, `.ai/TIANJI_LOVE_H7_SELF_EVOLUTION_REVIEW_20260725.md`, `.ai/evidence/h7-browser-uat-20260725/`, `.ai/H7_GATE_INDEX_20260725.md`.

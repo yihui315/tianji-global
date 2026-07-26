@@ -4,7 +4,7 @@ This is the latest Gate Index for the TianJi Love H7 follow-up batch. It superse
 
 ## Target
 - **Project:** TianJi Love (tianji-global repo)
-- **Branch under review:** `docs/sias-h7-evidence-20260725` (PR #182, DRAFT)
+- **Branch under review:** `docs/sias-h7-evidence-20260725` (PR #182, READY FOR REVIEW)
 - **Staging target commit:** `c26319976ac1cef6b96b4e4896d9cd0e78706cde` (squash merge of PR #181)
 - **Staging URL:** https://staging.tianji.love
 - **Staging release path:** /var/www/tianji-global-staging/releases/20260725T105420Z
@@ -25,7 +25,7 @@ This is the latest Gate Index for the TianJi Love H7 follow-up batch. It superse
 | PR | Title | Branch | State | Commit |
 |----|-------|--------|-------|--------|
 | #181 | `fix(analytics): preserve UTM parameters across all alias redirects (H7)` | `sias/high-throughput-h7-20260725` | **MERGED** (squash) | `c26319976ac1cef6b96b4e4896d9cd0e78706cde` |
-| #182 | `docs(ai): record H7 browser UAT, clean-log, and self-evolution evidence` | `docs/sias-h7-evidence-20260725` | **OPEN DRAFT** (awaiting non-author reviewer) | see PR #182 head metadata |
+| #182 | `docs(ai): record H7 browser UAT, clean-log, and self-evolution evidence` | `docs/sias-h7-evidence-20260725` | **OPEN — READY FOR REVIEW** (awaiting non-author reviewer) | see PR #182 head metadata |
 
 ## Backlog (non-blocking)
 
@@ -56,7 +56,7 @@ This is the latest Gate Index for the TianJi Love H7 follow-up batch. It superse
 ```
 H7_FINAL_GATE         = GO
 EVIDENCE_ARCHIVE      = READY_FOR_NON_AUTHOR_REVIEW
-PR_182                = OPEN_DRAFT
+PR_182                = OPEN_READY_FOR_REVIEW
 PR_181                = MERGED @ c2631997
 PRODUCTION            = HOLD
 H8                    = HOLD
