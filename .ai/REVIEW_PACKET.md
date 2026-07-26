@@ -1,5 +1,41 @@
 # TianJi Love Review Packet
 
+## H7 Browser UAT + self-evolution evidence archive (2026-07-25) — PR #182 (OPEN — READY FOR REVIEW, awaiting non-author reviewer)
+
+- Task ID: `TIANJI-H7-FOLLOWUP-SELF-EVOLUTION-001`.
+- Working tree: branch `docs/sias-h7-evidence-20260725` from `origin/main@c2631997` (post-PR #181 squash merge). Evidence archive committed and pushed; PR #182 is OPEN — READY FOR REVIEW pending non-author review.
+- Goal: complete H7 staging follow-up (Browser UAT + triage + self-evolution Skills + final gate) and archive evidence to the existing PR #182. Production deploy and H8 implementation remain **HOLD**.
+- What changed:
+  - New files (all under `.ai/`, no production source touched):
+    - `.ai/TIANJI_LOVE_H7_BROWSER_UAT_20260725.md`
+    - `.ai/TIANJI_LOVE_H7_FINAL_UAT_GATE_20260725.md`
+    - `.ai/TIANJI_LOVE_H7_SELF_EVOLUTION_REVIEW_20260725.md`
+    - `.ai/SIAS_HIGH_THROUGHPUT_H7_20260725.md` (introduced by PR #182's initial evidence commit `1f1e04a`; still part of this complete H7 evidence archive)
+    - `.ai/skills/tianji-staging-deployment/SKILL.md`
+    - `.ai/skills/tianji-browser-uat/SKILL.md`
+    - `.ai/skills/tianji-deployment-troubleshooting/SKILL.md`
+    - `.ai/evidence/h7-browser-uat-20260725/` — 6 sanitised screenshots (desktop-home, mobile-home, desktop-love-test, mobile-love-test, desktop-pricing, utm-sanitized-redirect)
+    - `.ai/H7_GATE_INDEX_20260725.md` (latest H7 Gate Index)
+  - Updated files: `.ai/CHANGELOG_AI.md`, this packet.
+- Verification evidence:
+  - **H7 Browser UAT: GO** — 18/18 routes HTTP 200 (desktop 1280×800 + mobile 390×844), 0 console errors, 0 Network 5xx, UTM retention + sanitisation PASS, 0 mobile overflow, 14/14 images OK after lazy-load wait.
+  - **H7 Automated Gate: GO** (carried forward from pre-existing baseline at `c2631997`: typecheck, lint, 826/826 tests, targeted slow 3/3, degraded build, local HTTP, Nginx HTTPS 50/50, Version 10/10).
+  - **H7 Clean-Log Gate: GO** (PM2 flush + re-test, 0 new ERROR; Nginx 50/50 0× 5xx).
+  - **H7 Final Gate: GO** (18/18 strict gates + 6 confirmations PASS).
+  - `/api/version` confirms `commit=c2631997`, `status=ok`, `degradedReasons=[]`.
+  - `git diff --check` clean.
+  - Sensitive-data scan: only test-grade fake values (`SECRET`, `test@example.com`, `DROP`) ever appeared in a redirect source URL, not in any retained screenshot or report.
+  - Skill dedup confirmed: no prior `tianji-staging-deployment` / `tianji-browser-uat` / `tianji-deployment-troubleshooting` skill exists.
+- Gate decision: **READY_FOR_NON_AUTHOR_REVIEW**. PR #182 is OPEN — READY FOR REVIEW — agent does NOT self-approve / self-merge / enable auto-merge / delete required checks.
+- Problems: **0 P0 / 0 P1 / 0 P2**. One P3 in backlog: `P3-CANONICAL-001` (missing canonical URL on `/`, `/relationship/new`, `/login` × 2 viewports). SEO-only, not H7-blocking. **Must NOT be fixed in this PR — separate scoped task later.**
+- Risks: PR #182 depends on a non-author reviewer to Approve + Squash-merge + delete branch. Production deploy and H8 implementation explicitly **HOLD** — do NOT trigger until human explicitly approves.
+- Detailed evidence: see `.ai/TIANJI_LOVE_H7_BROWSER_UAT_20260725.md`, `.ai/TIANJI_LOVE_H7_FINAL_UAT_GATE_20260725.md`, `.ai/TIANJI_LOVE_H7_SELF_EVOLUTION_REVIEW_20260725.md`, `.ai/evidence/h7-browser-uat-20260725/`, `.ai/H7_GATE_INDEX_20260725.md`.
+- Archive status (reconciled 2026-07-25):
+  - **Evidence archive content commit:** `f5a31020a019b00ead67e589096f516f5bae2528` (the commit that introduced all H7 Browser UAT evidence, Skills, screenshots, and the original Gate Index + REVIEW_PACKET entries).
+  - **Documentation reconciliation commit:** `6d605674b2a4285bd9a8f175800c87040382c625` (the commit that replaced mutable HEAD/CI/diff references with the canonical statement "see PR #182 metadata").
+  - **Current PR head / latest CI run / final diff:** Authoritative source is GitHub PR #182 metadata. Do **not** hard-code mutable PR state in this tracked document.
+  - **Archive scope (immutable):** 16 files, all under `.ai/`.
+
 ## Revenue Autopilot v1 launch status (2026-07-23)
 
 - Task ID: `20260723-revenue-autopilot-v1-launch`.

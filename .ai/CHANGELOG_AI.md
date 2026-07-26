@@ -1,6 +1,33 @@
 # AI Execution Changelog
 ## Entries
 
+### 2026-07-25 - TianJi Love H7 follow-up — Browser UAT + self-evolution evidence archive
+
+- Task ID: `TIANJI-H7-FOLLOWUP-SELF-EVOLUTION-001`.
+- Working tree: branch `docs/sias-h7-evidence-20260725` from `origin/main@c2631997` (post-PR #181 squash merge), clean before this run.
+- Goal: complete the H7 staging follow-up — Playwright dual-viewport Browser UAT, problem triage (P0-P3), self-evolution Skill deposit, and final acceptance gate — then archive the evidence to PR #182. **Production deploy and H8 implementation remain HOLD per explicit human scope restriction.**
+- Files created (this run):
+  - `.ai/TIANJI_LOVE_H7_BROWSER_UAT_20260725.md` — full UAT report (18/18 routes 200, 0 console errors, 0 Network 5xx, UTM retention + sanitisation PASS, 0 mobile overflow, 14/14 images OK after lazy-load).
+  - `.ai/TIANJI_LOVE_H7_FINAL_UAT_GATE_20260725.md` — GO/NO-GO gate (verdict **GO**).
+  - `.ai/TIANJI_LOVE_H7_SELF_EVOLUTION_REVIEW_20260725.md` — 10 reusable lessons with trigger / root-cause / fix / verification / scope.
+  - `.ai/skills/tianji-staging-deployment/SKILL.md`, `.ai/skills/tianji-browser-uat/SKILL.md`, `.ai/skills/tianji-deployment-troubleshooting/SKILL.md` — three new skills (~370 lines total) under `.ai/skills/`, no secrets, no production `.env` references, no server IPs.
+  - `.ai/evidence/h7-browser-uat-20260725/` — 6 sanitised screenshots retained for audit (`desktop-home.png`, `mobile-home.png`, `desktop-love-test.png`, `mobile-love-test.png`, `desktop-pricing.png`, `utm-sanitized-redirect.png`); remaining 6 captures excluded (text report sufficient).
+  - Plus this changelog entry and the matching REVIEW_PACKET addition.
+- PR #181 status update: **already merged** as squash commit `c26319976ac1cef6b96b4e4896d9cd0e78706cde` (matches staging `/api/version`); previous "still open" wording in the early draft of `TIANJI_LOVE_H7_FINAL_UAT_GATE_20260725.md` has been replaced per the human correction.
+- PR #182 status: **DRAFT** (existing branch `docs/sias-h7-evidence-20260725`); this run only **appends evidence files** — no new PR opened, no duplication, no squash.
+- Final UAT gates (all 4):
+  - **H7 Browser UAT: GO**
+  - **H7 Automated Gate: GO** (Typecheck + Lint + 826/826 tests + targeted slow 3/3 + degraded build + local HTTP + Nginx HTTPS 50/50 + Version 10/10 + Clean-log gate — carried forward from pre-existing baseline).
+  - **H7 Clean-Log Gate: GO**
+  - **H7 Final Gate: GO**
+- Problems found: **0 P0 / 0 P1 / 0 P2**, 1 P3: `P3-CANONICAL-001` — missing canonical URL on `/`, `/relationship/new`, `/login` (6 occurrences across desktop + mobile). SEO metadata completeness only; **not blocking H7**. Recorded in backlog; **must not be fixed in PR #182** (separate scoped task later).
+- Evidence archive scope (PR #182, docs/evidence only): `.ai/` additions only. `git diff --check` clean. Sensitive-data scan: only test-grade fake values (`SECRET`, `test@example.com`, `DROP`) ever appeared in a redirect source URL, not in any retained screenshot or report. Files named `desktop-home.png` etc. carry no email/token/cookie/IP/key/PII.
+- Skill dedup: searched `~/.hermes/skills/` and `.ai/` — no prior `tianji-staging-deployment`, `tianji-browser-uat`, or `tianji-deployment-troubleshooting` skill exists; the 3 new skills are net-new and non-overlapping with existing `sias-formal-test-readiness-cloud-deploy` (which is SIAS-specific, not TianJi-Love-specific).
+- Validation: `npm run typecheck` / `lint` / `test` / `build` were **not re-run** in this archival batch — the pre-existing H7 baseline (commit `c2631997`) already proved them green and the worktree contains only `.ai/` additions. `git diff --check` clean. `git status --short` shows 6 untracked entries, all under `.ai/`.
+- Safety: no live Stripe, no production deploy, no production Supabase mutation, no `.env*` read/copy/print, no server SSH, no `.github/workflows/*` change, no Vercel config change, no Nginx/PM2 touched, no real payment, no real email, no production data mutation.
+- Gate status: `H7 Browser UAT: GO`; `H7 Automated Gate: GO`; `H7 Clean-Log Gate: GO`; `H7 Final Gate: GO`; `PR #181: MERGED @ c2631997`; `PR #182: OPEN DRAFT (awaiting non-author reviewer)`; `Canonical P3: BACKLOG`; `Production deploy: HOLD`; `H8 implementation: HOLD`.
+- Suggested commit message: `docs(ai): record H7 browser UAT and self-evolution evidence (#182)`.
+
 ### 2026-07-23 - Revenue Autopilot v1 launch — human-approved self-run toolchain
 
 - Task ID: `20260723-revenue-autopilot-v1-launch`.
