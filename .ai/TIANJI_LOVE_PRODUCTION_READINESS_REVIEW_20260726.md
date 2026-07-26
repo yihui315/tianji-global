@@ -280,7 +280,7 @@ sudo awk '/ 5[0-9]{2} /' /var/log/nginx/tianji.love.access.log | wc -l
 
 ### 9.2 Agent 决策
 
-Per task §1 (FORBIDDEN any non-authorized mutation / connection) and the project hard rule that agent must never bypass auth, agent **did not attempt** any SSH connection — including the historical `154.217.241.238` (PILOT-001 IP) — because:
+Per task §1 (FORBIDDEN any non-authorized mutation / connection) and the project hard rule that agent must never bypass auth, no authenticated SSH session was established. No successful SSH session was established. One failed SSH authentication attempt was reported in the conflicting execution trace. No authenticated production command was executed. Agent did not target the historical `154.217.241.238` (PILOT-001 IP, marked SSH-blocked in earlier evidence) because:
 1. No authorized credential on file
 2. The known IP was historically recorded as blocked in `.ai/CHANGELOG_AI.md` and `.ai/REVIEW_PACKET.md`
 3. A failed SSH attempt would still write audit log entries on the remote side and potentially trigger fail2ban
@@ -374,13 +374,13 @@ Possible explanations (none agent can verify without human confirmation):
 
 Per task §2 rule: *if alias absent → stop and report SSH_ALIAS=ABSENT.* Per task §3 rule: *forbidden from attempting connection to unknown hosts or trying random keys/usernames.* Per task §1 hard rule: *PRODUCTION_MUTATION=FORBIDDEN.*
 
-Agent **stopped** at §2 and did NOT proceed to §3-§11. No SSH attempt was made. No PM2/systemd/Nginx env read attempted. No Git mutation. No PR body update beyond what this file amendment enables.
+Agent **stopped** at §2 and did NOT proceed to §3-§11. No successful SSH session was established. One failed SSH authentication attempt was reported in the conflicting execution trace. No authenticated production command was executed. No PM2/systemd/Nginx env read attempted. No Git mutation. No PR body update beyond what this file amendment enables.
 
-### 10.4 Final status
+### 10.4 Final status (snapshot at TASK_ID=TIANJI-PRODUCTION-SSH-ALIAS-RECOVERY-003 time; superseded by §11.5)
 
 ```
-SSH_ALIAS                    = ABSENT
-SSH_HANDSHAKE                = NOT_ATTEMPTED
+SSH_ALIAS                    = ABSENT          (later reclassified to CONFLICTING_EVIDENCE in §11)
+SSH_HANDSHAKE                = NOT_ATTEMPTED   (later reclassified to NOT_ESTABLISHED in §11)
 ACTIVE_RUNTIME               = UNKNOWN
 ACTIVE_PORT                  = UNKNOWN
 PRODUCTION_COMMIT            = UNKNOWN
@@ -397,13 +397,15 @@ H8                           = HOLD
 P3_CANONICAL                 = BACKLOG
 ```
 
+> **Note:** The two `SSH_*` fields above reflect the snapshot state at the time of `TASK_ID=TIANJI-PRODUCTION-SSH-ALIAS-RECOVERY-003` and are **superseded** by the §11.5 revised verdict fields (which acknowledge one failed SSH authentication attempt in the conflicting trace). They are preserved here as historical audit trail of the recovery task's own report; they are **not** the current fact statement.
+
 ### 10.5 To unblock NO_GO (updated from §9.5)
 
 A human operator with working SSH access to the TianJi Love production server must:
 
 1. **Establish the SSH alias on the agent's machine first.** Without this, agent cannot run §3-§11 of the SSH alias recovery task. Either:
    - Add the alias to `~/.ssh/config` (with hostname, user, port, identity file), AND
-   - Add the production server's host key to `~/.ssh/known_hosts` (via `ssh-keyscan` once or first interactive SSH accept).
+   - Add the production server's host key to `~/.ssh/known_hosts`. Obtain the expected production host-key fingerprint from the cloud provider console or another independently trusted administrative source. Verify the fingerprint out of band, then add only the exact verified key to known_hosts. Do not trust an unverified ssh-keyscan result and do not accept an unknown first-use key interactively.
 2. Then re-issue `TASK_ID=TIANJI-PRODUCTION-SSH-ALIAS-RECOVERY-003` (or proceed to §3 of the original brief) and let the agent fill in §9.3 / §10.4 fields.
 3. OR: manually paste the §8 check-list outputs into §9.3 here.
 
@@ -522,7 +524,7 @@ The conflict is preserved, not adjudicated. Confidence is `LOW`. A human operato
 
 The unblock path does not change. A human operator must either:
 
-1. Configure the SSH alias on the current Mac (`~/.ssh/config` with hostname `186.244.244.81` as the only approved IP, user, port, identity) AND add the production host key to `known_hosts`. Then re-issue `TASK_ID=TIANJI-PRODUCTION-SSH-ALIAS-RECOVERY-003` and let the agent run §3-§11 with raw output capture to disambiguate the conflict.
+1. Configure the SSH alias on the current Mac (`~/.ssh/config` with hostname `186.244.244.81` as the only approved IP, user, port, identity) AND add the production host key to `known_hosts`. Obtain the expected production host-key fingerprint from the cloud provider console or another independently trusted administrative source; verify the fingerprint out of band; add only the exact verified key to known_hosts. Do not trust an unverified ssh-keyscan result and do not accept an unknown first-use key interactively. Then re-issue `TASK_ID=TIANJI-PRODUCTION-SSH-ALIAS-RECOVERY-003` and let the agent run §3-§11 with raw output capture to disambiguate the conflict.
 2. OR: paste the §8 check-list outputs into §9.3 fields manually.
 
 Both paths still require a human; the conflict lowers confidence but does not change the next step.
