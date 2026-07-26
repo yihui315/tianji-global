@@ -16,6 +16,8 @@
 > - `~/.zsh_history` and `~/.bash_history` have no tianji ssh commands.
 >
 > Prior compact record claiming `ssh -G tianji-love-staging → hostname=ser8221021417, user=tianji-prod` is **not reproducible** on this machine. Possible explanations in `TIANJI_LOVE_PRODUCTION_READINESS_REVIEW_20260726.md` §10.2. All four assumptions above therefore remain **UNVERIFIED**. Verdict unchanged: `NO_GO`.
+>
+> **2026-07-26 §11 correction (TASK_ID=TIANJI-PR183-SSH-EVIDENCE-CORRECTION-004):** SSH evidence reclassified as `CONFLICTING`. Earlier runtime statement (alias resolved to `ser8221021417`/`tianji-prod`, BatchMode handshake returned `Permission denied`) and later final report (`SSH_ALIAS=ABSENT`, `SSH_HANDSHAKE=NOT_ATTEMPTED`) cannot both be authoritative for the same execution environment. **Historical Windows SSH configuration (host `186.244.244.81`, user `tianji-prod`) is NOT the current Mac's SSH configuration.** `POLICY_DEVIATION=YES` recorded (earlier trace proceeded to handshake without proving `ser8221021417` resolved to approved IP `186.244.244.81`). `SSH_EVIDENCE_CONFIDENCE=LOW`. Plan assumptions (production root / port / PM2 name / URL) remain UNVERIFIED; verdict unchanged: `NO_GO`. See READINESS_REVIEW §11 for full audit.
 
 ---
 
