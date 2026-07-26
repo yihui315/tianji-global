@@ -3,13 +3,14 @@
 ## H7 Browser UAT + self-evolution evidence archive (2026-07-25) — PR #182 (DRAFT, awaiting non-author reviewer)
 
 - Task ID: `TIANJI-H7-FOLLOWUP-SELF-EVOLUTION-001`.
-- Working tree: branch `docs/sias-h7-evidence-20260725` from `origin/main@c2631997` (post-PR #181 squash merge). Not committed yet — pending reviewer.
+- Working tree: branch `docs/sias-h7-evidence-20260725` from `origin/main@c2631997` (post-PR #181 squash merge). Evidence archive committed and pushed as `f5a31020a019b00ead67e589096f516f5bae2528`; PR #182 remains OPEN DRAFT pending non-author review.
 - Goal: complete H7 staging follow-up (Browser UAT + triage + self-evolution Skills + final gate) and archive evidence to the existing PR #182. Production deploy and H8 implementation remain **HOLD**.
 - What changed:
   - New files (all under `.ai/`, no production source touched):
     - `.ai/TIANJI_LOVE_H7_BROWSER_UAT_20260725.md`
     - `.ai/TIANJI_LOVE_H7_FINAL_UAT_GATE_20260725.md`
     - `.ai/TIANJI_LOVE_H7_SELF_EVOLUTION_REVIEW_20260725.md`
+    - `.ai/SIAS_HIGH_THROUGHPUT_H7_20260725.md` (introduced by PR #182's initial evidence commit `1f1e04a`; still part of this complete H7 evidence archive)
     - `.ai/skills/tianji-staging-deployment/SKILL.md`
     - `.ai/skills/tianji-browser-uat/SKILL.md`
     - `.ai/skills/tianji-deployment-troubleshooting/SKILL.md`
@@ -22,15 +23,19 @@
   - **H7 Clean-Log Gate: GO** (PM2 flush + re-test, 0 new ERROR; Nginx 50/50 0× 5xx).
   - **H7 Final Gate: GO** (18/18 strict gates + 6 confirmations PASS).
   - `/api/version` confirms `commit=c2631997`, `status=ok`, `degradedReasons=[]`.
-  - `git status --short` shows 6 untracked entries, all under `.ai/`.
   - `git diff --check` clean.
   - Sensitive-data scan: only test-grade fake values (`SECRET`, `test@example.com`, `DROP`) ever appeared in a redirect source URL, not in any retained screenshot or report.
   - Skill dedup confirmed: no prior `tianji-staging-deployment` / `tianji-browser-uat` / `tianji-deployment-troubleshooting` skill exists.
-- Gate decision: **READY_FOR_REVIEW**. PR #182 remains DRAFT — agent does NOT self-approve / self-merge / enable auto-merge / delete required checks.
+- Gate decision: **READY_FOR_NON_AUTHOR_REVIEW**. PR #182 remains DRAFT — agent does NOT self-approve / self-merge / enable auto-merge / delete required checks.
 - Problems: **0 P0 / 0 P1 / 0 P2**. One P3 in backlog: `P3-CANONICAL-001` (missing canonical URL on `/`, `/relationship/new`, `/login` × 2 viewports). SEO-only, not H7-blocking. **Must NOT be fixed in this PR — separate scoped task later.**
 - Risks: PR #182 depends on a non-author reviewer to Approve + Squash-merge + delete branch. Production deploy and H8 implementation explicitly **HOLD** — do NOT trigger until human explicitly approves.
 - Detailed evidence: see `.ai/TIANJI_LOVE_H7_BROWSER_UAT_20260725.md`, `.ai/TIANJI_LOVE_H7_FINAL_UAT_GATE_20260725.md`, `.ai/TIANJI_LOVE_H7_SELF_EVOLUTION_REVIEW_20260725.md`, `.ai/evidence/h7-browser-uat-20260725/`, `.ai/H7_GATE_INDEX_20260725.md`.
-- Suggested commit message: `docs(ai): record H7 browser UAT and self-evolution evidence (#182)`.
+- Archive status (reconciled 2026-07-25):
+  - **Head commit:** `f5a31020a019b00ead67e589096f516f5bae2528`
+  - **Changed files:** 16
+  - **Diff:** +1134 / -0
+  - **Scope:** `.ai/` only
+  - **CI/CD run `30181119677`:** SUCCESS
 
 ## Revenue Autopilot v1 launch status (2026-07-23)
 

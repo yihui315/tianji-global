@@ -25,7 +25,7 @@ This is the latest Gate Index for the TianJi Love H7 follow-up batch. It superse
 | PR | Title | Branch | State | Commit |
 |----|-------|--------|-------|--------|
 | #181 | `fix(analytics): preserve UTM parameters across all alias redirects (H7)` | `sias/high-throughput-h7-20260725` | **MERGED** (squash) | `c26319976ac1cef6b96b4e4896d9cd0e78706cde` |
-| #182 | `docs(ai): record H7 attribution preservation evidence` | `docs/sias-h7-evidence-20260725` | **DRAFT** (awaiting non-author reviewer) | not yet committed |
+| #182 | `docs(ai): record H7 browser UAT, clean-log, and self-evolution evidence` | `docs/sias-h7-evidence-20260725` | **OPEN DRAFT** (awaiting non-author reviewer) | `f5a31020a019b00ead67e589096f516f5bae2528` |
 
 ## Backlog (non-blocking)
 
@@ -55,7 +55,7 @@ This is the latest Gate Index for the TianJi Love H7 follow-up batch. It superse
 
 ```
 H7_FINAL_GATE         = GO
-EVIDENCE_ARCHIVE      = READY_FOR_REVIEW
+EVIDENCE_ARCHIVE      = READY_FOR_NON_AUTHOR_REVIEW
 PR_182                = OPEN_DRAFT
 PR_181                = MERGED @ c2631997
 PRODUCTION            = HOLD
@@ -67,3 +67,16 @@ CANONICAL_P3          = BACKLOG (P3-CANONICAL-001)
 
 Generated: 2026-07-25 by Hermes Agent (TIANJI-H7-FOLLOWUP-SELF-EVOLUTION-001).
 Next human-only action: review and merge PR #182 (Approve + Squash-merge + delete branch from GitHub UI).
+
+---
+
+## PR #182 archive snapshot (2026-07-25 reconcile)
+
+- **Head commit:** `f5a31020a019b00ead67e589096f516f5bae2528`
+- **Branch:** `docs/sias-h7-evidence-20260725`
+- **Changed files:** 16
+- **Diff:** +1134 / -0
+- **Scope:** `.ai/` only
+- **CI run:** `30181119677` — conclusion `success` — head SHA `f5a31020a019b00ead67e589096f516f5bae2528`
+- **Note:** `.ai/SIAS_HIGH_THROUGHPUT_H7_20260725.md` is part of this archive (originally introduced by PR #182's initial evidence commit `1f1e04a` and still present on the PR head branch).
+- **Reviewer-only action:** Approve + Squash-merge + delete branch from GitHub UI. Agent will NOT self-approve, self-merge, or enable auto-merge.
