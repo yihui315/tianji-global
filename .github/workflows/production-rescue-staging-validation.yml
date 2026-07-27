@@ -1,18 +1,23 @@
 name: Production Rescue Staging Validation
 
 on:
-  push:
+  pull_request:
     branches:
-      - rescue/production-live-code-20260727
+      - main
     paths:
       - .github/workflows/production-rescue-staging-validation.yml
+      - src/lib/ai-orchestrator.ts
+      - src/lib/legacy-subscriber-store.ts
+      - src/app/api/subscribe/**
+      - src/app/api/subscribers/**
+      - src/__tests__/api/legacy-subscribe-route.test.ts
+      - src/__tests__/lib/legacy-subscriber-store.test.ts
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   degraded-staging-validation:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     env:
       STAGING_DEGRADED_MODE: 'true'
@@ -23,11 +28,8 @@ jobs:
       SUBSCRIBER_WRITES_DISABLED: 'true'
       NEXT_PUBLIC_APP_ENV: staging
     steps:
-      - name: Checkout rescue branch
+      - name: Checkout rescue commit
         uses: actions/checkout@v4
-        with:
-          ref: rescue/production-live-code-20260727
-          fetch-depth: 0
 
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
@@ -56,39 +58,3 @@ jobs:
 
       - name: Audit degraded staging mode
         run: npm run audit:staging:degraded
-
-      - name: Record validation evidence
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p .ai/production-rescue
-          cat > .ai/production-rescue/STAGING_VALIDATION_20260727.md <<EOF
-          # Production Rescue Staging Validation — 2026-07-27
-
-          \`TARGET_COMMIT=$(git rev-parse HEAD)\`
-
-          \`MINIMAX_SOURCE_BLOB=$(git hash-object src/lib/ai-orchestrator.ts)\`
-
-          \`MINIMAX_SOURCE_SHA256=$(sha256sum src/lib/ai-orchestrator.ts | awk '{print $1}')\`
-
-          - Targeted rescue tests: PASS
-          - Typecheck: PASS
-          - Degraded staging build: PASS
-          - Degraded staging audit: PASS
-          - AI provider live calls: DISABLED
-          - Stripe live actions: DISABLED
-          - Email sends: DISABLED
-          - Supabase mutations: DISABLED
-          - Subscriber writes: DISABLED
-          - Production deployment: NOT PERFORMED
-          EOF
-
-      - name: Commit validation evidence
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .ai/production-rescue/STAGING_VALIDATION_20260727.md
-          git commit -m "docs(rescue): record degraded staging validation"
-          git push origin HEAD:rescue/production-live-code-20260727
