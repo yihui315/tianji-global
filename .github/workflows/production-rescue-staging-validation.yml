@@ -1,0 +1,94 @@
+name: Production Rescue Staging Validation
+
+on:
+  push:
+    branches:
+      - rescue/production-live-code-20260727
+    paths:
+      - .github/workflows/production-rescue-staging-validation.yml
+
+permissions:
+  contents: write
+
+jobs:
+  degraded-staging-validation:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    env:
+      STAGING_DEGRADED_MODE: 'true'
+      AI_PROVIDER_LIVE_DISABLED: 'true'
+      STRIPE_LIVE_DISABLED: 'true'
+      EMAIL_SEND_DISABLED: 'true'
+      SUPABASE_MUTATION_DISABLED: 'true'
+      SUBSCRIBER_WRITES_DISABLED: 'true'
+      NEXT_PUBLIC_APP_ENV: staging
+    steps:
+      - name: Checkout rescue branch
+        uses: actions/checkout@v4
+        with:
+          ref: rescue/production-live-code-20260727
+          fetch-depth: 0
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify recovered source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object src/lib/ai-orchestrator.ts)" = "42298f00e9355f56cb79cdcd640e817551dc9de6"
+          test "$(sha256sum src/lib/ai-orchestrator.ts | awk '{print $1}')" = "810048466b27f63b6cba5736808e64325edb639b720449ee76b345ea56e2692a"
+
+      - name: Run targeted rescue tests
+        run: npx vitest run src/__tests__/api/legacy-subscribe-route.test.ts src/__tests__/lib/legacy-subscriber-store.test.ts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build degraded staging bundle
+        run: npm run build:staging:degraded
+
+      - name: Audit degraded staging mode
+        run: npm run audit:staging:degraded
+
+      - name: Record validation evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .ai/production-rescue
+          cat > .ai/production-rescue/STAGING_VALIDATION_20260727.md <<EOF
+          # Production Rescue Staging Validation — 2026-07-27
+
+          \`TARGET_COMMIT=$(git rev-parse HEAD)\`
+
+          \`MINIMAX_SOURCE_BLOB=$(git hash-object src/lib/ai-orchestrator.ts)\`
+
+          \`MINIMAX_SOURCE_SHA256=$(sha256sum src/lib/ai-orchestrator.ts | awk '{print $1}')\`
+
+          - Targeted rescue tests: PASS
+          - Typecheck: PASS
+          - Degraded staging build: PASS
+          - Degraded staging audit: PASS
+          - AI provider live calls: DISABLED
+          - Stripe live actions: DISABLED
+          - Email sends: DISABLED
+          - Supabase mutations: DISABLED
+          - Subscriber writes: DISABLED
+          - Production deployment: NOT PERFORMED
+          EOF
+
+      - name: Commit validation evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .ai/production-rescue/STAGING_VALIDATION_20260727.md
+          git commit -m "docs(rescue): record degraded staging validation"
+          git push origin HEAD:rescue/production-live-code-20260727
