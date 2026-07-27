@@ -28,6 +28,7 @@ describe('legacy subscriber compatibility routes', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.unstubAllEnvs();
+    vi.stubEnv('SUBSCRIBER_WRITES_DISABLED', 'false');
     mocks.addLegacySubscriber.mockReset();
     mocks.countLegacySubscribers.mockReset();
     mocks.isSupabaseMutationDisabled.mockReset();
@@ -80,6 +81,21 @@ describe('legacy subscriber compatibility routes', () => {
 
   it('skips writes in degraded staging mode', async () => {
     mocks.isSupabaseMutationDisabled.mockReturnValue(true);
+
+    const { POST } = await import('@/app/api/subscribe/route');
+    const response = await POST(postRequest({ email: 'reader@example.com' }));
+
+    expect(response.status).toBe(202);
+    await expect(response.json()).resolves.toEqual({
+      success: false,
+      skipped: true,
+      reason: 'subscriber_mutation_disabled',
+    });
+    expect(mocks.addLegacySubscriber).not.toHaveBeenCalled();
+  });
+
+  it('skips writes when the dedicated subscriber guard is enabled', async () => {
+    vi.stubEnv('SUBSCRIBER_WRITES_DISABLED', 'true');
 
     const { POST } = await import('@/app/api/subscribe/route');
     const response = await POST(postRequest({ email: 'reader@example.com' }));
