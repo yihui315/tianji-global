@@ -1,0 +1,46 @@
+name: Production Rescue Apply
+
+on:
+  push:
+    branches:
+      - rescue/production-live-code-20260727
+    paths:
+      - .github/workflows/production-rescue-apply.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply-preserved-minimax-patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout rescue branch
+        uses: actions/checkout@v4
+        with:
+          ref: rescue/production-live-code-20260727
+          fetch-depth: 0
+
+      - name: Apply exact preserved production patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git apply --check .ai/production-rescue/ai-orchestrator-production.patch
+          git apply .ai/production-rescue/ai-orchestrator-production.patch
+
+      - name: Verify recovered file hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object src/lib/ai-orchestrator.ts)" = "42298f00e9355f56cb79cdcd640e817551dc9de6"
+          test "$(sha256sum src/lib/ai-orchestrator.ts | awk '{print $1}')" = "810048466b27f63b6cba5736808e64325edb639b720449ee76b345ea56e2692a"
+
+      - name: Commit patch to rescue branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/lib/ai-orchestrator.ts
+          git commit -m "fix(rescue): apply preserved MiniMax primary routing"
+          git push origin HEAD:rescue/production-live-code-20260727
