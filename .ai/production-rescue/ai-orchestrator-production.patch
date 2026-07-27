@@ -1,0 +1,22 @@
+diff --git a/src/lib/ai-orchestrator.ts b/src/lib/ai-orchestrator.ts
+index f130256..42298f0 100644
+--- a/src/lib/ai-orchestrator.ts
++++ b/src/lib/ai-orchestrator.ts
+@@ -589,11 +589,16 @@ export async function generateReport(
+             maxTokens,
+           });
+         case 'deepseek':
+-        case 'minimax':
+           return callOpenAI(apiKey!, baseUrl, modelName, systemPrompt || '', prompt, {
+             temperature,
+             maxTokens,
+           }, providerPrefix);
++        case 'minimax':
++          // MiniMax key only works on Anthropic-compatible endpoint
++          return callAnthropic(apiKey!, baseUrl, modelName, systemPrompt || '', prompt, {
++            temperature,
++            maxTokens,
++          });
+         case 'gemini':
+           return callGemini(apiKey!, baseUrl, modelName, systemPrompt || '', prompt, {
+             temperature,
