@@ -1,0 +1,73 @@
+name: Prepare Clean Release Candidate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - rescue/production-live-code-20260727
+    paths:
+      - .github/workflows/prepare-clean-release.yml
+      - scripts/release/prepare-clean-release.mjs
+      - scripts/release/verify-clean-release.mjs
+
+permissions:
+  contents: read
+
+jobs:
+  prepare-clean-release:
+    name: Build immutable release artifact
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
+      NEXT_PUBLIC_APP_ENV: production
+      AI_PROVIDER_LIVE_DISABLED: 'true'
+      STRIPE_LIVE_DISABLED: 'true'
+      EMAIL_SEND_DISABLED: 'true'
+      SUPABASE_MUTATION_DISABLED: 'true'
+      SUBSCRIBER_WRITES_DISABLED: 'true'
+      SERVICE_VERSION_COMMIT: ${{ github.sha }}
+
+    steps:
+      - name: Checkout exact rescue commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Set immutable build timestamp
+        shell: bash
+        run: echo "SERVICE_VERSION_BUILT_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run release checks
+        run: npm run release:check
+
+      - name: Build clean release archive
+        run: node scripts/release/prepare-clean-release.mjs
+
+      - name: Verify clean release archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARCHIVE="dist/clean-release/tianji-love-${SERVICE_VERSION_COMMIT}.tar.gz"
+          node scripts/release/verify-clean-release.mjs "$ARCHIVE" "$SERVICE_VERSION_COMMIT"
+
+      - name: Upload clean release candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: tianji-clean-release-${{ github.sha }}
+          path: |
+            dist/clean-release/tianji-love-${{ github.sha }}.tar.gz
+            dist/clean-release/tianji-love-${{ github.sha }}.tar.gz.sha256
+            dist/clean-release/release-summary.json
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
