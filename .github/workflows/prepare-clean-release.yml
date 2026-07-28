@@ -61,6 +61,16 @@ jobs:
       - name: Run release checks in clean test environment
         run: npm run release:check
 
+      - name: Reset exact reviewed source for stamped build
+        shell: bash
+        run: |
+          set -euo pipefail
+          git reset --hard "$RELEASE_COMMIT"
+          git clean -fd
+          rm -rf .next dist
+          test "$(git rev-parse HEAD)" = "$RELEASE_COMMIT"
+          test -z "$(git status --porcelain)"
+
       - name: Rebuild with immutable version metadata
         env:
           NODE_ENV: production
