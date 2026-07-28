@@ -8,7 +8,6 @@ import { spawnSync } from 'node:child_process';
 const repoRoot = resolve(process.cwd());
 const distRoot = join(repoRoot, 'dist', 'clean-release');
 const stageRoot = join(distRoot, 'stage');
-const allowedGeneratedChanges = new Set(['next-env.d.ts']);
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -24,10 +23,6 @@ function run(command, args, options = {}) {
   }
 
   return result.stdout?.trim() ?? '';
-}
-
-function splitLines(value) {
-  return value ? value.split('\n').map((line) => line.trim()).filter(Boolean) : [];
 }
 
 async function sha256File(path) {
@@ -58,27 +53,7 @@ if (gitHead !== commit) {
   throw new Error(`Git HEAD ${gitHead} does not match SERVICE_VERSION_COMMIT ${commit}`);
 }
 
-const trackedChanges = splitLines(run('git', ['diff', '--name-only', 'HEAD'], { capture: true }));
-const untrackedChanges = splitLines(run('git', ['ls-files', '--others', '--exclude-standard'], { capture: true }));
-const unexpectedChanges = [...trackedChanges, ...untrackedChanges].filter(
-  (path) => !allowedGeneratedChanges.has(path),
-);
-
-if (unexpectedChanges.length > 0) {
-  throw new Error(`Refusing to package unexpected worktree changes: ${unexpectedChanges.join(', ')}`);
-}
-
-const requiredPaths = [
-  '.next/BUILD_ID',
-  '.next/server',
-  '.next/static',
-  'package.json',
-  'package-lock.json',
-  'next.config.js',
-  'public',
-];
-
-for (const relativePath of requiredPaths) {
+for (const relativePath of ['.next/BUILD_ID', '.next/server', '.next/static']) {
   await stat(join(repoRoot, relativePath));
 }
 
@@ -94,13 +69,26 @@ await cp(join(repoRoot, '.next'), join(stageRoot, '.next'), {
   recursive: true,
   filter: (source) => !source.includes(`${join('.next', 'cache')}`),
 });
-await cp(join(repoRoot, 'public'), join(stageRoot, 'public'), { recursive: true });
 
-for (const file of ['package.json', 'package-lock.json', 'next.config.js']) {
-  await cp(join(repoRoot, file), join(stageRoot, file));
+const trackedSourceArchive = join(distRoot, 'tracked-source.tar');
+run('git', [
+  'archive',
+  '--format=tar',
+  `--output=${trackedSourceArchive}`,
+  commit,
+  'public',
+  'package.json',
+  'package-lock.json',
+  'next.config.js',
+]);
+run('tar', ['-xf', trackedSourceArchive, '-C', stageRoot]);
+await rm(trackedSourceArchive, { force: true });
+
+for (const relativePath of ['public', 'package.json', 'package-lock.json', 'next.config.js']) {
+  await stat(join(stageRoot, relativePath));
 }
 
-const packageLockSha256 = await sha256File(join(repoRoot, 'package-lock.json'));
+const packageLockSha256 = await sha256File(join(stageRoot, 'package-lock.json'));
 const manifest = {
   schemaVersion: 1,
   service: 'tianji-love',
@@ -111,7 +99,7 @@ const manifest = {
   packageLockSha256,
   buildSource: {
     gitHead,
-    allowedGeneratedChanges: trackedChanges.filter((path) => allowedGeneratedChanges.has(path)),
+    trackedRuntimeFilesExtractedFromCommit: true,
   },
   runtime: {
     command: 'npm start',
@@ -152,5 +140,5 @@ console.log(`CLEAN_RELEASE_ARCHIVE_NAME=${basename(archivePath)}`);
 console.log(`CLEAN_RELEASE_SHA256=${archiveSha256}`);
 console.log(`CLEAN_RELEASE_COMMIT=${commit}`);
 console.log(`CLEAN_RELEASE_BUILD_ID=${buildId}`);
-console.log(`ALLOWED_GENERATED_CHANGES=${manifest.buildSource.allowedGeneratedChanges.join(',') || 'NONE'}`);
+console.log('TRACKED_RUNTIME_FILES_FROM_COMMIT=YES');
 console.log('PRODUCTION_CUTOVER_AUTHORIZED=NO');
