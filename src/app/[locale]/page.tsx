@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { buildLocalizedMetadata } from '@/lib/i18n-metadata';
 import { getLocalizedPath, isSupportedLocale, locales, type Locale } from '@/lib/i18n';
+import { SocialProofBanner } from '@/components/landing/SocialProofBanner';
 
 type PageParams = {
   params: Promise<{ locale: string }>;
@@ -122,6 +123,7 @@ export default async function LocalizedHomePage({ params }: PageParams) {
               ))}
             </div>
             <div className="mt-6 space-y-4 text-sm leading-7 text-white/62">
+              <SocialProofBanner locale={locale} className="mb-5" />
               {t.steps.map((step, index) => (
                 <p key={step}>
                   <span className="mr-3 text-[rgb(252,230,191)]">0{index + 1}</span>
