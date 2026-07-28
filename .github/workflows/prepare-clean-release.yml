@@ -38,6 +38,13 @@ jobs:
           ref: ${{ env.RELEASE_COMMIT }}
           fetch-depth: 0
 
+      - name: Verify clean checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$RELEASE_COMMIT"
+          test -z "$(git status --porcelain)"
+
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
