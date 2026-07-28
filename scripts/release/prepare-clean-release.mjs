@@ -8,6 +8,7 @@ import { spawnSync } from 'node:child_process';
 const repoRoot = resolve(process.cwd());
 const distRoot = join(repoRoot, 'dist', 'clean-release');
 const stageRoot = join(distRoot, 'stage');
+const allowedGeneratedChanges = new Set(['next-env.d.ts']);
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -23,6 +24,10 @@ function run(command, args, options = {}) {
   }
 
   return result.stdout?.trim() ?? '';
+}
+
+function splitLines(value) {
+  return value ? value.split('\n').map((line) => line.trim()).filter(Boolean) : [];
 }
 
 async function sha256File(path) {
@@ -53,9 +58,14 @@ if (gitHead !== commit) {
   throw new Error(`Git HEAD ${gitHead} does not match SERVICE_VERSION_COMMIT ${commit}`);
 }
 
-const worktree = run('git', ['status', '--porcelain'], { capture: true });
-if (worktree) {
-  throw new Error('Refusing to package a dirty worktree');
+const trackedChanges = splitLines(run('git', ['diff', '--name-only', 'HEAD'], { capture: true }));
+const untrackedChanges = splitLines(run('git', ['ls-files', '--others', '--exclude-standard'], { capture: true }));
+const unexpectedChanges = [...trackedChanges, ...untrackedChanges].filter(
+  (path) => !allowedGeneratedChanges.has(path),
+);
+
+if (unexpectedChanges.length > 0) {
+  throw new Error(`Refusing to package unexpected worktree changes: ${unexpectedChanges.join(', ')}`);
 }
 
 const requiredPaths = [
@@ -99,6 +109,10 @@ const manifest = {
   buildId,
   nodeVersion: process.version,
   packageLockSha256,
+  buildSource: {
+    gitHead,
+    allowedGeneratedChanges: trackedChanges.filter((path) => allowedGeneratedChanges.has(path)),
+  },
   runtime: {
     command: 'npm start',
     requiredEnvironment: [
@@ -138,4 +152,5 @@ console.log(`CLEAN_RELEASE_ARCHIVE_NAME=${basename(archivePath)}`);
 console.log(`CLEAN_RELEASE_SHA256=${archiveSha256}`);
 console.log(`CLEAN_RELEASE_COMMIT=${commit}`);
 console.log(`CLEAN_RELEASE_BUILD_ID=${buildId}`);
+console.log(`ALLOWED_GENERATED_CHANGES=${manifest.buildSource.allowedGeneratedChanges.join(',') || 'NONE'}`);
 console.log('PRODUCTION_CUTOVER_AUTHORIZED=NO');
