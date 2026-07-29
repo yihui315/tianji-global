@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { buildLocalizedMetadata } from '@/lib/i18n-metadata';
 import { getLocalizedPath, isSupportedLocale, locales, type Locale } from '@/lib/i18n';
+import { ZodiacMonthPreviewCard } from '@/components/zodiac/ZodiacMonthPreviewCard';
 
 type PageParams = {
   params: Promise<{ locale: string }>;
@@ -17,6 +18,12 @@ type HomeCopy = {
   footnote: string;
   steps: string[];
   eyebrow: string;
+  previewEyebrow: string;
+  previewIntro: string;
+  previewPrompt: string;
+  previewPlaceholder: string;
+  previewFollowupLabel: string;
+  previewCtaLabel: string;
 };
 
 const copy = {
@@ -34,6 +41,12 @@ const copy = {
       'Receive a free teaser with reflective relationship themes.',
       'Unlock deeper sections when you are ready.',
     ],
+    previewEyebrow: 'A 30-second private signal',
+    previewIntro: 'Pick the month you were born. We will surface one quiet reflection about how you tend to relate — no login, no signup, no commit.',
+    previewPrompt: 'Birth month',
+    previewPlaceholder: 'Choose a month',
+    previewFollowupLabel: 'Why we name this.',
+    previewCtaLabel: 'Go deeper with a private reading',
   },
   'zh-CN': {
     eyebrow: '私密的关系洞察',
@@ -44,6 +57,12 @@ const copy = {
     secondaryCta: '查看价格',
     footnote: '默认保护隐私。出生资料不会出现在分享链接中。',
     steps: ['只提交生成报告所需的最少出生信息。', '先获得一份免费的关系主题预览。', '准备好后再解锁更完整的深度章节。'],
+    previewEyebrow: '30 秒私密信号',
+    previewIntro: '点选你的出生月份，我们会浮出一句关于你如何相处的安静反思 —— 无登录、无注册、无承诺。',
+    previewPrompt: '出生月份',
+    previewPlaceholder: '选择一个月份',
+    previewFollowupLabel: '为什么我们这样说。',
+    previewCtaLabel: '继续做一次私密关系洞察',
   },
 } satisfies Record<Locale, HomeCopy>;
 
@@ -130,6 +149,22 @@ export default async function LocalizedHomePage({ params }: PageParams) {
               ))}
             </div>
           </div>
+        </section>
+
+        <section
+          aria-label={locale === 'zh-CN' ? '出生月份私密信号' : 'Birth-month private signal'}
+          className="mt-10 lg:mt-16"
+        >
+          <ZodiacMonthPreviewCard
+            locale={locale}
+            eyebrow={t.previewEyebrow}
+            intro={t.previewIntro}
+            prompt={t.previewPrompt}
+            placeholder={t.previewPlaceholder}
+            followupLabel={t.previewFollowupLabel}
+            ctaLabel={t.previewCtaLabel}
+            ctaHref={getLocalizedPath(locale, '/love-test')}
+          />
         </section>
       </div>
     </main>
