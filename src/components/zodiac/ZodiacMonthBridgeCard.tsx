@@ -5,10 +5,10 @@ import {
   MONTH_LABELS_EN,
   MONTH_LABELS_ZH,
   type ZodiacPreviewLocale,
-  buildZodiacMonthPreview,
+  buildZodiacMonthBridge,
 } from './zodiac-month-preview';
 
-export interface ZodiacMonthPreviewCardProps {
+export interface ZodiacMonthBridgeCardProps {
   locale: ZodiacPreviewLocale;
   /** Pre-rendered eyebrow title (already localized server-side). */
   eyebrow: string;
@@ -18,8 +18,11 @@ export interface ZodiacMonthPreviewCardProps {
   prompt: string;
   /** Pre-rendered placeholder shown before the user picks a month. */
   placeholder: string;
-  /** Pre-rendered hint shown under the result line (already localized). */
-  followupLabel: string;
+  /**
+   * Pre-rendered label rendered just above the per-sign reflections
+   * (already localized, e.g. "Both readings hold for your month.").
+   */
+  reflectionsLabel: string;
   /** Pre-rendered CTA label (already localized). */
   ctaLabel: string;
   /** CTA href used as `<Link>` target when the user opts in. */
@@ -27,38 +30,39 @@ export interface ZodiacMonthPreviewCardProps {
 }
 
 /**
- * ZodiacMonthPreviewCard — interactive month picker that renders a deterministic
- * reflection preview. Client component on purpose: it owns ephemeral form state.
+ * ZodiacMonthBridgeCard — interactive month picker that renders a deterministic
+ * bridge reflection for the chosen month. Client component on purpose: it
+ * owns ephemeral form state.
  *
- * Privacy posture:
- * - No fetch, no analytics, no server round-trip.
- * - No birth year, birth time, birth place is ever collected.
- * - The chosen month stays in local React state and is not sent anywhere.
- *
- * Visual posture:
- * - Uses inline Tailwind classes consistent with the existing landing hero
- *   palette (rgba(212,175,119,*) and rgba(8,14,28,*) tones).
- * - Pure client island; safe to mount on the otherwise-server landing page.
+ * Privacy / honesty posture:
+ *  - No fetch, no analytics, no server round-trip.
+ *  - No birth year, birth time, birth place is ever collected.
+ *  - The chosen month stays in local React state and is not transmitted.
+ *  - The result frame is *bridge*, not *reading*: it presents the two
+ *    Western zodiac signs that straddle the cusp inside that month, and
+ *    it explicitly states that the day (which we never ask for) is
+ *    what would determine the side. We never claim a specific sign for
+ *    the visitor.
  */
-export function ZodiacMonthPreviewCard({
+export function ZodiacMonthBridgeCard({
   locale,
   eyebrow,
   intro,
   prompt,
   placeholder,
-  followupLabel,
+  reflectionsLabel,
   ctaLabel,
   ctaHref,
-}: ZodiacMonthPreviewCardProps) {
+}: ZodiacMonthBridgeCardProps) {
   const months = locale === 'en' ? MONTH_LABELS_EN : MONTH_LABELS_ZH;
   const [chosen, setChosen] = useState<number | null>(null);
 
-  const preview = useMemo(() => {
+  const bridge = useMemo(() => {
     if (chosen === null) return null;
     try {
-      return buildZodiacMonthPreview(chosen, locale);
+      return buildZodiacMonthBridge(chosen, locale);
     } catch {
-      // Defensive: buildZodiacMonthPreview only throws on out-of-range /
+      // Defensive: buildZodiacMonthBridge only throws on out-of-range /
       // unsupported locale, both of which we guard against in this component.
       return null;
     }
@@ -66,7 +70,7 @@ export function ZodiacMonthPreviewCard({
 
   return (
     <div
-      data-testid="zodiac-month-preview-card"
+      data-testid="zodiac-month-bridge-card"
       data-locale={locale}
       className="rounded-3xl border border-[rgba(212,175,119,0.28)] bg-[rgba(8,14,28,0.72)] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.36)] backdrop-blur-md"
     >
@@ -105,19 +109,49 @@ export function ZodiacMonthPreviewCard({
         </select>
       </div>
 
-      {preview ? (
+      {bridge ? (
         <div
-          data-testid="zodiac-month-preview-result"
+          data-testid="zodiac-month-bridge-result"
           className="mt-5 rounded-2xl border border-white/12 bg-black/30 p-4"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[rgb(252,230,191)]">
-            {preview.sign}
+          <p
+            className="text-xs font-semibold uppercase tracking-[0.18em] text-[rgb(252,230,191)]"
+            data-testid="zodiac-month-bridge-signs"
+          >
+            {bridge.signs[0]} <span aria-hidden="true">·</span> {bridge.signs[1]}
           </p>
-          <p className="mt-2 text-lg leading-snug text-white/90">{preview.line}</p>
-          <p className="mt-3 text-xs leading-relaxed text-white/58">{followupLabel}</p>
-          <p className="mt-1 text-sm leading-relaxed text-white/74">{preview.hint}</p>
+          <p className="mt-2 text-lg leading-snug text-white/90" data-testid="zodiac-month-bridge-line">
+            {bridge.bridgeLine}
+          </p>
+          <p className="mt-3 text-xs leading-relaxed text-white/58">{bridge.bridgeHint}</p>
+
+          <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-[rgb(252,230,191)]">
+            {reflectionsLabel}
+          </p>
+          <div className="mt-2 grid gap-3">
+            <div
+              className="rounded-xl border border-white/10 bg-black/20 p-3"
+              data-testid="zodiac-month-bridge-reflection-primary"
+            >
+              <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/52">
+                {bridge.signs[0]}
+              </div>
+              <p className="mt-1 text-sm leading-relaxed text-white/82">{bridge.reflectionPrimary}</p>
+            </div>
+            <div
+              className="rounded-xl border border-white/10 bg-black/20 p-3"
+              data-testid="zodiac-month-bridge-reflection-secondary"
+            >
+              <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/52">
+                {bridge.signs[1]}
+              </div>
+              <p className="mt-1 text-sm leading-relaxed text-white/82">{bridge.reflectionSecondary}</p>
+            </div>
+          </div>
+
           <a
             href={ctaHref}
+            data-testid="zodiac-month-bridge-cta"
             className="mt-4 inline-flex items-center gap-2 rounded-full border border-[rgba(212,175,119,0.5)] bg-[rgb(212,175,119)] px-5 py-2.5 text-sm font-semibold text-black shadow-[0_18px_60px_rgba(212,175,119,0.26)] transition-transform hover:translate-y-[-1px]"
           >
             {ctaLabel}
@@ -129,4 +163,4 @@ export function ZodiacMonthPreviewCard({
   );
 }
 
-export default ZodiacMonthPreviewCard;
+export default ZodiacMonthBridgeCard;

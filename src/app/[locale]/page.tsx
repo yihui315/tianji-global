@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { buildLocalizedMetadata } from '@/lib/i18n-metadata';
 import { getLocalizedPath, isSupportedLocale, locales, type Locale } from '@/lib/i18n';
-import { ZodiacMonthPreviewCard } from '@/components/zodiac/ZodiacMonthPreviewCard';
+import { ZodiacMonthBridgeCard } from '@/components/zodiac/ZodiacMonthBridgeCard';
 
 type PageParams = {
   params: Promise<{ locale: string }>;
@@ -22,7 +22,7 @@ type HomeCopy = {
   previewIntro: string;
   previewPrompt: string;
   previewPlaceholder: string;
-  previewFollowupLabel: string;
+  previewReflectionsLabel: string;
   previewCtaLabel: string;
 };
 
@@ -41,11 +41,11 @@ const copy = {
       'Receive a free teaser with reflective relationship themes.',
       'Unlock deeper sections when you are ready.',
     ],
-    previewEyebrow: 'A 30-second private signal',
-    previewIntro: 'Pick the month you were born. We will surface one quiet reflection about how you tend to relate — no login, no signup, no commit.',
+    previewEyebrow: 'A birth-month reflection',
+    previewIntro: 'Pick the month you were born. We will surface the two Western signs that cross inside that month and a quiet reading that holds on either side — no login, no day-of-month, no commit.',
     previewPrompt: 'Birth month',
     previewPlaceholder: 'Choose a month',
-    previewFollowupLabel: 'Why we name this.',
+    previewReflectionsLabel: 'Both readings hold for your month.',
     previewCtaLabel: 'Go deeper with a private reading',
   },
   'zh-CN': {
@@ -57,11 +57,11 @@ const copy = {
     secondaryCta: '查看价格',
     footnote: '默认保护隐私。出生资料不会出现在分享链接中。',
     steps: ['只提交生成报告所需的最少出生信息。', '先获得一份免费的关系主题预览。', '准备好后再解锁更完整的深度章节。'],
-    previewEyebrow: '30 秒私密信号',
-    previewIntro: '点选你的出生月份，我们会浮出一句关于你如何相处的安静反思 —— 无登录、无注册、无承诺。',
+    previewEyebrow: '出生月份上的反思',
+    previewIntro: '点选你的出生月份。我们会呈现这个月里跨越的两个西方星座，以及一条无论站在哪一边都成立的安静反思 —— 无登录、不问几号、无承诺。',
     previewPrompt: '出生月份',
     previewPlaceholder: '选择一个月份',
-    previewFollowupLabel: '为什么我们这样说。',
+    previewReflectionsLabel: '这两条反思，对你的月份都成立。',
     previewCtaLabel: '继续做一次私密关系洞察',
   },
 } satisfies Record<Locale, HomeCopy>;
@@ -155,13 +155,13 @@ export default async function LocalizedHomePage({ params }: PageParams) {
           aria-label={locale === 'zh-CN' ? '出生月份私密信号' : 'Birth-month private signal'}
           className="mt-10 lg:mt-16"
         >
-          <ZodiacMonthPreviewCard
+          <ZodiacMonthBridgeCard
             locale={locale}
             eyebrow={t.previewEyebrow}
             intro={t.previewIntro}
             prompt={t.previewPrompt}
             placeholder={t.previewPlaceholder}
-            followupLabel={t.previewFollowupLabel}
+            reflectionsLabel={t.previewReflectionsLabel}
             ctaLabel={t.previewCtaLabel}
             ctaHref={getLocalizedPath(locale, '/love-test')}
           />
