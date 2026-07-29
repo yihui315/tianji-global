@@ -57,12 +57,12 @@ const MONTH_BRIDGE: ReadonlyArray<{
   monthIndex: number;
   primary: ZodiacSignName;
   secondary: ZodiacSignName;
-  /** The two border lines (English day numbers; mirror in zh-CN via the bridge line). */
+  /** Display-only calendar segments. February uses "month end" because no year is collected. */
   boundaryEN: string;
   boundaryZH: string;
 }> = [
   { monthIndex: 0,  primary: 'Capricorn',    secondary: 'Aquarius',    boundaryEN: 'Jan 1–19 / Jan 20–31', boundaryZH: '1 月 1–19 日 / 20–31 日' },
-  { monthIndex: 1,  primary: 'Aquarius',     secondary: 'Pisces',      boundaryEN: 'Feb 1–18 / Feb 19–28', boundaryZH: '2 月 1–18 日 / 19–28 日' },
+  { monthIndex: 1,  primary: 'Aquarius',     secondary: 'Pisces',      boundaryEN: 'Feb 1–18 / Feb 19–month end', boundaryZH: '2 月 1–18 日 / 19 日–月末' },
   { monthIndex: 2,  primary: 'Pisces',       secondary: 'Aries',       boundaryEN: 'Mar 1–20 / Mar 21–31', boundaryZH: '3 月 1–20 日 / 21–31 日' },
   { monthIndex: 3,  primary: 'Aries',        secondary: 'Taurus',      boundaryEN: 'Apr 1–19 / Apr 20–30', boundaryZH: '4 月 1–19 日 / 20–30 日' },
   { monthIndex: 4,  primary: 'Taurus',       secondary: 'Gemini',      boundaryEN: 'May 1–20 / May 21–31', boundaryZH: '5 月 1–20 日 / 21–31 日' },
@@ -185,10 +185,7 @@ export function buildZodiacMonthBridge(
   };
 }
 
-/**
- * Return all 12 month-pair sign names for the chosen locale.
- * Used by the UI to render the dropdown labels and by tests for parity checks.
- */
+/** Return all 12 month-pair sign names for the chosen locale. */
 export function listZodiacBridgeSignPairs(locale: ZodiacPreviewLocale): string[][] {
   const labels = SIGN_LABELS[locale];
   return MONTH_BRIDGE.map((entry) => [
