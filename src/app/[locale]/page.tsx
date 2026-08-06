@@ -11,7 +11,7 @@ type PageParams = {
 type HomeCopy = {
   title: string;
   description: string;
-  promise: string[];
+  promise: { headline: string; when: string }[];
   primaryCta: string;
   secondaryCta: string;
   footnote: string;
@@ -25,7 +25,11 @@ const copy = {
     title: 'Love is the one force that bends fate.',
     description:
       'Discover your romantic patterns, emotional timing, and relationship compatibility through a private cosmic reading designed for modern love.',
-    promise: ['Discover patterns.', 'Understand timing.', 'Make clearer relationship choices.'],
+    promise: [
+      { headline: 'Discover patterns.', when: 'Start here if you want a full private reading.' },
+      { headline: 'Understand timing.', when: 'Pick this when you already have a specific question.' },
+      { headline: 'Make clearer relationship choices.', when: 'Use this to see the next emotional window.' },
+    ],
     primaryCta: 'Start a free love reading',
     secondaryCta: 'View pricing',
     footnote: 'Private by design. Birth details are never placed in share URLs.',
@@ -39,7 +43,11 @@ const copy = {
     eyebrow: '私密的关系洞察',
     title: '爱，是唯一能改变命运的变量。',
     description: '通过私密的 TianJi Love 关系报告，理解你的情感模式、关系节奏与相处选择。',
-    promise: ['发现情感模式。', '理解关系节奏。', '做出更清晰的相处选择。'],
+    promise: [
+      { headline: '发现情感模式。', when: '不知道问什么 → 从这里开始。' },
+      { headline: '理解关系节奏。', when: '已经有具体问题 → 选这个。' },
+      { headline: '做出更清晰的相处选择。', when: '看清下一段情感窗口期 → 用这个。' },
+    ],
     primaryCta: '开始免费关系洞察',
     secondaryCta: '查看价格',
     footnote: '默认保护隐私。出生资料不会出现在分享链接中。',
@@ -96,7 +104,7 @@ export default async function LocalizedHomePage({ params }: PageParams) {
               {t.title}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/72">{t.description}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 href={getLocalizedPath(locale, '/love-reading/result/demo')}
                 className="rounded-full border border-[rgba(212,175,119,0.5)] bg-[rgb(212,175,119)] px-6 py-3 text-sm font-semibold text-black shadow-[0_20px_70px_rgba(212,175,119,0.28)]"
@@ -116,8 +124,9 @@ export default async function LocalizedHomePage({ params }: PageParams) {
           <div className="rounded-3xl border border-white/10 bg-white/[0.055] p-5 shadow-[0_30px_100px_rgba(0,0,0,0.42)]">
             <div className="grid gap-3">
               {t.promise.map((item) => (
-                <div key={item} className="rounded-2xl border border-white/10 bg-black/20 p-4 text-lg text-white/88">
-                  {item}
+                <div key={item.headline} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <div className="text-lg leading-snug text-white/88">{item.headline}</div>
+                  <div className="mt-1 text-xs leading-5 text-white/52">{item.when}</div>
                 </div>
               ))}
             </div>
