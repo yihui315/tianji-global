@@ -9,7 +9,9 @@ const mocks = vi.hoisted(() => ({
   })),
   markOrderPaid: vi.fn(),
   markOrderRefunded: vi.fn(),
-  recordStripeEvent: vi.fn(),
+  claimStripeEvent: vi.fn(),
+  markStripeEventProcessed: vi.fn(),
+  markStripeEventFailed: vi.fn(),
   trackLoveFunnelEvent: vi.fn(),
   sendReportReadyEmailForCheckoutSession: vi.fn(),
   isPayPerUseEnabled: vi.fn(() => true),
@@ -23,9 +25,12 @@ vi.mock('@/lib/stripe', () => ({
 }));
 
 vi.mock('@/lib/billing', () => ({
+  claimStripeEvent: mocks.claimStripeEvent,
+  getBillingProduct: vi.fn(),
   markOrderPaid: mocks.markOrderPaid,
   markOrderRefunded: mocks.markOrderRefunded,
-  recordStripeEvent: mocks.recordStripeEvent,
+  markStripeEventProcessed: mocks.markStripeEventProcessed,
+  markStripeEventFailed: mocks.markStripeEventFailed,
 }));
 
 vi.mock('@/lib/love-funnel-analytics', () => ({
@@ -91,7 +96,7 @@ describe('Stripe webhook degraded runtime guard', () => {
       skipped: 'payment_unavailable',
     });
     expect(mocks.getStripe).not.toHaveBeenCalled();
-    expect(mocks.recordStripeEvent).not.toHaveBeenCalled();
+    expect(mocks.claimStripeEvent).not.toHaveBeenCalled();
     expect(mocks.markOrderPaid).not.toHaveBeenCalled();
     expect(mocks.markOrderRefunded).not.toHaveBeenCalled();
     expect(mocks.sendReportReadyEmailForCheckoutSession).not.toHaveBeenCalled();

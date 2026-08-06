@@ -90,15 +90,20 @@ check(
   'approval gate before Stripe create',
 );
 check(
-  'unlock verification blocks Love-Test paid intent before Stripe retrieve',
-  indexBefore(unlockRoute, 'getLoveTestPaidIntentCheckoutGate', 'stripe.checkout.sessions.retrieve'),
-  'approval gate before Stripe retrieve',
+  'unlock verification blocks Love-Test paid intent before webhook-backed entitlement lookup',
+  (() => {
+    const getStart = unlockRoute.indexOf('export async function GET');
+    const gate = unlockRoute.indexOf('getLoveTestPaidIntentCheckoutGate', getStart);
+    const lookup = unlockRoute.indexOf('await getPaidOrderForCheckoutSession', getStart);
+    return getStart >= 0 && gate > getStart && lookup > gate;
+  })(),
+  'approval gate before entitlement lookup',
 );
 check(
   'webhook has staging-degraded guard before Stripe verification or mutation',
   webhookRoute.includes('isStagingDegradedMode()') &&
     webhookRoute.includes('STAGING_DEGRADED_PAYMENT_UNAVAILABLE_CODE') &&
-    indexBefore(webhookRoute, 'isStagingDegradedMode()', 'recordStripeEvent(event)'),
+    indexBefore(webhookRoute, 'isStagingDegradedMode()', 'claimStripeEvent(event)'),
   'webhook skip before mutation',
 );
 check(

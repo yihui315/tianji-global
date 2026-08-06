@@ -5,7 +5,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
-import { getStripe } from '@/lib/stripe';
+import {
+  createPendingOrder,
+  getBillingProduct,
+  getPaidOrderForCheckoutSession,
+  isBillingPersistenceConfigured,
+} from '@/lib/billing';
+import { requirePayPerUseEnabled } from '@/lib/pay-per-use';
+import { getStripe, getStripeTestModeReadiness } from '@/lib/stripe';
 import { buildDrawEvidence } from '@/lib/divination/evidence';
 import {
   decodeQuickDrawId,
@@ -95,6 +102,9 @@ const postBodySchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const payPerUseGate = requirePayPerUseEnabled();
+  if (payPerUseGate) return payPerUseGate;
+
   try {
     if (isStagingDegradedMode() && !isStripePaymentAvailable()) {
       return NextResponse.json(buildPaymentUnavailableBody(), { status: 503 });
@@ -113,44 +123,69 @@ export async function POST(request: NextRequest) {
     }
 
     const lang = language ?? decoded.language ?? 'en';
+    const stripeReadiness = getStripeTestModeReadiness();
+    if (!stripeReadiness.ready || !isBillingPersistenceConfigured()) {
+      return NextResponse.json(
+        { error: 'Test payment infrastructure is not configured', code: 'test_payment_not_ready' },
+        { status: 503 }
+      );
+    }
+
     const stripe = getStripe();
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin;
+    const resourceRef = tokenRef(id);
 
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: lang === 'zh'
-                ? 'TianJi Three Cards - Paid relationship unlock'
-                : 'TianJi Three Cards - Paid relationship unlock',
-              description: lang === 'zh'
-                ? 'Unlock the deeper three-card relationship reading. One-time payment. No subscription.'
-                : 'Unlock the deeper three-card relationship reading. One-time payment. No subscription.',
+    const session = await stripe.checkout.sessions.create(
+      {
+        mode: 'payment',
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: lang === 'zh'
+                  ? 'TianJi Three Cards - Paid relationship unlock'
+                  : 'TianJi Three Cards - Paid relationship unlock',
+                description: lang === 'zh'
+                  ? 'Unlock the deeper three-card relationship reading. One-time payment. No subscription.'
+                  : 'Unlock the deeper three-card relationship reading. One-time payment. No subscription.',
+              },
+              unit_amount: QUICK_DRAW_UNLOCK_PRICE_USD_CENTS,
             },
-            unit_amount: QUICK_DRAW_UNLOCK_PRICE_USD_CENTS,
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        metadata: {
+          flow: 'quick-draw',
+          productId: 'draw_unlock',
+          productType: 'pay-per-use',
+          amount: String(QUICK_DRAW_UNLOCK_PRICE_USD_CENTS),
+          currency: 'usd',
+          quickDrawRef: resourceRef,
+          resourceRef,
+          language: lang,
+          source: 'draw',
         },
-      ],
-      metadata: {
-        flow: 'quick-draw',
-        productType: 'pay-per-use',
-        amount: String(QUICK_DRAW_UNLOCK_PRICE_USD_CENTS),
-        currency: 'usd',
-        quickDrawRef: tokenRef(id),
-        language: lang,
+        success_url: `${appUrl}/draw?lang=${lang}&id=${encodeURIComponent(id)}&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${appUrl}/draw?lang=${lang}&cancelled=1`,
       },
-      success_url: `${appUrl}/draw?lang=${lang}&id=${encodeURIComponent(id)}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/draw?lang=${lang}&cancelled=1`,
-    });
+      { idempotencyKey: `draw_unlock:${resourceRef}` }
+    );
 
     if (!session.url) {
       return NextResponse.json({ error: 'Unable to create checkout session' }, { status: 500 });
     }
+
+    const product = getBillingProduct('draw_unlock');
+    if (!product) {
+      return NextResponse.json({ error: 'Draw unlock is not configured' }, { status: 503 });
+    }
+    await createPendingOrder({
+      product,
+      checkoutSessionId: session.id,
+      resourceRef,
+    });
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
@@ -171,21 +206,21 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
-
-    const paid = session.payment_status === 'paid' || session.status === 'complete';
-    if (!paid) {
-      return NextResponse.json({ error: 'Payment not verified' }, { status: 403 });
-    }
-
-    if (session.metadata?.flow !== 'quick-draw') {
-      return NextResponse.json({ error: 'Unexpected session flow' }, { status: 400 });
-    }
-
-    const id = queryId || session.metadata?.quickDrawId;
+    const id = queryId;
     if (typeof id !== 'string' || !id) {
       return NextResponse.json({ error: 'Draw id missing on session' }, { status: 400 });
+    }
+
+    const paidOrder = await getPaidOrderForCheckoutSession(sessionId);
+    if (
+      !paidOrder ||
+      paidOrder.productId !== 'draw_unlock' ||
+      paidOrder.resourceRef !== tokenRef(id)
+    ) {
+      return NextResponse.json(
+        { error: 'Payment confirmation pending', code: 'webhook_confirmation_pending' },
+        { status: 409 }
+      );
     }
 
     const decoded = decodeQuickDrawId(id);

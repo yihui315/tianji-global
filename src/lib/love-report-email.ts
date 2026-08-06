@@ -40,6 +40,9 @@ export async function sendReportReadyEmailForCheckoutSession(input: {
   if (!order?.customerEmail) {
     return { sent: false, reason: 'missing_customer_email' };
   }
+  if (!order.readingSessionId) {
+    return { sent: false, reason: 'missing_reading_session' };
+  }
 
   const reportUrl = buildPrivateReportLink({
     appUrl: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',

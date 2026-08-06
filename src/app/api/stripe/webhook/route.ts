@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import {
+  claimStripeEvent,
+  getBillingProduct,
   markOrderPaid,
   markOrderRefunded,
-  recordStripeEvent,
+  markStripeEventFailed,
+  markStripeEventProcessed,
   type BillingProductId,
 } from '@/lib/billing';
 import { trackLoveFunnelEvent } from '@/lib/love-funnel-analytics';
-import { normalizeLoveProductType } from '@/lib/love-reading/revenue-contract';
+import {
+  normalizeLoveProductType,
+  normalizeOneTimeProductType,
+} from '@/lib/love-reading/revenue-contract';
 import { sendReportReadyEmailForCheckoutSession } from '@/lib/love-report-email';
 import { isPayPerUseEnabled } from '@/lib/pay-per-use';
 import { markRelationshipReadingPremium } from '@/lib/relationship-reading-store';
@@ -18,13 +23,14 @@ import {
   isStripePaymentAvailable,
 } from '@/lib/staging-degraded-mode';
 import { getStripe } from '@/lib/stripe';
-import type { CheckoutSession, StripeCharge, StripeRefund, StripeEvent, StripeMetadata } from '@/types/stripe-api';
+import type { CheckoutSession, StripeCharge, StripeRefund, StripeMetadata } from '@/types/stripe-api';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function metadataProductId(metadata?: StripeMetadata | null): BillingProductId | null {
-  return normalizeLoveProductType(metadata?.productId ?? metadata?.legacyProductId);
+  const productType = metadata?.productId ?? metadata?.legacyProductId;
+  return normalizeLoveProductType(productType) ?? normalizeOneTimeProductType(productType);
 }
 
 function readingModeFromMetadata(metadata?: StripeMetadata | null) {
@@ -42,9 +48,13 @@ async function handleCheckoutSessionCompleted(session: CheckoutSession) {
 
   const productId = metadataProductId(session.metadata);
   const readingSessionId = session.metadata?.readingSessionId;
+  const resourceRef = session.metadata?.resourceRef;
   const source = session.metadata?.source === 'relationship' ? 'relationship' : 'love_reading';
   const relationshipReadingId = session.metadata?.relationshipReadingId || readingSessionId;
-  if (!productId || !readingSessionId) return;
+  if (!productId || (!readingSessionId && !resourceRef)) return;
+
+  const product = getBillingProduct(productId);
+  if (!product) return;
 
   await markOrderPaid({
     checkoutSessionId: session.id,
@@ -61,6 +71,12 @@ async function handleCheckoutSessionCompleted(session: CheckoutSession) {
     amountTotal: session.amount_total ?? null,
     currency: session.currency ?? null,
   });
+
+  // Ask/Draw entitlements are represented by the paid order. Their result
+  // routes only unlock after this webhook-backed state is present.
+  if (product.kind === 'one_time_unlock') return;
+
+  if (!readingSessionId) return;
 
   if (source === 'relationship') {
     if (!relationshipReadingId) return;
@@ -108,9 +124,12 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-  if (!webhookSecret) {
-    return NextResponse.json({ error: 'Missing webhook secret' }, { status: 500 });
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+  if (!webhookSecret || !webhookSecret.startsWith('whsec_')) {
+    return NextResponse.json(
+      { error: 'Webhook signing secret is not configured', code: 'stripe_webhook_secret_invalid' },
+      { status: 500 }
+    );
   }
 
   const rawBody = await request.text();
@@ -131,23 +150,30 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true, skipped: 'pay_per_use_disabled' });
   }
 
-  const isNewEvent = await recordStripeEvent(event);
-  if (!isNewEvent) {
+  const claimed = await claimStripeEvent(event);
+  if (!claimed) {
     return NextResponse.json({ received: true, duplicate: true });
   }
 
-  switch (event.type) {
-    case 'checkout.session.completed':
-      await handleCheckoutSessionCompleted(event.data.object as import('@/types/stripe-api').CheckoutSession);
-      break;
-    case 'charge.refunded':
-      await handleRefundEvent(event.data.object as import('@/types/stripe-api').StripeCharge);
-      break;
-    case 'refund.created':
-      await handleRefundEvent(event.data.object as import('@/types/stripe-api').StripeRefund);
-      break;
-    default:
-      break;
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed':
+        await handleCheckoutSessionCompleted(event.data.object as import('@/types/stripe-api').CheckoutSession);
+        break;
+      case 'charge.refunded':
+        await handleRefundEvent(event.data.object as import('@/types/stripe-api').StripeCharge);
+        break;
+      case 'refund.created':
+        await handleRefundEvent(event.data.object as import('@/types/stripe-api').StripeRefund);
+        break;
+      default:
+        break;
+    }
+    await markStripeEventProcessed(event.id);
+  } catch (error) {
+    await markStripeEventFailed(event.id);
+    console.error('[stripe/webhook] event processing failed', error);
+    return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
   }
 
   return NextResponse.json({ received: true });

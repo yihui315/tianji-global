@@ -93,12 +93,15 @@ const askWebhookRoute = routeStatus(webhookRoutePath, webhookRoute, [
   'STRIPE_WEBHOOK_SECRET',
   'webhooks.constructEvent',
   'checkout.session.completed',
+  'normalizeOneTimeProductType',
+  'markOrderPaid',
 ]);
 
 const askEntitlementCheck = routeStatus(unlockRoutePath, unlockRoute, [
-  'checkout.sessions.retrieve',
-  "session.metadata?.flow !== 'ask-question'",
-  "session.payment_status === 'paid'",
+  'getPaidOrderForCheckoutSession',
+  "paidOrder.productId !== 'ask_unlock'",
+  'paidOrder.resourceRef !== tokenRef(id)',
+  'webhook_confirmation_pending',
   'decodeAskQuestionId',
 ]);
 

@@ -1,14 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
+import { createHash } from 'node:crypto';
 import { encodeQuickDrawId, type DrawnSlot } from '@/lib/quick-draw';
 
 const mocks = vi.hoisted(() => ({
   createSession: vi.fn(),
   retrieveSession: vi.fn(),
+  createPendingOrder: vi.fn(),
+  getPaidOrder: vi.fn(),
   generateReport: vi.fn(),
 }));
 
 vi.mock('@/lib/stripe', () => ({
+  getStripeTestModeReadiness: () => ({ ready: true, mode: 'test' }),
   getStripe: () => ({
     checkout: {
       sessions: {
@@ -17,6 +21,19 @@ vi.mock('@/lib/stripe', () => ({
       },
     },
   }),
+}));
+
+vi.mock('@/lib/billing', () => ({
+  createPendingOrder: mocks.createPendingOrder,
+  getBillingProduct: () => ({
+    productId: 'draw_unlock',
+    kind: 'one_time_unlock',
+    unitAmount: 299,
+    currency: 'usd',
+    entitlement: 'draw_unlock',
+  }),
+  getPaidOrderForCheckoutSession: mocks.getPaidOrder,
+  isBillingPersistenceConfigured: () => true,
 }));
 
 vi.mock('@/lib/ai-orchestrator', () => ({
@@ -35,6 +52,10 @@ function getRequest(path: string) {
   return new NextRequest(`https://tianji.love${path}`, {
     method: 'GET',
   });
+}
+
+function tokenRef(id: string) {
+  return createHash('sha256').update(id).digest('hex');
 }
 
 function sampleDraw(): DrawnSlot[] {
@@ -64,8 +85,11 @@ describe('Draw gateway revenue contract', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.unstubAllEnvs();
+    vi.stubEnv('ENABLE_PAY_PER_USE', 'true');
     mocks.createSession.mockReset();
     mocks.retrieveSession.mockReset();
+    mocks.createPendingOrder.mockReset();
+    mocks.getPaidOrder.mockReset();
     mocks.generateReport.mockReset();
   });
 
@@ -127,10 +151,11 @@ describe('Draw gateway revenue contract', () => {
       fullReading: '',
     });
 
-    mocks.retrieveSession.mockResolvedValue({
-      payment_status: 'paid',
-      status: 'complete',
-      metadata: { flow: 'quick-draw' },
+    mocks.getPaidOrder.mockResolvedValue({
+      productId: 'draw_unlock',
+      resourceRef: tokenRef(id),
+      readingSessionId: null,
+      customerEmail: null,
     });
     mocks.generateReport.mockResolvedValue({
       content:
@@ -174,6 +199,31 @@ describe('Draw gateway revenue contract', () => {
     const aiMetaJson = JSON.stringify(json.data.aiMeta);
     expect(aiMetaJson).not.toContain('Will my ex return');
     expect(aiMetaJson).not.toMatch(/API_KEY|birthDate|birthTime|birthLocation|timezone|prompt|requestBody/i);
+    expect(mocks.retrieveSession).not.toHaveBeenCalled();
+  });
+
+  it('does not unlock when the paid order is bound to a different Draw token', async () => {
+    const id = encodeQuickDrawId({
+      question: 'What is the timing?',
+      language: 'en',
+      draw: sampleDraw(),
+      fullReading: '',
+    });
+    mocks.getPaidOrder.mockResolvedValue({
+      productId: 'draw_unlock',
+      resourceRef: tokenRef('different-token'),
+      readingSessionId: null,
+      customerEmail: null,
+    });
+
+    const { GET } = await import('@/app/api/draw/unlock/route');
+    const response = await GET(getRequest(`/api/draw/unlock?session_id=cs_test_paid&id=${encodeURIComponent(id)}`));
+    const json = await response.json();
+
+    expect(response.status).toBe(409);
+    expect(json.code).toBe('webhook_confirmation_pending');
+    expect(mocks.generateReport).not.toHaveBeenCalled();
+    expect(mocks.retrieveSession).not.toHaveBeenCalled();
   });
 
   it('routes enhanced Tarot API interpretations through tarot_draw gateway safety', async () => {
