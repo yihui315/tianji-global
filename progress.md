@@ -61,6 +61,20 @@ No-Go in this local Windows worktree: Next.js build worker exits with code 32212
 - Supabase production mutation by Codex: No-Go.
 - Social auto-posting: No-Go.
 
+## Day 1 Manual Launch Pack And Evening Review - 2026-06-26
+
+- Added `assets/marketing/daily/day-001-manual-launch-pack-20260626.md` for human operators to copy, review, and publish manually.
+- Added `assets/marketing/daily/day-001-evening-review-20260626.md` for the same-day review handoff.
+- Updated `.ai/reports/growth-report-2026-06-26.md` with the Day 1 evening review state.
+- No manually entered live URLs or non-zero metrics were found in local artifacts.
+- Recorded views, clicks, leads, paid conversions, and revenue as `0` or `no real data yet`; no performance data was fabricated.
+- All publishing remains manual-only; source queue items remain `pending_manual_review` and `not_published` until a human changes them after actual publishing.
+- Revenue Execution: No-Go.
+- Stripe/payment: No-Go.
+- Supabase mutation: No-Go.
+- Production deploy: No-Go.
+- Social auto-posting: No-Go.
+
 ## Supabase Migration Command - Pending Human Approval
 
 ```bash
