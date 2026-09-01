@@ -6,6 +6,25 @@ import { isSupabaseMutationDisabled } from '@/lib/staging-degraded-mode';
 
 const USER_AGENT_MAX_LENGTH = 512;
 
+// In-memory rate limiting: 5 submissions per IP hash per 60 seconds
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 5;
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(ipHash: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ipHash);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ipHash, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return false;
+  }
+  entry.count++;
+  return true;
+}
+
 const leadCaptureSchema = z.object({
   email: z.string().email().max(255),
   name: z.string().max(255).optional(),
@@ -40,9 +59,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const ipHash = hashRequestIp(request);
+    if (!checkRateLimit(ipHash)) {
+      return NextResponse.json(
+        { success: false, error: 'rate_limited' },
+        { status: 429 },
+      );
+    }
+
     const body = await request.json();
     const data = leadCaptureSchema.parse(body);
-    const ipHash = hashRequestIp(request);
     const userAgent = truncateUserAgent(request.headers.get('user-agent') ?? '');
 
     const pool = getPool();
